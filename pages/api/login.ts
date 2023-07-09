@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { sessionOptions } from "../../lib/session";
 
-export async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
+export async function loginRoute(req: any, res: NextApiResponse) {
   console.log("jkslfdjklsdf");
   if (req.method === "POST") {
     const { mail, password } = await req.body;

@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { headers } from "next/headers";
 
 const fetchWithToken = async () => {
-    let response = await fetch("http://localhost:3000/api/user", {
+    let response = await fetch("https://test-auth-next-plum.vercel.app/api/user", {
       headers: {
         "Content-Type": "application/json",
         include: "credentials",

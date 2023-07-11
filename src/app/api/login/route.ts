@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../../lib/prisma";
 import bcrypt from "bcrypt";
-import { sessionOptions } from "../../../../lib/session";
 import jsonwebtoken from "jsonwebtoken";
 
 export async function POST(req: any, res: NextApiResponse) {

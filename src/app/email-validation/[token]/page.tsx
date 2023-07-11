@@ -6,7 +6,7 @@ const EmailValidation = () => {
   return (
     <main className={styles.emailValidation}>
       <h1 className={styles.emailValidation__h1}>
-        Validation de l'addresse email
+        Validation de l&apos;addresse email
       </h1>
       <div className={styles.emailValidation__container}>
         <div className={styles.emailValidation__article}>

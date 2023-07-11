@@ -36,7 +36,7 @@ const Display = () => {
         </>
       )}
       {isLog === false && (
-        <h2 className={styles.profile__article__h2}>Vous n'avez pas accès à cette page, vous allez être redirigé</h2>
+        <h2 className={styles.profile__article__h2}>Vous n&apos;avez pas accès à cette page, vous allez être redirigé</h2>
       )}
     </>
   );

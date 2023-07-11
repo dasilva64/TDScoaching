@@ -46,7 +46,7 @@ const EmailData = () => {
                   }}
                   className={styles.emailData__div__button}
                 >
-                  Valider l'addresse {editEmail[0]}
+                  Valider l&apos;addresse {editEmail[0]}
                 </button>
               </>
             )}

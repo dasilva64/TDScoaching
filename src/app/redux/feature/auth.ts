@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { PURGE } from "redux-persist";
 
 interface AuthType {
   role: string

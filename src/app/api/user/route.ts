@@ -50,7 +50,7 @@ export async function GET(req: any, res: NextApiResponse) {
   //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoibUBtLmNvbSIsImlhdCI6MTY4OTA5NTc2OX0.CvNh6Ao7E7AffZ5rWURsNSNEXsONpWOE1n64PCUEAmc
   //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoibUBtLmNvbSIsImlhdCI6MTY4OTA5NTc2OX0.CvNh6Ao7E7AffZ5rWURsNSNEXsONpWOE1n64PCUEAmc
 
-  if (req.method === "POST") {
+ /*  if (req.method === "POST") {
     const user = await prisma.user.findUnique({
       where: { mail: "jklf" },
       include: { meeting: true },
@@ -76,5 +76,5 @@ export async function GET(req: any, res: NextApiResponse) {
         body: userObject,
       });
     }
-  }
+  } */
 }

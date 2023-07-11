@@ -1,0 +1,58 @@
+.footer {
+  padding-bottom: 20px;
+  &__container {
+    display: flex;
+    justify-content: space-around;
+  }
+  &__li {
+    list-style-type: none;
+  }
+  &__ul__lineHeight {
+    line-height: 50px;
+  }
+  &__ul {
+    padding-left: 40px;
+    &__lineHeight {
+      line-height: 50px;
+    }
+  }
+  &__a {
+    color: black;
+    font-size: 18px;
+    text-decoration: none;
+    &:hover {
+      color: orange;
+    }
+  }
+  &__h2 {
+    color: black;
+    margin-top: 80px;
+    margin-bottom: 40px;
+    font-size: 30px;
+  }
+  &__a__color {
+    color: black;
+  }
+  &__strong {
+    font-weight: 400;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .footer {
+    padding-bottom: 20px;
+    &__container {
+      display: block;
+    }
+    &__ul {
+      padding-left: 20px;
+      &__lineHeight {
+        line-height: 30px;
+      }
+    }
+    &__a, &__li {
+      font-size: 14px;
+    }
+  }
+
+}

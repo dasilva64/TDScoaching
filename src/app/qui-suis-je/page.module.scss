@@ -1,0 +1,93 @@
+$primary-color: white;
+
+.about {
+  &__h1 {
+    margin-top: 80px;
+    font-size: 60px;
+  }
+  &__container {
+    background-color: rgb(0, 191, 255);
+    margin-top: 45px;
+    padding-top: 60px;
+    padding-bottom: 100px;
+  }
+  &__picture {
+    width: 40%;
+    border-radius: 50%;
+  }
+  &__img {
+    width: 40%;
+    margin: auto;
+    text-align: center;
+  }
+  &__thierry {
+    margin-top: 40px;
+    margin-bottom: -10px;
+    text-align: center;
+    font-family: hello;
+    color: white;
+    font-size: 40px;
+  }
+  &__article {
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: justify;
+    &__h2 {
+      text-align: center;
+      color: $primary-color;
+      margin-top: 100px;
+      margin-bottom: 60px;
+      font-size: 30px;
+    }
+    &__p {
+      background-color: white;
+      font-size: 21px;
+      text-justify: inter-word;
+      line-height: 30.996000289916992px;
+      border: 5px solid orange;
+      border-radius: 20px;
+      padding: 20px;
+      border: 2px solid orange;
+      box-shadow: 10px 10px orange;
+    }
+    &__ul {
+      background-color: white;
+      font-size: 21px;
+      text-justify: inter-word;
+      line-height: 30.996000289916992px;
+      border: 5px solid orange;
+      border-radius: 20px;
+      padding: 20px;
+      padding-left: 30px;
+      border: 2px solid orange;
+      box-shadow: 10px 10px orange;
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .about {
+    &__img {
+      width: 60%;
+    }
+    &__h1 {
+      margin-top: 40px;
+      font-size: 40px;
+    }
+    &__article {
+      margin-left: 5%;
+      margin-right: 5%;
+      text-align: justify;
+      &__p {
+        font-size: unset;
+      }
+      &__h2 {
+        font-size: 26px;
+      }
+      &__ul {
+        font-size: unset;
+        padding: 11px 0px 11px 20px;
+      }
+    }
+  }
+}

@@ -1,0 +1,151 @@
+.datePicker {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  &__head {
+    display: flex;
+    &__nav {
+      display: flex;
+      justify-content: space-around;
+    }
+    &__div {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      &__div {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        margin-right: 10px;
+        &__i {
+          margin-left: 5px;
+          width: 0px;
+          height: 0px;
+          border-left: 4px solid transparent;
+          border-right: 4px solid transparent;
+          border-top: 5px solid gray;
+        }
+        &:hover > &__p {
+          border-bottom: 1px solid black;
+        }
+        &:hover > &__i {
+          border-top: 5px solid black;
+        }
+        &__div {
+          position: relative;
+          z-index: 999;
+          background-color: white;
+          width: 100px;
+          border: 1px solid black;
+          border-radius: 5px;
+          display: block;
+          &__div {
+            padding: 5px;
+            &__current {
+              padding: 5px;
+              color: white;
+              background-color: blue;
+              &:hover {
+                background-color: orange;
+              }
+            }
+            &:hover {
+              background-color: orange;
+            }
+          }
+        }
+      }
+    }
+    &__previous {
+      cursor: pointer;
+      width: 0px;
+      height: 0px;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-right: 10px solid gray;
+      &:hover {
+        border-right: 10px solid black;
+      }
+    }
+    &__home {
+      position: relative;
+      margin-left: 50px;
+      cursor: pointer;
+      &:hover {
+        filter: brightness(0);
+      }
+    }
+    &__next {
+      cursor: pointer;
+      width: 0px;
+      position: absolute;
+      right: 45px;
+      height: 0px;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-left: 10px solid gray;
+      &:hover {
+        border-left: 10px solid black;
+      }
+    }
+  }
+  &__table {
+    margin-top: 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+    clear: both;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    &__thead {
+      &__tr {
+        &__th {
+          padding: 10px 17px;
+          border-right: 1px solid #111;
+
+          &__day {
+            padding: 10px 17px;
+          background-color: #f0f0f0;
+          }
+        }
+      }
+    }
+    &__tbody {
+      &__tr {
+        &__td {
+          border-top: 1px solid gray;
+          padding: 3px 0px;
+          cursor: pointer;
+          &__hour {
+            text-align: center;
+            border-top: 1px solid black;
+            border-right: 1px solid black;
+            width: 20%;
+            padding: 3px 0px;
+            background-color: #f0f0f0;
+          }
+          &__meeting {
+            &__me {
+              background-color: green;
+              border-radius: 5px;
+              color: white;
+
+            }
+            &__other {
+              background-color: red;
+              border-bottom: 0;
+              border-radius: 5px;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .datePicker {
+    margin-top: 50px;
+  }
+}

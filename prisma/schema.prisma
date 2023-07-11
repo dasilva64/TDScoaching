@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
 }
 
@@ -9,8 +9,30 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model user {
-  id        Int   @id @default(autoincrement())
-  mail     String   @unique
-  password  String
+model User {
+  id                              Int      @id @default(autoincrement())
+  mail                            String   @unique
+  password                        String
+  token                           String?  @db.VarChar
+  registerToken                   String?  @db.VarChar
+  editEmail                       Json?    @db.Json
+  firstname                       String   @db.VarChar
+  lastname                        String   @db.VarChar
+  phone                           String   @db.VarChar
+  twoFactor                       Boolean
+  role                            String   @db.VarChar
+  status                          Boolean
+  meetingId                       Int?
+  meetings                        Meeting?
+  Meeting_User_meetingIdToMeeting Meeting? @relation("User_meetingIdToMeeting", fields: [meetingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Meeting {
+  id                           Int      @id @default(autoincrement())
+  userId                       Int      @unique
+  description                  String?
+  startAt                      DateTime @db.Timestamp(6)
+  endAt                        DateTime @db.Timestamp(6)
+  user                         User     @relation(fields: [userId], references: [id], onUpdate: NoAction)
+  User_User_meetingIdToMeeting User[]   @relation("User_meetingIdToMeeting")
 }

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
 import useUser from "../../../components/hook/useUserGetRole";
 import useEdit from "../../../components/hook/useEdit";
+import useUserGet from "@/app/components/hook/useUserGet";
 
 /* const fetchEdit = async (url: string, dataInput: string) => {
   console.log('test')
@@ -43,7 +44,7 @@ const Display = () => {
   const [urlFetch, setUrlFetch] = useState<string>("");
 
   const [tesst, setTesst] = useState<boolean>(true);
-  const { userData, isLoading, isError, mutate } = useUser();
+  const { userData, isLoading, isError, mutate } = useUserGet();
   const [editFirstname, setEditFirstname] = useState<boolean>(false);
   const [editLastname, setEditLastname] = useState<boolean>(false);
   const [editPassword, setEditPassword] = useState<boolean>(false);

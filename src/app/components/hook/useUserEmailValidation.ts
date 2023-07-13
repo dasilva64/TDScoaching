@@ -11,7 +11,7 @@ const fetchUserEmailValidation = async (url: string) => {
 const useUserEmailValidation = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { token } = useParams();
+ /*  const { token } = useParams();
   const { data } = useSWR(
     `http://localhost:8080/user/email-validation/${token}`,
     fetchUserEmailValidation
@@ -32,8 +32,9 @@ const useUserEmailValidation = () => {
         router.push("/");
       }
     }
-  }, [data, dispatch, router]);
-  return data;
+  }, [data, dispatch, router]); */
+  //return data;
+  return null
 };
 
 export default useUserEmailValidation;

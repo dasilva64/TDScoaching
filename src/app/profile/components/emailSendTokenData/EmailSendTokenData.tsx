@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./EmailSendTokenData.module.scss";
-import useUserGet from "@/app/components/hook/useUserGet";
+import useUserGet from "../../../components/hook/useUserGet";
 
 const EmailData = () => {
   const dispatch = useDispatch<AppDispatch>();

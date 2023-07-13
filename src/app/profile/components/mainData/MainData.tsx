@@ -4,7 +4,7 @@ import React from "react";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./MainData.module.scss";
-import useUserGet from "@/app/components/hook/useUserGet";
+import useUserGet from "../../../components/hook/useUserGet";
 
 const MainData = () => {
   const {userData} = useUserGet()

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
 import useUser from "../../../components/hook/useUserGetRole";
 import useEdit from "../../../components/hook/useEdit";
-import useUserGet from "@/app/components/hook/useUserGet";
+import useUserGet from "../../../components/hook/useUserGet";
 
 /* const fetchEdit = async (url: string, dataInput: string) => {
   console.log('test')

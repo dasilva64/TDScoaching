@@ -8,7 +8,6 @@ import PasswordData from "./passwordData/PasswordData";
 import PhoneData from "./phoneData/PhoneData";
 import TwoFactorData from "./twoFactorData/TwoFactorData";
 import EmailCheck from "./emailData/EmailData";
-import useUserGet from "@/app/components/hook/useUserGet";
 
 const Display = () => {
   return (

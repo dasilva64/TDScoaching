@@ -11,7 +11,7 @@ import fetchResetUserPassword from "../hook/useReset";
 const Reset = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { push } = useRouter();
-  const { token } = useParams();
+ // const { token } = useParams();
   const [inputPassword, setInputPassword] = useState<string>("");
   const [inputPasswordComfirm, setInputPasswordComfirm] = useState<string>("");
   const [validInputPassword, setValidInputPassword] = useState<boolean>(false);
@@ -99,7 +99,7 @@ const Reset = () => {
   }, [data, dispatch, push]);
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validInputPassword === true && validInputPasswordComfirm === true) {
+    /* if (validInputPassword === true && validInputPasswordComfirm === true) {
       const fetchReset = async () => {
         trigger({ password: inputPassword, token: token });
       };
@@ -111,7 +111,7 @@ const Reset = () => {
       if (validInputPasswordComfirm === false) {
         setInputPasswordComfirmError("Password Comfirm : need to be not empty");
       }
-    }
+    } */
   };
   return (
     <form

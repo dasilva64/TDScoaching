@@ -9,7 +9,6 @@ import useSWRMutation from "swr/mutation";
 
 const ModalUserPhoneData = () => {
   const { isLog } = useSelector((state: RootState) => state.auth);
-  const { userData, isLoading, isError, mutate } = useUser();
   const dispatch = useDispatch<AppDispatch>();
   const [phoneInput, setPhoneInput] = useState<string>("");
   const [validPhoneInput, setValidPhoneInput] = useState<boolean>(false);

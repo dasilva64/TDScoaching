@@ -1,4 +1,4 @@
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch } from "../../redux/store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";

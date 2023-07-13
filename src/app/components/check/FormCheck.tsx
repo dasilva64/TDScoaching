@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import styles from "./FormCheck.module.scss";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 
 const FormCheck = () => {
@@ -20,7 +20,7 @@ const FormCheck = () => {
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json"
+          Accept: "application/json",
         },
         body: JSON.stringify({ code: inputCode, email: emailUser }),
       });

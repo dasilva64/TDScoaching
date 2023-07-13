@@ -2,22 +2,22 @@
 
 import React from "react";
 import styles from "../page.module.scss";
-import { RootState, AppDispatch } from "@/app/redux/store";
+import { RootState, AppDispatch } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DatePickerDesktop from "./datePicker/DatePickerDesktop";
 import DatePickerMobile from "./datePicker/DatePickerMobile";
-import useUser from "@/app/components/hook/useUser";
+import useUser from "../../components/hook/useUserGetRole";
 import ModalDeleteMeeting from "./modal/ModalDeleteMeeting";
-import useDelete from "@/app/components/hook/meeting/useDeleteMeeting";
-import useAll from "@/app/components/hook/meeting/useAll";
-import fetchGetPayment from "@/app/components/hook/paiement/useGet";
+import useDelete from "../../components/hook/meeting/useDeleteMeeting";
+import useAll from "../../components/hook/meeting/useAll";
+import fetchGetPayment from "../../components/hook/paiement/useGet";
 import useSWRMutation from "swr/mutation";
-import fetchAddDescription from "@/app/components/hook/meeting/useAddDescription";
-import fetchEditDescription from "@/app/components/hook/meeting/useEditDescription";
-import fetchDeleteMeeting from "@/app/components/hook/meeting/useDeleteMeeting";
-import fetchDeleteDescription from "@/app/components/hook/meeting/useDeleteDescription";
+import fetchAddDescription from "../../components/hook/meeting/useAddDescription";
+import fetchEditDescription from "../../components/hook/meeting/useEditDescription";
+import fetchDeleteMeeting from "../../components/hook/meeting/useDeleteMeeting";
+import fetchDeleteDescription from "../../components/hook/meeting/useDeleteDescription";
 import DisplayMeeting from "./meeting/DisplayMeeting";
 
 /* const fetchEdit = async (id: any) => {

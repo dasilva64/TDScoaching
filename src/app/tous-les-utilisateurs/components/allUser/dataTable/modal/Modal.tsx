@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Modal.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "../../../../../redux/store";
 
 const Modal = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -234,7 +234,9 @@ const Modal = () => {
       <button className={styles.userModal__btn} onClick={() => closeForm()}>
         <span className={styles.userModal__btn__cross}>&times;</span>
       </button>
-      <h1 className={styles.userModal__h1}>Information de l&apos;utilisateur</h1>
+      <h1 className={styles.userModal__h1}>
+        Information de l&apos;utilisateur
+      </h1>
       <div>
         {Object.entries(userData).map((p: any, index: any) => {
           if (p[0] === "status") {

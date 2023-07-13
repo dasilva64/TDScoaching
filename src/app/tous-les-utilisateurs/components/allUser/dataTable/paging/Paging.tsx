@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Paging.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "../../../../../redux/store";
 
 const Paging = () => {
   const dispatch = useDispatch();

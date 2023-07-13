@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./Display.module.scss";
-import useUserEmailValidation from "@/app/components/hook/useUserEmailValidation";
+import useUserEmailValidation from "../../../components/hook/useUserEmailValidation";
 
 const Display = () => {
   useUserEmailValidation();

@@ -1,7 +1,6 @@
 const fetchEditPasswordData = async (url: string, { arg }: { arg: { password: string }}) => {
-  let response = await fetch(url, {
+  let response = await fetch("/api/user/editPasswordUser", {
     method: "post",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

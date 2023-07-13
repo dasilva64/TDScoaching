@@ -3,7 +3,7 @@
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import useCreate from "@/app/components/hook/meeting/useCreate";
+import useCreate from "../../components/hook/meeting/useCreate";
 
 const Page = () => {
   let ar = window?.location.pathname.split("/");

@@ -1,5 +1,5 @@
 const fetchEditEmailData = async (url: string, { arg }: { arg: { code: string }}) => {
-  let response = await fetch(url, {
+  let response = await fetch("/api/user/editEmailUser", {
     method: "post",
     credentials: "include",
     headers: {

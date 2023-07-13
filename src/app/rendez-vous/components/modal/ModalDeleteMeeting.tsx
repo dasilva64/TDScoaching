@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ModalDeleteMeeting.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
-import useDelete from "@/app/components/hook/meeting/useDeleteMeeting";
+import { AppDispatch, RootState } from "../../../redux/store";
+import useDelete from "../../../components/hook/meeting/useDeleteMeeting";
 import { mutate } from "swr";
 
 const ModalDeleteMeeting = ({ id, setDataTest }: any) => {
@@ -15,13 +15,13 @@ const ModalDeleteMeeting = ({ id, setDataTest }: any) => {
       type: "form/closeModalDeleteMeeting",
     });
   };
-/*   const { data } = useDelete(
+  /*   const { data } = useDelete(
     isLog,
     userClickOnButton,
     setUserClickOnButton,
     id
   ); */
- /*  useEffect(() => {
+  /*  useEffect(() => {
     console.log(data);
     console.log(data);
     console.log(data);

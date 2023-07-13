@@ -1,9 +1,9 @@
-import Header from "./components/header/header";
+import { Suspense, lazy } from "react";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Providers } from "./redux/provider";
 import Footer from "./components/footer/footer";
-
+const Header = lazy(() => import("./components/header/header"));
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -17,10 +17,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <body className={inter.className}>
         <Providers>
-          <Header />
+          <Suspense fallback={<div>Loading...</div>}>
+<Header />
+          </Suspense>
           {children}
           <Footer />
         </Providers>

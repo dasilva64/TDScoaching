@@ -1,6 +1,6 @@
 "use client";
 
-import { RootState } from "@/app/redux/store";
+import { RootState } from "../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NbShow from "./dataTable/nbShow/NbShow";
@@ -8,7 +8,7 @@ import Paging from "./dataTable/paging/Paging";
 import Search from "./dataTable/search/Search";
 import Display from "./dataTable/display/Display";
 import Modal from "./dataTable/modal/Modal";
-import styles from './AllUser.module.scss'
+import styles from "./AllUser.module.scss";
 import { useRouter } from "next/navigation";
 
 const fetchWithToken = async (url: string, token: string) => {

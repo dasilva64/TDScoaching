@@ -1,42 +1,10 @@
-import Image from "next/image";
 import styles from "./page.module.scss";
 import ImageDisplay from "./components/image/image";
 
 export default function Home() {
   return (
     <main className={styles.home}>
-      <h1 className={styles.home__h1}>
-        <span className={`${styles.home__span} ${styles.home__span__1}`}>
-          C
-        </span>
-        <span className={`${styles.home__span} ${styles.home__span__2}`}>
-          o
-        </span>
-        <span className={`${styles.home__span} ${styles.home__span__3}`}>
-          a
-        </span>
-        <span className={`${styles.home__span} ${styles.home__span__4}`}>
-          c
-        </span>
-        <span className={`${styles.home__span} ${styles.home__span__5}`}>
-          h
-        </span>
-        <span className={`${styles.home__span} ${styles.home__span__6}`}>
-          d
-        </span>
-        <span className={`${styles.home__span} ${styles.home__span__7}`}>
-          e
-        </span>
-        <span className={`${styles.home__span} ${styles.home__span__8}`}>
-          v
-        </span>
-        <span className={`${styles.home__span} ${styles.home__span__9}`}>
-          i
-        </span>
-        <span className={`${styles.home__span} ${styles.home__span__10}`}>
-          e
-        </span>
-      </h1>
+      <h1 className={styles.home__h1}>Coaching de vie</h1>
       <div className={styles.home__container}>
         <div className={styles.home__article}>
           <h2 className={styles.home__article__h2}>

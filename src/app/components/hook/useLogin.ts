@@ -6,15 +6,17 @@ const fetchUserLogin = async (
     arg: { email: string; password: string; remember: boolean };
   }
 ) => {
-  let response = await fetch("https://test-auth-next-plum.vercel.app/api/login", {
+  let response = await fetch("http://localhost:3000/api/user/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/json",
     },
     body: JSON.stringify(arg),
   });
+  console.log(response);
   let json = await response.json();
+  console.log(json);
+
   return json;
 };
 

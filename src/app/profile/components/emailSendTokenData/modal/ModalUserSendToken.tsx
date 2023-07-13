@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ModalUserSendToken.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
-import GroupForm from "@/app/components/form/group";
+import { AppDispatch, RootState } from "../../../../redux/store";
+import GroupForm from "../../../../components/form/group";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
-import fetchEditSendToken from "@/app/components/hook/user/useEditEmailSendTokenData";
+import fetchEditSendToken from "../../../../components/hook/user/useEditEmailSendTokenData";
+import { TextField } from "@mui/material";
+import useUserGet from "@/app/components/hook/useUserGet";
 
 const ModalUserSendToken = () => {
+  const {userData} = useUserGet()
   const dispatch = useDispatch<AppDispatch>();
-  const { emailUser } = useSelector((state: RootState) => state.auth);
-  const [emailInput, setEmailInput] = useState<string>(emailUser);
+  const [emailInput, setEmailInput] = useState<string>(userData?.body.email);
   const [validEmailInput, setValidEmailInput] = useState<boolean>(false);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
 
@@ -78,6 +80,27 @@ const ModalUserSendToken = () => {
       }
     }
   };
+  const handlerInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    type: string,
+    regex: RegExp,
+    setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    setInput: React.Dispatch<React.SetStateAction<string>>,
+    errorMessage: string
+  ) => {
+    setInput(e.target.value);
+    if (regex.test(e.target.value)) {
+      setValidInput(true);
+      setErrorMessage("");
+    } else if (e.target.value.length === 0) {
+      setValidInput(false);
+      setErrorMessage("");
+    } else {
+      setValidInput(false);
+      setErrorMessage(errorMessage);
+    }
+  };
   return (
     <>
       <div className={styles.modalEditEmailData}>
@@ -97,17 +120,27 @@ const ModalUserSendToken = () => {
             handlerSubmit(e);
           }}
         >
-          <GroupForm
-            nameLabel={"Email"}
-            typeInput={"text"}
-            nameInput={"email"}
-            errorMessageInput={"Email : doit avoir un format valide"}
-            regex={/^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/}
-            inputValue={emailInput}
-            setInputValue={setEmailInput}
-            setValidInput={setValidEmailInput}
-            errorMessage={errorMessageEmail}
-            setErrorMessage={setErrorMessageEmail}
+          <TextField
+            value={emailInput}
+            style={{ margin: "30px 0px 40px 0px" }}
+            id={"email"}
+            label={"Email"}
+            variant="standard"
+            type={"email"}
+            placeholder={"Entrez votre email"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                "firstname",
+                /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                setValidEmailInput,
+                setErrorMessageEmail,
+                setEmailInput,
+                "Email : doit avoir un format valide"
+              );
+            }}
+            helperText={errorMessageEmail}
           />
           <div className={styles.modalEditEmailData__form__submit}>
             <input

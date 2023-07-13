@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./EmailData.module.scss";
-import useUser from "@/app/components/hook/useUser";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import useUser from "../../../components/hook/useUserGetRole";
+import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import useEditEmailData from "@/app/components/hook/user/useEditEmailData";
-import GroupForm from "@/app/components/form/group";
+import useEditEmailData from "../../../components/hook/user/useEditEmailData";
+import GroupForm from "../../../components/form/group";
 import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
-import fetchEditEmailData from "@/app/components/hook/user/useEditEmailData";
+import fetchEditEmailData from "../../../components/hook/user/useEditEmailData";
 
 const EmailCheck = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,7 +23,10 @@ const EmailCheck = () => {
   const [validCodeInput, setValidCodeInput] = useState<boolean>(false);
   const [errorMessageCode, setErrorMessageCode] = useState<string>("");
 
-  const {trigger, data} = useSWRMutation('http://localhost:8080/user/editEmail', fetchEditEmailData)
+  const { trigger, data } = useSWRMutation(
+    "http://localhost:8080/user/editEmail",
+    fetchEditEmailData
+  );
 
   useEffect(() => {
     if (data) {
@@ -52,7 +55,7 @@ const EmailCheck = () => {
           ...data,
           body: {
             ...data.body,
-            editEmail: null
+            editEmail: null,
           },
         },
         { revalidate: false }
@@ -61,7 +64,7 @@ const EmailCheck = () => {
     if (data) {
       mutateMainData();
     }
-  }, [data])
+  }, [data]);
   const closeForm = () => {
     dispatch({
       type: "form/closeModalEditEmailData",
@@ -71,7 +74,7 @@ const EmailCheck = () => {
     e.preventDefault();
     if (validCodeInput === true) {
       const fetchLogin = async () => {
-        trigger({code: codeInput})
+        trigger({ code: codeInput });
       };
       fetchLogin();
     } else {
@@ -86,7 +89,9 @@ const EmailCheck = () => {
         <div className={styles.modalEditEmailSendData}>
           <button
             className={styles.modalEditEmailSendData__btn}
-            onClick={() => {closeForm()}}
+            onClick={() => {
+              closeForm();
+            }}
           >
             <span className={styles.modalEditEmailSendData__btn__cross}>
               &times;

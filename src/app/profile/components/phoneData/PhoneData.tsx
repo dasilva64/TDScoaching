@@ -1,12 +1,12 @@
 "use client";
 
-import { RootState } from "@/app/redux/store";
+import { RootState } from "../../../redux/store";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./PhoneData.module.scss";
 
 const PhoneData = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { phone } = useSelector((state: RootState) => state.auth);
 
   return (
@@ -25,8 +25,8 @@ const PhoneData = () => {
               className={styles.phoneData__div__button}
               onClick={() => {
                 dispatch({
-                  type: 'form/openModalEditPhoneData'
-                })
+                  type: "form/openModalEditPhoneData",
+                });
               }}
             >
               Modifier

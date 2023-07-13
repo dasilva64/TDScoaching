@@ -32,17 +32,13 @@ const auth = createSlice({
   reducers: {
     login: (state, action) => {
       state.isLog = true;
-      state.emailUser = action.payload.email;
       state.role = action.payload.role;
       state.id = action.payload.id
-      state.firstname = action.payload.firstname
-      state.lastname = action.payload.lastname
-      state.phone = action.payload.phone
-      state.editEmail = action.payload.editEmail
     },
     logout: (state, action) => {
       state.isLog = false;
-      state.emailUser = "";
+      state.role = "";
+      state.id = ""
 
     },
   },

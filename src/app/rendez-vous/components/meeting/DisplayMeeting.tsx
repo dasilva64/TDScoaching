@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import styles from "../../page.module.scss";
-import useUser from '@/app/components/hook/useUser';
-import { AppDispatch, RootState } from '@/app/redux/store';
-import { useDispatch, useSelector } from 'react-redux';
-import fetchAddDescription from '@/app/components/hook/meeting/useAddDescription';
-import useSWRMutation from 'swr/mutation';
-import fetchDeleteDescription from '@/app/components/hook/meeting/useDeleteDescription';
-import { useRouter } from 'next/navigation';
-import DeleteMeeting from './deleteMeeting/DeleteMeeting';
-import EditDescription from './editDescription/EditDescription';
-import DeleteDescription from './deleteDescription/DeleteDescription';
-import AddDescription from './addDescription/AddDescription';
-
+import useUser from "../../../components/hook/useUserGetRole";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import fetchAddDescription from "../../../components/hook/meeting/useAddDescription";
+import useSWRMutation from "swr/mutation";
+import fetchDeleteDescription from "../../../components/hook/meeting/useDeleteDescription";
+import { useRouter } from "next/navigation";
+import DeleteMeeting from "./deleteMeeting/DeleteMeeting";
+import EditDescription from "./editDescription/EditDescription";
+import DeleteDescription from "./deleteDescription/DeleteDescription";
+import AddDescription from "./addDescription/AddDescription";
 
 const DisplayMeeting = () => {
   const { isLog } = useSelector((state: RootState) => state.auth);
@@ -57,8 +56,8 @@ const DisplayMeeting = () => {
                 <>
                   <p className={styles.meet__meet__p}>
                     Vous pouvez ajouter une descriptio ici ajouter des
-                    informations sur vous. Je prendrais alors vos remarque
-                    en compte avant notre rendez-vous.
+                    informations sur vous. Je prendrais alors vos remarque en
+                    compte avant notre rendez-vous.
                   </p>
                   <AddDescription />
                   <div className={styles.meet__meet__div}>
@@ -100,7 +99,7 @@ const DisplayMeeting = () => {
           ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default DisplayMeeting
+export default DisplayMeeting;

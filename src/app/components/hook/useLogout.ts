@@ -6,12 +6,8 @@ import useSWR from "swr"
 
 const fetchWithToken = async (url: string) => {
     let response = await fetch(url, {
-      credentials: "include",
     });
     let json = await response.json();
-    if (json.status === 401) {
-      throw new Error(json.message);
-    }
     return json;
   };
 
@@ -19,7 +15,7 @@ function useLogout (userLogout: any, setUserLogout: any) {
 const dispatch = useDispatch()
 const router = useRouter()
 const pathname = usePathname()
-    const { data, error, isLoading } = useSWR(userLogout === true ?["http://localhost:8080/user/logout"] : null,
+    const { data, error, isLoading } = useSWR(userLogout === true ?["http://localhost:3000/api/user/logout"] : null,
     ([url]) => fetchWithToken(url)
   );
   useEffect(() => {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Forgot.module.scss";
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import GroupForm from "../form/group";
 import fetchUserForgotEmail from "../hook/useForgot";
 import useSWRMutation from "swr/mutation";
+import { TextField } from "@mui/material";
 
 const Forgot = () => {
   const [inputEmail, setInputEmail] = useState<string>("");
@@ -46,6 +47,27 @@ const Forgot = () => {
       }
     }
   };
+
+  const handlerInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    regex: RegExp,
+    setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    setInput: React.Dispatch<React.SetStateAction<string>>,
+    errorMessage: string
+  ) => {
+    setInput(e.target.value);
+    if (regex.test(e.target.value)) {
+      setValidInput(true);
+      setErrorMessage("");
+    } else if (e.target.value.length === 0) {
+      setValidInput(false);
+      setErrorMessage("");
+    } else {
+      setValidInput(false);
+      setErrorMessage(errorMessage);
+    }
+  };
   return (
     <>
       <div className={styles.forgot}>
@@ -77,16 +99,26 @@ const Forgot = () => {
           }}
           className={styles.forgot__form}
         >
-          <GroupForm
-            nameLabel={"Email"}
-            typeInput={"email"}
-            nameInput={"email"}
-            errorMessageInput={"Email : doit avoir un format valide"}
-            regex={/^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/}
-            setInputValue={setInputEmail}
-            setValidInput={setValidInputEmail}
-            errorMessage={inputEmailError}
-            setErrorMessage={setInputEmailError}
+          <TextField
+            value={inputEmail}
+            style={{ margin: "10px 0px" }}
+            id={"email"}
+            label={"Email"}
+            variant="standard"
+            type={"email"}
+            placeholder={"Entrez votre email"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                setValidInputEmail,
+                setInputEmailError,
+                setInputEmail,
+                "Email : doit être un email valide"
+              );
+            }}
+            helperText={inputEmailError}
           />
 
           <div className={styles.forgot__form__submit}>

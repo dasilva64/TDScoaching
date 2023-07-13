@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "./DeleteMeeting.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
-import fetchDeleteMeeting from "@/app/components/hook/meeting/useDeleteMeeting";
+import { AppDispatch, RootState } from "../../../../redux/store";
+import fetchDeleteMeeting from "../../../../components/hook/meeting/useDeleteMeeting";
 import useSWRMutation from "swr/mutation";
-import useUser from "@/app/components/hook/useUser";
-import useAll from "@/app/components/hook/meeting/useAll";
+import useUser from "../../../../components/hook/useUserGetRole";
+import useAll from "../../../../components/hook/meeting/useAll";
 
 const DeleteMeeting = () => {
   const { isLog } = useSelector((state: RootState) => state.auth);

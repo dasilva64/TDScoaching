@@ -3,28 +3,27 @@ import useSWR from "swr";
 import { headers } from "next/headers";
 
 const fetchWithToken = async () => {
-    let response = await fetch("https://test-auth-next-plum.vercel.app/api/user", {
+    let response = await fetch("/api/user/getUserRole", {
       headers: {
         "Content-Type": "application/json",
-        include: "credentials",
       },
     });
     let json = await response.json();
     return json;
 };
 
-function useUser() {
+function useUserGetRole() {
+  
   const { data, error, isLoading, mutate }: any = useSWR<any>(
-    "/api/user/get",
+    "/api/user/getUserRole",
     () => fetchWithToken()
   );
-
   return {
-    userData: data,
+    userDataRole: data,
     isLoading,
     isError: error,
     mutate: mutate,
   };
 }
 
-export default useUser;
+export default useUserGetRole;

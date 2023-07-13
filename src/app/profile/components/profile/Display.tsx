@@ -2,12 +2,12 @@
 
 import React, { cache, useEffect, useState } from "react";
 import styles from "../../page.module.scss";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "../../../redux/store";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
-import useUser from "@/app/components/hook/useUser";
-import useEdit from "@/app/components/hook/useEdit";
+import useUser from "../../../components/hook/useUserGetRole";
+import useEdit from "../../../components/hook/useEdit";
 
 /* const fetchEdit = async (url: string, dataInput: string) => {
   console.log('test')
@@ -73,8 +73,7 @@ const Display = () => {
   const [inputValidEmail, setInputValidEmail] = useState<boolean>(false);
   const [inputValidPhone, setInputValidPhone] = useState<boolean>(false);
 
-  useEdit(isLog, dataInput, userClick, setUserClick, urlFetch)
-
+  useEdit(isLog, dataInput, userClick, setUserClick, urlFetch);
 
   const [displayModalPassword, setDisplayModalPassword] =
     useState<boolean>(false);
@@ -168,9 +167,9 @@ const Display = () => {
     dataInput: any,
     type: string
   ) => {
-    setDataInput(dataInput)
-    setUrlFetch(url)
-    setUserClick(true)
+    setDataInput(dataInput);
+    setUrlFetch(url);
+    setUserClick(true);
     setEditPhone(!editPhone);
     //await fetchEdit(url, dataInput);
     if (type === "firstname") {
@@ -178,7 +177,6 @@ const Display = () => {
       try {
         console.log("wait");
         await mutate({ ...userData, user: { firstname: dataInput } });
-        
       } catch (error) {
         console.log("error");
       }
@@ -207,9 +205,10 @@ const Display = () => {
     } else if (type === "phone") {
       setEditPhone(!editPhone);
       try {
-        
-        await mutate({ ...userData, body: { ...userData.body, phone: dataInput } }, {revalidate: false});
-        
+        await mutate(
+          { ...userData, body: { ...userData.body, phone: dataInput } },
+          { revalidate: false }
+        );
       } catch (error) {
         console.log("error");
       }
@@ -351,7 +350,8 @@ const Display = () => {
               <span
                 onClick={() => {
                   if (inputEmail && inputEmail.length > 0) {
-                  handlerClickEmail();}
+                    handlerClickEmail();
+                  }
                 }}
                 className={styles.profile__article__span}
               >
@@ -498,7 +498,6 @@ const Display = () => {
     );
   }
 
-
   const closeForm = () => {
     setDisplayModalPassword(false);
   };
@@ -563,4 +562,3 @@ const Display = () => {
 };
 
 export default Display;
-

@@ -1,19 +1,16 @@
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserPasswordData.module.scss";
-import GroupForm from "@/app/components/form/group";
-import fetchEditPasswordData from "@/app/components/hook/user/useEditPasswordData";
+import GroupForm from "../../../../components/form/group";
+import fetchEditPasswordData from "../../../../components/hook/user/useEditPasswordData";
 import useSWRMutation from "swr/mutation";
+import { TextField } from "@mui/material";
 
 const ModalUserPasswordData = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [passwordInput, setPasswordInput] = useState<string>(
-    ""
-  );
-  const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>(
-    ""
-  );
+  const [passwordInput, setPasswordInput] = useState<string>("");
+  const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>("");
   const [validPasswordInput, setValidPasswordInput] = useState<boolean>(false);
   const [validPasswordComfirmInput, setValidPasswordComfirmInput] =
     useState<boolean>(false);
@@ -21,8 +18,10 @@ const ModalUserPasswordData = () => {
   const [errorMessagePasswordComfirm, setErrorMessagePasswordComfirm] =
     useState<string>("");
 
-  const {trigger, data} = useSWRMutation('http://localhost:8080/user/editPassword', fetchEditPasswordData)
-
+  const { trigger, data } = useSWRMutation(
+    "http://localhost:8080/user/editPassword",
+    fetchEditPasswordData
+  );
 
   useEffect(() => {
     if (data) {
@@ -54,15 +53,15 @@ const ModalUserPasswordData = () => {
     if (validPasswordInput === true || validPasswordComfirmInput === true) {
       if (passwordInput === passwordComfirmInput) {
         const fetchLogin = async () => {
-          trigger({password: passwordInput})
+          trigger({ password: passwordInput });
         };
         fetchLogin();
       } else {
         setValidPasswordInput(false);
         setValidPasswordComfirmInput(false);
         setErrorMessagePasswordComfirm(
-            "Comfirmation mot de passe : les mots de passe sont identiques"
-          );
+          "Comfirmation mot de passe : les mots de passe sont identiques"
+        );
       }
     } else {
       if (validPasswordInput === false) {
@@ -73,6 +72,27 @@ const ModalUserPasswordData = () => {
           "Comfirmation mot de passe : ne doit pas être vide"
         );
       }
+    }
+  };
+  const handlerInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    type: string,
+    regex: RegExp,
+    setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    setInput: React.Dispatch<React.SetStateAction<string>>,
+    errorMessage: string
+  ) => {
+    setInput(e.target.value);
+    if (regex.test(e.target.value)) {
+      setValidInput(true);
+      setErrorMessage("");
+    } else if (e.target.value.length === 0) {
+      setValidInput(false);
+      setErrorMessage("");
+    } else {
+      setValidInput(false);
+      setErrorMessage(errorMessage);
     }
   };
   return (
@@ -87,7 +107,7 @@ const ModalUserPasswordData = () => {
           </span>
         </button>
         <h1 className={styles.modalEditPasswordData__h1}>
-          Modification des informations principales
+          Modification de votre mot de passe
         </h1>
         <form
           className={styles.modalEditPasswordData__form}
@@ -96,33 +116,49 @@ const ModalUserPasswordData = () => {
             handlerSubmit(e);
           }}
         >
-          <GroupForm
-            nameLabel={"Mot de passe"}
-            typeInput={"password"}
-            nameInput={"password"}
-            errorMessageInput={
-              "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
-            }
-            regex={/^(?=.*[a-z]).{1,}$/}
-            inputValue={passwordInput}
-            setInputValue={setPasswordInput}
-            setValidInput={setValidPasswordInput}
-            errorMessage={errorMessagePassword}
-            setErrorMessage={setErrorMessagePassword}
+          <TextField
+            value={passwordInput}
+            style={{ margin: "20px 0px 0px 0px" }}
+            id={"password"}
+            label={"Mot de passe"}
+            variant="standard"
+            type={"password"}
+            placeholder={"Entrez votre mot de passe"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                "password",
+                /^(?=.*[a-z]).{1,}$/,
+                setValidPasswordInput,
+                setErrorMessagePassword,
+                setPasswordInput,
+                "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
+              );
+            }}
+            helperText={errorMessagePassword}
           />
-          <GroupForm
-            nameLabel={"Comfirmation mot de passe"}
-            typeInput={"password"}
-            nameInput={"comfirmPassword"}
-            errorMessageInput={
-              "Comfirmation mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
-            }
-            regex={/^(?=.*[a-z]).{1,}$/}
-            inputValue={passwordComfirmInput}
-            setInputValue={setPasswordComfirmInput}
-            setValidInput={setValidPasswordComfirmInput}
-            errorMessage={errorMessagePasswordComfirm}
-            setErrorMessage={setErrorMessagePasswordComfirm}
+          <TextField
+            value={passwordComfirmInput}
+            style={{ margin: "20px 0px" }}
+            id={"comfirmPassword"}  
+            label={"Comfirmation mot de passe"}
+            variant="standard"
+            type={"password"}
+            placeholder={"Entrez votre comfirmation mot de passe"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                "comfirmPassword",
+                /^(?=.*[a-z]).{1,}$/,
+                setValidPasswordComfirmInput,
+                setErrorMessagePasswordComfirm,
+                setPasswordComfirmInput,
+                "Comfirmation mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
+              );
+            }}
+            helperText={errorMessagePasswordComfirm}
           />
           <div className={styles.modalEditPasswordData__form__submit}>
             <input

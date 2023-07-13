@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import styles from "../page.module.scss";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch } from "../../redux/store";
 
 const ContactForm = () => {
+
   const [inputFirstname, setInputFirstname] = useState<string>("");
   const [inputLastname, setInputLastname] = useState<string>("");
   const [inputEmail, setInputEmail] = useState<string>("");
@@ -126,11 +127,11 @@ const ContactForm = () => {
         });
         let json = await response.json();
         if (json.status === 200) {
-          setInputFirstname("")
-          setInputLastname("")
-          setInputEmail("")
-          setInputObject("")
-          setInputMessage("")
+          setInputFirstname("");
+          setInputLastname("");
+          setInputEmail("");
+          setInputObject("");
+          setInputMessage("");
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: json.message },

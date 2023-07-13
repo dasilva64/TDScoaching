@@ -1,20 +1,21 @@
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserMainData.module.scss";
-import GroupForm from "@/app/components/form/group";
+import GroupForm from "../../../../components/form/group";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
-import fetchEditMainData from "@/app/components/hook/user/useEditMainData";
+import fetchEditMainData from "../../../../components/hook/user/useEditMainData";
+import { TextField } from "@mui/material";
+import useUserGet from "@/app/components/hook/useUserGet";
 
 const ModalUserMainData = () => {
-  const { lastname, firstname } = useSelector(
-    (state: RootState) => state.auth
-  );
 
+  const {userData} = useUserGet()
+  console.log(userData)
   const dispatch = useDispatch<AppDispatch>();
-  const [firstnameInput, setFirstnameInput] = useState<string>(firstname);
-  const [lastnameInput, setLastnameInput] = useState<string>(lastname);
+  const [firstnameInput, setFirstnameInput] = useState<string>(userData.body.firstname);
+  const [lastnameInput, setLastnameInput] = useState<string>(userData.body.lastname);
   const [validFirstnameInput, setValidFirstnameInput] =
     useState<boolean>(false);
   const [validLastnameInput, setValidLastnameInput] = useState<boolean>(false);
@@ -30,7 +31,6 @@ const ModalUserMainData = () => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        console.log(data)
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "succes", flashMessage: data.message },
@@ -50,7 +50,7 @@ const ModalUserMainData = () => {
   useEffect(() => {
     const mutateMainData = async () => {
       mutate(
-        "/api/user/get",
+        "/api/user/getUser",
         {
           ...data,
           body: {
@@ -81,12 +81,39 @@ const ModalUserMainData = () => {
       };
       fetchLogin();
     } else {
-      if (validFirstnameInput === false) {
+      if (userData.body.firstname === firstnameInput) {
+        setErrorMessageFirstname("Prénom : ne doit pas égal à l'ancien prénom");
+      }
+      if (userData.body.firstname !== firstnameInput && validFirstnameInput === false) {
         setErrorMessageFirstname("Prénom : ne doit pas être vide");
       }
-      if (validLastnameInput === false) {
+      if (userData.body.lastname === lastnameInput) {
+        setErrorMessageLastname("Nom de famille : ne doit pas égal à l'ancien nom de famille");
+      }
+      if (userData.body.lastname !== lastnameInput && validLastnameInput === false) {
         setErrorMessageLastname("Nom de famille : ne doit pas être vide");
       }
+    }
+  };
+  const handlerInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    type: string,
+    regex: RegExp,
+    setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    setInput: React.Dispatch<React.SetStateAction<string>>,
+    errorMessage: string
+  ) => {
+    setInput(e.target.value);
+    if (regex.test(e.target.value)) {
+      setValidInput(true);
+      setErrorMessage("");
+    } else if (e.target.value.length === 0) {
+      setValidInput(false);
+      setErrorMessage("");
+    } else {
+      setValidInput(false);
+      setErrorMessage(errorMessage);
     }
   };
   return (
@@ -110,29 +137,49 @@ const ModalUserMainData = () => {
             handlerSubmit(e);
           }}
         >
-          <GroupForm
-            nameLabel={"Prénom"}
-            typeInput={"text"}
-            nameInput={"firstname"}
-            errorMessageInput={"Prénom : ne doit pas être vide"}
-            regex={/^[0-9a-zA-Z]{2,}$/}
-            inputValue={firstnameInput}
-            setInputValue={setFirstnameInput}
-            setValidInput={setValidFirstnameInput}
-            errorMessage={errorMessageFirstname}
-            setErrorMessage={setErrorMessageFirstname}
+          <TextField
+            value={firstnameInput}
+            style={{ margin: "20px 0px 0px 0px" }}
+            id={"firstname"}
+            label={"Prénom"}
+            variant="standard"
+            type={"text"}
+            placeholder={"Entrez votre prénom"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                "firstname",
+                /^[A-Za-z]{3,}$/,
+                setValidFirstnameInput,
+                setErrorMessageFirstname,
+                setFirstnameInput,
+                "Prénom : 3 lettres minimum"
+              );
+            }}
+            helperText={errorMessageFirstname}
           />
-          <GroupForm
-            nameLabel={"Nom de famille"}
-            typeInput={"text"}
-            nameInput={"lastname"}
-            errorMessageInput={"Nom de famille : ne doit pas être vide"}
-            regex={/^(?=.*[a-z]).{1,}$/}
-            inputValue={lastnameInput}
-            setInputValue={setLastnameInput}
-            setValidInput={setValidLastnameInput}
-            errorMessage={errorMessageLastname}
-            setErrorMessage={setErrorMessageLastname}
+          <TextField
+            value={lastnameInput}
+            style={{ margin: "20px 0px" }}
+            id={"lastname"}
+            label={"Nom de famille"}
+            variant="standard"
+            type={"text"}
+            placeholder={"Entrez votre nom de famille"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                "lastname",
+                /^[A-Za-z]{3,}$/,
+                setValidLastnameInput,
+                setErrorMessageLastname,
+                setLastnameInput,
+                "Nom de famille : 3 lettres minimum"
+              );
+            }}
+            helperText={errorMessageLastname}
           />
           <div className={styles.modalEditMainUserData__form__submit}>
             <input

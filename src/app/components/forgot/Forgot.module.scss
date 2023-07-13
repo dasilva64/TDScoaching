@@ -57,22 +57,8 @@
         text-align: center;
     }
     &__form {
-        &__group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-            &__label {
-                color: black;
-                margin-bottom: 5px;
-            }
-            &__input {
-                border-radius: 5px;
-            }
-            &__error {
-                color: red;
-                margin: 5px 0px -5px 0px;
-            }
-        }
+        display: flex;
+        flex-direction: column;
         &__submit {
             text-align: center;
             &__btn {

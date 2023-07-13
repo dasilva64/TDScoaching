@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DisplayOne from "./DisplayOne";
 import styles from "./Display.module.scss";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "../../../../../redux/store";
 
 const Display = () => {
   const [keyAr, setKeyAr] = useState<string[]>([]);
@@ -26,7 +26,7 @@ const Display = () => {
       }
     }
   }, [dispatch, keyAr, sortBy]);
-console.log(datas)
+  console.log(datas);
   useEffect(() => {
     if (sortBy[0] === "" && sortBy[1] === "" && keyAr[0]) {
       dispatch({
@@ -35,14 +35,14 @@ console.log(datas)
       });
       let arr: any = datas;
       let newat: any = Object.entries(arr).sort(function (a: any, b: any): any {
-        return a[1][keyAr[0]].localeCompare(b[1][keyAr[0]])
+        return a[1][keyAr[0]].localeCompare(b[1][keyAr[0]]);
       });
 
       let test: any = [];
       for (let i = 0; i < newat.length; i++) {
         test.push(newat[i][1]);
       }
-      dispatch({ type: "Array/storeData", payload: {  datas: test } });
+      dispatch({ type: "Array/storeData", payload: { datas: test } });
       let ar: any = [];
       for (let i = (currentPage - 1) * nbShow; i < currentPage * nbShow; i++) {
         if (datas && datas.length && i < datas.length) {
@@ -59,18 +59,20 @@ console.log(datas)
         }
       }
     } else {
-      ar.push(<tr key={1}><td colSpan={keyAr.length} className={`${styles.table__body__tr__td__odd__first} ${styles.table__body__tr__td__odd__first__center}`}>Aucun utilisateur n&apos;a été trouvé</td></tr>)
+      ar.push(
+        <tr key={1}>
+          <td
+            colSpan={keyAr.length}
+            className={`${styles.table__body__tr__td__odd__first} ${styles.table__body__tr__td__odd__first__center}`}
+          >
+            Aucun utilisateur n&apos;a été trouvé
+          </td>
+        </tr>
+      );
     }
 
     setSee(ar);
-  }, [
-    currentPage,
-    datas,
-    dispatch,
-    keyAr,
-    nbShow,
-    sortBy,
-  ]);
+  }, [currentPage, datas, dispatch, keyAr, nbShow, sortBy]);
 
   const handlerSortBy = (e: any) => {
     if (e.target.textContent === sortBy[0]) {
@@ -96,25 +98,24 @@ console.log(datas)
     }
   };
 
-  const sortByF = (element : any, sort: any) => {
+  const sortByF = (element: any, sort: any) => {
     if (sortBy[0] !== "" && sortBy[1] !== "" && keyAr[0]) {
       let arr: any = datas;
       let newat: any = Object.entries(arr).sort(function (a: any, b: any): any {
         if (sort === "DESC") {
-          console.log(a[1][element])
-          return a[1][element].localeCompare(b[1][element])
+          console.log(a[1][element]);
+          return a[1][element].localeCompare(b[1][element]);
         } else {
-          return b[1][element].localeCompare(a[1][element])
+          return b[1][element].localeCompare(a[1][element]);
         }
       });
-      
 
       let test: any = [];
       for (let i = 0; i < newat.length; i++) {
         test.push(newat[i][1]);
       }
-      console.log(test)
-      dispatch({ type: "Array/storeData", payload: {  datas: test }  });
+      console.log(test);
+      dispatch({ type: "Array/storeData", payload: { datas: test } });
     }
   };
   return (

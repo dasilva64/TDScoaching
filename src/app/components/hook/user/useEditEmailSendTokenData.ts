@@ -1,7 +1,9 @@
-const fetchEditSendToken = async (url: string, { arg }: { arg: { mail: string }}) => {
-  let response = await fetch(url, {
+const fetchEditSendToken = async (
+  url: string,
+  { arg }: { arg: { mail: string } }
+) => {
+  let response = await fetch("/api/user/sendTokenEditEmail", {
     method: "post",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

@@ -41,6 +41,8 @@
         }
     }
     &__form {
+        display: flex;
+        flex-direction: column;
         &__group {
             display: flex;
             flex-direction: column;

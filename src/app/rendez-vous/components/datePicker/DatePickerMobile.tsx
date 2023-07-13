@@ -5,7 +5,7 @@ import styles from "./DatePickerMobile.module.scss";
 import Image from "next/image";
 import { current } from "@reduxjs/toolkit";
 import { start } from "repl";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
 
 const DatePickerMobile = ({
@@ -88,7 +88,6 @@ const DatePickerMobile = ({
                 startDate.getDate().toString() ===
                 choiceDate.getDate().toString()
               ) {
-                
                 ar.push(copyEvents[i]);
               }
             }
@@ -141,11 +140,9 @@ const DatePickerMobile = ({
       let startDate = new Date(copyEvents[i]["startAt"]);
       if (startDate.getTime() > choiceDate.getTime()) {
         if (startDate.getFullYear() === choiceDate.getFullYear()) {
-          
           if (
             startDate.getMonth().toString() === choiceDate.getMonth().toString()
           ) {
-            
             if (
               startDate.getDate().toString() === choiceDate.getDate().toString()
             ) {
@@ -521,7 +518,8 @@ const DatePickerMobile = ({
               <tr className={styles.datePicker__table__thead__tr}>
                 <th className={styles.datePicker__table__thead__tr__th}></th>
                 <th className={styles.datePicker__table__thead__tr__th__day}>
-                  {daystext[choiceDate.getDay()]} {choiceDate.getDay()} {monthstext[choiceDate.getMonth()]} {choiceDate.getFullYear()}
+                  {daystext[choiceDate.getDay()]} {choiceDate.getDay()}{" "}
+                  {monthstext[choiceDate.getMonth()]} {choiceDate.getFullYear()}
                 </th>
               </tr>
             </thead>
@@ -569,8 +567,7 @@ const DatePickerMobile = ({
                                     styles.datePicker__table__tbody__tr__td__meeting__other
                                   }
                                   key={index}
-                                >
-                                </td>
+                                ></td>
                               );
                             }
                           }

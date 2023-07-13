@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./SendCode.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 
 const SendCode = () => {
   const { isLog } = useSelector((state: RootState) => state.auth);

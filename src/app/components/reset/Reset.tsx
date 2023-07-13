@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "../../reinitialisation-mot-de-passe/[token]/page.module.scss";
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { useParams, useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";

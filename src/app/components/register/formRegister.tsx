@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./formRegister.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import GroupForm from "../form/group";
 import useRegister from "../hook/useRegister";
 import useSWRMutation from "swr/mutation";
 import fetchUserRegister from "../hook/useRegister";
+import { TextField } from "@mui/material";
+import { error } from "console";
 
 const FormRegister = () => {
   const { isLog } = useSelector((state: RootState) => state.auth);
@@ -102,6 +104,27 @@ const FormRegister = () => {
     }
   };
 
+  const handlerInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    regex: RegExp,
+    setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    setInput: React.Dispatch<React.SetStateAction<string>>,
+    errorMessage: string
+  ) => {
+    setInput(e.target.value);
+    if (regex.test(e.target.value)) {
+      setValidInput(true);
+      setErrorMessage("");
+    } else if (e.target.value.length === 0) {
+      setValidInput(false);
+      setErrorMessage("");
+    } else {
+      setValidInput(false);
+      setErrorMessage(errorMessage);
+    }
+  };
+
   return (
     <>
       <div className={styles.register}>
@@ -130,75 +153,131 @@ const FormRegister = () => {
             handlerSubmit(e);
           }}
         >
-          <GroupForm
-            nameLabel={"Prénom"}
-            typeInput={"text"}
-            nameInput={"firstname"}
-            errorMessageInput={"Prénom : 3 lettres minimum"}
-            regex={/^[A-Za-z]{3,}$/}
-            setInputValue={setFirstnameInput}
-            setValidInput={setValidFirstnameInput}
-            errorMessage={firstnameInputError}
-            setErrorMessage={setFirstnameInputError}
+          <TextField
+            value={firstnameInput}
+            style={{ margin: "10px 0px" }}
+            id={"firstname"}
+            label={"Prénom"}
+            variant="standard"
+            type={"text"}
+            placeholder={"Entrez votre prénom"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                /^[A-Za-z]{3,}$/,
+                setValidFirstnameInput,
+                setFirstnameInputError,
+                setFirstnameInput,
+                "Prénom : 3 lettres minimum"
+              );
+            }}
+            helperText={firstnameInputError}
           />
-          <GroupForm
-            nameLabel={"Nom de famille"}
-            typeInput={"text"}
-            nameInput={"lastname"}
-            errorMessageInput={"Nom de famille : 3 lettres minimum"}
-            regex={/^[A-Za-z]{3,}$/}
-            setInputValue={setLastnameInput}
-            setValidInput={setValidLastnameInput}
-            errorMessage={lastnameInputError}
-            setErrorMessage={setLastnameInputError}
+          <TextField
+            value={lastnameInput}
+            style={{ margin: "10px 0px" }}
+            id={"lastname"}
+            label={"Nom de famille"}
+            variant="standard"
+            type={"text"}
+            placeholder={"Entrez votre nom de famille"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                /^[A-Za-z]{3,}$/,
+                setValidLastnameInput,
+                setLastnameInputError,
+                setLastnameInput,
+                "Nom de famille : 3 lettres minimum"
+              );
+            }}
+            helperText={lastnameInputError}
           />
-          <GroupForm
-            nameLabel={"Mot de passe"}
-            typeInput={"password"}
-            nameInput={"password"}
-            errorMessageInput={
-              "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
-            }
-            regex={/^(?=.*[a-z]).{1,}$/}
-            setInputValue={setPasswordInput}
-            setValidInput={setValidPasswordInput}
-            errorMessage={passwordInputError}
-            setErrorMessage={setPasswordInputError}
+          <TextField
+            value={passwordInput}
+            style={{ margin: "10px 0px" }}
+            id={"password"}
+            label={"Mot de passe"}
+            variant="standard"
+            type={"password"}
+            placeholder={"Entrez votre mot de passe"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                /^(?=.*[a-z]).{1,}$/,
+                setValidPasswordInput,
+                setPasswordInputError,
+                setPasswordInput,
+                "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
+              );
+            }}
+            helperText={passwordInputError}
           />
-          <GroupForm
-            nameLabel={"Comfirmation mot de passe"}
-            typeInput={"password"}
-            nameInput={"comfirmPassword"}
-            errorMessageInput={"Comfirmation mot de passe : doit correspondre"}
-            regex={/^(?=.*[a-z]).{1,}$/}
-            setInputValue={setPasswordComfirmInput}
-            setValidInput={setValidPasswordComfirmInput}
-            errorMessage={passwordComfirmInputError}
-            setErrorMessage={setPasswordComfirmError}
+          <TextField
+            value={passwordComfirmInput}
+            style={{ margin: "10px 0px" }}
+            id={"passwordComfirm"}
+            label={"Comfirmation mot de passe"}
+            variant="standard"
+            type={"password"}
+            placeholder={"Entrez comfirmation de votre mot de passe"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                /^(?=.*[a-z]).{1,}$/,
+                setValidPasswordComfirmInput,
+                setPasswordComfirmError,
+                setPasswordComfirmInput,
+                "Comfirmation mot de passe : doit correspondre"
+              );
+            }}
+            helperText={passwordComfirmInputError}
           />
-          <GroupForm
-            nameLabel={"Email"}
-            typeInput={"text"}
-            nameInput={"email"}
-            errorMessageInput={"Email : doit être un email valide"}
-            regex={/^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/}
-            setInputValue={setEmailInput}
-            setValidInput={setValidEmailInput}
-            errorMessage={emailInputError}
-            setErrorMessage={setEmailInputError}
+          <TextField
+            value={emailInput}
+            style={{ margin: "10px 0px" }}
+            id={"email"}
+            label={"Email"}
+            variant="standard"
+            type={"email"}
+            placeholder={"Entrez votre email"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                setValidEmailInput,
+                setEmailInputError,
+                setEmailInput,
+                "Email : doit être un email valide"
+              );
+            }}
+            helperText={emailInputError}
           />
-          <GroupForm
-            nameLabel={"Télephone"}
-            typeInput={"tel"}
-            nameInput={"phone"}
-            errorMessageInput={
-              "Téléphone : doit être une numéro de téléphone valide"
-            }
-            regex={/^[0-9]{10,10}$/}
-            setInputValue={setPhoneInput}
-            setValidInput={setValidPhoneInput}
-            errorMessage={phoneInputError}
-            setErrorMessage={setPhoneInputError}
+          <TextField
+            value={phoneInput}
+            style={{ margin: "10px 0px" }}
+            id={"phone"}
+            label={"Téléphone"}
+            variant="standard"
+            type={"tel"}
+            placeholder={"Entrez votre numéro de téléphone"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                /^[0-9]{10,10}$/,
+                setValidPhoneInput,
+                setPhoneInputError,
+                setPhoneInput,
+                "Téléphone : doit être une numéro de téléphone valide"
+              );
+            }}
+            helperText={phoneInputError}
           />
           <div className={styles.register__form__submit}>
             <input

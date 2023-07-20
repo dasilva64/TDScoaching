@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ModalUserSendToken.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../redux/store";
-import GroupForm from "../../../../components/form/group";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../redux/store";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
-import fetchEditSendToken from "../../../../components/hook/user/useEditEmailSendTokenData";
+import fetchUserEditSendToken from "@/app/components/fetch/user/fetchUserEditSendToken";
 import { TextField } from "@mui/material";
-import useUserGet from "../../../../components/hook/useUserGet";
+import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const ModalUserSendToken = () => {
   const {userData} = useUserGet()
@@ -17,25 +16,23 @@ const ModalUserSendToken = () => {
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
 
   const { trigger, data } = useSWRMutation(
-    "http://localhost:8080/user/editEmailSendToken",
-    fetchEditSendToken
+    "/api/user/sendTokenEditEmail",
+    fetchUserEditSendToken
   );
 
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        console.log(data);
         const mutateUser = async () => {
+          let test = {newEmail: data.body.editEmail.newEmail,
+            limitDate: data.body.editEmail.limitDate,}
           mutate(
-            "/api/user/get",
+            "/api/user/getUser",
             {
               ...data,
               body: {
                 ...data.body,
-                editEmail: {
-                  newEmail: data.newData.newEmail,
-                  limitDate: data.newData.limitDate,
-                },
+                editEmail: test,
               },
             },
             { revalidate: false }

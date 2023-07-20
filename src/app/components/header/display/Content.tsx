@@ -12,14 +12,21 @@ import SendCode from "../../sendCode/SendCode";
 import Forgot from "../../forgot/Forgot";
 import { RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import useLogout from "../../hook/useLogout";
-import useUserGetRole from "../../hook/useUserGetRole";
 import ModalUserMainData from "../../../profile/components/mainData/modal/ModalUserMainData";
 import ModalUserPasswordData from "../../../profile/components/passwordData/modal/ModalUserPasswordData";
 import ModalUserSendToken from "../../../profile/components/emailSendTokenData/modal/ModalUserSendToken";
 import EmailCheck from "../../../profile/components/emailData/EmailData";
 import EmailValidData from "../../../profile/components/emailValidData/EmailValidData";
-import ModalUserPhoneData from "../../../profile/components/phoneData/modal/ModalUserPhoneData";
+import useUserGet from "../../hook/user/useUserGet";
+import ModalPhoneSendTokenData from "../../../profile/components/phoneSendTokenData/modal/ModalPhoneSendTokenData";
+import PhoneCheck from "@/app/profile/components/phoneData/PhoneData";
+import PhoneValidData from "@/app/profile/components/phoneValidData/PhoneValidData";
+import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorUser";
+import ModalTwoFactorDisable from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorDisable";
+import fetchUserLogout from "../../fetch/user/fetchUserLogout";
+import useSWRMutation from "swr/mutation";
+import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
+import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteMeeting";
 
 const Content = () => {
   const pathname = usePathname();
@@ -39,10 +46,15 @@ const Content = () => {
     displayModalEditEmailData,
     displayModalEditValidEmailData,
     displayModalEditPhoneData,
+    displayModalDeleteMeeting,
+    displayModalEditPhoneSendData,
+    displayModalEditValidPhoneData,
+    displayModalTwoFactor,
+    displayModalTwoFactorDisable,
+    displayModalCancelMeeting
   } = useSelector((state: RootState) => state.form);
 
   const { isLog, role } = useSelector((state: RootState) => state.auth);
-  const [userLogout, setUserLogout] = useState(false);
 
   const { flashMessage } = useSelector((state: RootState) => state.flash);
   const handlerClick = () => {
@@ -50,37 +62,83 @@ const Content = () => {
       type: "form/toggleLogin",
     });
   };
-
-  useLogout(userLogout, setUserLogout);
-  const { userDataRole } = useUserGetRole();
+  const { data, trigger } = useSWRMutation("/api/user/logout", fetchUserLogout);
   useEffect(() => {
+    if (data && data.status === 200) {
+      dispatch({
+        type: "auth/logout",
+      });
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: { type: "success", flashMessage: data.message },
+      });
+      if (pathname === "/rendez-vous" || pathname === "/profile") {
+        router.push("/");
+      }
+    }
+  }, [data, dispatch, pathname, router]);
 
-    if (userDataRole) {
-      if (userDataRole.status === 200) {
+  useEffect(() => {
+    const tes = async () => {
+      let response = await fetch("/api/user/getUser", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      let json = await response.json();
+      if (json) {
+        if (json.status === 200) {
+          dispatch({
+            type: "auth/login",
+            payload: {
+              role: json.body.role,
+              id: json.body.id,
+            },
+          });
+        } else {
+          /* if (pathname === "/rendez-vous" || pathname === "/profile") {
+            router.push("/");
+          } */
+          dispatch({
+            type: "auth/logout",
+          });
+        }
+      }
+    };
+    tes();
+  }, [dispatch]);
+
+  /*   
+  useEffect(() => {
+    if (userData) {
+      console.log(userData);
+      if (userData.status === 200) {
         dispatch({
           type: "auth/login",
           payload: {
-            role: userDataRole.body.role,
-            id: userDataRole.body.id,
+            role: userData.body.role,
+            id: userData.body.id,
           },
         });
       } else {
-       /*  if (pathname === "/rendez-vous" || pathname === "/profile") {
+         if (pathname === "/rendez-vous" || pathname === "/profile") {
           router.push("/");
-        } */
+        }
         dispatch({
           type: "auth/logout",
         });
       }
     }
-  }, [dispatch, pathname, router, userDataRole]);
+  }, [dispatch, pathname, router, userData]); */
 
   useEffect(() => {
     if (document) {
       let mainDiv = document.querySelector("main");
       let footerDiv = document.querySelector("footer");
+      let htlmElement = document.querySelector("html");
+      let htlmbody = document.querySelector("body");
 
-      if (mainDiv && footerDiv) {
+      if (mainDiv && footerDiv && htlmElement && htlmbody) {
         if (
           displayFormLogin === true ||
           displayFormRegister === true ||
@@ -92,29 +150,29 @@ const Content = () => {
           displayModalEditEmailSendData === true ||
           displayModalEditEmailData === true ||
           displayModalEditValidEmailData === true ||
-          displayModalEditPhoneData === true
+          displayModalEditPhoneData === true ||
+          displayModalEditPhoneSendData === true ||
+          displayModalEditValidPhoneData === true ||
+          displayModalTwoFactor === true ||
+          displayModalTwoFactorDisable === true ||
+          displayModalCancelMeeting === true ||
+          displayModalDeleteMeeting === true
         ) {
           mainDiv.style.opacity = "0.1";
           footerDiv.style.opacity = "0.1";
+          htlmElement.style.height = "100%";
+          htlmbody.style.height = "100%";
+          htlmbody.style.overflow = "hidden";
         } else {
           mainDiv.style.opacity = "1";
           footerDiv.style.opacity = "1";
+          htlmElement.style.height = "unset";
+          htlmbody.style.height = "unset";
+          htlmbody.style.overflow = "unset";
         }
       }
     }
-  }, [
-    displayFormCheck,
-    displayModalEditEmailSendData,
-    displayFormForgot,
-    displayFormLogin,
-    displayFormRegister,
-    displayModalEditMainUserData,
-    displayModalEditPasswordData,
-    displaySendCode,
-    displayModalEditEmailData,
-    displayModalEditValidEmailData,
-    displayModalEditPhoneData,
-  ]);
+  }, [displayFormCheck, displayModalEditEmailSendData, displayFormForgot, displayFormLogin, displayFormRegister, displayModalEditMainUserData, displayModalEditPasswordData, displaySendCode, displayModalEditEmailData, displayModalEditValidEmailData, displayModalEditPhoneData, displayModalEditPhoneSendData, displayModalEditValidPhoneData, displayModalTwoFactor, displayModalTwoFactorDisable, displayModalCancelMeeting, displayModalDeleteMeeting]);
 
   const updateUseState = () => {
     setIsClick(!isClick);
@@ -144,7 +202,13 @@ const Content = () => {
       displayModalEditEmailSendData ||
       displayModalEditEmailData ||
       displayModalEditValidEmailData ||
-      displayModalEditPhoneData
+      displayModalEditPhoneData ||
+      displayModalEditPhoneSendData ||
+      displayModalEditValidPhoneData ||
+      displayModalTwoFactor ||
+      displayModalTwoFactorDisable ||
+      displayModalCancelMeeting ||
+      displayModalDeleteMeeting
     ) {
       if (displayLogMenu === true) {
         if (flashMessage && flashMessage[1].length > 0) {
@@ -180,20 +244,70 @@ const Content = () => {
       ) {
         if (flashMessage[0] === "error") {
           return (
-            <div className={styles.flash__modal__error}>{flashMessage[1]}</div>
+            <div className={styles.flash__modal__error}>
+              {flashMessage[1]}
+              <span
+                onClick={() => {
+                  dispatch({
+                    type: "flash/clearFlashMessage",
+                  });
+                }}
+                className={styles.flash__modal__error__span}
+              >
+                &times;
+              </span>
+            </div>
           );
         } else {
           return (
             <div className={styles.flash__modal__success}>
               {flashMessage[1]}
+              <span
+                onClick={() => {
+                  dispatch({
+                    type: "flash/clearFlashMessage",
+                  });
+                }}
+                className={styles.flash__modal__success__span}
+              >
+                &times;
+              </span>
             </div>
           );
         }
       }
       if (flashMessage[0] === "error") {
-        return <div className={styles.flash__error}>{flashMessage[1]}</div>;
+        return (
+          <div className={styles.flash__modal__error}>
+            {flashMessage[1]}{" "}
+            <span
+              onClick={() => {
+                dispatch({
+                  type: "flash/clearFlashMessage",
+                });
+              }}
+              className={styles.flash__modal__error__span}
+            >
+              &times;
+            </span>
+          </div>
+        );
       } else {
-        return <div className={styles.flash__success}>{flashMessage[1]}</div>;
+        return (
+          <div className={styles.flash__modal__success}>
+            {flashMessage[1]}{" "}
+            <span
+              onClick={() => {
+                dispatch({
+                  type: "flash/clearFlashMessage",
+                });
+              }}
+              className={styles.flash__modal__success__span}
+            >
+              &times;
+            </span>
+          </div>
+        );
       }
     } else {
       return null;
@@ -201,7 +315,6 @@ const Content = () => {
   };
 
   useEffect(() => {
-    
     if (flashMessage && flashMessage[1].length > 0) {
       let timer = setTimeout(() => {
         dispatch({
@@ -225,7 +338,13 @@ const Content = () => {
       {displayModalEditEmailSendData && <ModalUserSendToken />}
       {displayModalEditEmailData === true && <EmailCheck />}
       {displayModalEditValidEmailData === true && <EmailValidData />}
-      {displayModalEditPhoneData === true && <ModalUserPhoneData />}
+      {displayModalEditPhoneSendData === true && <ModalPhoneSendTokenData />}
+      {displayModalEditPhoneData === true && <PhoneCheck />}
+      {displayModalEditValidPhoneData === true && <PhoneValidData />}
+      {displayModalTwoFactor === true && <ModalTwoFactor />}
+      {displayModalTwoFactorDisable === true && <ModalTwoFactorDisable />}
+      {displayModalCancelMeeting === true && <ModalCancel />}
+      {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
       {displayFlash()}
       <header className={ClassName()}>
         <figure className={styles.header__figure}>
@@ -482,7 +601,7 @@ const Content = () => {
                           <>
                             <li className={styles.header__log__li}>
                               <Link
-                                href="/historique"
+                                href="/meetings"
                                 onClick={() => setDisplayLogMenu(false)}
                               >
                                 Historique des rendez-vous
@@ -490,7 +609,7 @@ const Content = () => {
                             </li>
                             <li className={styles.header__log__li}>
                               <Link
-                                href="/rendez-vous"
+                                href="/meetingAdmin"
                                 onClick={() => setDisplayLogMenu(false)}
                               >
                                 Tous les rendez-vous
@@ -498,7 +617,7 @@ const Content = () => {
                             </li>
                             <li className={styles.header__log__li}>
                               <Link
-                                href="/tous-les-utilisateurs"
+                                href="/utilisateurs"
                                 onClick={() => setDisplayLogMenu(false)}
                               >
                                 Tous les utilisateurs
@@ -530,7 +649,7 @@ const Content = () => {
                           <Link
                             href=""
                             onClick={() => {
-                              setUserLogout(true);
+                              trigger();
                             }}
                           >
                             Déconnection

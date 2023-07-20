@@ -1,19 +1,19 @@
-"use client"
+"use client";
 import React from "react";
 import styles from "../page.module.scss";
 import EmailData from "./emailSendTokenData/EmailSendTokenData";
 import MainData from "./mainData/MainData";
 import MeetingData from "./meetingData/MeetingData";
 import PasswordData from "./passwordData/PasswordData";
-import PhoneData from "./phoneData/PhoneData";
+import PhoneData from "./phoneSendTokenData/PhoneSendTokenData";
 import TwoFactorData from "./twoFactorData/TwoFactorData";
-import EmailCheck from "./emailData/EmailData";
 
 const Display = () => {
   return (
     <>
       <>
-        <EmailCheck />
+        {/* <EmailCheck />
+        <PhoneCheck /> */}
         <h2 className={styles.profile__article__h2}>Mes informations</h2>
         <div className={styles.profile__article__div}>
           <div className={styles.profile__article__div__div}>

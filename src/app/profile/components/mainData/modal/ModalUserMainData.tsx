@@ -2,20 +2,21 @@ import { AppDispatch, RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserMainData.module.scss";
-import GroupForm from "../../../../components/form/group";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
-import fetchEditMainData from "../../../../components/hook/user/useEditMainData";
+import fetchUserEditMainData from "@/app/components/fetch/user/fetchUserEditMainData";
 import { TextField } from "@mui/material";
-import useUserGet from "../../../../components/hook/useUserGet";
+import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const ModalUserMainData = () => {
-
-  const {userData} = useUserGet()
-  console.log(userData)
+  const { userData } = useUserGet();
   const dispatch = useDispatch<AppDispatch>();
-  const [firstnameInput, setFirstnameInput] = useState<string>(userData.body.firstname);
-  const [lastnameInput, setLastnameInput] = useState<string>(userData.body.lastname);
+  const [firstnameInput, setFirstnameInput] = useState<string>(
+    userData.body.firstname
+  );
+  const [lastnameInput, setLastnameInput] = useState<string>(
+    userData.body.lastname
+  );
   const [validFirstnameInput, setValidFirstnameInput] =
     useState<boolean>(false);
   const [validLastnameInput, setValidLastnameInput] = useState<boolean>(false);
@@ -24,8 +25,8 @@ const ModalUserMainData = () => {
   const [errorMessageLastname, setErrorMessageLastname] = useState<string>("");
 
   const { trigger, data } = useSWRMutation(
-    "http://localhost:8080/user/editMainData",
-    fetchEditMainData
+    "/api/user/editMainUser",
+    fetchUserEditMainData
   );
 
   useEffect(() => {
@@ -84,13 +85,21 @@ const ModalUserMainData = () => {
       if (userData.body.firstname === firstnameInput) {
         setErrorMessageFirstname("Prénom : ne doit pas égal à l'ancien prénom");
       }
-      if (userData.body.firstname !== firstnameInput && validFirstnameInput === false) {
+      if (
+        userData.body.firstname !== firstnameInput &&
+        validFirstnameInput === false
+      ) {
         setErrorMessageFirstname("Prénom : ne doit pas être vide");
       }
       if (userData.body.lastname === lastnameInput) {
-        setErrorMessageLastname("Nom de famille : ne doit pas égal à l'ancien nom de famille");
+        setErrorMessageLastname(
+          "Nom de famille : ne doit pas égal à l'ancien nom de famille"
+        );
       }
-      if (userData.body.lastname !== lastnameInput && validLastnameInput === false) {
+      if (
+        userData.body.lastname !== lastnameInput &&
+        validLastnameInput === false
+      ) {
         setErrorMessageLastname("Nom de famille : ne doit pas être vide");
       }
     }

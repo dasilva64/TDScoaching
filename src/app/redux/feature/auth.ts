@@ -2,24 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface AuthType {
   role: string
-  emailUser: string
   isLog: boolean;
   id: string
-  lastname: string
-  firstname: string
-  phone: string
-  editEmail: any[]
 }
 
 const initialState: AuthType = {
   role: "",
   isLog: false,
-  emailUser: "",
   id: "",
-  lastname: "",
-  firstname: "",
-  phone: "",
-  editEmail: []
 };
 interface UserData {
   email: string;

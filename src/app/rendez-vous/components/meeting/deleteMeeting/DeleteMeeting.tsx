@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import styles from "./DeleteMeeting.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
-import fetchDeleteMeeting from "../../../../components/hook/meeting/useDeleteMeeting";
+import fetchDeleteMeeting from "../../../../components/fetch/meeting/fetchDeleteMeeting";
 import useSWRMutation from "swr/mutation";
-import useUser from "../../../../components/hook/useUserGetRole";
-import useAll from "../../../../components/hook/meeting/useAll";
+import useAll from "../../../../components/hook/meeting/useAllAfterNow";
+import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const DeleteMeeting = () => {
   const { isLog } = useSelector((state: RootState) => state.auth);
 
-  const { user, isLoading, isError, mutate }: any = useUser();
-  const { allMeeting, mutateMeeting } = useAll(isLog);
+  const { userData, isLoading, isError, mutate }: any = useUserGet();
+  const { allMeeting, mutateMeeting } = useAll();
 
   const dispatch = useDispatch<AppDispatch>();
   const [userClickOnButton, setUserClickOnButton] = useState<boolean>(false);
@@ -19,10 +19,10 @@ const DeleteMeeting = () => {
   const { displayModalDeleteMeeting } = useSelector(
     (state: RootState) => state.form
   );
-  console.log(user);
+  console.log(userData);
   const { trigger: triggerDeleteMeeting, data: dataDeleteMeeting } =
     useSWRMutation(
-      `http://localhost:8080/meeting/${user.body.meetingId}`,
+      `http://localhost:8080/meeting/${userData.body.meetingId}`,
       fetchDeleteMeeting
     );
 
@@ -50,7 +50,7 @@ const DeleteMeeting = () => {
     triggerDeleteMeeting();
     try {
       let index;
-      let test = user.body.meetingId;
+      let test = userData.body.meetingId;
       for (let i = 0; i < allMeeting.length; i++) {
         if (allMeeting[i].id === test) {
           index = i;
@@ -64,8 +64,8 @@ const DeleteMeeting = () => {
         ]);
       }
       await mutate({
-        ...user,
-        body: { ...user.body, meetingId: null, meeting: null },
+        ...userData,
+        body: { ...userData.body, meetingId: null, meeting: null },
       });
 
       console.log("wait");
@@ -80,39 +80,6 @@ const DeleteMeeting = () => {
   };
   return (
     <>
-      {displayModalDeleteMeeting === true && (
-        <>
-          <div className={styles.modalDeleteMeeting__modal}>
-            <button
-              className={styles.modalDeleteMeeting__modal__btn}
-              onClick={() => closeFormDelete()}
-            >
-              <span className={styles.modalDeleteMeeting__modal__btn__cross}>
-                &times;
-              </span>
-            </button>
-            <h1 className={styles.modalDeleteMeeting__modal__h1}>
-              Voulez vous vraiment supprimer ce rendez-vous
-            </h1>
-
-            <p>
-              Si vous supprimer ce rendez-vous le paiement que vous avez
-              effectué ne sera pas validé et aucun argent ne sera débité de
-              votre compte.
-            </p>
-            <div className={styles.modalDeleteMeeting__modal__remove}>
-              <button
-                className={styles.modalDeleteMeeting__modal__remove__btn}
-                onClick={() => {
-                  handlerClick();
-                }}
-              >
-                Supprimer
-              </button>
-            </div>
-          </div>
-        </>
-      )}
       <div className={styles.modalDeleteMeeting__div}>
         <div>
           <button

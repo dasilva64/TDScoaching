@@ -67,6 +67,13 @@ export const Array = createSlice({
         changeDisplayModal: (state, action) => {
             state.displayModal = action.payload.display
             state.userData = action.payload.userData
+        },
+        resetData: (state) => {
+            state.sortBy = ["", ""]
+            state.currentPage = 1
+            state.nbShow = 10
+            state.onSearch = false
+            state.datas = state.initialDatas
         }
     }
 })

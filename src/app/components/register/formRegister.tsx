@@ -1,17 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./formRegister.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import GroupForm from "../form/group";
-import useRegister from "../hook/useRegister";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 import useSWRMutation from "swr/mutation";
-import fetchUserRegister from "../hook/useRegister";
+import fetchUserRegister from "../fetch/user/fetchUserRegister";
 import { TextField } from "@mui/material";
-import { error } from "console";
 
 const FormRegister = () => {
-  const { isLog } = useSelector((state: RootState) => state.auth);
-
   const dispatch = useDispatch<AppDispatch>();
   const [emailInput, setEmailInput] = useState<string>("");
   const [firstnameInput, setFirstnameInput] = useState<string>("");
@@ -36,7 +31,7 @@ const FormRegister = () => {
   const [phoneInputError, setPhoneInputError] = useState<string>("");
 
   const { trigger, data } = useSWRMutation(
-    "http://localhost:8080/user/register",
+    "/api/user/register",
     fetchUserRegister
   );
 
@@ -68,7 +63,7 @@ const FormRegister = () => {
     ) {
       const fetchRegister = async () => {
         trigger({
-          email: emailInput,
+          mail: emailInput,
           password: passwordInput,
           firstname: firstnameInput,
           lastname: lastnameInput,

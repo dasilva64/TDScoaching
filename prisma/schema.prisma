@@ -9,30 +9,34 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User {
-  id                              Int      @id @default(autoincrement())
-  mail                            String   @unique
-  password                        String
-  token                           String?  @db.VarChar
-  registerToken                   String?  @db.VarChar
-  editEmail                       Json?    @db.Json
-  firstname                       String   @db.VarChar
-  lastname                        String   @db.VarChar
-  phone                           String   @db.VarChar
-  twoFactor                       Boolean
-  role                            String   @db.VarChar
-  status                          Boolean
-  meetingId                       Int?
-  meetings                        Meeting?
-  Meeting_User_meetingIdToMeeting Meeting? @relation("User_meetingIdToMeeting", fields: [meetingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Meeting {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  description String?
+  startAt     DateTime @db.Timestamp(6)
+  endAt       DateTime @db.Timestamp(6)
+  status      Boolean
+  userId      String   @db.Uuid
+  limitDate   String?  @db.VarChar
+  User        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model Meeting {
-  id                           Int      @id @default(autoincrement())
-  userId                       Int      @unique
-  description                  String?
-  startAt                      DateTime @db.Timestamp(6)
-  endAt                        DateTime @db.Timestamp(6)
-  user                         User     @relation(fields: [userId], references: [id], onUpdate: NoAction)
-  User_User_meetingIdToMeeting User[]   @relation("User_meetingIdToMeeting")
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model User {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  mail          String    @unique @db.VarChar
+  firstname     String    @db.VarChar
+  lastname      String    @db.VarChar
+  password      String    @db.VarChar
+  registerToken Json?     @db.Json
+  resetToken    Json?     @db.Json
+  editEmail     Json?     @db.Json
+  phone         String    @unique @db.VarChar
+  role          String    @db.VarChar
+  twoFactor     Boolean
+  status        Boolean
+  editPhone     Json?     @db.Json
+  twoFactorCode Json?     @db.Json
+  meetingId     String?   @db.Uuid
+  Meeting       Meeting[]
 }

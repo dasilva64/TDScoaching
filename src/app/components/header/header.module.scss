@@ -182,6 +182,24 @@
       top: 20px;
       z-index: 6;
       transform: translateX(-50%);
+      width: 95%;
+      &__span {
+        position: absolute;
+        right: 10px;
+        font-size: 25px;
+        color: red;
+        padding: 1px 8px 3px 8px;
+        border-radius: 50%;
+        background-color: white;
+        cursor: pointer;
+        bottom: 6px;
+        transition: all 400ms;
+        &:hover {
+          transform: scale(1.1);
+          background-color: red;
+          color: white;
+        }
+      }
     }
     &__success {
       background-color: white;
@@ -195,7 +213,25 @@
       left: 50%;
       top: 20px;
       z-index: 6;
+      width: 95%;
       transform: translateX(-50%);
+      &__span {
+        position: absolute;
+        right: 10px;
+        font-size: 25px;
+        color: blue;
+        padding: 1px 8px 3px 8px;
+        border-radius: 50%;
+        background-color: white;
+        cursor: pointer;
+        bottom: 6px;
+        transition: all 400ms;
+        &:hover {
+          transform: scale(1.1);
+          background-color: blue;
+          color: white;
+        }
+      }
     }
   }
   &__error {

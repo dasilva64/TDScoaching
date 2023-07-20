@@ -8,6 +8,7 @@ import register from "./feature/register";
 import user from "./feature/user";
 import flash from "./feature/flash";
 import { Array } from "./feature/Array";
+import { ArrayMeeting } from "./feature/ArrayMeeting";
 
 export const store = configureStore({
   reducer: {
@@ -16,7 +17,8 @@ export const store = configureStore({
     register: register.reducer,
     user: user.reducer,
     flash: flash.reducer,
-    Array: Array.reducer
+    Array: Array.reducer,
+    ArrayMeeting: ArrayMeeting.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

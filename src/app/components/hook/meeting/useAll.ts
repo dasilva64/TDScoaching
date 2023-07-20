@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-const fetchWithToken = async () => {
-  let response = await fetch("http://localhost:8080/meeting/all", {
-    credentials: "include",
-  });
+const fetchWithToken = async (url: string) => {
+  let response = await fetch(url);
   let json = await response.json();
   return json;
 };
 
-function useAll(isLog: boolean) {
+function useAll() {
   //const [callFetch, setCallFetch] = useState<boolean>(false)
-  const { data, error, isLoading, mutate }: any = useSWR<any>(isLog === true ? "/api/all" : null, () =>
-    fetchWithToken()
+  const { data, error, isLoading } = useSWR(["/api/meeting/getAll"], ([url]) =>
+    fetchWithToken(url)
   );
 
   /* useEffect(() => {
@@ -21,10 +19,9 @@ function useAll(isLog: boolean) {
     }
   }, [data]) */
   return {
-    allMeeting: data,
+    data,
     isLoading,
     isError: error,
-    mutateMeeting: mutate,
   };
 }
 

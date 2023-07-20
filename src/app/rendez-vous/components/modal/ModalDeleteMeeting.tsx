@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./ModalDeleteMeeting.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
-import useDelete from "../../../components/hook/meeting/useDeleteMeeting";
+import useDelete from "../../../components/fetch/meeting/fetchDeleteMeeting";
 import { mutate } from "swr";
 
 const ModalDeleteMeeting = ({ id, setDataTest }: any) => {

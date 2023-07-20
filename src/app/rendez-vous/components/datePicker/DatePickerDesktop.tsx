@@ -80,7 +80,7 @@ const DatePickerDesktop = ({
               eventDate,
               eventDay,
               eventHour,
-              copyEvents[i]["userId"]
+              copyEvents[i]["userId"],
             ]);
           }
         }
@@ -127,7 +127,7 @@ const DatePickerDesktop = ({
       week.splice(5, 2);
       return week;
     }
-    if (events && events.length > 0 && choiceDate === "") {
+    if (choiceDate === "") {
       let current = new Date();
       current.setDate(current.getDate());
       setChoiceDate(current.toDateString());
@@ -183,7 +183,7 @@ const DatePickerDesktop = ({
               eventDate,
               eventDay,
               eventHour,
-              copyEvents[i]["userId"]
+              copyEvents[i]["userId"],
             ]);
           }
         }
@@ -245,11 +245,8 @@ const DatePickerDesktop = ({
   const previous = () => {
     let next = new Date(startDateWeek);
 
-    console.log(next)
-    console.log(new Date())
     let test = new Date();
     if (new Date(next).getTime() > new Date().getTime()) {
-      console.log('test')
       next.setDate(next.getDate() - 7);
       setChoiceDate(next.toDateString());
       changeDate(next.toDateString());
@@ -267,7 +264,7 @@ const DatePickerDesktop = ({
     let test = new Date();
     if (new Date(create).getTime() > new Date().getTime()) {
       setDisplayModal(true);
-      setDateMeeting(create);
+      setDateMeeting(create.toLocaleString());
     }
   };
 
@@ -343,7 +340,6 @@ const DatePickerDesktop = ({
         <table className={styles.datePicker__table}>
           <thead className={styles.datePicker__table__thead}>
             <tr className={styles.datePicker__table__thead__tr}>
-              <th className={styles.datePicker__table__thead__tr__th}></th>
               {arDateWeek.length > 0 &&
                 arDateWeek.map((p: any, index: any) => {
                   return (
@@ -351,23 +347,31 @@ const DatePickerDesktop = ({
                       className={styles.datePicker__table__thead__tr__th}
                       key={index}
                     >
-                      {daystext[p[3]]} - {p[2]}/{p[1]}
+                      <div
+                        className={styles.datePicker__table__thead__tr__th__div}
+                      >
+                        <span>{daystext[p[3]]}</span>
+                        <span>
+                          {p[2]}/{p[1]}
+                        </span>
+                      </div>
                     </th>
                   );
                 })}
             </tr>
           </thead>
           <tbody className={styles.datePicker__table__tbody}>
-            {hourtext && user &&
+            {hourtext &&
+              user &&
               Object.entries(hourtext).map((h: any, index: any) => {
                 return (
                   <tr
                     key={index}
                     className={styles.datePicker__table__tbody__tr}
                   >
-                    <td className={styles.datePicker__table__tbody__tr__td__hour}>
+                    {/* <td className={styles.datePicker__table__tbody__tr__td__hour}>
                       {h[1]}h
-                    </td>
+                    </td> */}
                     {arDateWeek.length > 0 &&
                       arDateWeek.map((p: any, index: any) => {
                         if (p[4] && p[4].length > 0) {
@@ -380,7 +384,10 @@ const DatePickerDesktop = ({
                               if (
                                 h[1].toString() === p[4][0][y][4].toString()
                               ) {
-                                if (user.body.id.toString() === p[4][0][y][5].toString()) {
+                                if (
+                                  user.body.id.toString() ===
+                                  p[4][0][y][5].toString()
+                                ) {
                                   return (
                                     <td
                                       onClick={() => {}}
@@ -401,10 +408,15 @@ const DatePickerDesktop = ({
                                       }
                                       key={index}
                                     >
+                                      {" "}
+                                      <div
+                                        className={
+                                          styles.datePicker__table__tbody__tr__td__meeting__other__div
+                                        }
+                                      ></div>
                                     </td>
                                   );
                                 }
-                                
                               }
                             }
                           }
@@ -413,12 +425,26 @@ const DatePickerDesktop = ({
                         //
                         return (
                           <td
-                            onClick={() => {
-                              handlerClick(h[1], p);
-                            }}
                             className={styles.datePicker__table__tbody__tr__td}
                             key={index}
-                          ></td>
+                          >
+                            <div
+                              className={
+                                styles.datePicker__table__tbody__tr__td__div
+                              }
+                              onClick={() => {
+                                handlerClick(h[1], p);
+                              }}
+                            >
+                              <p
+                                className={
+                                  styles.datePicker__table__tbody__tr__td__div__p
+                                }
+                              >
+                                {h[1]} h
+                              </p>
+                            </div>
+                          </td>
                         );
                       })}
                   </tr>

@@ -9,10 +9,15 @@ const initialState = {
     displayModalDeleteMeeting: false,
     displayModalEditMainUserData: false,
     displayModalEditPasswordData: false,
+    displayModalEditPhoneSendData: false,
     displayModalEditPhoneData: false,
+    displayModalEditValidPhoneData: false,
     displayModalEditEmailSendData: false,
     displayModalEditEmailData: false,
-    displayModalEditValidEmailData: false
+    displayModalEditValidEmailData: false,
+    displayModalTwoFactor: false,
+    displayModalTwoFactorDisable: false,
+    displayModalCancelMeeting: false,
 }
 
 const form = createSlice({
@@ -96,11 +101,42 @@ const form = createSlice({
         closeModalEditValidEmailData: (state) => {
             state.displayModalEditValidEmailData = false
         },
+        openModalEditPhoneSendData: (state) => {
+            state.displayModalEditPhoneSendData = true
+        },
+        closeModalEditPhoneSendData: (state) => {
+            state.displayModalEditPhoneSendData = false
+        },
         openModalEditPhoneData: (state) => {
+            state.displayModalEditPhoneSendData = false
             state.displayModalEditPhoneData = true
         },
         closeModalEditPhoneData: (state) => {
             state.displayModalEditPhoneData = false
+        },
+         openModalEditValidPhoneData: (state) => {
+            state.displayModalEditValidPhoneData = true
+        },
+        closeModalEditValidPhoneData: (state) => {
+            state.displayModalEditValidPhoneData = false
+        },
+        openModalTwoFactor: (state) => {
+            state.displayModalTwoFactor = true
+        },
+        closeModalTwoFactor: (state) => {
+            state.displayModalTwoFactor = false
+        },
+        openModalTwoFactorDisable: (state) => {
+            state.displayModalTwoFactorDisable = true
+        },
+        closeModalTwoFactorDisable: (state) => {
+            state.displayModalTwoFactorDisable = false
+        },
+        openModalCancelMeeting: (state) => {
+            state.displayModalCancelMeeting = true
+        },
+        closeModalCancelMeeting: (state) => {
+            state.displayModalCancelMeeting = false
         },
 
     }

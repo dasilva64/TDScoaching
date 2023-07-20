@@ -1,51 +1,44 @@
 import React, { useEffect } from "react";
 import styles from "../../../page.module.scss";
-import fetchDeleteDescription from "../../../../components/hook/meeting/useDeleteDescription";
+import fetchDeleteDescription from "../../../../components/fetch/meeting/fetchDeleteDescription";
 import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
-import useUser from "../../../../components/hook/useUserGetRole";
 import { RootState } from "../../../../redux/store";
 import { useSelector } from "react-redux";
+import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const DeleteDescription = () => {
-  const { isLog } = useSelector((state: RootState) => state.auth);
+  const { userData, isLoading, isError, mutate }: any = useUserGet();
 
-  const { user, isLoading, isError, mutate }: any = useUser();
+  const { trigger, data } = useSWRMutation(
+    `/api/meeting/deleteDescription`,
+    fetchDeleteDescription
+  );
 
-  const { trigger: triggerDeleteDescription, data: dataDeleteDescription } =
-    useSWRMutation(
-      `http://localhost:8080/meeting/${user ? user.body.meetingId : null}`,
-      fetchDeleteDescription,
-      { revalidate: false }
-    );
-
-  useEffect(() => {
-    if (dataDeleteDescription) {
-      if (dataDeleteDescription.status === 200) {
-        console.log(dataDeleteDescription);
+  /* useEffect(() => {
+    if (data) {
+      if (data.status === 200) {
+        console.log(data);
         const mutateUser = async () => {
           try {
             await mutate({
-              ...user,
+              ...data,
               body: {
-                ...user.body,
-                meeting: { ...user.body.meeting, description: null },
+                ...data.body,
+                meeting: { ...data.body.meeting, description: null },
               },
             });
           } catch (error) {
             console.log(error);
           }
         };
-        if (user.body.meeting.description !== null) {
           mutateUser();
-        }
       }
     }
-  }, [dataDeleteDescription, mutate, user]);
+  }, [data, mutate]); */
   const handlerClickDeleteDescription = () => {
     const fetchDeleteMeeting = async () => {
-      console.log("ttt");
-      triggerDeleteDescription();
+      trigger();
     };
     fetchDeleteMeeting();
   };

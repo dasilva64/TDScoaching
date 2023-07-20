@@ -4,9 +4,11 @@ import React, { use, useEffect, useState } from "react";
 import styles from "../page.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
+import { TextField, TextareaAutosize } from "@mui/material";
+import useSWRMutation from "swr/mutation";
+import fetchSendEmail from "@/app/components/fetch/contact/useContact";
 
 const ContactForm = () => {
-
   const [inputFirstname, setInputFirstname] = useState<string>("");
   const [inputLastname, setInputLastname] = useState<string>("");
   const [inputEmail, setInputEmail] = useState<string>("");
@@ -28,77 +30,31 @@ const ContactForm = () => {
   const [objectInputError, setObjectInputError] = useState<string>("");
   const [messageInputError, setMessageInputError] = useState<string>("");
 
-  const handlerInputFirstname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > 3) {
-      handler(e, true, "", "firstname");
-    } else if (e.target.value.length === 0) {
-      handler(e, false, "", "firstname");
-    } else {
-      handler(e, false, "Firstname : need to be not empty", "firstname");
-    }
-  };
-  const handlerInputLastname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > 3) {
-      handler(e, true, "", "lastname");
-    } else if (e.target.value.length === 0) {
-      handler(e, false, "", "lastname");
-    } else {
-      handler(e, false, "Lastname : need to be not empty", "lastname");
-    }
-  };
-  const handlerInputEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const mailregex = /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/;
-    if (mailregex.test(e.target.value)) {
-      handler(e, true, "", "email");
-    } else if (e.target.value.length === 0) {
-      handler(e, false, "", "email");
-    } else {
-      handler(e, false, "Email : need to be a valid email", "email");
-    }
-  };
-  const handlerInputObject = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > 3) {
-      handler(e, true, "", "object");
-    } else if (e.target.value.length === 0) {
-      handler(e, false, "", "object");
-    } else {
-      handler(e, false, "Object : need to be not empty", "object");
-    }
-  };
-  const handlerInputMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length > 3) {
-      handler(e, true, "", "message");
-    } else if (e.target.value.length === 0) {
-      handler(e, false, "", "message");
-    } else {
-      handler(e, false, "Message : need to be not empty", "message");
-    }
-  };
+  const { trigger, data } = useSWRMutation(
+    "http://localhost:8080/contact/send",
+    fetchSendEmail
+  );
 
-  const handler = (e: any, valid: boolean, text: string, type: string) => {
-    if (type === "email") {
-      setInputEmail(e.target.value);
-      setValidInputEmail(valid);
-      setEmailInputError(text);
-    } else if (type === "firstname") {
-      setInputFirstname(e.target.value);
-      setValidInputFirstname(valid);
-      setFirstnameInputError(text);
-    } else if (type === "lastname") {
-      setInputLastname(e.target.value);
-      setValidInputLastname(valid);
-      setLastnameInputError(text);
-    } else if (type === "object") {
-      setInputObject(e.target.value);
-      setValidInputObject(valid);
-      setObjectInputError(text);
-    } else if (type === "message") {
-      setInputMessage(e.target.value);
-      setValidInputMessage(valid);
-      setMessageInputError(text);
+  useEffect(() => {
+    if (data) {
+      if (data.status === 200) {
+        setInputFirstname("");
+        setInputLastname("");
+        setInputEmail("");
+        setInputObject("");
+        setInputMessage("");
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: data.message },
+        });
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+      }
     }
-    return valid;
-  };
+  }, [data, dispatch]);
 
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,38 +66,14 @@ const ContactForm = () => {
       validinputObject === true
     ) {
       const fetchLogin = async () => {
-        let response = await fetch("http://localhost:8080/contact/send", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            email: inputEmail,
-            firstname: inputFirstname,
-            lastname: inputLastname,
-            object: inputObject,
-            message: inputMessage,
-            speudo: inputPseudo,
-          }),
+        trigger({
+          email: inputEmail,
+          firstname: inputFirstname,
+          lastname: inputLastname,
+          object: inputObject,
+          message: inputMessage,
+          speudo: inputPseudo,
         });
-        let json = await response.json();
-        if (json.status === 200) {
-          setInputFirstname("");
-          setInputLastname("");
-          setInputEmail("");
-          setInputObject("");
-          setInputMessage("");
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "success", flashMessage: json.message },
-          });
-        } else {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: json.message },
-          });
-        }
       };
       if (inputPseudo.length === 0) {
         fetchLogin();
@@ -164,6 +96,27 @@ const ContactForm = () => {
       }
     }
   };
+  const handlerInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    type: string,
+    regex: RegExp,
+    setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    setInput: React.Dispatch<React.SetStateAction<string>>,
+    errorMessage: string
+  ) => {
+    setInput(e.target.value);
+    if (regex.test(e.target.value)) {
+      setValidInput(true);
+      setErrorMessage("");
+    } else if (e.target.value.length === 0) {
+      setValidInput(false);
+      setErrorMessage("");
+    } else {
+      setValidInput(false);
+      setErrorMessage(errorMessage);
+    }
+  };
   return (
     <>
       <form
@@ -173,95 +126,117 @@ const ContactForm = () => {
           handlerSubmit(e);
         }}
       >
-        <div className={styles.contact__form__div}>
-          <label className={styles.contact__form__label} htmlFor="nom">
-            Nom
-          </label>
-          <input
-            type="text"
-            id="nom"
-            name="nom"
-            className={styles.contact__form__input}
-            onChange={(e) => {
-              handlerInputLastname(e);
-            }}
-            value={inputLastname}
-          />
-          <div className={styles.contact__form__input__error}>
-            {lastnameInputError}
-          </div>
-        </div>
-        <div className={styles.contact__form__div}>
-          <label className={styles.contact__form__label} htmlFor="prenom">
-            Prenom
-          </label>
-          <input
-            type="text"
-            id="prenom"
-            name="prenom"
-            className={styles.contact__form__input}
-            onChange={(e) => {
-              handlerInputFirstname(e);
-            }}
-            value={inputFirstname}
-          />
-          <div className={styles.contact__form__input__error}>
-            {firstnameInputError}
-          </div>
-        </div>
-        <div className={styles.contact__form__div}>
-          <label className={styles.contact__form__label} htmlFor="email">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            className={styles.contact__form__input}
-            onChange={(e) => {
-              handlerInputEmail(e);
-            }}
-            value={inputEmail}
-          />
-          <div className={styles.contact__form__input__error}>
-            {emailInputError}
-          </div>
-        </div>
-        <div className={styles.contact__form__div}>
-          <label className={styles.contact__form__label} htmlFor="objet">
-            Objet
-          </label>
-          <input
-            type="text"
-            id="objet"
-            name="objet"
-            className={styles.contact__form__input}
-            onChange={(e) => {
-              handlerInputObject(e);
-            }}
-            value={inputObject}
-          />
-          <div className={styles.contact__form__input__error}>
-            {objectInputError}
-          </div>
-        </div>
-        <div className={styles.contact__form__div}>
-          <label className={styles.contact__form__label} htmlFor="message">
-            Message
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            className={styles.contact__form__input}
-            onChange={(e) => {
-              handlerInputMessage(e);
-            }}
-            value={inputMessage}
-          ></textarea>
-          <div className={styles.contact__form__input__error}>
-            {messageInputError}
-          </div>
-        </div>
+        <TextField
+          value={inputLastname}
+          id={"lastname"}
+          style={{ margin: "10px 0px" }}
+          label={"Nom de famille"}
+          variant="standard"
+          type={"text"}
+          placeholder={"Entrez votre nom de famille"}
+          FormHelperTextProps={{ style: { color: "red" } }}
+          onChange={(e) => {
+            handlerInput(
+              e,
+              "lastname",
+              /^[A-Za-z]{3,}$/,
+              setValidInputLastname,
+              setLastnameInputError,
+              setInputLastname,
+              "Lastname : 3 lettres minimum"
+            );
+          }}
+          helperText={lastnameInputError}
+        />
+        <TextField
+          value={inputFirstname}
+          id={"firstname"}
+          style={{ margin: "10px 0px" }}
+          label={"Prénom"}
+          variant="standard"
+          type={"text"}
+          placeholder={"Entrez votre prénom"}
+          FormHelperTextProps={{ style: { color: "red" } }}
+          onChange={(e) => {
+            handlerInput(
+              e,
+              "firstname",
+              /^[A-Za-z]{3,}$/,
+              setValidInputFirstname,
+              setFirstnameInputError,
+              setInputFirstname,
+              "firstname : 3 lettres minimum"
+            );
+          }}
+          helperText={firstnameInputError}
+        />
+        <TextField
+          value={inputEmail}
+          id={"email"}
+          style={{ margin: "10px 0px" }}
+          label={"Email"}
+          variant="standard"
+          type={"email"}
+          placeholder={"Entrez votre mail"}
+          FormHelperTextProps={{ style: { color: "red" } }}
+          onChange={(e) => {
+            handlerInput(
+              e,
+              "email",
+              /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+              setValidInputEmail,
+              setEmailInputError,
+              setInputEmail,
+              "Email : doit avoir un format valide"
+            );
+          }}
+          helperText={emailInputError}
+        />
+        <TextField
+          value={inputObject}
+          id={"object"}
+          style={{ margin: "10px 0px" }}
+          label={"Objet"}
+          variant="standard"
+          type={"text"}
+          placeholder={"Entrez l'objet de votre message"}
+          FormHelperTextProps={{ style: { color: "red" } }}
+          onChange={(e) => {
+            handlerInput(
+              e,
+              "object",
+              /^[A-Za-z]{3,}$/,
+              setValidInputObject,
+              setObjectInputError,
+              setInputObject,
+              "Object : 3 lettres minimum"
+            );
+          }}
+          helperText={objectInputError}
+        />
+        <TextField
+          value={inputMessage}
+          id={"message"}
+          style={{ margin: "10px 0px" }}
+          label={"Message"}
+          variant="standard"
+          type={"text"}
+          placeholder={"Entrez votre message"}
+          FormHelperTextProps={{ style: { color: "red" } }}
+          onChange={(e) => {
+            handlerInput(
+              e,
+              "message",
+              /^[A-Za-z]{3,}$/,
+              setValidInputMessage,
+              setMessageInputError,
+              setInputMessage,
+              "Message : 3 lettres minimum"
+            );
+          }}
+          helperText={messageInputError}
+        />
+
         <input
           type="text"
           name="pseudo"

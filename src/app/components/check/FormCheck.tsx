@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const FormCheck = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { emailUser } = useSelector((state: RootState) => state.auth);
+  //const { emailUser } = useSelector((state: RootState) => state.auth);
 
   const [inputCode, setInputCode] = useState<string>("");
   const handlerInputCode = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,7 +15,7 @@ const FormCheck = () => {
 
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const fetchCheckCode = async () => {
+    /* const fetchCheckCode = async () => {
       let response = await fetch("http://localhost:8080/user/check", {
         method: "post",
         headers: {
@@ -26,13 +26,13 @@ const FormCheck = () => {
       });
       let json = await response.json();
       console.log(json);
-      /* dispatch({
+       dispatch({
         type: "form/closeCheck",
-      }); */
+      }); 
     };
     if (inputCode.length === 6) {
       fetchCheckCode();
-    }
+    } */
   };
 
   const closeForm = () => {

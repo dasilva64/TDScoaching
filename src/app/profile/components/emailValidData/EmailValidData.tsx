@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import styles from "./EmailValidData.module.scss";
 import { mutate } from "swr";
-import fetchEditEmailData from "../../../components/hook/user/useEditEmailData";
+import fetchUserEditEmailData from "@/app/components/fetch/user/fetchUserEditEmailData";
 import { TextField } from "@mui/material";
+import fetchReSendEmailCode from "@/app/components/fetch/user/useReSendEmail";
 
 const EmailValidData = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,8 +23,8 @@ const EmailValidData = () => {
     });
   };
   const { trigger, data } = useSWRMutation(
-    "http://localhost:8080/user/editEmail",
-    fetchEditEmailData
+    "/api/user/editEmailUser",
+    fetchUserEditEmailData
   );
 
   useEffect(() => {
@@ -34,7 +35,7 @@ const EmailValidData = () => {
           payload: { type: "success", flashMessage: data.message },
         });
         dispatch({
-          type: "form/closeModalEditEmailData",
+          type: "form/closeModalEditValidEmailData",
         });
       } else {
         dispatch({
@@ -46,22 +47,63 @@ const EmailValidData = () => {
   }, [data, dispatch]);
   useEffect(() => {
     const mutateMainData = async () => {
+      let copyNewEmail = data.body.mail;
       mutate(
-        "/api/user/get",
+        "/api/user/getUser",
         {
           ...data,
           body: {
             ...data.body,
+            email: copyNewEmail,
             editEmail: null,
           },
         },
         { revalidate: false }
       );
     };
-    if (data) {
+    if (data && data.status === 200) {
       mutateMainData();
     }
   }, [data]);
+
+  const { trigger: triggerReSendCode, data: dataReSendCode } = useSWRMutation(
+    "/api/user/emailReSendCode",
+    fetchReSendEmailCode
+  );
+  useEffect(() => {
+    if (dataReSendCode) {
+      if (dataReSendCode.status === 200) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataReSendCode.message },
+        });
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataReSendCode.message },
+        });
+      }
+    }
+  }, [dataReSendCode, dispatch]);
+  useEffect(() => {
+    const mutateMaindataReSendCode = async () => {
+      let copyNewEmail = dataReSendCode.body.editEmail;
+      mutate(
+        "/api/user/getUser",
+        {
+          ...dataReSendCode,
+          body: {
+            ...dataReSendCode.body,
+            editEmail: copyNewEmail,
+          },
+        },
+        { revalidate: false }
+      );
+    };
+    if (dataReSendCode && dataReSendCode.status === 200) {
+      mutateMaindataReSendCode();
+    }
+  }, [dataReSendCode]);
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validCodeInput === true) {
@@ -121,27 +163,27 @@ const EmailValidData = () => {
             }}
           >
             <TextField
-            value={codeInput}
-            style={{ margin: "20px 0px 30px 0px" }}
-            id={"code"}
-            label={"Code de validation"}
-            variant="standard"
-            type={"number"}
-            placeholder={"Entrez votre code"}
-            FormHelperTextProps={{ style: { color: "red" } }}
-            onChange={(e) => {
-              handlerInput(
-                e,
-                "firstname",
-                /^[0-9]{8,8}$/,
-                setValidCodeInput,
-                setErrorMessageCode,
-                setCodeInput,
-                "Code : doit contenir 8 chiffres"
-              );
-            }}
-            helperText={errorMessageCode}
-          />
+              value={codeInput}
+              style={{ margin: "20px 0px 30px 0px" }}
+              id={"code"}
+              label={"Code de validation"}
+              variant="standard"
+              type={"number"}
+              placeholder={"Entrez votre code"}
+              FormHelperTextProps={{ style: { color: "red" } }}
+              onChange={(e) => {
+                handlerInput(
+                  e,
+                  "firstname",
+                  /^[0-9]{8,8}$/,
+                  setValidCodeInput,
+                  setErrorMessageCode,
+                  setCodeInput,
+                  "Code : doit contenir 8 chiffres"
+                );
+              }}
+              helperText={errorMessageCode}
+            />
             <div className={styles.modalEditEmailValidData__form__submit}>
               <input
                 className={styles.modalEditEmailValidData__form__submit__btn}
@@ -150,6 +192,16 @@ const EmailValidData = () => {
               />
             </div>
           </form>
+          <div className={styles.modalEditEmailValidData__reSend}>
+            <button
+              className={styles.modalEditEmailValidData__reSend__btn}
+              onClick={() => {
+                triggerReSendCode();
+              }}
+            >
+              Renvoyer un code
+            </button>
+          </div>
         </div>
       )}
     </>

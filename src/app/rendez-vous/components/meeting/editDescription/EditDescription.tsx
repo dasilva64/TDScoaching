@@ -1,38 +1,37 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../../page.module.scss";
-import fetchAddDescription from "../../../../components/hook/meeting/useAddDescription";
-import useUser from "../../../../components/hook/useUserGetRole";
+import fetchAddDescription from "../../../../components/fetch/meeting/fetchAddDescription";
 import useSWRMutation from "swr/mutation";
 import { RootState } from "../../../../redux/store";
 import { useSelector } from "react-redux";
+import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const EditDescription = () => {
   const { isLog } = useSelector((state: RootState) => state.auth);
 
   const [displayEditMeeting, setDisplayEditMeeting] = useState<boolean>(false);
   const [description, setDescription] = useState<string>("");
-  const { user, isLoading, isError, mutate }: any = useUser();
+  const { userData, isLoading, isError, mutate }: any = useUserGet();
 
-  const { trigger: triggerAddDescription, data: dataAddDescription } =
+  const { trigger, data } =
     useSWRMutation(
-      `http://localhost:8080/meeting/${user ? user.body.meetingId : null}`,
+      `/api/meeting/editDescription`,
       fetchAddDescription,
-      { revalidate: false }
     );
   useEffect(() => {
-    if (dataAddDescription) {
-      if (dataAddDescription.status === 200) {
-        console.log(dataAddDescription);
+    if (data) {
+      if (data.status === 200) {
+        console.log(data);
 
         const mutateUser = async () => {
           try {
             await mutate({
-              ...user,
+              ...userData,
               body: {
-                ...user.body,
+                ...userData.body,
                 meeting: {
-                  ...user.body.meeting,
-                  description: dataAddDescription.body,
+                  ...userData.body.meeting,
+                  description: data.body,
                 },
               },
             });
@@ -40,16 +39,15 @@ const EditDescription = () => {
             console.log(error);
           }
         };
-        if (user.body.meeting.description !== dataAddDescription.body) {
+        if (userData.body.meeting.description !== data.body) {
           mutateUser();
         }
       }
     }
-  }, [dataAddDescription, mutate, user]);
+  }, [data, mutate, userData]);
   const handlerClickAdd = () => {
     const fetchAddDescription = async () => {
-      console.log(user);
-      triggerAddDescription({ description: description });
+      trigger({ description: description });
     };
     fetchAddDescription();
   };
@@ -80,7 +78,7 @@ const EditDescription = () => {
               name="description"
               id="description"
               className={styles.meet__meet__div__input}
-              defaultValue={user.body.meeting.description}
+              defaultValue={userData.body.meeting.description}
             ></textarea>
           </div>
           <div className={styles.meet__comfirm__div}>

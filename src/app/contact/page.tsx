@@ -23,12 +23,14 @@ const Contact = () => {
         </div>
         <div className={styles.contact__article}>
           <h2 className={styles.contact__article__h2}>Me contacter</h2>
-          <p className={styles.contact__article__p}>
-            Veuillez renseigner le formulaire ci-dessous pour prendre
-            rendez-vous, poser une question, ou tout autre demande. Je me ferai
-            un plaisir de vous répondre au plus vite.
-          </p>
-          <ContactForm />
+          <div className={styles.contact__article__div}>
+            <p className={styles.contact__article__div__p}>
+              Veuillez renseigner le formulaire ci-dessous pour prendre
+              rendez-vous, poser une question, ou tout autre demande. Je me
+              ferai un plaisir de vous répondre au plus vite.
+            </p>
+            <ContactForm />
+          </div>
         </div>
       </div>
     </main>

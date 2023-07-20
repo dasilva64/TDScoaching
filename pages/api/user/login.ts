@@ -1,13 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import bcrypt from "bcrypt";
 import { withIronSessionApiRoute } from "iron-session/next";
 
 export default withIronSessionApiRoute(
-  async function loginRoute(req: any, res: NextApiResponse) {
+  async function login(req: any, res: NextApiResponse) {
     if (req.method === "POST") {
       const { mail, password } = await req.body;
-      const user = await prisma.user.findFirst({
+      const user = await prisma.user.findUnique({
         where: {
           mail: mail,
         },
@@ -17,13 +17,14 @@ export default withIronSessionApiRoute(
         if (decode === false) {
           return res.status(404).json({
             status: 404,
-            message: "Mauvaise combinaison email/mot de passe, veuillez réessayer"
+            message:
+              "Mauvaise combinaison email/mot de passe, veuillez réessayer",
           });
         } else {
           let userObject = {
             role: user.role,
             id: user.id,
-          }
+          };
           req.session.user = userObject;
           await req.session.save();
           return res.status(200).json({
@@ -35,13 +36,14 @@ export default withIronSessionApiRoute(
       } else {
         return res.status(404).json({
           status: 404,
-          message: "Mauvaise combinaison email/mot de passe, veuillez réessayer"
+          message:
+            "Mauvaise combinaison email/mot de passe, veuillez réessayer",
         });
       }
     } else {
       res.status(404).json({
         status: 404,
-        message: "Mauvaise requête, veuillez réessayer"
+        message: "Une erreur est survenue, veuillez réessayer",
       });
     }
   },

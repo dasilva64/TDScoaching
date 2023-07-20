@@ -1,16 +1,15 @@
 "use client";
 
-import { AppDispatch, RootState } from "../../../redux/store";
+import { AppDispatch } from "../../../redux/store";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "./EmailSendTokenData.module.scss";
-import useUserGet from "../../../components/hook/useUserGet";
+import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const EmailData = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {userData} = useUserGet()
+  const { userData, isLoading, isError } = useUserGet();
   let restDate;
-  console.log(userData);
   if (userData?.body.editEmail) {
     let limitDate = userData?.body.editEmail.limitDate;
     let convertInDate = new Date(limitDate);
@@ -18,10 +17,23 @@ const EmailData = () => {
     restDate = new Date(difference);
   }
 
-  return (
-    <>
-      <>
-        <div className={styles.emailData}>
+  let content;
+  if (isError) {
+    content = <div>error</div>;
+  } else if (isLoading) {
+    content = (
+      <div className={styles.emailData__loadData}>
+        Chargement des données
+        <div className={styles.emailData__loadData__arc}>
+          <div className={styles.emailData__loadData__arc__circle}></div>
+        </div>
+      </div>
+    );
+  } else {
+    if (userData) {
+      content = (
+        <>
+        <h3 className={styles.emailData__h3}>Adresse email</h3>
           <ul className={styles.emailData__ul}>
             <li
               className={`${styles.emailData__ul__li} ${styles.emailData__ul__li__margin}`}
@@ -34,8 +46,8 @@ const EmailData = () => {
               <>
                 <p>
                   Vous avez déjà fait une demande de changement de mail, vous
-                  pouvez refaire une demande dans {restDate?.getUTCMinutes()}{" "}
-                  min{" "}
+                  pouvez refaire une demande dans{" "}
+                  {Number(restDate?.getUTCMinutes()) + 1} min{" "}
                 </p>
                 <button
                   onClick={() => {
@@ -50,6 +62,8 @@ const EmailData = () => {
               </>
             )}
             {!userData?.body.editEmail && (
+              <>
+              <p>Vous pouvez modifier votre adresse email en cliquant sur le bouton ci-dessous</p>
               <button
                 onClick={() => {
                   dispatch({
@@ -60,9 +74,18 @@ const EmailData = () => {
               >
                 Modifier
               </button>
+              </>
+              
             )}
           </div>
-        </div>
+        </>
+      );
+    }
+  }
+  return (
+    <>
+      <>
+        <div className={styles.emailData}>{content}</div>
       </>
     </>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./page.module.scss";
-import Reset from "../../components/reset/Reset";
+import Reset from "./components/Reset";
 
 const ResetPassword = () => {
   return (

@@ -1,14 +1,10 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import styles from "./formLogin.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import GroupForm from "../form/group";
 import useSWRMutation from "swr/mutation";
-import fetchUserLogin from "../hook/useLogin";
+import fetchUserLogin from "../fetch/user/fetchUserLogin";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
-import { error } from "console";
 
 const FormLogin = () => {
   const { isLog } = useSelector((state: RootState) => state.auth);
@@ -22,15 +18,13 @@ const FormLogin = () => {
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
   const [errorMessagePassword, setErrorMessagePassword] = useState<string>("");
 
-  const { trigger, data } = useSWRMutation("/api/login", fetchUserLogin);
+  const { trigger, data } = useSWRMutation("/api/user/login", fetchUserLogin);
   const handlerInputRememberMe = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.checked);
     setRememberMeInput(e.target.checked);
   };
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        console.log(data);
         /* let ar;
         if (data.body.editEmail) {
           ar = [data.body.editEmail.newEmail, data.body.editEmail.limitDate];
@@ -78,24 +72,10 @@ const FormLogin = () => {
     if (validEmailInput === true && validPasswordInput === true) {
       const fetchLogin = async () => {
         trigger({
-          email: emailInput,
+          mail: emailInput,
           password: passwordInput,
           remember: rememberMeInput,
         });
-        /* let response = await fetch("http://localhost:3000/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            email: emailInput,
-            password: passwordInput,
-            remember: rememberMeInput,
-          }),
-        });
-        let json = await response.json();
-        console.log(json); */
       };
       if (isLog === false) {
         fetchLogin();
@@ -131,7 +111,6 @@ const FormLogin = () => {
       setErrorMessage(errorMessage);
     }
   };
-
   return (
     <>
       <div className={styles.login}>

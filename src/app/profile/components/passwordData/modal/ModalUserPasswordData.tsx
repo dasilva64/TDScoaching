@@ -1,9 +1,8 @@
-import { AppDispatch, RootState } from "../../../../redux/store";
+import { AppDispatch } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "./ModalUserPasswordData.module.scss";
-import GroupForm from "../../../../components/form/group";
-import fetchEditPasswordData from "../../../../components/hook/user/useEditPasswordData";
+import fetchUserEditPasswordData from "@/app/components/fetch/user/fetchUserEditPasswordData";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
 
@@ -19,8 +18,8 @@ const ModalUserPasswordData = () => {
     useState<string>("");
 
   const { trigger, data } = useSWRMutation(
-    "http://localhost:8080/user/editPassword",
-    fetchEditPasswordData
+    "/api/user/editPasswordUser",
+    fetchUserEditPasswordData
   );
 
   useEffect(() => {

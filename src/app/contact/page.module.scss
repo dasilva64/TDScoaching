@@ -22,7 +22,7 @@ $primary-color: white;
       margin-bottom: 60px;
       font-size: 30px;
     }
-    &__p {
+    &__div {
       border: 1px solid orange;
       box-shadow: 10px 10px orange;
       border-radius: 20px;
@@ -32,13 +32,17 @@ $primary-color: white;
     }
   }
   &__form {
+    display: flex;
+    flex-direction: column;
     margin: 40px 0px;
-   &__label {
-    color: white;
-   }
+    &__label {
+      color: black;
+      margin-top: 20px;
+      margin-bottom: 5px;
+    }
     &__div {
-        display: flex;
-        flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
     &__input {
       height: 22px;
@@ -52,21 +56,21 @@ $primary-color: white;
       }
     }
     &__submit {
-        margin-top: 30px;
-        cursor: pointer;
-        border: 1px solid orange;
-        padding: 10px;
-        background-color: orange;
-        border-radius: 10px;
-        color: white;
-        transition: all 400ms;
-        position: relative;
-        z-index: 1;
-        font-size: 21px;
-        height: unset;
-        & :hover {
-            transform: scale(1.1);
-        }
+      margin-top: 30px;
+      cursor: pointer;
+      border: 1px solid orange;
+      padding: 10px;
+      background-color: orange;
+      border-radius: 10px;
+      color: white;
+      transition: all 400ms;
+      position: relative;
+      z-index: 1;
+      font-size: 21px;
+      height: unset;
+      & :hover {
+        transform: scale(1.1);
+      }
     }
   }
 }

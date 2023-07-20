@@ -6,6 +6,7 @@ export default withIronSessionApiRoute(
   async function sendTokenEditPhone(req, res) {
     if (req.method === "POST") {
       if (req.session.user) {
+        
         const { phone } = await req.body;
         let user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
@@ -17,6 +18,7 @@ export default withIronSessionApiRoute(
             message: "L'utilisateur n'a pas été trouvé, veuillez rézssayer",
           });
         } else {
+          
           if (user.phone === phone) {
             return res.status(404).json({
               status: 404,
@@ -24,6 +26,7 @@ export default withIronSessionApiRoute(
                 "Vous ne pouvez pas utiliser le même numéro veuillez réessayer",
             });
           }
+          
           let userNew = await prisma.user.findFirst({
             where: { phone: phone },
           });
@@ -42,6 +45,7 @@ export default withIronSessionApiRoute(
                 },
               },
             });
+            
             const verifySid = "VA20ccd8e069732b219c3798beda84b750";
             const client = twilio(
               process.env.TWILIO_ACCOUNT_SID,
@@ -51,8 +55,9 @@ export default withIronSessionApiRoute(
               body: `Votre code de vérification est ${random}`,
 
               from: "+1 361 314 4154",
-              to: `+33661861227`,
+              to: `+33686381081`,
             });
+
             let copyEditPhone: any = editUser.editPhone;
             let userObject = {
               id: editUser.id,

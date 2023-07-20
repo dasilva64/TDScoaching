@@ -72,7 +72,7 @@ const Content = () => {
         type: "flash/storeFlashMessage",
         payload: { type: "success", flashMessage: data.message },
       });
-      if (pathname === "/rendez-vous" || pathname === "/profile") {
+      if (pathname === "/rendez-vous" || pathname === "/profile" || pathname === "/meetingAdmin" || pathname === "/utilisateurs" || pathname === "meetings") {
         router.push("/");
       }
     }

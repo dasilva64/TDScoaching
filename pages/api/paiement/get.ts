@@ -53,7 +53,7 @@ export default withIronSessionApiRoute(
                 product_data: {
                   name: "RDV du " + dateStart.toLocaleString("fr-FR"),
                 },
-                unit_amount: 2000,
+                unit_amount: 10000,
               },
               quantity: 1,
             },

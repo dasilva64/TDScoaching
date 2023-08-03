@@ -53,6 +53,7 @@ const Content = () => {
   } = useSelector((state: RootState) => state.form);
 
   const { isLog, role } = useSelector((state: RootState) => state.auth);
+  console.log(role);
 
   const { flashMessage } = useSelector((state: RootState) => state.flash);
   const handlerClick = () => {

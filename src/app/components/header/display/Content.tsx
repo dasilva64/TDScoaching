@@ -625,12 +625,11 @@ const Content = () => {
                           </>
                         )}
                         <li className={styles.header__log__li}>
-                          <Link
-                            href=""
+                          <button
                             onClick={() => {
                               console.log("json");
-                              const logout = async () => {
-                                /* let response = await fetch("/api/user/logout");
+                              /*const logout = async () => {
+                                 let response = await fetch("/api/user/logout");
                                 let json = await response.json();
                                 if (json && json.status === 200) {
                                   console.log("json", json);
@@ -644,7 +643,7 @@ const Content = () => {
                                       flashMessage: json.message,
                                     },
                                   }); */
-                                /* if (
+                              /* if (
                                     pathname === "/rendez-vous" ||
                                     pathname === "/profile" ||
                                     pathname === "/meetingAdmin" ||
@@ -653,13 +652,13 @@ const Content = () => {
                                   ) {
                                     router.push("/");
                                   } */
-                                //}
-                              };
-                              logout();
+                              //}
+                              /* };
+                              logout(); */
                             }}
                           >
                             Déconnection
-                          </Link>
+                          </button>
                         </li>
                       </ul>
                     </>

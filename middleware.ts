@@ -12,6 +12,7 @@ export const middleware = async (req: NextRequest) => {
     },
   });
   const { user } = session;
+  console.log(user)
   if (user) {
     if (
       req.nextUrl.pathname.startsWith("/utilisateurs") ||

@@ -7,8 +7,8 @@ import register from "./feature/register";
 
 import user from "./feature/user";
 import flash from "./feature/flash";
-import { Array } from "./feature/Array";
-import { ArrayMeeting } from "./feature/ArrayMeeting";
+import Array from "./feature/Array";
+import ArrayMeeting from "./feature/ArrayMeeting";
 
 export const store = configureStore({
   reducer: {
@@ -28,4 +28,3 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-

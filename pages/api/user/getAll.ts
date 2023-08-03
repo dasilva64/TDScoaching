@@ -1,7 +1,6 @@
 import { NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import { withIronSessionApiRoute } from "iron-session/next";
-import { Prisma } from "@prisma/client";
 
 export default withIronSessionApiRoute(
   async function getUser(req: any, res: NextApiResponse) {

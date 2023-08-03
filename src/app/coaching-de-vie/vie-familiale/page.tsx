@@ -1,77 +1,115 @@
 import ImageDisplay from "../../components/image/image";
 import Link from "next/link";
 import styles from "./page.module.scss";
+import WhileInView from "@/app/components/framer/WhileInView";
+import Image from "next/image";
 
 const Famille = () => {
   return (
     <main className={styles.famille}>
-      <h1 className={styles.famille__h1}>Vie familiale</h1>
+      <WhileInView>
+        <h1 className={styles.famille__h1}>Vie familiale</h1>
+      </WhileInView>
       <div className={styles.famille__container}>
         <div className={styles.famille__article}>
-          <h2 className={styles.famille__article__h2}>
-            Pourquoi faire du coaching familial ?
-          </h2>
+          <WhileInView>
+            <h2 className={styles.famille__article__h2}>
+              Pourquoi faire du coaching familial ?
+            </h2>
+          </WhileInView>
           <div className={styles.famille__article__div}>
-            <div className={styles.famille__article__div__text}>
-              <p>
-                Pour renforcer, améliorer et réparer les dynamiques opérant au
-                sein de la famille.
-                <br />
-                Vous êtes soumis au rythme effréné de la vie, au stress, à la
-                fatigue quotidienne, au tempérament imprévisible des enfants et
-                aux enjeux autour de la scolarité qui rendent votre tâche de
-                parent particulièrement délicate.
-              </p>
-            </div>
+            <WhileInView className={styles.famille__article__div__text}>
+              <div>
+                <WhileInView>
+                  <p>
+                    Pour renforcer, améliorer et réparer les dynamiques opérant
+                    au sein de la famille.
+                    <br />
+                    Vous êtes soumis au rythme effréné de la vie, au stress, à
+                    la fatigue quotidienne, au tempérament imprévisible des
+                    enfants et aux enjeux autour de la scolarité qui rendent
+                    votre tâche de parent particulièrement délicate.
+                  </p>
+                </WhileInView>
+              </div>
+            </WhileInView>
             <div className={styles.famille__article__div__img}>
-              <ImageDisplay
-                path="/assets/img/famille.jpg"
-                className="right"
-                border="20px"
-              />
+              <WhileInView>
+                <Image
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  style={{
+                    objectFit: "contain",
+                    width: "100%",
+                    height: "auto",
+                    borderRadius: "20px",
+                  }}
+                  priority={true}
+                  src={"/assets/img/famille.jpg"}
+                  alt="bousole"
+                />
+              </WhileInView>
             </div>
           </div>
         </div>
         <div className={styles.famille__article}>
-          <h2 className={styles.famille__article__h2}>
-            Comment tds-coachingdevie peut vous aider ?
-          </h2>
+          <WhileInView>
+            <h2 className={styles.famille__article__h2}>
+              Comment tds-coachingdevie peut vous aider ?
+            </h2>
+          </WhileInView>
           <div className={styles.famille__article__div}>
             <div className={styles.famille__article__div__img}>
-              <ImageDisplay
-                path="/assets/img/famille.jpg"
-                className="left"
-                border="20px"
-              />
+              <WhileInView>
+                <Image
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  style={{
+                    objectFit: "contain",
+                    width: "100%",
+                    height: "auto",
+                    borderRadius: "20px",
+                  }}
+                  priority={true}
+                  src={"/assets/img/famille.jpg"}
+                  alt="bousole"
+                />
+              </WhileInView>
             </div>
-            <div className={styles.famille__article__div__text}>
-              <ul>
-                <li>
-                  Accompagner les parents isolés à devenir leader de leurs
-                  enfants ;
-                </li>
-                <li>
-                  Accompagner les parents à développer leurs qualités de
-                  communication (Ecoute, compréhension, respect de chacun) ;
-                </li>
-                <li>
-                  Coacher les femmes entrepreneures à équilibrer leur vie de
-                  maman et leur vie professionnelle ;
-                </li>
-                <li>
-                  Aider les parents à obtenir des relations complices avec leurs
-                  enfants sans avoir à crier ni s’énerver ;
-                </li>
-                <li>
-                  Aider les beaux-parents qui ne se sentent pas reconnus à
-                  trouver leur place su sein de la famille recomposée ;
-                </li>
-                <li>
-                  Aider les mamans hypersensibles à se sentir épanouies malgré
-                  leurs émotions débordantes .
-                </li>
-              </ul>
-            </div>
+            <WhileInView className={styles.famille__article__div__text}>
+              <div>
+                <WhileInView>
+                  <ul>
+                    <li>
+                      Accompagner les parents isolés à devenir leader de leurs
+                      enfants ;
+                    </li>
+                    <li>
+                      Accompagner les parents à développer leurs qualités de
+                      communication (Ecoute, compréhension, respect de chacun) ;
+                    </li>
+                    <li>
+                      Coacher les femmes entrepreneures à équilibrer leur vie de
+                      maman et leur vie professionnelle ;
+                    </li>
+                    <li>
+                      Aider les parents à obtenir des relations complices avec
+                      leurs enfants sans avoir à crier ni s’énerver ;
+                    </li>
+                    <li>
+                      Aider les beaux-parents qui ne se sentent pas reconnus à
+                      trouver leur place su sein de la famille recomposée ;
+                    </li>
+                    <li>
+                      Aider les mamans hypersensibles à se sentir épanouies
+                      malgré leurs émotions débordantes .
+                    </li>
+                  </ul>
+                </WhileInView>
+              </div>
+            </WhileInView>
           </div>
         </div>
         <div className={styles.famille__article}>

@@ -10,10 +10,26 @@ const Display = () => {
   let token = queryParam.toString().split("/");
   const { data, isLoading, error } = useUserEmailValidation(token[2]);
   let content;
-  if (error) return <div>failed to load</div>;
-  if (isLoading) return <div>loading...</div>;
-  if (data) return <div>ok</div>;
-  return <>{content}</>;
+  if (error) {
+    content = <div className={styles.display__loadData}>{data.message}</div>;
+  }
+  if (isLoading) {
+    content = (
+      <div className={styles.display__loadData}>
+        Chargement des données
+        <div className={styles.display__loadData__arc}>
+          <div className={styles.display__loadData__arc__circle}></div>
+        </div>
+      </div>
+    );
+  } else {
+    content = <div className={styles.display__loadData}>{data.message}</div>;
+  }
+  return (
+    <>
+      <div className={styles.display}>{content}</div>
+    </>
+  );
 };
 
 export default Display;

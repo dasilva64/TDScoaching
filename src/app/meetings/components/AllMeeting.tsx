@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import useAll from "@/app/components/hook/meeting/useAll";
 import React, { use, useEffect } from "react";
@@ -31,7 +31,7 @@ const AllMeeting = () => {
     if (data.status === 200) {
       content = (
         <>
-        <div className={styles.datatable}>
+          <div className={styles.datatable}>
             <div className={styles.datatable__container}>
               {datas && (
                 <>
@@ -51,23 +51,38 @@ const AllMeeting = () => {
       );
     }
   }
-  
+
   useEffect(() => {
     if (data && data.status === 200) {
-      
       let newar = [...data.body];
-      
+
       newar.map((p: any, index: any) => {
-        let copyUser = {...p.User};
-        console.log(copyUser)
+        let copyUser = { ...p.User };
+        console.log(copyUser);
         if (p.description === null || p.description === "aucun") {
-          newar[index] = { ...p, startAt: new Date(p.startAt).toLocaleString(), endAt: new Date(p.endAt).toLocaleString(), description: "aucun", status: p.status.toString(),  prenom: copyUser.firstname, nom: copyUser.lastname };
+          newar[index] = {
+            ...p,
+            startAt: new Date(p.startAt).toLocaleString(),
+            endAt: new Date(p.endAt).toLocaleString(),
+            description: "aucun",
+            status: p.status.toString(),
+            prenom: copyUser.firstname,
+            nom: copyUser.lastname,
+          };
           delete newar[index].User;
-            
+          delete newar[index].limitDate;
         } else {
-        
-        newar[index] = { ...p, startAt: new Date(p.startAt).toLocaleString(), endAt: new Date(p.endAt).toLocaleString() , status: p.status.toString(),  prenom: copyUser.firstname, nom: copyUser.lastname };
-delete newar[index].User;
+          newar[index] = {
+            ...p,
+            startAt: new Date(p.startAt).toLocaleString(),
+            endAt: new Date(p.endAt).toLocaleString(),
+            status: p.status.toString(),
+            prenom: copyUser.firstname,
+            nom: copyUser.lastname,
+          };
+          delete newar[index].User;
+          delete newar[index].limitDate;
+
         }
       });
       dispatch({

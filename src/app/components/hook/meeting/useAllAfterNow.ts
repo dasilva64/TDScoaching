@@ -1,24 +1,17 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-const fetchWithToken = async () => {
-  let response = await fetch("/api/meeting/getAll", {
-  });
+const fetchWithToken = async (url: string) => {
+  let response = await fetch(url, {});
   let json = await response.json();
   return json;
 };
 
 function useAllAfterNow() {
-  //const [callFetch, setCallFetch] = useState<boolean>(false)
-  const { data, error, isLoading, mutate }: any = useSWR<any>("/api/all", () =>
-    fetchWithToken()
+  const { data, error, isLoading, mutate }: any = useSWR<any>(
+    "/api/meeting/getAllAfterNow",
+    (url) => fetchWithToken(url)
   );
-
-  /* useEffect(() => {
-    if(data) {
-      setCallFetch(true)
-    }
-  }, [data]) */
   return {
     allMeeting: data,
     isLoading,

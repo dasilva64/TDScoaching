@@ -8,6 +8,15 @@ export default withIronSessionApiRoute(
       if (req.session.user) {
         const allMeeting = await prisma.meeting.findMany({
           where: { startAt: { gte: new Date() } },
+          include: {
+            User: {
+              select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+              },
+            },
+          },
         });
         return res.json({
           status: 404,

@@ -27,7 +27,7 @@ const initialState: ArrayType = {
     userData: null
 }
 
-export const ArrayMeeting = createSlice({
+const ArrayMeeting = createSlice({
     name: 'ArrayMeeting',
     initialState,
     reducers: {
@@ -70,3 +70,5 @@ export const ArrayMeeting = createSlice({
         }
     }
 })
+
+export default ArrayMeeting

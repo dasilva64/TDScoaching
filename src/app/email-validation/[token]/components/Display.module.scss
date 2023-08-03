@@ -1,7 +1,42 @@
-.h2 {
-    text-align: center;
-    color: white;
-    margin-top: 100px;
-    margin-bottom: 60px;
-    font-size: 30px;
+.display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid orange;
+    box-shadow: 10px 10px orange;
+    border-radius: 20px;
+    background: white;
+    margin-bottom: 50px;
+    min-height: 125px;
+    &__loadData {
+      text-align: center;
+      &__arc {
+        margin: 20px auto 0px auto;
+      width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          border-top: 1px solid black;
+          border-bottom: 1px solid transparent;
+          border-left: 1px solid black;
+          border-right: 1px solid transparent;
+          animation: load 2000ms both infinite ease-out;
+          &__circle {
+                position: absolute;
+            top: 17px;
+            right: 22px;
+            width: 10px;
+            height: 10px;
+            background-color: black;
+            border-radius: 50%;
+          }}
+    }
 }
+
+@keyframes load {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(-680deg);
+    }
+  }

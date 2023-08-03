@@ -15,7 +15,6 @@ function useUserGet() {
     "/api/user/getUser",
     () => fetchWithToken()
   );
-
   return {
     userData: data,
     isLoading,

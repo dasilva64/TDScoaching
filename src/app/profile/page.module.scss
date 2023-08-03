@@ -23,11 +23,29 @@ $primary-color: white;
       font-size: 30px;
     }
     &__div {
-        display: flex;
-    justify-content: space-between;
-    &__div {
+      display: flex;
+      justify-content: space-between;
+      &__div {
         width: 45%;
+      }
     }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .profile {
+    &__article {
+      &__div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        &__div {
+          width: 100%;
+          &__margin {
+            margin-top: 50px;
+          }
+        }
+      }
     }
   }
 }

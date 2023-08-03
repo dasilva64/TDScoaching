@@ -84,14 +84,56 @@ const ModalUserPasswordData = () => {
   ) => {
     setInput(e.target.value);
     if (regex.test(e.target.value)) {
-      setValidInput(true);
-      setErrorMessage("");
+      if (
+        passwordComfirmInput.length > 0 &&
+        e.target.value !== passwordComfirmInput
+      ) {
+        setValidInput(true);
+        setErrorMessage("");
+        setErrorMessagePasswordComfirm(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setErrorMessagePasswordComfirm("");
+        setValidPasswordComfirmInput(true);
+        setValidInput(true);
+        setErrorMessage("");
+      }
     } else if (e.target.value.length === 0) {
-      setValidInput(false);
-      setErrorMessage("");
+      if (
+        passwordComfirmInput.length > 0 &&
+        e.target.value !== passwordComfirmInput
+      ) {
+        setValidInput(true);
+        setErrorMessage("");
+        setErrorMessagePasswordComfirm(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setErrorMessagePasswordComfirm("");
+        setValidPasswordComfirmInput(true);
+        setValidInput(false);
+        setErrorMessage("");
+      }
     } else {
-      setValidInput(false);
-      setErrorMessage(errorMessage);
+      if (
+        passwordComfirmInput.length > 0 &&
+        e.target.value !== passwordComfirmInput
+      ) {
+        setValidInput(true);
+        setErrorMessage("");
+        setErrorMessagePasswordComfirm(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setErrorMessagePasswordComfirm("");
+        setValidPasswordComfirmInput(true);
+        setValidInput(false);
+        setErrorMessage(errorMessage);
+      }
     }
   };
   return (
@@ -140,14 +182,28 @@ const ModalUserPasswordData = () => {
           <TextField
             value={passwordComfirmInput}
             style={{ margin: "20px 0px" }}
-            id={"comfirmPassword"}  
+            id={"comfirmPassword"}
             label={"Comfirmation mot de passe"}
             variant="standard"
             type={"password"}
             placeholder={"Entrez votre comfirmation mot de passe"}
             FormHelperTextProps={{ style: { color: "red" } }}
             onChange={(e) => {
-              handlerInput(
+              setPasswordComfirmInput(e.target.value);
+              if (
+                passwordInput.length > 0 &&
+                e.target.value !== passwordInput
+              ) {
+                setValidPasswordComfirmInput(false);
+                setErrorMessagePasswordComfirm(
+                  "Comfirmation mot de passe : les mots de passe doivent être identique"
+                );
+              } else {
+                setValidPasswordComfirmInput(true);
+
+                setErrorMessagePasswordComfirm("");
+              }
+              /* handlerInput(
                 e,
                 "comfirmPassword",
                 /^(?=.*[a-z]).{1,}$/,
@@ -155,7 +211,7 @@ const ModalUserPasswordData = () => {
                 setErrorMessagePasswordComfirm,
                 setPasswordComfirmInput,
                 "Comfirmation mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
-              );
+              ); */
             }}
             helperText={errorMessagePasswordComfirm}
           />

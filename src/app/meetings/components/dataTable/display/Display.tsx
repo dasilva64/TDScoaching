@@ -102,15 +102,19 @@ const Display = () => {
       let arr: any = datas;
       let newat: any = Object.entries(arr).sort(function (a: any, b: any): any {
         if (sort === "DESC") {
-          return a[1][element].toString().localeCompare(b[1][element].toString(), undefined, {
-            numeric: true,
-            sensitivity: "base",
-          });
+          return a[1][element]
+            .toString()
+            .localeCompare(b[1][element].toString(), undefined, {
+              numeric: true,
+              sensitivity: "base",
+            });
         } else {
-          return b[1][element].toString().localeCompare(a[1][element].toString(), undefined, {
-            numeric: true,
-            sensitivity: "base",
-          });
+          return b[1][element]
+            .toString()
+            .localeCompare(a[1][element].toString(), undefined, {
+              numeric: true,
+              sensitivity: "base",
+            });
         }
       });
 
@@ -130,6 +134,17 @@ const Display = () => {
               keyAr.map((key: any, index: any) => {
                 if (key === sortBy[0]) {
                   if (sortBy[1] === "ASC") {
+                    if (key === "id" || key === "userId") {
+                      return (
+                        <th
+                          className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__asc__little}`}
+                          onClick={(e) => handlerSortBy(e)}
+                          key={index}
+                        >
+                          {key}
+                        </th>
+                      );
+                    }
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__asc}`}
@@ -140,6 +155,17 @@ const Display = () => {
                       </th>
                     );
                   } else {
+                    if (key === "id" || key === "userId") {
+                      return (
+                        <th
+                          className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__desc__little}`}
+                          onClick={(e) => handlerSortBy(e)}
+                          key={index}
+                        >
+                          {key}
+                        </th>
+                      );
+                    }
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__desc}`}
@@ -151,6 +177,17 @@ const Display = () => {
                     );
                   }
                 } else {
+                  if (key === "id" || key === "userId") {
+                    return (
+                      <th
+                        className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__both__little}`}
+                        onClick={(e) => handlerSortBy(e)}
+                        key={index}
+                      >
+                        {key}
+                      </th>
+                    );
+                  }
                   return (
                     <th
                       className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__both}`}

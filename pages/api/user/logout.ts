@@ -15,10 +15,12 @@ export default withIronSessionApiRoute(
             message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
           });
         } else {
+          console.log("user", user);
           req.session.destroy();
           return res.status(200).json({
             status: 200,
-            message: "Vous avez été déconnecté avec succès",
+            //message: "Vous avez été déconnecté avec succès",
+            message: "Vous sfdsdfjkl",
           });
         }
       } else {

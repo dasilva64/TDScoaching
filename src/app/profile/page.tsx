@@ -3,6 +3,7 @@ import styles from "./page.module.scss";
 import Display from "./components/Display";
 
 const Profile = async () => {
+  console.log("profile");
   return (
     <>
       <main className={styles.profile}>

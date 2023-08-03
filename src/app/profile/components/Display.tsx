@@ -22,7 +22,7 @@ const Display = () => {
             <EmailData />
           </div>
 
-          <div className={styles.profile__article__div__div}>
+          <div className={`${styles.profile__article__div__div} ${styles.profile__article__div__div__margin}`}>
             <PhoneData />
             <MeetingData />
             <TwoFactorData />

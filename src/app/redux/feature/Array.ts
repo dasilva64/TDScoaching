@@ -27,7 +27,7 @@ const initialState: ArrayType = {
     userData: null
 }
 
-export const Array = createSlice({
+const Array = createSlice({
     name: 'Array',
     initialState,
     reducers: {
@@ -77,3 +77,5 @@ export const Array = createSlice({
         }
     }
 })
+
+export default Array

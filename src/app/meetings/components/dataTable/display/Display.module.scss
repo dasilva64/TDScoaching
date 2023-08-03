@@ -1,69 +1,78 @@
 .table {
-    width: 100%;
-    border-bottom: 1px solid #111;
-    border-spacing: 0;
-    clear: both;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    &__head {
-        &__tr {
-            background: #f1f1f1;
-            &__th {
-                padding: 10px 18px;
-                border-bottom: 1px solid #111;
-                &__both {
-                    background-image: url('/assets/icone/sort_both.png');
-                    background-repeat: no-repeat;
-                background-position: center right;
-                }
-                &__asc {
-                    background-image: url('/assets/icone/sort_asc.png');
-                    background-repeat: no-repeat;
-                background-position: center right;
-                }
-                &__desc {
-                    background-image: url('/assets/icone/sort_desc.png');
-                    background-repeat: no-repeat;
-                background-position: center right;
-                }
-            }
+  width: 100%;
+  border-bottom: 1px solid #111;
+  border-spacing: 0;
+  clear: both;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  &__head {
+    &__tr {
+      background: #f1f1f1;
+      &__th {
+        padding: 10px 18px;
+        border-bottom: 1px solid #111;
+        &__both {
+          background-image: url("/assets/icone/sort_both.png");
+          background-repeat: no-repeat;
+          background-position: center right;
+          &__little {
+            width: 1px;
+          }
         }
-    }
-    &__body {
-        &__tr {
-            max-height: 35px;
-            &__border {
-                max-height: 35px;
-            }
-            &__td {
-                max-height: 35px;
-                border-top: 1px solid #ddd;
-                padding: 8px 10px;
-                background-color: #f1f1f1;
-                &__div {
-                    max-height: 20px;
-                    overflow: scroll;
-                }
-                &__border {
-                    padding: 8px 10px;
-                    border-top: none;
-                }
-                &__even {
-                    background-color: #f9f9f9;
-                    &__first {
-                        background-color: #f1f1f1;
-                    }
-                }
-                &__odd {
-                    &__first {
-                        background-color: #fafafa;
-                        &__center {
-                            text-align: center;
-                            padding: 8px 10px;
-                        }
-                    }
-                }
-            }
+        &__asc {
+          background-image: url("/assets/icone/sort_asc.png");
+          background-repeat: no-repeat;
+          background-position: center right;
+          &__little {
+            width: 1px;
+          }
         }
+        &__desc {
+          background-image: url("/assets/icone/sort_desc.png");
+          background-repeat: no-repeat;
+          background-position: center right;
+          &__little {
+            width: 1px;
+          }
+        }
+      }
     }
+  }
+  &__body {
+    &__tr {
+      max-height: 35px;
+      &__border {
+        max-height: 35px;
+      }
+      &__td {
+        max-height: 35px;
+        border-top: 1px solid #ddd;
+        padding: 8px 10px;
+        background-color: #f1f1f1;
+        &__div {
+          max-height: 20px;
+          overflow: scroll;
+        }
+        &__border {
+          padding: 8px 10px;
+          border-top: none;
+        }
+        &__even {
+          background-color: #f9f9f9;
+          &__first {
+            background-color: #f1f1f1;
+          }
+        }
+        &__odd {
+          &__first {
+            background-color: #fafafa;
+            &__center {
+              text-align: center;
+              padding: 8px 10px;
+            }
+          }
+        }
+      }
+    }
+  }
 }

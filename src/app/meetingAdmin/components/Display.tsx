@@ -4,58 +4,17 @@ import React from "react";
 import styles from "../page.module.scss";
 import { RootState, AppDispatch } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DatePickerDesktop from "./datePicker/DatePickerDesktop";
 import DatePickerMobile from "./datePicker/DatePickerMobile";
-import useDelete from "../../components/fetch/meeting/fetchDeleteMeeting";
-import useAll from "../../components/hook/meeting/useAllAfterNow";
-import fetchGetPayment from "../../components/fetch/paiement/useGet";
-import useSWRMutation from "swr/mutation";
-import fetchAddDescription from "../../components/fetch/meeting/fetchAddDescription";
-import fetchDeleteMeeting from "../../components/fetch/meeting/fetchDeleteMeeting";
-import fetchDeleteDescription from "../../components/fetch/meeting/fetchDeleteDescription";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import useAllAfterNow from "../../components/hook/meeting/useAllAfterNow";
 
-/* const fetchEdit = async (id: any) => {
-  //const dispatch = useDispatch()
-
-  let response = await fetch(`http://localhost:8080/meeting/${id}`, {
-    method: "delete",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  });
-  let json = await response.json();
-  return json;
-}; */
-
 const Display = () => {
-  var options: any = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  const { push } = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
-  const [displayModal, setDisplayModal] = useState<boolean>(false);
-  const [displayEditMeeting, setDisplayEditMeeting] = useState<boolean>(false);
-  const [dateMeeting, setDateMeeting] = useState<string>("");
-
-  const [description, setDescription] = useState<string>("");
   const [mobile, setMobile] = useState<boolean | null>(null);
-  const [events, setEvents] = useState<any>([]);
-  const { displayModalDeleteMeeting } = useSelector(
-    (state: RootState) => state.form
-  );
 
-  const { userData, isLoading, isError } = useUserGet();
-
-  const { allMeeting, mutateMeeting } = useAllAfterNow();
+  const { allMeeting, isLoading, isError } = useAllAfterNow();
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth < 600) {
@@ -103,34 +62,13 @@ const Display = () => {
   } else {
     content = (
       <>
-        
         <div className={styles.meet__article}>
-          {userData &&
-            !userData.body.meeting &&
-            allMeeting &&
-            mobile === false && (
-              <>
-                <DatePickerDesktop
-                  user={userData}
-                  events={allMeeting.body}
-                  setDisplayModal={setDisplayModal}
-                  setDateMeeting={setDateMeeting}
-                />
-              </>
-            )}
-          {userData && !userData.body.meeting && mobile === true && (
-            <DatePickerMobile
-              user={userData}
-              events={allMeeting}
-              setDisplayModal={setDisplayModal}
-              setDateMeeting={setDateMeeting}
-            />
-          )}
+          {mobile === false && <DatePickerDesktop events={allMeeting.body} />}
+          {mobile === true && <DatePickerMobile events={allMeeting.body} />}
         </div>
       </>
     );
   }
-
   return <>{content}</>;
 };
 

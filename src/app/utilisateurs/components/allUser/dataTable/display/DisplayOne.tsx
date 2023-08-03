@@ -6,21 +6,13 @@ import Link from "next/link";
 
 const DisplayOne = ({ i }: any) => {
   const dispatch = useDispatch();
-  const { datas } = useSelector((state: RootState) => state.Array);
+  const { datas, sortBy } = useSelector((state: RootState) => state.Array);
   const [keyAr, setKeyAr] = useState<any>([]);
   useEffect(() => {
     if (datas && datas.length > 0) {
       setKeyAr(Object.keys(datas[0]));
     }
   }, [datas]);
-
-  const handlerClick = (i: number) => {
-    console.log(datas[i]["id"]);
-    /* dispatch({
-      type: "Array/changeDisplayModal",
-      payload: { display: true, userData: datas[i] },
-    }); */
-  };
 
   return (
     <>
@@ -33,33 +25,42 @@ const DisplayOne = ({ i }: any) => {
           {keyAr &&
             keyAr.map((p: any, index: any) => {
               if (datas[i] !== undefined) {
+                if (sortBy[0] === p) {
+                  if (i % 2 === 0) {
+                    return (
+                      <td
+                        className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td__border}`}
+                        key={index}
+                      >
+                        {" "}
+                        <Link href={`/utilisateur/${datas[i]["id"]}`}>
+                          <div className={styles.table__body__tr__td__div}>
+                            {datas[i][p]}
+                          </div>
+                        </Link>
+                      </td>
+                    );
+                  } else {
+                    return (
+                      <td
+                        className={`${styles.table__body__tr__td__odd__first} ${styles.table__body__tr__td}`}
+                        key={index}
+                      >
+                        <Link href={`/utilisateur/${datas[i]["id"]}`}>
+                          <div className={styles.table__body__tr__td__div}>
+                            {datas[i][p]}
+                          </div>
+                        </Link>
+                      </td>
+                    );
+                  }
+                }
                 if (i % 2 === 0) {
                   if (i === 0) {
-                    if (p === keyAr[0]) {
-                      return (
-                        <td
-                          className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td__border}`}
-                          key={index}
-                          onClick={() => {
-                            handlerClick(i);
-                          }}
-                        >
-                          {" "}
-                          <Link href={`/utilisateur/${datas[i]["id"]}`}>
-                            <div className={styles.table__body__tr__td__div}>
-                              {datas[i][p]}
-                            </div>
-                          </Link>
-                        </td>
-                      );
-                    }
                     return (
                       <td
                         className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td__border}`}
                         key={index}
-                        onClick={() => {
-                          handlerClick(i);
-                        }}
                       >
                         <Link href={`/utilisateur/${datas[i]["id"]}`}>
                           <div className={styles.table__body__tr__td__div}>
@@ -69,30 +70,10 @@ const DisplayOne = ({ i }: any) => {
                       </td>
                     );
                   } else {
-                    if (p === keyAr[0]) {
-                      return (
-                        <td
-                          className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td}`}
-                          key={index}
-                          onClick={() => {
-                            handlerClick(i);
-                          }}
-                        >
-                          <Link href={`/utilisateur/${datas[i]["id"]}`}>
-                            <div className={styles.table__body__tr__td__div}>
-                              {datas[i][p]}
-                            </div>
-                          </Link>
-                        </td>
-                      );
-                    }
                     return (
                       <td
                         className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}
                         key={index}
-                        onClick={() => {
-                          handlerClick(i);
-                        }}
                       >
                         <Link href={`/utilisateur/${datas[i]["id"]}`}>
                           <div className={styles.table__body__tr__td__div}>
@@ -103,28 +84,10 @@ const DisplayOne = ({ i }: any) => {
                     );
                   }
                 } else {
-                  if (p === keyAr[0]) {
-                    return (
-                      <td
-                        className={`${styles.table__body__tr__td__odd__first} ${styles.table__body__tr__td}`}
-                        key={index}
-                        onClick={() => {
-                          handlerClick(i);
-                        }}
-                      >
-                        <div className={styles.table__body__tr__td__div}>
-                          {datas[i][p]}
-                        </div>
-                      </td>
-                    );
-                  }
                   return (
                     <td
                       className={`${styles.table__body__tr__td__odd} ${styles.table__body__tr__td}`}
                       key={index}
-                      onClick={() => {
-                        handlerClick(i);
-                      }}
                     >
                       <div className={styles.table__body__tr__td__div}>
                         {datas[i][p]}

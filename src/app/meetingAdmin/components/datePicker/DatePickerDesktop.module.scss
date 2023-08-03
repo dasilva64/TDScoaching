@@ -91,35 +91,29 @@
           }
           &__meeting {
             &__me {
-               cursor: pointer;
-            display: flex;
-            margin: auto;
-            justify-content: center;
-            width: 85%;
-            height: 85%;
-            border-radius: 5px;
-            background-color: green;
-            transition: all 400ms;
-            &:hover {
-              background-color: blue;
-              color: white;
-            }
+              cursor: pointer;
+              margin: auto;
+              justify-content: center;
+              width: 85%;
+              height: 85%;
+              border-radius: 5px;
+              background-color: green;
+              transition: all 400ms;
+              &:hover {
+                background-color: blue;
+                color: white;
+              }
             }
             &__other {
-                  height: 30px;
-              cursor: pointer;
-            margin: auto;
-            justify-content: center;
-            width: 85%;
-            height: 85%;
-            border-radius: 5px;
-            background-color: green;
-            color: white;
-            transition: all 400ms;
-              &:hover {
-              background-color: blue;
-              color: white;
-            }
+              cursor: not-allowed;
+              border-radius: 5px;
+              &__div {
+                height: 2px;
+                background-color: #2b466033;
+                border-radius: 1px;
+                margin: 0 auto;
+                width: 29px;
+              }
             }
           }
         }

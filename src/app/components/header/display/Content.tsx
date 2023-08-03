@@ -17,14 +17,12 @@ import ModalUserPasswordData from "../../../profile/components/passwordData/moda
 import ModalUserSendToken from "../../../profile/components/emailSendTokenData/modal/ModalUserSendToken";
 import EmailCheck from "../../../profile/components/emailData/EmailData";
 import EmailValidData from "../../../profile/components/emailValidData/EmailValidData";
-import useUserGet from "../../hook/user/useUserGet";
 import ModalPhoneSendTokenData from "../../../profile/components/phoneSendTokenData/modal/ModalPhoneSendTokenData";
 import PhoneCheck from "@/app/profile/components/phoneData/PhoneData";
 import PhoneValidData from "@/app/profile/components/phoneValidData/PhoneValidData";
 import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorUser";
 import ModalTwoFactorDisable from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorDisable";
-import fetchUserLogout from "../../fetch/user/fetchUserLogout";
-import useSWRMutation from "swr/mutation";
+
 import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
 import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteMeeting";
 
@@ -51,7 +49,7 @@ const Content = () => {
     displayModalEditValidPhoneData,
     displayModalTwoFactor,
     displayModalTwoFactorDisable,
-    displayModalCancelMeeting
+    displayModalCancelMeeting,
   } = useSelector((state: RootState) => state.form);
 
   const { isLog, role } = useSelector((state: RootState) => state.auth);
@@ -62,21 +60,6 @@ const Content = () => {
       type: "form/toggleLogin",
     });
   };
-  const { data, trigger } = useSWRMutation("/api/user/logout", fetchUserLogout);
-  useEffect(() => {
-    if (data && data.status === 200) {
-      dispatch({
-        type: "auth/logout",
-      });
-      dispatch({
-        type: "flash/storeFlashMessage",
-        payload: { type: "success", flashMessage: data.message },
-      });
-      if (pathname === "/rendez-vous" || pathname === "/profile" || pathname === "/meetingAdmin" || pathname === "/utilisateurs" || pathname === "meetings") {
-        router.push("/");
-      }
-    }
-  }, [data, dispatch, pathname, router]);
 
   useEffect(() => {
     const tes = async () => {
@@ -99,37 +82,14 @@ const Content = () => {
           /* if (pathname === "/rendez-vous" || pathname === "/profile") {
             router.push("/");
           } */
-          dispatch({
+          /* dispatch({
             type: "auth/logout",
-          });
+          }); */
         }
       }
     };
     tes();
   }, [dispatch]);
-
-  /*   
-  useEffect(() => {
-    if (userData) {
-      console.log(userData);
-      if (userData.status === 200) {
-        dispatch({
-          type: "auth/login",
-          payload: {
-            role: userData.body.role,
-            id: userData.body.id,
-          },
-        });
-      } else {
-         if (pathname === "/rendez-vous" || pathname === "/profile") {
-          router.push("/");
-        }
-        dispatch({
-          type: "auth/logout",
-        });
-      }
-    }
-  }, [dispatch, pathname, router, userData]); */
 
   useEffect(() => {
     if (document) {
@@ -172,7 +132,25 @@ const Content = () => {
         }
       }
     }
-  }, [displayFormCheck, displayModalEditEmailSendData, displayFormForgot, displayFormLogin, displayFormRegister, displayModalEditMainUserData, displayModalEditPasswordData, displaySendCode, displayModalEditEmailData, displayModalEditValidEmailData, displayModalEditPhoneData, displayModalEditPhoneSendData, displayModalEditValidPhoneData, displayModalTwoFactor, displayModalTwoFactorDisable, displayModalCancelMeeting, displayModalDeleteMeeting]);
+  }, [
+    displayFormCheck,
+    displayModalEditEmailSendData,
+    displayFormForgot,
+    displayFormLogin,
+    displayFormRegister,
+    displayModalEditMainUserData,
+    displayModalEditPasswordData,
+    displaySendCode,
+    displayModalEditEmailData,
+    displayModalEditValidEmailData,
+    displayModalEditPhoneData,
+    displayModalEditPhoneSendData,
+    displayModalEditValidPhoneData,
+    displayModalTwoFactor,
+    displayModalTwoFactorDisable,
+    displayModalCancelMeeting,
+    displayModalDeleteMeeting,
+  ]);
 
   const updateUseState = () => {
     setIsClick(!isClick);
@@ -649,7 +627,32 @@ const Content = () => {
                           <Link
                             href=""
                             onClick={() => {
-                              trigger();
+                              const logout = async () => {
+                                let response = await fetch("/api/user/logout");
+                                let json = await response.json();
+                                if (json && json.status === 200) {
+                                  dispatch({
+                                    type: "auth/logout",
+                                  });
+                                  dispatch({
+                                    type: "flash/storeFlashMessage",
+                                    payload: {
+                                      type: "success",
+                                      flashMessage: json.message,
+                                    },
+                                  });
+                                  if (
+                                    pathname === "/rendez-vous" ||
+                                    pathname === "/profile" ||
+                                    pathname === "/meetingAdmin" ||
+                                    pathname === "/utilisateurs" ||
+                                    pathname === "meetings"
+                                  ) {
+                                    router.push("/");
+                                  }
+                                }
+                              };
+                              logout();
                             }}
                           >
                             Déconnection

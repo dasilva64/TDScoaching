@@ -42,7 +42,12 @@ const ImageDisplay: React.FC<Proptype> = ({ path, className, border }) => {
       width="0"
       height="0"
       sizes="100vw"
-      style={{ objectFit: "contain", width: "100%", height: "auto", borderRadius: border }}
+      style={{
+        objectFit: "contain",
+        width: "100%",
+        height: "auto",
+        borderRadius: border,
+      }}
       priority={true}
       className={
         style === false

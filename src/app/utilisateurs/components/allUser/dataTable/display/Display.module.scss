@@ -15,16 +15,25 @@
                     background-image: url('/assets/icone/sort_both.png');
                     background-repeat: no-repeat;
                 background-position: center right;
+                &__little {
+                    width: 1px;
+                  }
                 }
                 &__asc {
                     background-image: url('/assets/icone/sort_asc.png');
                     background-repeat: no-repeat;
                 background-position: center right;
+                &__little {
+                    width: 1px;
+                  }
                 }
                 &__desc {
                     background-image: url('/assets/icone/sort_desc.png');
                     background-repeat: no-repeat;
                 background-position: center right;
+                &__little {
+                    width: 1px;
+                  }
                 }
             }
         }

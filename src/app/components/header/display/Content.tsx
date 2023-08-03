@@ -632,6 +632,7 @@ const Content = () => {
                                 let response = await fetch("/api/user/logout");
                                 let json = await response.json();
                                 if (json && json.status === 200) {
+                                  console.log("json", json);
                                   dispatch({
                                     type: "auth/logout",
                                   });
@@ -642,7 +643,7 @@ const Content = () => {
                                       flashMessage: json.message,
                                     },
                                   });
-                                  if (
+                                  /* if (
                                     pathname === "/rendez-vous" ||
                                     pathname === "/profile" ||
                                     pathname === "/meetingAdmin" ||
@@ -650,7 +651,7 @@ const Content = () => {
                                     pathname === "meetings"
                                   ) {
                                     router.push("/");
-                                  }
+                                  } */
                                 }
                               };
                               logout();

@@ -628,8 +628,9 @@ const Content = () => {
                           <Link
                             href=""
                             onClick={() => {
+                              console.log("json");
                               const logout = async () => {
-                                let response = await fetch("/api/user/logout");
+                                /* let response = await fetch("/api/user/logout");
                                 let json = await response.json();
                                 if (json && json.status === 200) {
                                   console.log("json", json);
@@ -642,8 +643,8 @@ const Content = () => {
                                       type: "success",
                                       flashMessage: json.message,
                                     },
-                                  });
-                                  /* if (
+                                  }); */
+                                /* if (
                                     pathname === "/rendez-vous" ||
                                     pathname === "/profile" ||
                                     pathname === "/meetingAdmin" ||
@@ -652,7 +653,7 @@ const Content = () => {
                                   ) {
                                     router.push("/");
                                   } */
-                                }
+                                //}
                               };
                               logout();
                             }}

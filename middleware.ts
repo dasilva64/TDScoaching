@@ -14,15 +14,15 @@ export const middleware = async (req: NextRequest) => {
   const { user } = session;
   if (user) {
     if (
-      req.nextUrl.pathname.startsWith("/utilisateurs") ||
-      req.nextUrl.pathname.startsWith("/meetings") ||
-      req.nextUrl.pathname.startsWith("/meetingAdmin")
+      req.nextUrl.pathname === ("/utilisateurs") ||
+      req.nextUrl.pathname === ("/meetings") ||
+      req.nextUrl.pathname === ("/meetingAdmin")
     ) {
       if (user.role !== "ROLE_ADMIN") {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }
-    if (req.nextUrl.pathname.startsWith("/rendez-vous")) {
+    if (req.nextUrl.pathname === ("/rendez-vous")) {
       if (user.role !== "ROLE_USER") {
         return NextResponse.redirect(new URL("/", req.url));
       }

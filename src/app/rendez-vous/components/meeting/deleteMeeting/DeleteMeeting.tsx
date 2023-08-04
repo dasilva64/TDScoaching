@@ -47,7 +47,7 @@ const DeleteMeeting = () => {
     }
   }, [dataDeleteMeeting, dispatch]);
   const handlerClick = async () => {
-    triggerDeleteMeeting();
+    // triggerDeleteMeeting();
     try {
       let index;
       let test = userData.body.meetingId;

@@ -14,6 +14,7 @@ const Content = () => {
   const queryParam: any = usePathname();
   let id = queryParam.toString().split("/");
   const { data, isLoading, isError } = useGetById(id[2]);
+  console.log(data);
   useEffect(() => {
     if (data) {
       if (data.status !== 200) {
@@ -79,18 +80,17 @@ const Content = () => {
                   <ul className={styles.content__flex__div__ul__ul}>
                     Rendez-vous en cours :
                     <li className={styles.content__flex__div__ul__ul__li}>
-                      Description : {data.body.meetings.description}
+                      Description : {data.body.meeting.description}
                     </li>
                     <li className={styles.content__flex__div__ul__ul__li}>
                       Start :{" "}
-                      {new Date(data.body.meetings.startAt).toLocaleString()}
+                      {new Date(data.body.meeting.startAt).toLocaleString()}
                     </li>
                     <li className={styles.content__flex__div__ul__ul__li}>
-                      End :{" "}
-                      {new Date(data.body.meetings.endAt).toLocaleString()}
+                      End : {new Date(data.body.meeting.endAt).toLocaleString()}
                     </li>
                     <li className={styles.content__flex__div__ul__ul__li}>
-                      Status : {data.body.meetings.status.toString()}
+                      Status : {data.body.meeting.status.toString()}
                     </li>
                   </ul>
                 )}
@@ -105,24 +105,97 @@ const Content = () => {
                 <>
                   <div className={styles.content__flex__div__div}>
                     <table className={styles.content__flex__div__div__table}>
-                      <thead className={styles.content__flex__div__div__table__thead}>
-                        <tr className={styles.content__flex__div__div__table__thead__tr}>
-                          <th className={styles.content__flex__div__div__table__thead__tr__th}>Id</th>
-                          <th className={styles.content__flex__div__div__table__thead__tr__th}>Description</th>
-                          <th className={styles.content__flex__div__div__table__thead__tr__th}>Start</th>
-                          <th className={styles.content__flex__div__div__table__thead__tr__th}>End</th>
-                          <th className={styles.content__flex__div__div__table__thead__tr__th}>Status</th>
+                      <thead
+                        className={styles.content__flex__div__div__table__thead}
+                      >
+                        <tr
+                          className={
+                            styles.content__flex__div__div__table__thead__tr
+                          }
+                        >
+                          <th
+                            className={
+                              styles.content__flex__div__div__table__thead__tr__th
+                            }
+                          >
+                            Id
+                          </th>
+                          <th
+                            className={
+                              styles.content__flex__div__div__table__thead__tr__th
+                            }
+                          >
+                            Description
+                          </th>
+                          <th
+                            className={
+                              styles.content__flex__div__div__table__thead__tr__th
+                            }
+                          >
+                            Start
+                          </th>
+                          <th
+                            className={
+                              styles.content__flex__div__div__table__thead__tr__th
+                            }
+                          >
+                            End
+                          </th>
+                          <th
+                            className={
+                              styles.content__flex__div__div__table__thead__tr__th
+                            }
+                          >
+                            Status
+                          </th>
                         </tr>
                       </thead>
-                      <tbody className={styles.content__flex__div__div__table__tbody}>
+                      <tbody
+                        className={styles.content__flex__div__div__table__tbody}
+                      >
                         {data.body.allMeetings.map((p: any, index: any) => {
                           return (
-                            <tr className={styles.content__flex__div__div__table__tbody__tr} key={index}>
-                              <td className={styles.content__flex__div__div__table__tbody__tr__td}>{p.id}</td>
-                              <td className={styles.content__flex__div__div__table__tbody__tr__td}>{p.description}</td>
-                              <td className={styles.content__flex__div__div__table__tbody__tr__td}>{new Date(p.startAt).toLocaleString()}</td>
-                              <td className={styles.content__flex__div__div__table__tbody__tr__td}>{new Date(p.endAt).toLocaleString()}</td>
-                              <td className={styles.content__flex__div__div__table__tbody__tr__td}>{p.status.toString()}</td>
+                            <tr
+                              className={
+                                styles.content__flex__div__div__table__tbody__tr
+                              }
+                              key={index}
+                            >
+                              <td
+                                className={
+                                  styles.content__flex__div__div__table__tbody__tr__td
+                                }
+                              >
+                                {p.id}
+                              </td>
+                              <td
+                                className={
+                                  styles.content__flex__div__div__table__tbody__tr__td
+                                }
+                              >
+                                {p.description}
+                              </td>
+                              <td
+                                className={
+                                  styles.content__flex__div__div__table__tbody__tr__td
+                                }
+                              >
+                                {new Date(p.startAt).toLocaleString()}
+                              </td>
+                              <td
+                                className={
+                                  styles.content__flex__div__div__table__tbody__tr__td
+                                }
+                              >
+                                {new Date(p.endAt).toLocaleString()}
+                              </td>
+                              <td
+                                className={
+                                  styles.content__flex__div__div__table__tbody__tr__td
+                                }
+                              >
+                                {p.status.toString()}
+                              </td>
                             </tr>
                           );
                         })}

@@ -28,7 +28,6 @@ import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/Modal
 
 const Content = ({ userLog }: any) => {
   const pathname = usePathname();
-  console.log(pathname);
   const router = useRouter();
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const [isClick, setIsClick] = useState<boolean>(false);
@@ -59,6 +58,7 @@ const Content = ({ userLog }: any) => {
       type: "form/toggleLogin",
     });
   };
+  const { isLog, role } = useSelector((state: RootState) => state.auth);
 
   /*useEffect(() => {
     const tes = async () => {
@@ -548,14 +548,123 @@ const Content = ({ userLog }: any) => {
               </Link>
             </li>
           </ul>
-          {(!userLog && (
-            <button
-              className={styles.header__login}
-              onClick={() => handlerClick()}
-            >
-              Se connecter
-            </button>
-          )) ||
+          {(!userLog &&
+            ((isLog === false && (
+              <button
+                className={styles.header__login}
+                onClick={() => handlerClick()}
+              >
+                Se connecter
+              </button>
+            )) ||
+              (isLog === true && (
+                <>
+                  <div className={styles.header__log}>
+                    <div
+                      onClick={() => setDisplayLogMenu(!displayLogMenu)}
+                      className={styles.header__log__div}
+                    ></div>
+                    {displayLogMenu === true && (
+                      <>
+                        <ul className={styles.header__log__ul}>
+                          <li className={styles.header__log__li}>
+                            <Link
+                              href="/profile"
+                              onClick={() => setDisplayLogMenu(false)}
+                            >
+                              Compte
+                            </Link>
+                          </li>
+                          {role === "ROLE_ADMIN" && (
+                            <>
+                              <li className={styles.header__log__li}>
+                                <Link
+                                  href="/meetings"
+                                  onClick={() => setDisplayLogMenu(false)}
+                                >
+                                  Historique des rendez-vous
+                                </Link>
+                              </li>
+                              <li className={styles.header__log__li}>
+                                <Link
+                                  href="/meetingAdmin"
+                                  onClick={() => setDisplayLogMenu(false)}
+                                >
+                                  Tous les rendez-vous
+                                </Link>
+                              </li>
+                              <li className={styles.header__log__li}>
+                                <Link
+                                  href="/utilisateurs"
+                                  onClick={() => setDisplayLogMenu(false)}
+                                >
+                                  Tous les utilisateurs
+                                </Link>
+                              </li>
+                            </>
+                          )}
+                          {role === "ROLE_USER" && (
+                            <>
+                              <li className={styles.header__log__li}>
+                                <Link
+                                  href="/historique"
+                                  onClick={() => setDisplayLogMenu(false)}
+                                >
+                                  Historique des rendez-vous
+                                </Link>
+                              </li>
+                              <li className={styles.header__log__li}>
+                                <Link
+                                  href="/rendez-vous"
+                                  onClick={() => setDisplayLogMenu(false)}
+                                >
+                                  Mes rendez-vous
+                                </Link>
+                              </li>
+                            </>
+                          )}
+                          <li className={styles.header__log__li}>
+                            <button
+                              onClick={() => {
+                                const logout = async () => {
+                                  let response = await fetch(
+                                    "/api/user/logout"
+                                  );
+                                  let json = await response.json();
+                                  if (json && json.status === 200) {
+                                    dispatch({
+                                      type: "auth/logout",
+                                    });
+                                    dispatch({
+                                      type: "flash/storeFlashMessage",
+                                      payload: {
+                                        type: "success",
+                                        flashMessage: json.message,
+                                      },
+                                    });
+                                    if (
+                                      pathname === "/rendez-vous" ||
+                                      pathname === "/profile" ||
+                                      pathname === "/meetingAdmin" ||
+                                      pathname === "/utilisateurs" ||
+                                      pathname === "/meetings"
+                                    ) {
+                                      router.push("/");
+                                    }
+                                  }
+                                };
+                                logout();
+                              }}
+                            >
+                              Déconnection
+                            </button>
+                          </li>
+                        </ul>
+                      </>
+                    )}
+                  </div>
+                </>
+              )))) ||
             (userLog && (
               <>
                 <div className={styles.header__log}>

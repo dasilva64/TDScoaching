@@ -34,18 +34,18 @@ const FormLogin = () => {
         dispatch({
           type: "form/toggleLogin",
         });
-        dispatch({
+        /* dispatch({
           type: "auth/login",
           payload: {
             //email: data.body.email,
             role: data.body.role,
             id: data.body.id,
-            /* firstname: data.body.firstname,
+            firstname: data.body.firstname,
             lastname: data.body.lastname,
             phone: data.body.phone,
-            editEmail: ar, */
+            editEmail: ar, 
           },
-        });
+        });*/
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },

@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import styles from "../page.module.scss";
 import EmailData from "./emailSendTokenData/EmailSendTokenData";

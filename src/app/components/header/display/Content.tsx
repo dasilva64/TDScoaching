@@ -26,8 +26,9 @@ import ModalTwoFactorDisable from "@/app/profile/components/twoFactorData/modal/
 import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
 import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteMeeting";
 
-const Content = () => {
+const Content = ({ userLog }: any) => {
   const pathname = usePathname();
+  console.log(pathname);
   const router = useRouter();
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const [isClick, setIsClick] = useState<boolean>(false);
@@ -52,9 +53,6 @@ const Content = () => {
     displayModalCancelMeeting,
   } = useSelector((state: RootState) => state.form);
 
-  const { isLog, role } = useSelector((state: RootState) => state.auth);
-  console.log(role);
-
   const { flashMessage } = useSelector((state: RootState) => state.flash);
   const handlerClick = () => {
     dispatch({
@@ -62,7 +60,7 @@ const Content = () => {
     });
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     const tes = async () => {
       let response = await fetch("/api/user/getUser", {
         headers: {
@@ -80,17 +78,17 @@ const Content = () => {
             },
           });
         } else {
-          /* if (pathname === "/rendez-vous" || pathname === "/profile") {
+           if (pathname === "/rendez-vous" || pathname === "/profile") {
             router.push("/");
           } */
-          /* dispatch({
+  /* dispatch({
             type: "auth/logout",
-          }); */
+          }); 
         }
       }
     };
     tes();
-  }, [dispatch]);
+  }, [dispatch]);*/
 
   useEffect(() => {
     if (document) {
@@ -550,7 +548,7 @@ const Content = () => {
               </Link>
             </li>
           </ul>
-          {(!isLog && (
+          {(!userLog && (
             <button
               className={styles.header__login}
               onClick={() => handlerClick()}
@@ -558,7 +556,7 @@ const Content = () => {
               Se connecter
             </button>
           )) ||
-            (isLog && (
+            (userLog && (
               <>
                 <div className={styles.header__log}>
                   <div
@@ -576,7 +574,7 @@ const Content = () => {
                             Compte
                           </Link>
                         </li>
-                        {role === "ROLE_ADMIN" && (
+                        {userLog.role === "ROLE_ADMIN" && (
                           <>
                             <li className={styles.header__log__li}>
                               <Link
@@ -604,7 +602,7 @@ const Content = () => {
                             </li>
                           </>
                         )}
-                        {role === "ROLE_USER" && (
+                        {userLog.role === "ROLE_USER" && (
                           <>
                             <li className={styles.header__log__li}>
                               <Link
@@ -627,7 +625,6 @@ const Content = () => {
                         <li className={styles.header__log__li}>
                           <button
                             onClick={() => {
-                              console.log("json");
                               const logout = async () => {
                                 let response = await fetch("/api/user/logout");
                                 let json = await response.json();

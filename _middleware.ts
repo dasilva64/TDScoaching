@@ -12,8 +12,6 @@ export const middleware = async (req: NextRequest) => {
     },
   });
   const { user } = session;
-  console.log('first', req.nextUrl)
-  console.log('second', req.nextUrl.pathname)
   /* if (user) {
     if (
       req.nextUrl.pathname === ("/utilisateurs") ||

@@ -29,14 +29,14 @@ export const middleware = async (req: NextRequest) => {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }
-  } */
+  } 
   if (!user) {
     return NextResponse.redirect(new URL("/", req.url));
   }
   if (user.role !== "ROLE_USER" && user.role !== "ROLE_ADMIN") {
     return NextResponse.redirect(new URL("/", req.url));
   }
-  return res;
+  return res;*/
 };
 
 export const config = {

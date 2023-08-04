@@ -9,6 +9,7 @@ import user from "./feature/user";
 import flash from "./feature/flash";
 import Array from "./feature/Array";
 import ArrayMeeting from "./feature/ArrayMeeting";
+import ArrayMeetingByUser from "./feature/ArrayMeetingByUser";
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     flash: flash.reducer,
     Array: Array.reducer,
     ArrayMeeting: ArrayMeeting.reducer,
+    ArrayMeetingByUser: ArrayMeetingByUser.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

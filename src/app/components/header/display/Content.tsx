@@ -59,7 +59,6 @@ const Content = ({ userLog }: any) => {
     });
   };
   const { isLog, role } = useSelector((state: RootState) => state.auth);
-
   useEffect(() => {
     if (userLog) {
       if (userLog.role === "ROLE_ADMIN") {
@@ -70,11 +69,11 @@ const Content = ({ userLog }: any) => {
             id: userLog.id,
           },
         });
-      } else {
-        dispatch({
-          type: "auth/logout",
-        });
       }
+    } else {
+      dispatch({
+        type: "auth/logout",
+      });
     }
   }, [dispatch, userLog]);
   /*useEffect(() => {
@@ -397,10 +396,6 @@ const Content = ({ userLog }: any) => {
                                 await new Promise((resolve) =>
                                   setTimeout(resolve, 2000)
                                 );
-
-                                dispatch({
-                                  type: "auth/logout",
-                                });
                                 window.location.reload();
                               }
                             };
@@ -468,10 +463,6 @@ const Content = ({ userLog }: any) => {
                                 await new Promise((resolve) =>
                                   setTimeout(resolve, 2000)
                                 );
-
-                                dispatch({
-                                  type: "auth/logout",
-                                });
                                 window.location.reload();
                               }
                             };
@@ -550,10 +541,6 @@ const Content = ({ userLog }: any) => {
                               await new Promise((resolve) =>
                                 setTimeout(resolve, 2000)
                               );
-
-                              dispatch({
-                                type: "auth/logout",
-                              });
                               window.location.reload();
                             }
                           };
@@ -621,10 +608,6 @@ const Content = ({ userLog }: any) => {
                               await new Promise((resolve) =>
                                 setTimeout(resolve, 2000)
                               );
-
-                              dispatch({
-                                type: "auth/logout",
-                              });
                               window.location.reload();
                             }
                           };

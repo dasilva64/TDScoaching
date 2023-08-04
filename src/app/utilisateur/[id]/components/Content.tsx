@@ -1,20 +1,24 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { use, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import useGetById from "@/app/components/hook/user/useGetById";
 import styles from "./Content.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/redux/store";
 import { useRouter } from "next/navigation";
+import NbShow from "./dataTable/nbShow/NbShow";
+import Search from "./dataTable/search/Search";
+import Display from "./dataTable/display/Display";
+import Paging from "./dataTable/paging/Paging";
 
 const Content = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const queryParam: any = usePathname();
   let id = queryParam.toString().split("/");
-  console.log(id);
   const { data, isLoading, isError } = useGetById(id[2]);
+  console.log(data);
   useEffect(() => {
     if (data) {
       if (data.status !== 200) {
@@ -103,7 +107,7 @@ const Content = () => {
               </h2>
               {data.body.allMeetings.length === 0 && <p>Aucun rendez-vous</p>}
               {data.body.allMeetings.length > 0 && (
-                <>
+                /*  <>
                   <div className={styles.content__flex__div__right__div}>
                     <table
                       className={styles.content__flex__div__right__div__table}
@@ -195,6 +199,16 @@ const Content = () => {
                       </tbody>
                     </table>
                   </div>
+                </> */
+                <>
+                  <div>
+                    <div className={styles.datatable__container__div}>
+                      <NbShow />
+                      <Search />
+                    </div>
+                  </div>
+                  <Display />
+                  <Paging />
                 </>
               )}
             </div>
@@ -206,6 +220,31 @@ const Content = () => {
     }
   }
 
+  useEffect(() => {
+    if (data && data.status === 200) {
+      let copyOfItems = [...data.body.allMeetings];
+
+      copyOfItems.map((p: any, index: any) => {
+        if (p.description === null || p.description === "aucun") {
+          copyOfItems[index] = {
+            ...p,
+            description: "aucun",
+            status: p.status.toString(),
+            startAt: new Date(p.startAt).toLocaleString(),
+          };
+        } else
+          copyOfItems[index] = {
+            ...p,
+            description: p.description.toString(),
+            startAt: new Date(p.startAt).toLocaleString(),
+          };
+      });
+      dispatch({
+        type: "ArrayMeetingByUser/storeData",
+        payload: { datas: copyOfItems },
+      });
+    }
+  }, [data, dispatch]);
   return (
     <>
       <div className={styles.content}>{content}</div>

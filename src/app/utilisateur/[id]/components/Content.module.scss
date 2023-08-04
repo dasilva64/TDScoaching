@@ -45,7 +45,7 @@
     margin: 40px 0px;
     &__div {
       &__right {
-        width: 50%;
+        width: 60%;
         &__h2 {
           margin-bottom: 20px;
         }
@@ -76,5 +76,14 @@
       }
       }
     }
+  }
+}
+
+.datatable {
+  &__container {
+      &__div {
+          display: flex;
+          justify-content: space-between;
+      }
   }
 }

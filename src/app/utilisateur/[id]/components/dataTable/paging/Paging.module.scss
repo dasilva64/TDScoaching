@@ -1,0 +1,60 @@
+.paging {
+    clear: both;
+    display: flex;
+    justify-content: space-between;
+    &__div {
+      display: flex;
+      &__span {
+        padding: 0.5em 1em;
+        display: flex;
+        align-content: center;
+        flex-direction: column;
+        justify-content: center;
+        cursor: pointer;
+        &:hover {
+          border: 1px solid #111;
+          border-radius: 2px;
+          color: white;
+          background: linear-gradient(to bottom, #585858 0%, #111 100%);
+        }
+      }
+      &__div {
+        display: flex;
+        &__span {
+          padding: 0.5em 1em;
+          display: flex;
+          align-content: center;
+          flex-direction: column;
+          justify-content: center;
+          cursor: pointer;
+          &:hover {
+            color: white;
+            border: 1px solid #111;
+            border-radius: 2px;
+            background: linear-gradient(to bottom, #585858 0%, #111 100%);
+          }
+          &__current {
+            color: black;
+              padding: 0.5em 1em;
+              display: flex;
+              align-content: center;
+              flex-direction: column;
+              justify-content: center;
+              cursor: pointer;
+              border: 1px solid #979797;
+              border-radius: 2px;
+              background: linear-gradient(to bottom, #fff 0%, #dcdcdc 100%);
+            }
+            &__point {
+              padding: 0px 0.3em 8px 0.3em;
+              display: flex;
+              align-content: center;
+              flex-direction: column;
+              justify-content: center;
+              cursor: pointer;
+            }
+        }
+        
+      }
+    }
+  }

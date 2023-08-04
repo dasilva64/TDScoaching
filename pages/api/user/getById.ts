@@ -7,7 +7,6 @@ export default withIronSessionApiRoute(
     if (req.method === "POST") {
       if (req.session.user) {
         const { id } = await req.body;
-        console.log(id);
         const user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
         });
@@ -30,7 +29,6 @@ export default withIronSessionApiRoute(
               const meetingById = await prisma.meeting.findUnique({
                 where: { id: userById.meetingId },
               });
-              console.log("5");
               if (meetingById === null) {
                 return res.status(400).json({
                   status: 400,
@@ -40,8 +38,12 @@ export default withIronSessionApiRoute(
               } else {
                 const meetingByUser = await prisma.meeting.findMany({
                   where: { userId: id },
+                  select: {
+                    startAt: true,
+                    description: true,
+                    status: true,
+                  },
                 });
-                console.log("1");
                 let userObject = {
                   id: userById?.id,
                   role: userById?.role,
@@ -65,8 +67,12 @@ export default withIronSessionApiRoute(
             } else {
               const meetingByUser = await prisma.meeting.findMany({
                 where: { userId: id },
+                select: {
+                  startAt: true,
+                  description: true,
+                  status: true,
+                },
               });
-              console.log("2");
               let userObject = {
                 id: userById?.id,
                 role: userById?.role,

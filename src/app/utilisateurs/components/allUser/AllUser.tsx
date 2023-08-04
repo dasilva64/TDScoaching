@@ -76,6 +76,7 @@ const AllUser = () => {
       });
     }
   }, [data, dispatch]);
+  console.log(datas);
   return <>{content}</>;
 };
 

@@ -12,11 +12,14 @@ export const middleware = async (req: NextRequest) => {
     },
   });
   const { user } = session;
+
+  let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
   if (user) {
     if (
       req.nextUrl.pathname.startsWith("/utilisateurs") ||
       req.nextUrl.pathname.startsWith("/meetings") ||
-      req.nextUrl.pathname.startsWith("/meetingAdmin")
+      req.nextUrl.pathname.startsWith("/meetingAdmin") ||
+      regex.test(req.nextUrl.pathname)
     ) {
       if (user.role !== "ROLE_ADMIN") {
         return NextResponse.redirect(new URL("/", req.url));
@@ -44,5 +47,6 @@ export const config = {
     "/meetings",
     "/rendez-vous",
     "/meetingAdmin",
+    "/utilisateur/:path*",
   ],
 };

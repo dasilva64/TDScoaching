@@ -303,262 +303,128 @@ const Content = ({ userLog }: any) => {
       };
     }
   }, [dispatch, flashMessage]);
-  return (
-    <>
-      {displayFormLogin === true && <FormLogin />}
-      {displayFormRegister === true && <FormRegister />}
-      {displaySendCode === true && <SendCode />}
-      {displayFormCheck === true && <FormCheck />}
-      {displayFormForgot === true && <Forgot />}
-      {displayModalEditMainUserData === true && <ModalUserMainData />}
-      {displayModalEditPasswordData && <ModalUserPasswordData />}
-      {displayModalEditEmailSendData && <ModalUserSendToken />}
-      {displayModalEditEmailData === true && <EmailCheck />}
-      {displayModalEditValidEmailData === true && <EmailValidData />}
-      {displayModalEditPhoneSendData === true && <ModalPhoneSendTokenData />}
-      {displayModalEditPhoneData === true && <PhoneCheck />}
-      {displayModalEditValidPhoneData === true && <PhoneValidData />}
-      {displayModalTwoFactor === true && <ModalTwoFactor />}
-      {displayModalTwoFactorDisable === true && <ModalTwoFactorDisable />}
-      {displayModalCancelMeeting === true && <ModalCancel />}
-      {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
-      {displayFlash()}
-      <header className={ClassName()}>
-        <figure className={styles.header__figure}>
-          <Link className="link" href="/" tabIndex={0}>
-            <Image
-              className={styles.header__logo}
-              width={80}
-              height={80}
-              src="/assets/logo/logo.png"
-              alt="logo tdss coaching"
-              priority={true}
-            />
-          </Link>
-          <figcaption className={styles.header__figcaption}>
-            Coach de vie
-          </figcaption>
-        </figure>
-        <nav
-          className={
-            isClick === false
-              ? `${styles.header__nav}`
-              : `${styles.header__nav__mobile}`
-          }
-        >
-          <ul
-            className={
-              isClick === false
-                ? `${styles.header__ul}`
-                : `${styles.header__ul__mobile}`
-            }
+
+  const displayLogBtn = () => {
+    if (!userLog) {
+      if (isLog === false) {
+        return (
+          <button
+            className={styles.header__login}
+            onClick={() => handlerClick()}
           >
-            <li className={styles.header__li}>
-              <Link
-                className={
-                  pathname == "/"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
-                }
-                tabIndex={0}
-                href="/"
-                onClick={(e) => {
-                  isClick === true ? setIsClick(false) : null;
-                }}
-              >
-                Accueil
-              </Link>
-            </li>
-            <li className={styles.header__li}>
-              <Link
-                className={
-                  pathname == "/qui-suis-je"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
-                }
-                tabIndex={0}
-                href="/qui-suis-je"
-                onClick={(e) => {
-                  isClick === true ? setIsClick(false) : null;
-                }}
-              >
-                Qui suis-je ?
-              </Link>
-            </li>
-            <li className={`${styles.header__li} ${styles.header__li__hover}`}>
-              <Link
-                className={
-                  pathname == "/coaching-de-vie"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
-                }
-                href="/coaching-de-vie"
-                onClick={(e) => {
-                  isClick === true ? setIsClick(false) : null;
-                }}
-              >
-                Coaching de vie
-              </Link>
-              <span
-                tabIndex={0}
-                aria-label="sous menu coaching de vie"
-                className={styles.header__span}
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                ❯
-              </span>
-              <ul
-                role="listbox"
-                className={`${styles.header__ul__hidden} ${styles.header__ul__hidden__hover}`}
-                aria-expanded="true"
-                aria-activedescendant="option1"
-              >
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/coaching-de-vie/vie-familiale"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/coaching-de-vie/vie-familiale"
-                    onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
-                    }}
-                  >
-                    Vie familiale
-                  </Link>
-                </li>
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/coaching-de-vie/vie-de-couple"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/coaching-de-vie/vie-de-couple"
-                    onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
-                    }}
-                  >
-                    Vie de couple
-                  </Link>
-                </li>
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/coaching-de-vie/vie-professionnelle"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/coaching-de-vie/vie-professionnelle"
-                    onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
-                    }}
-                  >
-                    Vie professionnelle
-                  </Link>
-                </li>
-              </ul>
-            </li>
-            <li className={`${styles.header__li} ${styles.header__li__hover}`}>
-              <span className={`${styles.header__a}`}>Mes prestations</span>
-              <span
-                tabIndex={0}
-                aria-label="sous menu mes prestations"
-                className={styles.header__span}
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                ❯
-              </span>
-              <ul
-                role="listbox"
-                className={`${styles.header__ul__hidden} ${styles.header__ul__hidden__hover}`}
-                aria-expanded="true"
-                aria-activedescendant="option2"
-              >
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/modalite"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/modalite"
-                    onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
-                    }}
-                  >
-                    {" "}
-                    Modalités du coaching
-                  </Link>
-                </li>
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/tarif"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/tarif"
-                    onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
-                    }}
-                  >
-                    Tarif / Durée
-                  </Link>
-                </li>
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/code-de-deontologie"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/code-de-deontologie"
-                    onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
-                    }}
-                  >
-                    Code de déontologie
-                  </Link>
-                </li>
-              </ul>
-            </li>
-            <li className={styles.header__li}>
-              <Link
-                className={
-                  pathname == "/contact"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
-                }
-                href="/contact"
-                onClick={(e) => {
-                  isClick === true ? setIsClick(false) : null;
-                }}
-              >
-                Contact
-              </Link>
-            </li>
-          </ul>
-          {(!userLog &&
-            ((isLog === false && (
-              <button
-                className={styles.header__login}
-                onClick={() => handlerClick()}
-              >
-                Se connecter
-              </button>
-            )) ||
-              (isLog === true && (
-                <>
+            Se connecter
+          </button>
+        )
+      } else {
+        <>
+          <div className={styles.header__log}>
+            <div
+              onClick={() => setDisplayLogMenu(!displayLogMenu)}
+              className={styles.header__log__div}
+            ></div>
+            {displayLogMenu === true && (
+              <>
+                <ul className={styles.header__log__ul}>
+                  <li className={styles.header__log__li}>
+                    <Link
+                      href="/profile"
+                      onClick={() => setDisplayLogMenu(false)}
+                    >
+                      Compte
+                    </Link>
+                  </li>
+                  {role === "ROLE_ADMIN" && (
+                    <>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/meetings"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Historique des rendez-vous
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/meetingAdmin"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Tous les rendez-vous
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/utilisateurs"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Tous les utilisateurs
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                  {role === "ROLE_USER" && (
+                    <>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/historique"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Historique des rendez-vous
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/rendez-vous"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Mes rendez-vous
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                  <li className={styles.header__log__li}>
+                    <button
+                      onClick={() => {
+                        const logout = async () => {
+                          let response = await fetch(
+                            "/api/user/logout"
+                          );
+                          let json = await response.json();
+                          if (json && json.status === 200) {
+                            dispatch({
+                              type: "auth/logout",
+                            });
+                            dispatch({
+                              type: "flash/storeFlashMessage",
+                              payload: {
+                                type: "success",
+                                flashMessage: json.message,
+                              },
+                            });
+                            if (
+                              pathname === "/rendez-vous" ||
+                              pathname === "/profile" ||
+                              pathname === "/meetingAdmin" ||
+                              pathname === "/utilisateurs" ||
+                              pathname === "/meetings"
+                            ) {
+                              router.push("/");
+                            }
+                          }
+                        };
+                        logout();
+                      }}
+                    >
+                      Déconnection
+                    </button>
+                  </li>
+                </ul>
+              </>
+            )}
+          </div>
+        </>
+      }
+    } else {
+      <>
                   <div className={styles.header__log}>
                     <div
                       onClick={() => setDisplayLogMenu(!displayLogMenu)}
@@ -575,7 +441,7 @@ const Content = ({ userLog }: any) => {
                               Compte
                             </Link>
                           </li>
-                          {role === "ROLE_ADMIN" && (
+                          {userLog.role === "ROLE_ADMIN" && (
                             <>
                               <li className={styles.header__log__li}>
                                 <Link
@@ -603,7 +469,7 @@ const Content = ({ userLog }: any) => {
                               </li>
                             </>
                           )}
-                          {role === "ROLE_USER" && (
+                          {userLog.role === "ROLE_USER" && (
                             <>
                               <li className={styles.header__log__li}>
                                 <Link
@@ -627,9 +493,7 @@ const Content = ({ userLog }: any) => {
                             <button
                               onClick={() => {
                                 const logout = async () => {
-                                  let response = await fetch(
-                                    "/api/user/logout"
-                                  );
+                                  let response = await fetch("/api/user/logout");
                                   let json = await response.json();
                                   if (json && json.status === 200) {
                                     dispatch({
@@ -664,145 +528,285 @@ const Content = ({ userLog }: any) => {
                     )}
                   </div>
                 </>
-              )))) ||
-            (userLog && (
-              <>
-                <div className={styles.header__log}>
-                  <div
-                    onClick={() => setDisplayLogMenu(!displayLogMenu)}
-                    className={styles.header__log__div}
-                  ></div>
-                  {displayLogMenu === true && (
-                    <>
-                      <ul className={styles.header__log__ul}>
-                        <li className={styles.header__log__li}>
-                          <Link
-                            href="/profile"
-                            onClick={() => setDisplayLogMenu(false)}
-                          >
-                            Compte
-                          </Link>
-                        </li>
-                        {userLog.role === "ROLE_ADMIN" && (
-                          <>
-                            <li className={styles.header__log__li}>
-                              <Link
-                                href="/meetings"
-                                onClick={() => setDisplayLogMenu(false)}
-                              >
-                                Historique des rendez-vous
-                              </Link>
-                            </li>
-                            <li className={styles.header__log__li}>
-                              <Link
-                                href="/meetingAdmin"
-                                onClick={() => setDisplayLogMenu(false)}
-                              >
-                                Tous les rendez-vous
-                              </Link>
-                            </li>
-                            <li className={styles.header__log__li}>
-                              <Link
-                                href="/utilisateurs"
-                                onClick={() => setDisplayLogMenu(false)}
-                              >
-                                Tous les utilisateurs
-                              </Link>
-                            </li>
-                          </>
-                        )}
-                        {userLog.role === "ROLE_USER" && (
-                          <>
-                            <li className={styles.header__log__li}>
-                              <Link
-                                href="/historique"
-                                onClick={() => setDisplayLogMenu(false)}
-                              >
-                                Historique des rendez-vous
-                              </Link>
-                            </li>
-                            <li className={styles.header__log__li}>
-                              <Link
-                                href="/rendez-vous"
-                                onClick={() => setDisplayLogMenu(false)}
-                              >
-                                Mes rendez-vous
-                              </Link>
-                            </li>
-                          </>
-                        )}
-                        <li className={styles.header__log__li}>
-                          <button
-                            onClick={() => {
-                              const logout = async () => {
-                                let response = await fetch("/api/user/logout");
-                                let json = await response.json();
-                                if (json && json.status === 200) {
-                                  dispatch({
-                                    type: "auth/logout",
-                                  });
-                                  dispatch({
-                                    type: "flash/storeFlashMessage",
-                                    payload: {
-                                      type: "success",
-                                      flashMessage: json.message,
-                                    },
-                                  });
-                                  if (
-                                    pathname === "/rendez-vous" ||
-                                    pathname === "/profile" ||
-                                    pathname === "/meetingAdmin" ||
-                                    pathname === "/utilisateurs" ||
-                                    pathname === "/meetings"
-                                  ) {
-                                    router.push("/");
-                                  }
-                                }
-                              };
-                              logout();
-                            }}
-                          >
-                            Déconnection
-                          </button>
-                        </li>
-                      </ul>
-                    </>
-                  )}
-                </div>
-              </>
-            ))}
-        </nav>
-        <div className={styles.header__burger}>
-          <button
-            className={styles.header__burger__btn}
-            onClick={() => updateUseState()}
+    }
+    return (
+      <>
+        {displayFormLogin === true && <FormLogin />}
+        {displayFormRegister === true && <FormRegister />}
+        {displaySendCode === true && <SendCode />}
+        {displayFormCheck === true && <FormCheck />}
+        {displayFormForgot === true && <Forgot />}
+        {displayModalEditMainUserData === true && <ModalUserMainData />}
+        {displayModalEditPasswordData && <ModalUserPasswordData />}
+        {displayModalEditEmailSendData && <ModalUserSendToken />}
+        {displayModalEditEmailData === true && <EmailCheck />}
+        {displayModalEditValidEmailData === true && <EmailValidData />}
+        {displayModalEditPhoneSendData === true && <ModalPhoneSendTokenData />}
+        {displayModalEditPhoneData === true && <PhoneCheck />}
+        {displayModalEditValidPhoneData === true && <PhoneValidData />}
+        {displayModalTwoFactor === true && <ModalTwoFactor />}
+        {displayModalTwoFactorDisable === true && <ModalTwoFactorDisable />}
+        {displayModalCancelMeeting === true && <ModalCancel />}
+        {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
+        {displayFlash()}
+        <header className={ClassName()}>
+          <figure className={styles.header__figure}>
+            <Link className="link" href="/" tabIndex={0}>
+              <Image
+                className={styles.header__logo}
+                width={80}
+                height={80}
+                src="/assets/logo/logo.png"
+                alt="logo tdss coaching"
+                priority={true}
+              />
+            </Link>
+            <figcaption className={styles.header__figcaption}>
+              Coach de vie
+            </figcaption>
+          </figure>
+          <nav
+            className={
+              isClick === false
+                ? `${styles.header__nav}`
+                : `${styles.header__nav__mobile}`
+            }
           >
-            <div className={styles.header__burger__line}>
-              <span
-                className={
-                  isClick
-                    ? `${styles.header__cross} ${styles.header__bar1__rotate}`
-                    : `${styles.header__bar} ${styles.header__bar1}`
-                }
-              ></span>
-              <span
-                className={
-                  isClick ? "" : `${styles.header__bar} ${styles.header__bar2}`
-                }
-              ></span>
-              <span
-                className={
-                  isClick
-                    ? `${styles.header__cross} ${styles.header__bar2__rotate}`
-                    : `${styles.header__bar} ${styles.header__bar3}`
-                }
-              ></span>
-            </div>
-          </button>
-        </div>
-      </header>
-    </>
-  );
-};
+            <ul
+              className={
+                isClick === false
+                  ? `${styles.header__ul}`
+                  : `${styles.header__ul__mobile}`
+              }
+            >
+              <li className={styles.header__li}>
+                <Link
+                  className={
+                    pathname == "/"
+                      ? `${styles.header__a} ${styles.active}`
+                      : `${styles.header__a}`
+                  }
+                  tabIndex={0}
+                  href="/"
+                  onClick={(e) => {
+                    isClick === true ? setIsClick(false) : null;
+                  }}
+                >
+                  Accueil
+                </Link>
+              </li>
+              <li className={styles.header__li}>
+                <Link
+                  className={
+                    pathname == "/qui-suis-je"
+                      ? `${styles.header__a} ${styles.active}`
+                      : `${styles.header__a}`
+                  }
+                  tabIndex={0}
+                  href="/qui-suis-je"
+                  onClick={(e) => {
+                    isClick === true ? setIsClick(false) : null;
+                  }}
+                >
+                  Qui suis-je ?
+                </Link>
+              </li>
+              <li className={`${styles.header__li} ${styles.header__li__hover}`}>
+                <Link
+                  className={
+                    pathname == "/coaching-de-vie"
+                      ? `${styles.header__a} ${styles.active}`
+                      : `${styles.header__a}`
+                  }
+                  href="/coaching-de-vie"
+                  onClick={(e) => {
+                    isClick === true ? setIsClick(false) : null;
+                  }}
+                >
+                  Coaching de vie
+                </Link>
+                <span
+                  tabIndex={0}
+                  aria-label="sous menu coaching de vie"
+                  className={styles.header__span}
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  ❯
+                </span>
+                <ul
+                  role="listbox"
+                  className={`${styles.header__ul__hidden} ${styles.header__ul__hidden__hover}`}
+                  aria-expanded="true"
+                  aria-activedescendant="option1"
+                >
+                  <li className={styles.header__li}>
+                    <Link
+                      className={
+                        pathname == "/coaching-de-vie/vie-familiale"
+                          ? `${styles.header__a} ${styles.active}`
+                          : `${styles.header__a}`
+                      }
+                      tabIndex={0}
+                      href="/coaching-de-vie/vie-familiale"
+                      onClick={(e) => {
+                        isClick === true ? setIsClick(false) : null;
+                      }}
+                    >
+                      Vie familiale
+                    </Link>
+                  </li>
+                  <li className={styles.header__li}>
+                    <Link
+                      className={
+                        pathname == "/coaching-de-vie/vie-de-couple"
+                          ? `${styles.header__a} ${styles.active}`
+                          : `${styles.header__a}`
+                      }
+                      tabIndex={0}
+                      href="/coaching-de-vie/vie-de-couple"
+                      onClick={(e) => {
+                        isClick === true ? setIsClick(false) : null;
+                      }}
+                    >
+                      Vie de couple
+                    </Link>
+                  </li>
+                  <li className={styles.header__li}>
+                    <Link
+                      className={
+                        pathname == "/coaching-de-vie/vie-professionnelle"
+                          ? `${styles.header__a} ${styles.active}`
+                          : `${styles.header__a}`
+                      }
+                      tabIndex={0}
+                      href="/coaching-de-vie/vie-professionnelle"
+                      onClick={(e) => {
+                        isClick === true ? setIsClick(false) : null;
+                      }}
+                    >
+                      Vie professionnelle
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li className={`${styles.header__li} ${styles.header__li__hover}`}>
+                <span className={`${styles.header__a}`}>Mes prestations</span>
+                <span
+                  tabIndex={0}
+                  aria-label="sous menu mes prestations"
+                  className={styles.header__span}
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  ❯
+                </span>
+                <ul
+                  role="listbox"
+                  className={`${styles.header__ul__hidden} ${styles.header__ul__hidden__hover}`}
+                  aria-expanded="true"
+                  aria-activedescendant="option2"
+                >
+                  <li className={styles.header__li}>
+                    <Link
+                      className={
+                        pathname == "/modalite"
+                          ? `${styles.header__a} ${styles.active}`
+                          : `${styles.header__a}`
+                      }
+                      tabIndex={0}
+                      href="/modalite"
+                      onClick={(e) => {
+                        isClick === true ? setIsClick(false) : null;
+                      }}
+                    >
+                      {" "}
+                      Modalités du coaching
+                    </Link>
+                  </li>
+                  <li className={styles.header__li}>
+                    <Link
+                      className={
+                        pathname == "/tarif"
+                          ? `${styles.header__a} ${styles.active}`
+                          : `${styles.header__a}`
+                      }
+                      tabIndex={0}
+                      href="/tarif"
+                      onClick={(e) => {
+                        isClick === true ? setIsClick(false) : null;
+                      }}
+                    >
+                      Tarif / Durée
+                    </Link>
+                  </li>
+                  <li className={styles.header__li}>
+                    <Link
+                      className={
+                        pathname == "/code-de-deontologie"
+                          ? `${styles.header__a} ${styles.active}`
+                          : `${styles.header__a}`
+                      }
+                      tabIndex={0}
+                      href="/code-de-deontologie"
+                      onClick={(e) => {
+                        isClick === true ? setIsClick(false) : null;
+                      }}
+                    >
+                      Code de déontologie
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li className={styles.header__li}>
+                <Link
+                  className={
+                    pathname == "/contact"
+                      ? `${styles.header__a} ${styles.active}`
+                      : `${styles.header__a}`
+                  }
+                  href="/contact"
+                  onClick={(e) => {
+                    isClick === true ? setIsClick(false) : null;
+                  }}
+                >
+                  Contact
+                </Link>
+              </li>
+            </ul>
+            {displayLogBtn()}
+          </nav>
+          <div className={styles.header__burger}>
+            <button
+              className={styles.header__burger__btn}
+              onClick={() => updateUseState()}
+            >
+              <div className={styles.header__burger__line}>
+                <span
+                  className={
+                    isClick
+                      ? `${styles.header__cross} ${styles.header__bar1__rotate}`
+                      : `${styles.header__bar} ${styles.header__bar1}`
+                  }
+                ></span>
+                <span
+                  className={
+                    isClick ? "" : `${styles.header__bar} ${styles.header__bar2}`
+                  }
+                ></span>
+                <span
+                  className={
+                    isClick
+                      ? `${styles.header__cross} ${styles.header__bar2__rotate}`
+                      : `${styles.header__bar} ${styles.header__bar3}`
+                  }
+                ></span>
+              </div>
+            </button>
+          </div>
+        </header>
+      </>
+    );
+  };
 
-export default Content;
+  export default Content;

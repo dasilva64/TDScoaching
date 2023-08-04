@@ -1,7 +1,4 @@
-const fetchCreate = async (
-  url: string,
-  { arg }: { arg: { start: string } }
-) => {
+const fetchCreate = async (url: string, { arg }: { arg: { start: Date } }) => {
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -10,7 +7,6 @@ const fetchCreate = async (
     body: JSON.stringify(arg),
   });
   const json = await response.json();
-  console.log(json);
   return json;
 };
 

@@ -6,10 +6,13 @@ import Image from "next/image";
 import fetchCreate from "@/app/components/fetch/meeting/fetchCreate";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import { AppDispatch } from "@/app/redux/store";
+import fetchDeleteMeeting from "@/app/components/fetch/meeting/fetchDeleteMeeting";
 
 const DatePickerDesktop = ({ events }: any) => {
+  const dispatch = useDispatch<AppDispatch>();
   const { id } = useSelector((state: any) => state.auth);
   const [arDateWeek, setArDateWeek] = useState<any>([]);
   const [all, setAll] = useState<any>(null);
@@ -65,9 +68,36 @@ const DatePickerDesktop = ({ events }: any) => {
           },
           { revalidate: false }
         );
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: data.message },
+        });
       }
     }
-  }, [data]);
+  }, [data, dispatch]);
+
+  const { data: dataDelete, trigger: triggerDelete } = useSWRMutation(
+    "/api/meeting/deleteMeeting",
+    fetchDeleteMeeting
+  );
+  useEffect(() => {
+    if (dataDelete) {
+      if (dataDelete.status === 200) {
+        mutate(
+          "/api/meeting/getAllAfterNow",
+          {
+            ...dataDelete,
+            body: [...dataDelete.body],
+          },
+          { revalidate: false }
+        );
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataDelete.message },
+        });
+      }
+    }
+  }, [dataDelete, dispatch]);
 
   useEffect(() => {
     const getMeetingByWeek = (newar: any) => {
@@ -154,7 +184,7 @@ const DatePickerDesktop = ({ events }: any) => {
         getMeetingByWeek(ar);
       }
     }
-    if (events.length > all?.length) {
+    if (events.length > all?.length || events.length < all?.length) {
       let current = new Date(startDateWeek);
       current.setDate(current.getDate());
       let ar = getAllDayInWeek(new Date(startDateWeek));
@@ -384,32 +414,48 @@ const DatePickerDesktop = ({ events }: any) => {
                                   return (
                                     <td
                                       className={
-                                        styles.datePicker__table__tbody__tr__td__meeting__other
+                                        styles.datePicker__table__tbody__tr__td
                                       }
                                       key={index}
                                     >
                                       {" "}
                                       <div
+                                        onClick={() => {
+                                          let create: any = new Date(
+                                            Date.UTC(
+                                              p[0][0],
+                                              p[0][1] - 1,
+                                              p[0][2],
+                                              h[1]
+                                            )
+                                          );
+                                          triggerDelete({ start: create });
+                                        }}
                                         className={
-                                          styles.datePicker__table__tbody__tr__td__meeting__other__div
+                                          styles.datePicker__table__tbody__tr__td__meeting__me__back
                                         }
                                       ></div>
                                     </td>
                                   );
                                 } else {
-                                  console.log(p);
                                   return (
                                     <td
                                       className={
-                                        styles.datePicker__table__tbody__tr__td__meeting__me
+                                        styles.datePicker__table__tbody__tr__td
                                       }
                                       key={index}
                                     >
-                                      <Link
-                                        href={`/utilisateur/${p[1][0][y][5]}`}
+                                      <div
+                                        className={
+                                          styles.datePicker__table__tbody__tr__td__meeting__me
+                                        }
                                       >
-                                        {p[1][0][y][6]} {p[1][0][y][7]}
-                                      </Link>
+                                        <Link
+                                          href={`/utilisateur/${p[1][0][y][5]}`}
+                                        >
+                                          {p[1][0][y][6]} {p[1][0][y][7]}
+                                        </Link>
+                                      </div>
                                     </td>
                                   );
                                 }
@@ -429,36 +475,30 @@ const DatePickerDesktop = ({ events }: any) => {
                                 styles.datePicker__table__tbody__tr__td__div
                               }
                               onClick={() => {
-                                let create = new Date(
+                                let create: any = new Date(
+                                  Date.UTC(p[0][0], p[0][1] - 1, p[0][2], h[1])
+                                );
+                                let create2: any = new Date(
                                   p[0][0],
                                   p[0][1] - 1,
                                   p[0][2],
                                   h[1]
                                 );
-                                let startstr = "";
-                                let endstr = "";
-                                create
-                                  .toLocaleString()
-                                  .split(" ")
-                                  .map((el, index) => {
-                                    if (index === 0) {
-                                      el.split("/")
-                                        .reverse()
-                                        .map((el) => {
-                                          startstr = startstr + el + "-";
-                                        });
-                                    } else {
-                                      el.split(":").map((el) => {
-                                        endstr = endstr + el + ":";
-                                      });
-                                    }
+                                if (
+                                  new Date(create2).getTime() >
+                                  new Date().getTime()
+                                ) {
+                                  trigger({ start: create });
+                                } else {
+                                  dispatch({
+                                    type: "flash/storeFlashMessage",
+                                    payload: {
+                                      type: "error",
+                                      flashMessage:
+                                        "Vous ne pouvez pas créer un rendez-vous dans le passé",
+                                    },
                                   });
-                                let formatDate =
-                                  startstr.slice(0, startstr.length - 1) +
-                                  "T" +
-                                  endstr.slice(0, endstr.length - 1) +
-                                  ".000Z";
-                                trigger({ start: formatDate });
+                                }
                               }}
                             >
                               <p

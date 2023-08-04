@@ -113,75 +113,89 @@ const Famille = () => {
           </div>
         </div>
         <div className={styles.famille__article}>
-          <h2 className={styles.famille__article__h2}>
-            Le coaching familial c’est :
-          </h2>
-          <ul className={styles.famille__article__ul}>
-            <li>Des rencontres à domicile ou par vidéo ;</li>
-            <li>
-              Une rencontre d’évaluation, afin de bien cerner les besoins et
-              l’origine des difficultés ;
-            </li>
-            <li>
-              Une rencontre de clarification des objectifs, afin de prendre la
-              bonne direction ;
-            </li>
-            <li>
-              Une ou plusieurs rencontres afin d’aider la famille à bâtir et
-              appliquer un plan d’action concret ;
-            </li>
-            <li>
-              Une ou des rencontres d’observation et de coaching à travers le
-              quotidien ;
-            </li>
-            <li>
-              Une intervention basée sur les approches systémiques, approches
-              orientées vers les solutions, le coaching et la programmation
-              neurolinguistique (PNL) ;
-            </li>
-            <li>
-              Une approche axée sur la responsabilisation de chaque membre de la
-              famille, le développement du leadership éducatif des parents et
-              des adultes qui guident l’enfant ;
-            </li>
-            <li>
-              Une intervention positive et respectueuse qui se base sur les
-              forces et les ressources de chacun ;
-            </li>
-            <li>
-              Une formule épanouissante qui permet de retrouver le juste
-              équilibre entre fermeté et bienveillance .
-            </li>
-          </ul>
+          <WhileInView>
+            <h2 className={styles.famille__article__h2}>
+              Le coaching familial c’est :
+            </h2>
+          </WhileInView>
+          <WhileInView>
+            <ul className={styles.famille__article__ul}>
+              <li>Des rencontres à domicile ou par vidéo ;</li>
+              <li>
+                Une rencontre d’évaluation, afin de bien cerner les besoins et
+                l’origine des difficultés ;
+              </li>
+              <li>
+                Une rencontre de clarification des objectifs, afin de prendre la
+                bonne direction ;
+              </li>
+              <li>
+                Une ou plusieurs rencontres afin d’aider la famille à bâtir et
+                appliquer un plan d’action concret ;
+              </li>
+              <li>
+                Une ou des rencontres d’observation et de coaching à travers le
+                quotidien ;
+              </li>
+              <li>
+                Une intervention basée sur les approches systémiques, approches
+                orientées vers les solutions, le coaching et la programmation
+                neurolinguistique (PNL) ;
+              </li>
+              <li>
+                Une approche axée sur la responsabilisation de chaque membre de
+                la famille, le développement du leadership éducatif des parents
+                et des adultes qui guident l’enfant ;
+              </li>
+              <li>
+                Une intervention positive et respectueuse qui se base sur les
+                forces et les ressources de chacun ;
+              </li>
+              <li>
+                Une formule épanouissante qui permet de retrouver le juste
+                équilibre entre fermeté et bienveillance .
+              </li>
+            </ul>
+          </WhileInView>
         </div>
         <div className={styles.famille__article}>
-          <p className={styles.famille__article__p__margin}>
-            Si vous souhaitez en savoir plus sur la tarification, cliquez sur le
-            bouton ci-dessous.
-          </p>
-          <p
-            className={`${styles.famille__article__p} ${styles.famille__article__p__hover}`}
-          >
-            <Link className={styles.famille__article__btn} href="/tarif">
-              Mes prestations
-            </Link>
-          </p>
-          <p className={styles.famille__article__p}>
-            Vous aimeriez que nous fassions un bout de chemin ensemble et que je
-            vous accompagne afin de retrouver de l’harmonie et de la complicité
-            au sein de votre famille ?
-          </p>
-          <p className={styles.famille__article__p}>
-            Si vous souhaitez me contacter ou prendre rendez-vous, cliquez sur
-            le bouton ci-dessous.
-          </p>
-          <p
-            className={`${styles.famille__article__p} ${styles.famille__article__p__hover}`}
-          >
-            <Link className={styles.famille__article__btn} href="/contact">
-              Prendre rendez-vous
-            </Link>
-          </p>
+          <WhileInView>
+            <p className={styles.famille__article__p__margin}>
+              Si vous souhaitez en savoir plus sur la tarification, cliquez sur
+              le bouton ci-dessous.
+            </p>
+          </WhileInView>
+          <WhileInView>
+            <p
+              className={`${styles.famille__article__p} ${styles.famille__article__p__hover}`}
+            >
+              <Link className={styles.famille__article__btn} href="/tarif">
+                Mes prestations
+              </Link>
+            </p>
+          </WhileInView>
+          <WhileInView>
+            <p className={styles.famille__article__p}>
+              Vous aimeriez que nous fassions un bout de chemin ensemble et que
+              je vous accompagne afin de retrouver de l’harmonie et de la
+              complicité au sein de votre famille ?
+            </p>
+          </WhileInView>
+          <WhileInView>
+            <p className={styles.famille__article__p}>
+              Si vous souhaitez me contacter ou prendre rendez-vous, cliquez sur
+              le bouton ci-dessous.
+            </p>
+          </WhileInView>
+          <WhileInView>
+            <p
+              className={`${styles.famille__article__p} ${styles.famille__article__p__hover}`}
+            >
+              <Link className={styles.famille__article__btn} href="/contact">
+                Prendre rendez-vous
+              </Link>
+            </p>
+          </WhileInView>
         </div>
       </div>
     </main>

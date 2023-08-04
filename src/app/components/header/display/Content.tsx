@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import styles from "../header.module.scss";
 import FormLogin from "../../login/formLogin";
 import FormRegister from "../../register/formRegister";
@@ -60,6 +60,23 @@ const Content = ({ userLog }: any) => {
   };
   const { isLog, role } = useSelector((state: RootState) => state.auth);
 
+  useEffect(() => {
+    if (userLog) {
+      if (userLog.role === "ROLE_ADMIN") {
+        dispatch({
+          type: "auth/login",
+          payload: {
+            role: userLog.role,
+            id: userLog.id,
+          },
+        });
+      } else {
+        dispatch({
+          type: "auth/logout",
+        });
+      }
+    }
+  }, [dispatch, userLog]);
   /*useEffect(() => {
     const tes = async () => {
       let response = await fetch("/api/user/getUser", {
@@ -304,6 +321,10 @@ const Content = ({ userLog }: any) => {
     }
   }, [dispatch, flashMessage]);
 
+  /*  useEffect(() => {
+    console.log("reload");
+    window.location.reload();
+  }, []); */
   const displayLogBtn = () => {
     if (!userLog) {
       if (isLog === false) {
@@ -367,24 +388,20 @@ const Content = ({ userLog }: any) => {
                               let json = await response.json();
                               if (json && json.status === 200) {
                                 dispatch({
-                                  type: "auth/logout",
-                                });
-                                dispatch({
                                   type: "flash/storeFlashMessage",
                                   payload: {
                                     type: "success",
                                     flashMessage: json.message,
                                   },
                                 });
-                                if (
-                                  pathname === "/rendez-vous" ||
-                                  pathname === "/profile" ||
-                                  pathname === "/meetingAdmin" ||
-                                  pathname === "/utilisateurs" ||
-                                  pathname === "/meetings"
-                                ) {
-                                  router.push("/");
-                                }
+                                await new Promise((resolve) =>
+                                  setTimeout(resolve, 2000)
+                                );
+
+                                dispatch({
+                                  type: "auth/logout",
+                                });
+                                window.location.reload();
                               }
                             };
                             logout();
@@ -442,24 +459,20 @@ const Content = ({ userLog }: any) => {
                               let json = await response.json();
                               if (json && json.status === 200) {
                                 dispatch({
-                                  type: "auth/logout",
-                                });
-                                dispatch({
                                   type: "flash/storeFlashMessage",
                                   payload: {
                                     type: "success",
                                     flashMessage: json.message,
                                   },
                                 });
-                                if (
-                                  pathname === "/rendez-vous" ||
-                                  pathname === "/profile" ||
-                                  pathname === "/meetingAdmin" ||
-                                  pathname === "/utilisateurs" ||
-                                  pathname === "/meetings"
-                                ) {
-                                  router.push("/");
-                                }
+                                await new Promise((resolve) =>
+                                  setTimeout(resolve, 2000)
+                                );
+
+                                dispatch({
+                                  type: "auth/logout",
+                                });
+                                window.location.reload();
                               }
                             };
                             logout();
@@ -528,24 +541,20 @@ const Content = ({ userLog }: any) => {
                             let json = await response.json();
                             if (json && json.status === 200) {
                               dispatch({
-                                type: "auth/logout",
-                              });
-                              dispatch({
                                 type: "flash/storeFlashMessage",
                                 payload: {
                                   type: "success",
                                   flashMessage: json.message,
                                 },
                               });
-                              if (
-                                pathname === "/rendez-vous" ||
-                                pathname === "/profile" ||
-                                pathname === "/meetingAdmin" ||
-                                pathname === "/utilisateurs" ||
-                                pathname === "/meetings"
-                              ) {
-                                router.push("/");
-                              }
+                              await new Promise((resolve) =>
+                                setTimeout(resolve, 2000)
+                              );
+
+                              dispatch({
+                                type: "auth/logout",
+                              });
+                              window.location.reload();
                             }
                           };
                           logout();
@@ -603,24 +612,20 @@ const Content = ({ userLog }: any) => {
                             let json = await response.json();
                             if (json && json.status === 200) {
                               dispatch({
-                                type: "auth/logout",
-                              });
-                              dispatch({
                                 type: "flash/storeFlashMessage",
                                 payload: {
                                   type: "success",
                                   flashMessage: json.message,
                                 },
                               });
-                              if (
-                                pathname === "/rendez-vous" ||
-                                pathname === "/profile" ||
-                                pathname === "/meetingAdmin" ||
-                                pathname === "/utilisateurs" ||
-                                pathname === "/meetings"
-                              ) {
-                                router.push("/");
-                              }
+                              await new Promise((resolve) =>
+                                setTimeout(resolve, 2000)
+                              );
+
+                              dispatch({
+                                type: "auth/logout",
+                              });
+                              window.location.reload();
                             }
                           };
                           logout();

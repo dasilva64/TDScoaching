@@ -1,7 +1,9 @@
 import styles from "./page.module.scss";
 import Display from "./components/Display";
+import { cookies } from "next/headers";
+import { getRequestCookie } from "../../../lib/getRequestCookie";
 
-const Page = () => {
+const Page = async () => {
   return (
     <>
       <main className={styles.meet}>

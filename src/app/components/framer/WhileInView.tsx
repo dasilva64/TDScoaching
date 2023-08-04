@@ -5,13 +5,11 @@ import { motion, useAnimation, useInView } from "framer-motion";
 
 const WhileInView = ({ className, children }: any) => {
   const ref = useRef(null);
-  const isInView = useInView(ref);
+  const isInView = useInView(ref, { once: true });
   const mainControls = useAnimation();
   useEffect(() => {
     if (isInView) {
       mainControls.start("visible");
-    } else {
-      mainControls.start("hidden");
     }
   }, [isInView, mainControls]);
 
@@ -20,12 +18,12 @@ const WhileInView = ({ className, children }: any) => {
       className={className}
       ref={ref}
       variants={{
-        hidden: { y: 10, opacity: 0 },
+        hidden: { y: 100, opacity: 0 },
         visible: { y: 0, opacity: 1 },
       }}
       initial="hidden"
       animate={mainControls}
-      transition={{ duration: 1, type: "spring", bounce: 0.3 }}
+      transition={{ duration: 1.5, type: "spring", bounce: 0.4 }}
     >
       {children}
     </motion.div>

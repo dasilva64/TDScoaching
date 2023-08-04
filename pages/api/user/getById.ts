@@ -7,6 +7,7 @@ export default withIronSessionApiRoute(
     if (req.method === "POST") {
       if (req.session.user) {
         const { id } = await req.body;
+        console.log(id);
         const user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
         });
@@ -25,18 +26,47 @@ export default withIronSessionApiRoute(
               message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
             });
           } else {
-            const meetingById = await prisma.meeting.findUnique({
-              where: { id: userById.meetingId! },
-            });
-            if (meetingById === null) {
-              return res.status(400).json({
-                status: 400,
-                message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+            if (userById.meetingId !== null) {
+              const meetingById = await prisma.meeting.findUnique({
+                where: { id: userById.meetingId },
               });
+              console.log("5");
+              if (meetingById === null) {
+                return res.status(400).json({
+                  status: 400,
+                  message:
+                    "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+                });
+              } else {
+                const meetingByUser = await prisma.meeting.findMany({
+                  where: { userId: id },
+                });
+                console.log("1");
+                let userObject = {
+                  id: userById?.id,
+                  role: userById?.role,
+                  firstname: userById?.firstname,
+                  lastname: userById?.lastname,
+                  mail: userById?.mail,
+                  status: userById?.status,
+                  phone: userById?.phone,
+                  editEmail: userById?.editEmail,
+                  editPhone: userById?.editPhone,
+                  twoFactor: userById?.twoFactor,
+                  twoFactorCode: userById?.twoFactorCode,
+                  allMeetings: meetingByUser,
+                  meeting: meetingById,
+                };
+                return res.status(200).json({
+                  status: 200,
+                  body: userObject,
+                });
+              }
             } else {
               const meetingByUser = await prisma.meeting.findMany({
                 where: { userId: id },
               });
+              console.log("2");
               let userObject = {
                 id: userById?.id,
                 role: userById?.role,
@@ -50,7 +80,7 @@ export default withIronSessionApiRoute(
                 twoFactor: userById?.twoFactor,
                 twoFactorCode: userById?.twoFactorCode,
                 allMeetings: meetingByUser,
-                meeting: meetingById,
+                meeting: null,
               };
               return res.status(200).json({
                 status: 200,

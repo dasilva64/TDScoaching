@@ -6,7 +6,66 @@ import { Prisma } from "@prisma/client";
 export default withIronSessionApiRoute(
   async function getuser(req: any, res: NextApiResponse) {
     if (req.method === "POST") {
-      let id = req.params.id;
+      if (req.session.user) {
+        const user = await prisma.user.findUnique({
+          where: { id: req.session.user.id },
+        });
+        if (user === null) {
+          return res.status(400).json({
+            status: 400,
+            message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+          });
+        } else {
+          const { start } = await req.body;
+          if (user.role === "ROLE_ADMIN") {
+            const meeting = await prisma.meeting.findFirst({
+              where: { startAt: start },
+            });
+            const deleteMeeting = await prisma.meeting.delete({
+              where: { id: meeting?.id },
+            });
+            const allMeeting = await prisma.meeting.findMany({
+              where: { startAt: { gte: new Date() } },
+              include: {
+                User: {
+                  select: {
+                    id: true,
+                    firstname: true,
+                    lastname: true,
+                  },
+                },
+              },
+            });
+
+            return res.status(200).json({
+              status: 200,
+              message: "Rendez-vous supprimé avec succès",
+              body: allMeeting,
+            });
+          } else {
+            const deleteMeetingInUser = await prisma.user.update({
+              where: { id: user.id },
+              data: { meetingId: null },
+            });
+            const meeting = await prisma.meeting.findFirst({
+              where: { startAt: start },
+            });
+            const deleteMeeting = await prisma.meeting.delete({
+              where: { id: meeting?.id },
+            });
+
+            return res.status(200).json({
+              status: 200,
+              message: "Rendez-vous supprimé avec succès",
+            });
+          }
+        }
+      } else {
+        return res.status(404).json({
+          status: 404,
+          message: "Vous n'êtes pas connecté, veuillez réessayer",
+        });
+      }
       /* const deleteMeetingInUser = await prisma.user.update({
         where: { meetingId: id },
         data: { meetingId: Prisma.JsonNull },

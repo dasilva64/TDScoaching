@@ -58,7 +58,6 @@ const AllMeeting = () => {
 
       newar.map((p: any, index: any) => {
         let copyUser = { ...p.User };
-        console.log(copyUser);
         if (p.description === null || p.description === "aucun") {
           newar[index] = {
             ...p,
@@ -82,7 +81,6 @@ const AllMeeting = () => {
           };
           delete newar[index].User;
           delete newar[index].limitDate;
-
         }
       });
       dispatch({

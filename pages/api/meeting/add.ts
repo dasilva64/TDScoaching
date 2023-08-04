@@ -6,14 +6,12 @@ export default withIronSessionApiRoute(
     if (req.session.user) {
       let start = req.body.start;
       console.log(start);
-      console.log(new Date(start));
       let dateStart = new Date(start);
       const meeting = await prisma.meeting.findFirst({
         where: {
           startAt: dateStart,
         },
       });
-      console.log(meeting);
       if (meeting) {
         return res.status(404).json({
           status: 404,

@@ -13,8 +13,8 @@ const Content = () => {
   const router = useRouter();
   const queryParam: any = usePathname();
   let id = queryParam.toString().split("/");
+  console.log(id);
   const { data, isLoading, isError } = useGetById(id[2]);
-  console.log(data);
   useEffect(() => {
     if (data) {
       if (data.status !== 200) {
@@ -42,108 +42,106 @@ const Content = () => {
       content = (
         <>
           <div className={styles.content__flex}>
-            <div className={styles.content__flex__div}>
-              <h2 className={styles.content__flex__div__h2}>
+            <div className={styles.content__flex__div__left}>
+              <h2 className={styles.content__flex__div__left__h2}>
                 Information de l&apos;utilisateur
               </h2>
-              <ul className={styles.content__flex__div__ul}>
-                <li className={styles.content__flex__div__ul__li}>
-                  Id : {data.body.id}
+              <ul className={styles.content__flex__div__left__ul}>
+                <li className={styles.content__flex__div__left__ul__li}>
+                  <strong>Prénom</strong> : {data.body.firstname}
                 </li>
-                <li className={styles.content__flex__div__ul__li}>
-                  Prénom : {data.body.firstname}
+                <li className={styles.content__flex__div__left__ul__li}>
+                  <strong>Nom de famille</strong> : {data.body.lastname}
                 </li>
-                <li className={styles.content__flex__div__ul__li}>
-                  Nom de famille : {data.body.lastname}
+                <li className={styles.content__flex__div__left__ul__li}>
+                  <strong>Mail</strong> : {data.body.mail}
                 </li>
-                <li className={styles.content__flex__div__ul__li}>
-                  Mail : {data.body.mail}
+                <li className={styles.content__flex__div__left__ul__li}>
+                  <strong>Téléphone</strong> : {data.body.phone}
                 </li>
-                <li className={styles.content__flex__div__ul__li}>
-                  Téléphone : {data.body.phone}
+                <li className={styles.content__flex__div__left__ul__li}>
+                  <strong>Deux facteur</strong> :{" "}
+                  {data.body.twoFactor.toString()}
                 </li>
-                <li className={styles.content__flex__div__ul__li}>
-                  Deux facteur : {data.body.twoFactor.toString()}
+                <li className={styles.content__flex__div__left__ul__li}>
+                  <strong>Status</strong> : {data.body.status.toString()}
                 </li>
-                <li className={styles.content__flex__div__ul__li}>
-                  Status : {data.body.status.toString()}
-                </li>
-                <li className={styles.content__flex__div__ul__li}>
-                  Role : {data.body.role}
+                <li className={styles.content__flex__div__left__ul__li}>
+                  <strong>Role</strong> : {data.body.role}
                 </li>
                 {data.body.meeting === null && (
-                  <li className={styles.content__flex__div__ul__li}>
-                    Rendez-vous en cours : aucun
+                  <li className={styles.content__flex__div__left__ul__li}>
+                    <strong>Rendez-vous en cours</strong> : aucun
                   </li>
                 )}
                 {data.body.meeting !== null && (
-                  <ul className={styles.content__flex__div__ul__ul}>
-                    Rendez-vous en cours :
-                    <li className={styles.content__flex__div__ul__ul__li}>
-                      Description : {data.body.meeting.description}
+                  <ul className={styles.content__flex__div__left__ul__ul}>
+                    <strong>Rendez-vous en cours</strong> :
+                    <li className={styles.content__flex__div__left__ul__ul__li}>
+                      <strong>Description</strong> :{" "}
+                      {data.body.meeting.description}
                     </li>
-                    <li className={styles.content__flex__div__ul__ul__li}>
-                      Start :{" "}
+                    <li className={styles.content__flex__div__left__ul__ul__li}>
+                      <strong>Start</strong> :{" "}
                       {new Date(data.body.meeting.startAt).toLocaleString()}
                     </li>
-                    <li className={styles.content__flex__div__ul__ul__li}>
-                      End : {new Date(data.body.meeting.endAt).toLocaleString()}
+                    <li className={styles.content__flex__div__left__ul__ul__li}>
+                      <strong>End</strong> :{" "}
+                      {new Date(data.body.meeting.endAt).toLocaleString()}
                     </li>
-                    <li className={styles.content__flex__div__ul__ul__li}>
-                      Status : {data.body.meeting.status.toString()}
+                    <li className={styles.content__flex__div__left__ul__ul__li}>
+                      <strong>Status</strong> :{" "}
+                      {data.body.meeting.status.toString()}
                     </li>
                   </ul>
                 )}
               </ul>
             </div>
-            <div className={styles.content__flex__div}>
-              <h2 className={styles.content__flex__div__h2}>
+            <div className={styles.content__flex__div__right}>
+              <h2 className={styles.content__flex__div__right__h2}>
                 historique rendez-vous
               </h2>
               {data.body.allMeetings.length === 0 && <p>Aucun rendez-vous</p>}
               {data.body.allMeetings.length > 0 && (
                 <>
-                  <div className={styles.content__flex__div__div}>
-                    <table className={styles.content__flex__div__div__table}>
+                  <div className={styles.content__flex__div__right__div}>
+                    <table
+                      className={styles.content__flex__div__right__div__table}
+                    >
                       <thead
-                        className={styles.content__flex__div__div__table__thead}
+                        className={
+                          styles.content__flex__div__right__div__table__thead
+                        }
                       >
                         <tr
                           className={
-                            styles.content__flex__div__div__table__thead__tr
+                            styles.content__flex__div__right__div__table__thead__tr
                           }
                         >
                           <th
                             className={
-                              styles.content__flex__div__div__table__thead__tr__th
-                            }
-                          >
-                            Id
-                          </th>
-                          <th
-                            className={
-                              styles.content__flex__div__div__table__thead__tr__th
+                              styles.content__flex__div__right__div__table__thead__tr__th
                             }
                           >
                             Description
                           </th>
                           <th
                             className={
-                              styles.content__flex__div__div__table__thead__tr__th
+                              styles.content__flex__div__right__div__table__thead__tr__th
                             }
                           >
                             Start
                           </th>
                           <th
                             className={
-                              styles.content__flex__div__div__table__thead__tr__th
+                              styles.content__flex__div__right__div__table__thead__tr__th
                             }
                           >
                             End
                           </th>
                           <th
                             className={
-                              styles.content__flex__div__div__table__thead__tr__th
+                              styles.content__flex__div__right__div__table__thead__tr__th
                             }
                           >
                             Status
@@ -151,47 +149,42 @@ const Content = () => {
                         </tr>
                       </thead>
                       <tbody
-                        className={styles.content__flex__div__div__table__tbody}
+                        className={
+                          styles.content__flex__div__right__div__table__tbody
+                        }
                       >
                         {data.body.allMeetings.map((p: any, index: any) => {
                           return (
                             <tr
                               className={
-                                styles.content__flex__div__div__table__tbody__tr
+                                styles.content__flex__div__right__div__table__tbody__tr
                               }
                               key={index}
                             >
                               <td
                                 className={
-                                  styles.content__flex__div__div__table__tbody__tr__td
-                                }
-                              >
-                                {p.id}
-                              </td>
-                              <td
-                                className={
-                                  styles.content__flex__div__div__table__tbody__tr__td
+                                  styles.content__flex__div__right__div__table__tbody__tr__td
                                 }
                               >
                                 {p.description}
                               </td>
                               <td
                                 className={
-                                  styles.content__flex__div__div__table__tbody__tr__td
+                                  styles.content__flex__div__right__div__table__tbody__tr__td
                                 }
                               >
                                 {new Date(p.startAt).toLocaleString()}
                               </td>
                               <td
                                 className={
-                                  styles.content__flex__div__div__table__tbody__tr__td
+                                  styles.content__flex__div__right__div__table__tbody__tr__td
                                 }
                               >
                                 {new Date(p.endAt).toLocaleString()}
                               </td>
                               <td
                                 className={
-                                  styles.content__flex__div__div__table__tbody__tr__td
+                                  styles.content__flex__div__right__div__table__tbody__tr__td
                                 }
                               >
                                 {p.status.toString()}

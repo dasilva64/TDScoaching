@@ -15,6 +15,7 @@ const Display = () => {
   const [mobile, setMobile] = useState<boolean | null>(null);
 
   const { allMeeting, isLoading, isError } = useAllAfterNow();
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth < 600) {

@@ -55,20 +55,24 @@ const AllUser = () => {
   }
   useEffect(() => {
     if (data && data.status === 200) {
-      let newar = data.body;
-      newar.map((p: any, index: any) => {
+      let copyOfItems = [...data.body];
+
+      copyOfItems.map((p: any, index: any) => {
         if (p.meeting === null || p.meeting === "aucun") {
           if (p.meeting === null) {
-            newar[index] = { ...p, meeting: "aucun", status: p.status.toString() };
-          } 
-          
+            copyOfItems[index] = {
+              ...p,
+              meeting: "aucun",
+              status: p.status.toString(),
+            };
+          }
         } else if (p.meeting !== null) {
-          newar[index] = { ...p, status: p.status.toString() };
+          copyOfItems[index] = { ...p, status: p.status.toString() };
         }
       });
       dispatch({
         type: "Array/storeData",
-        payload: { datas: newar },
+        payload: { datas: copyOfItems },
       });
     }
   }, [data, dispatch]);

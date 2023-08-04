@@ -12,7 +12,9 @@ export const middleware = async (req: NextRequest) => {
     },
   });
   const { user } = session;
-  if (user) {
+  console.log('first', req.nextUrl)
+  console.log('second', req.nextUrl.pathname)
+  /* if (user) {
     if (
       req.nextUrl.pathname === ("/utilisateurs") ||
       req.nextUrl.pathname === ("/meetings") ||
@@ -27,7 +29,7 @@ export const middleware = async (req: NextRequest) => {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }
-  }
+  } */
   if (!user) {
     return NextResponse.redirect(new URL("/", req.url));
   }

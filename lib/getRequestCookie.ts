@@ -10,6 +10,7 @@ export async function getRequestCookie(
 ): Promise<IronSessionData | null> {
     const cookieName = "test";
     const foundCookie = cookies.get(cookieName);
+    console.log('foundCookie', foundCookie)
     if (!foundCookie) {
         return null;
     }

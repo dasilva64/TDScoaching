@@ -20,9 +20,7 @@ export default function RootLayout({
     <html lang="fr">
       <body className={inter.className}>
         <Providers>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Header />
-          </Suspense>
+          <Header />
           {children}
           <Footer />
         </Providers>

@@ -1,9 +1,12 @@
 import React from "react";
+import { cookies } from "next/headers";
 import styles from "./page.module.scss";
 import Display from "./components/Display";
+import { getRequestCookie } from "../../../lib/getRequestCookie";
 
 const Profile = async () => {
-  console.log("profile");
+  const user = await getRequestCookie(cookies());
+  console.log("second", user);
   return (
     <>
       <main className={styles.profile}>

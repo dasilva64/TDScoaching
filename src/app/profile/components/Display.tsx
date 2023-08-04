@@ -7,6 +7,7 @@ import MeetingData from "./meetingData/MeetingData";
 import PasswordData from "./passwordData/PasswordData";
 import PhoneData from "./phoneSendTokenData/PhoneSendTokenData";
 import TwoFactorData from "./twoFactorData/TwoFactorData";
+import { getRequestCookie } from "../../../../lib/getRequestCookie";
 
 const Display = () => {
   return (
@@ -22,7 +23,9 @@ const Display = () => {
             <EmailData />
           </div>
 
-          <div className={`${styles.profile__article__div__div} ${styles.profile__article__div__div__margin}`}>
+          <div
+            className={`${styles.profile__article__div__div} ${styles.profile__article__div__div__margin}`}
+          >
             <PhoneData />
             <MeetingData />
             <TwoFactorData />

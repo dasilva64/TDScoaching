@@ -8,7 +8,9 @@ const Profile = async () => {
       <main className={styles.profile}>
         <h1 className={styles.profile__h1}>Profile</h1>
         <div className={styles.profile__container}>
-          <div className={styles.profile__article}>{/* <Display /> */}</div>
+          <div className={styles.profile__article}>
+            <Display />
+          </div>
         </div>
       </main>
     </>

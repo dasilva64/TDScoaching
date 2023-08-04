@@ -317,6 +317,168 @@ const Content = ({ userLog }: any) => {
         );
       } else {
         if (role === "ROLE_ADMIN") {
+          return (
+            <>
+              <div className={styles.header__log}>
+                <div
+                  onClick={() => setDisplayLogMenu(!displayLogMenu)}
+                  className={styles.header__log__div}
+                ></div>
+                {displayLogMenu === true && (
+                  <>
+                    <ul className={styles.header__log__ul}>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/profile"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Compte
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/meetings"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Historique des rendez-vous
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/meetingAdmin"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Tous les rendez-vous
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/utilisateurs"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Tous les utilisateurs
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <button
+                          onClick={() => {
+                            const logout = async () => {
+                              let response = await fetch("/api/user/logout");
+                              let json = await response.json();
+                              if (json && json.status === 200) {
+                                dispatch({
+                                  type: "auth/logout",
+                                });
+                                dispatch({
+                                  type: "flash/storeFlashMessage",
+                                  payload: {
+                                    type: "success",
+                                    flashMessage: json.message,
+                                  },
+                                });
+                                if (
+                                  pathname === "/rendez-vous" ||
+                                  pathname === "/profile" ||
+                                  pathname === "/meetingAdmin" ||
+                                  pathname === "/utilisateurs" ||
+                                  pathname === "/meetings"
+                                ) {
+                                  router.push("/");
+                                }
+                              }
+                            };
+                            logout();
+                          }}
+                        >
+                          Déconnection
+                        </button>
+                      </li>
+                    </ul>
+                  </>
+                )}
+              </div>
+            </>
+          );
+        } else {
+          return (
+            <>
+              <div className={styles.header__log}>
+                <div
+                  onClick={() => setDisplayLogMenu(!displayLogMenu)}
+                  className={styles.header__log__div}
+                ></div>
+                {displayLogMenu === true && (
+                  <>
+                    <ul className={styles.header__log__ul}>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/profile"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Compte
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/historique"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Historique des rendez-vous
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <Link
+                          href="/rendez-vous"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          Mes rendez-vous
+                        </Link>
+                      </li>
+                      <li className={styles.header__log__li}>
+                        <button
+                          onClick={() => {
+                            const logout = async () => {
+                              let response = await fetch("/api/user/logout");
+                              let json = await response.json();
+                              if (json && json.status === 200) {
+                                dispatch({
+                                  type: "auth/logout",
+                                });
+                                dispatch({
+                                  type: "flash/storeFlashMessage",
+                                  payload: {
+                                    type: "success",
+                                    flashMessage: json.message,
+                                  },
+                                });
+                                if (
+                                  pathname === "/rendez-vous" ||
+                                  pathname === "/profile" ||
+                                  pathname === "/meetingAdmin" ||
+                                  pathname === "/utilisateurs" ||
+                                  pathname === "/meetings"
+                                ) {
+                                  router.push("/");
+                                }
+                              }
+                            };
+                            logout();
+                          }}
+                        >
+                          Déconnection
+                        </button>
+                      </li>
+                    </ul>
+                  </>
+                )}
+              </div>
+            </>
+          );
+        }
+      }
+    } else {
+      if (userLog.role === "ROLE_ADMIN") {
+        return (
           <>
             <div className={styles.header__log}>
               <div
@@ -396,8 +558,10 @@ const Content = ({ userLog }: any) => {
                 </>
               )}
             </div>
-          </>;
-        } else {
+          </>
+        );
+      } else {
+        return (
           <>
             <div className={styles.header__log}>
               <div
@@ -469,164 +633,8 @@ const Content = ({ userLog }: any) => {
                 </>
               )}
             </div>
-          </>;
-        }
-      }
-    } else {
-      if (userLog.role === "ROLE_ADMIN") {
-        <>
-          <div className={styles.header__log}>
-            <div
-              onClick={() => setDisplayLogMenu(!displayLogMenu)}
-              className={styles.header__log__div}
-            ></div>
-            {displayLogMenu === true && (
-              <>
-                <ul className={styles.header__log__ul}>
-                  <li className={styles.header__log__li}>
-                    <Link
-                      href="/profile"
-                      onClick={() => setDisplayLogMenu(false)}
-                    >
-                      Compte
-                    </Link>
-                  </li>
-                  <li className={styles.header__log__li}>
-                    <Link
-                      href="/meetings"
-                      onClick={() => setDisplayLogMenu(false)}
-                    >
-                      Historique des rendez-vous
-                    </Link>
-                  </li>
-                  <li className={styles.header__log__li}>
-                    <Link
-                      href="/meetingAdmin"
-                      onClick={() => setDisplayLogMenu(false)}
-                    >
-                      Tous les rendez-vous
-                    </Link>
-                  </li>
-                  <li className={styles.header__log__li}>
-                    <Link
-                      href="/utilisateurs"
-                      onClick={() => setDisplayLogMenu(false)}
-                    >
-                      Tous les utilisateurs
-                    </Link>
-                  </li>
-                  <li className={styles.header__log__li}>
-                    <button
-                      onClick={() => {
-                        const logout = async () => {
-                          let response = await fetch("/api/user/logout");
-                          let json = await response.json();
-                          if (json && json.status === 200) {
-                            dispatch({
-                              type: "auth/logout",
-                            });
-                            dispatch({
-                              type: "flash/storeFlashMessage",
-                              payload: {
-                                type: "success",
-                                flashMessage: json.message,
-                              },
-                            });
-                            if (
-                              pathname === "/rendez-vous" ||
-                              pathname === "/profile" ||
-                              pathname === "/meetingAdmin" ||
-                              pathname === "/utilisateurs" ||
-                              pathname === "/meetings"
-                            ) {
-                              router.push("/");
-                            }
-                          }
-                        };
-                        logout();
-                      }}
-                    >
-                      Déconnection
-                    </button>
-                  </li>
-                </ul>
-              </>
-            )}
-          </div>
-        </>;
-      } else {
-        <>
-          <div className={styles.header__log}>
-            <div
-              onClick={() => setDisplayLogMenu(!displayLogMenu)}
-              className={styles.header__log__div}
-            ></div>
-            {displayLogMenu === true && (
-              <>
-                <ul className={styles.header__log__ul}>
-                  <li className={styles.header__log__li}>
-                    <Link
-                      href="/profile"
-                      onClick={() => setDisplayLogMenu(false)}
-                    >
-                      Compte
-                    </Link>
-                  </li>
-                  <li className={styles.header__log__li}>
-                    <Link
-                      href="/historique"
-                      onClick={() => setDisplayLogMenu(false)}
-                    >
-                      Historique des rendez-vous
-                    </Link>
-                  </li>
-                  <li className={styles.header__log__li}>
-                    <Link
-                      href="/rendez-vous"
-                      onClick={() => setDisplayLogMenu(false)}
-                    >
-                      Mes rendez-vous
-                    </Link>
-                  </li>
-                  <li className={styles.header__log__li}>
-                    <button
-                      onClick={() => {
-                        const logout = async () => {
-                          let response = await fetch("/api/user/logout");
-                          let json = await response.json();
-                          if (json && json.status === 200) {
-                            dispatch({
-                              type: "auth/logout",
-                            });
-                            dispatch({
-                              type: "flash/storeFlashMessage",
-                              payload: {
-                                type: "success",
-                                flashMessage: json.message,
-                              },
-                            });
-                            if (
-                              pathname === "/rendez-vous" ||
-                              pathname === "/profile" ||
-                              pathname === "/meetingAdmin" ||
-                              pathname === "/utilisateurs" ||
-                              pathname === "/meetings"
-                            ) {
-                              router.push("/");
-                            }
-                          }
-                        };
-                        logout();
-                      }}
-                    >
-                      Déconnection
-                    </button>
-                  </li>
-                </ul>
-              </>
-            )}
-          </div>
-        </>;
+          </>
+        );
       }
     }
   };

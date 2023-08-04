@@ -19,13 +19,13 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={inter.className}>
-        {/*  <Providers> */}
-        {/*  <Suspense fallback={<div>Loading...</div>}>
+        <Providers>
+          {/*  <Suspense fallback={<div>Loading...</div>}>
             <Header />
           </Suspense> */}
-        {children}
-        {/* <Footer /> */}
-        {/* </Providers> */}
+          {children}
+          {/* <Footer /> */}
+        </Providers>
       </body>
     </html>
   );

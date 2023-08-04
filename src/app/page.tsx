@@ -1,15 +1,13 @@
-import styles from "./page.module.scss";
-import ImageDisplay from "./components/image/image";
-import Image from "next/image";
-import WhileInView from "./components/framer/WhileInView";
-
 export default function Home() {
   return (
-    <main className={styles.home}>
-      <WhileInView>
-        <h1 className={styles.home__h1}>Coaching de vie</h1>
-      </WhileInView>
-      <div className={styles.home__container}>
+    /* className={styles.home} */
+    <main>
+      {/*       <WhileInView>
+       */}{" "}
+      {/* className={styles.home__h1} */}
+      <h1>Coaching de vie</h1>
+      {/* </WhileInView> */}
+      {/*  <div className={styles.home__container}>
         <div className={styles.home__article}>
           <WhileInView>
             <h2 className={styles.home__article__h2}>
@@ -44,7 +42,6 @@ export default function Home() {
                     height: "auto",
                     borderRadius: "20px",
                   }}
-                  priority={true}
                   src={"/assets/img/avenue.jpg"}
                   alt="bousole"
                 />
@@ -71,7 +68,6 @@ export default function Home() {
                     height: "auto",
                     borderRadius: "20px",
                   }}
-                  priority={true}
                   src={"/assets/img/avenue.jpg"}
                   alt="bousole"
                 />
@@ -150,7 +146,7 @@ export default function Home() {
             </div>
           </WhileInView>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }

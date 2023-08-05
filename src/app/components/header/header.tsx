@@ -4,6 +4,7 @@ import { unsealData } from "iron-session";
 
 const Header = async () => {
   //const user = await getRequestCookie(cookies());
+  /* 
   const cookieStore = cookies();
   const encrytedSession = cookieStore.get("test")?.value;
   const session = encrytedSession
@@ -11,10 +12,11 @@ const Header = async () => {
         password:
           "tesdfjklsjtesdfjktesdfjklsjdfljslkdfjlsjdflslqfdjkstlsjdfljslkdfjlsjdflslqfdjkstdfljslkdfjlsjdflslqfdjkst",
       })
-    : null;
+    : null ;
+    */
   return (
     <>
-      <Content userLog={session} />
+      <Content />
     </>
   );
 };

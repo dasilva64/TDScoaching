@@ -5,10 +5,7 @@ import { Prisma } from "@prisma/client";
 
 export default withIronSessionApiRoute(
   async function check(req: any, res: NextApiResponse) {
-    return res.status(200).json({
-      status: 200,
-    });
-    /* if (req.method === "GET") {
+    if (req.method === "GET") {
       if (req.session.user) {
         const user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
@@ -39,7 +36,7 @@ export default withIronSessionApiRoute(
         status: 404,
         message: "Une erreur est survenue, veuillez réessayer",
       });
-    } */
+    }
   },
   {
     password:

@@ -185,7 +185,7 @@ const Content = ({ userLog }: any) => {
     return false;
   }; */
 
-  const ClassName = () => {
+  /*const ClassName = () => {
     if (
       displayFormLogin === true ||
       displayFormForgot ||
@@ -225,7 +225,7 @@ const Content = ({ userLog }: any) => {
       }
       return styles.header;
     }
-  };
+  }; 
   const displayFlash = () => {
     if (flashMessage && flashMessage[1].length > 0) {
       if (
@@ -305,9 +305,9 @@ const Content = ({ userLog }: any) => {
     } else {
       return null;
     }
-  };
+  }; */
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (flashMessage && flashMessage[1].length > 0) {
       let timer = setTimeout(() => {
         dispatch({
@@ -318,7 +318,7 @@ const Content = ({ userLog }: any) => {
         clearTimeout(timer);
       };
     }
-  }, [dispatch, flashMessage]);
+  }, [dispatch, flashMessage]); */
 
   /*  useEffect(() => {
     console.log("reload");
@@ -645,9 +645,10 @@ const Content = ({ userLog }: any) => {
       {displayModalTwoFactorDisable === true && <ModalTwoFactorDisable />}
       {displayModalCancelMeeting === true && <ModalCancel />}
       {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
-      {displayFlash()}
-      <header className={ClassName()}>
-        <figure className={styles.header__figure}>
+      {/* {displayFlash()} */}
+      {/* ClassName() */}
+      <header className={""}>
+        {/* <figure className={styles.header__figure}>
           <Link className="link" href="/" tabIndex={0}>
             <Image
               className={styles.header__logo}
@@ -661,7 +662,7 @@ const Content = ({ userLog }: any) => {
           <figcaption className={styles.header__figcaption}>
             Coach de vie
           </figcaption>
-        </figure>
+        </figure> */}
         <nav
           className={
             isClick === false

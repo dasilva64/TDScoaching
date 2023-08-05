@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import useSWRMutation from "swr/mutation";
 import fetchUserLogin from "../fetch/user/fetchUserLogin";
+import { mutate } from "swr";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 
 const FormLogin = () => {
@@ -18,19 +19,20 @@ const FormLogin = () => {
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
   const [errorMessagePassword, setErrorMessagePassword] = useState<string>("");
 
-  const { trigger, data } = useSWRMutation("/api/user/login", fetchUserLogin);
+  //const { trigger, data } = useSWRMutation("/api/user/login", fetchUserLogin);
   const handlerInputRememberMe = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRememberMeInput(e.target.checked);
   };
-  useEffect(() => {
+  /* useEffect(() => {
     if (data) {
-      if (data.status === 200) {
-        /* let ar;
+      if (data.status === 200) { */
+  /* let ar;
         if (data.body.editEmail) {
           ar = [data.body.editEmail.newEmail, data.body.editEmail.limitDate];
         } else {
           ar = null;
         } */
+  /*  mutate("/api/user/check", data.body, { revalidate: false });
         dispatch({
           type: "form/toggleLogin",
         });
@@ -39,12 +41,12 @@ const FormLogin = () => {
           payload: {
             //email: data.body.email,
             role: data.body.role,
-            id: data.body.id,
-            /* firstname: data.body.firstname,
+            id: data.body.id, */
+  /* firstname: data.body.firstname,
             lastname: data.body.lastname,
             phone: data.body.phone,
             editEmail: ar, */
-          },
+  /* },
         });
         dispatch({
           type: "flash/storeFlashMessage",
@@ -57,7 +59,7 @@ const FormLogin = () => {
         });
       }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch]); */
 
   const closeForm = () => {
     dispatch({
@@ -71,11 +73,47 @@ const FormLogin = () => {
     e.preventDefault();
     if (validEmailInput === true && validPasswordInput === true) {
       const fetchLogin = async () => {
-        trigger({
+        let response = await fetch("/api/user/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mail: emailInput,
+            password: passwordInput,
+            remember: rememberMeInput,
+          }),
+        });
+        let json = await response.json();
+        if (json) {
+          if (json.status === 200) {
+            mutate("/api/user/check", json.body, { revalidate: false });
+            dispatch({
+              type: "form/toggleLogin",
+            });
+            dispatch({
+              type: "auth/login",
+              payload: {
+                role: json.body.role,
+                id: json.body.id,
+              },
+            });
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "success", flashMessage: json.message },
+            });
+          } else {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "error", flashMessage: json.message },
+            });
+          }
+        }
+        /* trigger({
           mail: emailInput,
           password: passwordInput,
           remember: rememberMeInput,
-        });
+        }); */
       };
       if (isLog === false) {
         fetchLogin();

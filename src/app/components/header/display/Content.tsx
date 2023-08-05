@@ -871,7 +871,7 @@ const Content = ({ userLog }: any) => {
               </Link>
             </li>
           </ul>
-          {displayLogBtn()}
+          {/* {displayLogBtn()} */}
         </nav>
         <div className={styles.header__burger}>
           <button

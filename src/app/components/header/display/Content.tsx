@@ -1,6 +1,6 @@
 "use client";
 
-const Content = () => {
+const Content = ({ userLog }: any) => {
   /* const pathname = usePathname();
   const router = useRouter();
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);

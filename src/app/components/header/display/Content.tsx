@@ -2,7 +2,7 @@
 
 import styles from "../header.module.scss";
 import Link from "next/link";
-import useCheck from "../../hook/user/useCheck";
+//import useCheck from "../../hook/user/useCheck";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
@@ -25,6 +25,7 @@ import Forgot from "../../forgot/Forgot";
 import FormLogin from "../../login/formLogin";
 import FormRegister from "../../register/formRegister";
 import SendCode from "../../sendCode/SendCode";
+import useCheck from "../../hook/user/useCheck";
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);

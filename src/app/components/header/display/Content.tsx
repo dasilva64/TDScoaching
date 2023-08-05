@@ -1,9 +1,198 @@
 "use client";
 
+import styles from "../header.module.scss";
+import Link from "next/link";
+import useCheck from "../../hook/user/useCheck";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
+import EmailCheck from "@/app/profile/components/emailData/EmailData";
+import ModalUserSendToken from "@/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
+import EmailValidData from "@/app/profile/components/emailValidData/EmailValidData";
+import ModalUserMainData from "@/app/profile/components/mainData/modal/ModalUserMainData";
+import ModalUserPasswordData from "@/app/profile/components/passwordData/modal/ModalUserPasswordData";
+import PhoneCheck from "@/app/profile/components/phoneData/PhoneData";
+import ModalPhoneSendTokenData from "@/app/profile/components/phoneSendTokenData/modal/ModalPhoneSendTokenData";
+import PhoneValidData from "@/app/profile/components/phoneValidData/PhoneValidData";
+import ModalTwoFactorDisable from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorDisable";
+import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorUser";
+import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
+import ModalDeleteMeeting from "@/app/rendez-vous/components/modal/ModalDeleteMeeting";
+import FormCheck from "../../check/FormCheck";
+import Forgot from "../../forgot/Forgot";
+import FormLogin from "../../login/formLogin";
+import FormRegister from "../../register/formRegister";
+import SendCode from "../../sendCode/SendCode";
+
 const Content = () => {
-  /* const pathname = usePathname();
-  const router = useRouter();
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
+
+  const { data, isLoading, isError } = useCheck();
+  let content;
+  if (isError) {
+    content = <div>Erreur</div>;
+  }
+  if (isLoading) {
+    content = <div>Chargement...</div>;
+  }
+  if (data) {
+    if (data.body === null) {
+      content = (
+        <button className={styles.header__login} onClick={() => handlerClick()}>
+          Se connecter
+        </button>
+      );
+    } else {
+      if (data.body.role === "ROLE_ADMIN") {
+        content = (
+          <>
+            <div className={styles.header__log}>
+              <div
+                onClick={() => setDisplayLogMenu(!displayLogMenu)}
+                className={styles.header__log__div}
+              ></div>
+              {displayLogMenu === true && (
+                <>
+                  <ul className={styles.header__log__ul}>
+                    <li className={styles.header__log__li}>
+                      <Link
+                        href="/profile"
+                        onClick={() => setDisplayLogMenu(false)}
+                      >
+                        Compte
+                      </Link>
+                    </li>
+                    <li className={styles.header__log__li}>
+                      <Link
+                        href="/meetings"
+                        onClick={() => setDisplayLogMenu(false)}
+                      >
+                        Historique des rendez-vous
+                      </Link>
+                    </li>
+                    <li className={styles.header__log__li}>
+                      <Link
+                        href="/meetingAdmin"
+                        onClick={() => setDisplayLogMenu(false)}
+                      >
+                        Tous les rendez-vous
+                      </Link>
+                    </li>
+                    <li className={styles.header__log__li}>
+                      <Link
+                        href="/utilisateurs"
+                        onClick={() => setDisplayLogMenu(false)}
+                      >
+                        Tous les utilisateurs
+                      </Link>
+                    </li>
+                    <li className={styles.header__log__li}>
+                      <button
+                        onClick={() => {
+                          const logout = async () => {
+                            let response = await fetch("/api/user/logout");
+                            let json = await response.json();
+                            if (json && json.status === 200) {
+                              dispatch({
+                                type: "flash/storeFlashMessage",
+                                payload: {
+                                  type: "success",
+                                  flashMessage: json.message,
+                                },
+                              });
+                              await new Promise((resolve) =>
+                                setTimeout(resolve, 2000)
+                              );
+                              window.location.reload();
+                            }
+                          };
+                          logout();
+                        }}
+                      >
+                        Déconnection
+                      </button>
+                    </li>
+                  </ul>
+                </>
+              )}
+            </div>
+          </>
+        );
+      } else if (data.body.role === "ROLE_USER") {
+        content = (
+          <>
+            <div className={styles.header__log}>
+              <div
+                onClick={() => setDisplayLogMenu(!displayLogMenu)}
+                className={styles.header__log__div}
+              ></div>
+              {displayLogMenu === true && (
+                <>
+                  <ul className={styles.header__log__ul}>
+                    <li className={styles.header__log__li}>
+                      <Link
+                        href="/profile"
+                        onClick={() => setDisplayLogMenu(false)}
+                      >
+                        Compte
+                      </Link>
+                    </li>
+                    <li className={styles.header__log__li}>
+                      <Link
+                        href="/historique"
+                        onClick={() => setDisplayLogMenu(false)}
+                      >
+                        Historique des rendez-vous
+                      </Link>
+                    </li>
+                    <li className={styles.header__log__li}>
+                      <Link
+                        href="/rendez-vous"
+                        onClick={() => setDisplayLogMenu(false)}
+                      >
+                        Mes rendez-vous
+                      </Link>
+                    </li>
+                    <li className={styles.header__log__li}>
+                      <button
+                        onClick={() => {
+                          const logout = async () => {
+                            let response = await fetch("/api/user/logout");
+                            let json = await response.json();
+                            if (json && json.status === 200) {
+                              dispatch({
+                                type: "flash/storeFlashMessage",
+                                payload: {
+                                  type: "success",
+                                  flashMessage: json.message,
+                                },
+                              });
+                              await new Promise((resolve) =>
+                                setTimeout(resolve, 2000)
+                              );
+                              window.location.reload();
+                            }
+                          };
+                          logout();
+                        }}
+                      >
+                        Déconnection
+                      </button>
+                    </li>
+                  </ul>
+                </>
+              )}
+            </div>
+          </>
+        );
+      }
+    }
+  }
+
+  const pathname = usePathname();
+  const router = useRouter();
   const [isClick, setIsClick] = useState<boolean>(false);
   const dispatch = useDispatch();
   const {
@@ -32,8 +221,8 @@ const Content = () => {
       type: "form/toggleLogin",
     });
   };
-  const { isLog, role } = useSelector((state: RootState) => state.auth); */
-  /*   useEffect(() => {
+  /* const { isLog, role } = useSelector((state: RootState) => state.auth);
+  useEffect(() => {
     if (userLog) {
       if (userLog.role === "ROLE_ADMIN") {
         dispatch({
@@ -50,7 +239,7 @@ const Content = () => {
       });
     }
   }, [dispatch, userLog]); */
-  /*useEffect(() => {
+  /*   useEffect(() => {
     const tes = async () => {
       let response = await fetch("/api/user/getUser", {
         headers: {
@@ -68,19 +257,19 @@ const Content = () => {
             },
           });
         } else {
-           if (pathname === "/rendez-vous" || pathname === "/profile") {
+          if (pathname === "/rendez-vous" || pathname === "/profile") {
             router.push("/");
-          } */
-  /* dispatch({
+          }
+          dispatch({
             type: "auth/logout",
-          }); 
+          });
         }
       }
     };
     tes();
-  }, [dispatch]);*/
+  }, [dispatch]); */
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (document) {
       let mainDiv = document.querySelector("main");
       let footerDiv = document.querySelector("footer");
@@ -143,23 +332,23 @@ const Content = () => {
 
   const updateUseState = () => {
     setIsClick(!isClick);
-  }; */
+  };
 
-  /*   if (typeof window !== "undefined") {
+  if (typeof window !== "undefined") {
     window.addEventListener("resize", () => {
       if (window.innerWidth < 1201) {
       } else {
         setIsClick(false);
       }
     });
-  } */
+  }
 
-  /* const handlerCancelNavigation = (e: any) => {
+  const handlerCancelNavigation = (e: any) => {
     e.preventDefault();
     return false;
-  }; */
+  };
 
-  /*const ClassName = () => {
+  const ClassName = () => {
     if (
       displayFormLogin === true ||
       displayFormForgot ||
@@ -199,7 +388,7 @@ const Content = () => {
       }
       return styles.header;
     }
-  }; 
+  };
   const displayFlash = () => {
     if (flashMessage && flashMessage[1].length > 0) {
       if (
@@ -279,9 +468,9 @@ const Content = () => {
     } else {
       return null;
     }
-  }; */
+  };
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (flashMessage && flashMessage[1].length > 0) {
       let timer = setTimeout(() => {
         dispatch({
@@ -292,12 +481,8 @@ const Content = () => {
         clearTimeout(timer);
       };
     }
-  }, [dispatch, flashMessage]); */
+  }, [dispatch, flashMessage]);
 
-  /*  useEffect(() => {
-    console.log("reload");
-    window.location.reload();
-  }, []); */
   /* const displayLogBtn = () => {
     if (!userLog) {
       if (isLog === false) {
@@ -602,7 +787,7 @@ const Content = () => {
   }; */
   return (
     <>
-      {/* {displayFormLogin === true && <FormLogin />}
+      {displayFormLogin === true && <FormLogin />}
       {displayFormRegister === true && <FormRegister />}
       {displaySendCode === true && <SendCode />}
       {displayFormCheck === true && <FormCheck />}
@@ -618,11 +803,10 @@ const Content = () => {
       {displayModalTwoFactor === true && <ModalTwoFactor />}
       {displayModalTwoFactorDisable === true && <ModalTwoFactorDisable />}
       {displayModalCancelMeeting === true && <ModalCancel />}
-      {displayModalDeleteMeeting === true && <ModalDeleteMeeting />} */}
-      {/* {displayFlash()} */}
-      {/* ClassName() */}
-      <header className={""}>
-        {/* <figure className={styles.header__figure}>
+      {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
+      {displayFlash()}
+      <header className={ClassName()}>
+        <figure className={styles.header__figure}>
           <Link className="link" href="/" tabIndex={0}>
             <Image
               className={styles.header__logo}
@@ -636,8 +820,8 @@ const Content = () => {
           <figcaption className={styles.header__figcaption}>
             Coach de vie
           </figcaption>
-        </figure> */}
-        {/* <nav
+        </figure>
+        <nav
           className={
             isClick === false
               ? `${styles.header__nav}`
@@ -846,9 +1030,9 @@ const Content = () => {
               </Link>
             </li>
           </ul>
-          {displayLogBtn()}
-        </nav> */}
-        {/*  <div className={styles.header__burger}>
+          {content}
+        </nav>
+        <div className={styles.header__burger}>
           <button
             className={styles.header__burger__btn}
             onClick={() => updateUseState()}
@@ -875,7 +1059,7 @@ const Content = () => {
               ></span>
             </div>
           </button>
-        </div> */}
+        </div>
       </header>
     </>
   );

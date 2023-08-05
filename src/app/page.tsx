@@ -4,7 +4,7 @@ import Image from "next/image";
 import WhileInView from "./components/framer/WhileInView";
 
 const getData = async () => {
-  const res = await fetch("https://testtds-vogj.vercel.app/api/user/check", {
+  const res = await fetch("/api/user/check", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -14,12 +14,11 @@ const getData = async () => {
 };
 
 const Header = async () => {
-  const data = await getData();
+  //const data = await getData();
   //const user = await getRequestCookie(cookies());
-  console.log(data);
   return (
     <>
-      <Content userLog={data} />
+      <Content userLog={"data"} />
     </>
   );
 };

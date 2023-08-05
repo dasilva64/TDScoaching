@@ -88,6 +88,18 @@ export default withIronSessionApiRoute(
           } else {
             userTwoFactorObject = null;
           }
+          const allMeeting = await prisma.meeting.findMany({
+            where: { startAt: { gte: new Date() } },
+            include: {
+              User: {
+                select: {
+                  id: true,
+                  firstname: true,
+                  lastname: true,
+                },
+              },
+            },
+          });
           if (user.meetingId !== null) {
             let meeting = await prisma.meeting.findUnique({
               where: {
@@ -101,6 +113,26 @@ export default withIronSessionApiRoute(
               lastname: user.lastname,
               email: user.mail,
               meeting: meeting,
+              meetings: allMeeting,
+              phone: user.phone,
+              editEmail: userEditMailObject,
+              editPhone: userEditPhoneObject,
+              twoFactor: user.twoFactor,
+              twoFactorCode: userTwoFactorObject,
+            };
+            return res.status(200).json({
+              status: 200,
+              body: userObject,
+            });
+          } else {
+            let userObject = {
+              id: user.id,
+              role: user.role,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              email: user.mail,
+              meeting: user.meetingId,
+              meetings: allMeeting,
               phone: user.phone,
               editEmail: userEditMailObject,
               editPhone: userEditPhoneObject,
@@ -112,23 +144,6 @@ export default withIronSessionApiRoute(
               body: userObject,
             });
           }
-          let userObject = {
-            id: user.id,
-            role: user.role,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            email: user.mail,
-            meeting: user.meetingId,
-            phone: user.phone,
-            editEmail: userEditMailObject,
-            editPhone: userEditPhoneObject,
-            twoFactor: user.twoFactor,
-            twoFactorCode: userTwoFactorObject,
-          };
-          return res.status(200).json({
-            status: 200,
-            body: userObject,
-          });
         }
       } else {
         return res.status(404).json({

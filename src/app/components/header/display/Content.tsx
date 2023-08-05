@@ -29,9 +29,22 @@ import useCheck from "../../hook/user/useCheck";
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const { data, isLoading, isError } = useCheck();
-  console.log(data);
+  useEffect(() => {
+    if (data) {
+      if (data.body !== null) {
+        dispatch({
+          type: "auth/login",
+          payload: {
+            role: data.body.role,
+            id: data.body.id,
+          },
+        });
+      }
+    }
+  }, [data, dispatch]);
   let content;
   if (isError) {
     content = <div>Erreur</div>;
@@ -207,7 +220,6 @@ const Content = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [isClick, setIsClick] = useState<boolean>(false);
-  const dispatch = useDispatch();
   const {
     displayFormLogin,
     displayFormRegister,

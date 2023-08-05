@@ -3,15 +3,18 @@
 import React, { useEffect, useState } from "react";
 import styles from "./DatePickerDesktop.module.scss";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import fetchGetPayment from "@/app/components/fetch/paiement/useGet";
+import useSWRMutation from "swr/mutation";
 
-const DatePickerDesktop = ({
-  user,
-  events,
-  setDisplayModal,
-  setDateMeeting,
-}: any) => {
+const DatePickerDesktop = ({ events }: any) => {
+  console.log(events);
   const [arDateWeek, setArDateWeek] = useState<any>([]);
   const [choiceDate, setChoiceDate] = useState<string>("");
+  const [all, setAll] = useState<any>(null);
+  const { id } = useSelector((state: any) => state.auth);
+  const [displayModal, setDisplayModal] = useState<boolean>(false);
+
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [startDateWeek, setStartDateWeek] = useState<string>("");
   const [arMeeting, setArMeeting] = useState<null | any>(null);
@@ -70,25 +73,44 @@ const DatePickerDesktop = ({
           let eventHour = startDate.getUTCHours();
 
           if (
-            eventYear.toString() === newar[y][0].toString() &&
-            (eventMonth + 1).toString() === newar[y][1].toString() &&
-            eventDate.toString() === newar[y][2].toString()
+            eventYear.toString() === newar[y].getFullYear().toString() &&
+            (eventMonth + 1).toString() ===
+              (newar[y].getMonth() + 1).toString() &&
+            eventDate.toString() === newar[y].getDate().toString()
           ) {
+            let copyUser: any = { ...copyEvents[i].User };
             arWeek.push([
               eventYear,
               eventMonth + 1,
               eventDate,
               eventDay,
               eventHour,
-              copyEvents[i]["userId"],
+              copyUser.id,
+              copyUser.firstname,
+              copyUser.lastname,
             ]);
           }
         }
         if (arWeek.length > 0) {
-          ar.push([...newar[y], [arWeek]]);
+          ar.push([
+            [
+              newar[y].getFullYear(),
+              newar[y].getMonth() + 1,
+              newar[y].getDate(),
+              newar[y].getDay(),
+            ],
+            [arWeek],
+          ]);
           arWeek = [];
         } else {
-          ar.push([...newar[y]]);
+          ar.push([
+            [
+              newar[y].getFullYear(),
+              newar[y].getMonth() + 1,
+              newar[y].getDate(),
+              newar[y].getDay(),
+            ],
+          ]);
           arWeek = [];
         }
       }
@@ -127,8 +149,29 @@ const DatePickerDesktop = ({
       week.splice(5, 2);
       return week;
     }
-    if (choiceDate === "") {
-      let current = new Date();
+    if (arDateWeek.length === 0) {
+      if (startDateWeek === "") {
+        setAll(events);
+        let current = new Date();
+        if (current.getDay() === 6) {
+          current.setDate(current.getDate() + 2);
+          let ar = getAllDayInWeek(new Date(current));
+          getMeetingByWeek(ar);
+        } else if (current.getDay() === 0) {
+          current.setDate(current.getDate() + 1);
+          let ar = getAllDayInWeek(new Date(current));
+          getMeetingByWeek(ar);
+        } else {
+          let ar = getAllDayInWeek(new Date(current));
+          getMeetingByWeek(ar);
+        }
+      } else {
+        let current = new Date(startDateWeek);
+        current.setDate(current.getDate());
+        let ar = getAllDayInWeek(new Date(startDateWeek));
+        getMeetingByWeek(ar);
+      }
+      /* let current = new Date();
       current.setDate(current.getDate());
       setChoiceDate(current.toDateString());
       let newar = [];
@@ -141,10 +184,17 @@ const DatePickerDesktop = ({
           d.getDate(),
           d.getDay(),
         ]);
-      }
+      } */
 
       //setArDateWeek(newar);
-      getMeetingByWeek(newar);
+      //getMeetingByWeek(newar);
+    }
+    if (events.length > all?.length || events.length < all?.length) {
+      let current = new Date(startDateWeek);
+      current.setDate(current.getDate());
+      let ar = getAllDayInWeek(new Date(startDateWeek));
+      getMeetingByWeek(ar);
+      setAll(events);
     }
 
     /* let newar = [];
@@ -155,7 +205,7 @@ const DatePickerDesktop = ({
     }
     setArDateWeek(newar); */
     //getMeetingByWeek();
-  }, [arDateWeek, choiceDate, events]);
+  }, [all?.length, arDateWeek, events, startDateWeek]);
 
   const changeDate = (wowtets: any) => {
     const getMeetingByWeek = (newar: any) => {
@@ -173,25 +223,44 @@ const DatePickerDesktop = ({
           let eventHour = startDate.getUTCHours();
 
           if (
-            eventYear.toString() === newar[y][0].toString() &&
-            (eventMonth + 1).toString() === newar[y][1].toString() &&
-            eventDate.toString() === newar[y][2].toString()
+            eventYear.toString() === newar[y].getFullYear().toString() &&
+            (eventMonth + 1).toString() ===
+              (newar[y].getMonth() + 1).toString() &&
+            eventDate.toString() === newar[y].getDate().toString()
           ) {
+            let copyUser: any = { ...copyEvents[i].User };
             arWeek.push([
               eventYear,
               eventMonth + 1,
               eventDate,
               eventDay,
               eventHour,
-              copyEvents[i]["userId"],
+              copyUser.id,
+              copyUser.firstname,
+              copyUser.lastname,
             ]);
           }
         }
         if (arWeek.length > 0) {
-          ar.push([...newar[y], [arWeek]]);
+          ar.push([
+            [
+              newar[y].getFullYear(),
+              newar[y].getMonth() + 1,
+              newar[y].getDate(),
+              newar[y].getDay(),
+            ],
+            [arWeek],
+          ]);
           arWeek = [];
         } else {
-          ar.push([...newar[y]]);
+          ar.push([
+            [
+              newar[y].getFullYear(),
+              newar[y].getMonth() + 1,
+              newar[y].getDate(),
+              newar[y].getDay(),
+            ],
+          ]);
           arWeek = [];
         }
       }
@@ -232,49 +301,220 @@ const DatePickerDesktop = ({
       return week;
     }
     let newar = [];
-    let ar = getAllDayInWeek(wowtets);
-    for (let i = 0; i < ar.length; i++) {
+    let wowtetss = new Date(wowtets);
+    if (wowtetss.getDay() === 6) {
+      wowtetss.setDate(wowtetss.getDate() + 2);
+      let ar = getAllDayInWeek(new Date(wowtetss));
+      getMeetingByWeek(ar);
+    } else if (wowtetss.getDay() === 0) {
+      wowtetss.setDate(wowtetss.getDate() + 1);
+      let ar = getAllDayInWeek(new Date(wowtetss));
+      getMeetingByWeek(ar);
+    } else {
+      let ar = getAllDayInWeek(new Date(wowtetss));
+      getMeetingByWeek(ar);
+    }
+    //let ar = getAllDayInWeek(wowtets);
+    /* for (let i = 0; i < ar.length; i++) {
       let d = new Date(ar[i]);
       newar.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay()]);
-    }
+    } */
 
     //setArDateWeek(newar);
-    getMeetingByWeek(newar);
+    //getMeetingByWeek(newar);
   };
 
   const previous = () => {
-    let next = new Date(startDateWeek);
+    let start = new Date(startDateWeek);
 
+    let end = new Date(startDateWeek);
+    end.setDate(end.getDate() + 5);
+    let current = new Date();
+    let startPrevious = new Date(start);
+    startPrevious.setDate(startPrevious.getDate() - 7);
     let test = new Date();
-    if (new Date(next).getTime() > new Date().getTime()) {
-      next.setDate(next.getDate() - 7);
-      setChoiceDate(next.toDateString());
-      changeDate(next.toDateString());
+    test.setDate(test.getDate() - 1);
+    if (new Date(startPrevious).getTime() > new Date().getTime()) {
+      start.setDate(start.getDate() - 7);
+      changeDate(start.toDateString());
+      setArDateWeek([]);
+    } else {
+      let dayWeek = [];
+      for (let i = 0; i < 5; i++) {
+        dayWeek.push(new Date(startPrevious));
+        if (current.getDate() === startPrevious.getDate()) {
+          start.setDate(start.getDate() - 7);
+          changeDate(start.toDateString());
+          setArDateWeek([]);
+          break;
+        }
+        startPrevious.setDate(startPrevious.getDate() + 1);
+      }
     }
   };
 
   const next = () => {
     let next = new Date(startDateWeek);
     next.setDate(next.getDate() + 7);
-    setChoiceDate(next.toDateString());
     changeDate(next.toDateString());
+    setArDateWeek([]);
   };
   const handlerClick = (h: any, p: any) => {
-    let create = new Date(p[0], p[1] - 1, p[2], h);
+    console.log(h);
+    console.log(p);
+    let create = new Date(p[0][0], p[0][1] - 1, p[0][2], h);
     let test = new Date();
+    console.log(create);
+    console.log(test);
     if (new Date(create).getTime() > new Date().getTime()) {
+      console.log("test");
+      setChoiceDate(create.toLocaleString());
       setDisplayModal(true);
-      setDateMeeting(create.toLocaleString());
+      // setDateMeeting(create.toLocaleString());
     }
   };
 
   const goCurrent = () => {
     let current = new Date();
-    setChoiceDate(current.toDateString());
+    //setChoiceDate(current.toDateString());
     changeDate(current.toDateString());
+    setArDateWeek([]);
   };
+  const closeForm = () => {
+    setDisplayModal(false);
+  };
+  const { trigger: triggerGet, data: dataGet } = useSWRMutation(
+    "http://localhost:8080/payment/get",
+    fetchGetPayment
+  );
+  useEffect(() => {
+    if (dataGet) {
+      window.location.href = dataGet.url;
+    }
+  }, [dataGet]);
+  const handlerPayment = () => {
+    setDisplayModal(false);
+    let startstr = "";
+    let endstr = "";
+    let copyChoiceDate = choiceDate;
+    copyChoiceDate.split(" ").map((el: any, index: any) => {
+      if (index === 0) {
+        el.split("/")
+          .reverse()
+          .map((el: any) => {
+            startstr = startstr + el + "-";
+          });
+      } else {
+        el.split(":").map((el: any) => {
+          endstr = endstr + el + ":";
+        });
+      }
+    });
+    let formatDate =
+      startstr.slice(0, startstr.length - 1) +
+      "T" +
+      endstr.slice(0, endstr.length - 1) +
+      ".000Z";
+    const fetchAddMeeting = async () => {
+      triggerGet({ start: formatDate });
+    };
+    fetchAddMeeting();
+  };
+  useEffect(() => {
+    if (document) {
+      let mainDiv = document.querySelector("main");
+      let headerDiv = document.querySelector("header");
+      let footerDiv = document.querySelector("footer");
+      let div1 = document.querySelector(
+        ".page_meet__h1__1RXpU"
+      ) as HTMLDivElement;
+      let div2 = document.querySelector(
+        ".DatePickerDesktop_datePicker__Oo4J3"
+      ) as HTMLDivElement;
+      let div3 = document.querySelector(
+        ".page_meet__meet__WMfw6"
+      ) as HTMLDivElement;
+      let div4 = document.querySelector(
+        ".page_meet__container__4_8kP"
+      ) as HTMLDivElement;
+      let div5 = document.querySelector(
+        ".page_meet__article__bh0e_"
+      ) as HTMLDivElement;
+      let htlmElement = document.querySelector("html");
+      let htlmbody = document.querySelector("body");
+      if (
+        mainDiv &&
+        footerDiv &&
+        headerDiv &&
+        htlmElement &&
+        htlmbody &&
+        div1 &&
+        div2 &&
+        div3 &&
+        div4 &&
+        div5
+      ) {
+        if (displayModal === true) {
+          headerDiv.style.opacity = "0.1";
+          div1.style.opacity = "0.1";
+          div2.style.opacity = "0.1";
+          div3.style.opacity = "0.1";
+          footerDiv.style.opacity = "0.1";
+          div4.style.opacity = "0.1";
+          div5.style.opacity = "0.1";
+
+          htlmElement.style.height = "100%";
+          htlmbody.style.height = "100%";
+          htlmbody.style.overflow = "hidden";
+        } else {
+          headerDiv.style.opacity = "1";
+          mainDiv.style.opacity = "1";
+          div1.style.opacity = "1";
+          div2.style.opacity = "1";
+          div3.style.opacity = "1";
+          div4.style.opacity = "1";
+          div5.style.opacity = "1";
+          footerDiv.style.opacity = "1";
+          htlmElement.style.height = "unset";
+          htlmbody.style.height = "unset";
+          htlmbody.style.overflow = "unset";
+        }
+      }
+    }
+  }, [displayModal]);
   return (
     <>
+      {displayModal === true && (
+        <div className={styles.datePicker__comfirm}>
+          <button
+            className={styles.datePicker__comfirm__btn}
+            onClick={() => closeForm()}
+          >
+            <span className={styles.datePicker__comfirm__btn__cross}>
+              &times;
+            </span>
+          </button>
+          <h1 className={styles.datePicker__comfirm__h1}>
+            Comfirmation de rendez-vous
+          </h1>
+          <p>Rappel du rendez-vous : {choiceDate}</p>
+          <p>
+            Pour comfirmer le rendez-vous une autorisation bancaire est
+            nécessaire. Aucune somme ne sera débitée avant la fin de la
+            consultation vidéo.
+          </p>
+          <div className={styles.datePicker__comfirm__div}>
+            <button
+              className={styles.datePicker__comfirm__div__btn}
+              onClick={() => {
+                handlerPayment();
+              }}
+            >
+              Payer pour comfirmer
+            </button>
+          </div>
+        </div>
+      )}
       <div className={styles.datePicker}>
         <div className={styles.datePicker__head}>
           <span
@@ -294,39 +534,41 @@ const DatePickerDesktop = ({
           />
           {arDateWeek && arDateWeek.length > 0 && (
             <div className={styles.datePicker__head__div}>
-              {arDateWeek[0][1] === arDateWeek[arDateWeek.length - 1][1] && (
+              {arDateWeek[0][0][1] ===
+                arDateWeek[arDateWeek.length - 1][0][1] && (
                 <>
                   <p className={styles.datePicker__head__div__marginR}>
-                    {arDateWeek[0][2].toString()}
+                    {arDateWeek[0][0][2]}
                   </p>
                   <p>-</p>
                   <p className={styles.datePicker__head__div__marginL}>
-                    {arDateWeek[arDateWeek.length - 1][2].toString()}
+                    {arDateWeek[arDateWeek.length - 1][0][2]}
                   </p>
                   <p className={styles.datePicker__head__div__marginL}>
-                    {monthstext[arDateWeek[0][1]]}
+                    {monthstext[arDateWeek[0][0][1]]}
                   </p>
                 </>
               )}
-              {arDateWeek[0][1] !== arDateWeek[arDateWeek.length - 1][1] && (
+              {arDateWeek[0][0][1] !==
+                arDateWeek[arDateWeek.length - 1][0][1] && (
                 <>
                   <p className={styles.datePicker__head__div__marginR}>
-                    {arDateWeek[0][2].toString()}
+                    {arDateWeek[0][0][2]}
                   </p>
                   <p className={styles.datePicker__head__div__marginR}>
-                    {monthstext[arDateWeek[0][1]]}
+                    {monthstext[arDateWeek[0][0][1]]}
                   </p>
                   <p>-</p>
                   <p className={styles.datePicker__head__div__marginL}>
-                    {arDateWeek[arDateWeek.length - 1][2].toString()}
+                    {arDateWeek[arDateWeek.length - 1][0][2]}
                   </p>
                   <p className={styles.datePicker__head__div__marginL}>
-                    {monthstext[arDateWeek[arDateWeek.length - 1][1]]}
+                    {monthstext[arDateWeek[arDateWeek.length - 1][0][1]]}
                   </p>
                 </>
               )}
               <p className={styles.datePicker__head__div__marginL}>
-                {arDateWeek[0][0].toString()}
+                {arDateWeek[0][0][0]}
               </p>
             </div>
           )}
@@ -350,9 +592,9 @@ const DatePickerDesktop = ({
                       <div
                         className={styles.datePicker__table__thead__tr__th__div}
                       >
-                        <span>{daystext[p[3]]}</span>
+                        <span>{daystext[p[0][3]]}</span>
                         <span>
-                          {p[2]}/{p[1]}
+                          {p[0][2]}/{p[0][1]}
                         </span>
                       </div>
                     </th>
@@ -362,31 +604,27 @@ const DatePickerDesktop = ({
           </thead>
           <tbody className={styles.datePicker__table__tbody}>
             {hourtext &&
-              user &&
               Object.entries(hourtext).map((h: any, index: any) => {
                 return (
                   <tr
                     key={index}
                     className={styles.datePicker__table__tbody__tr}
                   >
-                    {/* <td className={styles.datePicker__table__tbody__tr__td__hour}>
-                      {h[1]}h
-                    </td> */}
                     {arDateWeek.length > 0 &&
                       arDateWeek.map((p: any, index: any) => {
-                        if (p[4] && p[4].length > 0) {
-                          for (let y = 0; y < p[4][0].length; y++) {
+                        if (p[1] && p[1].length > 0) {
+                          for (let y = 0; y < p[1][0].length; y++) {
                             if (
-                              p[0] === p[4][0][y][0] &&
-                              p[1] === p[4][0][y][1] &&
-                              p[2] === p[4][0][y][2]
+                              p[0][0] === p[1][0][y][0] &&
+                              p[0][1] === p[1][0][y][1] &&
+                              p[0][2] === p[1][0][y][2] &&
+                              p[0][3] === p[1][0][y][3]
                             ) {
                               if (
-                                h[1].toString() === p[4][0][y][4].toString()
+                                h[1].toString() === p[1][0][y][4].toString()
                               ) {
                                 if (
-                                  user.body.id.toString() ===
-                                  p[4][0][y][5].toString()
+                                  id.toString() === p[1][0][y][5].toString()
                                 ) {
                                   return (
                                     <td
@@ -421,31 +659,67 @@ const DatePickerDesktop = ({
                             }
                           }
                         }
-
-                        //
-                        return (
-                          <td
-                            className={styles.datePicker__table__tbody__tr__td}
-                            key={index}
-                          >
-                            <div
+                        console.log("current", new Date());
+                        console.log(
+                          new Date(p[0][0], p[0][1] - 1, p[0][2], h[1])
+                        );
+                        let current = new Date();
+                        current.setDate(current.getDate() + 3);
+                        if (
+                          current.getTime() <
+                          new Date(
+                            p[0][0],
+                            p[0][1] - 1,
+                            p[0][2],
+                            h[1]
+                          ).getTime()
+                        ) {
+                          return (
+                            <td
                               className={
-                                styles.datePicker__table__tbody__tr__td__div
+                                styles.datePicker__table__tbody__tr__td
                               }
-                              onClick={() => {
-                                handlerClick(h[1], p);
-                              }}
+                              key={index}
                             >
-                              <p
+                              <div
                                 className={
-                                  styles.datePicker__table__tbody__tr__td__div__p
+                                  styles.datePicker__table__tbody__tr__td__div
+                                }
+                                onClick={() => {
+                                  handlerClick(h[1], p);
+                                }}
+                              >
+                                <p
+                                  className={
+                                    styles.datePicker__table__tbody__tr__td__div__p
+                                  }
+                                >
+                                  {h[1]} h
+                                </p>
+                              </div>
+                            </td>
+                          );
+                        } else {
+                          return (
+                            <td
+                              className={`${styles.datePicker__table__tbody__tr__td} ${styles.datePicker__table__tbody__tr__td__previous}`}
+                              key={index}
+                            >
+                              <div
+                                className={
+                                  styles.datePicker__table__tbody__tr__td__div__previous
                                 }
                               >
-                                {h[1]} h
-                              </p>
-                            </div>
-                          </td>
-                        );
+                                <p
+                                  className={
+                                    styles.datePicker__table__tbody__tr__td__div__previous__p
+                                  }
+                                ></p>
+                              </div>
+                            </td>
+                          );
+                        }
+                        //
                       })}
                   </tr>
                 );

@@ -57,7 +57,7 @@ const Display = () => {
 
   const { userData, isLoading, isError } = useUserGet();
 
-  const { allMeeting, mutateMeeting } = useAllAfterNow();
+  //const { allMeeting, mutateMeeting } = useAllAfterNow();
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth < 600) {
@@ -432,7 +432,7 @@ const Display = () => {
   } else {
     content = (
       <>
-        {displayModal === true && (
+        {/* {displayModal === true && (
           <div className={styles.meet__comfirm}>
             <button
               className={styles.meet__comfirm__btn}
@@ -459,29 +459,24 @@ const Display = () => {
               </button>
             </div>
           </div>
-        )}
+        )} */}
         <div className={styles.meet__article}>
+          {mobile === false && userData && (
+            <>
+              <DatePickerDesktop events={userData?.body.meetings} />
+            </>
+          )}
           {userData &&
             !userData.body.meeting &&
-            allMeeting &&
-            mobile === false && (
-              <>
-                <DatePickerDesktop
-                  user={userData}
-                  events={allMeeting.body}
-                  setDisplayModal={setDisplayModal}
-                  setDateMeeting={setDateMeeting}
-                />
-              </>
-            )}
-          {userData && !userData.body.meeting && mobile === true && (
-            <DatePickerMobile
+            mobile === true &&
+            {
+              /* <DatePickerMobile
               user={userData}
               events={allMeeting}
               setDisplayModal={setDisplayModal}
               setDateMeeting={setDateMeeting}
-            />
-          )}
+            /> */
+            }}
           <DisplayMeeting />
         </div>
       </>

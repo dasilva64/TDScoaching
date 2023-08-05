@@ -174,9 +174,18 @@ const DatePickerDesktop = ({ events }: any) => {
       if (startDateWeek === "") {
         setAll(events);
         let current = new Date();
-        current.setDate(current.getDate());
-        let ar = getAllDayInWeek(new Date());
-        getMeetingByWeek(ar);
+        if (current.getDay() === 6) {
+          current.setDate(current.getDate() + 2);
+          let ar = getAllDayInWeek(new Date(current));
+          getMeetingByWeek(ar);
+        } else if (current.getDay() === 0) {
+          current.setDate(current.getDate() + 1);
+          let ar = getAllDayInWeek(new Date(current));
+          getMeetingByWeek(ar);
+        } else {
+          let ar = getAllDayInWeek(new Date(current));
+          getMeetingByWeek(ar);
+        }
       } else {
         let current = new Date(startDateWeek);
         current.setDate(current.getDate());
@@ -277,13 +286,31 @@ const DatePickerDesktop = ({ events }: any) => {
   };
 
   const previous = () => {
-    let next = new Date(startDateWeek);
+    let start = new Date(startDateWeek);
 
+    let end = new Date(startDateWeek);
+    end.setDate(end.getDate() + 5);
+    let current = new Date();
+    let startPrevious = new Date(start);
+    startPrevious.setDate(startPrevious.getDate() - 7);
     let test = new Date();
-    if (new Date(next).getTime() > new Date().getTime()) {
-      next.setDate(next.getDate() - 7);
-      changeDate(next.toDateString());
+    test.setDate(test.getDate() - 1);
+    if (new Date(startPrevious).getTime() > new Date().getTime()) {
+      start.setDate(start.getDate() - 7);
+      changeDate(start.toDateString());
       setArDateWeek([]);
+    } else {
+      let dayWeek = [];
+      for (let i = 0; i < 5; i++) {
+        dayWeek.push(new Date(startPrevious));
+        if (current.getDate() === startPrevious.getDate()) {
+          start.setDate(start.getDate() - 7);
+          changeDate(start.toDateString());
+          setArDateWeek([]);
+          break;
+        }
+        startPrevious.setDate(startPrevious.getDate() + 1);
+      }
     }
   };
 

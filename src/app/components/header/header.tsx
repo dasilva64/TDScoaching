@@ -9,8 +9,8 @@ const getData = async () => {
       "Content-Type": "application/json",
     },
   });
-  const data = await res.json();
-  return data;
+  console.log(res);
+  return res.json();
 };
 
 const Header = async () => {

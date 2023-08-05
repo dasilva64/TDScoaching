@@ -3,7 +3,20 @@ import ImageDisplay from "./components/image/image";
 import Image from "next/image";
 import WhileInView from "./components/framer/WhileInView";
 
-export default function Home() {
+const getData = async () => {
+  const res = await fetch("https://testtds-vogj.vercel.app/api/user/check", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  console.log(res);
+  return res.json();
+};
+
+export default async function Home() {
+  const data = await getData();
+  console.log(data);
   return (
     <main className={styles.home}>
       <WhileInView>

@@ -7,9 +7,8 @@ const fetchWithToken = async (url: string) => {
 };
 
 function useCheck() {
-  const { data, error, isLoading, mutate } = useSWR(
-    ["/api/user/check"],
-    ([url]) => fetchWithToken(url)
+  const { data, error, isLoading, mutate } = useSWR("/api/user/check", (url) =>
+    fetchWithToken(url)
   );
 
   return {

@@ -31,6 +31,7 @@ const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
 
   const { data, isLoading, isError } = useCheck();
+  console.log(data);
   let content;
   if (isError) {
     content = <div>Erreur</div>;
@@ -96,6 +97,15 @@ const Content = () => {
                             let response = await fetch("/api/user/logout");
                             let json = await response.json();
                             if (json && json.status === 200) {
+                              /*  mutate(
+                                "/api/user/check",
+                                {
+                                  ...json,
+                                  body: null,
+                                  status: 404,
+                                },
+                                { revalidate: false }
+                              ); */
                               dispatch({
                                 type: "flash/storeFlashMessage",
                                 payload: {
@@ -103,9 +113,11 @@ const Content = () => {
                                   flashMessage: json.message,
                                 },
                               });
+
                               await new Promise((resolve) =>
                                 setTimeout(resolve, 2000)
                               );
+
                               window.location.reload();
                             }
                           };

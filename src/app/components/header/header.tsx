@@ -14,7 +14,7 @@ const getData = async () => {
 };
 
 const Header = async () => {
-  //const data = await getData();
+  const data = await getData();
   //const user = await getRequestCookie(cookies());
   return (
     <>

@@ -1,32 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
-import styles from "../header.module.scss";
-import FormLogin from "../../login/formLogin";
-import FormRegister from "../../register/formRegister";
-import FormCheck from "../../check/FormCheck";
-import SendCode from "../../sendCode/SendCode";
-import Forgot from "../../forgot/Forgot";
-import { RootState } from "../../../redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import ModalUserMainData from "../../../profile/components/mainData/modal/ModalUserMainData";
-import ModalUserPasswordData from "../../../profile/components/passwordData/modal/ModalUserPasswordData";
-import ModalUserSendToken from "../../../profile/components/emailSendTokenData/modal/ModalUserSendToken";
-import EmailCheck from "../../../profile/components/emailData/EmailData";
-import EmailValidData from "../../../profile/components/emailValidData/EmailValidData";
-import ModalPhoneSendTokenData from "../../../profile/components/phoneSendTokenData/modal/ModalPhoneSendTokenData";
-import PhoneCheck from "@/app/profile/components/phoneData/PhoneData";
-import PhoneValidData from "@/app/profile/components/phoneValidData/PhoneValidData";
-import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorUser";
-import ModalTwoFactorDisable from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorDisable";
-
-import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
-import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteMeeting";
-
-const Content = ({ userLog }: any) => {
+const Content = () => {
   /* const pathname = usePathname();
   const router = useRouter();
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);

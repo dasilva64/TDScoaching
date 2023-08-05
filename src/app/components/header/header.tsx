@@ -4,7 +4,11 @@ import { getRequestCookie } from "../../../../lib/getRequestCookie";
 
 const Header = async () => {
   //const user = await getRequestCookie(cookies());
-  return <>{/* <Content userLog={user} /> */}</>;
+  return (
+    <>
+      <Content />
+    </>
+  );
 };
 
 export default Header;

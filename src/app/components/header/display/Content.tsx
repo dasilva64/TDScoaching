@@ -27,7 +27,7 @@ import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel"
 import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteMeeting";
 
 const Content = ({ userLog }: any) => {
-  const pathname = usePathname();
+  /* const pathname = usePathname();
   const router = useRouter();
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const [isClick, setIsClick] = useState<boolean>(false);
@@ -58,8 +58,8 @@ const Content = ({ userLog }: any) => {
       type: "form/toggleLogin",
     });
   };
-  const { isLog, role } = useSelector((state: RootState) => state.auth);
-  useEffect(() => {
+  const { isLog, role } = useSelector((state: RootState) => state.auth); */
+  /*   useEffect(() => {
     if (userLog) {
       if (userLog.role === "ROLE_ADMIN") {
         dispatch({
@@ -75,7 +75,7 @@ const Content = ({ userLog }: any) => {
         type: "auth/logout",
       });
     }
-  }, [dispatch, userLog]);
+  }, [dispatch, userLog]); */
   /*useEffect(() => {
     const tes = async () => {
       let response = await fetch("/api/user/getUser", {
@@ -106,7 +106,7 @@ const Content = ({ userLog }: any) => {
     tes();
   }, [dispatch]);*/
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (document) {
       let mainDiv = document.querySelector("main");
       let footerDiv = document.querySelector("footer");
@@ -169,16 +169,16 @@ const Content = ({ userLog }: any) => {
 
   const updateUseState = () => {
     setIsClick(!isClick);
-  };
+  }; */
 
-  if (typeof window !== "undefined") {
+  /*   if (typeof window !== "undefined") {
     window.addEventListener("resize", () => {
       if (window.innerWidth < 1201) {
       } else {
         setIsClick(false);
       }
     });
-  }
+  } */
 
   /* const handlerCancelNavigation = (e: any) => {
     e.preventDefault();
@@ -324,7 +324,7 @@ const Content = ({ userLog }: any) => {
     console.log("reload");
     window.location.reload();
   }, []); */
-  const displayLogBtn = () => {
+  /* const displayLogBtn = () => {
     if (!userLog) {
       if (isLog === false) {
         return (
@@ -625,10 +625,10 @@ const Content = ({ userLog }: any) => {
         );
       }
     }
-  };
+  }; */
   return (
     <>
-      {displayFormLogin === true && <FormLogin />}
+      {/* {displayFormLogin === true && <FormLogin />}
       {displayFormRegister === true && <FormRegister />}
       {displaySendCode === true && <SendCode />}
       {displayFormCheck === true && <FormCheck />}
@@ -644,7 +644,7 @@ const Content = ({ userLog }: any) => {
       {displayModalTwoFactor === true && <ModalTwoFactor />}
       {displayModalTwoFactorDisable === true && <ModalTwoFactorDisable />}
       {displayModalCancelMeeting === true && <ModalCancel />}
-      {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
+      {displayModalDeleteMeeting === true && <ModalDeleteMeeting />} */}
       {/* {displayFlash()} */}
       {/* ClassName() */}
       <header className={""}>
@@ -663,7 +663,7 @@ const Content = ({ userLog }: any) => {
             Coach de vie
           </figcaption>
         </figure> */}
-        <nav
+        {/* <nav
           className={
             isClick === false
               ? `${styles.header__nav}`
@@ -872,9 +872,9 @@ const Content = ({ userLog }: any) => {
               </Link>
             </li>
           </ul>
-          {/* {displayLogBtn()} */}
-        </nav>
-        <div className={styles.header__burger}>
+          {displayLogBtn()}
+        </nav> */}
+        {/*  <div className={styles.header__burger}>
           <button
             className={styles.header__burger__btn}
             onClick={() => updateUseState()}
@@ -901,7 +901,7 @@ const Content = ({ userLog }: any) => {
               ></span>
             </div>
           </button>
-        </div>
+        </div> */}
       </header>
     </>
   );

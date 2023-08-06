@@ -12,6 +12,7 @@ import { TextField } from "@mui/material";
 const Reset = () => {
   const queryParam: any = usePathname();
   let token = queryParam.toString().split("/");
+  console.log(token);
   const dispatch = useDispatch<AppDispatch>();
 
   const { push } = useRouter();
@@ -49,6 +50,7 @@ const Reset = () => {
     e.preventDefault();
     if (validPasswordInput === true && validPasswordComfirmInput === true) {
       const fetchReset = async () => {
+        console.log(token[2]);
         trigger({ password: passwordInput, token: token[2] });
       };
       fetchReset();
@@ -72,14 +74,56 @@ const Reset = () => {
   ) => {
     setInput(e.target.value);
     if (regex.test(e.target.value)) {
-      setValidInput(true);
-      setErrorMessage("");
+      if (
+        passwordComfirmInput.length > 0 &&
+        e.target.value !== passwordComfirmInput
+      ) {
+        setValidInput(true);
+        setErrorMessage("");
+        setPasswordComfirmError(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setValidInput(true);
+        setErrorMessage("");
+        setPasswordComfirmError("");
+        setValidPasswordComfirmInput(true);
+      }
     } else if (e.target.value.length === 0) {
-      setValidInput(false);
-      setErrorMessage("");
+      if (
+        passwordComfirmInput.length > 0 &&
+        e.target.value !== passwordComfirmInput
+      ) {
+        setValidInput(false);
+        setErrorMessage("");
+        setPasswordComfirmError(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setValidInput(false);
+        setErrorMessage("");
+        setPasswordComfirmError("");
+        setValidPasswordComfirmInput(true);
+      }
     } else {
-      setValidInput(false);
-      setErrorMessage(errorMessage);
+      if (
+        passwordComfirmInput.length > 0 &&
+        e.target.value !== passwordComfirmInput
+      ) {
+        setValidInput(false);
+        setErrorMessage("");
+        setPasswordComfirmError(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setValidInput(false);
+        setErrorMessage(errorMessage);
+        setPasswordComfirmError("");
+        setValidPasswordComfirmInput(true);
+      }
     }
   };
   return (
@@ -121,14 +165,17 @@ const Reset = () => {
         placeholder={"Entrez comfirmation de votre mot de passe"}
         FormHelperTextProps={{ style: { color: "red" } }}
         onChange={(e) => {
-          handlerInput(
-            e,
-            /^(?=.*[a-z]).{1,}$/,
-            setValidPasswordComfirmInput,
-            setPasswordComfirmError,
-            setPasswordComfirmInput,
-            "Comfirmation mot de passe : doit correspondre"
-          );
+          setPasswordComfirmInput(e.target.value);
+          if (passwordInput.length > 0 && e.target.value !== passwordInput) {
+            setValidPasswordComfirmInput(false);
+            setPasswordComfirmError(
+              "Comfirmation mot de passe : les mots de passe doivent être identique"
+            );
+          } else {
+            setValidPasswordComfirmInput(true);
+
+            setPasswordComfirmError("");
+          }
         }}
         helperText={passwordComfirmInputError}
       />

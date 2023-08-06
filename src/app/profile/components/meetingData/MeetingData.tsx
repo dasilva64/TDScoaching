@@ -38,7 +38,7 @@ const MeetingData = () => {
                     className={`${styles.meetingData__ul__li} ${styles.meetingData__ul__li__margin}`}
                   >
                     Rendez-vous :{" "}
-                    {userData && userData.body.meetings
+                    {userData && userData.body.meetingId
                       ? "test"
                       : "Aucun de rendez-vous programmé"}
                   </li>

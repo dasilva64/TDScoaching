@@ -63,6 +63,8 @@ const FormLogin = () => {
               payload: { type: "success", flashMessage: json.message },
             });
           } else {
+            setPasswordInput("");
+            setEmailInput("");
             dispatch({
               type: "flash/storeFlashMessage",
               payload: { type: "error", flashMessage: json.message },

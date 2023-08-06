@@ -18,18 +18,6 @@ export default async function forgotPassword(
       });
     } else {
       if (user.resetToken) {
-        let copyResetToken: any = user.resetToken;
-        let limitDate = new Date(copyResetToken.limitDate);
-        let currentDate = new Date();
-        let difference = limitDate.getTime() - currentDate.getTime();
-        let differenceDate = new Date(difference);
-        return res.status(404).json({
-          status: 404,
-          type: "reset",
-          email: user.mail,
-          message: `Un lien de réinitialisation à déjà été envoyé à cette adresse, veuillez réessayer dans ${differenceDate.getMinutes()} minutes`,
-        });
-      } else {
         let token = jsonwebtoken.sign(
           { user: user.mail },
           process.env.SECRET_TOKEN_RESET as string
@@ -66,6 +54,11 @@ export default async function forgotPassword(
         res.status(200).json({
           status: 200,
           message: "Un email vous a été envoyer pour récupérer votre compte",
+        });
+      } else {
+        res.status(404).json({
+          status: 404,
+          message: "Aucun",
         });
       }
     }

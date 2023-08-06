@@ -8,7 +8,6 @@ import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DatePickerDesktop from "./datePicker/DatePickerDesktop";
 import DatePickerMobile from "./datePicker/DatePickerMobile";
-import ModalDeleteMeeting from "./modal/ModalDeleteMeeting";
 import useDelete from "../../components/fetch/meeting/fetchDeleteMeeting";
 import useAll from "../../components/hook/meeting/useAllAfterNow";
 import fetchGetPayment from "../../components/fetch/paiement/useGet";
@@ -306,10 +305,10 @@ const Display = () => {
       console.log("error");
     }
   }; */
-  const [userClickOnButton, setUserClickOnButton] = useState<boolean>(false);
+  //const [userClickOnButton, setUserClickOnButton] = useState<boolean>(false);
   //const { allMeeting, mutateMeeting } = useAll(isLog);
 
-  const { trigger: triggerGet, data: dataGet } = useSWRMutation(
+  /* const { trigger: triggerGet, data: dataGet } = useSWRMutation(
     "http://localhost:8080/payment/get",
     fetchGetPayment
   );
@@ -317,7 +316,7 @@ const Display = () => {
     if (dataGet) {
       window.location.href = dataGet.url;
     }
-  }, [dataGet]);
+  }, [dataGet]); */
 
   /*   const { trigger: triggerDeleteMeeting, data: dataDeleteMeeting } =
     useSWRMutation(
@@ -344,6 +343,7 @@ const Display = () => {
       }
     }
   }, [dataDeleteMeeting, dispatch]); */
+  /* console.log(userData);
   const handlerPayment = () => {
     setDisplayModal(false);
     let startstr = "";
@@ -370,7 +370,7 @@ const Display = () => {
       triggerGet({ start: formatDate });
     };
     fetchAddMeeting();
-  };
+  }; */
   /*   const handlerPayment = () => {
     setDisplayModal(false);
     const fetchAddMeeting = async () => {
@@ -410,9 +410,9 @@ const Display = () => {
       console.log("error");
     }
   }; */
-  const closeForm = () => {
+  /* const closeForm = () => {
     setDisplayModal(false);
-  };
+  }; */
   let content;
   if (isError && isError.message) {
     content = (
@@ -461,7 +461,7 @@ const Display = () => {
           </div>
         )} */}
         <div className={styles.meet__article}>
-          {mobile === false && userData && (
+          {mobile === false && userData && userData.body.meeting === null && (
             <>
               <DatePickerDesktop events={userData?.body.meetings} />
             </>

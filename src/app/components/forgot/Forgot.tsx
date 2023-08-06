@@ -6,13 +6,15 @@ import GroupForm from "../form/group";
 import fetchUserForgotEmail from "../fetch/user/fetchUserForgot";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
+import fetchUserReSendForgotPassword from "../fetch/user/fetchUserReSendForgotPassword";
 
 const Forgot = () => {
   const [inputEmail, setInputEmail] = useState<string>("");
   const [validInputEmail, setValidInputEmail] = useState<boolean>(false);
   const [inputEmailError, setInputEmailError] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
-
+  const [displayReSendEmail, setDisplayReSendEmail] = useState<boolean>(false);
+  const [emailUser, setEmailUser] = useState<string>("");
   const { trigger, data } = useSWRMutation(
     "/api/user/forgotPassword",
     fetchUserForgotEmail
@@ -27,6 +29,10 @@ const Forgot = () => {
           payload: { flashMessage: data.message, type: "success" },
         });
       } else {
+        if (data.type === "reset") {
+          setDisplayReSendEmail(true);
+          setEmailUser(data.email);
+        }
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "error" },
@@ -34,6 +40,32 @@ const Forgot = () => {
       }
     }
   }, [data, dispatch]);
+
+  const { trigger: triggerReSend, data: dateReSend } = useSWRMutation(
+    "/api/user/reSendForgotPassword",
+    fetchUserReSendForgotPassword
+  );
+
+  useEffect(() => {
+    if (dateReSend) {
+      if (dateReSend.status === 200) {
+        dispatch({ type: "form/closeForgotOpenLogin" });
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { flashMessage: dateReSend.message, type: "success" },
+        });
+      } else {
+        if (dateReSend.type === "reset") {
+          setDisplayReSendEmail(true);
+          setEmailUser(dateReSend.email);
+        }
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { flashMessage: dateReSend.message, type: "error" },
+        });
+      }
+    }
+  }, [dateReSend, dispatch]);
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validInputEmail === true) {
@@ -129,6 +161,21 @@ const Forgot = () => {
             />
           </div>
         </form>
+        {displayReSendEmail && (
+          <div className={styles.forgot__form__submit}>
+            <button
+              className={styles.forgot__form__submit__btn}
+              onClick={() => {
+                const fetchApi = async () => {
+                  triggerReSend({ email: emailUser });
+                };
+                fetchApi();
+              }}
+            >
+              Renvoyer un code à l&apos;addresse {emailUser}
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

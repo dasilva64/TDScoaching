@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 const fetchWithToken = async (url: string) => {
@@ -7,15 +6,16 @@ const fetchWithToken = async (url: string) => {
   return json;
 };
 
-function useAll() {
-  const { data, error, isLoading } = useSWR(["/api/meeting/getAll"], ([url]) =>
-    fetchWithToken(url)
+const useAllByUser = () => {
+  const { data, isLoading, error } = useSWR(
+    "/api/meeting/getAllByUser",
+    (url) => fetchWithToken(url)
   );
   return {
     data,
     isLoading,
     isError: error,
   };
-}
+};
 
-export default useAll;
+export default useAllByUser;

@@ -3,21 +3,18 @@
 import React, { useEffect, useState } from "react";
 import styles from "./DatePickerDesktop.module.scss";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import fetchGetPayment from "@/app/components/fetch/paiement/useGet";
 import useSWRMutation from "swr/mutation";
+import { AppDispatch } from "@/app/redux/store";
 
 const DatePickerDesktop = ({ events }: any) => {
-  console.log(events);
+  const dispatch = useDispatch<AppDispatch>();
   const [arDateWeek, setArDateWeek] = useState<any>([]);
-  const [choiceDate, setChoiceDate] = useState<string>("");
   const [all, setAll] = useState<any>(null);
   const { id } = useSelector((state: any) => state.auth);
-  const [displayModal, setDisplayModal] = useState<boolean>(false);
 
-  const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [startDateWeek, setStartDateWeek] = useState<string>("");
-  const [arMeeting, setArMeeting] = useState<null | any>(null);
   const daystext: any = {
     1: "Lundi",
     2: "Mardi",
@@ -368,8 +365,14 @@ const DatePickerDesktop = ({ events }: any) => {
     console.log(test);
     if (new Date(create).getTime() > new Date().getTime()) {
       console.log("test");
-      setChoiceDate(create.toLocaleString());
-      setDisplayModal(true);
+      dispatch({
+        type: "form/openModalMeeting",
+        payload: {
+          date: create.toLocaleString(),
+        },
+      });
+      /* setChoiceDate(create.toLocaleString());
+      setDisplayModal(true); */
       // setDateMeeting(create.toLocaleString());
     }
   };
@@ -380,141 +383,8 @@ const DatePickerDesktop = ({ events }: any) => {
     changeDate(current.toDateString());
     setArDateWeek([]);
   };
-  const closeForm = () => {
-    setDisplayModal(false);
-  };
-  const { trigger: triggerGet, data: dataGet } = useSWRMutation(
-    "http://localhost:8080/payment/get",
-    fetchGetPayment
-  );
-  useEffect(() => {
-    if (dataGet) {
-      window.location.href = dataGet.url;
-    }
-  }, [dataGet]);
-  const handlerPayment = () => {
-    setDisplayModal(false);
-    let startstr = "";
-    let endstr = "";
-    let copyChoiceDate = choiceDate;
-    copyChoiceDate.split(" ").map((el: any, index: any) => {
-      if (index === 0) {
-        el.split("/")
-          .reverse()
-          .map((el: any) => {
-            startstr = startstr + el + "-";
-          });
-      } else {
-        el.split(":").map((el: any) => {
-          endstr = endstr + el + ":";
-        });
-      }
-    });
-    let formatDate =
-      startstr.slice(0, startstr.length - 1) +
-      "T" +
-      endstr.slice(0, endstr.length - 1) +
-      ".000Z";
-    const fetchAddMeeting = async () => {
-      triggerGet({ start: formatDate });
-    };
-    fetchAddMeeting();
-  };
-  useEffect(() => {
-    if (document) {
-      let mainDiv = document.querySelector("main");
-      let headerDiv = document.querySelector("header");
-      let footerDiv = document.querySelector("footer");
-      let div1 = document.querySelector(
-        ".page_meet__h1__1RXpU"
-      ) as HTMLDivElement;
-      let div2 = document.querySelector(
-        ".DatePickerDesktop_datePicker__Oo4J3"
-      ) as HTMLDivElement;
-      let div3 = document.querySelector(
-        ".page_meet__meet__WMfw6"
-      ) as HTMLDivElement;
-      let div4 = document.querySelector(
-        ".page_meet__container__4_8kP"
-      ) as HTMLDivElement;
-      let div5 = document.querySelector(
-        ".page_meet__article__bh0e_"
-      ) as HTMLDivElement;
-      let htlmElement = document.querySelector("html");
-      let htlmbody = document.querySelector("body");
-      if (
-        mainDiv &&
-        footerDiv &&
-        headerDiv &&
-        htlmElement &&
-        htlmbody &&
-        div1 &&
-        div2 &&
-        div3 &&
-        div4 &&
-        div5
-      ) {
-        if (displayModal === true) {
-          headerDiv.style.opacity = "0.1";
-          div1.style.opacity = "0.1";
-          div2.style.opacity = "0.1";
-          div3.style.opacity = "0.1";
-          footerDiv.style.opacity = "0.1";
-          div4.style.opacity = "0.1";
-          div5.style.opacity = "0.1";
-
-          htlmElement.style.height = "100%";
-          htlmbody.style.height = "100%";
-          htlmbody.style.overflow = "hidden";
-        } else {
-          headerDiv.style.opacity = "1";
-          mainDiv.style.opacity = "1";
-          div1.style.opacity = "1";
-          div2.style.opacity = "1";
-          div3.style.opacity = "1";
-          div4.style.opacity = "1";
-          div5.style.opacity = "1";
-          footerDiv.style.opacity = "1";
-          htlmElement.style.height = "unset";
-          htlmbody.style.height = "unset";
-          htlmbody.style.overflow = "unset";
-        }
-      }
-    }
-  }, [displayModal]);
   return (
     <>
-      {displayModal === true && (
-        <div className={styles.datePicker__comfirm}>
-          <button
-            className={styles.datePicker__comfirm__btn}
-            onClick={() => closeForm()}
-          >
-            <span className={styles.datePicker__comfirm__btn__cross}>
-              &times;
-            </span>
-          </button>
-          <h1 className={styles.datePicker__comfirm__h1}>
-            Comfirmation de rendez-vous
-          </h1>
-          <p>Rappel du rendez-vous : {choiceDate}</p>
-          <p>
-            Pour comfirmer le rendez-vous une autorisation bancaire est
-            nécessaire. Aucune somme ne sera débitée avant la fin de la
-            consultation vidéo.
-          </p>
-          <div className={styles.datePicker__comfirm__div}>
-            <button
-              className={styles.datePicker__comfirm__div__btn}
-              onClick={() => {
-                handlerPayment();
-              }}
-            >
-              Payer pour comfirmer
-            </button>
-          </div>
-        </div>
-      )}
       <div className={styles.datePicker}>
         <div className={styles.datePicker__head}>
           <span

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 const fetchWithToken = async (url: string) => {
-  let response = await fetch(url, {});
+  let response = await fetch(url);
   let json = await response.json();
   return json;
 };

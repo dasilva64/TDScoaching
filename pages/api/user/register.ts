@@ -9,8 +9,9 @@ export default withIronSessionApiRoute(
   async function sendTokenEditPhone(req, res) {
     if (req.method === "POST") {
       const { phone, mail, firstname, lastname, password } = await req.body;
-      let user = await prisma.user.findUnique({ where: { mail: mail } });
-      if (user === null) {
+      let userEmail = await prisma.user.findUnique({ where: { mail: mail } });
+      let userPhone = await prisma.user.findUnique({ where: { phone: phone } });
+      if (userEmail === null && userPhone === null) {
         const encrytpPassword = async () => {
           const saltRounds = 10;
           let encrypt = await bcrypt.hash(password, saltRounds);
@@ -22,7 +23,7 @@ export default withIronSessionApiRoute(
           let registerTokenObject = {
             token: token,
             limitDate: currentDate.setDate(currentDate.getDate() + 1),
-          }
+          };
           let UserCreate = await prisma.user.create({
             data: {
               mail: mail,
@@ -35,10 +36,6 @@ export default withIronSessionApiRoute(
               twoFactor: false,
               role: "ROLE_USER",
             },
-          }).then((user) => {
-            return user;
-          }).catch((error) => {
-            return null;
           });
 
           if (UserCreate === null) {
@@ -75,17 +72,26 @@ export default withIronSessionApiRoute(
         };
         encrytpPassword();
       } else {
-        return res.status(404).json({
-          status: 404,
-          message: "Un utilisateur utilise déjà cet email, veuillez réessayer",
-        });
+        if (userEmail !== null) {
+          return res.status(404).json({
+            status: 404,
+            message:
+              "Un utilisateur utilise déjà cet email, veuillez réessayer",
+          });
+        } else {
+          return res.status(404).json({
+            status: 404,
+            message:
+              "Un utilisateur utilise déjà ce numéro de téléphone, veuillez réessayer",
+          });
+        }
       }
-    }else {
-        return res.status(404).json({
-          status: 404,
-          message: "Une erreur est survenue, veuillez réessayer",
-        });
-      }
+    } else {
+      return res.status(404).json({
+        status: 404,
+        message: "Une erreur est survenue, veuillez réessayer",
+      });
+    }
   },
   {
     password:

@@ -21,17 +21,25 @@ export default withIronSessionApiRoute(
               "Mauvaise combinaison email/mot de passe, veuillez réessayer",
           });
         } else {
-          let userObject = {
-            role: user.role,
-            id: user.id,
-          };
-          req.session.user = userObject;
-          await req.session.save();
-          return res.status(200).json({
-            status: 200,
-            body: userObject,
-            message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
-          });
+          if (user.status === false) {
+            return res.status(404).json({
+              status: 404,
+              message:
+                "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail",
+            });
+          } else {
+            let userObject = {
+              role: user.role,
+              id: user.id,
+            };
+            req.session.user = userObject;
+            await req.session.save();
+            return res.status(200).json({
+              status: 200,
+              body: userObject,
+              message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
+            });
+          }
         }
       } else {
         return res.status(404).json({

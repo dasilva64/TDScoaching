@@ -120,6 +120,69 @@ const FormRegister = () => {
     }
   };
 
+  const handlerInputPassword = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    regex: RegExp,
+    setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    setInput: React.Dispatch<React.SetStateAction<string>>,
+    errorMessage: string
+  ) => {
+    setInput(e.target.value);
+    if (regex.test(e.target.value)) {
+      if (
+        passwordComfirmInput.length > 0 &&
+        e.target.value !== passwordComfirmInput
+      ) {
+        setValidInput(true);
+        setErrorMessage("");
+        setPasswordComfirmError(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setValidInput(true);
+        setErrorMessage("");
+        setPasswordComfirmError("");
+        setValidPasswordComfirmInput(true);
+      }
+    } else if (e.target.value.length === 0) {
+      if (
+        passwordComfirmInput.length > 0 &&
+        e.target.value !== passwordComfirmInput
+      ) {
+        setValidInput(false);
+        setErrorMessage("");
+        setPasswordComfirmError(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setValidInput(false);
+        setErrorMessage("");
+        setPasswordComfirmError("");
+        setValidPasswordComfirmInput(true);
+      }
+    } else {
+      if (
+        passwordComfirmInput.length > 0 &&
+        e.target.value !== passwordComfirmInput
+      ) {
+        setValidInput(false);
+        setErrorMessage("");
+        setPasswordComfirmError(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setValidInput(false);
+        setErrorMessage(errorMessage);
+        setPasswordComfirmError("");
+        setValidPasswordComfirmInput(true);
+      }
+    }
+  };
+
   return (
     <>
       <div className={styles.register}>
@@ -200,7 +263,7 @@ const FormRegister = () => {
             placeholder={"Entrez votre mot de passe"}
             FormHelperTextProps={{ style: { color: "red" } }}
             onChange={(e) => {
-              handlerInput(
+              handlerInputPassword(
                 e,
                 /^(?=.*[a-z]).{1,}$/,
                 setValidPasswordInput,
@@ -221,14 +284,20 @@ const FormRegister = () => {
             placeholder={"Entrez comfirmation de votre mot de passe"}
             FormHelperTextProps={{ style: { color: "red" } }}
             onChange={(e) => {
-              handlerInput(
-                e,
-                /^(?=.*[a-z]).{1,}$/,
-                setValidPasswordComfirmInput,
-                setPasswordComfirmError,
-                setPasswordComfirmInput,
-                "Comfirmation mot de passe : doit correspondre"
-              );
+              setPasswordComfirmInput(e.target.value);
+              if (
+                passwordInput.length > 0 &&
+                e.target.value !== passwordInput
+              ) {
+                setValidPasswordComfirmInput(false);
+                setPasswordComfirmError(
+                  "Comfirmation mot de passe : les mots de passe doivent être identique"
+                );
+              } else {
+                setValidPasswordComfirmInput(true);
+
+                setPasswordComfirmError("");
+              }
             }}
             helperText={passwordComfirmInputError}
           />

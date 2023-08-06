@@ -6,10 +6,6 @@ export default withIronSessionApiRoute(
   async function get(req, res) {
     if (req.session.user) {
       let start = req.body.start;
-      console.log(start);
-      console.log(start);
-      console.log(start);
-      console.log(new Date(start));
       let dateStart = new Date(start);
       const meeting = await prisma.meeting.findFirst({
         where: {
@@ -28,7 +24,9 @@ export default withIronSessionApiRoute(
           endAt: new Date(dateStart.setHours(dateStart.getHours() + 1)),
           status: false,
           userId: req.session.user.id,
-          limitDate: new Date(currentDate.setHours(currentDate.getHours() + 1)).getTime().toString(),
+          limitDate: new Date(currentDate.setHours(currentDate.getHours() + 1))
+            .getTime()
+            .toString(),
         };
         const meeting = await prisma.meeting.create({
           data: createMeeting,
@@ -55,7 +53,13 @@ export default withIronSessionApiRoute(
               price_data: {
                 currency: "eur",
                 product_data: {
-                  name: "RDV du " + dateStart.toLocaleString("fr-FR"),
+                  name:
+                    "RDV du " +
+                    start.split("T")[0] +
+                    " à " +
+                    start.split("T")[1].split(":")[0] +
+                    "h" +
+                    start.split("T")[1].split(":")[1],
                 },
                 unit_amount: 10000,
               },

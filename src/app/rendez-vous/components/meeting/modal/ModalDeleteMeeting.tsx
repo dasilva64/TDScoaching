@@ -1,8 +1,9 @@
-import React, { useDebugValue, useEffect } from "react";
-import styles from "./ModalDeleteMeeting.module.scss"
+import React, { use, useDebugValue, useEffect } from "react";
+import styles from "./ModalDeleteMeeting.module.scss";
 import fetchCancel from "@/app/components/fetch/paiement/fetchCancel";
 import useSWRMutation from "swr/mutation";
 import { useDispatch } from "react-redux";
+import { mutate } from "swr";
 
 const ModalDeleteMeeting = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,14 @@ const ModalDeleteMeeting = () => {
       }
     }
   }, [data, dispatch]);
+  useEffect(() => {
+    if (data && data.status === 200) {
+      const test = async () => {
+        await mutate("/api/user/getUser");
+      };
+      test();
+    }
+  }, [data]);
   const closeForm = () => {
     dispatch({
       type: "form/closeModalDeleteMeeting",

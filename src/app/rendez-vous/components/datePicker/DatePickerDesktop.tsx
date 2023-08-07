@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./DatePickerDesktop.module.scss";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import fetchGetPayment from "@/app/components/fetch/paiement/useGet";
-import useSWRMutation from "swr/mutation";
 import { AppDispatch } from "@/app/redux/store";
 
 const DatePickerDesktop = ({ events }: any) => {
@@ -112,27 +110,6 @@ const DatePickerDesktop = ({ events }: any) => {
         }
       }
       setArDateWeek(ar);
-      /* for (let i = 0; i < copyEvents.length; i++) {
-        let startDate = new Date(copyEvents[i]["startAt"]);
-        let eventDate = startDate.getDate();
-        let eventDay = startDate.getDay();
-        let eventMonth = startDate.getMonth();
-        let eventYear = startDate.getFullYear();
-        let eventHour = startDate.getUTCHours();
-        
-        for (let y = 0; y < newar.length; y++) {
-          if (
-            eventYear.toString() === newar[y][0].toString() &&
-            (eventMonth+1).toString() === newar[y][1].toString() &&
-            eventDate.toString() === newar[y][2].toString()
-          ) {
-            console.log('test')
-            ar.push([...newar[y], eventYear, eventMonth+1, eventDate, eventDay, eventHour])
-          }
-        }
-      }
-      let tes = []
-      setArMeeting(ar) */
     };
     function getAllDayInWeek(test: any) {
       var week = new Array();
@@ -168,23 +145,6 @@ const DatePickerDesktop = ({ events }: any) => {
         let ar = getAllDayInWeek(new Date(startDateWeek));
         getMeetingByWeek(ar);
       }
-      /* let current = new Date();
-      current.setDate(current.getDate());
-      setChoiceDate(current.toDateString());
-      let newar = [];
-      let ar = getAllDayInWeek(new Date());
-      for (let i = 0; i < ar.length; i++) {
-        let d = new Date(ar[i]);
-        newar.push([
-          d.getFullYear(),
-          d.getMonth() + 1,
-          d.getDate(),
-          d.getDay(),
-        ]);
-      } */
-
-      //setArDateWeek(newar);
-      //getMeetingByWeek(newar);
     }
     if (events.length > all?.length || events.length < all?.length) {
       let current = new Date(startDateWeek);
@@ -193,15 +153,6 @@ const DatePickerDesktop = ({ events }: any) => {
       getMeetingByWeek(ar);
       setAll(events);
     }
-
-    /* let newar = [];
-    let ar = getAllDayInWeek(choiceDate);
-    for (let i = 0; i < ar.length; i++) {
-      let d = new Date(ar[i]);
-      newar.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay()]);
-    }
-    setArDateWeek(newar); */
-    //getMeetingByWeek();
   }, [all?.length, arDateWeek, events, startDateWeek]);
 
   const changeDate = (wowtets: any) => {
@@ -262,27 +213,6 @@ const DatePickerDesktop = ({ events }: any) => {
         }
       }
       setArDateWeek(ar);
-      /* for (let i = 0; i < copyEvents.length; i++) {
-        let startDate = new Date(copyEvents[i]["startAt"]);
-        let eventDate = startDate.getDate();
-        let eventDay = startDate.getDay();
-        let eventMonth = startDate.getMonth();
-        let eventYear = startDate.getFullYear();
-        let eventHour = startDate.getUTCHours();
-        
-        for (let y = 0; y < newar.length; y++) {
-          if (
-            eventYear.toString() === newar[y][0].toString() &&
-            (eventMonth+1).toString() === newar[y][1].toString() &&
-            eventDate.toString() === newar[y][2].toString()
-          ) {
-            console.log('test')
-            ar.push([...newar[y], eventYear, eventMonth+1, eventDate, eventDay, eventHour])
-          }
-        }
-      }
-      let tes = []
-      setArMeeting(ar) */
     };
 
     function getAllDayInWeek(test: any) {
@@ -297,7 +227,6 @@ const DatePickerDesktop = ({ events }: any) => {
       week.splice(5, 2);
       return week;
     }
-    let newar = [];
     let wowtetss = new Date(wowtets);
     if (wowtetss.getDay() === 6) {
       wowtetss.setDate(wowtetss.getDate() + 2);
@@ -311,14 +240,6 @@ const DatePickerDesktop = ({ events }: any) => {
       let ar = getAllDayInWeek(new Date(wowtetss));
       getMeetingByWeek(ar);
     }
-    //let ar = getAllDayInWeek(wowtets);
-    /* for (let i = 0; i < ar.length; i++) {
-      let d = new Date(ar[i]);
-      newar.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay()]);
-    } */
-
-    //setArDateWeek(newar);
-    //getMeetingByWeek(newar);
   };
 
   const previous = () => {
@@ -357,29 +278,19 @@ const DatePickerDesktop = ({ events }: any) => {
     setArDateWeek([]);
   };
   const handlerClick = (h: any, p: any) => {
-    console.log(h);
-    console.log(p);
     let create = new Date(p[0][0], p[0][1] - 1, p[0][2], h);
-    let test = new Date();
-    console.log(create);
-    console.log(test);
     if (new Date(create).getTime() > new Date().getTime()) {
-      console.log("test");
       dispatch({
         type: "form/openModalMeeting",
         payload: {
           date: create.toLocaleString(),
         },
       });
-      /* setChoiceDate(create.toLocaleString());
-      setDisplayModal(true); */
-      // setDateMeeting(create.toLocaleString());
     }
   };
 
   const goCurrent = () => {
     let current = new Date();
-    //setChoiceDate(current.toDateString());
     changeDate(current.toDateString());
     setArDateWeek([]);
   };
@@ -529,10 +440,6 @@ const DatePickerDesktop = ({ events }: any) => {
                             }
                           }
                         }
-                        console.log("current", new Date());
-                        console.log(
-                          new Date(p[0][0], p[0][1] - 1, p[0][2], h[1])
-                        );
                         let current = new Date();
                         current.setDate(current.getDate() + 3);
                         if (

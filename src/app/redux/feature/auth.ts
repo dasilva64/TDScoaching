@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface AuthType {
-  role: string
+  role: string;
   isLog: boolean;
-  id: string
+  id: string;
 }
 
 const initialState: AuthType = {
@@ -11,10 +11,6 @@ const initialState: AuthType = {
   isLog: false,
   id: "",
 };
-interface UserData {
-  email: string;
-  password: string;
-}
 
 const auth = createSlice({
   name: "auth",
@@ -23,13 +19,12 @@ const auth = createSlice({
     login: (state, action) => {
       state.isLog = true;
       state.role = action.payload.role;
-      state.id = action.payload.id
+      state.id = action.payload.id;
     },
     logout: (state, action) => {
       state.isLog = false;
       state.role = "";
-      state.id = ""
-
+      state.id = "";
     },
   },
 });

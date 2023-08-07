@@ -1,8 +1,5 @@
 import fetchAddDescription from "../../../../components/fetch/meeting/fetchAddDescription";
-import { RootState, AppDispatch } from "../../../../redux/store";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import styles from "./AddDescription.module.scss";
 import useUserGet from "@/app/components/hook/user/useUserGet";

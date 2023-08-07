@@ -7,7 +7,7 @@ import nodemailer from "nodemailer";
 export default withIronSessionApiRoute(
   async function send(req: any, res: NextApiResponse) {
     if (req.method === "POST") {
-        const {email, firstname, lastname, object, message} = await req.body
+      const { email, firstname, lastname, object, message } = await req.body;
 
       const user = await prisma.user.findUnique({ where: { mail: email } });
 

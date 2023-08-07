@@ -13,7 +13,7 @@ const fetchSendEmail = async (
     };
   }
 ) => {
-  let response = await fetch("/api/contact/send", {
+  let response = await fetch(url, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -22,7 +22,7 @@ const fetchSendEmail = async (
     body: JSON.stringify(arg),
   });
   let json = await response.json();
-  return json
+  return json;
 };
 
 export default fetchSendEmail;

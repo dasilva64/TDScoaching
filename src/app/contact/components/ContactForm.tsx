@@ -4,7 +4,7 @@ import React, { use, useEffect, useState } from "react";
 import styles from "../page.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { TextField, TextareaAutosize } from "@mui/material";
+import { TextField } from "@mui/material";
 import useSWRMutation from "swr/mutation";
 import fetchSendEmail from "@/app/components/fetch/contact/useContact";
 
@@ -30,10 +30,7 @@ const ContactForm = () => {
   const [objectInputError, setObjectInputError] = useState<string>("");
   const [messageInputError, setMessageInputError] = useState<string>("");
 
-  const { trigger, data } = useSWRMutation(
-    "http://localhost:8080/contact/send",
-    fetchSendEmail
-  );
+  const { trigger, data } = useSWRMutation("/api/contact/send", fetchSendEmail);
 
   useEffect(() => {
     if (data) {

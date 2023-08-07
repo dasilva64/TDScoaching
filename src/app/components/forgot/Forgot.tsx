@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./Forgot.module.scss";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
-import GroupForm from "../form/group";
 import fetchUserForgotEmail from "../fetch/user/fetchUserForgot";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";

@@ -2,27 +2,20 @@ import React, { useEffect, useState } from "react";
 import styles from "../../../page.module.scss";
 import fetchAddDescription from "../../../../components/fetch/meeting/fetchAddDescription";
 import useSWRMutation from "swr/mutation";
-import { RootState } from "../../../../redux/store";
-import { useSelector } from "react-redux";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const EditDescription = () => {
-  const { isLog } = useSelector((state: RootState) => state.auth);
-
   const [displayEditMeeting, setDisplayEditMeeting] = useState<boolean>(false);
   const [description, setDescription] = useState<string>("");
-  const { userData, isLoading, isError, mutate }: any = useUserGet();
+  const { userData, mutate }: any = useUserGet();
 
-  const { trigger, data } =
-    useSWRMutation(
-      `/api/meeting/editDescription`,
-      fetchAddDescription,
-    );
+  const { trigger, data } = useSWRMutation(
+    `/api/meeting/editDescription`,
+    fetchAddDescription
+  );
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        console.log(data);
-
         const mutateUser = async () => {
           try {
             await mutate({

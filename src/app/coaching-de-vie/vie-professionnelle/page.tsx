@@ -1,5 +1,4 @@
 import WhileInView from "@/app/components/framer/WhileInView";
-import ImageDisplay from "../../components/image/image";
 import styles from "./page.module.scss";
 import Link from "next/link";
 import Image from "next/image";

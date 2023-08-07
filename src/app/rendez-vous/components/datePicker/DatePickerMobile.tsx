@@ -126,7 +126,6 @@ const DatePickerMobile = ({
 
   const handlerClick = (year: any, month: any, day: any, hour: any) => {
     let create = new Date(year, month, day, day, hour);
-    let test = new Date();
     if (new Date(create).getTime() > new Date().getTime()) {
       setDisplayModal(true);
       setDateMeeting(create);

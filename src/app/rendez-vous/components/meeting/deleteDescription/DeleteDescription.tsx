@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "../../../page.module.scss";
 import fetchDeleteDescription from "../../../../components/fetch/meeting/fetchDeleteDescription";
-import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
-import { RootState } from "../../../../redux/store";
-import { useSelector } from "react-redux";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const DeleteDescription = () => {

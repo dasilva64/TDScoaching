@@ -33,7 +33,7 @@ export default withIronSessionApiRoute(
             message: "Le rendez-vous n'est plus valide, veuillez réessayer",
           });
         } else {
-          let editMeeting = await prisma.meeting.update({
+          /* let editMeeting = await prisma.meeting.update({
             where: {
               id: meeting?.id,
             },
@@ -41,7 +41,7 @@ export default withIronSessionApiRoute(
               status: true,
               limitDate: null,
             },
-          });
+          }); */
           const stripe = new Stripe(
             "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f",
             {
@@ -67,12 +67,8 @@ export default withIronSessionApiRoute(
             success_url: `http://localhost:3000/api/meeting/create`,
             cancel_url: "http://localhost:3000/rendez-vous",
           });
+          res.json({ url: session.url });
         }
-
-        res.status(200).json({
-          status: 200,
-          message: "Le rendez-vous a bien été créé",
-        });
       }
     } else {
       return res.status(404).json({

@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { lazy } from "react";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Providers } from "./redux/provider";

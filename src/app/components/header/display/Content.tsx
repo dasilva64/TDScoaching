@@ -18,7 +18,6 @@ import PhoneValidData from "@/app/profile/components/phoneValidData/PhoneValidDa
 import ModalTwoFactorDisable from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorDisable";
 import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorUser";
 import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
-import FormCheck from "../../check/FormCheck";
 import Forgot from "../../forgot/Forgot";
 import FormLogin from "../../login/formLogin";
 import FormRegister from "../../register/formRegister";
@@ -466,7 +465,6 @@ const Content = () => {
       {displayFormLogin === true && <FormLogin />}
       {displayFormRegister === true && <FormRegister />}
       {displaySendCode === true && <SendCode />}
-      {displayFormCheck === true && <FormCheck />}
       {displayFormForgot === true && <Forgot />}
       {displayModalEditMainUserData === true && <ModalUserMainData />}
       {displayModalEditPasswordData && <ModalUserPasswordData />}

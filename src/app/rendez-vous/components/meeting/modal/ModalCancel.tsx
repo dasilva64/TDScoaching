@@ -1,4 +1,4 @@
-import React, { useDebugValue, useEffect } from "react";
+import React, { useEffect } from "react";
 import styles from "./ModalCancel.module.scss";
 import fetchCancel from "@/app/components/fetch/paiement/fetchCancel";
 import useSWRMutation from "swr/mutation";
@@ -8,10 +8,12 @@ import { mutate } from "swr";
 const ModalCancel = () => {
   const dispatch = useDispatch();
   const { trigger, data } = useSWRMutation("/api/paiement/cancel", fetchCancel);
-  console.log(data);
   useEffect(() => {
     if (data && data.status === 200) {
       if (data.status === 200) {
+        mutate("/api/user/getUser", {
+          ...data,
+        });
         dispatch({
           type: "form/closeModalCancelMeeting",
         });
@@ -27,15 +29,6 @@ const ModalCancel = () => {
       }
     }
   }, [data, dispatch]);
-
-  useEffect(() => {
-    if (data && data.status === 200) {
-      const test = async () => {
-        await mutate("/api/user/getUser");
-      };
-      test();
-    }
-  }, [data]);
   const closeForm = () => {
     dispatch({
       type: "form/closeModalCancelMeeting",

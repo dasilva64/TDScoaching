@@ -1,6 +1,6 @@
 import fetchGetPayment from "@/app/components/fetch/paiement/useGet";
 import { AppDispatch, RootState } from "@/app/redux/store";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import styles from "./ModalAddMeeting.module.scss";
@@ -8,8 +8,6 @@ import styles from "./ModalAddMeeting.module.scss";
 const ModalAddMeeting = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { dataModalMeeting } = useSelector((state: RootState) => state.form);
-  const { isLog } = useSelector((state: RootState) => state.auth);
-  const [userClickOnButton, setUserClickOnButton] = useState<boolean>(false);
 
   const closeForm = () => {
     dispatch({

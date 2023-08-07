@@ -11,9 +11,34 @@ import NbShow from "./dataTable/nbShow/NbShow";
 import Search from "./dataTable/search/Search";
 import Display from "./dataTable/display/Display";
 import Paging from "./dataTable/paging/Paging";
+import useSWRMutation from "swr/mutation";
+import { mutate } from "swr";
+import fetchCancelByAdmin from "@/app/components/fetch/paiement/fetchCancelByAdmin";
 
 const Content = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { data: dataCancel, trigger } = useSWRMutation(
+    "/api/paiement/cancelByAdmin",
+    fetchCancelByAdmin
+  );
+  useEffect(() => {
+    if (dataCancel) {
+      if (dataCancel.status !== 200) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataCancel.message },
+        });
+      } else {
+        mutate("/api/user/getById", {
+          ...dataCancel,
+        });
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataCancel.message },
+        });
+      }
+    }
+  }, [dataCancel, dispatch]);
   const router = useRouter();
   const queryParam: any = usePathname();
   let id = queryParam.toString().split("/");
@@ -79,25 +104,48 @@ const Content = () => {
                   </li>
                 )}
                 {data.body.meeting !== null && (
-                  <ul className={styles.content__flex__div__left__ul__ul}>
-                    <strong>Rendez-vous en cours</strong> :
-                    <li className={styles.content__flex__div__left__ul__ul__li}>
-                      <strong>Description</strong> :{" "}
-                      {data.body.meeting.description}
-                    </li>
-                    <li className={styles.content__flex__div__left__ul__ul__li}>
-                      <strong>Start</strong> :{" "}
-                      {new Date(data.body.meeting.startAt).toLocaleString()}
-                    </li>
-                    <li className={styles.content__flex__div__left__ul__ul__li}>
-                      <strong>End</strong> :{" "}
-                      {new Date(data.body.meeting.endAt).toLocaleString()}
-                    </li>
-                    <li className={styles.content__flex__div__left__ul__ul__li}>
-                      <strong>Status</strong> :{" "}
-                      {data.body.meeting.status.toString()}
-                    </li>
-                  </ul>
+                  <>
+                    <ul className={styles.content__flex__div__left__ul__ul}>
+                      <strong>Rendez-vous en cours</strong> :
+                      <li
+                        className={styles.content__flex__div__left__ul__ul__li}
+                      >
+                        <strong>Description</strong> :{" "}
+                        {data.body.meeting.description}
+                      </li>
+                      <li
+                        className={styles.content__flex__div__left__ul__ul__li}
+                      >
+                        <strong>Start</strong> :{" "}
+                        {new Date(data.body.meeting.startAt).toLocaleString()}
+                      </li>
+                      <li
+                        className={styles.content__flex__div__left__ul__ul__li}
+                      >
+                        <strong>End</strong> :{" "}
+                        {new Date(data.body.meeting.endAt).toLocaleString()}
+                      </li>
+                      <li
+                        className={styles.content__flex__div__left__ul__ul__li}
+                      >
+                        <strong>Status</strong> :{" "}
+                        {data.body.meeting.status.toString()}
+                      </li>
+                    </ul>
+                    <div>
+                      <button>Accepter</button>
+                      <button
+                        onClick={() => {
+                          trigger({
+                            meetingId: data.body.meeting.id,
+                            userId: data.body.id,
+                          });
+                        }}
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                  </>
                 )}
               </ul>
             </div>
@@ -107,99 +155,6 @@ const Content = () => {
               </h2>
               {data.body.allMeetings.length === 0 && <p>Aucun rendez-vous</p>}
               {data.body.allMeetings.length > 0 && (
-                /*  <>
-                  <div className={styles.content__flex__div__right__div}>
-                    <table
-                      className={styles.content__flex__div__right__div__table}
-                    >
-                      <thead
-                        className={
-                          styles.content__flex__div__right__div__table__thead
-                        }
-                      >
-                        <tr
-                          className={
-                            styles.content__flex__div__right__div__table__thead__tr
-                          }
-                        >
-                          <th
-                            className={
-                              styles.content__flex__div__right__div__table__thead__tr__th
-                            }
-                          >
-                            Description
-                          </th>
-                          <th
-                            className={
-                              styles.content__flex__div__right__div__table__thead__tr__th
-                            }
-                          >
-                            Start
-                          </th>
-                          <th
-                            className={
-                              styles.content__flex__div__right__div__table__thead__tr__th
-                            }
-                          >
-                            End
-                          </th>
-                          <th
-                            className={
-                              styles.content__flex__div__right__div__table__thead__tr__th
-                            }
-                          >
-                            Status
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        className={
-                          styles.content__flex__div__right__div__table__tbody
-                        }
-                      >
-                        {data.body.allMeetings.map((p: any, index: any) => {
-                          return (
-                            <tr
-                              className={
-                                styles.content__flex__div__right__div__table__tbody__tr
-                              }
-                              key={index}
-                            >
-                              <td
-                                className={
-                                  styles.content__flex__div__right__div__table__tbody__tr__td
-                                }
-                              >
-                                {p.description}
-                              </td>
-                              <td
-                                className={
-                                  styles.content__flex__div__right__div__table__tbody__tr__td
-                                }
-                              >
-                                {new Date(p.startAt).toLocaleString()}
-                              </td>
-                              <td
-                                className={
-                                  styles.content__flex__div__right__div__table__tbody__tr__td
-                                }
-                              >
-                                {new Date(p.endAt).toLocaleString()}
-                              </td>
-                              <td
-                                className={
-                                  styles.content__flex__div__right__div__table__tbody__tr__td
-                                }
-                              >
-                                {p.status.toString()}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </> */
                 <>
                   <div>
                     <div className={styles.datatable__container__div}>

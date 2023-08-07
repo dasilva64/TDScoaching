@@ -6,7 +6,6 @@ import MeetingData from "./meetingData/MeetingData";
 import PasswordData from "./passwordData/PasswordData";
 import PhoneData from "./phoneSendTokenData/PhoneSendTokenData";
 import TwoFactorData from "./twoFactorData/TwoFactorData";
-import { getRequestCookie } from "../../../../lib/getRequestCookie";
 import DeleteAccount from "./deleteAccount/DeleteAccount";
 
 const Display = () => {

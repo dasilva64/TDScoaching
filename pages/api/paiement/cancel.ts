@@ -1,6 +1,7 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import prisma from "../../../lib/prisma";
 import { Prisma } from "@prisma/client";
+import { Stripe } from "stripe";
 
 export default withIronSessionApiRoute(
   async function cancel(req, res) {
@@ -17,6 +18,24 @@ export default withIronSessionApiRoute(
         });
       } else {
         let meetingId = user?.meetingId;
+        const meeting = await prisma.meeting.findUnique({
+          where: {
+            id: meetingId!,
+          },
+        });
+
+        const stripe = new Stripe(
+          "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f",
+          {
+            apiVersion: "2022-11-15",
+          }
+        );
+        const session = await stripe.checkout.sessions.retrieve(
+          meeting?.paymentId!
+        );
+        let copyId: any = session.payment_intent;
+        const paymentIntent = await stripe.paymentIntents.cancel(copyId);
+
         let editUser = await prisma.user.update({
           where: {
             id: req.session.user.id,
@@ -27,15 +46,10 @@ export default withIronSessionApiRoute(
         });
         let delMeeting = await prisma.meeting.delete({
           where: {
-            id: meetingId!,
+            id: meeting?.id,
           },
         });
 
-        let meeting = await prisma.meeting.findFirst({
-          where: {
-            id: user?.meetingId!,
-          },
-        });
         let userEditMailObject;
         if (user.editEmail) {
           let copyEditEmail: any = user.editEmail;
@@ -183,3 +197,4 @@ export default withIronSessionApiRoute(
     },
   }
 );
+//cs_test_a1DYstcgths9g3iOwxFdAz8hUJPcpuWygxRYUKvPmGelaJN9X6rnqyORYa

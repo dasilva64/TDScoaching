@@ -1,7 +1,5 @@
 import styles from "./page.module.scss";
 import Display from "./components/Display";
-import { cookies } from "next/headers";
-import { getRequestCookie } from "../../../lib/getRequestCookie";
 
 const Page = async () => {
   return (

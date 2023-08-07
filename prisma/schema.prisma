@@ -18,6 +18,7 @@ model Meeting {
   status      Boolean
   userId      String   @db.Uuid
   limitDate   String?  @db.VarChar
+  paymentId   String?  @unique
   User        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 

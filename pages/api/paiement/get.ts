@@ -71,6 +71,17 @@ export default withIronSessionApiRoute(
           success_url: `http://localhost:3000/api/meeting/create`,
           cancel_url: "http://localhost:3000/rendez-vous",
         });
+        let copyPaymentId: string = session.id;
+        console.log(session);
+        console.log(session);
+        const editMeeting = await prisma.meeting.update({
+          where: {
+            id: meeting.id,
+          },
+          data: {
+            paymentId: copyPaymentId,
+          },
+        });
         res.json({ url: session.url });
       }
     } else {

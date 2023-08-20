@@ -29,7 +29,7 @@ export default function Home() {
             </WhileInView>
             <div className={styles.home__divImg}>
               <WhileInView>
-                <Image
+                {/* <Image
                   width="0"
                   height="0"
                   sizes="100vw"
@@ -39,9 +39,10 @@ export default function Home() {
                     height: "auto",
                     borderRadius: "20px",
                   }}
+                  priority={true}
                   src={"/assets/img/avenue.jpg"}
                   alt="bousole"
-                />
+                /> */}
               </WhileInView>
             </div>
           </div>
@@ -55,7 +56,7 @@ export default function Home() {
           <div className={styles.home__div__flex}>
             <div className={styles.home__divImg}>
               <WhileInView>
-                <Image
+                {/* <Image
                   width="0"
                   height="0"
                   sizes="100vw"
@@ -65,9 +66,10 @@ export default function Home() {
                     height: "auto",
                     borderRadius: "20px",
                   }}
+                  priority={true}
                   src={"/assets/img/avenue.jpg"}
                   alt="bousole"
-                />
+                /> */}
               </WhileInView>
             </div>
             <WhileInView className={styles.home__divP__little}>

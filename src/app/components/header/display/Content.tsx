@@ -490,7 +490,6 @@ const Content = () => {
               height={80}
               src="/assets/logo/logo.png"
               alt="logo tdss coaching"
-              priority={true}
             />
           </Link>
           <figcaption className={styles.header__figcaption}>

@@ -11,8 +11,9 @@ export default withIronSessionApiRoute(
           where: { id: req.session.user.id },
         });
         if (user === null) {
-          return res.status(400).json({
+          return res.status(200).json({
             status: 400,
+            body: null,
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
           });
         } else {
@@ -25,7 +26,7 @@ export default withIronSessionApiRoute(
           });
         }
       } else {
-        return res.status(404).json({
+        return res.status(200).json({
           status: 404,
           message: "Vous n'êtes pas connecté, veuillez réessayer",
           body: null,

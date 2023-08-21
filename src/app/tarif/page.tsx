@@ -4,9 +4,7 @@ import styles from "./page.module.scss";
 const Tarif = () => {
   return (
     <main className={styles.tarif}>
-      <WhileInView>
-        <h1 className={styles.tarif__h1}>Tarif / Durée</h1>
-      </WhileInView>
+      <h1 className={styles.tarif__h1}>Tarif / Durée</h1>
       <div className={styles.tarif__container}>
         <div className={styles.tarif__article}>
           <WhileInView>
@@ -27,31 +25,27 @@ const Tarif = () => {
           <div className={styles.tarif__article__flex}>
             <WhileInView className={styles.tarif__article__flex__div}>
               <div>
-                <WhileInView>
-                  <p className={styles.tarif__article__flex__div__p}>
-                    Problématiques dites « simples »<br />
-                    Séance découverte + Pack 5 séances
-                    <br />
-                    3 mois d’accompagnement
-                    <br />
-                    380 euros
-                  </p>
-                </WhileInView>
+                <p className={styles.tarif__article__flex__div__p}>
+                  Problématiques dites « simples »<br />
+                  Séance découverte + Pack 5 séances
+                  <br />
+                  3 mois d’accompagnement
+                  <br />
+                  380 euros
+                </p>
               </div>
             </WhileInView>
             <WhileInView className={styles.tarif__article__flex__div}>
               <div>
-                <WhileInView>
-                  <p className={styles.tarif__article__flex__div__p}>
-                    Coaching classNameique
-                    <br />
-                    Séance découverte + Pack 10 séances
-                    <br />
-                    6 mois d’accompagnement
-                    <br />
-                    730 euros
-                  </p>
-                </WhileInView>
+                <p className={styles.tarif__article__flex__div__p}>
+                  Coaching classNameique
+                  <br />
+                  Séance découverte + Pack 10 séances
+                  <br />
+                  6 mois d’accompagnement
+                  <br />
+                  730 euros
+                </p>
               </div>
             </WhileInView>
           </div>

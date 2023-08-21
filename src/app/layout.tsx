@@ -3,7 +3,8 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Providers } from "./redux/provider";
 import Footer from "./components/footer/footer";
-const Header = lazy(() => import("./components/header/header"));
+import Header from "./components/header/header";
+//const Header = lazy(() => import("./components/header/header"));
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {

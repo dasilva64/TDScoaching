@@ -5,11 +5,9 @@ import Image from "next/image";
 const About = () => {
   return (
     <main className={styles.about}>
-      <WhileInView>
-        <h1 className={styles.about__h1}>Qui suis-je ?</h1>
-      </WhileInView>
+      <h1 className={styles.about__h1}>Qui suis-je ?</h1>
       <div className={styles.about__container}>
-        <p className={styles.about__img}>
+        <div className={styles.about__img}>
           <WhileInView>
             <Image
               width="0"
@@ -22,11 +20,11 @@ const About = () => {
                 borderRadius: "50%",
               }}
               priority={true}
-              src={"/assets/img/moi.jpg"}
+              src={"/assets/img/moi.jpeg"}
               alt="bousole"
             />
           </WhileInView>
-        </p>
+        </div>
         <WhileInView>
           <p className={styles.about__thierry}>Thierry Da Silva Seabra</p>
         </WhileInView>

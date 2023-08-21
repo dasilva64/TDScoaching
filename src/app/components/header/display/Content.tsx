@@ -491,7 +491,6 @@ const Content = () => {
               src="/assets/logo/logo.png"
               alt="logo tdss coaching"
               priority={true}
-              quality={1}
             />
           </Link>
           <figcaption className={styles.header__figcaption}>

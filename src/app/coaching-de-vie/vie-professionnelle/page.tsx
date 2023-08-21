@@ -6,9 +6,7 @@ import Image from "next/image";
 const Pro = () => {
   return (
     <main className={styles.pro}>
-      <WhileInView>
-        <h1 className={styles.pro__h1}>Vie professionnelle</h1>
-      </WhileInView>
+      <h1 className={styles.pro__h1}>Vie professionnelle</h1>
       <div className={styles.pro__container}>
         <div className={styles.pro__article}>
           <WhileInView>
@@ -19,21 +17,19 @@ const Pro = () => {
           <div className={styles.pro__article__div}>
             <WhileInView className={styles.pro__article__div__text}>
               <div>
-                <WhileInView>
-                  <ul>
-                    <li>
-                      Vous êtes confrontés à l’ennui ou à la perte de sens ?
-                    </li>
-                    <li>
-                      Vous souhaitez vous réorienter ou vous envisagez une
-                      reconversion professionnelle ?
-                    </li>
-                    <li>
-                      Vous souhaitez développer votre potentiel et vos
-                      compétences ?
-                    </li>
-                  </ul>
-                </WhileInView>
+                <ul>
+                  <li>
+                    Vous êtes confrontés à l’ennui ou à la perte de sens ?
+                  </li>
+                  <li>
+                    Vous souhaitez vous réorienter ou vous envisagez une
+                    reconversion professionnelle ?
+                  </li>
+                  <li>
+                    Vous souhaitez développer votre potentiel et vos compétences
+                    ?
+                  </li>
+                </ul>
               </div>
             </WhileInView>
             <div className={styles.pro__article__div__img}>
@@ -65,33 +61,27 @@ const Pro = () => {
           <WhileInView className={styles.pro__article__big}>
             <div>
               <div>
-                <WhileInView>
-                  <p>
-                    tds-coachingdevie vous accompagnera afin de vous permettre
-                    de :
-                  </p>
-                </WhileInView>
-                <WhileInView>
-                  <ul className={styles.pro__article__big__ul}>
-                    <li>Prendre du recul ;</li>
-                    <li>Ouvrir le champ des possibles ;</li>
-                    <li>Retrouver du sens et booster votre motivation ;</li>
-                    <li>
-                      Voir plus clairement les options qui s’offrent à vous ;
-                    </li>
-                    <li>Améliorer votre gestion du temps ;</li>
-                    <li>Améliorer votre communication .</li>
-                  </ul>
-                </WhileInView>
+                <p>
+                  tds-coachingdevie vous accompagnera afin de vous permettre de
+                  :
+                </p>
+                <ul className={styles.pro__article__big__ul}>
+                  <li>Prendre du recul ;</li>
+                  <li>Ouvrir le champ des possibles ;</li>
+                  <li>Retrouver du sens et booster votre motivation ;</li>
+                  <li>
+                    Voir plus clairement les options qui s’offrent à vous ;
+                  </li>
+                  <li>Améliorer votre gestion du temps ;</li>
+                  <li>Améliorer votre communication .</li>
+                </ul>
               </div>
               <div>
-                <WhileInView>
-                  <p>
-                    Je ne ferai pas les choses à votre place. Mon fil conducteur
-                    sera toujours de viser votre <strong>autonomie</strong> et
-                    votre développement personnel.
-                  </p>
-                </WhileInView>
+                <p>
+                  Je ne ferai pas les choses à votre place. Mon fil conducteur
+                  sera toujours de viser votre <strong>autonomie</strong> et
+                  votre développement personnel.
+                </p>
               </div>
             </div>
           </WhileInView>

@@ -6,9 +6,7 @@ import Image from "next/image";
 const Famille = () => {
   return (
     <main className={styles.famille}>
-      <WhileInView>
-        <h1 className={styles.famille__h1}>Vie familiale</h1>
-      </WhileInView>
+      <h1 className={styles.famille__h1}>Vie familiale</h1>
       <div className={styles.famille__container}>
         <div className={styles.famille__article}>
           <WhileInView>
@@ -19,17 +17,15 @@ const Famille = () => {
           <div className={styles.famille__article__div}>
             <WhileInView className={styles.famille__article__div__text}>
               <div>
-                <WhileInView>
-                  <p>
-                    Pour renforcer, améliorer et réparer les dynamiques opérant
-                    au sein de la famille.
-                    <br />
-                    Vous êtes soumis au rythme effréné de la vie, au stress, à
-                    la fatigue quotidienne, au tempérament imprévisible des
-                    enfants et aux enjeux autour de la scolarité qui rendent
-                    votre tâche de parent particulièrement délicate.
-                  </p>
-                </WhileInView>
+                <p>
+                  Pour renforcer, améliorer et réparer les dynamiques opérant au
+                  sein de la famille.
+                  <br />
+                  Vous êtes soumis au rythme effréné de la vie, au stress, à la
+                  fatigue quotidienne, au tempérament imprévisible des enfants
+                  et aux enjeux autour de la scolarité qui rendent votre tâche
+                  de parent particulièrement délicate.
+                </p>
               </div>
             </WhileInView>
             <div className={styles.famille__article__div__img}>
@@ -79,34 +75,32 @@ const Famille = () => {
             </div>
             <WhileInView className={styles.famille__article__div__text}>
               <div>
-                <WhileInView>
-                  <ul>
-                    <li>
-                      Accompagner les parents isolés à devenir leader de leurs
-                      enfants ;
-                    </li>
-                    <li>
-                      Accompagner les parents à développer leurs qualités de
-                      communication (Ecoute, compréhension, respect de chacun) ;
-                    </li>
-                    <li>
-                      Coacher les femmes entrepreneures à équilibrer leur vie de
-                      maman et leur vie professionnelle ;
-                    </li>
-                    <li>
-                      Aider les parents à obtenir des relations complices avec
-                      leurs enfants sans avoir à crier ni s’énerver ;
-                    </li>
-                    <li>
-                      Aider les beaux-parents qui ne se sentent pas reconnus à
-                      trouver leur place su sein de la famille recomposée ;
-                    </li>
-                    <li>
-                      Aider les mamans hypersensibles à se sentir épanouies
-                      malgré leurs émotions débordantes .
-                    </li>
-                  </ul>
-                </WhileInView>
+                <ul>
+                  <li>
+                    Accompagner les parents isolés à devenir leader de leurs
+                    enfants ;
+                  </li>
+                  <li>
+                    Accompagner les parents à développer leurs qualités de
+                    communication (Ecoute, compréhension, respect de chacun) ;
+                  </li>
+                  <li>
+                    Coacher les femmes entrepreneures à équilibrer leur vie de
+                    maman et leur vie professionnelle ;
+                  </li>
+                  <li>
+                    Aider les parents à obtenir des relations complices avec
+                    leurs enfants sans avoir à crier ni s’énerver ;
+                  </li>
+                  <li>
+                    Aider les beaux-parents qui ne se sentent pas reconnus à
+                    trouver leur place su sein de la famille recomposée ;
+                  </li>
+                  <li>
+                    Aider les mamans hypersensibles à se sentir épanouies malgré
+                    leurs émotions débordantes .
+                  </li>
+                </ul>
               </div>
             </WhileInView>
           </div>

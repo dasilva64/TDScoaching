@@ -6,9 +6,7 @@ import WhileInView from "../components/framer/WhileInView";
 const Contact = () => {
   return (
     <main className={styles.contact}>
-      <WhileInView>
-        <h1 className={styles.contact__h1}>Contact</h1>
-      </WhileInView>
+      <h1 className={styles.contact__h1}>Contact</h1>
       <div className={styles.contact__container}>
         <div className={styles.contact__article}>
           <WhileInView>
@@ -34,16 +32,12 @@ const Contact = () => {
           </WhileInView>
           <WhileInView>
             <div className={styles.contact__article__div}>
-              <WhileInView>
-                <p className={styles.contact__article__div__p}>
-                  Veuillez renseigner le formulaire ci-dessous pour prendre
-                  rendez-vous, poser une question, ou tout autre demande. Je me
-                  ferai un plaisir de vous répondre au plus vite.
-                </p>
-              </WhileInView>
-              <WhileInView>
-                <ContactForm />
-              </WhileInView>
+              <p className={styles.contact__article__div__p}>
+                Veuillez renseigner le formulaire ci-dessous pour prendre
+                rendez-vous, poser une question, ou tout autre demande. Je me
+                ferai un plaisir de vous répondre au plus vite.
+              </p>
+              <ContactForm />
             </div>
           </WhileInView>
         </div>

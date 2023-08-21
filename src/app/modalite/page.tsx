@@ -4,11 +4,7 @@ import styles from "./page.module.scss";
 const Modalite = () => {
   return (
     <main className={styles.modalite}>
-      <WhileInView>
-        <h1 className={styles.modalite__h1}>
-          Modalités des séances de coaching
-        </h1>
-      </WhileInView>
+      <h1 className={styles.modalite__h1}>Modalités des séances de coaching</h1>
       <div className={styles.modalite__container}>
         <div className={styles.modalite__article}>
           <div>
@@ -75,11 +71,11 @@ const Modalite = () => {
               </p>
             </WhileInView>
           </div>
-          <div
-            className={`${styles.modalite__article__div} ${styles.modalite__article__div__margin}`}
-          >
-            <div>
-              <WhileInView>
+          <WhileInView>
+            <div
+              className={`${styles.modalite__article__div} ${styles.modalite__article__div__margin}`}
+            >
+              <div>
                 <p>
                   En fonction de votre demande, des axes de travail vont
                   apparaître. Nous établirons un plan d’actions concrètes pour
@@ -102,8 +98,6 @@ const Modalite = () => {
                   clôture » permettant de valider l’atteinte de l’objectif.
                   Organisation des rendez-vous selon les besoins :
                 </p>
-              </WhileInView>
-              <WhileInView>
                 <ul className={styles.modalite__article__div__ul}>
                   <li>RDV dans un lieu neutre (café, parc …) ;</li>
                   <li>
@@ -111,9 +105,9 @@ const Modalite = () => {
                   </li>
                   <li>RDV en visio .</li>
                 </ul>
-              </WhileInView>
+              </div>
             </div>
-          </div>
+          </WhileInView>
         </div>
       </div>
     </main>

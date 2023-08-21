@@ -4,27 +4,21 @@ import styles from "./page.module.scss";
 const Code = () => {
   return (
     <main className={styles.code}>
-      <WhileInView>
-        <h1>Code de déontologie</h1>
-      </WhileInView>
+      <h1>Code de déontologie</h1>
       <div className={styles.code__container}>
         <div className={styles.code__article}>
           <WhileInView>
             <div className={styles.code__article__div}>
-              <WhileInView>
-                <p>
-                  Je m’engage à rester en conformité́ avec chacune des directives
-                  auxquelles il est fait référence dans le présent Code de
-                  déontologie.
-                </p>
-              </WhileInView>
-              <WhileInView>
-                <p>
-                  Cette charte n’a qu’une valeur informative. Il s’agit de
-                  principes généraux qu’il est important de respecter en tant
-                  que coach professionnel en coaching conjugal.
-                </p>
-              </WhileInView>
+              <p>
+                Je m’engage à rester en conformité́ avec chacune des directives
+                auxquelles il est fait référence dans le présent Code de
+                déontologie.
+              </p>
+              <p>
+                Cette charte n’a qu’une valeur informative. Il s’agit de
+                principes généraux qu’il est important de respecter en tant que
+                coach professionnel en coaching conjugal.
+              </p>
             </div>
           </WhileInView>
           <WhileInView>
@@ -32,8 +26,8 @@ const Code = () => {
               De l’exercice de la profession : les obligations du coach
             </h2>
           </WhileInView>
-          <div className={styles.code__article__div}>
-            <WhileInView>
+          <WhileInView>
+            <div className={styles.code__article__div}>
               <ul className={styles.code__article__div__ul}>
                 <li>
                   <strong>Respect et Droits des clients</strong>
@@ -186,8 +180,8 @@ const Code = () => {
                   </ul>
                 </li>
               </ul>
-            </WhileInView>
-          </div>
+            </div>
+          </WhileInView>
           <WhileInView>
             <h2 className={styles.code__article__h2}>Principes fondamentaux</h2>
           </WhileInView>

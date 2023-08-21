@@ -42,6 +42,7 @@ export default function Home() {
                   priority={true}
                   src={"/assets/img/avenue.jpg"}
                   alt="bousole"
+                  quality={1}
                 />
               </WhileInView>
             </div>
@@ -69,6 +70,7 @@ export default function Home() {
                   priority={true}
                   src={"/assets/img/avenue.jpg"}
                   alt="bousole"
+                  quality={1}
                 />
               </WhileInView>
             </div>

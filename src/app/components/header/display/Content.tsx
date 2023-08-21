@@ -484,14 +484,14 @@ const Content = () => {
       <header className={ClassName()}>
         <figure className={styles.header__figure}>
           <Link className="link" href="/" tabIndex={0}>
-            {/* <Image
+            <Image
               className={styles.header__logo}
               width={80}
               height={80}
               src="/assets/logo/logo.png"
               alt="logo tdss coaching"
               priority={true}
-            /> */}
+            />
           </Link>
           <figcaption className={styles.header__figcaption}>
             Coach de vie

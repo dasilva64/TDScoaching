@@ -9,7 +9,7 @@ const fetchSendEmail = async (
       lastname: string;
       object: string;
       message: string;
-      speudo: string;
+      pseudo: string;
     };
   }
 ) => {

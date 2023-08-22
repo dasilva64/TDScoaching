@@ -4,9 +4,11 @@ import React, { use, useEffect, useState } from "react";
 import styles from "../page.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { TextField } from "@mui/material";
+import { FormHelperText, FormLabel, TextField } from "@mui/material";
 import useSWRMutation from "swr/mutation";
 import fetchSendEmail from "@/app/components/fetch/contact/useContact";
+import Textarea from "@mui/joy/Textarea";
+import validator from "validator";
 
 const ContactForm = () => {
   const [inputFirstname, setInputFirstname] = useState<string>("");
@@ -44,6 +46,24 @@ const ContactForm = () => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
+      } else if (data.status === 400) {
+        data.message.forEach((element: string) => {
+          if (element[0] === "firstname") {
+            setFirstnameInputError(element[1]);
+          }
+          if (element[0] === "lastname") {
+            setLastnameInputError(element[1]);
+          }
+          if (element[0] === "email") {
+            setEmailInputError(element[1]);
+          }
+          if (element[0] === "object") {
+            setObjectInputError(element[1]);
+          }
+          if (element[0] === "message") {
+            setMessageInputError(element[1]);
+          }
+        });
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -64,12 +84,12 @@ const ContactForm = () => {
     ) {
       const fetchLogin = async () => {
         trigger({
-          email: inputEmail,
-          firstname: inputFirstname,
-          lastname: inputLastname,
-          object: inputObject,
-          message: inputMessage,
-          speudo: inputPseudo,
+          email: validator.escape(inputEmail),
+          firstname: validator.escape(inputFirstname),
+          lastname: validator.escape(inputLastname),
+          object: validator.escape(inputObject),
+          message: validator.escape(inputMessage),
+          pseudo: validator.escape(inputPseudo),
         });
       };
       if (inputPseudo.length === 0) {
@@ -77,19 +97,19 @@ const ContactForm = () => {
       }
     } else {
       if (validinputEmail === false) {
-        setEmailInputError("Email : need to be not empty");
+        setEmailInputError("Email : ne peut pas être vide");
       }
       if (validinputFirstname === false) {
-        setFirstnameInputError("Firstname : need to be not empty");
+        setFirstnameInputError("Prénom : ne peut pas être vide");
       }
       if (validinputLastname === false) {
-        setLastnameInputError("Lastname : need to be not empty");
+        setLastnameInputError("Nom de famille : ne peut pas être vide");
       }
       if (validinputObject === false) {
-        setObjectInputError("Object : need to be not empty");
+        setObjectInputError("Objet : ne peut pas être vide");
       }
       if (validinputMessage === false) {
-        setMessageInputError("Message comfirm : need to be not empty");
+        setMessageInputError("Message : ne peut pas être vide");
       }
     }
   };
@@ -102,11 +122,12 @@ const ContactForm = () => {
     setInput: React.Dispatch<React.SetStateAction<string>>,
     errorMessage: string
   ) => {
-    setInput(e.target.value);
-    if (regex.test(e.target.value)) {
+    let removeDoubleSpace = e.target.value.replace(/\s\s+/g, " ");
+    setInput(removeDoubleSpace);
+    if (regex.test(removeDoubleSpace)) {
       setValidInput(true);
       setErrorMessage("");
-    } else if (e.target.value.length === 0) {
+    } else if (removeDoubleSpace.length === 0) {
       setValidInput(false);
       setErrorMessage("");
     } else {
@@ -136,11 +157,11 @@ const ContactForm = () => {
             handlerInput(
               e,
               "lastname",
-              /^[A-Za-z]{3,}$/,
+              /^[A-Za-z ]{3,}$/,
               setValidInputLastname,
               setLastnameInputError,
               setInputLastname,
-              "Lastname : 3 lettres minimum"
+              "Nom de famille : 3 lettres minimum"
             );
           }}
           helperText={lastnameInputError}
@@ -158,11 +179,11 @@ const ContactForm = () => {
             handlerInput(
               e,
               "firstname",
-              /^[A-Za-z]{3,}$/,
+              /^[A-Za-z ]{3,}$/,
               setValidInputFirstname,
               setFirstnameInputError,
               setInputFirstname,
-              "firstname : 3 lettres minimum"
+              "Prénom : 3 lettres minimum"
             );
           }}
           helperText={firstnameInputError}
@@ -202,37 +223,33 @@ const ContactForm = () => {
             handlerInput(
               e,
               "object",
-              /^[A-Za-z]{3,}$/,
+              /^[A-Za-z0-9][A-Za-z0-9,?;.:!() ]{1,}$/,
               setValidInputObject,
               setObjectInputError,
               setInputObject,
-              "Object : 3 lettres minimum"
+              "Objet : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation)"
             );
           }}
           helperText={objectInputError}
         />
-        <TextField
+        <FormLabel>Message</FormLabel>
+        <Textarea
           value={inputMessage}
-          id={"message"}
-          style={{ margin: "10px 0px" }}
-          label={"Message"}
-          variant="standard"
-          type={"text"}
-          placeholder={"Entrez votre message"}
-          FormHelperTextProps={{ style: { color: "red" } }}
           onChange={(e) => {
             handlerInput(
               e,
               "message",
-              /^[A-Za-z]{3,}$/,
+              /^[A-Za-z0-9][A-Za-z0-9,?;.:!() ]{1,}$/,
               setValidInputMessage,
               setMessageInputError,
               setInputMessage,
-              "Message : 3 lettres minimum"
+              "Message : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation)"
             );
           }}
-          helperText={messageInputError}
+          placeholder="Entrez votre message"
+          minRows={2}
         />
+        <FormHelperText>{messageInputError}</FormHelperText>
 
         <input
           type="text"
@@ -249,7 +266,7 @@ const ContactForm = () => {
           <input
             className={styles.contact__form__submit}
             type="submit"
-            value="C'est parti"
+            value="Envoyer"
           />
           <div className={styles.contact__form__input__error}></div>
         </div>

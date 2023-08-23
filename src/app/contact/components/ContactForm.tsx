@@ -82,18 +82,18 @@ const ContactForm = () => {
       validinputMessage === true &&
       validinputObject === true
     ) {
-      const fetchLogin = async () => {
+      const fetchContact = async () => {
         trigger({
-          email: validator.escape(inputEmail),
-          firstname: validator.escape(inputFirstname),
-          lastname: validator.escape(inputLastname),
-          object: validator.escape(inputObject),
-          message: validator.escape(inputMessage),
-          pseudo: validator.escape(inputPseudo),
+          email: validator.escape(inputEmail.trim()),
+          firstname: validator.escape(inputFirstname.trim()),
+          lastname: validator.escape(inputLastname.trim()),
+          object: validator.escape(inputObject.trim()),
+          message: validator.escape(inputMessage.trim()),
+          pseudo: validator.escape(inputPseudo.trim()),
         });
       };
       if (inputPseudo.length === 0) {
-        fetchLogin();
+        fetchContact();
       }
     } else {
       if (validinputEmail === false) {

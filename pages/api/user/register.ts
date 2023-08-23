@@ -3,37 +3,64 @@ import prisma from "../../../lib/prisma";
 import twilio from "twilio";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Prisma } from "@prisma/client";
 import nodemailer from "nodemailer";
+import { validationBody } from "../../../lib/validation";
+import validator from "validator";
 
 export default withIronSessionApiRoute(
   async function sendTokenEditPhone(req, res) {
     if (req.method === "POST") {
-      const { phone, mail, firstname, lastname, password } = await req.body;
-      let userEmail = await prisma.user.findUnique({ where: { mail: mail } });
-      let userPhone = await prisma.user.findUnique({ where: { phone: phone } });
-      if (userEmail === null && userPhone === null) {
-        const encrytpPassword = async () => {
+      const { phone, email, firstname, lastname, password, pseudo, birth } =
+        await req.body;
+
+      let arrayMessageError = validationBody(req.body);
+      console.log(birth);
+      if (arrayMessageError.length > 0) {
+        return res.status(400).json({
+          status: 400,
+          message: arrayMessageError,
+        });
+      }
+      if (pseudo.trim() !== "") {
+        return res.status(404).json({
+          status: 404,
+          message:
+            "Une erreur est survenue lors de l'envoie du message, veuillez réessayer plus tard",
+        });
+      } else {
+        let userEmail = await prisma.user.findUnique({
+          where: { mail: validator.escape(email.trim()) },
+        });
+        let userPhone = await prisma.user.findUnique({
+          where: { phone: validator.escape(phone.trim()) },
+        });
+        if (userEmail === null && userPhone === null) {
           const saltRounds = 10;
-          let encrypt = await bcrypt.hash(password, saltRounds);
+          let encrypt = await bcrypt.hash(
+            validator.escape(password.trim()),
+            saltRounds
+          );
           let token = jwt.sign(
-            { user: mail },
+            { user: validator.escape(email.trim()) },
             process.env.SECRET_TOKEN_REGISTER as string
           );
           let currentDate = new Date();
           let registerTokenObject = {
             token: token,
-            limitDate: currentDate.setDate(currentDate.getDate() + 1),
+            limitDate: currentDate.setMinutes(currentDate.getMinutes() + 1),
           };
           let UserCreate = await prisma.user.create({
             data: {
-              mail: mail,
-              firstname: firstname,
-              lastname: lastname,
+              mail: validator.escape(email.trim()),
+              firstname: validator.escape(firstname.trim()),
+              lastname: validator.escape(lastname.trim()),
               password: encrypt,
               status: false,
               registerToken: registerTokenObject,
-              phone: phone,
+              phone: validator.escape(phone.trim()),
               twoFactor: false,
+              birth: validator.escape(birth.trim()),
               role: "ROLE_USER",
             },
           });
@@ -41,7 +68,7 @@ export default withIronSessionApiRoute(
           if (UserCreate === null) {
             return res.status(404).json({
               status: 404,
-              message: "Impossible de créer un utilisateur veuillez réessayer",
+              message: "Impossible de créer un utilisateur, veuillez réessayer",
             });
           } else {
             let smtpTransport = nodemailer.createTransport({
@@ -54,36 +81,175 @@ export default withIronSessionApiRoute(
             let mailOptions = {
               from: process.env.SECRET_SMTP_EMAIL,
               to: process.env.SECRET_SMTP_EMAIL,
-              subject: "Validation of your account",
-              html: `<div><h1>tds coaching</h1><p>Click on the link for validate your account</p><p>This link is available one day</p><a href='http://localhost:3000/email-validation/${token}'>Click here</a></div>`,
+              subject: "Validation de votre compte",
+              html: `<div><h1>tds coaching</h1><p>Cliquer sur le lien pour valider votre compte</p><p>Ce lien est valide pendant 1 jour</p><p>Votre compte sera supprimé si vous ne valider pas votre comtpe</p><a href='http://localhost:3000/email-validation/${token}'>Cliquer ici</a></div>`,
             };
-            smtpTransport.sendMail(mailOptions, function (error, info) {
-              if (error) {
-                console.log(error);
-              } else {
-                console.log("succes");
-              }
-            });
+            smtpTransport.sendMail(mailOptions);
             return res.status(200).json({
               status: 200,
               message: "Un email vous a été envoyer pour activer votre compte",
             });
           }
-        };
-        encrytpPassword();
-      } else {
-        if (userEmail !== null) {
-          return res.status(404).json({
-            status: 404,
-            message:
-              "Un utilisateur utilise déjà cet email, veuillez réessayer",
-          });
         } else {
-          return res.status(404).json({
-            status: 404,
-            message:
-              "Un utilisateur utilise déjà ce numéro de téléphone, veuillez réessayer",
-          });
+          if (userEmail !== null) {
+            if (userEmail.status === false && userEmail.registerToken) {
+              let copyRegisterToken: any = userEmail?.registerToken;
+              if (new Date().getTime() > copyRegisterToken.limitDate) {
+                const deleteUser = await prisma.user.delete({
+                  where: { mail: userEmail.mail },
+                });
+                const saltRounds = 10;
+                let encrypt = await bcrypt.hash(
+                  validator.escape(password.trim()),
+                  saltRounds
+                );
+                let token = jwt.sign(
+                  { user: validator.escape(email.trim()) },
+                  process.env.SECRET_TOKEN_REGISTER as string
+                );
+                let currentDate = new Date();
+                let registerTokenObject = {
+                  token: token,
+                  limitDate: currentDate.setMinutes(
+                    currentDate.getMinutes() + 1
+                  ),
+                };
+                let UserCreate = await prisma.user.create({
+                  data: {
+                    mail: validator.escape(email.trim()),
+                    firstname: validator.escape(firstname.trim()),
+                    lastname: validator.escape(lastname.trim()),
+                    password: encrypt,
+                    status: false,
+                    registerToken: registerTokenObject,
+                    phone: validator.escape(phone.trim()),
+                    twoFactor: false,
+                    birth: validator.escape(birth.trim()),
+                    role: "ROLE_USER",
+                  },
+                });
+
+                if (UserCreate === null) {
+                  return res.status(404).json({
+                    status: 404,
+                    message:
+                      "Impossible de créer un utilisateur, veuillez réessayer",
+                  });
+                } else {
+                  let smtpTransport = nodemailer.createTransport({
+                    service: "Gmail",
+                    auth: {
+                      user: process.env.SECRET_SMTP_EMAIL,
+                      pass: process.env.SECRET_SMTP_PASSWORD,
+                    },
+                  });
+                  let mailOptions = {
+                    from: process.env.SECRET_SMTP_EMAIL,
+                    to: process.env.SECRET_SMTP_EMAIL,
+                    subject: "Validation de votre compte",
+                    html: `<div><h1>tds coaching</h1><p>Cliquer sur le lien pour valider votre compte</p><p>Ce lien est valide pendant 1 jour</p><p>Votre compte sera supprimé si vous ne valider pas votre comtpe</p><a href='http://localhost:3000/email-validation/${token}'>Cliquer ici</a></div>`,
+                  };
+                  smtpTransport.sendMail(mailOptions);
+                  return res.status(200).json({
+                    status: 200,
+                    message:
+                      "Un email vous a été envoyer pour activer votre compte",
+                  });
+                }
+              } else {
+                return res.status(404).json({
+                  status: 404,
+                  message:
+                    "Un utilisateur utilise déjà cet email, veuillez réessayer",
+                });
+              }
+            } else {
+              return res.status(404).json({
+                status: 404,
+                message:
+                  "Un utilisateur utilise déjà cet email, veuillez réessayer",
+              });
+            }
+          } else {
+            if (userPhone?.status === false && userPhone?.registerToken) {
+              let copyRegisterToken: any = userPhone?.registerToken;
+              if (new Date().getTime() > copyRegisterToken.limitDate) {
+                const deleteUser = await prisma.user.delete({
+                  where: { mail: userPhone.mail },
+                });
+                const saltRounds = 10;
+                let encrypt = await bcrypt.hash(
+                  validator.escape(password.trim()),
+                  saltRounds
+                );
+                let token = jwt.sign(
+                  { user: validator.escape(email.trim()) },
+                  process.env.SECRET_TOKEN_REGISTER as string
+                );
+                let currentDate = new Date();
+                let registerTokenObject = {
+                  token: token,
+                  limitDate: currentDate.setMinutes(
+                    currentDate.getMinutes() + 1
+                  ),
+                };
+                let UserCreate = await prisma.user.create({
+                  data: {
+                    mail: validator.escape(email.trim()),
+                    firstname: validator.escape(firstname.trim()),
+                    lastname: validator.escape(lastname.trim()),
+                    password: encrypt,
+                    status: false,
+                    registerToken: registerTokenObject,
+                    phone: validator.escape(phone.trim()),
+                    twoFactor: false,
+                    birth: validator.escape(birth.trim()),
+                    role: "ROLE_USER",
+                  },
+                });
+
+                if (UserCreate === null) {
+                  return res.status(404).json({
+                    status: 404,
+                    message:
+                      "Impossible de créer un utilisateur, veuillez réessayer",
+                  });
+                } else {
+                  let smtpTransport = nodemailer.createTransport({
+                    service: "Gmail",
+                    auth: {
+                      user: process.env.SECRET_SMTP_EMAIL,
+                      pass: process.env.SECRET_SMTP_PASSWORD,
+                    },
+                  });
+                  let mailOptions = {
+                    from: process.env.SECRET_SMTP_EMAIL,
+                    to: process.env.SECRET_SMTP_EMAIL,
+                    subject: "Validation de votre compte",
+                    html: `<div><h1>tds coaching</h1><p>Cliquer sur le lien pour valider votre compte</p><p>Ce lien est valide pendant 1 jour</p><p>Votre compte sera supprimé si vous ne valider pas votre comtpe</p><a href='http://localhost:3000/email-validation/${token}'>Cliquer ici</a></div>`,
+                  };
+                  smtpTransport.sendMail(mailOptions);
+                  return res.status(200).json({
+                    status: 200,
+                    message:
+                      "Un email vous a été envoyer pour activer votre compte",
+                  });
+                }
+              } else {
+                return res.status(404).json({
+                  status: 404,
+                  message:
+                    "Un utilisateur utilise déjà ce numéro de téléphone, veuillez réessayer",
+                });
+              }
+            } else {
+              return res.status(404).json({
+                status: 404,
+                message:
+                  "Un utilisateur utilise déjà ce numéro de téléphone, veuillez réessayer",
+              });
+            }
+          }
         }
       }
     } else {

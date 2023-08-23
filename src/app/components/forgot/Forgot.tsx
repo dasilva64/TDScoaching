@@ -5,9 +5,11 @@ import { useDispatch } from "react-redux";
 import fetchUserForgotEmail from "../fetch/user/fetchUserForgot";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
+import validator from "validator";
 import fetchUserReSendForgotPassword from "../fetch/user/fetchUserReSendForgotPassword";
 
 const Forgot = () => {
+  const [inputPseudo, setInputPseudo] = useState<string>("");
   const [inputEmail, setInputEmail] = useState<string>("");
   const [validInputEmail, setValidInputEmail] = useState<boolean>(false);
   const [inputEmailError, setInputEmailError] = useState<string>("");
@@ -26,6 +28,12 @@ const Forgot = () => {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
+        });
+      } else if (data.status === 400) {
+        data.message.forEach((element: string) => {
+          if (element[0] === "email") {
+            setInputEmailError(element[1]);
+          }
         });
       } else {
         if (data.type === "reset") {
@@ -69,7 +77,10 @@ const Forgot = () => {
     e.preventDefault();
     if (validInputEmail === true) {
       const fetchApi = async () => {
-        trigger({ email: inputEmail });
+        trigger({
+          email: validator.escape(inputEmail.trim()),
+          pseudo: validator.escape(inputPseudo.trim()),
+        });
       };
       fetchApi();
     } else {
@@ -131,6 +142,7 @@ const Forgot = () => {
           className={styles.forgot__form}
         >
           <TextField
+            autoFocus
             value={inputEmail}
             style={{ margin: "10px 0px" }}
             id={"email"}
@@ -151,6 +163,17 @@ const Forgot = () => {
             }}
             helperText={inputEmailError}
           />
+          <input
+            type="text"
+            name="pseudo"
+            id="pseudo"
+            style={{ display: "none" }}
+            tabIndex={-1}
+            autoComplete="off"
+            onChange={(e) => {
+              setInputPseudo(e.target.value);
+            }}
+          />
 
           <div className={styles.forgot__form__submit}>
             <input
@@ -166,7 +189,7 @@ const Forgot = () => {
               className={styles.forgot__form__submit__btn}
               onClick={() => {
                 const fetchApi = async () => {
-                  triggerReSend({ email: emailUser });
+                  triggerReSend({ email: validator.escape(emailUser.trim()) });
                 };
                 fetchApi();
               }}

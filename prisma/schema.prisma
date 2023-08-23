@@ -39,5 +39,6 @@ model User {
   editPhone     Json?     @db.Json
   twoFactorCode Json?     @db.Json
   meetingId     String?   @db.Uuid
+  birth         String    @db.VarChar
   Meeting       Meeting[]
 }

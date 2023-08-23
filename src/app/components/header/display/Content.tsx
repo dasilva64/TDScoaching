@@ -110,6 +110,7 @@ const Content = () => {
                             let response = await fetch("/api/user/logout");
                             let json = await response.json();
                             if (json && json.status === 200) {
+                              setDisplayLogMenu(false);
                               dispatch({
                                 type: "flash/storeFlashMessage",
                                 payload: {
@@ -119,7 +120,7 @@ const Content = () => {
                               });
 
                               await new Promise((resolve) =>
-                                setTimeout(resolve, 2000)
+                                setTimeout(resolve, 1000)
                               );
 
                               window.location.reload();
@@ -179,6 +180,7 @@ const Content = () => {
                             let response = await fetch("/api/user/logout");
                             let json = await response.json();
                             if (json && json.status === 200) {
+                              setDisplayLogMenu(false);
                               dispatch({
                                 type: "flash/storeFlashMessage",
                                 payload: {
@@ -187,7 +189,7 @@ const Content = () => {
                                 },
                               });
                               await new Promise((resolve) =>
-                                setTimeout(resolve, 2000)
+                                setTimeout(resolve, 1000)
                               );
                               window.location.reload();
                             }
@@ -521,7 +523,7 @@ const Content = () => {
                 tabIndex={0}
                 href="/"
                 onClick={(e) => {
-                  isClick === true ? setIsClick(false) : null;
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
                 }}
               >
                 Accueil
@@ -537,7 +539,7 @@ const Content = () => {
                 tabIndex={0}
                 href="/qui-suis-je"
                 onClick={(e) => {
-                  isClick === true ? setIsClick(false) : null;
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
                 }}
               >
                 Qui suis-je ?
@@ -552,7 +554,7 @@ const Content = () => {
                 }
                 href="/coaching-de-vie"
                 onClick={(e) => {
-                  isClick === true ? setIsClick(false) : null;
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
                 }}
               >
                 Coaching de vie
@@ -582,7 +584,7 @@ const Content = () => {
                     tabIndex={0}
                     href="/coaching-de-vie/vie-familiale"
                     onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
+                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
                     }}
                   >
                     Vie familiale
@@ -598,7 +600,7 @@ const Content = () => {
                     tabIndex={0}
                     href="/coaching-de-vie/vie-de-couple"
                     onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
+                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
                     }}
                   >
                     Vie de couple
@@ -614,7 +616,7 @@ const Content = () => {
                     tabIndex={0}
                     href="/coaching-de-vie/vie-professionnelle"
                     onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
+                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
                     }}
                   >
                     Vie professionnelle
@@ -649,7 +651,7 @@ const Content = () => {
                     tabIndex={0}
                     href="/modalite"
                     onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
+                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
                     }}
                   >
                     {" "}
@@ -666,7 +668,7 @@ const Content = () => {
                     tabIndex={0}
                     href="/tarif"
                     onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
+                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
                     }}
                   >
                     Tarif / Durée
@@ -682,7 +684,7 @@ const Content = () => {
                     tabIndex={0}
                     href="/code-de-deontologie"
                     onClick={(e) => {
-                      isClick === true ? setIsClick(false) : null;
+                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
                     }}
                   >
                     Code de déontologie
@@ -699,7 +701,7 @@ const Content = () => {
                 }
                 href="/contact"
                 onClick={(e) => {
-                  isClick === true ? setIsClick(false) : null;
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
                 }}
               >
                 Contact
@@ -716,19 +718,21 @@ const Content = () => {
             <div className={styles.header__burger__line}>
               <span
                 className={
-                  isClick
+                  displayLogMenu
                     ? `${styles.header__cross} ${styles.header__bar1__rotate}`
                     : `${styles.header__bar} ${styles.header__bar1}`
                 }
               ></span>
               <span
                 className={
-                  isClick ? "" : `${styles.header__bar} ${styles.header__bar2}`
+                  displayLogMenu
+                    ? ""
+                    : `${styles.header__bar} ${styles.header__bar2}`
                 }
               ></span>
               <span
                 className={
-                  isClick
+                  displayLogMenu
                     ? `${styles.header__cross} ${styles.header__bar2__rotate}`
                     : `${styles.header__bar} ${styles.header__bar3}`
                 }

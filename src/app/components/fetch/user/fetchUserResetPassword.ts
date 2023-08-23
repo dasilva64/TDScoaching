@@ -1,6 +1,6 @@
 const fetchUserResetPassword = async (
   url: string,
-  { arg }: { arg: { password: string; token: string } }
+  { arg }: { arg: { password: string; token: string; pseudo: string } }
 ) => {
   let response = await fetch(url, {
     method: "post",

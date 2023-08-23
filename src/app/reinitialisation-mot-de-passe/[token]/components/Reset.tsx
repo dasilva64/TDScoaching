@@ -8,13 +8,14 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 import fetchUserResetPassword from "../../../components/fetch/user/fetchUserResetPassword";
 import { TextField } from "@mui/material";
+import validator from "validator";
 
 const Reset = () => {
   const queryParam: any = usePathname();
   let token = queryParam.toString().split("/");
-  console.log(token);
   const dispatch = useDispatch<AppDispatch>();
 
+  const [inputPseudo, setInputPseudo] = useState<string>("");
   const { push } = useRouter();
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>("");
@@ -37,6 +38,12 @@ const Reset = () => {
           payload: { flashMessage: data.message, type: "success" },
         });
         push("/");
+      } else if (data.status === 400) {
+        data.message.forEach((element: string) => {
+          if (element[0] === "password") {
+            setPasswordInputError(element[1]);
+          }
+        });
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -50,16 +57,21 @@ const Reset = () => {
     e.preventDefault();
     if (validPasswordInput === true && validPasswordComfirmInput === true) {
       const fetchReset = async () => {
-        console.log(token[2]);
-        trigger({ password: passwordInput, token: token[2] });
+        trigger({
+          password: validator.escape(passwordInput.trim()),
+          token: validator.escape(token[2].trim()),
+          pseudo: validator.escape(inputPseudo.trim()),
+        });
       };
       fetchReset();
     } else {
       if (validPasswordInput === false) {
-        setPasswordInputError("Password : need to be not empty");
+        setPasswordInputError("Mot de passe : ne doit pas être vide");
       }
       if (validPasswordComfirmInput === false) {
-        setPasswordComfirmError("Password Comfirm : need to be not empty");
+        setPasswordComfirmError(
+          "Comfirmation mot de passe : ne doit pas être vide"
+        );
       }
     }
   };
@@ -72,11 +84,19 @@ const Reset = () => {
     setInput: React.Dispatch<React.SetStateAction<string>>,
     errorMessage: string
   ) => {
-    setInput(e.target.value);
-    if (regex.test(e.target.value)) {
+    let removeSpace = "";
+    if (e.target.value.charAt(0) === " ") {
+      removeSpace = e.target.value.replace(/\s/, "");
+      setInput(removeSpace);
+    } else {
+      removeSpace = e.target.value.replace(/\s+/g, "");
+      setInput(removeSpace);
+    }
+    setInput(removeSpace);
+    if (regex.test(removeSpace)) {
       if (
         passwordComfirmInput.length > 0 &&
-        e.target.value !== passwordComfirmInput
+        removeSpace !== passwordComfirmInput
       ) {
         setValidInput(true);
         setErrorMessage("");
@@ -90,10 +110,10 @@ const Reset = () => {
         setPasswordComfirmError("");
         setValidPasswordComfirmInput(true);
       }
-    } else if (e.target.value.length === 0) {
+    } else if (removeSpace.length === 0) {
       if (
         passwordComfirmInput.length > 0 &&
-        e.target.value !== passwordComfirmInput
+        removeSpace !== passwordComfirmInput
       ) {
         setValidInput(false);
         setErrorMessage("");
@@ -110,10 +130,10 @@ const Reset = () => {
     } else {
       if (
         passwordComfirmInput.length > 0 &&
-        e.target.value !== passwordComfirmInput
+        removeSpace !== passwordComfirmInput
       ) {
         setValidInput(false);
-        setErrorMessage("");
+        setErrorMessage(errorMessage);
         setPasswordComfirmError(
           "Comfirmation mot de passe : les mots de passe doivent être identique"
         );
@@ -135,6 +155,7 @@ const Reset = () => {
       }}
     >
       <TextField
+        autoFocus
         value={passwordInput}
         style={{ margin: "10px 0px" }}
         id={"password"}
@@ -165,8 +186,15 @@ const Reset = () => {
         placeholder={"Entrez comfirmation de votre mot de passe"}
         FormHelperTextProps={{ style: { color: "red" } }}
         onChange={(e) => {
-          setPasswordComfirmInput(e.target.value);
-          if (passwordInput.length > 0 && e.target.value !== passwordInput) {
+          let removeSpace = "";
+          if (e.target.value.charAt(0) === " ") {
+            removeSpace = e.target.value.replace(/\s/, "");
+            setPasswordComfirmInput(removeSpace);
+          } else {
+            removeSpace = e.target.value.replace(/\s+/g, "");
+            setPasswordComfirmInput(removeSpace);
+          }
+          if (passwordInput.length > 0 && removeSpace !== passwordInput) {
             setValidPasswordComfirmInput(false);
             setPasswordComfirmError(
               "Comfirmation mot de passe : les mots de passe doivent être identique"
@@ -178,6 +206,17 @@ const Reset = () => {
           }
         }}
         helperText={passwordComfirmInputError}
+      />
+      <input
+        type="text"
+        name="pseudo"
+        id="pseudo"
+        style={{ display: "none" }}
+        tabIndex={-1}
+        autoComplete="off"
+        onChange={(e) => {
+          setInputPseudo(e.target.value);
+        }}
       />
       <div className={styles.reset__form__submit}>
         <input

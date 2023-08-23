@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import jsonwebtoken from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import validator from "validator";
+import { validationBody } from "../../../lib/validation";
 
 export default async function forgotPassword(
   req: NextApiRequest,
@@ -9,7 +11,16 @@ export default async function forgotPassword(
 ) {
   if (req.method === "POST") {
     let { email } = await req.body;
-    const user = await prisma.user.findUnique({ where: { mail: email } });
+    let arrayMessageError = validationBody(req.body);
+    if (arrayMessageError.length > 0) {
+      return res.status(400).json({
+        status: 400,
+        message: arrayMessageError,
+      });
+    }
+    const user = await prisma.user.findUnique({
+      where: { mail: validator.escape(email.trim()) },
+    });
     if (user === null) {
       return res.status(404).json({
         status: 404,
@@ -28,7 +39,7 @@ export default async function forgotPassword(
           limitDate: currentDate.setMinutes(currentDate.getMinutes() + 30),
         };
         let editUser = await prisma.user.update({
-          where: { mail: email },
+          where: { mail: validator.escape(email.trim()) },
           data: { resetToken: resetTokenObject },
         });
         let smtpTransport = nodemailer.createTransport({
@@ -44,13 +55,7 @@ export default async function forgotPassword(
           subject: "Réinitialisation du mot de passe",
           html: `<div><h1>tds coaching</h1><p>Cliquer sur le lien pour réinitialiser votre mot de passe</p><p>Ce lien n'est disponible pendant 1 jour</p><a href='http://localhost:3000/reinitialisation-mot-de-passe/${token}'>Cliquer ici</a></div>`,
         };
-        smtpTransport.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log("succes");
-          }
-        });
+        smtpTransport.sendMail(mailOptions);
         res.status(200).json({
           status: 200,
           message: "Un email vous a été envoyer pour récupérer votre compte",

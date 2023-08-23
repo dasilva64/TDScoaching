@@ -17,7 +17,7 @@ export default withIronSessionApiRoute(
           message: arrayMessageError,
         });
       }
-      if (pseudo !== "") {
+      if (pseudo.trim() !== "") {
         return res.status(404).json({
           status: 404,
           message:
@@ -25,7 +25,7 @@ export default withIronSessionApiRoute(
         });
       } else {
         const user = await prisma.user.findUnique({
-          where: { mail: validator.escape(email) },
+          where: { mail: validator.escape(email.trim()) },
         });
 
         let smtpTransport = nodemailer.createTransport({
@@ -40,9 +40,9 @@ export default withIronSessionApiRoute(
             from: process.env.SECRET_SMTP_EMAIL,
             to: process.env.SECRET_SMTP_EMAIL,
             subject: object,
-            html: `<div><h1>${validator.escape(firstname)} ${validator.escape(
-              lastname
-            )}</h1><p>${validator.escape(
+            html: `<div><h1>${validator.escape(
+              firstname.trim()
+            )} ${validator.escape(lastname.trim())}</h1><p>${validator.escape(
               message
             )}</p><p>pas de compte</p></div>`,
           };
@@ -52,9 +52,11 @@ export default withIronSessionApiRoute(
             from: process.env.SECRET_SMTP_EMAIL,
             to: process.env.SECRET_SMTP_EMAIL,
             subject: object,
-            html: `<div><h1>${validator.escape(firstname)} ${validator.escape(
-              lastname
-            )}</h1><p>${validator.escape(message)}</p><p>compte</p></div>`,
+            html: `<div><h1>${validator.escape(
+              firstname.trim()
+            )} ${validator.escape(lastname.trim())}</h1><p>${validator.escape(
+              message.trim()
+            )}</p><p>compte</p></div>`,
           };
           smtpTransport.sendMail(mailOptions);
         }

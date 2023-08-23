@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import styles from "./formLogin.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 import { mutate } from "swr";
+import validator from "validator";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
+import fetchUserReSendEmailValidation from "../fetch/user/fetchUserReSendEmailValidation";
+import useSWRMutation from "swr/mutation";
 
 const FormLogin = () => {
-  const { isLog } = useSelector((state: RootState) => state.auth);
-
   const dispatch = useDispatch<AppDispatch>();
+  const [inputPseudo, setInputPseudo] = useState<string>("");
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [rememberMeInput, setRememberMeInput] = useState<boolean>(false);
@@ -16,10 +18,35 @@ const FormLogin = () => {
   const [validPasswordInput, setValidPasswordInput] = useState<boolean>(false);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
   const [errorMessagePassword, setErrorMessagePassword] = useState<string>("");
+  const [reSendEmail, setReSendEmail] = useState<boolean>(false);
+  const [otherEmail, setOtherEmail] = useState<string>("");
+  const el = useRef(null);
 
   const handlerInputRememberMe = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRememberMeInput(e.target.checked);
   };
+
+  const { data, trigger } = useSWRMutation(
+    "/api/user/reSendEmailValidation",
+    fetchUserReSendEmailValidation
+  );
+
+  useEffect(() => {
+    if (data) {
+      if (data.status === 200) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: data.message },
+        });
+        setReSendEmail(false);
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+      }
+    }
+  }, [data, dispatch]);
 
   const closeForm = () => {
     dispatch({
@@ -39,14 +66,17 @@ const FormLogin = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            mail: emailInput,
-            password: passwordInput,
+            email: validator.escape(emailInput.trim()),
+            password: validator.escape(passwordInput.trim()),
             remember: rememberMeInput,
+            pseudo: validator.escape(inputPseudo.trim()),
           }),
         });
         let json = await response.json();
         if (json) {
           if (json.status === 200) {
+            setValidEmailInput(false);
+            setValidPasswordInput(false);
             mutate("/api/user/check");
             dispatch({
               type: "form/toggleLogin",
@@ -62,9 +92,38 @@ const FormLogin = () => {
               type: "flash/storeFlashMessage",
               payload: { type: "success", flashMessage: json.message },
             });
+          } else if (json.status === 400) {
+            json.message.forEach((element: string) => {
+              if (element[0] === "email") {
+                setErrorMessageEmail(element[1]);
+              }
+              if (element[0] === "password") {
+                setErrorMessagePassword(element[1]);
+              }
+            });
+            setValidEmailInput(false);
+            setValidPasswordInput(false);
+            setPasswordInput("");
+          } else if (
+            json.status === 404 &&
+            json.message ===
+              "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
+          ) {
+            setReSendEmail(true);
+            setOtherEmail(emailInput);
+            setValidEmailInput(false);
+            setValidPasswordInput(false);
+            setPasswordInput("");
+            setEmailInput("");
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "error", flashMessage: json.message },
+            });
           } else {
             setPasswordInput("");
             setEmailInput("");
+            setValidEmailInput(false);
+            setValidPasswordInput(false);
             dispatch({
               type: "flash/storeFlashMessage",
               payload: { type: "error", flashMessage: json.message },
@@ -72,15 +131,17 @@ const FormLogin = () => {
           }
         }
       };
-      if (isLog === false) {
+      if (inputPseudo.length === 0) {
         fetchLogin();
       }
     } else {
       if (validEmailInput === false) {
-        setErrorMessageEmail("Email : ne doit pas être vide");
+        setErrorMessageEmail("Email : doit avoir un format valide");
       }
       if (validPasswordInput === false) {
-        setErrorMessagePassword("Password : ne doit pas être vide");
+        setErrorMessagePassword(
+          "Mot de passe : doit avoir une lettre en minuscule, un nombre et 8 caractères minimum"
+        );
       }
     }
   };
@@ -121,6 +182,7 @@ const FormLogin = () => {
           }}
         >
           <TextField
+            autoFocus
             value={emailInput}
             id={"email"}
             label={"Email"}
@@ -176,6 +238,17 @@ const FormLogin = () => {
             label="Se souvenir de moi"
             labelPlacement="start"
           />
+          <input
+            type="text"
+            name="pseudo"
+            id="pseudo"
+            style={{ display: "none" }}
+            tabIndex={-1}
+            autoComplete="off"
+            onChange={(e) => {
+              setInputPseudo(e.target.value);
+            }}
+          />
           <div className={styles.login__form__submit}>
             <input
               className={styles.login__form__submit__btn}
@@ -184,6 +257,19 @@ const FormLogin = () => {
             />
           </div>
         </form>
+        {reSendEmail === true && (
+          <div className={styles.login__forgot}>
+            <button
+              className={styles.login__forgot__btn}
+              onClick={() => {
+                trigger({ email: otherEmail });
+              }}
+            >
+              Renvoyer un mail de validation à {otherEmail}
+            </button>
+          </div>
+        )}
+
         <div className={styles.login__forgot}>
           <button
             className={styles.login__forgot__btn}
@@ -216,3 +302,5 @@ const FormLogin = () => {
 };
 
 export default FormLogin;
+
+// /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}$/,

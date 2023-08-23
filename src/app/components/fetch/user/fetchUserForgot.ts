@@ -1,6 +1,6 @@
 const fetchUserForgot = async (
   url: string,
-  { arg }: { arg: { email: string } }
+  { arg }: { arg: { email: string; pseudo: string } }
 ) => {
   let response = await fetch(url, {
     method: "POST",

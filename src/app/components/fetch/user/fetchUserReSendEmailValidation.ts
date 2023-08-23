@@ -1,18 +1,6 @@
-const fetchUserRegister = async (
+const fetchUserReSendEmailValidation = async (
   url: string,
-  {
-    arg,
-  }: {
-    arg: {
-      email: string;
-      password: string;
-      firstname: string;
-      lastname: string;
-      phone: string;
-      birth: string;
-      pseudo: string;
-    };
-  }
+  { arg }: { arg: { email: string } }
 ) => {
   let response = await fetch(url, {
     method: "POST",
@@ -26,4 +14,4 @@ const fetchUserRegister = async (
   return json;
 };
 
-export default fetchUserRegister;
+export default fetchUserReSendEmailValidation;

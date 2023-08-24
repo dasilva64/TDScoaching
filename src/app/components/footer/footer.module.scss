@@ -1,5 +1,6 @@
 .footer {
   padding-bottom: 20px;
+  background: beige;
   &__container {
     display: flex;
     justify-content: space-around;
@@ -50,9 +51,9 @@
         line-height: 30px;
       }
     }
-    &__a, &__li {
+    &__a,
+    &__li {
       font-size: 14px;
     }
   }
-
 }

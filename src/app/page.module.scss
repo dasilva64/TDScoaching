@@ -4,58 +4,53 @@ $primary-color: white;
   primaryColor: $primary-color;
 }
 .home {
+  &__bg {
+    margin-top: 20px;
+    height: calc(100vh - 124px);
+    width: 100%;
+    position: relative;
+    &__div {
+      position: absolute;
+      background-color: white;
+      width: 400px;
+      top: 50%;
+      left: 80%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: 2px 2px 2px 2px black, 0 0 25px aqua, 0 0 5px darkblue,
+        0 0 5px darkblue;
+      &__p {
+        margin-top: 30px;
+      }
+      &__div {
+        margin-top: 30px;
+        text-align: center;
+        &__btn {
+          cursor: pointer;
+          padding: 10px;
+          border: 2px solid aqua;
+          color: black;
+          border-radius: 10px;
+          background-color: white;
+          transition: all 400ms;
+          &:hover {
+            color: white;
+            background-color: aqua;
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+  }
   &__h1 {
     margin-top: 80px;
     font-size: 60px;
   }
   &__container {
-    background-color: rgb(0, 191, 255);
     margin-top: 45px;
     padding-top: 30px;
     padding-bottom: 100px;
-  }
-  &__span {
-    position: relative;
-    display: inline-block;
-    animation: test 1s both;
-    -webkit-animation: test 1s both;
-
-    &__2 {
-      animation-delay: 1.1s;
-      -webkit-animation-delay: 0.1s;
-    }
-    &__3 {
-      animation-delay: 1.2s;
-      -webkit-animation-delay: 0.2s;
-    }
-    &__4 {
-      animation-delay: 1.3s;
-      -webkit-animation-delay: 0.3s;
-    }
-    &__5 {
-      animation-delay: 1.4s;
-      -webkit-animation-delay: 0.4s;
-    }
-    &__6 {
-      animation-delay: 1.5s;
-      -webkit-animation-delay: 0.5s;
-    }
-    &__7 {
-      animation-delay: 1.6s;
-      -webkit-animation-delay: 0.6s;
-    }
-    &__8 {
-      animation-delay: 1.7s;
-      -webkit-animation-delay: 0.7s;
-    }
-    &__9 {
-      animation-delay: 1.8;
-      -webkit-animation-delay: 0.8s;
-    }
-    &__10 {
-      animation-delay: 1.9s;
-      -webkit-animation-delay: 0.9s;
-    }
   }
   &__article {
     margin-left: 10%;
@@ -63,7 +58,7 @@ $primary-color: white;
     text-align: justify;
     &__h2 {
       text-align: center;
-      color: $primary-color;
+      color: black;
       margin-top: 100px;
       margin-bottom: 60px;
       font-size: 30px;
@@ -73,32 +68,41 @@ $primary-color: white;
     }
   }
   &__divImg {
-    width: 30%;
     display: flex;
     margin-top: auto;
     margin-bottom: auto;
     border-radius: 20px;
+    transition: all 300ms ease-in;
+    &:hover {
+      transform: scale(1.05);
+    }
   }
   &__divP {
-    &__little {
-      border: 1px solid orange;
-      box-shadow: 10px 10px orange;
+    &__middle {
       border-radius: 20px;
-      padding: 20px;
-      padding-left: 30px;
-      background-color: white;
+      padding: 20px 20px 20px 0px;
       margin-top: auto;
       margin-bottom: auto;
+      color: black;
+      width: 100%;
+    }
+    &__little {
+      border-radius: 20px;
+      padding: 20px 20px 20px 0px;
+      color: black;
       width: 55%;
+      &__div {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
     }
     &__big {
-      border: 1px solid orange;
-      box-shadow: 10px 10px orange;
       border-radius: 20px;
-      padding: 20px;
-      padding-left: 30px;
-      background-color: white;
+      padding: 20px 20px 20px 0px;
       margin-top: auto;
+      color: black;
       margin-bottom: auto;
       width: 100%;
     }
@@ -108,6 +112,7 @@ $primary-color: white;
   }
   &__div {
     &__flex {
+      margin-top: 40px;
       display: flex;
       justify-content: space-between;
     }
@@ -141,8 +146,8 @@ $primary-color: white;
     }
     &__divP {
       &__little {
-        border: 1px solid orange;
-        box-shadow: 10px 10px orange;
+        border: 1px solid beige;
+        box-shadow: 10px 10px beige;
         border-radius: 20px;
         padding: 10px;
 
@@ -151,8 +156,8 @@ $primary-color: white;
         width: unset;
       }
       &__big {
-        border: 1px solid orange;
-        box-shadow: 10px 10px orange;
+        border: 1px solid beige;
+        box-shadow: 10px 10px beige;
         border-radius: 20px;
         padding: 10px;
 

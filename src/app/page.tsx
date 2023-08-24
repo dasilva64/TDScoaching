@@ -55,15 +55,15 @@ export default function Home() {
             nos relations personnelles, au sein de notre famille ou dans notre
             parcours professionnel, il est naturel de désirer un état de
             bien-être et de sérénité. Cependant, la réalité est que souvent, ces
-            aspirations se perdent dans le tumulte de la vie quotidienne. C'est
-            ici que le coaching de vie entre en jeu en tant que phare guidant à
-            travers les eaux troubles. Imaginez avoir un partenaire dédié, un
-            professionnel qualifié, qui vous aide à démêler les nœuds
+            aspirations se perdent dans le tumulte de la vie quotidienne.
+            C&apos;est ici que le coaching de vie entre en jeu en tant que phare
+            guidant à travers les eaux troubles. Imaginez avoir un partenaire
+            dédié, un professionnel qualifié, qui vous aide à démêler les nœuds
             émotionnels, à identifier les schémas négatifs qui entravent votre
             progression et à concevoir une feuille de route personnalisée vers
             la tranquillité que vous cherchez. Le coaching de vie se révèle être
-            bien plus qu'une simple consultation : c'est une relation
-            d'accompagnement où votre coach est investi dans votre
+            bien plus qu&apos;une simple consultation : c&apos;est une relation
+            d&apos;accompagnement où votre coach est investi dans votre
             transformation personnelle.
           </p>
           <div className={styles.home__div__flex}>
@@ -171,10 +171,10 @@ export default function Home() {
                   borderRadius: "10px",
                 }}
               >
-                <h3>Energie a l'état pur</h3>
+                <h3>Energie a l&apos;état pur</h3>
                 <p>
-                  J'ai besion de me rebooster pour me sentir à nouveau en pleine
-                  forme et retoruver ma motivation
+                  J&apos;ai besion de me rebooster pour me sentir à nouveau en
+                  pleine forme et retoruver ma motivation
                 </p>
               </div>
               <div
@@ -186,9 +186,9 @@ export default function Home() {
               >
                 <h3>Se reconstruire</h3>
                 <p>
-                  Je désire repartir de l'avant après une période difficile ou
-                  un échec pour mieux accepter la situation, retrouver ma paix
-                  intérieure et ma joie de vivre.
+                  Je désire repartir de l&apos;avant après une période difficile
+                  ou un échec pour mieux accepter la situation, retrouver ma
+                  paix intérieure et ma joie de vivre.
                 </p>
               </div>
               <div
@@ -200,8 +200,9 @@ export default function Home() {
               >
                 <h3>Trouver sa voie</h3>
                 <p>
-                  J'ai envie de mieux me connaitre pour définir un projet qui me
-                  corresponde et dans lequel je m'épanouirai pleinement.
+                  J&apos;ai envie de mieux me connaitre pour définir un projet
+                  qui me corresponde et dans lequel je m&apos;épanouirai
+                  pleinement.
                 </p>
               </div>
             </div>

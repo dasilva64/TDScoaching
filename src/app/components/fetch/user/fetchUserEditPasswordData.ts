@@ -1,4 +1,7 @@
-const fetchUserEditPasswordData = async (url: string, { arg }: { arg: { password: string }}) => {
+const fetchUserEditPasswordData = async (
+  url: string,
+  { arg }: { arg: { password: string; pseudo: string } }
+) => {
   let response = await fetch("/api/user/editPasswordUser", {
     method: "post",
     headers: {

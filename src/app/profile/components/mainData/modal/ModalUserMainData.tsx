@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserMainData.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
+import validator from "validator";
 import fetchUserEditMainData from "@/app/components/fetch/user/fetchUserEditMainData";
 import { TextField } from "@mui/material";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const ModalUserMainData = () => {
   const { userData } = useUserGet();
+  const [inputPseudo, setInputPseudo] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
   const [firstnameInput, setFirstnameInput] = useState<string>(
     userData.body.firstname
@@ -39,6 +41,15 @@ const ModalUserMainData = () => {
         dispatch({
           type: "form/closeModalEditMainUserData",
         });
+      } else if (data.status === 400) {
+        data.message.forEach((element: string) => {
+          if (element[0] === "firstname") {
+            setErrorMessageFirstname(element[1]);
+          }
+          if (element[0] === "lastname") {
+            setErrorMessageLastname(element[1]);
+          }
+        });
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -63,10 +74,10 @@ const ModalUserMainData = () => {
         { revalidate: false }
       );
     };
-    if (data) {
+    if (data && data.body) {
       mutateMainData();
     }
-  });
+  }, [data, firstnameInput, lastnameInput]);
 
   const closeForm = () => {
     dispatch({
@@ -77,24 +88,22 @@ const ModalUserMainData = () => {
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validFirstnameInput === true || validLastnameInput === true) {
-      const fetchLogin = async () => {
-        trigger({ firstname: firstnameInput, lastname: lastnameInput });
-      };
-      fetchLogin();
-    } else {
-      if (userData.body.firstname === firstnameInput) {
-        setErrorMessageFirstname("Prénom : ne doit pas égal à l'ancien prénom");
+      if (inputPseudo.length === 0) {
+        const fetchLogin = async () => {
+          trigger({
+            firstname: validator.escape(firstnameInput.trim()),
+            lastname: validator.escape(lastnameInput.trim()),
+            pseudo: validator.escape(inputPseudo.trim()),
+          });
+        };
+        fetchLogin();
       }
+    } else {
       if (
         userData.body.firstname !== firstnameInput &&
         validFirstnameInput === false
       ) {
         setErrorMessageFirstname("Prénom : ne doit pas être vide");
-      }
-      if (userData.body.lastname === lastnameInput) {
-        setErrorMessageLastname(
-          "Nom de famille : ne doit pas égal à l'ancien nom de famille"
-        );
       }
       if (
         userData.body.lastname !== lastnameInput &&
@@ -113,11 +122,19 @@ const ModalUserMainData = () => {
     setInput: React.Dispatch<React.SetStateAction<string>>,
     errorMessage: string
   ) => {
-    setInput(e.target.value);
-    if (regex.test(e.target.value)) {
+    let removeSpace = "";
+    if (e.target.value.charAt(0) === " ") {
+      removeSpace = e.target.value.replace(/\s/, "");
+      setInput(removeSpace);
+    } else {
+      removeSpace = e.target.value.replace(/\s+/g, " ");
+      setInput(removeSpace);
+    }
+    setInput(removeSpace);
+    if (regex.test(removeSpace)) {
       setValidInput(true);
       setErrorMessage("");
-    } else if (e.target.value.length === 0) {
+    } else if (removeSpace.length === 0) {
       setValidInput(false);
       setErrorMessage("");
     } else {
@@ -159,7 +176,7 @@ const ModalUserMainData = () => {
               handlerInput(
                 e,
                 "firstname",
-                /^[A-Za-z]{3,}$/,
+                /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
                 setValidFirstnameInput,
                 setErrorMessageFirstname,
                 setFirstnameInput,
@@ -181,7 +198,7 @@ const ModalUserMainData = () => {
               handlerInput(
                 e,
                 "lastname",
-                /^[A-Za-z]{3,}$/,
+                /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
                 setValidLastnameInput,
                 setErrorMessageLastname,
                 setLastnameInput,
@@ -189,6 +206,17 @@ const ModalUserMainData = () => {
               );
             }}
             helperText={errorMessageLastname}
+          />
+          <input
+            type="text"
+            name="pseudo"
+            id="pseudo"
+            style={{ display: "none" }}
+            tabIndex={-1}
+            autoComplete="off"
+            onChange={(e) => {
+              setInputPseudo(e.target.value);
+            }}
           />
           <div className={styles.modalEditMainUserData__form__submit}>
             <input

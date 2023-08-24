@@ -6,10 +6,12 @@ import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 import fetchUserEditSendToken from "@/app/components/fetch/user/fetchUserEditSendToken";
 import { TextField } from "@mui/material";
+import validator from "validator";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const ModalUserSendToken = () => {
-  const {userData} = useUserGet()
+  const [inputPseudo, setInputPseudo] = useState<string>("");
+  const { userData } = useUserGet();
   const dispatch = useDispatch<AppDispatch>();
   const [emailInput, setEmailInput] = useState<string>(userData?.body.email);
   const [validEmailInput, setValidEmailInput] = useState<boolean>(false);
@@ -23,28 +25,18 @@ const ModalUserSendToken = () => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        const mutateUser = async () => {
-          let test = {newEmail: data.body.editEmail.newEmail,
-            limitDate: data.body.editEmail.limitDate,}
-          mutate(
-            "/api/user/getUser",
-            {
-              ...data,
-              body: {
-                ...data.body,
-                editEmail: test,
-              },
-            },
-            { revalidate: false }
-          );
-        };
-        mutateUser();
         dispatch({
           type: "form/openModalEditEmailData",
         });
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
+        });
+      } else if (data.status === 400) {
+        data.message.forEach((element: string) => {
+          if (element[0] === "email") {
+            setErrorMessageEmail(element[1]);
+          }
         });
       } else {
         dispatch({
@@ -54,6 +46,7 @@ const ModalUserSendToken = () => {
       }
     }
   }, [data, dispatch]);
+
   const closeForm = () => {
     dispatch({
       type: "form/closeModalEditEmailSendData",
@@ -67,10 +60,15 @@ const ModalUserSendToken = () => {
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validEmailInput === true) {
-      const fetchLogin = async () => {
-        trigger({ mail: emailInput });
-      };
-      fetchLogin();
+      if (inputPseudo.length === 0) {
+        const fetchLogin = async () => {
+          trigger({
+            email: validator.escape(emailInput.trim()),
+            pseudo: validator.escape(inputPseudo.trim()),
+          });
+        };
+        fetchLogin();
+      }
     } else {
       if (validEmailInput === false) {
         setErrorMessageEmail("Email : doit avoir un format valide");
@@ -86,11 +84,18 @@ const ModalUserSendToken = () => {
     setInput: React.Dispatch<React.SetStateAction<string>>,
     errorMessage: string
   ) => {
-    setInput(e.target.value);
-    if (regex.test(e.target.value)) {
+    let removeSpace = "";
+    if (e.target.value.charAt(0) === " ") {
+      removeSpace = e.target.value.replace(/\s/, "");
+      setInput(removeSpace);
+    } else {
+      removeSpace = e.target.value.replace(/\s+/g, " ");
+      setInput(removeSpace);
+    }
+    if (regex.test(removeSpace)) {
       setValidInput(true);
       setErrorMessage("");
-    } else if (e.target.value.length === 0) {
+    } else if (removeSpace.length === 0) {
       setValidInput(false);
       setErrorMessage("");
     } else {
@@ -123,7 +128,7 @@ const ModalUserSendToken = () => {
             id={"email"}
             label={"Email"}
             variant="standard"
-            type={"email"}
+            type={"text"}
             placeholder={"Entrez votre email"}
             FormHelperTextProps={{ style: { color: "red" } }}
             onChange={(e) => {
@@ -138,6 +143,17 @@ const ModalUserSendToken = () => {
               );
             }}
             helperText={errorMessageEmail}
+          />
+          <input
+            type="text"
+            name="pseudo"
+            id="pseudo"
+            style={{ display: "none" }}
+            tabIndex={-1}
+            autoComplete="off"
+            onChange={(e) => {
+              setInputPseudo(e.target.value);
+            }}
           />
           <div className={styles.modalEditEmailData__form__submit}>
             <input

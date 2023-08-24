@@ -9,12 +9,10 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import EmailCheck from "@/app/profile/components/emailData/EmailData";
 import ModalUserSendToken from "@/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
-import EmailValidData from "@/app/profile/components/emailValidData/EmailValidData";
 import ModalUserMainData from "@/app/profile/components/mainData/modal/ModalUserMainData";
 import ModalUserPasswordData from "@/app/profile/components/passwordData/modal/ModalUserPasswordData";
 import PhoneCheck from "@/app/profile/components/phoneData/PhoneData";
 import ModalPhoneSendTokenData from "@/app/profile/components/phoneSendTokenData/modal/ModalPhoneSendTokenData";
-import PhoneValidData from "@/app/profile/components/phoneValidData/PhoneValidData";
 import ModalTwoFactorDisable from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorDisable";
 import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorUser";
 import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
@@ -26,11 +24,20 @@ import useCheck from "../../hook/user/useCheck";
 import ModalAddMeeting from "@/app/rendez-vous/components/modal/ModalAddMeeting";
 import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteMeeting";
 import ModalDeleteAccount from "@/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
+import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalCloseEmail";
+import ModalClosePhone from "@/app/profile/components/phoneData/modal/ModalClosePhone";
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const fetchCheckUser = async () => {
+      let response = await fetch("/api/user/checkDelete");
+      let json = await response.json();
+    };
+    fetchCheckUser();
+  }, []);
   const { data, isLoading, isError } = useCheck();
   useEffect(() => {
     if (data) {
@@ -110,19 +117,9 @@ const Content = () => {
                             let response = await fetch("/api/user/logout");
                             let json = await response.json();
                             if (json && json.status === 200) {
-                              setDisplayLogMenu(false);
                               dispatch({
-                                type: "flash/storeFlashMessage",
-                                payload: {
-                                  type: "success",
-                                  flashMessage: json.message,
-                                },
+                                type: "auth/logout",
                               });
-
-                              await new Promise((resolve) =>
-                                setTimeout(resolve, 1000)
-                              );
-
                               window.location.reload();
                             }
                           };
@@ -180,17 +177,9 @@ const Content = () => {
                             let response = await fetch("/api/user/logout");
                             let json = await response.json();
                             if (json && json.status === 200) {
-                              setDisplayLogMenu(false);
                               dispatch({
-                                type: "flash/storeFlashMessage",
-                                payload: {
-                                  type: "success",
-                                  flashMessage: json.message,
-                                },
+                                type: "auth/logout",
                               });
-                              await new Promise((resolve) =>
-                                setTimeout(resolve, 1000)
-                              );
                               window.location.reload();
                             }
                           };
@@ -233,6 +222,8 @@ const Content = () => {
     displayModalCancelMeeting,
     displayModalMeeting,
     displayModalDeleteAccount,
+    displayModalCloseEmail,
+    displayModalClosePhone,
   } = useSelector((state: RootState) => state.form);
 
   const { flashMessage } = useSelector((state: RootState) => state.flash);
@@ -269,19 +260,19 @@ const Content = () => {
           displayModalCancelMeeting === true ||
           displayModalDeleteMeeting === true ||
           displayModalMeeting === true ||
-          displayModalDeleteAccount === true
+          displayModalDeleteAccount === true ||
+          displayModalCloseEmail === true ||
+          displayModalClosePhone === true
         ) {
           mainDiv.style.opacity = "0.1";
           footerDiv.style.opacity = "0.1";
           htlmElement.style.height = "100%";
           htlmbody.style.height = "100%";
-          htlmbody.style.overflow = "hidden";
         } else {
           mainDiv.style.opacity = "1";
           footerDiv.style.opacity = "1";
           htlmElement.style.height = "unset";
           htlmbody.style.height = "unset";
-          htlmbody.style.overflow = "unset";
         }
       }
     }
@@ -305,6 +296,8 @@ const Content = () => {
     displayModalDeleteMeeting,
     displayModalMeeting,
     displayModalDeleteAccount,
+    displayModalCloseEmail,
+    displayModalClosePhone,
   ]);
 
   const updateUseState = () => {
@@ -343,7 +336,9 @@ const Content = () => {
       displayModalCancelMeeting ||
       displayModalDeleteMeeting ||
       displayModalMeeting ||
-      displayModalDeleteAccount
+      displayModalDeleteAccount ||
+      displayModalCloseEmail ||
+      displayModalClosePhone
     ) {
       if (displayLogMenu === true) {
         if (flashMessage && flashMessage[1].length > 0) {
@@ -472,16 +467,17 @@ const Content = () => {
       {displayModalEditPasswordData && <ModalUserPasswordData />}
       {displayModalEditEmailSendData && <ModalUserSendToken />}
       {displayModalEditEmailData === true && <EmailCheck />}
-      {displayModalEditValidEmailData === true && <EmailValidData />}
       {displayModalEditPhoneSendData === true && <ModalPhoneSendTokenData />}
       {displayModalEditPhoneData === true && <PhoneCheck />}
-      {displayModalEditValidPhoneData === true && <PhoneValidData />}
       {displayModalTwoFactor === true && <ModalTwoFactor />}
       {displayModalTwoFactorDisable === true && <ModalTwoFactorDisable />}
       {displayModalCancelMeeting === true && <ModalCancel />}
       {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
       {displayModalMeeting === true && <ModalAddMeeting />}
       {displayModalDeleteAccount === true && <ModalDeleteAccount />}
+      {displayModalCloseEmail === true && <ModalCloseEmail />}
+      {displayModalClosePhone === true && <ModalClosePhone />}
+
       {displayFlash()}
       <header className={ClassName()}>
         <figure className={styles.header__figure}>

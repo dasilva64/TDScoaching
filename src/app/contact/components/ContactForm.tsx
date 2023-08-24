@@ -82,18 +82,20 @@ const ContactForm = () => {
       validinputMessage === true &&
       validinputObject === true
     ) {
-      const fetchContact = async () => {
-        trigger({
-          email: validator.escape(inputEmail.trim()),
-          firstname: validator.escape(inputFirstname.trim()),
-          lastname: validator.escape(inputLastname.trim()),
-          object: validator.escape(inputObject.trim()),
-          message: validator.escape(inputMessage.trim()),
-          pseudo: validator.escape(inputPseudo.trim()),
-        });
-      };
       if (inputPseudo.length === 0) {
-        fetchContact();
+        const fetchContact = async () => {
+          trigger({
+            email: validator.escape(inputEmail.trim()),
+            firstname: validator.escape(inputFirstname.trim()),
+            lastname: validator.escape(inputLastname.trim()),
+            object: validator.escape(inputObject.trim()),
+            message: validator.escape(inputMessage.trim()),
+            pseudo: validator.escape(inputPseudo.trim()),
+          });
+        };
+        if (inputPseudo.length === 0) {
+          fetchContact();
+        }
       }
     } else {
       if (validinputEmail === false) {

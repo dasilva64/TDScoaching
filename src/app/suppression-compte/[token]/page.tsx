@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./page.module.scss";
+import Display from "./components/Display";
 
 const page = () => {
   return (
@@ -10,7 +11,9 @@ const page = () => {
       <div className={styles.historique__container}>
         <div className={styles.historique__article}>
           <h2 className={styles.historique__article__h2}>en attente</h2>
-          <div></div>
+          <div className={styles.historique__article}>
+            <Display />
+          </div>
         </div>
       </div>
     </main>

@@ -113,7 +113,7 @@ const PhoneCheck = () => {
   };
   const closeForm = () => {
     dispatch({
-      type: "form/closeModalEditPhoneData",
+      type: "form/openModalClosePhone",
     });
   };
   const handlerInput = (

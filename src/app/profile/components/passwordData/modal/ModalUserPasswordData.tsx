@@ -8,6 +8,7 @@ import { TextField } from "@mui/material";
 
 const ModalUserPasswordData = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [inputPseudo, setInputPseudo] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>("");
   const [validPasswordInput, setValidPasswordInput] = useState<boolean>(false);
@@ -32,6 +33,12 @@ const ModalUserPasswordData = () => {
         dispatch({
           type: "form/closeModalEditPasswordData",
         });
+      } else if (data.status === 400) {
+        data.message.forEach((element: string) => {
+          if (element[0] === "password") {
+            setErrorMessagePassword(element[1]);
+          }
+        });
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -51,10 +58,12 @@ const ModalUserPasswordData = () => {
     e.preventDefault();
     if (validPasswordInput === true || validPasswordComfirmInput === true) {
       if (passwordInput === passwordComfirmInput) {
-        const fetchLogin = async () => {
-          trigger({ password: passwordInput });
-        };
-        fetchLogin();
+        if (inputPseudo.length === 0) {
+          const fetchLogin = async () => {
+            trigger({ password: passwordInput, pseudo: inputPseudo });
+          };
+          fetchLogin();
+        }
       } else {
         setValidPasswordInput(false);
         setValidPasswordComfirmInput(false);
@@ -82,11 +91,19 @@ const ModalUserPasswordData = () => {
     setInput: React.Dispatch<React.SetStateAction<string>>,
     errorMessage: string
   ) => {
-    setInput(e.target.value);
-    if (regex.test(e.target.value)) {
+    let removeSpace = "";
+    if (e.target.value.charAt(0) === " ") {
+      removeSpace = e.target.value.replace(/\s/, "");
+      setInput(removeSpace);
+    } else {
+      removeSpace = e.target.value.replace(/\s+/g, "");
+      setInput(removeSpace);
+    }
+    setInput(removeSpace);
+    if (regex.test(removeSpace)) {
       if (
         passwordComfirmInput.length > 0 &&
-        e.target.value !== passwordComfirmInput
+        removeSpace !== passwordComfirmInput
       ) {
         setValidInput(true);
         setErrorMessage("");
@@ -95,17 +112,17 @@ const ModalUserPasswordData = () => {
         );
         setValidPasswordComfirmInput(false);
       } else {
-        setErrorMessagePasswordComfirm("");
-        setValidPasswordComfirmInput(true);
         setValidInput(true);
         setErrorMessage("");
+        setErrorMessagePasswordComfirm("");
+        setValidPasswordComfirmInput(true);
       }
-    } else if (e.target.value.length === 0) {
+    } else if (removeSpace.length === 0) {
       if (
         passwordComfirmInput.length > 0 &&
-        e.target.value !== passwordComfirmInput
+        removeSpace !== passwordComfirmInput
       ) {
-        setValidInput(true);
+        setValidInput(false);
         setErrorMessage("");
         setErrorMessagePasswordComfirm(
           "Comfirmation mot de passe : les mots de passe doivent être identique"
@@ -120,10 +137,10 @@ const ModalUserPasswordData = () => {
     } else {
       if (
         passwordComfirmInput.length > 0 &&
-        e.target.value !== passwordComfirmInput
+        removeSpace !== passwordComfirmInput
       ) {
-        setValidInput(true);
-        setErrorMessage("");
+        setValidInput(false);
+        setErrorMessage(errorMessage);
         setErrorMessagePasswordComfirm(
           "Comfirmation mot de passe : les mots de passe doivent être identique"
         );
@@ -170,7 +187,7 @@ const ModalUserPasswordData = () => {
               handlerInput(
                 e,
                 "password",
-                /^(?=.*[a-z]).{1,}$/,
+                /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{2,}$/,
                 setValidPasswordInput,
                 setErrorMessagePassword,
                 setPasswordInput,
@@ -189,11 +206,15 @@ const ModalUserPasswordData = () => {
             placeholder={"Entrez votre comfirmation mot de passe"}
             FormHelperTextProps={{ style: { color: "red" } }}
             onChange={(e) => {
-              setPasswordComfirmInput(e.target.value);
-              if (
-                passwordInput.length > 0 &&
-                e.target.value !== passwordInput
-              ) {
+              let removeSpace = "";
+              if (e.target.value.charAt(0) === " ") {
+                removeSpace = e.target.value.replace(/\s/, "");
+                setPasswordComfirmInput(removeSpace);
+              } else {
+                removeSpace = e.target.value.replace(/\s+/g, "");
+                setPasswordComfirmInput(removeSpace);
+              }
+              if (passwordInput.length > 0 && removeSpace !== passwordInput) {
                 setValidPasswordComfirmInput(false);
                 setErrorMessagePasswordComfirm(
                   "Comfirmation mot de passe : les mots de passe doivent être identique"
@@ -203,17 +224,19 @@ const ModalUserPasswordData = () => {
 
                 setErrorMessagePasswordComfirm("");
               }
-              /* handlerInput(
-                e,
-                "comfirmPassword",
-                /^(?=.*[a-z]).{1,}$/,
-                setValidPasswordComfirmInput,
-                setErrorMessagePasswordComfirm,
-                setPasswordComfirmInput,
-                "Comfirmation mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
-              ); */
             }}
             helperText={errorMessagePasswordComfirm}
+          />
+          <input
+            type="text"
+            name="pseudo"
+            id="pseudo"
+            style={{ display: "none" }}
+            tabIndex={-1}
+            autoComplete="off"
+            onChange={(e) => {
+              setInputPseudo(e.target.value);
+            }}
           />
           <div className={styles.modalEditPasswordData__form__submit}>
             <input

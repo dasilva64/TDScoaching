@@ -56,14 +56,16 @@ const Reset = () => {
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validPasswordInput === true && validPasswordComfirmInput === true) {
-      const fetchReset = async () => {
-        trigger({
-          password: validator.escape(passwordInput.trim()),
-          token: validator.escape(token[2].trim()),
-          pseudo: validator.escape(inputPseudo.trim()),
-        });
-      };
-      fetchReset();
+      if (inputPseudo.length === 0) {
+        const fetchReset = async () => {
+          trigger({
+            password: validator.escape(passwordInput.trim()),
+            token: validator.escape(token[2].trim()),
+            pseudo: validator.escape(inputPseudo.trim()),
+          });
+        };
+        fetchReset();
+      }
     } else {
       if (validPasswordInput === false) {
         setPasswordInputError("Mot de passe : ne doit pas être vide");
@@ -167,7 +169,7 @@ const Reset = () => {
         onChange={(e) => {
           handlerInput(
             e,
-            /^(?=.*[a-z]).{1,}$/,
+            /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
             setValidPasswordInput,
             setPasswordInputError,
             setPasswordInput,

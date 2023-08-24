@@ -4,6 +4,7 @@ import React from "react";
 import styles from "./MeetingData.module.scss";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 const MeetingData = () => {
   const { userData, isLoading, isError } = useUserGet();
@@ -38,14 +39,16 @@ const MeetingData = () => {
                     className={`${styles.meetingData__ul__li} ${styles.meetingData__ul__li__margin}`}
                   >
                     Rendez-vous :{" "}
-                    {userData && userData.body.meetingId
-                      ? "test"
+                    {userData && userData.body.meeting
+                      ? dayjs(userData.body.meeting.startAt).format(
+                          "YYYY-MM-DD à HH"
+                        ) + "h"
                       : "Aucun de rendez-vous programmé"}
                   </li>
                 </ul>
 
                 <div className={styles.meetingData__div}>
-                  {userData && userData.body.meetings && (
+                  {userData && userData.body.meeting && (
                     <>
                       <Link
                         href={"/rendez-vous"}
@@ -55,7 +58,7 @@ const MeetingData = () => {
                       </Link>
                     </>
                   )}
-                  {userData && !userData.body.meetings && (
+                  {userData && !userData.body.meeting && (
                     <>
                       <Link
                         href={"/rendez-vous"}

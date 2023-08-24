@@ -1,6 +1,6 @@
 const fetchUserEditSendToken = async (
   url: string,
-  { arg }: { arg: { mail: string } }
+  { arg }: { arg: { email: string; pseudo: string } }
 ) => {
   let response = await fetch(url, {
     method: "post",

@@ -1,39 +1,59 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import prisma from "../../../lib/prisma";
+import { validationBody } from "../../../lib/validation";
+import validator from "validator";
 
 export default withIronSessionApiRoute(
   async function editMainUser(req, res) {
     if (req.method === "POST") {
       if (req.session.user) {
-        const { firstname, lastname } = await req.body;
-        let user = await prisma.user.findUnique({
-          where: { id: req.session.user.id },
-        });
-        if (user === null) {
+        const { firstname, lastname, pseudo } = await req.body;
+        let arrayMessageError = validationBody(req.body);
+        if (arrayMessageError.length > 0) {
           return res.status(400).json({
             status: 400,
-            message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
+            message: arrayMessageError,
+          });
+        }
+        if (pseudo.trim() !== "") {
+          return res.status(404).json({
+            status: 404,
+            message:
+              "Une erreur est survenue lors de l'envoie du message, veuillez réessayer plus tard",
           });
         } else {
-          let editUser = await prisma.user.update({
-            where: {
-              id: req.session.user.id,
-            },
-            data: { firstname: firstname, lastname: lastname },
+          let user = await prisma.user.findUnique({
+            where: { id: req.session.user.id },
           });
-          let userObject = {
-            id: editUser.id,
-            firstname: editUser.firstname,
-            lastname: editUser.lastname,
-            email: editUser.mail,
-            role: editUser.role,
-            phone: editUser.phone,
-          };
-          res.status(200).json({
-            status: 200,
-            message: "Vos informations ont été mis à jours avec succès",
-            body: userObject,
-          });
+          if (user === null) {
+            return res.status(400).json({
+              status: 400,
+              message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
+            });
+          } else {
+            let editUser = await prisma.user.update({
+              where: {
+                id: req.session.user.id,
+              },
+              data: {
+                firstname: validator.escape(firstname.trim()),
+                lastname: validator.escape(lastname.trim()),
+              },
+            });
+            let userObject = {
+              id: editUser.id,
+              firstname: editUser.firstname,
+              lastname: editUser.lastname,
+              email: editUser.mail,
+              role: editUser.role,
+              phone: editUser.phone,
+            };
+            res.status(200).json({
+              status: 200,
+              message: "Vos informations ont été mis à jours avec succès",
+              body: userObject,
+            });
+          }
         }
       } else {
         return res.status(404).json({

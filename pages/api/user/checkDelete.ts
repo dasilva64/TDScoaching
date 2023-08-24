@@ -4,7 +4,7 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { Prisma } from "@prisma/client";
 
 export default withIronSessionApiRoute(
-  async function check(req: any, res: NextApiResponse) {
+  async function checkDelete(req: any, res: NextApiResponse) {
     if (req.method === "GET") {
       if (req.session.user) {
         const user = await prisma.user.findUnique({
@@ -17,12 +17,26 @@ export default withIronSessionApiRoute(
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
           });
         } else {
+          console.log(user.editEmail);
+          if (user.editEmail !== null) {
+            console.log(user.editEmail);
+            let removeEditEmail = await prisma.user.update({
+              where: { mail: user.mail },
+              data: {
+                editEmail: Prisma.JsonNull,
+              },
+            });
+          }
+          if (user.editPhone !== null) {
+            let removeEditPhone = await prisma.user.update({
+              where: { mail: user.mail },
+              data: {
+                editPhone: Prisma.JsonNull,
+              },
+            });
+          }
           return res.status(200).json({
             status: 200,
-            body: {
-              id: user.id,
-              role: user.role,
-            },
           });
         }
       } else {

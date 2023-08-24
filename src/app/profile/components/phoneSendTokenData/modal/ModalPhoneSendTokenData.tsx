@@ -6,9 +6,11 @@ import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import { mutate } from "swr";
+import validator from "validator";
 import fetchUserEditPhoneSendTokenData from "@/app/components/fetch/user/fetchUserEditPhoneSendTokenData";
 
 const ModalUserPhoneData = () => {
+  const [inputPseudo, setInputPseudo] = useState<string>("");
   const { userData } = useUserGet();
   const dispatch = useDispatch<AppDispatch>();
   const [phoneInput, setPhoneInput] = useState<string>(userData?.body.phone);
@@ -23,9 +25,8 @@ const ModalUserPhoneData = () => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        console.log(data);
         const mutateUser = async () => {
-          let test = {
+          let editTokenPhoneObject = {
             newPhone: data.body.editPhone.newPhone,
             limitDate: data.body.editPhone.limitDate,
           };
@@ -35,13 +36,15 @@ const ModalUserPhoneData = () => {
               ...data,
               body: {
                 ...data.body,
-                editPhone: test,
+                editPhone: editTokenPhoneObject,
               },
             },
             { revalidate: false }
           );
         };
-        mutateUser();
+        if (data && data.body) {
+          mutateUser();
+        }
         dispatch({
           type: "form/openModalEditPhoneData",
         });
@@ -49,7 +52,12 @@ const ModalUserPhoneData = () => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
-        
+      } else if (data.status === 400) {
+        data.message.forEach((element: string) => {
+          if (element[0] === "phone") {
+            setErrorMessagePhone(element[1]);
+          }
+        });
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -72,12 +80,15 @@ const ModalUserPhoneData = () => {
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validPhoneInput === true) {
-      const fetchLogin = async () => {
-        trigger({
-          phone: phoneInput,
-        });
-      };
-      fetchLogin();
+      if (inputPseudo.length === 0) {
+        const fetchLogin = async () => {
+          trigger({
+            phone: validator.escape(phoneInput.trim()),
+            pseudo: validator.escape(inputPseudo.trim()),
+          });
+        };
+        fetchLogin();
+      }
     } else {
       if (validPhoneInput === false) {
         setErrorMessagePhone("Mot de passe : ne doit pas être vide");
@@ -93,11 +104,18 @@ const ModalUserPhoneData = () => {
     setInput: React.Dispatch<React.SetStateAction<string>>,
     errorMessage: string
   ) => {
-    setInput(e.target.value);
-    if (regex.test(e.target.value)) {
+    let removeSpace = "";
+    if (e.target.value.charAt(0) === " ") {
+      removeSpace = e.target.value.replace(/\s/, "");
+      setInput(removeSpace);
+    } else {
+      removeSpace = e.target.value.replace(/\s+/g, " ");
+      setInput(removeSpace);
+    }
+    if (regex.test(removeSpace)) {
       setValidInput(true);
       setErrorMessage("");
-    } else if (e.target.value.length === 0) {
+    } else if (removeSpace.length === 0) {
       setValidInput(false);
       setErrorMessage("");
     } else {
@@ -137,14 +155,25 @@ const ModalUserPhoneData = () => {
               handlerInput(
                 e,
                 "firstname",
-                /^[0-9]{10,10}$/,
+                /^[0](6|7)[0-9]{8,8}$/,
                 setValidPhoneInput,
                 setErrorMessagePhone,
                 setPhoneInput,
-                "Numéro de téléphone : 10 chiffres"
+                "Numéro de téléphone : doit être une numéro de téléphone valide commençant par 06 or 07"
               );
             }}
             helperText={errorMessagePhone}
+          />
+          <input
+            type="text"
+            name="pseudo"
+            id="pseudo"
+            style={{ display: "none" }}
+            tabIndex={-1}
+            autoComplete="off"
+            onChange={(e) => {
+              setInputPseudo(e.target.value);
+            }}
           />
           <div className={styles.modalEditPhoneData__form__submit}>
             <input

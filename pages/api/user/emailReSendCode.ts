@@ -19,7 +19,6 @@ export default withIronSessionApiRoute(
             let min = Math.ceil(10000000);
             let max = Math.floor(99999998);
             let random = Math.floor(Math.random() * (max - min + 1)) + min;
-            let current = new Date();
             let copyEditEmail: any = user.editEmail;
             let editUser = await prisma.user.update({
               where: { mail: user.mail },
@@ -27,7 +26,6 @@ export default withIronSessionApiRoute(
                 editEmail: {
                   token: random,
                   newEmail: copyEditEmail.newEmail,
-                  limitDate: current.setHours(current.getHours() + 1),
                 },
               },
             });
@@ -44,13 +42,7 @@ export default withIronSessionApiRoute(
               subject: "Validation de votre nouvelle adresse email",
               html: `<div><h1>tds coaching</h1><p>Cliquer sur le lien pour valider votre adresse email</p><p>Ce lien est valable 1 jours</p><p>Votre code de vérification est ${random}</p></div>`,
             };
-            smtpTransport.sendMail(mailOptions, function (error, info) {
-              if (error) {
-                console.log(error);
-              } else {
-                console.log("succes");
-              }
-            });
+            smtpTransport.sendMail(mailOptions);
             return res.json({
               status: 200,
               body: editUser,

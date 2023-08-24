@@ -2,7 +2,6 @@ import React, { use, useEffect, useRef, useState } from "react";
 import styles from "./formLogin.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { mutate } from "swr";
 import validator from "validator";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import fetchUserReSendEmailValidation from "../fetch/user/fetchUserReSendEmailValidation";
@@ -59,80 +58,66 @@ const FormLogin = () => {
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validEmailInput === true && validPasswordInput === true) {
-      const fetchLogin = async () => {
-        let response = await fetch("/api/user/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: validator.escape(emailInput.trim()),
-            password: validator.escape(passwordInput.trim()),
-            remember: rememberMeInput,
-            pseudo: validator.escape(inputPseudo.trim()),
-          }),
-        });
-        let json = await response.json();
-        if (json) {
-          if (json.status === 200) {
-            setValidEmailInput(false);
-            setValidPasswordInput(false);
-            mutate("/api/user/check");
-            dispatch({
-              type: "form/toggleLogin",
-            });
-            dispatch({
-              type: "auth/login",
-              payload: {
-                role: json.body.role,
-                id: json.body.id,
-              },
-            });
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "success", flashMessage: json.message },
-            });
-          } else if (json.status === 400) {
-            json.message.forEach((element: string) => {
-              if (element[0] === "email") {
-                setErrorMessageEmail(element[1]);
-              }
-              if (element[0] === "password") {
-                setErrorMessagePassword(element[1]);
-              }
-            });
-            setValidEmailInput(false);
-            setValidPasswordInput(false);
-            setPasswordInput("");
-          } else if (
-            json.status === 404 &&
-            json.message ===
-              "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
-          ) {
-            setReSendEmail(true);
-            setOtherEmail(emailInput);
-            setValidEmailInput(false);
-            setValidPasswordInput(false);
-            setPasswordInput("");
-            setEmailInput("");
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "error", flashMessage: json.message },
-            });
-          } else {
-            setPasswordInput("");
-            setEmailInput("");
-            setValidEmailInput(false);
-            setValidPasswordInput(false);
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "error", flashMessage: json.message },
-            });
-          }
-        }
-      };
       if (inputPseudo.length === 0) {
-        fetchLogin();
+        const fetchLogin = async () => {
+          let response = await fetch("/api/user/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: validator.escape(emailInput.trim()),
+              password: validator.escape(passwordInput.trim()),
+              remember: rememberMeInput,
+              pseudo: validator.escape(inputPseudo.trim()),
+            }),
+          });
+          let json = await response.json();
+          if (json) {
+            if (json.status === 200) {
+              window.location.reload();
+            } else if (json.status === 400) {
+              json.message.forEach((element: string) => {
+                if (element[0] === "email") {
+                  setErrorMessageEmail(element[1]);
+                }
+                if (element[0] === "password") {
+                  setErrorMessagePassword(element[1]);
+                }
+              });
+              setValidEmailInput(false);
+              setValidPasswordInput(false);
+              setPasswordInput("");
+            } else if (
+              json.status === 404 &&
+              json.message ===
+                "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
+            ) {
+              setReSendEmail(true);
+              setOtherEmail(emailInput);
+              setValidEmailInput(false);
+              setValidPasswordInput(false);
+              setPasswordInput("");
+              setEmailInput("");
+              dispatch({
+                type: "flash/storeFlashMessage",
+                payload: { type: "error", flashMessage: json.message },
+              });
+            } else {
+              setPasswordInput("");
+              setEmailInput("");
+              setValidEmailInput(false);
+              setValidPasswordInput(false);
+              dispatch({
+                type: "flash/storeFlashMessage",
+                payload: { type: "error", flashMessage: json.message },
+              });
+            }
+          }
+        };
+        if (inputPseudo.length === 0) {
+          fetchLogin();
+        }
       }
     } else {
       if (validEmailInput === false) {
@@ -155,11 +140,19 @@ const FormLogin = () => {
     setInput: React.Dispatch<React.SetStateAction<string>>,
     errorMessage: string
   ) => {
-    setInput(e.target.value);
-    if (regex.test(e.target.value)) {
+    let removeSpace = "";
+    if (e.target.value.charAt(0) === " ") {
+      removeSpace = e.target.value.replace(/\s/, "");
+      setInput(removeSpace);
+    } else {
+      removeSpace = e.target.value.replace(/\s\s+/g, " ");
+      setInput(removeSpace);
+    }
+    setInput(removeSpace);
+    if (regex.test(removeSpace)) {
       setValidInput(true);
       setErrorMessage("");
-    } else if (e.target.value.length === 0) {
+    } else if (removeSpace.length === 0) {
       setValidInput(false);
       setErrorMessage("");
     } else {
@@ -216,7 +209,7 @@ const FormLogin = () => {
               handlerInput(
                 e,
                 "password",
-                /^(?=.*[a-z]).{1,}$/,
+                /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
                 setValidPasswordInput,
                 setErrorMessagePassword,
                 setPasswordInput,

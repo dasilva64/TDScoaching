@@ -9,12 +9,18 @@ import useSWRMutation from "swr/mutation";
 import fetchUserEditEmailData from "@/app/components/fetch/user/fetchUserEditEmailData";
 import { TextField } from "@mui/material";
 import fetchReSendEmailCode from "@/app/components/fetch/user/useReSendEmail";
+import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const EmailCheck = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { displayModalEditEmailData } = useSelector(
     (state: RootState) => state.form
   );
+  const { userData, isLoading, isError } = useUserGet();
+  let content;
+  if (!isError && !isLoading && userData?.body.editEmail) {
+    content = <>{userData?.body.editEmail.newEmail}</>;
+  }
 
   const [codeInput, setCodeInput] = useState<string>("");
   const [validCodeInput, setValidCodeInput] = useState<boolean>(false);
@@ -46,7 +52,6 @@ const EmailCheck = () => {
 
   useEffect(() => {
     const mutateMainData = async () => {
-      console.log(data);
       let copyNewEmail = data.body.mail;
       mutate(
         "/api/user/getUser",
@@ -67,7 +72,7 @@ const EmailCheck = () => {
   }, [data]);
   const closeForm = () => {
     dispatch({
-      type: "form/closeModalEditEmailData",
+      type: "form/openModalCloseEmail",
     });
   };
   const { trigger: triggerReSendCode, data: dataReSendCode } = useSWRMutation(
@@ -157,8 +162,13 @@ const EmailCheck = () => {
             </span>
           </button>
           <h1 className={styles.modalEditEmailSendData__h1}>
-            Validation de votre email
+            Validation de votre nouvel email {content}
           </h1>
+          <p>
+            Afin de renforcer la sécurité de vos données et de vos documents,
+            nous devons vérifier votre adresse email. Nous vous avons envoyé un
+            email contenant un code de sécurité à 8 chiffres.
+          </p>
           <form
             className={styles.modalEditEmailSendData__form}
             action=""

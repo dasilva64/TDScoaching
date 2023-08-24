@@ -4,7 +4,7 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { Prisma } from "@prisma/client";
 
 export default withIronSessionApiRoute(
-  async function check(req: any, res: NextApiResponse) {
+  async function cancelEmail(req: any, res: NextApiResponse) {
     if (req.method === "GET") {
       if (req.session.user) {
         const user = await prisma.user.findUnique({
@@ -17,12 +17,26 @@ export default withIronSessionApiRoute(
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
           });
         } else {
+          const updateUser = await prisma.user.update({
+            where: { mail: user.mail },
+            data: {
+              editEmail: Prisma.JsonNull,
+            },
+          });
+          let userObject = {
+            id: updateUser.id,
+            role: updateUser.role,
+            firstname: updateUser.firstname,
+            lastname: updateUser.lastname,
+            email: updateUser.mail,
+            phone: updateUser.phone,
+            editPhone: updateUser.editPhone,
+            editEmail: updateUser.editEmail,
+          };
           return res.status(200).json({
             status: 200,
-            body: {
-              id: user.id,
-              role: user.role,
-            },
+            message: "Votre demande de modification d'email à été annulé",
+            body: userObject,
           });
         }
       } else {

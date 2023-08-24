@@ -50,6 +50,7 @@ const FormRegister = () => {
   );
 
   useEffect(() => {
+    console.log(data);
     if (data) {
       if (data.status === 200) {
         dispatch({
@@ -94,18 +95,18 @@ const FormRegister = () => {
       validPhoneInput === true &&
       validBirthInput === true
     ) {
-      const fetchRegister = async () => {
-        trigger({
-          email: validator.escape(emailInput.trim()),
-          password: validator.escape(passwordInput.trim()),
-          firstname: validator.escape(firstnameInput.trim()),
-          lastname: validator.escape(lastnameInput.trim()),
-          phone: validator.escape(phoneInput.trim()),
-          birth: dayjs(birthInput).format("YYYY-MM-DD"),
-          pseudo: validator.escape(inputPseudo.trim()),
-        });
-      };
       if (inputPseudo.length === 0) {
+        const fetchRegister = async () => {
+          trigger({
+            email: validator.escape(emailInput.trim()),
+            password: validator.escape(passwordInput.trim()),
+            firstname: validator.escape(firstnameInput.trim()),
+            lastname: validator.escape(lastnameInput.trim()),
+            phone: validator.escape(phoneInput.trim()),
+            birth: dayjs(birthInput).format("YYYY-MM-DD"),
+            pseudo: validator.escape(inputPseudo.trim()),
+          });
+        };
         fetchRegister();
       }
     } else {
@@ -308,7 +309,7 @@ const FormRegister = () => {
             onChange={(e) => {
               handlerInput(
                 e,
-                /^[A-Za-z][A-Za-z ]{2,}$/,
+                /^[A-Za-z][A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{2,}$/,
                 setValidFirstnameInput,
                 setFirstnameInputError,
                 setFirstnameInput,
@@ -329,7 +330,7 @@ const FormRegister = () => {
             onChange={(e) => {
               handlerInput(
                 e,
-                /^[A-Za-z][A-Za-z ]{2,}$/,
+                /^[A-Za-z][A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{2,}$/,
                 setValidLastnameInput,
                 setLastnameInputError,
                 setLastnameInput,
@@ -350,7 +351,7 @@ const FormRegister = () => {
             onChange={(e) => {
               handlerInputPassword(
                 e,
-                /^(?=.*[a-z]).{1,}$/,
+                /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
                 setValidPasswordInput,
                 setPasswordInputError,
                 setPasswordInput,

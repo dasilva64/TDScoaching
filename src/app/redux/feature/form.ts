@@ -21,6 +21,8 @@ const initialState = {
   displayModalMeeting: false,
   dataModalMeeting: "",
   displayModalDeleteAccount: false,
+  displayModalCloseEmail: false,
+  displayModalClosePhone: false,
 };
 
 const form = createSlice({
@@ -154,6 +156,26 @@ const form = createSlice({
     },
     closeModalDeleteAccount: (state) => {
       state.displayModalDeleteAccount = false;
+    },
+    openModalCloseEmail: (state) => {
+      state.displayModalCloseEmail = true;
+    },
+    closeModalCloseEmail: (state) => {
+      state.displayModalCloseEmail = false;
+    },
+    closeModalCloseEmailAndEditEmailData: (state) => {
+      state.displayModalCloseEmail = false;
+      state.displayModalEditEmailData = false;
+    },
+    openModalClosePhone: (state) => {
+      state.displayModalClosePhone = true;
+    },
+    closeModalClosePhone: (state) => {
+      state.displayModalClosePhone = false;
+    },
+    closeModalClosePhoneAndEditPhoneData: (state) => {
+      state.displayModalClosePhone = false;
+      state.displayModalEditPhoneData = false;
     },
   },
 });

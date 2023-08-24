@@ -40,5 +40,6 @@ model User {
   twoFactorCode Json?     @db.Json
   meetingId     String?   @db.Uuid
   birth         String    @db.VarChar
+  deleteToken   Json?     @db.Json
   Meeting       Meeting[]
 }

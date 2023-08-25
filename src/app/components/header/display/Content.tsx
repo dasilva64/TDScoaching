@@ -26,11 +26,39 @@ import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/Modal
 import ModalDeleteAccount from "@/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
 import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalCloseEmail";
 import ModalClosePhone from "@/app/profile/components/phoneData/modal/ModalClosePhone";
+import { on } from "events";
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const [onTop, setOnTop] = useState<boolean | null>(null);
+  const [openHeaderOnScroll, setOpenHeaderOnScroll] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (document) {
+      /* if (openHeaderOnScroll === false) {
+        if (document.documentElement.scrollTop === 0) {
+          setOnTop(true);
+        } else {
+          setOnTop(false);
+        }
+      } else {
+        setOnTop(true);
+      } */
+      document.addEventListener("scroll", () => {
+        //if (openHeaderOnScroll === false) {
+        if (document.documentElement.scrollTop === 0) {
+          setOnTop(true);
+          //setOpenHeaderOnScroll(false);
+        } else {
+          setOnTop(false);
+        }
+        /* } else {
+          setOnTop(true);
+        } */
+      });
+    }
+  }, []);
   useEffect(() => {
     const fetchCheckUser = async () => {
       let response = await fetch("/api/user/checkDelete");
@@ -736,7 +764,43 @@ const Content = () => {
             </div>
           </button>
         </div>
+        {/* {openHeaderOnScroll === true && (
+            <button
+              className={styles.headerScroll__btnClose}
+              onClick={() => {
+                setOnTop(false);
+                setOpenHeaderOnScroll(false);
+              }}
+            >
+              <Image
+                width={20}
+                height={20}
+                src="/assets/icone/arrow-up-solid.svg"
+                alt="flèche vers le haut"
+                priority={true}
+              />
+            </button>
+          )} */}
       </header>
+      {/* {onTop === false && (
+        <header className={styles.headerScroll}>
+          <button
+            className={styles.headerScroll__btn}
+            onClick={() => {
+              setOnTop(true);
+              setOpenHeaderOnScroll(true);
+            }}
+          >
+            <Image
+              width={20}
+              height={20}
+              src="/assets/icone/arrow-down-solid.svg"
+              alt="flèche vers le haut"
+              priority={true}
+            />
+          </button>
+        </header>
+      )} */}
     </>
   );
 };

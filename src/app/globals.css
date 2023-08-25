@@ -2,6 +2,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
 }
 
 html,
@@ -15,6 +16,6 @@ a {
   text-decoration: none;
 }
 
-h1, h2 {
+h1, h2, h3 {
   text-align: center;
 }

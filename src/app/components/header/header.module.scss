@@ -1,7 +1,11 @@
 .header {
   display: flex;
-  margin-top: 20px;
   justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  z-index: 5;
+  background-color: white;
+  top: 0;
   &__header {
     &__margin {
       margin-bottom: 100px;
@@ -174,9 +178,49 @@
     }
   }
 }
+.test {
+  margin-top: 80px;
+}
 
 .active {
   border-bottom: 2px solid black;
+}
+
+.headerScroll {
+  position: fixed;
+  width: 100%;
+  z-index: 5;
+  top: 0;
+  &__btn {
+    background-color: white;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    border: none;
+    border-radius: 0 0 10px 10px;
+    padding: 5px 15px;
+    margin-left: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 1s;
+    &:hover {
+      box-shadow: 0px 2px 10px 1px orange;
+    }
+  }
+  &__btnClose {
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: none;
+    border-radius: 0 0 10px 10px;
+    padding: 5px 15px;
+    margin-left: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 1s;
+    bottom: -20px;
+  }
 }
 
 .flash {

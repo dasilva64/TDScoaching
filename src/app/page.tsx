@@ -199,7 +199,7 @@ export default function Home() {
               <div
                 style={{
                   border: "1px solid orange",
-                  boxShadow: "5px 5px 5px #5fc0ee",
+                  boxShadow: "5px 5px 5px #1dd6fc",
                   padding: "20px",
                   borderRadius: "10px",
                 }}
@@ -224,7 +224,7 @@ export default function Home() {
               <div
                 style={{
                   border: "1px solid orange",
-                  boxShadow: "5px 5px 5px #5fc0ee",
+                  boxShadow: "5px 5px 5px #1dd6fc",
                   padding: "20px",
                   borderRadius: "10px",
                 }}
@@ -251,7 +251,7 @@ export default function Home() {
               <div
                 style={{
                   border: "1px solid orange",
-                  boxShadow: "5px 5px 5px #5fc0ee",
+                  boxShadow: "5px 5px 5px #1dd6fc",
                   padding: "20px",
                   borderRadius: "10px",
                 }}
@@ -278,7 +278,7 @@ export default function Home() {
               <div
                 style={{
                   border: "1px solid orange",
-                  boxShadow: "5px 5px 5px #5fc0ee",
+                  boxShadow: "5px 5px 5px #1dd6fc",
                   padding: "20px",
                   borderRadius: "10px",
                 }}
@@ -302,7 +302,7 @@ export default function Home() {
               <div
                 style={{
                   border: "1px solid orange",
-                  boxShadow: "5px 5px 5px #5fc0ee",
+                  boxShadow: "5px 5px 5px #1dd6fc",
                   padding: "20px",
                   borderRadius: "10px",
                 }}
@@ -326,7 +326,7 @@ export default function Home() {
               <div
                 style={{
                   border: "1px solid orange",
-                  boxShadow: "5px 5px 5px #5fc0ee",
+                  boxShadow: "5px 5px 5px #1dd6fc",
                   padding: "20px",
                   borderRadius: "10px",
                 }}

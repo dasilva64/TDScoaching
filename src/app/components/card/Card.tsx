@@ -19,15 +19,13 @@ const Card = ({ title, content }: any) => {
           {title}
         </h3>
         <Image
-          className={`${styles.card__img} ${show ? styles.card__img__up : ""}`}
+          className={`${styles.card__img} ${
+            show === true ? styles.card__img__up : styles.card__img__down
+          }`}
           width="20"
           height="20"
           priority={true}
-          src={`${
-            show
-              ? "/assets/icone/chevron-up-solid.svg"
-              : "/assets/icone/chevron-down-solid.svg"
-          }`}
+          src={"/assets/icone/chevron-down-solid.svg"}
           alt="bousole"
         />
       </div>

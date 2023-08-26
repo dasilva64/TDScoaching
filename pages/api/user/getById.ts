@@ -13,7 +13,7 @@ export default withIronSessionApiRoute(
         if (user === null) {
           return res.status(400).json({
             status: 400,
-            message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+            message: "L' n'a pas été trouvé, veuillez réessayer",
           });
         } else {
           const userById = await prisma.user.findUnique({
@@ -32,8 +32,7 @@ export default withIronSessionApiRoute(
               if (meetingById === null) {
                 return res.status(400).json({
                   status: 400,
-                  message:
-                    "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+                  message: "L'hjkjk n'a pas été trouvé, veuillez réessayer",
                 });
               } else {
                 const meetingByUser = await prisma.meeting.findMany({

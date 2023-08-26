@@ -6,48 +6,60 @@ import Image from "next/image";
 const Famille = () => {
   return (
     <main className={styles.famille}>
-      <h1 className={styles.famille__h1}>Vie familiale</h1>
-      <div className={styles.famille__container}>
-        <div className={styles.famille__article}>
+      <section className={styles.famille__bg}>
+        <Image
+          className={styles.famille__bg__img}
+          width="0"
+          height="400"
+          sizes="100vw"
+          priority={true}
+          src={"/assets/img/avenue.jpg"}
+          alt="bousole"
+        />
+      </section>
+      <section className={styles.famille__why}>
+        <div className={styles.famille__why__container}>
           <WhileInView>
-            <h2 className={styles.famille__article__h2}>
-              Pourquoi faire du coaching familial ?
+            <h2 className={styles.famille__why__container__h2}>
+              Vie familiale
             </h2>
           </WhileInView>
-          <div className={styles.famille__article__div}>
-            <WhileInView className={styles.famille__article__div__text}>
-              <div>
-                <p>
-                  Pour renforcer, améliorer et réparer les dynamiques opérant au
-                  sein de la famille.
-                  <br />
-                  Vous êtes soumis au rythme effréné de la vie, au stress, à la
-                  fatigue quotidienne, au tempérament imprévisible des enfants
-                  et aux enjeux autour de la scolarité qui rendent votre tâche
-                  de parent particulièrement délicate.
-                </p>
-              </div>
+          <div className={styles.famille__why__container__content}>
+            <WhileInView style={{ display: "flex" }}>
+              <Image
+                className={styles.famille__why__container__content__img}
+                width="400"
+                height="300"
+                priority={true}
+                src={"/assets/img/famille.jpg"}
+                alt="bousole"
+              />
             </WhileInView>
-            <div className={styles.famille__article__div__img}>
-              <WhileInView>
-                <Image
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  style={{
-                    objectFit: "contain",
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "20px",
-                  }}
-                  priority={true}
-                  src={"/assets/img/famille.jpg"}
-                  alt="bousole"
-                />
-              </WhileInView>
-            </div>
+            <WhileInView
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+                marginLeft: "80px",
+              }}
+            >
+              <h2 className={styles.famille__why__container__content__h2}>
+                Pourquoi faire du coaching familial ?
+              </h2>
+              <p>
+                Pour renforcer, améliorer et réparer les dynamiques opérant au
+                sein de la famille.
+                <br />
+                Vous êtes soumis au rythme effréné de la vie, au stress, à la
+                fatigue quotidienne, au tempérament imprévisible des enfants et
+                aux enjeux autour de la scolarité qui rendent votre tâche de
+                parent particulièrement délicate.
+              </p>
+            </WhileInView>
           </div>
         </div>
+      </section>
+      <div className={styles.famille__container}>
         <div className={styles.famille__article}>
           <WhileInView>
             <h2 className={styles.famille__article__h2}>
@@ -151,46 +163,57 @@ const Famille = () => {
             </ul>
           </WhileInView>
         </div>
-        <div className={styles.famille__article}>
-          <WhileInView>
-            <p className={styles.famille__article__p__margin}>
+      </div>
+      <section className={styles.famille__delivery}>
+        <div className={styles.famille__delivery__container}>
+          <div className={styles.famille__delivery__container__card}>
+            <h3 className={styles.famille__delivery__container__card__h3}>
+              Mes prestations
+            </h3>
+            <Image
+              className={styles.famille__delivery__container__card__img}
+              width="30"
+              height="30"
+              priority={true}
+              src={"/assets/icone/goal.png"}
+              alt="bousole"
+            />
+            <p className={styles.famille__delivery__container__card__p}>
               Si vous souhaitez en savoir plus sur la tarification, cliquez sur
               le bouton ci-dessous.
             </p>
-          </WhileInView>
-          <WhileInView>
-            <p
-              className={`${styles.famille__article__p} ${styles.famille__article__p__hover}`}
+            <Link
+              className={styles.famille__delivery__container__card__btn}
+              href="/tarif"
             >
-              <Link className={styles.famille__article__btn} href="/tarif">
-                Mes prestations
-              </Link>
-            </p>
-          </WhileInView>
-          <WhileInView>
-            <p className={styles.famille__article__p}>
-              Vous aimeriez que nous fassions un bout de chemin ensemble et que
-              je vous accompagne afin de retrouver de l’harmonie et de la
-              complicité au sein de votre famille ?
-            </p>
-          </WhileInView>
-          <WhileInView>
-            <p className={styles.famille__article__p}>
+              Mes prestations
+            </Link>
+          </div>
+          <div className={styles.famille__delivery__container__card}>
+            <h3 className={styles.famille__delivery__container__card__h3}>
+              Rendez-vous
+            </h3>
+            <Image
+              className={styles.famille__delivery__container__card__img}
+              width="30"
+              height="30"
+              priority={true}
+              src={"/assets/icone/goal.png"}
+              alt="bousole"
+            />
+            <p className={styles.famille__delivery__container__card__p}>
               Si vous souhaitez me contacter ou prendre rendez-vous, cliquez sur
               le bouton ci-dessous.
             </p>
-          </WhileInView>
-          <WhileInView>
-            <p
-              className={`${styles.famille__article__p} ${styles.famille__article__p__hover}`}
+            <Link
+              className={styles.famille__delivery__container__card__btn}
+              href="/contact"
             >
-              <Link className={styles.famille__article__btn} href="/contact">
-                Prendre rendez-vous
-              </Link>
-            </p>
-          </WhileInView>
+              Prendre rendez-vous
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 };

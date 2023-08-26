@@ -2,7 +2,7 @@ const fetchCancelByAdmin = async (
   url: string,
   { arg }: { arg: { meetingId: string; userId: string } }
 ) => {
-  let response = await fetch("/api/paiement/cancelByAdmin", {
+  let response = await fetch(url, {
     method: "post",
     headers: {
       "Content-Type": "application/json",

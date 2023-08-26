@@ -51,7 +51,7 @@
 
   &__nav {
     display: flex;
-    flex: 2;
+    flex: 3;
     justify-content: end;
     margin: auto 20px auto 0px;
     height: 10%;
@@ -177,9 +177,6 @@
       color: white;
     }
   }
-}
-.test {
-  margin-top: 80px;
 }
 
 .active {
@@ -320,9 +317,68 @@
   }
 }
 
+.headerr {
+  display: none;
+  padding: 17px;
+  //position: fixed;
+  right: 126px;
+  top: 0;
+  z-index: 1;
+  z-index: 100;
+
+  .button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #1dd6fc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .burger {
+    width: 100%;
+    &::after,
+    &::before {
+      content: "";
+      display: block;
+      height: 1px;
+      width: 40%;
+      margin: auto;
+      background-color: white;
+      position: relative;
+      transition: transform 0.3s;
+    }
+
+    &::after {
+      top: -5px;
+    }
+
+    &::before {
+      top: 5px;
+    }
+  }
+
+  .burgerActive {
+    &::after {
+      transform: rotate(45deg);
+      top: -1px;
+    }
+
+    &::before {
+      transform: rotate(-45deg);
+      top: 0px;
+    }
+  }
+}
+
 @media screen and (max-width: 1200px) {
-  .header {
+  .headerr {
     display: block;
+  }
+  .header {
+    //display: block;
     opacity: 1;
     &__header {
       &__margin {
@@ -343,13 +399,13 @@
     &__burger {
       display: block;
       align-self: center;
-      position: absolute;
+      //position: absolute;
       right: 145px;
       top: 45px;
       &__log {
         display: block;
         align-self: center;
-        position: absolute;
+        //position: absolute;
         right: 65px;
         top: 45px;
       }
@@ -421,9 +477,8 @@
       border: none;
       border-radius: 10px;
       padding: 10px;
-      position: absolute;
-      right: 25px;
-      top: 45px;
+      position: relative;
+      z-index: 999;
       &__active {
         display: block;
         opacity: 0.2;

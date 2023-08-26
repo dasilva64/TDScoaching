@@ -2,7 +2,7 @@
 
 import styles from "../header.module.scss";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { usePathname, useRouter } from "next/navigation";
@@ -26,39 +26,15 @@ import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/Modal
 import ModalDeleteAccount from "@/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
 import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalCloseEmail";
 import ModalClosePhone from "@/app/profile/components/phoneData/modal/ModalClosePhone";
-import { on } from "events";
+import { AnimatePresence, motion, useCycle } from "framer-motion";
+import Nav from "../components/Nav";
 
 const Content = () => {
+  const { isActive } = useSelector((state: RootState) => state.menu);
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const [onTop, setOnTop] = useState<boolean | null>(null);
-  const [openHeaderOnScroll, setOpenHeaderOnScroll] = useState<boolean>(false);
+  const pathname = usePathname();
 
-  useEffect(() => {
-    if (document) {
-      /* if (openHeaderOnScroll === false) {
-        if (document.documentElement.scrollTop === 0) {
-          setOnTop(true);
-        } else {
-          setOnTop(false);
-        }
-      } else {
-        setOnTop(true);
-      } */
-      document.addEventListener("scroll", () => {
-        //if (openHeaderOnScroll === false) {
-        if (document.documentElement.scrollTop === 0) {
-          setOnTop(true);
-          //setOpenHeaderOnScroll(false);
-        } else {
-          setOnTop(false);
-        }
-        /* } else {
-          setOnTop(true);
-        } */
-      });
-    }
-  }, []);
   useEffect(() => {
     const fetchCheckUser = async () => {
       let response = await fetch("/api/user/checkDelete");
@@ -227,7 +203,6 @@ const Content = () => {
     }
   }
 
-  const pathname = usePathname();
   const router = useRouter();
   const [isClick, setIsClick] = useState<boolean>(false);
   const {
@@ -336,11 +311,17 @@ const Content = () => {
     window.addEventListener("resize", () => {
       if (window.innerWidth < 1201) {
       } else {
+        if (isActive) {
+          dispatch({
+            type: "menu/closeMenu",
+          });
+        }
         setIsClick(false);
       }
     });
   }
 
+  console.log("displayLogMenu", displayLogMenu);
   const handlerCancelNavigation = (e: any) => {
     e.preventDefault();
     return false;
@@ -471,7 +452,25 @@ const Content = () => {
       return null;
     }
   };
-
+  useEffect(() => {
+    if (document) {
+      let body = document.querySelector("body");
+      if (body) {
+        if (isActive === true) {
+          if (window.innerWidth < 601) {
+            body.style.overflow = "hidden";
+            body.style.height = "100vh";
+          } else {
+            body.style.overflow = "unset";
+            body.style.height = "unset";
+          }
+        } else {
+          body.style.overflow = "unset";
+          body.style.height = "unset";
+        }
+      }
+    }
+  }, [isActive]);
   useEffect(() => {
     if (flashMessage && flashMessage[1].length > 0) {
       let timer = setTimeout(() => {
@@ -507,6 +506,7 @@ const Content = () => {
       {displayModalClosePhone === true && <ModalClosePhone />}
 
       {displayFlash()}
+
       <header className={ClassName()}>
         <figure className={styles.header__figure}>
           <Link className="link" href="/" tabIndex={0}>
@@ -734,73 +734,61 @@ const Content = () => {
           </ul>
           {content}
         </nav>
-        <div className={styles.header__burger}>
-          <button
-            className={styles.header__burger__btn}
-            onClick={() => updateUseState()}
-          >
-            <div className={styles.header__burger__line}>
-              <span
-                className={
-                  displayLogMenu
-                    ? `${styles.header__cross} ${styles.header__bar1__rotate}`
-                    : `${styles.header__bar} ${styles.header__bar1}`
-                }
-              ></span>
-              <span
-                className={
-                  displayLogMenu
-                    ? ""
-                    : `${styles.header__bar} ${styles.header__bar2}`
-                }
-              ></span>
-              <span
-                className={
-                  displayLogMenu
-                    ? `${styles.header__cross} ${styles.header__bar2__rotate}`
-                    : `${styles.header__bar} ${styles.header__bar3}`
-                }
-              ></span>
-            </div>
-          </button>
-        </div>
-        {/* {openHeaderOnScroll === true && (
-            <button
-              className={styles.headerScroll__btnClose}
+
+        {/* <button
+          className={styles.header__burger__btn}
+          onClick={() => {
+            toggleOpen();
+            //updateUseState();
+          }}
+        >
+          <div className={styles.header__burger__line}>
+            <span
+              className={
+                displayLogMenu
+                  ? `${styles.header__cross} ${styles.header__bar1__rotate}`
+                  : `${styles.header__bar} ${styles.header__bar1}`
+              }
+            ></span>
+            <span
+              className={
+                displayLogMenu
+                  ? ""
+                  : `${styles.header__bar} ${styles.header__bar2}`
+              }
+            ></span>
+            <span
+              className={
+                displayLogMenu
+                  ? `${styles.header__cross} ${styles.header__bar2__rotate}`
+                  : `${styles.header__bar} ${styles.header__bar3}`
+              }
+            ></span>
+          </div>
+        </button> */}
+        <div
+          className={styles.main}
+          style={{ position: "relative", zIndex: "999" }}
+        >
+          <div className={styles.headerr}>
+            <div
               onClick={() => {
-                setOnTop(false);
-                setOpenHeaderOnScroll(false);
+                dispatch({
+                  type: "menu/toggleMenu",
+                });
               }}
+              className={styles.button}
             >
-              <Image
-                width={20}
-                height={20}
-                src="/assets/icone/arrow-up-solid.svg"
-                alt="flèche vers le haut"
-                priority={true}
-              />
-            </button>
-          )} */}
+              <div
+                className={`${styles.burger} ${
+                  isActive ? styles.burgerActive : ""
+                }`}
+              ></div>
+            </div>
+          </div>
+        </div>
+        <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>
       </header>
-      {/* {onTop === false && (
-        <header className={styles.headerScroll}>
-          <button
-            className={styles.headerScroll__btn}
-            onClick={() => {
-              setOnTop(true);
-              setOpenHeaderOnScroll(true);
-            }}
-          >
-            <Image
-              width={20}
-              height={20}
-              src="/assets/icone/arrow-down-solid.svg"
-              alt="flèche vers le haut"
-              priority={true}
-            />
-          </button>
-        </header>
-      )} */}
     </>
   );
 };

@@ -8,6 +8,7 @@ import Array from "./feature/Array";
 import ArrayMeeting from "./feature/ArrayMeeting";
 import ArrayMeetingByUser from "./feature/ArrayMeetingByUser";
 import ArrayHistorique from "./feature/ArrayHistorique";
+import menu from "./feature/menu";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     ArrayMeeting: ArrayMeeting.reducer,
     ArrayMeetingByUser: ArrayMeetingByUser.reducer,
     ArrayHistorique: ArrayHistorique.reducer,
+    menu: menu.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

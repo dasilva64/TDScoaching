@@ -1,0 +1,28 @@
+.card {
+  border: 1px solid #1dd6fc;
+  box-shadow: 5px 5px 5px #1dd6fc;
+  transition: all 300ms ease-in;
+  position: relative;
+  cursor: pointer;
+  padding: 20px;
+  border-radius: 10px;
+  &__img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+  }
+  &__animation {
+    animation: all 900ms ease-in;
+  }
+  &__p {
+    text-align: justify;
+    transition: all 400ms ease-in;
+    &__show {
+      opacity: 1;
+    }
+    &__hide {
+      opacity: 0;
+    }
+  }
+}

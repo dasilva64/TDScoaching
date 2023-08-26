@@ -39,6 +39,11 @@ const Content = () => {
       }
     }
   }, [dataCancel, dispatch]);
+
+  const { data: dataAccept, trigger: triggerAccept } = useSWRMutation(
+    "/api/paiement/acceptByAdmin",
+    fetchCancelByAdmin
+  );
   const router = useRouter();
   const queryParam: any = usePathname();
   let id = queryParam.toString().split("/");
@@ -51,7 +56,7 @@ const Content = () => {
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
-        router.push("/tous-les-utilisateurs");
+        //router.push("/tous-les-utilisateurs");
       }
     }
   }, [data, dispatch, router]);
@@ -133,7 +138,16 @@ const Content = () => {
                       </li>
                     </ul>
                     <div>
-                      <button>Accepter</button>
+                      <button
+                        onClick={() => {
+                          triggerAccept({
+                            meetingId: data.body.meeting.id,
+                            userId: data.body.id,
+                          });
+                        }}
+                      >
+                        Accepter
+                      </button>
                       <button
                         onClick={() => {
                           trigger({

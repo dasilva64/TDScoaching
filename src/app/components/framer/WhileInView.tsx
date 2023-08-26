@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 
-const WhileInView = ({ className, children }: any) => {
+const WhileInView = ({ className, children, style }: any) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   const mainControls = useAnimation();
@@ -15,6 +15,7 @@ const WhileInView = ({ className, children }: any) => {
 
   return (
     <motion.div
+      style={style}
       className={className}
       ref={ref}
       variants={{

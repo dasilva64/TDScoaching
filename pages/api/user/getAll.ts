@@ -31,9 +31,10 @@ export default withIronSessionApiRoute(
                 },
               },
             });
+            console.log("allUserObject", allUser);
             let copyAllUser: any = allUser;
             let allUserObject = [];
-            for (let i = 0; i < copyAllUser.length-1; i++) {
+            for (let i = 0; i < copyAllUser.length; i++) {
               let userObject = {
                 id: copyAllUser[i].id,
                 mail: copyAllUser[i].email,
@@ -45,6 +46,7 @@ export default withIronSessionApiRoute(
               };
               allUserObject.push(userObject);
             }
+
             res.status(200).json({
               status: 200,
               body: allUserObject,

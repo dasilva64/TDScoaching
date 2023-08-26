@@ -17,7 +17,7 @@ const Parallax = ({ className, children }: any) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref });
 
-  const y = useParallax(scrollYProgress, 100);
+  const y = useParallax(scrollYProgress, 300);
 
   return (
     <motion.div style={{ y }} className={className} ref={ref}>

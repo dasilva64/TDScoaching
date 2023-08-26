@@ -38,7 +38,7 @@ export default withIronSessionApiRoute(
 
         let editUser = await prisma.user.update({
           where: {
-            id: req.session.user.id,
+            id: meeting?.userId,
           },
           data: {
             meetingId: null,

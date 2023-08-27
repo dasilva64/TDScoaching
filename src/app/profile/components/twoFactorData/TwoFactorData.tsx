@@ -6,7 +6,6 @@ import styles from "./TwoFactorData.module.scss";
 import { Switch } from "@mui/material";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import useSWRMutation from "swr/mutation";
-import fetchEditSendTokenTwoFactor from "@/app/components/fetch/user/useEditTwoFactorSendToken";
 import { mutate } from "swr";
 import fetchGet from "@/app/components/fetch/user/fetchGet";
 

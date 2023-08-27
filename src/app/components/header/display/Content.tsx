@@ -267,8 +267,8 @@ const Content = () => {
           displayModalCloseEmail === true ||
           displayModalClosePhone === true
         ) {
-          mainDiv.style.opacity = "0.1";
-          footerDiv.style.opacity = "0.1";
+          mainDiv.style.opacity = "0.05";
+          footerDiv.style.opacity = "0.05";
           htlmElement.style.height = "100%";
           htlmbody.style.height = "100%";
         } else {
@@ -320,12 +320,6 @@ const Content = () => {
       }
     });
   }
-
-  console.log("displayLogMenu", displayLogMenu);
-  const handlerCancelNavigation = (e: any) => {
-    e.preventDefault();
-    return false;
-  };
 
   const ClassName = () => {
     if (
@@ -512,8 +506,9 @@ const Content = () => {
           <Link className="link" href="/" tabIndex={0}>
             <Image
               className={styles.header__logo}
-              width={80}
-              height={80}
+              width={0}
+              height={0}
+              sizes="100vw"
               src="/assets/logo/logo.png"
               alt="logo tdss coaching"
               priority={true}
@@ -766,10 +761,7 @@ const Content = () => {
             ></span>
           </div>
         </button> */}
-        <div
-          className={styles.main}
-          style={{ position: "relative", zIndex: "999" }}
-        >
+        <div className={styles.main}>
           <div className={styles.headerr}>
             <div
               onClick={() => {

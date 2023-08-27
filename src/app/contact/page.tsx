@@ -2,16 +2,32 @@ import React from "react";
 import styles from "./page.module.scss";
 import ContactForm from "./components/ContactForm";
 import WhileInView from "../components/framer/WhileInView";
+import Image from "next/image";
 
 const Contact = () => {
   return (
     <main className={styles.contact}>
-      <h1 className={styles.contact__h1}>Contact</h1>
-      <div className={styles.contact__container}>
-        <div className={styles.contact__article}>
-          <WhileInView>
-            <h2 className={styles.contact__article__h2}>Mes coordonnées</h2>
-          </WhileInView>
+      <section className={styles.contact__bg}>
+        <Image
+          className={styles.contact__bg__img}
+          width="0"
+          height="400"
+          sizes="100vw"
+          priority={true}
+          src={"/assets/img/avenue.jpg"}
+          alt="bousole"
+        />
+      </section>
+      <section className={styles.contact__main}>
+        <h1 className={styles.contact__main__h1}>Contact</h1>
+        <WhileInView>
+          <p className={styles.contact__main__p}>
+            Veuillez renseigner le formulaire ci-dessous pour prendre
+            rendez-vous, poser une question, ou tout autre demande. Je me ferai
+            un plaisir de vous répondre au plus vite.
+          </p>
+        </WhileInView>
+        <div className={styles.contact__main__container}>
           <WhileInView>
             <ul className={styles.contact__article__p}>
               <li>
@@ -25,23 +41,11 @@ const Contact = () => {
               </li>
             </ul>
           </WhileInView>
-        </div>
-        <div className={styles.contact__article}>
-          <WhileInView>
-            <h2 className={styles.contact__article__h2}>Me contacter</h2>
-          </WhileInView>
-          <WhileInView>
-            <div className={styles.contact__article__div}>
-              <p className={styles.contact__article__div__p}>
-                Veuillez renseigner le formulaire ci-dessous pour prendre
-                rendez-vous, poser une question, ou tout autre demande. Je me
-                ferai un plaisir de vous répondre au plus vite.
-              </p>
-              <ContactForm />
-            </div>
+          <WhileInView style={{ width: "60%" }}>
+            <ContactForm />
           </WhileInView>
         </div>
-      </div>
+      </section>
     </main>
   );
 };

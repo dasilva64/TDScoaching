@@ -1,75 +1,46 @@
-$primary-color: white;
+$primary-color: black;
 
 .contact {
-  &__h1 {
-    margin-top: 80px;
-    font-size: 60px;
-  }
-  &__container {
-    background-color: rgb(0, 191, 255);
-    margin-top: 45px;
-    padding-top: 60px;
-    padding-bottom: 100px;
-  }
-  &__article {
-    margin-left: 10%;
-    margin-right: 10%;
-    text-align: justify;
-    &__h2 {
-      text-align: center;
-      color: $primary-color;
-      margin-top: 100px;
-      margin-bottom: 60px;
-      font-size: 30px;
-    }
-    &__div {
-      border: 1px solid orange;
-      box-shadow: 10px 10px orange;
-      border-radius: 20px;
-      padding: 20px;
-      padding-left: 25px;
-      background-color: white;
+  &__bg {
+    &__img {
+      width: 100%;
+      object-fit: cover;
     }
   }
-  &__form {
-    display: flex;
-    flex-direction: column;
-    margin: 40px 0px;
-    &__label {
-      color: black;
-      margin-top: 20px;
-      margin-bottom: 5px;
+  &__main {
+    margin: 0px 10%;
+    &__h1 {
+      font-size: 48px;
+      margin: 40px 0px;
     }
-    &__div {
+    &__p {
+      margin-bottom: 30px;
+    }
+    &__container {
       display: flex;
-      flex-direction: column;
-    }
-    &__input {
-      height: 22px;
-      font-size: 15px;
-      border-radius: 5px;
-      border: none;
-      &__error {
-        color: orange;
-        padding-top: 5px;
-        font-size: 21px;
-      }
-    }
-    &__submit {
-      margin-top: 30px;
-      cursor: pointer;
-      border: 1px solid orange;
-      padding: 10px;
-      background-color: orange;
-      border-radius: 10px;
-      color: white;
-      transition: all 400ms;
-      position: relative;
-      z-index: 1;
-      font-size: 21px;
-      height: unset;
-      & :hover {
-        transform: scale(1.1);
+      justify-content: space-between;
+      margin-bottom: 50px;
+      &__form {
+        margin-top: -20px;
+        display: flex;
+        flex-direction: column;
+        &__submit {
+          margin-top: 30px;
+          cursor: pointer;
+          border: 1px solid orange;
+          padding: 10px;
+          background-color: orange;
+          border-radius: 10px;
+          color: black;
+          transition: all 400ms;
+          position: relative;
+          z-index: 1;
+          font-size: 21px;
+          height: unset;
+          & :hover {
+            transform: scale(1.1);
+          }
+        }
       }
     }
   }

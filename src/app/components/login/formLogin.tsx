@@ -162,6 +162,7 @@ const FormLogin = () => {
   };
   return (
     <>
+      <div className={styles.bg}></div>
       <div className={styles.login}>
         <button className={styles.login__btn} onClick={() => closeForm()}>
           <span className={styles.login__btn__cross}>&times;</span>
@@ -220,7 +221,11 @@ const FormLogin = () => {
           />
           <FormControlLabel
             className={styles.login__form__checkbox}
-            style={{ marginTop: "10px", alignSelf: "start", marginLeft: "0px" }}
+            style={{
+              marginTop: "10px",
+              alignSelf: "start",
+              marginLeft: "0px",
+            }}
             control={
               <Checkbox
                 onChange={(e) => {

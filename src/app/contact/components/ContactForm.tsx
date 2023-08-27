@@ -140,7 +140,7 @@ const ContactForm = () => {
   return (
     <>
       <form
-        className={styles.contact__form}
+        className={styles.contact__main__container__form}
         id="form"
         onSubmit={(e) => {
           handlerSubmit(e);
@@ -266,11 +266,13 @@ const ContactForm = () => {
         />
         <div>
           <input
-            className={styles.contact__form__submit}
+            className={styles.contact__main__container__form__submit}
             type="submit"
             value="Envoyer"
           />
-          <div className={styles.contact__form__input__error}></div>
+          <div
+            className={styles.contact__main__container__form__input__error}
+          ></div>
         </div>
       </form>
     </>

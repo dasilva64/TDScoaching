@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import validator from "validator";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
-import fetchUserReSendEmailValidation from "../fetch/user/fetchUserReSendEmailValidation";
 import useSWRMutation from "swr/mutation";
+import fetchPost from "../fetch/user/FetchPost";
 
 const FormLogin = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,7 +27,7 @@ const FormLogin = () => {
 
   const { data, trigger } = useSWRMutation(
     "/api/user/reSendEmailValidation",
-    fetchUserReSendEmailValidation
+    fetchPost
   );
 
   useEffect(() => {

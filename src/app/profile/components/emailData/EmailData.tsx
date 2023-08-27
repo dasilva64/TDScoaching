@@ -6,10 +6,10 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
-import fetchUserEditEmailData from "@/app/components/fetch/user/fetchUserEditEmailData";
 import { TextField } from "@mui/material";
-import fetchReSendEmailCode from "@/app/components/fetch/user/useReSendEmail";
 import useUserGet from "@/app/components/hook/user/useUserGet";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchGet from "@/app/components/fetch/user/fetchGet";
 
 const EmailCheck = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,7 +28,7 @@ const EmailCheck = () => {
 
   const { trigger, data } = useSWRMutation(
     "/api/user/editEmailUser",
-    fetchUserEditEmailData
+    fetchPost
   );
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const EmailCheck = () => {
   };
   const { trigger: triggerReSendCode, data: dataReSendCode } = useSWRMutation(
     "/api/user/emailReSendCode",
-    fetchReSendEmailCode
+    fetchGet
   );
   useEffect(() => {
     if (dataReSendCode) {

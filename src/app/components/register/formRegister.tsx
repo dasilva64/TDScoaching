@@ -3,7 +3,6 @@ import styles from "./formRegister.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import useSWRMutation from "swr/mutation";
-import fetchUserRegister from "../fetch/user/fetchUserRegister";
 import { TextField } from "@mui/material";
 import validator from "validator";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -12,6 +11,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { frFR } from "@mui/x-date-pickers/locales";
 import "dayjs/locale/fr";
+import fetchPost from "../fetch/user/FetchPost";
 
 const frenchLocale =
   frFR.components.MuiLocalizationProvider.defaultProps.localeText;
@@ -44,10 +44,7 @@ const FormRegister = () => {
   const [phoneInputError, setPhoneInputError] = useState<string>("");
   const [birthInputError, setBirthInputError] = useState<string>("");
 
-  const { trigger, data } = useSWRMutation(
-    "/api/user/register",
-    fetchUserRegister
-  );
+  const { trigger, data } = useSWRMutation("/api/user/register", fetchPost);
 
   useEffect(() => {
     console.log(data);

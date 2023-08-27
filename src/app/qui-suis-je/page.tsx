@@ -1,5 +1,6 @@
 import WhileInView from "../components/framer/WhileInView";
 import Parallax from "../components/framer/parallax";
+import Timeline from "./components/Timeline";
 import styles from "./page.module.scss";
 import Image from "next/image";
 
@@ -120,38 +121,11 @@ const About = () => {
           </div>
         </div>
       </section>
+
       <section className={styles.about__certificate}>
         <h2 className={styles.about__certificate__h2}>Formations :</h2>
         <div className={styles.about__certificate__container}>
-          <WhileInView>
-            <ul className={styles.about__certificate__container__ul}>
-              <li>Certificat de coach professionnel – International NLP</li>
-              <li>
-                Certificat de formation en mémoire, concentration et créativité
-                – Formalis – Accréditation IPHM et Qualiopi
-              </li>
-              <li>
-                Certificat de formation en coaching de vie – Formalis –
-                Accréditation IPHM et Qualiopi
-              </li>
-              <li>
-                Certificat de formation en coaching parental – Formalis –
-                Accréditation IPHM et Qualiopi
-              </li>
-              <li>
-                Certificat de formation en coaching conjugal – Formalis –
-                Accréditation IPHM et Qualiopi
-              </li>
-              <li>
-                DESS Certificat d’aptitude à l’administration des entreprises –
-                Université Paris 1-Panthéon Sorbonne
-              </li>
-              <li>
-                Master of Business Administration (MBA) – IAE Paris – Université
-                Paris 1-Panthéon Sorbonne
-              </li>
-            </ul>
-          </WhileInView>
+          <Timeline />
         </div>
       </section>
       <section className={styles.about__speciality}>

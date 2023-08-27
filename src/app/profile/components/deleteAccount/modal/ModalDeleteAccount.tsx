@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./ModalDeleteAccount.module.scss";
 import { useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import fetchUserDeleteAccount from "@/app/components/fetch/user/fetchDeleteAccount";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
@@ -10,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 import Textarea from "@mui/joy/Textarea";
 import { FormHelperText, FormLabel, TextField } from "@mui/material";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const ModalDeleteAccount = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const ModalDeleteAccount = () => {
   const [validinputMessage, setValidInputMessage] = useState<boolean>(false);
   const { data, trigger } = useSWRMutation(
     "/api/user/deleteAccountSendEmail",
-    fetchUserDeleteAccount
+    fetchPost
   );
   useEffect(() => {
     if (data) {

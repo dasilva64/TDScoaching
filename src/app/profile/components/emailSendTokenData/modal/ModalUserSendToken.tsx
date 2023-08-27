@@ -3,11 +3,10 @@ import styles from "./ModalUserSendToken.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../redux/store";
 import useSWRMutation from "swr/mutation";
-import { mutate } from "swr";
-import fetchUserEditSendToken from "@/app/components/fetch/user/fetchUserEditSendToken";
 import { TextField } from "@mui/material";
 import validator from "validator";
 import useUserGet from "@/app/components/hook/user/useUserGet";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const ModalUserSendToken = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -19,7 +18,7 @@ const ModalUserSendToken = () => {
 
   const { trigger, data } = useSWRMutation(
     "/api/user/sendTokenEditEmail",
-    fetchUserEditSendToken
+    fetchPost
   );
 
   useEffect(() => {

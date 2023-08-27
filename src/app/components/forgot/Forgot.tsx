@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import styles from "./Forgot.module.scss";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
-import fetchUserForgotEmail from "../fetch/user/fetchUserForgot";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
 import validator from "validator";
-import fetchUserReSendForgotPassword from "../fetch/user/fetchUserReSendForgotPassword";
+import fetchPost from "../fetch/user/FetchPost";
 
 const Forgot = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -18,7 +17,7 @@ const Forgot = () => {
   const [emailUser, setEmailUser] = useState<string>("");
   const { trigger, data } = useSWRMutation(
     "/api/user/forgotPassword",
-    fetchUserForgotEmail
+    fetchPost
   );
 
   useEffect(() => {
@@ -50,7 +49,7 @@ const Forgot = () => {
 
   const { trigger: triggerReSend, data: dateReSend } = useSWRMutation(
     "/api/user/reSendForgotPassword",
-    fetchUserReSendForgotPassword
+    fetchPost
   );
 
   useEffect(() => {

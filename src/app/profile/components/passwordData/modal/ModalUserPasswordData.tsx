@@ -2,9 +2,9 @@ import { AppDispatch } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styles from "./ModalUserPasswordData.module.scss";
-import fetchUserEditPasswordData from "@/app/components/fetch/user/fetchUserEditPasswordData";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const ModalUserPasswordData = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +20,7 @@ const ModalUserPasswordData = () => {
 
   const { trigger, data } = useSWRMutation(
     "/api/user/editPasswordUser",
-    fetchUserEditPasswordData
+    fetchPost
   );
 
   useEffect(() => {

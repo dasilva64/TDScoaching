@@ -4,14 +4,14 @@ import { useDispatch } from "react-redux";
 import styles from "./ModalTwoFactorUser.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
-import fetchDisableTwoFactor from "@/app/components/fetch/user/fetchUserDisableTwoFactor";
+import fetchGet from "@/app/components/fetch/user/fetchGet";
 
 const ModalTwoFactorDisable = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { trigger, data } = useSWRMutation(
     "/api/user/disableTwoFactor",
-    fetchDisableTwoFactor
+    fetchGet
   );
   useEffect(() => {
     if (data) {

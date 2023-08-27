@@ -4,9 +4,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import styles from "./PhoneData.module.scss";
-import fetchUserEditPhoneData from "@/app/components/fetch/user/fetchUserEditPhoneData";
 import { mutate } from "swr";
-import fetchReSendPhoneCode from "@/app/components/fetch/user/useReSendPhone";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchGet from "@/app/components/fetch/user/fetchGet";
 
 const PhoneCheck = () => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const PhoneCheck = () => {
   const [errorMessageCode, setErrorMessageCode] = useState<string>("");
   const { trigger, data } = useSWRMutation(
     "/api/user/editPhoneUser",
-    fetchUserEditPhoneData
+    fetchPost
   );
   useEffect(() => {
     if (data) {
@@ -61,7 +61,7 @@ const PhoneCheck = () => {
   }, [data]);
   const { trigger: triggerReSendCode, data: dataReSendCode } = useSWRMutation(
     "/api/user/phoneReSendCode",
-    fetchReSendPhoneCode
+    fetchGet
   );
   useEffect(() => {
     if (dataReSendCode) {
@@ -99,7 +99,6 @@ const PhoneCheck = () => {
   }, [dataReSendCode]);
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(validCodeInput);
     if (validCodeInput === true) {
       const fetchLogin = async () => {
         trigger({ code: codeInput });

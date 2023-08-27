@@ -8,6 +8,7 @@ import useUserGet from "@/app/components/hook/user/useUserGet";
 import useSWRMutation from "swr/mutation";
 import fetchEditSendTokenTwoFactor from "@/app/components/fetch/user/useEditTwoFactorSendToken";
 import { mutate } from "swr";
+import fetchGet from "@/app/components/fetch/user/fetchGet";
 
 const TwoFactorData = () => {
   const dispatch = useDispatch();
@@ -21,8 +22,8 @@ const TwoFactorData = () => {
     restDate = new Date(difference);
   }
   const { data, trigger } = useSWRMutation(
-    "/api/user/twofactor",
-    fetchEditSendTokenTwoFactor
+    "/api/user/sendTokenTwoFactor",
+    fetchGet
   );
   useEffect(() => {
     if (data) {
@@ -76,7 +77,7 @@ const TwoFactorData = () => {
     if (userData) {
       content = (
         <>
-        <h3 className={styles.twoFactorData__h3}>Double authentification</h3>
+          <h3 className={styles.twoFactorData__h3}>Double authentification</h3>
           <ul className={styles.twoFactorData__ul}>
             <li
               className={`${styles.twoFactorData__ul__li} ${styles.twoFactorData__ul__li__margin}`}
@@ -108,36 +109,40 @@ const TwoFactorData = () => {
             {userData?.body.twoFactor === false &&
               !userData?.body.twoFactorCode && (
                 <>
-                <p>Activer cette option est recommendé pour une question de sécurité</p>
-                <Switch
-                  defaultChecked={userData?.body.twoFactor}
-                  onChange={(e) => {
-                    if (e.target.checked === true) {
-                      trigger();
-                      dispatch({
-                        type: "form/openModalTwoFactor",
-                      });
-                    } else {
-                    }
-                  }}
-                />
+                  <p>
+                    Activer cette option est recommendé pour une question de
+                    sécurité
+                  </p>
+                  <Switch
+                    defaultChecked={userData?.body.twoFactor}
+                    onChange={(e) => {
+                      if (e.target.checked === true) {
+                        trigger();
+                        dispatch({
+                          type: "form/openModalTwoFactor",
+                        });
+                      } else {
+                      }
+                    }}
+                  />
                 </>
-                
               )}
             {userData?.body.twoFactor === true && (
               <>
-              <p>Votre authentification à double facteur est activé avec votre numéro de téléphone</p>
-              <Switch
-                defaultChecked={userData?.body.twoFactor}
-                onChange={(e) => {
-                  e.preventDefault();
-                  dispatch({
-                    type: "form/openModalTwoFactorDisable",
-                  });
-                }}
-              />
+                <p>
+                  Votre authentification à double facteur est activé avec votre
+                  numéro de téléphone
+                </p>
+                <Switch
+                  defaultChecked={userData?.body.twoFactor}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    dispatch({
+                      type: "form/openModalTwoFactorDisable",
+                    });
+                  }}
+                />
               </>
-              
             )}
           </div>
         </>

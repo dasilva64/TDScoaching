@@ -5,9 +5,9 @@ import styles from "./ModalUserMainData.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 import validator from "validator";
-import fetchUserEditMainData from "@/app/components/fetch/user/fetchUserEditMainData";
 import { TextField } from "@mui/material";
 import useUserGet from "@/app/components/hook/user/useUserGet";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const ModalUserMainData = () => {
   const { userData } = useUserGet();
@@ -26,10 +26,7 @@ const ModalUserMainData = () => {
     useState<string>("");
   const [errorMessageLastname, setErrorMessageLastname] = useState<string>("");
 
-  const { trigger, data } = useSWRMutation(
-    "/api/user/editMainUser",
-    fetchUserEditMainData
-  );
+  const { trigger, data } = useSWRMutation("/api/user/editMainUser", fetchPost);
 
   useEffect(() => {
     if (data) {

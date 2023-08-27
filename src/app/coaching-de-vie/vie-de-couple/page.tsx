@@ -1,20 +1,38 @@
 import WhileInView from "@/app/components/framer/WhileInView";
 import styles from "./page.module.scss";
 import Image from "next/image";
+import Link from "next/link";
 
 const Couple = () => {
   return (
     <main className={styles.couple}>
-      <h1 className={styles.couple__h1}>Vie de couple</h1>
-      <div className={styles.couple__container}>
-        <div className={styles.couple__article}>
+      <section className={styles.couple__bg}>
+        <Image
+          className={styles.couple__bg__img}
+          width="0"
+          height="400"
+          sizes="100vw"
+          priority={true}
+          src={"/assets/img/avenue.jpg"}
+          alt="bousole"
+        />
+      </section>
+      <section className={styles.couple__why}>
+        <div className={styles.couple__why__container}>
           <WhileInView>
-            <h2 className={styles.couple__article__h2}>
-              Pourquoi faire du coaching de couple ?
-            </h2>
+            <h2 className={styles.couple__why__container__h2}>Vie de couple</h2>
           </WhileInView>
-          <div className={styles.couple__article__div}>
-            <WhileInView className={styles.couple__article__div__text}>
+          <div className={styles.couple__why__container__content}>
+            <WhileInView
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+              }}
+            >
+              <h2 className={styles.couple__why__container__content__h2}>
+                Pourquoi faire du coaching familial ?
+              </h2>
               <div>
                 <p>
                   Le couple est l’espace où chacun laisse éclore ce qu’il a de
@@ -27,7 +45,7 @@ const Couple = () => {
                   moments d’impasses ou de défis, certains couples décident soit
                   de :
                 </p>
-                <ul>
+                <ul className={styles.couple__why__container__content__ul}>
                   <li>Se séparer ;</li>
                   <li>Continuer à lutter l’un contre l’autre ;</li>
                   <li>
@@ -38,62 +56,29 @@ const Couple = () => {
                 </ul>
               </div>
             </WhileInView>
-            <div className={styles.couple__article__div__img}>
-              <WhileInView>
-                <Image
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  style={{
-                    objectFit: "contain",
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "20px",
-                  }}
-                  priority={true}
-                  src={"/assets/img/couple.jpg"}
-                  alt="bousole"
-                />
-              </WhileInView>
-            </div>
-          </div>
-        </div>
-        <div
-          className={`${styles.couple__article} ${styles.couple__article__margin}`}
-        >
-          <div className={styles.couple__article__div}>
-            <div className={styles.couple__article__div__img}>
-              <WhileInView>
-                <Image
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  style={{
-                    objectFit: "contain",
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "20px",
-                  }}
-                  priority={true}
-                  src={"/assets/img/foret.jpg"}
-                  alt="bousole"
-                />
-              </WhileInView>
-            </div>
-            <WhileInView className={styles.couple__article__div__text}>
-              <div>
-                <p>
-                  Les couples qui souhaitent vivre une vie amoureuse épanouie,
-                  saine et équilibrée choisissent de faire face à leur situation
-                  et de traverser l’impasse pour en sortir encore plus fort.
-                  L’un des moyens privilégiés des couples pour avoir l’aide ou
-                  l’accompagnement nécessaire aux changements souhaités est
-                  d’avoir recours à un coach conjugal.
-                </p>
-              </div>
+            <WhileInView style={{ display: "flex", marginLeft: "80px" }}>
+              <Image
+                className={styles.couple__why__container__content__img}
+                width="400"
+                height="400"
+                sizes="100vw"
+                priority={true}
+                src={"/assets/img/couple.jpg"}
+                alt="bousole"
+              />
             </WhileInView>
           </div>
+          <p>
+            Les couples qui souhaitent vivre une vie amoureuse épanouie, saine
+            et équilibrée choisissent de faire face à leur situation et de
+            traverser l’impasse pour en sortir encore plus fort. L’un des moyens
+            privilégiés des couples pour avoir l’aide ou l’accompagnement
+            nécessaire aux changements souhaités est d’avoir recours à un coach
+            conjugal.
+          </p>
         </div>
+      </section>
+      <div className={styles.couple__container}>
         <div className={styles.couple__article}>
           <WhileInView>
             <h2 className={styles.couple__article__h2}>
@@ -199,6 +184,56 @@ const Couple = () => {
           </WhileInView>
         </div>
       </div>
+      <section className={styles.couple__delivery}>
+        <div className={styles.couple__delivery__container}>
+          <div className={styles.couple__delivery__container__card}>
+            <h3 className={styles.couple__delivery__container__card__h3}>
+              Mes prestations
+            </h3>
+            <Image
+              className={styles.couple__delivery__container__card__img}
+              width="30"
+              height="30"
+              priority={true}
+              src={"/assets/icone/goal.png"}
+              alt="bousole"
+            />
+            <p className={styles.couple__delivery__container__card__p}>
+              Si vous souhaitez en savoir plus sur la tarification, cliquez sur
+              le bouton ci-dessous.
+            </p>
+            <Link
+              className={styles.couple__delivery__container__card__btn}
+              href="/tarif"
+            >
+              Mes prestations
+            </Link>
+          </div>
+          <div className={styles.couple__delivery__container__card}>
+            <h3 className={styles.couple__delivery__container__card__h3}>
+              Rendez-vous
+            </h3>
+            <Image
+              className={styles.couple__delivery__container__card__img}
+              width="30"
+              height="30"
+              priority={true}
+              src={"/assets/icone/goal.png"}
+              alt="bousole"
+            />
+            <p className={styles.couple__delivery__container__card__p}>
+              Si vous souhaitez me contacter ou prendre rendez-vous, cliquez sur
+              le bouton ci-dessous.
+            </p>
+            <Link
+              className={styles.couple__delivery__container__card__btn}
+              href="/contact"
+            >
+              Prendre rendez-vous
+            </Link>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };

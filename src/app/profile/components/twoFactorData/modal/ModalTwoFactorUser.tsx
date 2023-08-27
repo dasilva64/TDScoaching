@@ -5,7 +5,7 @@ import styles from "./ModalTwoFactorUser.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 import { TextField } from "@mui/material";
-import fetchEditTwoFactor from "@/app/components/fetch/user/useEditTwoFactor";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const ModalTwoFactor = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,7 +14,7 @@ const ModalTwoFactor = () => {
   const [errorMessageCode, setErrorMessageCode] = useState<string>("");
   const { trigger, data } = useSWRMutation(
     "/api/user/editTwoFactor",
-    fetchEditTwoFactor
+    fetchPost
   );
 
   useEffect(() => {
@@ -38,7 +38,6 @@ const ModalTwoFactor = () => {
 
   useEffect(() => {
     const mutateMainData = async () => {
-      console.log(data);
       mutate(
         "/api/user/getUser",
         {

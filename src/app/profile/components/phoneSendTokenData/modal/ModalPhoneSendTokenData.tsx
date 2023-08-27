@@ -7,7 +7,7 @@ import { TextField } from "@mui/material";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import { mutate } from "swr";
 import validator from "validator";
-import fetchUserEditPhoneSendTokenData from "@/app/components/fetch/user/fetchUserEditPhoneSendTokenData";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const ModalUserPhoneData = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -19,7 +19,7 @@ const ModalUserPhoneData = () => {
 
   const { trigger, data } = useSWRMutation(
     "/api/user/sendTokenEditPhone",
-    fetchUserEditPhoneSendTokenData
+    fetchPost
   );
 
   useEffect(() => {

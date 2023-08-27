@@ -5,8 +5,8 @@ import styles from "./ModalCloseEmail.module.scss";
 import { AppDispatch, RootState } from "../../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import fetchReSendEmailCode from "@/app/components/fetch/user/useReSendEmail";
 import useUserGet from "@/app/components/hook/user/useUserGet";
+import fetchGet from "@/app/components/fetch/user/fetchGet";
 
 const ModalCloseEmail = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,10 +18,7 @@ const ModalCloseEmail = () => {
   if (!isError && !isLoading && userData?.body.editEmail) {
     content = <>{userData?.body.editEmail.newEmail}</>;
   }
-  const { trigger, data } = useSWRMutation(
-    "/api/user/cancelEmail",
-    fetchReSendEmailCode
-  );
+  const { trigger, data } = useSWRMutation("/api/user/cancelEmail", fetchGet);
 
   useEffect(() => {
     if (data) {

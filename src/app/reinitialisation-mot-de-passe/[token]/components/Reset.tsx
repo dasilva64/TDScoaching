@@ -6,9 +6,9 @@ import { AppDispatch } from "../../../redux/store";
 import { useDispatch } from "react-redux";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useSWRMutation from "swr/mutation";
-import fetchUserResetPassword from "../../../components/fetch/user/fetchUserResetPassword";
 import { TextField } from "@mui/material";
 import validator from "validator";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const Reset = () => {
   const queryParam: any = usePathname();
@@ -28,7 +28,7 @@ const Reset = () => {
 
   const { trigger, data } = useSWRMutation(
     "/api/user/resetPassword",
-    fetchUserResetPassword
+    fetchPost
   );
   useEffect(() => {
     if (data) {

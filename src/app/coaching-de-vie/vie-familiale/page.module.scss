@@ -2,6 +2,9 @@ $primary-color: black;
 
 .famille {
   &__bg {
+    position: relative;
+    z-index: 2;
+    margin-top: 80px;
     &__img {
       width: 100%;
       object-fit: cover;
@@ -16,24 +19,105 @@ $primary-color: black;
         color: black;
         padding-top: 80px;
         padding-bottom: 60px;
-        font-size: 30px;
+        font-size: 48px;
       }
       &__content {
         margin-top: 40px;
         display: flex;
         justify-content: space-between;
-        &__img {
-          flex: 1;
-          -webkit-box-flex: 1;
-          -ms-flex: 1;
-          -webkit-box-flex: 1;
-          -moz-box-flex: 1;
-          object-fit: cover;
-          height: auto;
+        &__card {
+          min-height: 100%;
           border-radius: 10px;
+          box-shadow: 0px 0px 14px 5px #1dd6fc;
+          display: block;
+          overflow: hidden;
+          &__img {
+            min-height: 100%;
+            display: inline-block;
+            vertical-align: middle;
+            transform: scale3d(1, 1, 1);
+            transition: transform 400ms ease-in-out;
+            object-fit: cover;
+            height: auto;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            min-width: 400px;
+            &:hover {
+              transform: scale(1.1);
+              transition: transform 400ms ease-in-out;
+            }
+          }
+        }
+        &__text {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          margin-right: 80px;
+          font-size: 18px;
         }
         &__h2 {
           text-align: center;
+          font-size: 48px;
+        }
+      }
+    }
+  }
+  &__how {
+    background-color: rgba(0, 0, 0, 0.03);
+    padding: 50px 0 50px 0;
+    &__container {
+      margin: 0 10% 0 10%;
+      &__h2 {
+        text-align: center;
+        color: black;
+        padding-top: 40px;
+        padding-bottom: 30px;
+        font-size: 48px;
+      }
+      &__content {
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 50px;
+        &__card {
+          place-self: center;
+          width: 200px;
+          padding: 20px;
+          border: 1px solid #1dd6fc;
+          box-shadow: 5px 5px 5px #1dd6fc;
+          border-radius: 10px;
+          &__p {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+  &__what {
+    margin: 50px 10% 50px 10%;
+    &__h2 {
+      text-align: center;
+      color: black;
+      padding-top: 40px;
+      padding-bottom: 30px;
+      font-size: 48px;
+    }
+    &__container {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 50px;
+      &__card {
+        place-self: center;
+        width: 200px;
+        padding: 20px;
+        border: 1px solid #1dd6fc;
+        box-shadow: 5px 5px 5px #1dd6fc;
+        border-radius: 10px;
+        &__p {
+          font-size: 18px;
         }
       }
     }
@@ -46,7 +130,7 @@ $primary-color: black;
       display: flex;
       justify-content: space-between;
       &__card {
-        width: 40%;
+        width: 45%;
         position: relative;
         height: 260px;
         border: 1px solid #1dd6fc;
@@ -60,6 +144,7 @@ $primary-color: black;
         border-radius: 10px;
         &__h3 {
           margin-bottom: 30px;
+          font-size: 32px;
         }
         &__img {
           float: right;
@@ -67,6 +152,7 @@ $primary-color: black;
           top: -50px;
         }
         &__p {
+          font-size: 18px;
           text-align: justify;
         }
         &__btn {
@@ -87,109 +173,136 @@ $primary-color: black;
       }
     }
   }
-  &__h1 {
-    margin-top: 80px;
-    font-size: 60px;
-  }
-  &__container {
-    margin-top: 45px;
-    padding-top: 30px;
-    padding-bottom: 100px;
-  }
-  &__article {
-    margin-left: 10%;
-    margin-right: 10%;
-    text-align: justify;
-    &__h2 {
-      text-align: center;
-      color: $primary-color;
-      margin-top: 100px;
-      margin-bottom: 60px;
-      font-size: 30px;
-    }
-    &__ul {
-      border: 1px solid orange;
-      box-shadow: 10px 10px orange;
-      border-radius: 20px;
-      padding: 20px;
-      padding-left: 30px;
-      background-color: white;
-    }
-    &__p {
-      color: black;
-      text-align: center;
-      margin-top: 40px;
-      &__hover {
-        &:hover {
-          transform: scale(1.1);
+}
+
+@media screen and (max-width: 1024px) {
+  .famille {
+    &__why {
+      &__container {
+        &__content {
+          &__h2 {
+            margin-bottom: 30px;
+          }
         }
       }
-
-      &__margin {
-        margin-top: 80px;
-        color: black;
-        text-align: center;
+    }
+    &__what {
+      &__container {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
       }
     }
-    &__btn {
-      border: 1px solid orange;
-      padding: 10px;
-      background-color: orange;
-      border-radius: 20px;
-      color: black;
-    }
-    &__div {
-      display: flex;
-      justify-content: space-between;
-      &__text {
-        display: flex;
-        width: 55%;
-        margin-top: auto;
-        margin-bottom: auto;
-        border: 1px solid orange;
-        box-shadow: 10px 10px orange;
-        border-radius: 20px;
-        padding: 20px;
-        padding-left: 30px;
-        background-color: white;
-      }
-      &__img {
-        width: 30%;
-        display: flex;
-        margin-top: auto;
-        margin-bottom: auto;
+    &__how {
+      &__container {
+        &__content {
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 20px;
+        }
       }
     }
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 768px) {
   .famille {
-    &__h1 {
-      margin-top: 40px;
-      font-size: 40px;
+    &__bg {
+      &__img {
+        height: 300px;
+      }
     }
-    &__article {
-      margin-left: 5%;
-      margin-right: 5%;
-      text-align: justify;
-      &__h2 {
-        margin-top: 40px;
-        font-size: 26px;
-      }
-      &__ul {
-        padding: 11px 0px 11px 20px;
-      }
-      &__div {
-        display: block;
-        &__text {
-          width: unset;
-          padding: 10px;
-          margin-bottom: 20px;
-          margin-top: 20px;
+    &__why {
+      &__container {
+        margin: 0 5% 0 5%;
+        &__h2 {
+          padding-top: 30px;
+          padding-bottom: 30px;
         }
-        &__img {
-          width: unset;
+        &__content {
+          display: block;
+          &__card {
+            margin-top: 30px;
+          }
+          &__text {
+            margin-right: 0px;
+          }
+        }
+      }
+    }
+    &__what {
+      margin: 50px 5% 50px 5%;
+      &__h2 {
+        font-size: 40px;
+      }
+      &__container {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        &__card {
+          width: 175px;
+          &__p {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+    &__how {
+      &__container {
+        margin: 0 5% 0 5%;
+        &__h2 {
+          font-size: 40px;
+        }
+        &__content {
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          &__card {
+            width: 175px;
+            &__p {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+    &__delivery {
+      &__container {
+        margin: 0 5% 0 5%;
+        display: block;
+        &__card {
+          margin-top: 30px;
+          width: 100%;
+          &__h3 {
+            font-size: 26px;
+          }
+          &__p {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .famille {
+    &__bg {
+      &__img {
+        height: 250px;
+      }
+    }
+    &__what {
+      &__container {
+        grid-template-columns: 1fr;
+        &__card {
+          width: 100%;
+        }
+      }
+    }
+    &__how {
+      &__container {
+        &__content {
+          grid-template-columns: 1fr;
+          &__card {
+            width: 100%;
+          }
         }
       }
     }

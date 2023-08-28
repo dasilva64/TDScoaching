@@ -1,9 +1,7 @@
 import styles from "./page.module.scss";
 import Image from "next/image";
-import WhileInView from "./components/framer/WhileInView";
 import GoDown from "./components/goDown/goDown";
 import Card from "./components/card/Card";
-import Head from "next/head";
 
 export default function Home() {
   return (
@@ -79,16 +77,19 @@ export default function Home() {
                   enseigner.
                 </p>
               </div>
-
-              <Image
-                className={styles.home__who__container__content__img}
-                width="0"
-                height="0"
-                sizes="100vw"
-                priority={true}
-                src={"/assets/img/avenue.jpg"}
-                alt="bousole"
-              />
+              <div className={styles.home__who__container__content__div__card}>
+                <Image
+                  className={
+                    styles.home__who__container__content__div__card__img
+                  }
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  priority={true}
+                  src={"/assets/img/avenue.jpg"}
+                  alt="bousole"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -99,15 +100,17 @@ export default function Home() {
             </h2>
 
             <div className={styles.home__what__container__content}>
-              <Image
-                width="0"
-                height="0"
-                sizes="100vw"
-                className={styles.home__what__container__content__img}
-                priority={true}
-                src={"/assets/img/avenue.jpg"}
-                alt="bousole"
-              />
+              <div className={styles.home__what__container__content__card}>
+                <Image
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  className={styles.home__what__container__content__card__img}
+                  priority={true}
+                  src={"/assets/img/avenue.jpg"}
+                  alt="bousole"
+                />
+              </div>
 
               <div className={styles.home__what__container__content__div}>
                 <p className={styles.home__what__container__content__div__p}>

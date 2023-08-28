@@ -306,7 +306,6 @@ const Content = () => {
   const updateUseState = () => {
     setIsClick(!isClick);
   };
-
   if (typeof window !== "undefined") {
     window.addEventListener("resize", () => {
       if (window.innerWidth < 1201) {
@@ -781,6 +780,15 @@ const Content = () => {
         </div>
         <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>
       </header>
+      <div
+        style={{
+          position: "fixed",
+          height: "1px",
+          zIndex: "1",
+          width: "100%",
+          boxShadow: "aqua 0px 20px 90px 10px",
+        }}
+      ></div>
     </>
   );
 };

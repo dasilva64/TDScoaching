@@ -1,60 +1,146 @@
 $primary-color: white;
 
 .modalite {
-  &__h1 {
+  &__bg {
+    position: relative;
+    z-index: 2;
     margin-top: 80px;
-    font-size: 60px;
+    &__img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
   }
-  &__container {
-    background-color: rgb(0, 191, 255);
-    margin-top: 45px;
-    padding-top: 60px;
-    padding-bottom: 100px;
-  }
-  &__article {
-    margin-left: 10%;
-    margin-right: 10%;
-    text-align: justify;
-    &__h2 {
+  &__main {
+    margin: 0px 10% 0px 10%;
+    &__h1 {
       text-align: center;
-      color: $primary-color;
+      color: black;
       margin-top: 100px;
       margin-bottom: 60px;
-      font-size: 30px;
+      font-size: 48px;
     }
-    &__div {
-      border: 5px solid orange;
-      border-radius: 20px;
-      padding: 20px;
-      border: 2px solid orange;
-      box-shadow: 10px 10px orange;
-      background-color: white;
-      &__margin {
-        margin-top: 30px;
+    &__container {
+      &__p {
+        font-size: 18px;
       }
-      &__ul {
-        padding: 20px 0px 20px 40px;
+    }
+  }
+  &__first {
+    margin-top: 100px;
+    padding: 30px 0px 30px 0px;
+    background-color: rgba(0, 0, 0, 0.03);
+    &__container {
+      margin: 0px 10% 0px 10%;
+      &__h2 {
+        text-align: center;
+        color: black;
+        margin-top: 60px;
+        margin-bottom: 40px;
+        font-size: 32px;
+      }
+      &__content {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        &__p {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+  &__next {
+    margin: 0px 10% 50px 10%;
+    &__h2 {
+      text-align: center;
+      color: black;
+      margin-top: 60px;
+      margin-bottom: 40px;
+      font-size: 32px;
+    }
+    &__container {
+      &__content {
+        &__p {
+          font-size: 18px;
+        }
+        &__ul {
+          padding: 20px 0px 20px 40px;
+          font-size: 18px;
+        }
       }
     }
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 768px) {
   .modalite {
-    &__h1 {
-      margin-top: 40px;
-      font-size: 40px;
+    &__bg {
+      &__container {
+        &__h1 {
+          font-size: 42px;
+        }
+        &__p {
+          font-size: 16px;
+        }
+        &__btn {
+          font-size: 16px;
+        }
+      }
     }
-    &__article {
-      margin-left: 5%;
-      margin-right: 5%;
-      text-align: justify;
+    &__main {
+      margin: 0px 5% 0px 5%;
+      &__h1 {
+        font-size: 40px;
+      }
+      &__container {
+        &__p {
+          font-size: 16px;
+        }
+      }
+    }
+    &__first {
+      &__container {
+        margin: 0px 5% 0px 5%;
+        &__h2 {
+          font-size: 26px;
+        }
+        &__content {
+          &__p {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+    &__next {
+      margin: 0px 5% 50px 5%;
       &__h2 {
         font-size: 26px;
-        margin-top: 40px;
       }
-      &__ul {
-        padding: 11px 0px 11px 20px;
+      &__container {
+        &__content {
+          &__p {
+            font-size: 16px;
+          }
+          &__ul {
+            padding: 10px 0px 10px 20px;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .home {
+    &__bg {
+      &__container {
+        width: 100%;
+        &__h1 {
+          width: 200px;
+        }
+        &__p {
+          width: 200px;
+        }
       }
     }
   }

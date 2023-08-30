@@ -29,6 +29,8 @@ const initialState = {
   displayModalDeleteAccount: false,
   displayModalCloseEmail: false,
   displayModalClosePhone: false,
+  displayModalEditFormule: false,
+  displayModalCancelFormule: false,
 };
 
 const form = createSlice({
@@ -86,6 +88,18 @@ const form = createSlice({
     },
     closeModalDeleteFirstMeeting: (state) => {
       state.displayModalDeleteFirstMeeting = false;
+    },
+    openModalEditFormuleUserData: (state) => {
+      state.displayModalEditFormule = true;
+    },
+    closeModalEditFormuleUserData: (state) => {
+      state.displayModalEditFormule = false;
+    },
+    openModalCancelFormuleUserData: (state) => {
+      state.displayModalCancelFormule = true;
+    },
+    closeModalCancelFormuleUserData: (state) => {
+      state.displayModalCancelFormule = false;
     },
     openModalEditFirstnameUserData: (state) => {
       state.displayModalEditFirstnameUserData = true;

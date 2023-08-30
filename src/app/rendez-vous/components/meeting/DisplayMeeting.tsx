@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import fetchGetPaymentValid from "@/app/components/fetch/paiement/fetchGetPaymentValid";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const DisplayMeeting = () => {
   const { userData } = useUserGet();
@@ -21,6 +22,10 @@ const DisplayMeeting = () => {
     }
   }, [data, dispatch]);
 
+  const { trigger: triggerEdit, data: dataEdit } = useSWRMutation(
+    "/api/user/editFormuleUser",
+    fetchPost
+  );
   const { push } = useRouter();
   let restDate;
   if (userData?.body.meeting && userData?.body.meeting.limitDate) {
@@ -47,33 +52,18 @@ const DisplayMeeting = () => {
               timeZone: "UTC",
             })}
           </p>
-          {userData.body.discovery ? (
-            <div className={styles.meet__container__text__div}>
-              <button
-                className={styles.meet__container__text__div__btn}
-                onClick={() => {
-                  dispatch({
-                    type: "form/openModalDeleteMeeting",
-                  });
-                }}
-              >
-                Supprimer votre rendez-vous
-              </button>
-            </div>
-          ) : (
-            <div className={styles.meet__container__text__div}>
-              <button
-                className={styles.meet__container__text__div__btn}
-                onClick={() => {
-                  dispatch({
-                    type: "form/openModalDeleteFirstMeeting",
-                  });
-                }}
-              >
-                Supprimer votre rendez-vous découverte
-              </button>
-            </div>
-          )}
+          <div className={styles.meet__container__text__div}>
+            <button
+              className={styles.meet__container__text__div__btn}
+              onClick={() => {
+                dispatch({
+                  type: "form/openModalDeleteMeeting",
+                });
+              }}
+            >
+              Supprimer votre rendez-vous
+            </button>
+          </div>
         </div>
       </>
     );
@@ -136,45 +126,62 @@ const DisplayMeeting = () => {
   } else if (userData && !userData.body.meeting && userData.body.discovery) {
     content = (
       <>
-        <h3 className={styles.meet__meet__h3}>
-          Vous n&apos;avez pas encore de rendez-vous de programmé
-        </h3>
-        <div className={styles.meet__meet__div}>
-          <p className={styles.meet__meet__div__p}>
-            Vous pouvez sélectionner une date en cliquant sur le calendrier. La
-            durée standar d&apos;un rendez-vous est de 1 heure. Vous pouvez
-            m&apos;envoyer un mail en cliquant sur le bouton ce-dessous si vous
-            voulez avoir d&apos;avantage de renseignement ou pour prendre un
-            rendez-vous personnalisé.
-          </p>
-          <div>
-            <button
-              className={styles.meet__meet__div__btn}
-              onClick={() => {
-                push("/contact");
-              }}
-            >
-              bouton
-            </button>
-          </div>
-          <p className={styles.meet__meet__div__p__marge}>
-            Avant de prendre un rendez-vous vous devez autoriser un paiement.
-          </p>
-        </div>
-      </>
-    );
-  } else if (userData && !userData.body.meeting && !userData.body.discovery) {
-    content = (
-      <>
         <div className={styles.meet__container__text}>
           <h3 className={styles.meet__container__text__h3}>
-            Rendez-vous de découverte
+            Vous n&apos;avez pas encore de rendez-vous de programmé
           </h3>
           <div className={styles.meet__container__text__h3__div}>
+            <div className={styles.meet__container__text__h3__div__div}>
+              {userData.body.typeMeeting.type === "formule1" && (
+                <>
+                  <p>
+                    Vous disposez actuellement de l&apos;offre{" "}
+                    {userData.body.typeMeeting.type}, vous pouvez changer
+                    d&apos;offre en cliquant sur le bouton ci-dessous
+                  </p>
+                  <button
+                    className={styles.meet__container__text__h3__div__div__btn}
+                    onClick={() => {
+                      dispatch({
+                        type: "form/openModalEditFormuleUserData",
+                      });
+                    }}
+                  >
+                    Changer d&apos;offre
+                  </button>
+                </>
+              )}
+              {userData.body.typeMeeting.type !== "formule1" && (
+                <>
+                  <div>
+                    <p>
+                      Vous disposez actuellement de l&apos;offre{" "}
+                      {userData.body.typeMeeting.type}, il vous reste encore{" "}
+                      {userData.body.typeMeeting.number} rendez-vous à prendre
+                    </p>
+                    <p>
+                      Vous pouvez annuler votre offre en cliquant sur le bouton
+                      ci-dessous
+                    </p>
+                    <button
+                      className={
+                        styles.meet__container__text__h3__div__div__btn
+                      }
+                      onClick={() => {
+                        dispatch({
+                          type: "form/openModalCancelFormuleUserData",
+                        });
+                      }}
+                    >
+                      Annuler d&apos;offre
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
             <p className={styles.meet__container__text__h3__div__p}>
-              Ce rendez-vous est gratuit et sans engagement. Il permet de faire
-              connaissance et de définir ensemble vos objectifs et vos besoins.
               Vous pouvez sélectionner une date en cliquant sur le calendrier.
+              La durée standard d&apos;un rendez-vous est de 45 min.
             </p>
             <div className={styles.meet__container__text__h3__div__div}>
               <Image
@@ -186,7 +193,7 @@ const DisplayMeeting = () => {
                 alt="bousole"
               />
               <p className={styles.meet__container__text__h3__div__div__p}>
-                : 25 min
+                : 45 min
               </p>
             </div>
             <div className={styles.meet__container__text__h3__div__div}>
@@ -199,7 +206,7 @@ const DisplayMeeting = () => {
                 alt="bousole"
               />
               <p className={styles.meet__container__text__h3__div__div__p}>
-                : Gratuit
+                : 100€
               </p>
             </div>
             <p className={styles.meet__container__text__h3__div__p}>
@@ -207,6 +214,7 @@ const DisplayMeeting = () => {
               ce-dessous si vous voulez avoir d&apos;avantage de renseignement
               ou pour prendre un rendez-vous personnalisé.
             </p>
+
             <div className={styles.meet__container__text__h3__div__div}>
               <button
                 className={styles.meet__container__text__h3__div__div__btn}

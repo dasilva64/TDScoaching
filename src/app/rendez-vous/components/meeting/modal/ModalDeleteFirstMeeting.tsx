@@ -13,8 +13,9 @@ const ModalDeleteFirstMeeting = () => {
     fetchGet
   );
   useEffect(() => {
-    if (data && data.status === 200) {
+    if (data) {
       if (data.status === 200) {
+        console.log(data);
         mutate(
           "/api/user/getUser",
           {

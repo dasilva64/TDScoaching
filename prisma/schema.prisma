@@ -42,6 +42,6 @@ model User {
   deleteToken   Json?     @db.Json
   genre         String
   discovery     Boolean
-  typeMeeting   String?
+  typeMeeting   Json      @db.Json
   Meeting       Meeting[]
 }

@@ -44,6 +44,7 @@ const ModalAddFirstMeeting = () => {
   }, [data, dispatch]);
   useEffect(() => {
     const mutateMeetingData = async () => {
+      console.log(data);
       mutate(
         "/api/user/getUser",
         {
@@ -84,7 +85,6 @@ const ModalAddFirstMeeting = () => {
       endstr.slice(0, endstr.length - 1) +
       ".000Z";
     const fetchAddMeeting = async () => {
-      console.log(formatDate);
       trigger({ start: formatDate });
     };
     fetchAddMeeting();

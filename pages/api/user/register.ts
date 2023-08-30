@@ -71,7 +71,7 @@ export default withIronSessionApiRoute(
               role: "ROLE_USER",
               genre: validator.escape(genre.trim()),
               discovery: false,
-              typeMeeting: null,
+              typeMeeting: { type: "découverte" },
             },
           });
 
@@ -136,7 +136,7 @@ export default withIronSessionApiRoute(
                     role: "ROLE_USER",
                     genre: validator.escape(genre.trim()),
                     discovery: false,
-                    typeMeeting: null,
+                    typeMeeting: { type: "découverte" },
                   },
                 });
 
@@ -216,7 +216,7 @@ export default withIronSessionApiRoute(
                     role: "ROLE_USER",
                     genre: validator.escape(genre.trim()),
                     discovery: false,
-                    typeMeeting: null,
+                    typeMeeting: { type: "découverte" },
                   },
                 });
 

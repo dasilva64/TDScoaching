@@ -1,45 +1,37 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import prisma from "../../../lib/prisma";
+import { validationBody } from "../../../lib/validation";
+import validator from "validator";
 import { Prisma } from "@prisma/client";
 
 export default withIronSessionApiRoute(
-  async function addFirst(req, res) {
-    if (req.session.user) {
-      let start = req.body.start;
-      let dateStart = new Date(start);
-      const meeting = await prisma.meeting.findFirst({
-        where: {
-          startAt: dateStart,
-        },
-      });
-      if (meeting) {
-        return res.status(404).json({
-          status: 404,
-          message: "Ce rendez-vous est déjà pris, veuillez réessayer",
-        });
-      } else {
-        const createMeeting: any = {
-          startAt: req.body.start,
-          endAt: new Date(dateStart.setHours(dateStart.getHours() + 1)),
-          status: true,
-          userId: req.session.user.id,
-          limitDate: null,
-        };
-        const meeting = await prisma.meeting.create({
-          data: createMeeting,
-        });
-        const userEdit = await prisma.user.update({
-          where: {
-            id: req.session.user.id,
-          },
-          data: {
-            meetingId: meeting.id,
-          },
-        });
-        const user = await prisma.user.findUnique({
+  async function cancelFormuleUser(req, res) {
+    if (req.method === "GET") {
+      if (req.session.user) {
+        let arrayMessageError = validationBody(req.body);
+        if (arrayMessageError.length > 0) {
+          return res.status(400).json({
+            status: 400,
+            message: arrayMessageError,
+          });
+        }
+        let user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
         });
-        if (user) {
+        if (user === null) {
+          return res.status(400).json({
+            status: 400,
+            message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
+          });
+        } else {
+          const deleteFormule = await prisma.user.update({
+            where: {
+              id: req.session.user.id,
+            },
+            data: {
+              typeMeeting: { type: "découverte" },
+            },
+          });
           let userEditMailObject;
           if (user.editEmail) {
             let copyEditEmail: any = user.editEmail;
@@ -150,8 +142,8 @@ export default withIronSessionApiRoute(
             };
             return res.status(200).json({
               status: 200,
-              message: "Rendez-vous pris avec succès",
               body: userObject,
+              message: "Votre formule a été annulé avec succès",
             });
           } else {
             let userObject = {
@@ -169,25 +161,26 @@ export default withIronSessionApiRoute(
               twoFactorCode: userTwoFactorObject,
               birth: user.birth,
               genre: user.genre,
-              typeMeeting: user.typeMeeting,
               discovery: user.discovery,
+              typeMeeting: user.typeMeeting,
             };
             return res.status(200).json({
               status: 200,
-              message: "Rendez-vous pris avec succès",
+              message: "Votre formule a été annulé avec succès",
               body: userObject,
             });
           }
         }
-        return res.status(400).json({
-          status: 400,
-          message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+      } else {
+        return res.status(404).json({
+          status: 404,
+          message: "Vous n'êtes pas connecté, veuillez réessayer",
         });
       }
     } else {
-      return res.status(401).json({
-        status: 401,
-        message: "Vous n'êtes pas connecté",
+      return res.status(404).json({
+        status: 404,
+        message: "Une erreur est survenue, veuillez réessayer",
       });
     }
   },

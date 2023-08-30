@@ -34,6 +34,8 @@ import ModalUserBirthData from "@/app/profile/components/birthData/modal/ModalUs
 import ModalUserGenderData from "@/app/profile/components/genderData/modal/ModalUserGenderData";
 import ModalAddFirstMeeting from "@/app/rendez-vous/components/modal/ModalAddFirstMeeting";
 import ModalDeleteFirstMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteFirstMeeting";
+import ModalEditFormuleUser from "@/app/rendez-vous/components/modal/ModalEditFormuleUser";
+import ModalCancelFormuleUser from "@/app/rendez-vous/components/modal/ModalCancelFormuleUser";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
@@ -238,6 +240,8 @@ const Content = () => {
     displayModalCloseEmail,
     displayModalClosePhone,
     displayModalDeleteFirstMeeting,
+    displayModalEditFormule,
+    displayModalCancelFormule,
   } = useSelector((state: RootState) => state.form);
 
   const { flashMessage } = useSelector((state: RootState) => state.flash);
@@ -281,7 +285,9 @@ const Content = () => {
           displayModalEditBirthUserData === true ||
           displayModalEditGenderUserData === true ||
           displayModalFirstMeeting === true ||
-          displayModalDeleteFirstMeeting === true
+          displayModalDeleteFirstMeeting === true ||
+          displayModalEditFormule === true ||
+          displayModalCancelFormule === true
         ) {
           mainDiv.style.opacity = "0.05";
           footerDiv.style.opacity = "0.05";
@@ -322,6 +328,8 @@ const Content = () => {
     displayModalEditGenderUserData,
     displayModalFirstMeeting,
     displayModalDeleteFirstMeeting,
+    displayModalEditFormule,
+    displayModalCancelFormule,
   ]);
 
   const updateUseState = () => {
@@ -366,7 +374,9 @@ const Content = () => {
       displayModalEditBirthUserData ||
       displayModalEditGenderUserData ||
       displayModalFirstMeeting ||
-      displayModalDeleteFirstMeeting
+      displayModalDeleteFirstMeeting ||
+      displayModalEditFormule ||
+      displayModalCancelFormule
     ) {
       if (displayLogMenu === true) {
         if (flashMessage && flashMessage[1].length > 0) {
@@ -528,6 +538,8 @@ const Content = () => {
       {displayModalCloseEmail === true && <ModalCloseEmail />}
       {displayModalClosePhone === true && <ModalClosePhone />}
       {displayModalDeleteFirstMeeting === true && <ModalDeleteFirstMeeting />}
+      {displayModalEditFormule === true && <ModalEditFormuleUser />}
+      {displayModalCancelFormule === true && <ModalCancelFormuleUser />}
 
       {displayFlash()}
 

@@ -18,12 +18,12 @@ import Link from "next/link";
 import fetchPost from "@/app/components/fetch/user/FetchPost";
 import useSWRMutation from "swr/mutation";
 import { useDispatch } from "react-redux";
-import { mutate } from "swr";
 import form from "@/app/redux/feature/form";
+import DisplayDiscoveryMeeting from "./meeting/DisplayDiscoveryMeeting";
 
 const Display = () => {
   const [mobile, setMobile] = useState<boolean | null>(null);
-  const { userData, isLoading, isError } = useUserGet();
+  const { userData, isLoading, isError, mutate } = useUserGet();
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const dispatch = useDispatch();
   const [inputFormule, setInputFormule] = useState<string>("");
@@ -38,7 +38,6 @@ const Display = () => {
     if (data) {
       if (data.status === 200) {
         mutate(
-          "/api/user/getUser",
           {
             ...data,
             body: {
@@ -65,7 +64,7 @@ const Display = () => {
         });
       }
     }
-  }, [data, dispatch, inputFormule]);
+  }, [data, dispatch, inputFormule, mutate]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -130,17 +129,12 @@ const Display = () => {
   } else {
     content = (
       <>
-        {mobile === false &&
+        {/* {mobile === false &&
           userData &&
           userData.body.meeting === null &&
           userData.body.typeMeeting !== null && (
-            <>
-              <DatePickerDesktop
-                events={userData?.body.meetings}
-                discovery={userData?.body.discovery}
-              />
-            </>
-          )}
+            
+          )} */}
         {userData &&
           !userData.body.meeting &&
           userData.body.typeMeeting !== null &&
@@ -153,88 +147,112 @@ const Display = () => {
               setDateMeeting={setDateMeeting}
             /> */
           }}
-        {userData.body.typeMeeting !== null && <DisplayMeeting />}
-        {userData.body.typeMeeting === null && (
-          <div
-            style={{ width: "100%" }}
-            className={styles.meet__container__formule}
-          >
-            <h3 className={styles.meet__container__formule__h3}>
-              Choisir une formule pour pouvoir prendre un rendez-vous
-            </h3>
-            <div className={styles.meet__container__formule__content}>
-              <div className={styles.meet__container__formule__content__card}>
-                <h2>Formule 1</h2>
-                <p>test</p>
-              </div>
-              <div className={styles.meet__container__formule__content__card}>
-                <h2>Formule 2</h2>
-                <p>test</p>
-              </div>
-              <div className={styles.meet__container__formule__content__card}>
-                <h2>Formule 3</h2>
-                <p>test</p>
-              </div>
-            </div>
-            <p>
-              Si vous voulez plus de renseignement sur les formules vous pouvez
-              cliquez ici
-            </p>
-            <Link href={"/tarif"}>Voir les offres</Link>
-            <form
-              onSubmit={(e) => {
-                handleSubmit(e);
-              }}
-            >
-              <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">
-                  Formule
-                </FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="female"
-                  name="radio-buttons-group"
-                  onChange={(e) => {
-                    setInputFormule(e.target.value);
-                    setValidFormuleInput(true);
-                    setErrorMessageFormule("");
-                  }}
-                >
-                  <FormControlLabel
-                    value="formule1"
-                    control={<Radio />}
-                    label="Formule 1"
-                  />
-                  <FormControlLabel
-                    value="formule2"
-                    control={<Radio />}
-                    label="Formule 2"
-                  />
-                  <FormControlLabel
-                    value="formule3"
-                    control={<Radio />}
-                    label="Formule 3"
-                  />
-                </RadioGroup>
-                <FormHelperText style={{ color: "red", margin: "0px" }}>
-                  {errorMessageFormule}
-                </FormHelperText>
-              </FormControl>
-              <input
-                type="text"
-                name="pseudo"
-                id="pseudo"
-                style={{ display: "none" }}
-                tabIndex={-1}
-                autoComplete="off"
-                onChange={(e) => {
-                  setInputPseudo(e.target.value);
-                }}
-              />
-              <input type="submit" value="Envoyer" />
-            </form>
-          </div>
+        {userData.body.typeMeeting.type === "découverte" && (
+          <>
+            {userData.body.meeting === null &&
+              userData.body.discovery === false && (
+                <DatePickerDesktop
+                  events={userData?.body.meetings}
+                  discovery={userData?.body.discovery}
+                />
+              )}
+
+            <DisplayDiscoveryMeeting />
+          </>
         )}
+        {userData.body.typeMeeting.type !== "découverte" && (
+          <>
+            <>
+              <DatePickerDesktop
+                events={userData?.body.meetings}
+                discovery={userData?.body.discovery}
+              />
+            </>
+            <DisplayMeeting />
+          </>
+        )}
+        {userData.body.typeMeeting.type === "découverte" &&
+          userData.body.discovery === true && (
+            <div
+              style={{ width: "100%" }}
+              className={styles.meet__container__formule}
+            >
+              <h3 className={styles.meet__container__formule__h3}>
+                Choisir une formule pour pouvoir prendre un rendez-vous
+              </h3>
+              <div className={styles.meet__container__formule__content}>
+                <div className={styles.meet__container__formule__content__card}>
+                  <h2>Formule 1</h2>
+                  <p>test</p>
+                </div>
+                <div className={styles.meet__container__formule__content__card}>
+                  <h2>Formule 2</h2>
+                  <p>test</p>
+                </div>
+                <div className={styles.meet__container__formule__content__card}>
+                  <h2>Formule 3</h2>
+                  <p>test</p>
+                </div>
+              </div>
+              <p>
+                Si vous voulez plus de renseignement sur les formules vous
+                pouvez cliquez ici
+              </p>
+              <Link href={"/tarif"}>Voir les offres</Link>
+              <form
+                onSubmit={(e) => {
+                  handleSubmit(e);
+                }}
+              >
+                <FormControl>
+                  <FormLabel id="demo-radio-buttons-group-label">
+                    Formule
+                  </FormLabel>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue="female"
+                    name="radio-buttons-group"
+                    onChange={(e) => {
+                      setInputFormule(e.target.value);
+                      setValidFormuleInput(true);
+                      setErrorMessageFormule("");
+                    }}
+                  >
+                    <FormControlLabel
+                      value="formule1"
+                      control={<Radio />}
+                      label="Formule 1"
+                    />
+                    <FormControlLabel
+                      value="formule2"
+                      control={<Radio />}
+                      label="Formule 2"
+                    />
+                    <FormControlLabel
+                      value="formule3"
+                      control={<Radio />}
+                      label="Formule 3"
+                    />
+                  </RadioGroup>
+                  <FormHelperText style={{ color: "red", margin: "0px" }}>
+                    {errorMessageFormule}
+                  </FormHelperText>
+                </FormControl>
+                <input
+                  type="text"
+                  name="pseudo"
+                  id="pseudo"
+                  style={{ display: "none" }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  onChange={(e) => {
+                    setInputPseudo(e.target.value);
+                  }}
+                />
+                <input type="submit" value="Envoyer" />
+              </form>
+            </div>
+          )}
       </>
     );
   }

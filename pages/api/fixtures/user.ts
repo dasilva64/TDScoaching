@@ -16,6 +16,9 @@ export default async function sendTokenEditPhone(req: any, res: any) {
         twoFactor: false,
         role: "ROLE_USER",
         birth: "1999-01-01",
+        genre: "homme",
+        discovery: false,
+        typeMeeting: null,
       },
     });
   }

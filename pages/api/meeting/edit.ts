@@ -6,7 +6,7 @@ export default withIronSessionApiRoute(
   async function getuser(req: any, res: NextApiResponse) {
     if (req.method === "POST") {
       if (req.session.user) {
-        const {description} = await req.body;
+        const { description } = await req.body;
         const user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
         });
@@ -25,14 +25,13 @@ export default withIronSessionApiRoute(
               message: "Aucun rendez-vous existe avec cet id",
             });
           } else {
-            const editMetting = await prisma.meeting.update({
+            /* const editMetting = await prisma.meeting.update({
               where: { id: meeting.id },
               data: { description: description },
-            });
+            }); */
             return res.status(200).json({
               status: 200,
               message: "Votre description a été modifié avec succès",
-              body: editMetting,
             });
           }
         }

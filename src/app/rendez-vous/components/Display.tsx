@@ -92,7 +92,27 @@ const Display = () => {
           }}
         {userData.body.typeMeeting !== null && <DisplayMeeting />}
         {userData.body.typeMeeting === null && (
-          <div>
+          <div
+            style={{ width: "100%" }}
+            className={styles.meet__container__text}
+          >
+            <h3 className={styles.meet__container__text__h3}>
+              Choisir une formule pour pouvoir prendre un rendez-vous
+            </h3>
+            <div>
+              <div>
+                <h2>Formule 1</h2>
+                <p>test</p>
+              </div>
+              <div>
+                <h2>Formule 2</h2>
+                <p>test</p>
+              </div>
+              <div>
+                <h2>Formule 3</h2>
+                <p>test</p>
+              </div>
+            </div>
             <p>
               Si vous voulez plus de renseignement sur les formules vous pouvez
               cliquez ici

@@ -62,7 +62,6 @@ export default withIronSessionApiRoute(
             where: { userId: userId },
             select: {
               startAt: true,
-              description: true,
               status: true,
             },
           });

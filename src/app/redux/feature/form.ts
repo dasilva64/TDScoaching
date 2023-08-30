@@ -7,7 +7,11 @@ const initialState = {
   displayFormCheck: false,
   displayFormForgot: false,
   displayModalDeleteMeeting: false,
-  displayModalEditMainUserData: false,
+  displayModalDeleteFirstMeeting: false,
+  displayModalEditFirstnameUserData: false,
+  displayModalEditLastnameUserData: false,
+  displayModalEditBirthUserData: false,
+  displayModalEditGenderUserData: false,
   displayModalEditPasswordData: false,
   displayModalEditPhoneSendData: false,
   displayModalEditPhoneData: false,
@@ -19,7 +23,9 @@ const initialState = {
   displayModalTwoFactorDisable: false,
   displayModalCancelMeeting: false,
   displayModalMeeting: false,
+  displayModalFirstMeeting: false,
   dataModalMeeting: "",
+  dataModalFirstMeeting: "",
   displayModalDeleteAccount: false,
   displayModalCloseEmail: false,
   displayModalClosePhone: false,
@@ -75,11 +81,35 @@ const form = createSlice({
     closeModalDeleteMeeting: (state) => {
       state.displayModalDeleteMeeting = false;
     },
-    openModalEditMainUserData: (state) => {
-      state.displayModalEditMainUserData = true;
+    openModalDeleteFirstMeeting: (state) => {
+      state.displayModalDeleteFirstMeeting = true;
     },
-    closeModalEditMainUserData: (state) => {
-      state.displayModalEditMainUserData = false;
+    closeModalDeleteFirstMeeting: (state) => {
+      state.displayModalDeleteFirstMeeting = false;
+    },
+    openModalEditFirstnameUserData: (state) => {
+      state.displayModalEditFirstnameUserData = true;
+    },
+    closeModalEditFirstnameUserData: (state) => {
+      state.displayModalEditFirstnameUserData = false;
+    },
+    openModalEditLastnameUserData: (state) => {
+      state.displayModalEditLastnameUserData = true;
+    },
+    closeModalEditLastnameUserData: (state) => {
+      state.displayModalEditLastnameUserData = false;
+    },
+    openModalEditBirthUserData: (state) => {
+      state.displayModalEditBirthUserData = true;
+    },
+    closeModalEditBirthUserData: (state) => {
+      state.displayModalEditBirthUserData = false;
+    },
+    openModalEditGenderUserData: (state) => {
+      state.displayModalEditGenderUserData = true;
+    },
+    closeModalEditGenderUserData: (state) => {
+      state.displayModalEditGenderUserData = false;
     },
     openModalEditPasswordData: (state) => {
       state.displayModalEditPasswordData = true;
@@ -150,6 +180,14 @@ const form = createSlice({
     closeModalMeeting: (state) => {
       state.displayModalMeeting = false;
       state.dataModalMeeting = "";
+    },
+    openModalFirstMeeting: (state, action) => {
+      state.displayModalFirstMeeting = true;
+      state.dataModalFirstMeeting = action.payload.date;
+    },
+    closeModalFirstMeeting: (state) => {
+      state.displayModalFirstMeeting = false;
+      state.dataModalFirstMeeting = "";
     },
     openModalDeleteAccount: (state) => {
       state.displayModalDeleteAccount = true;

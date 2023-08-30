@@ -4,17 +4,33 @@ import AllUser from "./components/allUser/AllUser";
 
 const page = () => {
   return (
-    <main className={styles.allUser}>
-      <h1 className={styles.allUser__h1}>Dashboard</h1>
-      <div className={styles.allUser__container}>
-        <div className={styles.allUser__article}>
-          <h2 className={styles.allUser__article__h2}>Tous les utilisateurs</h2>
-          <div>
-            <AllUser />
+    <>
+      <noscript
+        style={{
+          width: "100%",
+          padding: "20px 0",
+          background: "red",
+          position: "fixed",
+          bottom: "0",
+          left: "0",
+          zIndex: "999",
+          color: "white",
+          textAlign: "center",
+        }}
+      >
+        Veuillez activer JavaScript pour profiter pleinement de notre site.
+      </noscript>
+      <main className={styles.allUser}>
+        <h1 className={styles.allUser__h1}>Tous les utilisateurs</h1>
+        <div className={styles.allUser__container}>
+          <div className={styles.allUser__article}>
+            <div>
+              <AllUser />
+            </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 };
 

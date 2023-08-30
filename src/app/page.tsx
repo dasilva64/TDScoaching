@@ -53,11 +53,13 @@ export default function Home() {
             </h2>
 
             <p className={styles.home__who__container__p}>
-              Le coaching est l’accompagnement d’une personne dans un processus
-              de changement. Le coach agit comme facilitateur de l’évolution. Il
-              apporte une vision extérieure, prend le rôle d’un partenaire
-              objectif et permet à la personne coachée d’atteindre ses objectifs
-              plus efficacement et plus rapidement.
+              En offrant un espace pour la réflexion, le coaching peut aider à
+              améliorer la qualité de vie et favoriser la croissance
+              personnelle.
+            </p>
+            <p className={styles.home__who__container__p}>
+              Comment ? En encourageant l&apos;autoréflexion et la prise de
+              conscience de ses propres pensées, comportements et motivations.
             </p>
 
             <div className={styles.home__who__container__content}>
@@ -67,14 +69,13 @@ export default function Home() {
                 </h2>
 
                 <p className={styles.home__who__container__content__div__p}>
-                  Coacher quelqu’un, c’est libérer son potentiel pour maximiser
-                  ses performances. C’est l’aider à apprendre plutôt que de lui
-                  enseigner. Le coaching de vie implique également de fournir
-                  des outils et des techniques spécifiques pour vous aider à
-                  surmonter les obstacles et à atteindre vos objectifs. Coacher
-                  quelqu’un, c’est libérer son potentiel pour maximiser ses
-                  performances. C’est l’aider à apprendre plutôt que de lui
-                  enseigner.
+                  Coacher une personne, c&apos;est lui fournir un accompagnement
+                  personnalisé dans le but de l&apos;aider à atteindre des
+                  objectifs spécifiques, à développer ses compétences, à
+                  résoudre des problèmes ou à réaliser des changements positifs
+                  dans sa vie personnelle ou professionnelle. Le coach agit
+                  comme un facilitateur. Il va permettre à une personne de
+                  libérer son potentiel pour maximiser ses performances.
                 </p>
               </div>
               <div className={styles.home__who__container__content__div__card}>
@@ -114,28 +115,27 @@ export default function Home() {
 
               <div className={styles.home__what__container__content__div}>
                 <p className={styles.home__what__container__content__div__p}>
-                  Le coaching de vie s’est largement développé à partir des
-                  années 1990 et couvre tous les domaines de la vie :
-                </p>
-                <ul className={styles.home__what__container__content__div__ul}>
-                  <li>Vie familiale</li>
-                  <li>Vie professionnelle</li>
-                  <li>Vie de couple</li>
-                  <li>Vie liée à l’épanouissement personnel</li>
-                  <li>Vie sociale</li>
-                </ul>
-                <p className={styles.home__what__container__content__div__p}>
-                  Le coaching permet de prendre le temps de se poser ou mieux
-                  gérer son temps, de réfléchir, de se (re) trouver, de se (re)
-                  connaître, de s’orienter, de prendre des décisions,
-                  d’équilibrer ses domaines de vie, de communiquer plus
-                  facilement avec autrui, de mieux équilibrer sa vie
-                  professionnelle et sa vie privée et de manière générale de{" "}
-                  <strong>vivre mieux</strong>.
+                  Le coaching est un processus visant à accompagner une personne
+                  ou un groupe dans l&apos;atteinte de leurs objectifs
+                  personnels ou professionnels, ainsi que dans le développement
+                  de leurs compétences et de leur potentiel. Il s&apos;agit
+                  d&apos;une relation collaborative où le coach fournit un cadre
+                  spécifique qui va permettre à son client de réaliser un
+                  travail d’introspection.
                 </p>
                 <p className={styles.home__what__container__content__div__p}>
-                  tds-cochingdevie vous accompagne sur toutes formes de
-                  problèmes, dans différents domaines :
+                  Le coach n&apos;est pas là pour donner des conseils, des
+                  solutions ou des réponses toutes faites, mais plutôt pour
+                  amener son client à explorer ses propres pensées, à découvrir
+                  des solutions et à prendre des décisions éclairées.
+                </p>
+                <p className={styles.home__what__container__content__div__p}>
+                  Enfin, le coaching se différencie de la thérapie en ce sens
+                  qu&apos;il se concentre principalement sur le présent et
+                  l&apos;avenir, sur l&apos;action et la réalisation
+                  d&apos;objectifs spécifiques (la thérapie se penche davantage
+                  sur le passé, les émotions profondes et la guérison
+                  psychologique).
                 </p>
               </div>
             </div>
@@ -146,44 +146,44 @@ export default function Home() {
 
           <div className={styles.home__goal__container}>
             <Card
-              title={"Clarté et Objectifs"}
+              title={"Mieux gérer ses émotions"}
               content={
-                "Un coach de vie peut vous aider à définir des objectifs clairs et significatifs dans les domaines qui comptent le plus pour vous. Il vous guidera à travers un processus de réflexion approfondie pour définir ce que vous voulez vraiment et élaborer un plan pour y parvenir."
+                "Les défis et les obstacles peuvent parfois sembler insurmontables. Un coach professionnel peut vous aider à identifier les schémas négatifs de pensée et de comportement qui entravent votre progression. Il vous permettra de trouver des stratégies pour les surmonter."
               }
             />
 
             <Card
-              title={"Surmonter les Obstacles"}
+              title={"Améliorer ses relations interpersonnelles"}
               content={
-                "Les défis et les obstacles peuvent parfois sembler insurmontables. Un coach de vie peut vous aider à identifier les schémas négatifs de pensée et de comportement qui entravent votre progression, et vous fournir des stratégies pour les surmonter."
+                "Si vous avez des difficultés dans vos relations de couple, avec votre famille ou vos relations professionnelles, un coach professionnel peut vous aider à améliorer la communication, à développer des compétences en résolution de conflits et à renforcer les liens."
               }
             />
 
             <Card
-              title={"Améliorer les Relations"}
+              title={"Améliorer ses performances"}
               content={
-                "Si vous avez des difficultés dans vos relations de couple, votre famille ou vos relations professionnelles, un coach de vie peut vous aider à améliorer la communication, à développer des compétences en résolution de conflits et à renforcer les liens."
+                "Le coaching vous pousse à sortir de votre zone de confort et à vous engager dans une dynamique de croissance personnelle. Vous explorerez de nouvelles perspectives, apprendrez à vous connaître plus en profondeur et développerez un sentiment de réalisation personnelle."
               }
             />
 
             <Card
-              title={"Confiance en Soi"}
+              title={"Amélioter sa confiance en soi"}
               content={
-                "Un manque de confiance en soi peut être un frein majeur à la réalisation de vos objectifs. Un coach de vie peut vous aider à reconnaître et à renforcer vos forces, à vous accepter tel que vous êtes et à développer une confiance en vous solide."
+                "Un manque de confiance en soi peut être un frein majeur à la réalisation de vos objectifs. Un coach professionnel peut vous aider à reconnaître et à renforcer vos forces, à vous accepter tel que vous êtes et à développer une confiance en vous solide."
               }
             />
 
             <Card
               title={"Gestion du Stress"}
               content={
-                "La vie moderne peut être stressante. Un coach de vie peut vous enseigner des techniques de gestion du stress, de relaxation et de prise de recul pour mieux faire face aux défis de la vie quotidienne."
+                "La vie moderne peut être stressante. Un coach professionnel vous aidera à trouver des techniques de gestion du stress, de relaxation et de prise de recul pour mieux faire face aux défis de la vie quotidienne."
               }
             />
 
             <Card
-              title={"Croissance Personnelle"}
+              title={"Poser des limites et les faire respecter"}
               content={
-                "Le coaching de vie vous pousse à sortir de votre zone de confort et à vous engager dans un voyage de croissance personnelle. Vous explorerez de nouvelles perspectives, apprendrez à vous connaître plus en profondeur et développerez un sentiment de réalisation personnelle."
+                "Un coach professionnel vous aidera à mieux vous connaitre et à mieux évaluer vos besoins. Cela vous permettra d’être fidèle à vos valeurs et de pouvoir être pleinement vous-même."
               }
             />
           </div>

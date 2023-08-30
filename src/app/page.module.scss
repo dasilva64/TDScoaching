@@ -113,6 +113,9 @@ $primary-color: white;
           border-radius: 20px;
           color: black;
           margin-left: 100px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
           flex: 1;
           &__p {
             font-size: 18px;

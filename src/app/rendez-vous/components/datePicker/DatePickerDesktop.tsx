@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/app/redux/store";
 
-const DatePickerDesktop = ({ events }: any) => {
+const DatePickerDesktop = ({ events, discovery }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [arDateWeek, setArDateWeek] = useState<any>([]);
   const [all, setAll] = useState<any>(null);
@@ -280,12 +280,21 @@ const DatePickerDesktop = ({ events }: any) => {
   const handlerClick = (h: any, p: any) => {
     let create = new Date(p[0][0], p[0][1] - 1, p[0][2], h);
     if (new Date(create).getTime() > new Date().getTime()) {
-      dispatch({
-        type: "form/openModalMeeting",
-        payload: {
-          date: create.toLocaleString(),
-        },
-      });
+      if (discovery === false) {
+        dispatch({
+          type: "form/openModalFirstMeeting",
+          payload: {
+            date: create.toLocaleString(),
+          },
+        });
+      } else {
+        dispatch({
+          type: "form/openModalMeeting",
+          payload: {
+            date: create.toLocaleString(),
+          },
+        });
+      }
     }
   };
 
@@ -375,7 +384,7 @@ const DatePickerDesktop = ({ events }: any) => {
                       >
                         <span>{daystext[p[0][3]]}</span>
                         <span>
-                          {p[0][2]}/{p[0][1]}
+                          {p[0][2]} {monthstext[p[0][1]]}
                         </span>
                       </div>
                     </th>
@@ -409,30 +418,39 @@ const DatePickerDesktop = ({ events }: any) => {
                                 ) {
                                   return (
                                     <td
-                                      onClick={() => {}}
-                                      className={
-                                        styles.datePicker__table__tbody__tr__td__meeting__me
-                                      }
+                                      className={`${styles.datePicker__table__tbody__tr__td} ${styles.datePicker__table__tbody__tr__td__previous}`}
                                       key={index}
                                     >
-                                      {h[1]}
+                                      <div
+                                        className={
+                                          styles.datePicker__table__tbody__tr__td__div__previous
+                                        }
+                                      >
+                                        <p
+                                          className={
+                                            styles.datePicker__table__tbody__tr__td__div__previous__p
+                                          }
+                                        ></p>
+                                      </div>
                                     </td>
                                   );
                                 } else {
                                   return (
                                     <td
-                                      onClick={() => {}}
-                                      className={
-                                        styles.datePicker__table__tbody__tr__td__meeting__other
-                                      }
+                                      className={`${styles.datePicker__table__tbody__tr__td} ${styles.datePicker__table__tbody__tr__td__previous}`}
                                       key={index}
                                     >
-                                      {" "}
                                       <div
                                         className={
-                                          styles.datePicker__table__tbody__tr__td__meeting__other__div
+                                          styles.datePicker__table__tbody__tr__td__div__previous
                                         }
-                                      ></div>
+                                      >
+                                        <p
+                                          className={
+                                            styles.datePicker__table__tbody__tr__td__div__previous__p
+                                          }
+                                        ></p>
+                                      </div>
                                     </td>
                                   );
                                 }

@@ -4,6 +4,7 @@ import { AppDispatch } from "../../../redux/store";
 import React from "react";
 import { useDispatch } from "react-redux";
 import styles from "./EmailSendTokenData.module.scss";
+import Image from "next/image";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 
 const EmailData = () => {
@@ -15,10 +16,31 @@ const EmailData = () => {
     content = <div>error</div>;
   } else if (isLoading) {
     content = (
-      <div className={styles.emailData__loadData}>
-        Chargement des données
-        <div className={styles.emailData__loadData__arc}>
-          <div className={styles.emailData__loadData__arc__circle}></div>
+      <div className={styles.card}>
+        <Image
+          className={styles.card__icone}
+          width="20"
+          height="20"
+          priority={true}
+          src={"/assets/icone/user-solid.svg"}
+          alt="bousole"
+        />
+        <div className={styles.card__info}>
+          <p>
+            <strong>Email</strong>
+          </p>
+          <p>Chargement des données</p>
+        </div>
+        <Image
+          className={styles.card__info__icone}
+          width="20"
+          height="20"
+          priority={true}
+          src={"/assets/icone/chevron-right-solid.svg"}
+          alt="bousole"
+        />
+        <div className={styles.card__arc}>
+          <div className={styles.card__arc__circle}></div>
         </div>
       </div>
     );
@@ -26,43 +48,42 @@ const EmailData = () => {
     if (userData) {
       content = (
         <>
-          <h3 className={styles.emailData__h3}>Adresse email</h3>
-          <ul className={styles.emailData__ul}>
-            <li
-              className={`${styles.emailData__ul__li} ${styles.emailData__ul__li__margin}`}
-            >
-              email : {userData?.body.email}
-            </li>
-          </ul>
-          <div className={styles.emailData__div}>
-            <>
+          <div
+            className={styles.card}
+            onClick={() => {
+              dispatch({
+                type: "form/openModalEditEmailSendData",
+              });
+            }}
+          >
+            <Image
+              className={styles.card__icone}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/user-solid.svg"}
+              alt="bousole"
+            />
+            <div className={styles.card__info}>
               <p>
-                Vous pouvez modifier votre adresse email en cliquant sur le
-                bouton ci-dessous
+                <strong>Email</strong>
               </p>
-              <button
-                onClick={() => {
-                  dispatch({
-                    type: "form/openModalEditEmailSendData",
-                  });
-                }}
-                className={styles.emailData__div__button}
-              >
-                Modifier
-              </button>
-            </>
+              <p>{userData?.body.email}</p>
+            </div>
+            <Image
+              className={styles.card__info__icone}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/chevron-right-solid.svg"}
+              alt="bousole"
+            />
           </div>
         </>
       );
     }
   }
-  return (
-    <>
-      <>
-        <div className={styles.emailData}>{content}</div>
-      </>
-    </>
-  );
+  return <>{content}</>;
 };
 
 export default EmailData;

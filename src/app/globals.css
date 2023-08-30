@@ -23,3 +23,7 @@ a {
 h1, h2, h3 {
   text-align: center;
 }
+
+.css-1d1r5q-MuiFormHelperText-root {
+  color: red !important;
+}

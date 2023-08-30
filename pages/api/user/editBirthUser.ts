@@ -4,10 +4,10 @@ import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 
 export default withIronSessionApiRoute(
-  async function editMainUser(req, res) {
+  async function editBirthUser(req, res) {
     if (req.method === "POST") {
       if (req.session.user) {
-        const { firstname, lastname, pseudo } = await req.body;
+        const { birth, pseudo } = await req.body;
         let arrayMessageError = validationBody(req.body);
         if (arrayMessageError.length > 0) {
           return res.status(400).json({
@@ -36,10 +36,10 @@ export default withIronSessionApiRoute(
                 id: req.session.user.id,
               },
               data: {
-                firstname: validator.escape(firstname.trim()),
-                lastname: validator.escape(lastname.trim()),
+                birth: validator.escape(birth.trim()),
               },
             });
+
             let userObject = {
               id: editUser.id,
               firstname: editUser.firstname,
@@ -47,10 +47,11 @@ export default withIronSessionApiRoute(
               email: editUser.mail,
               role: editUser.role,
               phone: editUser.phone,
+              birth: editUser.birth,
             };
             res.status(200).json({
               status: 200,
-              message: "Vos informations ont été mis à jours avec succès",
+              message: "Votre date de naissance a été mis à jours avec succès",
               body: userObject,
             });
           }

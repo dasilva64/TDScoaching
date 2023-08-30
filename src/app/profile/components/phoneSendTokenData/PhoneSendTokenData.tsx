@@ -1,6 +1,6 @@
 "use client";
 
-import { RootState } from "../../../redux/store";
+import Image from "next/image";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./PhoneSendTokenData.module.scss";
@@ -14,10 +14,31 @@ const PhoneData = () => {
     content = <div>error</div>;
   } else if (isLoading) {
     content = (
-      <div className={styles.phoneData__loadData}>
-        Chargement des données
-        <div className={styles.phoneData__loadData__arc}>
-          <div className={styles.phoneData__loadData__arc__circle}></div>
+      <div className={styles.card}>
+        <Image
+          className={styles.card__icone}
+          width="20"
+          height="20"
+          priority={true}
+          src={"/assets/icone/user-solid.svg"}
+          alt="bousole"
+        />
+        <div className={styles.card__info}>
+          <p>
+            <strong>Numéro de téléphone</strong>
+          </p>
+          <p>Chargement des données</p>
+        </div>
+        <Image
+          className={styles.card__info__icone}
+          width="20"
+          height="20"
+          priority={true}
+          src={"/assets/icone/chevron-right-solid.svg"}
+          alt="bousole"
+        />
+        <div className={styles.card__arc}>
+          <div className={styles.card__arc__circle}></div>
         </div>
       </div>
     );
@@ -25,44 +46,43 @@ const PhoneData = () => {
     if (userData) {
       content = (
         <>
-          <h3 className={styles.phoneData__h3}>Numéro de téléphone</h3>
-          <ul className={styles.phoneData__ul}>
-            <li
-              className={`${styles.phoneData__ul__li} ${styles.phoneData__ul__li__margin}`}
-            >
-              Téléphone : {userData?.body.phone}
-            </li>
-          </ul>
-          <>
-            <p>
-              Vous pouvez modifier votre numéro de téléphone en cliquant sur le
-              bouton ci-dessous
-            </p>
-            <div className={styles.phoneData__div}>
-              <button
-                className={styles.phoneData__div__button}
-                onClick={() => {
-                  dispatch({
-                    type: "form/openModalEditPhoneSendData",
-                  });
-                }}
-              >
-                Modifier
-              </button>
+          <div
+            className={styles.card}
+            onClick={() => {
+              dispatch({
+                type: "form/openModalEditPhoneSendData",
+              });
+            }}
+          >
+            <Image
+              className={styles.card__icone}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/user-solid.svg"}
+              alt="bousole"
+            />
+            <div className={styles.card__info}>
+              <p>
+                <strong>Numéro de téléphone</strong>
+              </p>
+              <p>{userData?.body.phone}</p>
             </div>
-          </>
+            <Image
+              className={styles.card__info__icone}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/chevron-right-solid.svg"}
+              alt="bousole"
+            />
+          </div>
         </>
       );
     }
   }
 
-  return (
-    <>
-      <>
-        <div className={styles.phoneData}>{content}</div>
-      </>
-    </>
-  );
+  return <>{content}</>;
 };
 
 export default PhoneData;

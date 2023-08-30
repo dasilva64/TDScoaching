@@ -7,6 +7,7 @@ import { Switch } from "@mui/material";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
+import Image from "next/image";
 import fetchGet from "@/app/components/fetch/user/fetchGet";
 
 const TwoFactorData = () => {
@@ -65,10 +66,31 @@ const TwoFactorData = () => {
     content = <div>error</div>;
   } else if (isLoading) {
     content = (
-      <div className={styles.twoFactorData__loadData}>
-        Chargement des données
-        <div className={styles.twoFactorData__loadData__arc}>
-          <div className={styles.twoFactorData__loadData__arc__circle}></div>
+      <div className={styles.card}>
+        <Image
+          className={styles.card__icone}
+          width="20"
+          height="20"
+          priority={true}
+          src={"/assets/icone/user-solid.svg"}
+          alt="bousole"
+        />
+        <div className={styles.card__info}>
+          <p>
+            <strong>Double authentification</strong>
+          </p>
+          <p>Chargement des données</p>
+        </div>
+        <Image
+          className={styles.card__info__icone}
+          width="20"
+          height="20"
+          priority={true}
+          src={"/assets/icone/chevron-right-solid.svg"}
+          alt="bousole"
+        />
+        <div className={styles.card__arc}>
+          <div className={styles.card__arc__circle}></div>
         </div>
       </div>
     );
@@ -76,85 +98,44 @@ const TwoFactorData = () => {
     if (userData) {
       content = (
         <>
-          <h3 className={styles.twoFactorData__h3}>Double authentification</h3>
-          <ul className={styles.twoFactorData__ul}>
-            <li
-              className={`${styles.twoFactorData__ul__li} ${styles.twoFactorData__ul__li__margin}`}
-            >
-              Two Factor :
-            </li>
-          </ul>
-          <div className={styles.twoFactorData__div}>
-            {userData?.body.twoFactor === false &&
-              userData?.body.twoFactorCode && (
-                <>
-                  <p>
-                    Vous avez déjà fait une demande de two factor, vous pouvez
-                    refaire une demande dans{" "}
-                    {Number(restDate?.getMinutes()) + 1} minutes{" "}
-                  </p>
-                  <button
-                    className={styles.twoFactorData__div__button}
-                    onClick={() => {
-                      dispatch({
-                        type: "form/openModalTwoFactor",
-                      });
-                    }}
-                  >
-                    Valider ma two factor auth
-                  </button>
-                </>
-              )}
-            {userData?.body.twoFactor === false &&
-              !userData?.body.twoFactorCode && (
-                <>
-                  <p>
-                    Activer cette option est recommendé pour une question de
-                    sécurité
-                  </p>
-                  <Switch
-                    defaultChecked={userData?.body.twoFactor}
-                    onChange={(e) => {
-                      if (e.target.checked === true) {
-                        trigger();
-                        dispatch({
-                          type: "form/openModalTwoFactor",
-                        });
-                      } else {
-                      }
-                    }}
-                  />
-                </>
-              )}
-            {userData?.body.twoFactor === true && (
-              <>
-                <p>
-                  Votre authentification à double facteur est activé avec votre
-                  numéro de téléphone
-                </p>
-                <Switch
-                  defaultChecked={userData?.body.twoFactor}
-                  onChange={(e) => {
-                    e.preventDefault();
-                    dispatch({
-                      type: "form/openModalTwoFactorDisable",
-                    });
-                  }}
-                />
-              </>
-            )}
+          <div
+            className={styles.card}
+            onClick={() => {
+              dispatch({
+                type: "form/openModalEditFirstnameUserData",
+              });
+            }}
+          >
+            <Image
+              className={styles.card__icone}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/user-solid.svg"}
+              alt="bousole"
+            />
+            <div className={styles.card__info}>
+              <p>
+                <strong>Double authentification</strong>
+              </p>
+              <p>
+                {userData?.body.twoFactor === true ? "Acitvé" : "Désactivé"}
+              </p>
+            </div>
+            <Image
+              className={styles.card__info__icone}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/chevron-right-solid.svg"}
+              alt="bousole"
+            />
           </div>
         </>
       );
     }
   }
-  return (
-    <>
-      <>
-        <div className={styles.twoFactorData}>{content}</div>
-      </>
-    </>
-  );
+  return <>{content}</>;
 };
 
 export default TwoFactorData;

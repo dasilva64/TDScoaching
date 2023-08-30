@@ -67,6 +67,27 @@ export const validationBody = (body: any) => {
         }
       }
     }
+    if (key === "genre") {
+      if (validator.isEmpty(value)) {
+        arrayMessageError.push(["genre", "Genre : ne peut pas être vide"]);
+      } else {
+        if (!validator.isIn(value, ["homme", "femme"])) {
+          arrayMessageError.push(["genre", "Genre : ne peut pas être vide"]);
+        }
+      }
+    }
+    if (key === "formule") {
+      if (validator.isEmpty(value)) {
+        arrayMessageError.push(["formule", "Formule : ne peut pas être vide"]);
+      } else {
+        if (!validator.isIn(value, ["formule1", "formule2", "formule3"])) {
+          arrayMessageError.push([
+            "formule",
+            "Formule : ne peut pas être vide",
+          ]);
+        }
+      }
+    }
   });
   return arrayMessageError;
 };

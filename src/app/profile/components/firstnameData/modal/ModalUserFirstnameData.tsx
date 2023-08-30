@@ -1,7 +1,7 @@
 import { AppDispatch, RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "./ModalUserMainData.module.scss";
+import styles from "./ModalUserFirstnameData.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 import validator from "validator";
@@ -9,24 +9,21 @@ import { TextField } from "@mui/material";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import fetchPost from "@/app/components/fetch/user/FetchPost";
 
-const ModalUserMainData = () => {
+const ModalUserFirstnameData = () => {
   const { userData } = useUserGet();
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
   const [firstnameInput, setFirstnameInput] = useState<string>(
     userData.body.firstname
   );
-  const [lastnameInput, setLastnameInput] = useState<string>(
-    userData.body.lastname
-  );
-  const [validFirstnameInput, setValidFirstnameInput] =
-    useState<boolean>(false);
-  const [validLastnameInput, setValidLastnameInput] = useState<boolean>(false);
+  const [validFirstnameInput, setValidFirstnameInput] = useState<boolean>(true);
   const [errorMessageFirstname, setErrorMessageFirstname] =
     useState<string>("");
-  const [errorMessageLastname, setErrorMessageLastname] = useState<string>("");
 
-  const { trigger, data } = useSWRMutation("/api/user/editMainUser", fetchPost);
+  const { trigger, data } = useSWRMutation(
+    "/api/user/editFirstnameUser",
+    fetchPost
+  );
 
   useEffect(() => {
     if (data) {
@@ -36,15 +33,12 @@ const ModalUserMainData = () => {
           payload: { type: "succes", flashMessage: data.message },
         });
         dispatch({
-          type: "form/closeModalEditMainUserData",
+          type: "form/closeModalEditFirstnameUserData",
         });
       } else if (data.status === 400) {
         data.message.forEach((element: string) => {
           if (element[0] === "firstname") {
             setErrorMessageFirstname(element[1]);
-          }
-          if (element[0] === "lastname") {
-            setErrorMessageLastname(element[1]);
           }
         });
       } else {
@@ -65,7 +59,6 @@ const ModalUserMainData = () => {
           body: {
             ...data.body,
             firstname: firstnameInput,
-            lastname: lastnameInput,
           },
         },
         { revalidate: false }
@@ -74,22 +67,21 @@ const ModalUserMainData = () => {
     if (data && data.body) {
       mutateMainData();
     }
-  }, [data, firstnameInput, lastnameInput]);
+  }, [data, firstnameInput]);
 
   const closeForm = () => {
     dispatch({
-      type: "form/closeModalEditMainUserData",
+      type: "form/closeModalEditFirstnameUserData",
     });
   };
 
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validFirstnameInput === true || validLastnameInput === true) {
+    if (validFirstnameInput === true) {
       if (inputPseudo.length === 0) {
         const fetchLogin = async () => {
           trigger({
             firstname: validator.escape(firstnameInput.trim()),
-            lastname: validator.escape(lastnameInput.trim()),
             pseudo: validator.escape(inputPseudo.trim()),
           });
         };
@@ -101,12 +93,6 @@ const ModalUserMainData = () => {
         validFirstnameInput === false
       ) {
         setErrorMessageFirstname("Prénom : ne doit pas être vide");
-      }
-      if (
-        userData.body.lastname !== lastnameInput &&
-        validLastnameInput === false
-      ) {
-        setErrorMessageLastname("Nom de famille : ne doit pas être vide");
       }
     }
   };
@@ -151,7 +137,7 @@ const ModalUserMainData = () => {
           </span>
         </button>
         <h1 className={styles.modalEditMainUserData__h1}>
-          Modification des informations principales
+          Modifier votre prénom
         </h1>
         <form
           className={styles.modalEditMainUserData__form}
@@ -182,28 +168,6 @@ const ModalUserMainData = () => {
             }}
             helperText={errorMessageFirstname}
           />
-          <TextField
-            value={lastnameInput}
-            style={{ margin: "20px 0px" }}
-            id={"lastname"}
-            label={"Nom de famille"}
-            variant="standard"
-            type={"text"}
-            placeholder={"Entrez votre nom de famille"}
-            FormHelperTextProps={{ style: { color: "red" } }}
-            onChange={(e) => {
-              handlerInput(
-                e,
-                "lastname",
-                /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
-                setValidLastnameInput,
-                setErrorMessageLastname,
-                setLastnameInput,
-                "Nom de famille : 3 lettres minimum"
-              );
-            }}
-            helperText={errorMessageLastname}
-          />
           <input
             type="text"
             name="pseudo"
@@ -228,4 +192,4 @@ const ModalUserMainData = () => {
   );
 };
 
-export default ModalUserMainData;
+export default ModalUserFirstnameData;

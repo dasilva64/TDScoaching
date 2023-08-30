@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import EmailCheck from "@/app/profile/components/emailData/EmailData";
 import ModalUserSendToken from "@/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
-import ModalUserMainData from "@/app/profile/components/mainData/modal/ModalUserMainData";
+import ModalUserMainData from "@/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
 import ModalUserPasswordData from "@/app/profile/components/passwordData/modal/ModalUserPasswordData";
 import PhoneCheck from "@/app/profile/components/phoneData/PhoneData";
 import ModalPhoneSendTokenData from "@/app/profile/components/phoneSendTokenData/modal/ModalPhoneSendTokenData";
@@ -28,6 +28,12 @@ import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalClose
 import ModalClosePhone from "@/app/profile/components/phoneData/modal/ModalClosePhone";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
 import Nav from "../components/Nav";
+import ModalUserFirstnameData from "@/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
+import ModalUserLastnameData from "@/app/profile/components/lastnameData/modal/ModalUserLastnameData";
+import ModalUserBirthData from "@/app/profile/components/birthData/modal/ModalUserBirthData";
+import ModalUserGenderData from "@/app/profile/components/genderData/modal/ModalUserGenderData";
+import ModalAddFirstMeeting from "@/app/rendez-vous/components/modal/ModalAddFirstMeeting";
+import ModalDeleteFirstMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteFirstMeeting";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
@@ -211,8 +217,11 @@ const Content = () => {
     displayFormCheck,
     displaySendCode,
     displayModalEditPasswordData,
-    displayModalEditMainUserData,
+    displayModalEditFirstnameUserData,
+    displayModalEditLastnameUserData,
+    displayModalEditBirthUserData,
     displayFormForgot,
+    displayModalEditGenderUserData,
     displayModalEditEmailSendData,
     displayModalEditEmailData,
     displayModalEditValidEmailData,
@@ -224,9 +233,11 @@ const Content = () => {
     displayModalTwoFactorDisable,
     displayModalCancelMeeting,
     displayModalMeeting,
+    displayModalFirstMeeting,
     displayModalDeleteAccount,
     displayModalCloseEmail,
     displayModalClosePhone,
+    displayModalDeleteFirstMeeting,
   } = useSelector((state: RootState) => state.form);
 
   const { flashMessage } = useSelector((state: RootState) => state.flash);
@@ -250,7 +261,8 @@ const Content = () => {
           displaySendCode === true ||
           displayFormCheck === true ||
           displayFormForgot === true ||
-          displayModalEditMainUserData === true ||
+          displayModalEditFirstnameUserData === true ||
+          displayModalEditLastnameUserData === true ||
           displayModalEditPasswordData === true ||
           displayModalEditEmailSendData === true ||
           displayModalEditEmailData === true ||
@@ -265,7 +277,11 @@ const Content = () => {
           displayModalMeeting === true ||
           displayModalDeleteAccount === true ||
           displayModalCloseEmail === true ||
-          displayModalClosePhone === true
+          displayModalClosePhone === true ||
+          displayModalEditBirthUserData === true ||
+          displayModalEditGenderUserData === true ||
+          displayModalFirstMeeting === true ||
+          displayModalDeleteFirstMeeting === true
         ) {
           mainDiv.style.opacity = "0.05";
           footerDiv.style.opacity = "0.05";
@@ -285,7 +301,6 @@ const Content = () => {
     displayFormForgot,
     displayFormLogin,
     displayFormRegister,
-    displayModalEditMainUserData,
     displayModalEditPasswordData,
     displaySendCode,
     displayModalEditEmailData,
@@ -301,6 +316,12 @@ const Content = () => {
     displayModalDeleteAccount,
     displayModalCloseEmail,
     displayModalClosePhone,
+    displayModalEditFirstnameUserData,
+    displayModalEditLastnameUserData,
+    displayModalEditBirthUserData,
+    displayModalEditGenderUserData,
+    displayModalFirstMeeting,
+    displayModalDeleteFirstMeeting,
   ]);
 
   const updateUseState = () => {
@@ -325,7 +346,8 @@ const Content = () => {
       displayFormLogin === true ||
       displayFormForgot ||
       displayFormRegister ||
-      displayModalEditMainUserData ||
+      displayModalEditFirstnameUserData ||
+      displayModalEditLastnameUserData ||
       displayModalEditPasswordData ||
       displayModalEditEmailSendData ||
       displayModalEditEmailData ||
@@ -340,7 +362,11 @@ const Content = () => {
       displayModalMeeting ||
       displayModalDeleteAccount ||
       displayModalCloseEmail ||
-      displayModalClosePhone
+      displayModalClosePhone ||
+      displayModalEditBirthUserData ||
+      displayModalEditGenderUserData ||
+      displayModalFirstMeeting ||
+      displayModalDeleteFirstMeeting
     ) {
       if (displayLogMenu === true) {
         if (flashMessage && flashMessage[1].length > 0) {
@@ -483,7 +509,10 @@ const Content = () => {
       {displayFormRegister === true && <FormRegister />}
       {displaySendCode === true && <SendCode />}
       {displayFormForgot === true && <Forgot />}
-      {displayModalEditMainUserData === true && <ModalUserMainData />}
+      {displayModalEditFirstnameUserData === true && <ModalUserFirstnameData />}
+      {displayModalEditLastnameUserData === true && <ModalUserLastnameData />}
+      {displayModalEditBirthUserData === true && <ModalUserBirthData />}
+      {displayModalEditGenderUserData === true && <ModalUserGenderData />}
       {displayModalEditPasswordData && <ModalUserPasswordData />}
       {displayModalEditEmailSendData && <ModalUserSendToken />}
       {displayModalEditEmailData === true && <EmailCheck />}
@@ -494,9 +523,11 @@ const Content = () => {
       {displayModalCancelMeeting === true && <ModalCancel />}
       {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
       {displayModalMeeting === true && <ModalAddMeeting />}
+      {displayModalFirstMeeting === true && <ModalAddFirstMeeting />}
       {displayModalDeleteAccount === true && <ModalDeleteAccount />}
       {displayModalCloseEmail === true && <ModalCloseEmail />}
       {displayModalClosePhone === true && <ModalClosePhone />}
+      {displayModalDeleteFirstMeeting === true && <ModalDeleteFirstMeeting />}
 
       {displayFlash()}
 

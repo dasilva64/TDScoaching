@@ -1,3 +1,5 @@
+"use client";
+
 import { RootState } from "@/app/redux/store";
 import { TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";

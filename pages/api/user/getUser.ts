@@ -119,6 +119,10 @@ export default withIronSessionApiRoute(
               editPhone: userEditPhoneObject,
               twoFactor: user.twoFactor,
               twoFactorCode: userTwoFactorObject,
+              birth: user.birth,
+              genre: user.genre,
+              discovery: user.discovery,
+              typeMeeting: user.typeMeeting,
             };
             return res.status(200).json({
               status: 200,
@@ -138,6 +142,10 @@ export default withIronSessionApiRoute(
               editPhone: userEditPhoneObject,
               twoFactor: user.twoFactor,
               twoFactorCode: userTwoFactorObject,
+              birth: user.birth,
+              genre: user.genre,
+              discovery: user.discovery,
+              typeMeeting: user.typeMeeting,
             };
             return res.status(200).json({
               status: 200,

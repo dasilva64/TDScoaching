@@ -112,7 +112,7 @@ const ModalUserSendToken = () => {
           <span className={styles.modalEditEmailData__btn__cross}>&times;</span>
         </button>
         <h1 className={styles.modalEditEmailData__h1}>
-          Modification de l&apos;addresse mail
+          Modifier votre addresse mail
         </h1>
         <form
           className={styles.modalEditEmailData__form}

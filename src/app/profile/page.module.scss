@@ -1,32 +1,23 @@
 $primary-color: white;
 
 .profile {
-  &__h1 {
-    margin-top: 80px;
-    font-size: 60px;
-  }
-  &__container {
-    background-color: rgb(0, 191, 255);
-    margin-top: 45px;
-    padding-top: 30px;
-    padding-bottom: 100px;
-  }
-  &__article {
-    margin-left: 10%;
-    margin-right: 10%;
-    text-align: justify;
-    &__h2 {
-      text-align: center;
-      color: $primary-color;
-      margin-top: 100px;
-      margin-bottom: 60px;
-      font-size: 30px;
+  &__main {
+    margin: 0px 20%;
+    &__h1 {
+      padding-top: 200px;
+      font-size: 48px;
     }
-    &__div {
-      display: flex;
-      justify-content: space-between;
-      &__div {
-        width: 45%;
+    &__container {
+      margin-top: 45px;
+      padding-top: 30px;
+      padding-bottom: 100px;
+      &__content {
+        &__h3 {
+          font-size: 24px;
+          text-align: start;
+          margin-top: 40px;
+          margin-bottom: 5px;
+        }
       }
     }
   }

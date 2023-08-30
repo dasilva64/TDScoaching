@@ -39,7 +39,6 @@ export default withIronSessionApiRoute(
                   where: { userId: id },
                   select: {
                     startAt: true,
-                    description: true,
                     status: true,
                   },
                 });
@@ -51,9 +50,12 @@ export default withIronSessionApiRoute(
                   mail: userById?.mail,
                   status: userById?.status,
                   phone: userById?.phone,
+                  genre: userById?.genre,
+                  birth: userById?.birth,
                   editEmail: userById?.editEmail,
                   editPhone: userById?.editPhone,
                   twoFactor: userById?.twoFactor,
+                  discovery: userById?.discovery,
                   twoFactorCode: userById?.twoFactorCode,
                   allMeetings: meetingByUser,
                   meeting: meetingById,
@@ -68,7 +70,6 @@ export default withIronSessionApiRoute(
                 where: { userId: id },
                 select: {
                   startAt: true,
-                  description: true,
                   status: true,
                 },
               });
@@ -78,6 +79,9 @@ export default withIronSessionApiRoute(
                 firstname: userById?.firstname,
                 lastname: userById?.lastname,
                 mail: userById?.mail,
+                genre: userById?.genre,
+                discovery: userById?.discovery,
+                birth: userById?.birth,
                 status: userById?.status,
                 phone: userById?.phone,
                 editEmail: userById?.editEmail,

@@ -3,7 +3,15 @@ import styles from "./formRegister.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import useSWRMutation from "swr/mutation";
-import { TextField } from "@mui/material";
+import {
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
 import validator from "validator";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -26,6 +34,7 @@ const FormRegister = () => {
   const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>("");
   const [phoneInput, setPhoneInput] = useState<string>("");
   const [birthInput, setBirthInput] = useState<string>("");
+  const [genderInput, setGenderInput] = useState<string>("");
   const [validEmailInput, setValidEmailInput] = useState<boolean>(false);
   const [validFirstnameInput, setValidFirstnameInput] =
     useState<boolean>(false);
@@ -35,6 +44,7 @@ const FormRegister = () => {
     useState<boolean>(false);
   const [validPhoneInput, setValidPhoneInput] = useState<boolean>(false);
   const [validBirthInput, setValidBirthInput] = useState<boolean>(false);
+  const [validGenderInput, setValidGenderInput] = useState<boolean>(false);
   const [firstnameInputError, setFirstnameInputError] = useState<string>("");
   const [lastnameInputError, setLastnameInputError] = useState<string>("");
   const [passwordInputError, setPasswordInputError] = useState<string>("");
@@ -43,6 +53,7 @@ const FormRegister = () => {
   const [emailInputError, setEmailInputError] = useState<string>("");
   const [phoneInputError, setPhoneInputError] = useState<string>("");
   const [birthInputError, setBirthInputError] = useState<string>("");
+  const [genderInputError, setGenderInputError] = useState<string>("");
 
   const { trigger, data } = useSWRMutation("/api/user/register", fetchPost);
 
@@ -72,6 +83,12 @@ const FormRegister = () => {
           if (element[0] === "phone") {
             setPhoneInputError(element[1]);
           }
+          if (element[0] === "birth") {
+            setBirthInputError(element[1]);
+          }
+          if (element[0] === "genre") {
+            setGenderInputError(element[1]);
+          }
         });
       } else {
         dispatch({
@@ -90,7 +107,8 @@ const FormRegister = () => {
       validPasswordInput === true &&
       validPasswordComfirmInput === true &&
       validPhoneInput === true &&
-      validBirthInput === true
+      validBirthInput === true &&
+      validGenderInput === true
     ) {
       if (inputPseudo.length === 0) {
         const fetchRegister = async () => {
@@ -102,6 +120,7 @@ const FormRegister = () => {
             phone: validator.escape(phoneInput.trim()),
             birth: dayjs(birthInput).format("YYYY-MM-DD"),
             pseudo: validator.escape(inputPseudo.trim()),
+            genre: validator.escape(genderInput.trim()),
           });
         };
         fetchRegister();
@@ -135,6 +154,9 @@ const FormRegister = () => {
         setBirthInputError(
           "Date de naissance : vous devez être majeur pour vous inscrire"
         );
+      }
+      if (validGenderInput === false) {
+        setGenderInputError("Sexe : doit être sélectionné");
       }
     }
   };
@@ -437,7 +459,11 @@ const FormRegister = () => {
           >
             <DatePicker
               slotProps={{
-                textField: { variant: "standard", helperText: birthInputError },
+                textField: {
+                  variant: "standard",
+                  helperText: birthInputError,
+                  style: { color: "red" },
+                },
               }}
               label="Date de naissance"
               onChange={(e: any) => {
@@ -445,6 +471,33 @@ const FormRegister = () => {
               }}
             />
           </LocalizationProvider>
+          <FormControl style={{ marginTop: "15px" }}>
+            <FormLabel id="demo-row-radio-buttons-group-label">Sexe</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              onChange={(e) => {
+                setGenderInput(e.target.value);
+                setValidGenderInput(true);
+                setGenderInputError("");
+              }}
+            >
+              <FormControlLabel
+                value="femme"
+                control={<Radio />}
+                label="Femme"
+              />
+              <FormControlLabel
+                value="homme"
+                control={<Radio />}
+                label="Homme"
+              />
+            </RadioGroup>
+            <FormHelperText style={{ color: "red", margin: "0px" }}>
+              {genderInputError}
+            </FormHelperText>
+          </FormControl>
           <input
             type="text"
             name="pseudo"

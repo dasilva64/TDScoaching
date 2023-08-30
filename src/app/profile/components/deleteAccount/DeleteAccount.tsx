@@ -3,29 +3,43 @@
 import React from "react";
 import styles from "./DeleteAccount.module.scss";
 import { useDispatch } from "react-redux";
+import Image from "next/image";
 
 const DeleteAccount = () => {
   const dispatch = useDispatch();
   return (
     <>
-      <div className={styles.deleteAccount}>
-        <h3 className={styles.deleteAccount__h3}>Suppression du compte</h3>
-        <p>
-          Vous pouvez supprimer votre compte ici mais cette action sera
-          définitive
-        </p>
-        <div className={styles.deleteAccount__div}>
-          <button
-            onClick={() => {
-              dispatch({
-                type: "form/openModalDeleteAccount",
-              });
-            }}
-            className={styles.deleteAccount__div__button}
-          >
-            supprimer mon compte
-          </button>
-        </div>
+      <div
+        className={styles.card}
+        onClick={() => {
+          dispatch({
+            type: "form/openModalDeleteAccount",
+          });
+        }}
+      >
+        <>
+          <Image
+            className={styles.card__icone}
+            width="20"
+            height="20"
+            priority={true}
+            src={"/assets/icone/user-solid.svg"}
+            alt="bousole"
+          />
+          <div className={styles.card__info}>
+            <p>
+              <strong>Suppression du compte</strong>
+            </p>
+          </div>
+          <Image
+            className={styles.card__info__icone}
+            width="20"
+            height="20"
+            priority={true}
+            src={"/assets/icone/chevron-right-solid.svg"}
+            alt="bousole"
+          />
+        </>
       </div>
     </>
   );

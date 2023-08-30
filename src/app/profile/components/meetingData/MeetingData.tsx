@@ -5,6 +5,7 @@ import styles from "./MeetingData.module.scss";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import Link from "next/link";
 import dayjs from "dayjs";
+import Image from "next/image";
 
 const MeetingData = () => {
   const { userData, isLoading, isError } = useUserGet();
@@ -30,6 +31,30 @@ const MeetingData = () => {
     if (userData) {
       content = (
         <>
+          <>
+            <Image
+              className={styles.card__icone}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/user-solid.svg"}
+              alt="bousole"
+            />
+            <div className={styles.card__info}>
+              <p>
+                <strong>Prochain Rendez-vous</strong>
+              </p>
+              <p>{userData?.body.firstname}</p>
+            </div>
+            <Image
+              className={styles.card__info__icone}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/chevron-right-solid.svg"}
+              alt="bousole"
+            />
+          </>
           {userData.body.role === "ROLE_USER" && (
             <div className={styles.meetingData}>
               <>
@@ -100,7 +125,27 @@ const MeetingData = () => {
       );
     }
   }
-  return <>{content}</>;
+  return (
+    <>
+      {userData && userData.body.role === "ROLE_USER" && (
+        <div className={styles.profile__main__container__content}>
+          <h3 className={styles.profile__main__container__content__h3}>
+            Rendez-vous
+          </h3>
+          <div
+            className={styles.card}
+            onClick={() => {
+              /* dispatch({
+                type: "form/openModalEditFirstnameUserData",
+              }); */
+            }}
+          >
+            {content}
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default MeetingData;

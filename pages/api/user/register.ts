@@ -11,11 +11,18 @@ import validator from "validator";
 export default withIronSessionApiRoute(
   async function sendTokenEditPhone(req, res) {
     if (req.method === "POST") {
-      const { phone, email, firstname, lastname, password, pseudo, birth } =
-        await req.body;
+      const {
+        phone,
+        email,
+        firstname,
+        lastname,
+        password,
+        pseudo,
+        birth,
+        genre,
+      } = await req.body;
 
       let arrayMessageError = validationBody(req.body);
-      console.log(birth);
       if (arrayMessageError.length > 0) {
         return res.status(400).json({
           status: 400,
@@ -48,7 +55,7 @@ export default withIronSessionApiRoute(
           let currentDate = new Date();
           let registerTokenObject = {
             token: token,
-            limitDate: currentDate.setMinutes(currentDate.getMinutes() + 1),
+            limitDate: currentDate.setDate(currentDate.getDate() + 1),
           };
           let UserCreate = await prisma.user.create({
             data: {
@@ -62,6 +69,9 @@ export default withIronSessionApiRoute(
               twoFactor: false,
               birth: validator.escape(birth.trim()),
               role: "ROLE_USER",
+              genre: validator.escape(genre.trim()),
+              discovery: false,
+              typeMeeting: null,
             },
           });
 
@@ -110,9 +120,7 @@ export default withIronSessionApiRoute(
                 let currentDate = new Date();
                 let registerTokenObject = {
                   token: token,
-                  limitDate: currentDate.setMinutes(
-                    currentDate.getMinutes() + 1
-                  ),
+                  limitDate: currentDate.setDate(currentDate.getDate() + 1),
                 };
                 let UserCreate = await prisma.user.create({
                   data: {
@@ -126,6 +134,9 @@ export default withIronSessionApiRoute(
                     twoFactor: false,
                     birth: validator.escape(birth.trim()),
                     role: "ROLE_USER",
+                    genre: validator.escape(genre.trim()),
+                    discovery: false,
+                    typeMeeting: null,
                   },
                 });
 
@@ -189,9 +200,7 @@ export default withIronSessionApiRoute(
                 let currentDate = new Date();
                 let registerTokenObject = {
                   token: token,
-                  limitDate: currentDate.setMinutes(
-                    currentDate.getMinutes() + 1
-                  ),
+                  limitDate: currentDate.setDate(currentDate.getDate() + 1),
                 };
                 let UserCreate = await prisma.user.create({
                   data: {
@@ -205,6 +214,9 @@ export default withIronSessionApiRoute(
                     twoFactor: false,
                     birth: validator.escape(birth.trim()),
                     role: "ROLE_USER",
+                    genre: validator.escape(genre.trim()),
+                    discovery: false,
+                    typeMeeting: null,
                   },
                 });
 

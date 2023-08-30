@@ -4,7 +4,7 @@ import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 
 export default withIronSessionApiRoute(
-  async function editFirstnameUser(req, res) {
+  async function editFormuleUser(req, res) {
     if (req.method === "POST") {
       if (req.session.user) {
         const { formule, pseudo } = await req.body;
@@ -47,6 +47,7 @@ export default withIronSessionApiRoute(
               role: editUser.role,
               phone: editUser.phone,
               typeMeeting: editUser.typeMeeting,
+              formule: editUser.typeMeeting,
             };
             res.status(200).json({
               status: 200,

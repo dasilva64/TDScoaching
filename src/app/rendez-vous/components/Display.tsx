@@ -7,18 +7,81 @@ import DatePickerDesktop from "./datePicker/DatePickerDesktop";
 import DisplayMeeting from "./meeting/DisplayMeeting";
 import useUserGet from "@/app/components/hook/user/useUserGet";
 import { FormControl } from "@mui/base";
-import { FormLabel, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import {
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  FormHelperText,
+} from "@mui/material";
 import Link from "next/link";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
+import useSWRMutation from "swr/mutation";
+import { useDispatch } from "react-redux";
+import { mutate } from "swr";
+import form from "@/app/redux/feature/form";
 
 const Display = () => {
   const [mobile, setMobile] = useState<boolean | null>(null);
   const { userData, isLoading, isError } = useUserGet();
   const [inputPseudo, setInputPseudo] = useState<string>("");
-
+  const dispatch = useDispatch();
   const [inputFormule, setInputFormule] = useState<string>("");
+  const [validFormuleInput, setValidFormuleInput] = useState<boolean>(false);
+  const [errorMessageFormule, setErrorMessageFormule] = useState<string>("");
+  const { trigger, data } = useSWRMutation(
+    "/api/user/editFormuleUser",
+    fetchPost
+  );
+
+  useEffect(() => {
+    if (data) {
+      if (data.status === 200) {
+        mutate(
+          "/api/user/getUser",
+          {
+            ...data,
+            body: {
+              ...data.body,
+              formule: inputFormule,
+            },
+          },
+          { revalidate: false }
+        );
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: data.message },
+        });
+      } else if (data.status === 400) {
+        data.message.forEach((element: string) => {
+          if (element[0] === "formule") {
+            setErrorMessageFormule(element[1]);
+          }
+        });
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+      }
+    }
+  }, [data, dispatch, inputFormule]);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(inputFormule);
+    if (validFormuleInput === true) {
+      if (inputPseudo.length === 0) {
+        const fetchEdit = async () => {
+          trigger({
+            pseudo: inputPseudo,
+            formule: inputFormule,
+          });
+        };
+        fetchEdit();
+      }
+    } else {
+      setErrorMessageFormule("Veuillez choisir une formule");
+    }
   };
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -94,21 +157,21 @@ const Display = () => {
         {userData.body.typeMeeting === null && (
           <div
             style={{ width: "100%" }}
-            className={styles.meet__container__text}
+            className={styles.meet__container__formule}
           >
-            <h3 className={styles.meet__container__text__h3}>
+            <h3 className={styles.meet__container__formule__h3}>
               Choisir une formule pour pouvoir prendre un rendez-vous
             </h3>
-            <div>
-              <div>
+            <div className={styles.meet__container__formule__content}>
+              <div className={styles.meet__container__formule__content__card}>
                 <h2>Formule 1</h2>
                 <p>test</p>
               </div>
-              <div>
+              <div className={styles.meet__container__formule__content__card}>
                 <h2>Formule 2</h2>
                 <p>test</p>
               </div>
-              <div>
+              <div className={styles.meet__container__formule__content__card}>
                 <h2>Formule 3</h2>
                 <p>test</p>
               </div>
@@ -133,6 +196,8 @@ const Display = () => {
                   name="radio-buttons-group"
                   onChange={(e) => {
                     setInputFormule(e.target.value);
+                    setValidFormuleInput(true);
+                    setErrorMessageFormule("");
                   }}
                 >
                   <FormControlLabel
@@ -151,6 +216,9 @@ const Display = () => {
                     label="Formule 3"
                   />
                 </RadioGroup>
+                <FormHelperText style={{ color: "red", margin: "0px" }}>
+                  {errorMessageFormule}
+                </FormHelperText>
               </FormControl>
               <input
                 type="text"

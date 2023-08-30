@@ -35,10 +35,55 @@ export default withIronSessionApiRoute(
         );
         let copyId: any = session.payment_intent;
         const paymentIntent = await stripe.paymentIntents.capture(copyId);
-        return res.status(200).json({
-          status: 200,
-          message: "Votre rendez-vous a bien été accepté",
+        let editUser = await prisma.user.update({
+          where: {
+            id: meeting?.userId,
+          },
+          data: {
+            meetingId: null,
+          },
         });
+        const userById = await prisma.user.findUnique({
+          where: { id: userId },
+        });
+        if (userById === null) {
+          return res.status(400).json({
+            status: 400,
+            message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+          });
+        } else {
+          const meetingByUser = await prisma.meeting.findMany({
+            where: { userId: userId },
+            select: {
+              startAt: true,
+              status: true,
+            },
+          });
+          let userObject = {
+            id: userById?.id,
+            role: userById?.role,
+            firstname: userById?.firstname,
+            lastname: userById?.lastname,
+            mail: userById?.mail,
+            status: userById?.status,
+            phone: userById?.phone,
+            editEmail: userById?.editEmail,
+            editPhone: userById?.editPhone,
+            twoFactor: userById?.twoFactor,
+            twoFactorCode: userById?.twoFactorCode,
+            allMeetings: meetingByUser,
+            meeting: null,
+            birth: userById.birth,
+            genre: userById.genre,
+            discovery: userById.discovery,
+            typeMeeting: userById.typeMeeting,
+          };
+          return res.status(200).json({
+            status: 200,
+            message: "Votre rendez-vous a bien été accepté",
+            body: userObject,
+          });
+        }
       }
     } else {
       return res.status(404).json({

@@ -257,8 +257,9 @@ const Content = () => {
       let footerDiv = document.querySelector("footer");
       let htlmElement = document.querySelector("html");
       let htlmbody = document.querySelector("body");
+      let header = document.querySelector("header");
 
-      if (mainDiv && footerDiv && htlmElement && htlmbody) {
+      if (mainDiv && footerDiv && htlmElement && htlmbody && header) {
         if (
           displayFormLogin === true ||
           displayFormRegister === true ||
@@ -289,12 +290,14 @@ const Content = () => {
           displayModalEditFormule === true ||
           displayModalCancelFormule === true
         ) {
-          mainDiv.style.opacity = "0.05";
-          footerDiv.style.opacity = "0.05";
+          header.style.opacity = "0.01";
+          mainDiv.style.opacity = "0.01";
+          footerDiv.style.opacity = "0.01";
           htlmElement.style.height = "100%";
           htlmbody.style.height = "100%";
         } else {
           mainDiv.style.opacity = "1";
+          header.style.opacity = "1";
           footerDiv.style.opacity = "1";
           htlmElement.style.height = "unset";
           htlmbody.style.height = "unset";
@@ -378,7 +381,7 @@ const Content = () => {
       displayModalEditFormule ||
       displayModalCancelFormule
     ) {
-      if (displayLogMenu === true) {
+      /* if (displayLogMenu === true) {
         if (flashMessage && flashMessage[1].length > 0) {
           return `${styles.header__login__active} ${styles.header__header__margins}`;
         }
@@ -386,10 +389,10 @@ const Content = () => {
       }
       if (flashMessage && flashMessage[1].length > 0) {
         return `${styles.header__login__active} ${styles.header__header__margins}`;
-      }
-      return styles.header__login__active;
+      } */
+      return `${styles.header} ${styles.header__opacity}`;
     } else {
-      if (displayLogMenu === true) {
+      /* if (displayLogMenu === true) {
         if (flashMessage && flashMessage[1].length > 0) {
           return `${styles.header} ${styles.header__header__margins}`;
         }
@@ -397,11 +400,12 @@ const Content = () => {
       }
       if (flashMessage && flashMessage[1].length > 0) {
         return `${styles.header} ${styles.header__header__margins}`;
-      }
-      return styles.header;
+      } */
+      return `${styles.header} ${styles.header__noOpacity}`;
     }
   };
   const displayFlash = () => {
+    console.log(flashMessage);
     if (flashMessage && flashMessage[1].length > 0) {
       if (
         displayFormLogin === true ||
@@ -413,6 +417,14 @@ const Content = () => {
         if (flashMessage[0] === "error") {
           return (
             <div className={styles.flash__modal__error}>
+              <Image
+                className={styles.flash__modal__error__img}
+                width={25}
+                height={25}
+                src="/assets/icone/circle-exclamation-solid.svg"
+                alt="logo tdss coaching"
+                priority={true}
+              />
               {flashMessage[1]}
               <span
                 onClick={() => {
@@ -429,6 +441,14 @@ const Content = () => {
         } else {
           return (
             <div className={styles.flash__modal__success}>
+              <Image
+                className={styles.flash__modal__success__img}
+                width={20}
+                height={20}
+                src="/assets/icone/check-solid.svg"
+                alt="logo tdss coaching"
+                priority={true}
+              />
               {flashMessage[1]}
               <span
                 onClick={() => {
@@ -447,6 +467,14 @@ const Content = () => {
       if (flashMessage[0] === "error") {
         return (
           <div className={styles.flash__modal__error}>
+            <Image
+              className={styles.flash__modal__error__img}
+              width={25}
+              height={25}
+              src="/assets/icone/circle-exclamation-solid.svg"
+              alt="logo tdss coaching"
+              priority={true}
+            />
             {flashMessage[1]}{" "}
             <span
               onClick={() => {
@@ -463,6 +491,14 @@ const Content = () => {
       } else {
         return (
           <div className={styles.flash__modal__success}>
+            <Image
+              className={styles.flash__modal__success__img}
+              width={20}
+              height={20}
+              src="/assets/icone/check-solid.svg"
+              alt="logo tdss coaching"
+              priority={true}
+            />
             {flashMessage[1]}{" "}
             <span
               onClick={() => {
@@ -543,7 +579,7 @@ const Content = () => {
 
       {displayFlash()}
 
-      <header className={ClassName()}>
+      <header className={styles.header}>
         <figure className={styles.header__figure}>
           <Link className="link" href="/" tabIndex={0}>
             <Image
@@ -607,19 +643,7 @@ const Content = () => {
               </Link>
             </li>
             <li className={`${styles.header__li} ${styles.header__li__hover}`}>
-              <Link
-                className={
-                  pathname == "/coaching-de-vie"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
-                }
-                href="/coaching-de-vie"
-                onClick={(e) => {
-                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                }}
-              >
-                Coaching de vie
-              </Link>
+              <span className={`${styles.header__a}`}>Coaching de vie</span>
               <span
                 tabIndex={0}
                 aria-label="sous menu coaching de vie"

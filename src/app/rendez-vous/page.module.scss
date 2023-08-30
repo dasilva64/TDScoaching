@@ -72,11 +72,34 @@
         justify-content: space-between;
         margin-bottom: 50px;
         &__card {
-          padding: 10px;
+          padding: 10px 20px;
           border: 1px solid orange;
           box-shadow: 5px 5px orange;
           border-radius: 20px;
+          &__h2 {
+            text-align: center;
+            margin-bottom: 20px;
+          }
         }
+      }
+    }
+    &__notcomfirm {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      &__text {
+        width: 50%;
+        &__h3 {
+          text-align: center;
+          margin-bottom: 50px;
+        }
+      }
+      &__reminder {
+        width: 40%;
+        background-color: orange;
+        padding: 20px;
+        color: white;
+        border-radius: 10px;
       }
     }
   }

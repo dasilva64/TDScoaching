@@ -33,6 +33,7 @@ export default withIronSessionApiRoute(
         const session = await stripe.checkout.sessions.retrieve(
           meeting?.paymentId!
         );
+        console.log(session);
         let copyId: any = session.payment_intent;
         const paymentIntent = await stripe.paymentIntents.cancel(copyId);
 
@@ -153,6 +154,10 @@ export default withIronSessionApiRoute(
             editPhone: userEditPhoneObject,
             twoFactor: user.twoFactor,
             twoFactorCode: userTwoFactorObject,
+            birth: user.birth,
+            genre: user.genre,
+            discovery: user.discovery,
+            typeMeeting: user.typeMeeting,
           };
           return res.status(200).json({
             status: 200,
@@ -173,6 +178,10 @@ export default withIronSessionApiRoute(
             editPhone: userEditPhoneObject,
             twoFactor: user.twoFactor,
             twoFactorCode: userTwoFactorObject,
+            birth: user.birth,
+            genre: user.genre,
+            discovery: user.discovery,
+            typeMeeting: user.typeMeeting,
           };
           return res.status(200).json({
             status: 200,

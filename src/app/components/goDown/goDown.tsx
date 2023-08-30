@@ -12,7 +12,7 @@ const GoDown = () => {
         onClick={() => {
           if (document)
             document
-              .getElementById("test")
+              .getElementById("anchor")
               ?.scrollIntoView({ behavior: "smooth" });
         }}
       >

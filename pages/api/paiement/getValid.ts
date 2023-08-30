@@ -63,6 +63,8 @@ export default withIronSessionApiRoute(
               },
             ],
             mode: "payment",
+            customer_email: user?.mail,
+            locale: "fr",
             payment_intent_data: { capture_method: "manual" },
             success_url: `http://localhost:3000/api/meeting/create`,
             cancel_url: "http://localhost:3000/rendez-vous",

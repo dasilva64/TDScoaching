@@ -74,9 +74,9 @@ const DisplayMeeting = () => {
   ) {
     content = (
       <>
-        <div className={styles.meet__div}>
-          <div className={styles.meet__div__div}>
-            <h3 className={styles.meet__meet__h3}>
+        <div className={styles.meet__container__notcomfirm}>
+          <div className={styles.meet__container__notcomfirm__text}>
+            <h3 className={styles.meet__container__notcomfirm__text__h3}>
               Attention votre rendez-vous n&apos;est pas encore comfirmé
             </h3>
             <p>
@@ -111,7 +111,7 @@ const DisplayMeeting = () => {
               </button>
             </div>
           </div>
-          <div className={styles.meet__div__rappel}>
+          <div className={styles.meet__container__notcomfirm__reminder}>
             <h3 className={styles.meet__meet__h3}>Rappel du rendez-vous</h3>
             <p>
               {new Date(userData.body.meeting.startAt).toLocaleString("fr-FR", {
@@ -132,7 +132,7 @@ const DisplayMeeting = () => {
           </h3>
           <div className={styles.meet__container__text__h3__div}>
             <div className={styles.meet__container__text__h3__div__div}>
-              {userData.body.typeMeeting.type === "formule1" && (
+              {userData.body.typeMeeting.type === "unique" && (
                 <>
                   <p>
                     Vous disposez actuellement de l&apos;offre{" "}
@@ -151,7 +151,7 @@ const DisplayMeeting = () => {
                   </button>
                 </>
               )}
-              {userData.body.typeMeeting.type !== "formule1" && (
+              {userData.body.typeMeeting.type !== "unique" && (
                 <>
                   <div>
                     <p>

@@ -34,7 +34,7 @@ export default withIronSessionApiRoute(
           } else {
             let copyFormule: any = user.typeMeeting;
             if (copyFormule.type === "découverte") {
-              if (formule === "formule1") {
+              if (formule === "unique") {
                 let editUser = await prisma.user.update({
                   where: {
                     id: req.session.user.id,
@@ -43,7 +43,7 @@ export default withIronSessionApiRoute(
                     typeMeeting: { type: validator.escape(formule.trim()) },
                   },
                 });
-              } else if (formule === "formule2") {
+              } else if (formule === "flash") {
                 let editUser = await prisma.user.update({
                   where: {
                     id: req.session.user.id,
@@ -51,11 +51,11 @@ export default withIronSessionApiRoute(
                   data: {
                     typeMeeting: {
                       type: validator.escape(formule.trim()),
-                      number: 5,
+                      number: 3,
                     },
                   },
                 });
-              } else if (formule === "formule3") {
+              } else if (formule === "long") {
                 let editUser = await prisma.user.update({
                   where: {
                     id: req.session.user.id,
@@ -68,8 +68,8 @@ export default withIronSessionApiRoute(
                   },
                 });
               }
-            } else if (copyFormule.type === "formule1") {
-              if (formule === "formule1") {
+            } else if (copyFormule.type === "unique") {
+              if (formule === "unique") {
                 let editUser = await prisma.user.update({
                   where: {
                     id: req.session.user.id,
@@ -78,7 +78,7 @@ export default withIronSessionApiRoute(
                     typeMeeting: { type: validator.escape(formule.trim()) },
                   },
                 });
-              } else if (formule === "formule2") {
+              } else if (formule === "flash") {
                 let editUser = await prisma.user.update({
                   where: {
                     id: req.session.user.id,
@@ -86,11 +86,11 @@ export default withIronSessionApiRoute(
                   data: {
                     typeMeeting: {
                       type: validator.escape(formule.trim()),
-                      number: 5,
+                      number: 3,
                     },
                   },
                 });
-              } else if (formule === "formule3") {
+              } else if (formule === "long") {
                 let editUser = await prisma.user.update({
                   where: {
                     id: req.session.user.id,

@@ -4,10 +4,16 @@ import fetchCancel from "@/app/components/fetch/paiement/fetchCancel";
 import useSWRMutation from "swr/mutation";
 import { useDispatch } from "react-redux";
 import { mutate } from "swr";
+import useUserGet from "@/app/components/hook/user/useUserGet";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchGet from "@/app/components/fetch/user/fetchGet";
 
 const ModalCancel = () => {
   const dispatch = useDispatch();
-  const { trigger, data } = useSWRMutation("/api/paiement/cancel", fetchCancel);
+  const { trigger, data } = useSWRMutation(
+    "/api/meeting/deleteMeeting",
+    fetchGet
+  );
   useEffect(() => {
     if (data && data.status === 200) {
       if (data.status === 200) {

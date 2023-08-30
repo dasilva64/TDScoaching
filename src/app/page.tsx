@@ -46,7 +46,7 @@ export default function Home() {
           </div>
           <GoDown />
         </section>
-        <section className={styles.home__who}>
+        <section className={styles.home__who} id="anchor">
           <div className={styles.home__who__container}>
             <h2 className={styles.home__who__container__h2}>
               Vous êtes en quête de bien-être ?

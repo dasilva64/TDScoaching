@@ -80,7 +80,7 @@ export const validationBody = (body: any) => {
       if (validator.isEmpty(value)) {
         arrayMessageError.push(["formule", "Formule : ne peut pas être vide"]);
       } else {
-        if (!validator.isIn(value, ["formule1", "formule2", "formule3"])) {
+        if (!validator.isIn(value, ["unique", "flash", "longue"])) {
           arrayMessageError.push([
             "formule",
             "Formule : ne peut pas être vide",

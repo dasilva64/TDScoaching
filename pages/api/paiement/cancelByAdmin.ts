@@ -79,6 +79,10 @@ export default withIronSessionApiRoute(
             twoFactorCode: userById?.twoFactorCode,
             allMeetings: meetingByUser,
             meeting: null,
+            birth: userById.birth,
+            genre: userById.genre,
+            discovery: userById.discovery,
+            typeMeeting: userById.typeMeeting,
           };
           return res.status(200).json({
             status: 200,

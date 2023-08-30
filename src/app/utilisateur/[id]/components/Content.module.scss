@@ -35,8 +35,6 @@
   width: 100%;
   margin: auto 10%;
   background-color: white;
-  border: 1px solid orange;
-  box-shadow: 10px 10px orange;
   border-radius: 20px;
   padding: 20px;
   &__flex {
@@ -59,21 +57,21 @@
       }
       &__left {
         &__h2 {
-        margin-bottom: 20px;
-      }
-      &__ul {
-        list-style-type: none;
-        &__li {
-          margin-bottom: 5px;
+          margin-bottom: 20px;
         }
         &__ul {
           list-style-type: none;
           &__li {
             margin-bottom: 5px;
-            margin-left: 20px;
+          }
+          &__ul {
+            list-style-type: none;
+            &__li {
+              margin-bottom: 5px;
+              margin-left: 20px;
+            }
           }
         }
-      }
       }
     }
   }
@@ -81,9 +79,9 @@
 
 .datatable {
   &__container {
-      &__div {
-          display: flex;
-          justify-content: space-between;
-      }
+    &__div {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 }

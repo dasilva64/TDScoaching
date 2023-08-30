@@ -85,7 +85,7 @@ const DisplayDiscoveryMeeting = () => {
                 alt="bousole"
               />
               <p className={styles.meet__container__text__h3__div__div__p}>
-                : 25 min
+                : 30 min
               </p>
             </div>
             <div className={styles.meet__container__text__h3__div__div}>

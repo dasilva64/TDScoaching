@@ -18,6 +18,11 @@ export default withIronSessionApiRoute(
           message: "Ce rendez-vous est déjà pris, veuillez réessayer",
         });
       } else {
+        const user = await prisma.user.findUnique({
+          where: {
+            id: req.session.user.id,
+          },
+        });
         let currentDate = new Date();
         const createMeeting: any = {
           startAt: req.body.start,
@@ -31,7 +36,7 @@ export default withIronSessionApiRoute(
         const meeting = await prisma.meeting.create({
           data: createMeeting,
         });
-        const user = await prisma.user.update({
+        const userEdit = await prisma.user.update({
           where: {
             id: req.session.user.id,
           },
@@ -39,6 +44,7 @@ export default withIronSessionApiRoute(
             meetingId: meeting.id,
           },
         });
+        console.log(req.session.user);
 
         const stripe = new Stripe(
           "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f",
@@ -61,19 +67,21 @@ export default withIronSessionApiRoute(
                     "h" +
                     start.split("T")[1].split(":")[1],
                 },
+
                 unit_amount: 10000,
               },
+
               quantity: 1,
             },
           ],
           mode: "payment",
+          customer_email: user?.mail,
+          locale: "fr",
           payment_intent_data: { capture_method: "manual" },
           success_url: `http://localhost:3000/api/meeting/create`,
           cancel_url: "http://localhost:3000/rendez-vous",
         });
         let copyPaymentId: string = session.id;
-        console.log(session);
-        console.log(session);
         const editMeeting = await prisma.meeting.update({
           where: {
             id: meeting.id,

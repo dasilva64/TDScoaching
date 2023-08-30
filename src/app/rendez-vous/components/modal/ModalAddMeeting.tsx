@@ -1,9 +1,9 @@
-import fetchGetPayment from "@/app/components/fetch/paiement/useGet";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import styles from "./ModalAddMeeting.module.scss";
+import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const ModalAddMeeting = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,15 +14,12 @@ const ModalAddMeeting = () => {
       type: "form/closeModalMeeting",
     });
   };
-  const { trigger: triggerGet, data: dataGet } = useSWRMutation(
-    "http://localhost:8080/payment/get",
-    fetchGetPayment
-  );
+  const { trigger, data } = useSWRMutation("/api/paiement/get", fetchPost);
   useEffect(() => {
-    if (dataGet) {
-      window.location.href = dataGet.url;
+    if (data) {
+      window.location.href = data.url;
     }
-  }, [dataGet]);
+  }, [data]);
   const handlerPayment = () => {
     let startstr = "";
     let endstr = "";
@@ -46,7 +43,7 @@ const ModalAddMeeting = () => {
       endstr.slice(0, endstr.length - 1) +
       ".000Z";
     const fetchAddMeeting = async () => {
-      triggerGet({ start: formatDate });
+      trigger({ start: formatDate });
     };
     fetchAddMeeting();
   };

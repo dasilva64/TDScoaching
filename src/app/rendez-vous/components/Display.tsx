@@ -162,12 +162,15 @@ const Display = () => {
         )}
         {userData.body.typeMeeting.type !== "découverte" && (
           <>
-            <>
-              <DatePickerDesktop
-                events={userData?.body.meetings}
-                discovery={userData?.body.discovery}
-              />
-            </>
+            {userData.body.meeting === null && (
+              <>
+                <DatePickerDesktop
+                  events={userData?.body.meetings}
+                  discovery={userData?.body.discovery}
+                />
+              </>
+            )}
+
             <DisplayMeeting />
           </>
         )}
@@ -182,16 +185,34 @@ const Display = () => {
               </h3>
               <div className={styles.meet__container__formule__content}>
                 <div className={styles.meet__container__formule__content__card}>
-                  <h2>Formule 1</h2>
-                  <p>test</p>
+                  <h2
+                    className={
+                      styles.meet__container__formule__content__card__h2
+                    }
+                  >
+                    Formule Unique
+                  </h2>
+                  <p>1 rendez-vous de coaching</p>
                 </div>
                 <div className={styles.meet__container__formule__content__card}>
-                  <h2>Formule 2</h2>
-                  <p>test</p>
+                  <h2
+                    className={
+                      styles.meet__container__formule__content__card__h2
+                    }
+                  >
+                    Formule Flash
+                  </h2>
+                  <p>3 rendez-vous de coaching</p>
                 </div>
                 <div className={styles.meet__container__formule__content__card}>
-                  <h2>Formule 3</h2>
-                  <p>test</p>
+                  <h2
+                    className={
+                      styles.meet__container__formule__content__card__h2
+                    }
+                  >
+                    Formule Longue
+                  </h2>
+                  <p>10 rendez-vous de coaching</p>
                 </div>
               </div>
               <p>
@@ -219,19 +240,19 @@ const Display = () => {
                     }}
                   >
                     <FormControlLabel
-                      value="formule1"
+                      value="unique"
                       control={<Radio />}
-                      label="Formule 1"
+                      label="Formule Unique"
                     />
                     <FormControlLabel
-                      value="formule2"
+                      value="flash"
                       control={<Radio />}
-                      label="Formule 2"
+                      label="Formule Flash"
                     />
                     <FormControlLabel
-                      value="formule3"
+                      value="longue"
                       control={<Radio />}
-                      label="Formule 3"
+                      label="Formule Longue"
                     />
                   </RadioGroup>
                   <FormHelperText style={{ color: "red", margin: "0px" }}>

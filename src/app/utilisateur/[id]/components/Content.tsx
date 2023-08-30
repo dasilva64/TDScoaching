@@ -13,7 +13,6 @@ import Display from "./dataTable/display/Display";
 import Paging from "./dataTable/paging/Paging";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
-import fetchCancelByAdmin from "@/app/components/fetch/paiement/fetchCancelByAdmin";
 import fetchPost from "@/app/components/fetch/user/FetchPost";
 
 const Content = () => {
@@ -22,7 +21,6 @@ const Content = () => {
   const queryParam: any = usePathname();
   let id = queryParam.toString().split("/");
   const { data, isLoading, isError, mutate: mutateTest } = useGetById(id[2]);
-  console.log("data", data);
   useEffect(() => {
     if (data) {
       if (data.status !== 200) {
@@ -37,7 +35,7 @@ const Content = () => {
 
   const { data: dataCancel, trigger } = useSWRMutation(
     "/api/paiement/cancelByAdmin",
-    fetchCancelByAdmin
+    fetchPost
   );
   useEffect(() => {
     if (dataCancel) {
@@ -47,7 +45,7 @@ const Content = () => {
           payload: { type: "error", flashMessage: dataCancel.message },
         });
       } else {
-        mutate("/api/user/getById", {
+        mutateTest({
           ...dataCancel,
         });
         dispatch({
@@ -56,12 +54,30 @@ const Content = () => {
         });
       }
     }
-  }, [dataCancel, dispatch]);
+  }, [dataCancel, dispatch, mutateTest]);
 
   const { data: dataAccept, trigger: triggerAccept } = useSWRMutation(
     "/api/paiement/acceptByAdmin",
-    fetchCancelByAdmin
+    fetchPost
   );
+  useEffect(() => {
+    if (dataAccept) {
+      if (dataAccept.status !== 200) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataAccept.message },
+        });
+      } else {
+        mutateTest({
+          ...dataAccept,
+        });
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataAccept.message },
+        });
+      }
+    }
+  }, [dataAccept, dispatch, mutateTest]);
 
   const { data: dataFinishMeeting, trigger: triggerFinishMeeting } =
     useSWRMutation("/api/meeting/finish", fetchPost);
@@ -201,17 +217,19 @@ const Content = () => {
                         </button>
                       </div>
                     )}
-                    <div>
-                      <button
-                        onClick={() => {
-                          triggerFinishMeeting({
-                            id: data.body.id,
-                          });
-                        }}
-                      >
-                        Terminer
-                      </button>
-                    </div>
+                    {data.body.discovery === false && (
+                      <div>
+                        <button
+                          onClick={() => {
+                            triggerFinishMeeting({
+                              id: data.body.id,
+                            });
+                          }}
+                        >
+                          Terminer
+                        </button>
+                      </div>
+                    )}
                   </>
                 )}
               </ul>

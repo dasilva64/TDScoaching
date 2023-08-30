@@ -43,7 +43,7 @@ const Display = () => {
             ...data,
             body: {
               ...data.body,
-              formule: inputFormule,
+              typeMeeting: inputFormule,
             },
           },
           { revalidate: false }

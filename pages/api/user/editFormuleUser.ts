@@ -47,7 +47,6 @@ export default withIronSessionApiRoute(
               role: editUser.role,
               phone: editUser.phone,
               typeMeeting: editUser.typeMeeting,
-              formule: editUser.typeMeeting,
             };
             res.status(200).json({
               status: 200,

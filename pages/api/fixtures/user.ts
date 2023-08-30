@@ -18,7 +18,7 @@ export default async function sendTokenEditPhone(req: any, res: any) {
         birth: "1999-01-01",
         genre: "homme",
         discovery: false,
-        typeMeeting: null,
+        typeMeeting: { type: "découverte" },
       },
     });
   }

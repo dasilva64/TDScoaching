@@ -29,9 +29,9 @@ import ModalAddFirstMeeting from "@/app/rendez-vous/components/modal/ModalAddDis
 import ModalDeleteFirstMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteDiscoveryMeeting";
 import ModalEditFormuleUser from "@/app/rendez-vous/components/modal/ModalEditFormuleUser";
 import ModalCancelFormuleUser from "@/app/rendez-vous/components/modal/ModalCancelFormuleUser";
-import ModalAddOtherMeeting from "@/app/rendez-vous/components/modal/ModalAddOtherMeeting";
 import useGet from "../../hook/useGet";
 import ModalAddMeetingAdmin from "@/app/meetingAdmin/components/modal/ModalAddMeetingAdmin";
+import ModalEditMeeting from "@/app/rendez-vous/components/modal/ModalEditMeeting";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
@@ -256,7 +256,7 @@ const Content = () => {
     displayModalDeleteFirstMeeting,
     displayModalEditFormule,
     displayModalCancelFormule,
-    displayModalOtherMeeting,
+    displayModalEditMeeting,
     displayModalAddMeetingAdmin,
   } = useSelector((state: RootState) => state.form);
 
@@ -297,7 +297,7 @@ const Content = () => {
       displayModalDeleteFirstMeeting === true ||
       displayModalEditFormule === true ||
       displayModalCancelFormule === true ||
-      displayModalOtherMeeting === true ||
+      displayModalEditMeeting === true ||
       displayModalAddMeetingAdmin === true
     ) {
       return `${styles.line__hide}`;
@@ -344,7 +344,7 @@ const Content = () => {
           displayModalDeleteFirstMeeting === true ||
           displayModalEditFormule === true ||
           displayModalCancelFormule === true ||
-          displayModalOtherMeeting === true ||
+          displayModalEditMeeting === true ||
           displayModalAddMeetingAdmin === true
         ) {
           header.style.opacity = "0.02";
@@ -392,8 +392,8 @@ const Content = () => {
     displayModalDeleteFirstMeeting,
     displayModalEditFormule,
     displayModalCancelFormule,
-    displayModalOtherMeeting,
     displayModalAddMeetingAdmin,
+    displayModalEditMeeting,
   ]);
 
   if (typeof window !== "undefined") {
@@ -438,7 +438,7 @@ const Content = () => {
       displayModalDeleteFirstMeeting ||
       displayModalEditFormule ||
       displayModalCancelFormule ||
-      displayModalOtherMeeting ||
+      displayModalEditMeeting ||
       displayModalAddMeetingAdmin
     ) {
       /* if (displayLogMenu === true) {
@@ -630,7 +630,7 @@ const Content = () => {
       {displayModalDeleteFirstMeeting === true && <ModalDeleteFirstMeeting />}
       {displayModalEditFormule === true && <ModalEditFormuleUser />}
       {displayModalCancelFormule === true && <ModalCancelFormuleUser />}
-      {displayModalOtherMeeting === true && <ModalAddOtherMeeting />}
+      {displayModalEditMeeting === true && <ModalEditMeeting />}
       {displayModalAddMeetingAdmin === true && <ModalAddMeetingAdmin />}
 
       {displayFlash()}

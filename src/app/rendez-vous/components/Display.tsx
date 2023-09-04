@@ -16,7 +16,6 @@ const Display = () => {
     isLoading,
     isError,
   } = useGet("/api/user/getUserMeeting");
-  console.log(userData);
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth < 600) {
@@ -127,6 +126,7 @@ const Display = () => {
                 )}
 
               <DisplayDiscoveryMeeting
+                meetings={userData?.body.meetings}
                 meeting={userData.body.meeting}
                 discovery={userData.body.discovery}
               />

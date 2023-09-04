@@ -279,15 +279,12 @@ const Content = () => {
                           data.body.typeMeeting.number === 1 && (
                             <button
                               onClick={() => {
-                                if (data.body.typeMeeting.type === "flash") {
-                                  if (data.body.typeMeeting.number === 1) {
-                                    triggerAccept({
-                                      meetingId: data.body.meeting.id,
-                                      userId: data.body.id,
-                                    });
-                                  }
-                                } else if (
-                                  data.body.typeMeeting.type === "longue"
+                                if (
+                                  (data.body.typeMeeting.type === "flash" &&
+                                    data.body.typeMeeting.number === 1) ||
+                                  (data.body.typeMeeting.type === "longue" &&
+                                    data.body.typeMeeting.number === 1) ||
+                                  data.body.typeMeeting.type === "unique"
                                 ) {
                                   if (data.body.typeMeeting.number === 1) {
                                     triggerAccept({
@@ -296,9 +293,13 @@ const Content = () => {
                                     });
                                   }
                                 } else {
-                                  triggerAccept({
-                                    meetingId: data.body.meeting.id,
-                                    userId: data.body.id,
+                                  dispatch({
+                                    type: "flash/storeFlashMessage",
+                                    payload: {
+                                      type: "error",
+                                      flashMessage:
+                                        "Vous ne pouvez pas accepter ce rendez-vous",
+                                    },
                                   });
                                 }
                               }}
@@ -345,17 +346,6 @@ const Content = () => {
                             Accepter
                           </button>
                         )}
-
-                        <button
-                          onClick={() => {
-                            trigger({
-                              meetingId: data.body.meeting.id,
-                              userId: data.body.id,
-                            });
-                          }}
-                        >
-                          Annuler
-                        </button>
                       </div>
                     )}
                     {data.body.discovery === false && (

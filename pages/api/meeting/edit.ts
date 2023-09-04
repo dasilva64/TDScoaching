@@ -1,38 +1,80 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
+import { validationBody } from "../../../lib/validation";
 
 export default withIronSessionApiRoute(
   async function edit(req: any, res: NextApiResponse) {
     if (req.method === "POST") {
       if (req.session.user) {
-        const { description } = await req.body;
+        const { start } = await req.body;
+        let arrayMessageError = validationBody(req.body);
+        if (arrayMessageError.length > 0) {
+          return res.status(400).json({
+            status: 400,
+            message: arrayMessageError,
+          });
+        }
         const user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
         });
         if (user === null) {
           return res.status(404).json({
             status: 404,
-            message: "User not found",
+            message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
           });
         } else {
-          const meeting = await prisma.meeting.findUnique({
-            where: { id: user.meetingId! },
-          });
-          if (meeting === null) {
+          if (user.meetingId === null) {
             return res.status(404).json({
               status: 404,
-              message: "Aucun rendez-vous existe avec cet id",
+              message: "Vous n'avez pas de rendez-vous, veuillez réessayer",
             });
           } else {
-            /* const editMetting = await prisma.meeting.update({
-              where: { id: meeting.id },
-              data: { description: description },
-            }); */
-            return res.status(200).json({
-              status: 200,
-              message: "Votre description a été modifié avec succès",
+            let dateStart = new Date(start);
+            let isoDateStart = dateStart.toISOString();
+            const meeting = await prisma.meeting.findFirst({
+              where: {
+                startAt: isoDateStart,
+              },
             });
+            if (meeting) {
+              return res.status(404).json({
+                status: 404,
+                message: "Ce rendez-vous est déjà pris, veuillez réessayer",
+              });
+            } else {
+              const editMetting = await prisma.meeting.update({
+                where: { id: user.meetingId },
+                data: {
+                  startAt: isoDateStart,
+                },
+              });
+              if (editMetting === null) {
+                return res.status(400).json({
+                  status: 400,
+                  message:
+                    "Une erreur est survenue lors de la modification du rendez-vous, veuillez réessayer",
+                });
+              } else {
+                const allMeeting = await prisma.meeting.findMany({
+                  where: { startAt: { gte: new Date() } },
+                  select: {
+                    startAt: true,
+                  },
+                });
+                let userObject = {
+                  meeting: editMetting,
+                  meetings: allMeeting,
+                  discovery: user.discovery,
+                  typeMeeting: user.typeMeeting,
+                };
+                return res.status(200).json({
+                  status: 200,
+                  message: "Rendez-vous modifié avec succès",
+                  body: userObject,
+                });
+              }
+            }
           }
         }
       } else {

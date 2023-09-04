@@ -79,28 +79,6 @@ const ModalAddFirstMeeting = () => {
     }
   }, [data]);
   const handlerClick = () => {
-    /* let startstr = "";
-    let endstr = "";
-    let copyChoiceDate = dataModalFirstMeeting;
-
-    copyChoiceDate.split(" ").map((el: any, index: any) => {
-      if (index === 0) {
-        el.split("/")
-          .reverse()
-          .map((el: any) => {
-            startstr = startstr + el + "-";
-          });
-      } else {
-        el.split(":").map((el: any) => {
-          endstr = endstr + el + ":";
-        });
-      }
-    });
-    let formatDate =
-      startstr.slice(0, startstr.length - 1) +
-      "T" +
-      endstr.slice(0, endstr.length - 1) +
-      ".000Z"; */
     const fetchAddMeeting = async () => {
       trigger({
         start: new Date(dataModalFirstMeeting).toLocaleString("en-US"),

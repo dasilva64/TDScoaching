@@ -41,7 +41,6 @@ export default withIronSessionApiRoute(
               delete copyAllMeeting[i].status;
               array.push(copyAllMeeting[i]);
             }
-            console.log(array);
             return res.status(200).json({
               status: 200,
               body: array,

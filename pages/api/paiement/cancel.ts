@@ -7,7 +7,6 @@ export default withIronSessionApiRoute(
   async function cancel(req, res) {
     if (req.method === "GET") {
       if (req.session.user) {
-        console.log(req.session.user);
         let user = await prisma.user.findUnique({
           where: {
             id: req.session.user.id,

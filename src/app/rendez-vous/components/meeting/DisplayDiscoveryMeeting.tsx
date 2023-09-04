@@ -4,9 +4,11 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 import styles from "./DisplayDiscoveryMeeting.module.scss";
+import DatePickerEditDesktop from "../dataPickerEdit/DatePickerEditDesktop";
 
-const DisplayDiscoveryMeeting = ({ meeting, discovery }: any) => {
+const DisplayDiscoveryMeeting = ({ meetings, meeting, discovery }: any) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [displayEdit, setDisplayEdit] = React.useState<boolean>(false);
 
   const { push } = useRouter();
   let restDate;
@@ -20,7 +22,16 @@ const DisplayDiscoveryMeeting = ({ meeting, discovery }: any) => {
   if (meeting && meeting.status === true) {
     content = (
       <>
-        <div className={styles.myFirstMeeting__meeting}>
+        {displayEdit && (
+          <DatePickerEditDesktop events={meetings} discovery={discovery} />
+        )}
+        <div
+          className={`${
+            displayEdit === true
+              ? styles.myFirstMeeting__meeting__flexwidth
+              : styles.myFirstMeeting__meeting__fullwidth
+          }`}
+        >
           <h3 className={styles.myFirstMeeting__meeting__h3}>
             Voici votre prochain rendez-vous :{" "}
           </h3>
@@ -29,6 +40,14 @@ const DisplayDiscoveryMeeting = ({ meeting, discovery }: any) => {
             {new Date(meeting.startAt).toLocaleString("fr-FR")}
           </p>
           <div className={styles.myFirstMeeting__meeting__div}>
+            <button
+              className={styles.myFirstMeeting__meeting__div__btn}
+              onClick={() => {
+                setDisplayEdit(true);
+              }}
+            >
+              Modifier votre rendez-vous
+            </button>
             <button
               className={styles.myFirstMeeting__meeting__div__btn}
               onClick={() => {

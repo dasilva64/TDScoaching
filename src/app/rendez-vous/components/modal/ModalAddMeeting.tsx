@@ -35,13 +35,11 @@ const ModalAddMeeting = () => {
   const { trigger, data } = useSWRMutation("/api/paiement/get", fetchPost);
   useEffect(() => {
     if (data) {
-      console.log(data);
       window.location.href = data.url;
     }
   }, [data]);
   const handlerPayment = () => {
     const fetchAddMeeting = async () => {
-      //console.log(new Date(dataModalMeeting).toLocaleString("en-US"));
       trigger({
         start: new Date(dataModalMeeting).toLocaleString("en-US"),
         typeCoaching: typeMeetingInput,

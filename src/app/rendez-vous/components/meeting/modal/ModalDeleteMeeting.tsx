@@ -8,7 +8,6 @@ import fetchGet from "@/app/components/fetch/fetchGet";
 const ModalDeleteMeeting = () => {
   const dispatch = useDispatch();
   const { trigger, data } = useSWRMutation("/api/paiement/cancel", fetchGet);
-  console.log(data);
   useEffect(() => {
     if (data && data.status === 200) {
       if (data.status === 200) {

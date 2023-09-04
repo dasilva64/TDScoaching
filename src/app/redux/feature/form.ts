@@ -24,10 +24,10 @@ const initialState = {
   displayModalCancelMeeting: false,
   displayModalMeeting: false,
   displayModalFirstMeeting: false,
-  displayModalOtherMeeting: false,
+  displayModalEditMeeting: false,
   dataModalMeeting: "",
+  dataModalEditMeeting: "",
   dataModalFirstMeeting: "",
-  dataModalOtherMeeting: "",
   displayModalDeleteAccount: false,
   displayModalCloseEmail: false,
   displayModalClosePhone: false,
@@ -207,13 +207,13 @@ const form = createSlice({
       state.displayModalFirstMeeting = false;
       state.dataModalFirstMeeting = "";
     },
-    openModalOtherMeeting: (state, action) => {
-      state.displayModalOtherMeeting = true;
-      state.dataModalOtherMeeting = action.payload.date;
+    openModalEditMeeting: (state, action) => {
+      state.displayModalEditMeeting = true;
+      state.dataModalEditMeeting = action.payload.date;
     },
-    closeModalOtherMeeting: (state) => {
-      state.displayModalOtherMeeting = false;
-      state.dataModalOtherMeeting = "";
+    closeModalEditMeeting: (state) => {
+      state.displayModalEditMeeting = false;
+      state.dataModalEditMeeting = "";
     },
     openModalDeleteAccount: (state) => {
       state.displayModalDeleteAccount = true;

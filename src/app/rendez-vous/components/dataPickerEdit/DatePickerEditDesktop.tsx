@@ -1,15 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import styles from "./DatePickerDesktop.module.scss";
+import styles from "./DatePickerEditDesktop.module.scss";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store";
 
-const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
+const DatePickerEditDesktop = ({ events, discovery, typeMeeting }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [arDateWeek, setArDateWeek] = useState<any>([]);
   const [all, setAll] = useState<any>(null);
+  const { id } = useSelector((state: RootState) => state.auth);
 
   const [startDateWeek, setStartDateWeek] = useState<string>("");
   const daystext: any = {
@@ -83,8 +84,7 @@ const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
             month.toString() === (newar[y].getMonth() + 1).toString() &&
             date.toString() === newar[y].getDate().toString()
           ) {
-            let copyUser: any = { ...copyEvents[i].User };
-            arWeek.push([year, month, date, hour]);
+            arWeek.push([year, month, date, hour, copyEvents[i]["userId"]]);
           }
         }
         if (arWeek.length > 0) {
@@ -280,39 +280,12 @@ const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
   const handlerClick = (h: any, p: any) => {
     let create = new Date(p[0][0], p[0][1] - 1, p[0][2], h);
     if (new Date(create).getTime() > new Date().getTime()) {
-      if (discovery === false) {
-        dispatch({
-          type: "form/openModalFirstMeeting",
-          payload: {
-            date: create,
-          },
-        });
-      } else {
-        if (typeMeeting.type === "flash") {
-          if (typeMeeting.number === 3) {
-            dispatch({
-              type: "form/openModalMeeting",
-              payload: {
-                date: create,
-              },
-            });
-          } else {
-            dispatch({
-              type: "form/openModalOtherMeeting",
-              payload: {
-                date: create,
-              },
-            });
-          }
-        } else {
-          dispatch({
-            type: "form/openModalMeeting",
-            payload: {
-              date: create,
-            },
-          });
-        }
-      }
+      dispatch({
+        type: "form/openModalEditMeeting",
+        payload: {
+          date: create,
+        },
+      });
     }
   };
 
@@ -428,24 +401,47 @@ const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
                               if (
                                 h[1].toString() === p[1][0][y][3].toString()
                               ) {
-                                return (
-                                  <td
-                                    className={`${styles.datePicker__table__tbody__tr__td} ${styles.datePicker__table__tbody__tr__td__previous}`}
-                                    key={index}
-                                  >
-                                    <div
-                                      className={
-                                        styles.datePicker__table__tbody__tr__td__div__previous
-                                      }
+                                if (
+                                  id.toString() === p[1][0][y][4].toString()
+                                ) {
+                                  return (
+                                    <td
+                                      className={`${styles.datePicker__table__tbody__tr__td}`}
+                                      key={index}
                                     >
-                                      <p
+                                      <div
+                                        className={`${styles.datePicker__table__tbody__tr__td__div__previous} ${styles.datePicker__table__tbody__tr__td__meeting__me}`}
+                                      >
+                                        <p
+                                          className={
+                                            styles.datePicker__table__tbody__tr__td__div__previous__p
+                                          }
+                                        >
+                                          votre rendez-vous
+                                        </p>
+                                      </div>
+                                    </td>
+                                  );
+                                } else {
+                                  return (
+                                    <td
+                                      className={`${styles.datePicker__table__tbody__tr__td} ${styles.datePicker__table__tbody__tr__td__previous}`}
+                                      key={index}
+                                    >
+                                      <div
                                         className={
-                                          styles.datePicker__table__tbody__tr__td__div__previous__p
+                                          styles.datePicker__table__tbody__tr__td__div__previous
                                         }
-                                      ></p>
-                                    </div>
-                                  </td>
-                                );
+                                      >
+                                        <p
+                                          className={
+                                            styles.datePicker__table__tbody__tr__td__div__previous__p
+                                          }
+                                        ></p>
+                                      </div>
+                                    </td>
+                                  );
+                                }
                               }
                             }
                           }
@@ -518,4 +514,4 @@ const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
   );
 };
 
-export default DatePickerDesktop;
+export default DatePickerEditDesktop;

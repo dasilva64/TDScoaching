@@ -47,7 +47,21 @@ const Content = () => {
     };
     fetchCheckUser();
   }, []); */
-  const { data, isLoading, isError } = useGet("/api/user/check");
+  let content = (
+    <button
+      type="button"
+      className={styles.header__login}
+      onClick={() => {
+        handlerClick();
+        let body = document.body;
+        let test = body?.scrollHeight;
+      }}
+    >
+      Se connecter
+    </button>
+  );
+
+  /* const { data, isLoading, isError } = useGet("/api/user/check");
   useEffect(() => {
     if (data) {
       if (data.body !== null) {
@@ -224,7 +238,7 @@ const Content = () => {
         );
       }
     }
-  }
+  } */
 
   const [isClick, setIsClick] = useState<boolean>(false);
   const {

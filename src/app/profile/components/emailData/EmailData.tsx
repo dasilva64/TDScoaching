@@ -7,16 +7,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
-import useUserGet from "@/app/components/hook/user/useUserGet";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
-import fetchGet from "@/app/components/fetch/user/fetchGet";
+import fetchPost from "@/app/components/fetch/FetchPost";
+import fetchGet from "@/app/components/fetch/fetchGet";
+import useGet from "@/app/components/hook/useGet";
 
 const EmailCheck = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { displayModalEditEmailData } = useSelector(
+  const { displayModalCloseEmail } = useSelector(
     (state: RootState) => state.form
   );
-  const { userData, isLoading, isError } = useUserGet();
+  const {
+    data: userData,
+    isLoading,
+    isError,
+  } = useGet("/api/user/getUserProfile");
   let content;
   if (!isError && !isLoading && userData?.body.editEmail) {
     content = <>{userData?.body.editEmail.newEmail}</>;
@@ -54,7 +58,7 @@ const EmailCheck = () => {
     const mutateMainData = async () => {
       let copyNewEmail = data.body.mail;
       mutate(
-        "/api/user/getUser",
+        "/api/user/getUserProfile",
         {
           ...data,
           body: {
@@ -98,7 +102,7 @@ const EmailCheck = () => {
     const mutateMaindataReSendCode = async () => {
       let copyNewEmail = dataReSendCode.body.editEmail;
       mutate(
-        "/api/user/getUser",
+        "/api/user/getUserProfile",
         {
           ...dataReSendCode,
           body: {
@@ -149,75 +153,80 @@ const EmailCheck = () => {
   };
   return (
     <>
-      {displayModalEditEmailData === true && (
-        <div className={styles.modalEditEmailSendData}>
-          <button
-            className={styles.modalEditEmailSendData__btn}
-            onClick={() => {
-              closeForm();
+      <div className={styles.bg}></div>
+      <div
+        className={`${styles.modalEditEmailSendData} ${
+          displayModalCloseEmail === true
+            ? styles.modalEditEmailSendData__opacity
+            : null
+        }`}
+      >
+        <button
+          className={styles.modalEditEmailSendData__btn}
+          onClick={() => {
+            closeForm();
+          }}
+        >
+          <span className={styles.modalEditEmailSendData__btn__cross}>
+            &times;
+          </span>
+        </button>
+        <h1 className={styles.modalEditEmailSendData__h1}>
+          Validation de votre nouvel email {content}
+        </h1>
+        <p>
+          Afin de renforcer la sécurité de vos données et de vos documents, nous
+          devons vérifier votre adresse email. Nous vous avons envoyé un email
+          contenant un code de sécurité à 8 chiffres.
+        </p>
+        <form
+          className={styles.modalEditEmailSendData__form}
+          action=""
+          onSubmit={(e) => {
+            handlerSubmit(e);
+          }}
+        >
+          <TextField
+            value={codeInput}
+            style={{ margin: "20px 0px 30px 0px" }}
+            id={"code"}
+            label={"Code de validation"}
+            variant="standard"
+            type={"number"}
+            placeholder={"Entrez votre code"}
+            FormHelperTextProps={{ style: { color: "red" } }}
+            onChange={(e) => {
+              handlerInput(
+                e,
+                "firstname",
+                /^[0-9]{8,8}$/,
+                setValidCodeInput,
+                setErrorMessageCode,
+                setCodeInput,
+                "Code : doit contenir 8 chiffres"
+              );
             }}
-          >
-            <span className={styles.modalEditEmailSendData__btn__cross}>
-              &times;
-            </span>
-          </button>
-          <h1 className={styles.modalEditEmailSendData__h1}>
-            Validation de votre nouvel email {content}
-          </h1>
-          <p>
-            Afin de renforcer la sécurité de vos données et de vos documents,
-            nous devons vérifier votre adresse email. Nous vous avons envoyé un
-            email contenant un code de sécurité à 8 chiffres.
-          </p>
-          <form
-            className={styles.modalEditEmailSendData__form}
-            action=""
-            onSubmit={(e) => {
-              handlerSubmit(e);
-            }}
-          >
-            <TextField
-              value={codeInput}
-              style={{ margin: "20px 0px 30px 0px" }}
-              id={"code"}
-              label={"Code de validation"}
-              variant="standard"
-              type={"number"}
-              placeholder={"Entrez votre code"}
-              FormHelperTextProps={{ style: { color: "red" } }}
-              onChange={(e) => {
-                handlerInput(
-                  e,
-                  "firstname",
-                  /^[0-9]{8,8}$/,
-                  setValidCodeInput,
-                  setErrorMessageCode,
-                  setCodeInput,
-                  "Code : doit contenir 8 chiffres"
-                );
-              }}
-              helperText={errorMessageCode}
+            helperText={errorMessageCode}
+          />
+          <div className={styles.modalEditEmailSendData__form__submit}>
+            <input
+              className={styles.modalEditEmailSendData__form__submit__btn}
+              type="submit"
+              value="Valider votre mail"
             />
-            <div className={styles.modalEditEmailSendData__form__submit}>
-              <input
-                className={styles.modalEditEmailSendData__form__submit__btn}
-                type="submit"
-                value="Valider votre mail"
-              />
-            </div>
-          </form>
-          <div className={styles.modalEditEmailSendData__reSend}>
-            <button
-              className={styles.modalEditEmailSendData__reSend__btn}
-              onClick={() => {
-                triggerReSendCode();
-              }}
-            >
-              Renvoyer un code
-            </button>
           </div>
+        </form>
+        <div className={styles.modalEditEmailSendData__reSend}>
+          <button
+            className={styles.modalEditEmailSendData__reSend__btn}
+            onClick={() => {
+              triggerReSendCode();
+            }}
+          >
+            Renvoyer un code
+          </button>
         </div>
-      )}
+      </div>
     </>
   );
 };

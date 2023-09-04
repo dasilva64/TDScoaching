@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styles from "./ModalUserPasswordData.module.scss";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
 
 const ModalUserPasswordData = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -155,6 +155,7 @@ const ModalUserPasswordData = () => {
   };
   return (
     <>
+      <div className={styles.bg}></div>
       <div className={styles.modalEditPasswordData}>
         <button
           className={styles.modalEditPasswordData__btn}

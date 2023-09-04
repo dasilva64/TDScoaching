@@ -3,104 +3,39 @@
     padding-top: 200px;
   }
   &__container {
-    margin: 30px 10% 0px 10%;
+    margin: 10px 10% 0px 10%;
     padding-top: 30px;
     padding-bottom: 100px;
-    display: flex;
-    justify-content: space-between;
-    &__text {
-      width: 35%;
-      &__h3 {
-        text-align: center;
-        margin-bottom: 50px;
-        &__div {
-          &__p {
-            margin-bottom: 15px;
-            margin-top: 15px;
-          }
-          &__div {
-            display: flex;
-            margin-bottom: 5px;
-            &__p {
-              margin-left: 5px;
-            }
-          }
-          &__div {
-            text-align: center;
-            &__btn {
-              text-align: center;
-              background-color: white;
-              padding: 10px 20px;
-              border: 1px solid orange;
-              box-shadow: 5px 5px orange;
-              border-radius: 20px;
-              margin: auto;
-            }
-          }
-        }
-      }
-      &__p {
-        text-align: center;
-        margin-bottom: 20px;
-      }
-      &__div {
-        text-align: center;
-        &__btn {
-          background-color: white;
-          border-radius: 10px;
-          padding: 10px;
-          cursor: pointer;
-          margin-top: 20px;
-          border: 2px solid red;
-          transition: all 400ms;
-          &:hover {
-            transform: scale(1.05);
-            background-color: red;
-            color: white;
-          }
-        }
-      }
+    &__h2 {
+      margin: 30px 0px 20px 0px;
     }
-    &__formule {
-      display: block;
-      &__h3 {
-        text-align: center;
-        margin-bottom: 50px;
+    &__how {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 50px;
+      &__card {
+        padding: 10px;
+        border-radius: 10px;
+        background-color: orange;
+        color: white;
       }
-      &__content {
-        display: flex;
-        justify-content: space-between;
+      &__discovery {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
         margin-bottom: 50px;
         &__card {
-          padding: 10px 20px;
-          border: 1px solid orange;
-          box-shadow: 5px 5px orange;
-          border-radius: 20px;
-          &__h2 {
-            text-align: center;
-            margin-bottom: 20px;
-          }
+          padding: 10px;
+          border-radius: 10px;
+          background-color: orange;
+          color: white;
         }
       }
     }
-    &__notcomfirm {
-      width: 100%;
+    &__content {
       display: flex;
-      justify-content: space-around;
-      &__text {
-        width: 50%;
-        &__h3 {
-          text-align: center;
-          margin-bottom: 50px;
-        }
-      }
-      &__reminder {
-        width: 40%;
-        background-color: orange;
-        padding: 20px;
-        color: white;
-        border-radius: 10px;
-      }
+      justify-content: space-between;
     }
   }
   &__calendar {

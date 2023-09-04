@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ModalEditFormuleUser.module.scss";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/app/redux/store";
 import { FormControl } from "@mui/base";
 import {
   FormLabel,
@@ -11,16 +10,18 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import useUserGet from "@/app/components/hook/user/useUserGet";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
+import useGet from "@/app/components/hook/useGet";
 
 const ModalEditFormuleUser = () => {
-  const { userData, isLoading, isError, mutate } = useUserGet();
+  const { data: userData, mutate } = useGet("/api/user/getUserMeeting");
   const router = useRouter();
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const dispatch = useDispatch();
-  const [inputFormule, setInputFormule] = useState<string>("");
+  const [inputFormule, setInputFormule] = useState<string>(
+    userData?.body.typeMeeting.type
+  );
   const [validFormuleInput, setValidFormuleInput] = useState<boolean>(false);
   const [errorMessageFormule, setErrorMessageFormule] = useState<string>("");
   const closeForm = () => {
@@ -38,10 +39,6 @@ const ModalEditFormuleUser = () => {
         mutate(
           {
             ...data,
-            body: {
-              ...data.body,
-              typeMeeting: inputFormule,
-            },
           },
           { revalidate: false }
         );
@@ -99,16 +96,20 @@ const ModalEditFormuleUser = () => {
           Vous pouvez avoir plus d&apos;information sur les différentes offres
           en cliquant sur le bouton ci-dessous
         </p>
-        <button
-          onClick={() => {
-            dispatch({
-              type: "form/closeModalEditFormuleUserData",
-            });
-            router.push("/tarif");
-          }}
-        >
-          Cliquer ici
-        </button>
+        <div className={styles.modalComfirm__div}>
+          <button
+            className={styles.modalComfirm__div__btn}
+            onClick={() => {
+              dispatch({
+                type: "form/closeModalEditFormuleUserData",
+              });
+              router.push("/tarif");
+            }}
+          >
+            En savoir plus
+          </button>
+        </div>
+
         <form
           onSubmit={(e) => {
             handleSubmit(e);
@@ -127,19 +128,19 @@ const ModalEditFormuleUser = () => {
               }}
             >
               <FormControlLabel
-                value="formule1"
+                value="unique"
                 control={<Radio />}
-                label="Formule 1"
+                label="Formule unique"
               />
               <FormControlLabel
-                value="formule2"
+                value="flash"
                 control={<Radio />}
-                label="Formule 2"
+                label="Formule flash"
               />
               <FormControlLabel
-                value="formule3"
+                value="longue"
                 control={<Radio />}
-                label="Formule 3"
+                label="Formule longue"
               />
             </RadioGroup>
             <FormHelperText style={{ color: "red", margin: "0px" }}>
@@ -157,7 +158,13 @@ const ModalEditFormuleUser = () => {
               setInputPseudo(e.target.value);
             }}
           />
-          <input type="submit" value="Envoyer" />
+          <div className={styles.modalComfirm__div}>
+            <input
+              className={styles.modalComfirm__div__btn}
+              type="submit"
+              value="Changer"
+            />
+          </div>
         </form>
       </div>
     </>

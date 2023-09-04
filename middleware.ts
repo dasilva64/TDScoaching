@@ -14,6 +14,7 @@ export const middleware = async (req: NextRequest) => {
   const { user } = session;
 
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
+  let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
   if (user) {
     if (
       req.nextUrl.pathname.startsWith("/utilisateurs") ||
@@ -25,7 +26,10 @@ export const middleware = async (req: NextRequest) => {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }
-    if (req.nextUrl.pathname.startsWith("/rendez-vous")) {
+    if (
+      req.nextUrl.pathname.startsWith("/rendez-vous") ||
+      regexTwo.test(req.nextUrl.pathname)
+    ) {
       if (user.role !== "ROLE_USER") {
         return NextResponse.redirect(new URL("/", req.url));
       }
@@ -48,5 +52,6 @@ export const config = {
     "/rendez-vous",
     "/meetingAdmin",
     "/utilisateur/:path*",
+    "/suppression-compte/:path*",
   ],
 };

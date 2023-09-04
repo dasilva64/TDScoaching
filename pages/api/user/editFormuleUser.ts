@@ -33,214 +33,109 @@ export default withIronSessionApiRoute(
             });
           } else {
             let copyFormule: any = user.typeMeeting;
+            let data;
             if (copyFormule.type === "découverte") {
               if (formule === "unique") {
-                let editUser = await prisma.user.update({
-                  where: {
-                    id: req.session.user.id,
-                  },
-                  data: {
-                    typeMeeting: { type: validator.escape(formule.trim()) },
-                  },
-                });
+                data = { type: validator.escape(formule.trim()) };
               } else if (formule === "flash") {
-                let editUser = await prisma.user.update({
-                  where: {
-                    id: req.session.user.id,
-                  },
-                  data: {
-                    typeMeeting: {
-                      type: validator.escape(formule.trim()),
-                      number: 3,
-                    },
-                  },
-                });
-              } else if (formule === "long") {
-                let editUser = await prisma.user.update({
-                  where: {
-                    id: req.session.user.id,
-                  },
-                  data: {
-                    typeMeeting: {
-                      type: validator.escape(formule.trim()),
-                      number: 10,
-                    },
-                  },
-                });
+                data = {
+                  type: validator.escape(formule.trim()),
+                  number: 3,
+                };
+              } else if (formule === "longue") {
+                data = {
+                  type: validator.escape(formule.trim()),
+                  number: 10,
+                };
               }
             } else if (copyFormule.type === "unique") {
-              if (formule === "unique") {
-                let editUser = await prisma.user.update({
-                  where: {
-                    id: req.session.user.id,
-                  },
-                  data: {
-                    typeMeeting: { type: validator.escape(formule.trim()) },
-                  },
-                });
-              } else if (formule === "flash") {
-                let editUser = await prisma.user.update({
-                  where: {
-                    id: req.session.user.id,
-                  },
-                  data: {
-                    typeMeeting: {
-                      type: validator.escape(formule.trim()),
-                      number: 3,
-                    },
-                  },
-                });
-              } else if (formule === "long") {
-                let editUser = await prisma.user.update({
-                  where: {
-                    id: req.session.user.id,
-                  },
-                  data: {
-                    typeMeeting: {
-                      type: validator.escape(formule.trim()),
-                      number: 10,
-                    },
-                  },
-                });
-              }
-            }
-
-            let userEditMailObject;
-            if (user.editEmail) {
-              let copyEditEmail: any = user.editEmail;
-              let limitDate = copyEditEmail.limitDate;
-              let convertInDate = new Date(limitDate);
-              if (convertInDate < new Date()) {
-                await prisma.user.update({
-                  where: {
-                    id: user.id,
-                  },
-                  data: {
-                    editEmail: Prisma.JsonNull,
-                  },
-                });
-                userEditMailObject = null;
-              } else {
-                userEditMailObject = {
-                  newEmail: copyEditEmail.newEmail,
-                  limitDate: copyEditEmail.limitDate,
+              if (formule === "flash") {
+                data = {
+                  type: validator.escape(formule.trim()),
+                  number: 3,
+                };
+              } else if (formule === "longue") {
+                data = {
+                  type: validator.escape(formule.trim()),
+                  number: 10,
                 };
               }
-            } else {
-              userEditMailObject = null;
-            }
-
-            let userEditPhoneObject;
-            if (user.editPhone) {
-              let copyEditPhone: any = user.editPhone;
-              let limitDate = copyEditPhone.limitDate;
-              let convertInDate = new Date(limitDate);
-              if (convertInDate < new Date()) {
-                await prisma.user.update({
-                  where: {
-                    id: user.id,
-                  },
-                  data: {
-                    editPhone: Prisma.JsonNull,
-                  },
-                });
-                userEditPhoneObject = null;
+            } else if (copyFormule.type === "flash") {
+              if (copyFormule.number === 3) {
+                if (formule === "unique") {
+                  data = { type: validator.escape(formule.trim()) };
+                } else if (formule === "longue") {
+                  data = {
+                    type: validator.escape(formule.trim()),
+                    number: 10,
+                  };
+                }
               } else {
-                userEditPhoneObject = {
-                  newPhone: copyEditPhone.newPhone,
-                  limitDate: copyEditPhone.limitDate,
-                };
-              }
-            } else {
-              userEditPhoneObject = null;
-            }
-            let userTwoFactorObject;
-            if (user.twoFactorCode) {
-              let copyTwoFactorCode: any = user.twoFactorCode;
-              let limitDate = copyTwoFactorCode.limitDate;
-              let convertInDate = new Date(limitDate);
-              if (convertInDate < new Date()) {
-                await prisma.user.update({
-                  where: {
-                    id: user.id,
-                  },
-                  data: {
-                    twoFactorCode: Prisma.JsonNull,
-                  },
+                return res.status(404).json({
+                  status: 404,
+                  message:
+                    "Vous ne pouvez pas changer d'offre en cours, veuillez d'abord l'annuler",
                 });
-                userTwoFactorObject = null;
-              } else {
-                userTwoFactorObject = {
-                  limitDate: copyTwoFactorCode.limitDate,
-                };
               }
-            } else {
-              userTwoFactorObject = null;
+            } else if (copyFormule.type === "longue") {
+              if (copyFormule.number === 10) {
+                if (formule === "unique") {
+                  data = { type: validator.escape(formule.trim()) };
+                } else if (formule === "flash") {
+                  data = {
+                    type: validator.escape(formule.trim()),
+                    number: 3,
+                  };
+                }
+              } else {
+                return res.status(404).json({
+                  status: 404,
+                  message:
+                    "Vous ne pouvez pas changer d'offre en cours, veuillez d'abord l'annuler",
+                });
+              }
             }
-            const allMeeting = await prisma.meeting.findMany({
-              where: { startAt: { gte: new Date() } },
-              include: {
-                User: {
-                  select: {
-                    id: true,
-                    firstname: true,
-                    lastname: true,
-                  },
-                },
+            let editUser = await prisma.user.update({
+              where: {
+                id: req.session.user.id,
+              },
+              data: {
+                typeMeeting: data,
               },
             });
-            if (user.meetingId !== null) {
-              let meeting = await prisma.meeting.findUnique({
-                where: {
-                  id: user.meetingId,
-                },
-              });
-              let userObject = {
-                id: user.id,
-                role: user.role,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.mail,
-                meeting: meeting,
-                meetings: allMeeting,
-                phone: user.phone,
-                editEmail: userEditMailObject,
-                editPhone: userEditPhoneObject,
-                twoFactor: user.twoFactor,
-                twoFactorCode: userTwoFactorObject,
-                birth: user.birth,
-                genre: user.genre,
-                discovery: user.discovery,
-                typeMeeting: user.typeMeeting,
-              };
-              return res.status(200).json({
-                status: 200,
-                body: userObject,
-                message: "Votre formule a été mis à jours avec succès",
+            if (editUser === null) {
+              return res.status(404).json({
+                status: 404,
+                message:
+                  "Une erreur est survenue lors du choix de la formule, veuillez réessayer",
               });
             } else {
+              const allMeeting = await prisma.meeting.findMany({
+                where: { startAt: { gte: new Date() } },
+                select: {
+                  startAt: true,
+                },
+              });
+              let meeting;
+              if (editUser.meetingId === null) {
+                meeting = null;
+              } else {
+                meeting = await prisma.meeting.findUnique({
+                  where: {
+                    id: editUser.meetingId,
+                  },
+                });
+              }
               let userObject = {
-                id: user.id,
-                role: user.role,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.mail,
-                meeting: user.meetingId,
                 meetings: allMeeting,
-                phone: user.phone,
-                editEmail: userEditMailObject,
-                editPhone: userEditPhoneObject,
-                twoFactor: user.twoFactor,
-                twoFactorCode: userTwoFactorObject,
-                birth: user.birth,
-                genre: user.genre,
-                discovery: user.discovery,
-                typeMeeting: user.typeMeeting,
+                meeting: meeting,
+                typeMeeting: editUser.typeMeeting,
+                discovery: editUser.discovery,
               };
               return res.status(200).json({
                 status: 200,
-                message: "Votre formule a été mis à jours avec succès",
                 body: userObject,
+                message: "Votre formule a été mis à jours avec succès",
               });
             }
           }

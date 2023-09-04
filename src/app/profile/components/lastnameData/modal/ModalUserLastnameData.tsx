@@ -1,16 +1,16 @@
-import { AppDispatch, RootState } from "../../../../redux/store";
+import { AppDispatch } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "./ModalUserLastnameData.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 import validator from "validator";
 import { TextField } from "@mui/material";
-import useUserGet from "@/app/components/hook/user/useUserGet";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
+import useGet from "@/app/components/hook/useGet";
 
 const ModalUserLastnameData = () => {
-  const { userData } = useUserGet();
+  const { data: userData } = useGet("/api/user/getUserProfile");
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
   const [lastnameInput, setLastnameInput] = useState<string>(
@@ -52,7 +52,7 @@ const ModalUserLastnameData = () => {
   useEffect(() => {
     const mutateMainData = async () => {
       mutate(
-        "/api/user/getUser",
+        "/api/user/getUserProfile",
         {
           ...data,
           body: {
@@ -126,6 +126,7 @@ const ModalUserLastnameData = () => {
   };
   return (
     <>
+      <div className={styles.bg}></div>
       <div className={styles.modalEditMainUserData}>
         <button
           className={styles.modalEditMainUserData__btn}

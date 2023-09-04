@@ -1,6 +1,6 @@
 import prisma from "../../../lib/prisma";
 
- export default async function sendTokenEditPhone(req: any, res: any) {
+export default async function sendTokenEditPhone(req: any, res: any) {
   let user = await prisma.user.findMany({
     where: {
       role: "ROLE_USER",
@@ -9,20 +9,18 @@ import prisma from "../../../lib/prisma";
   for (let i = 0; i < user.length; i++) {
     let UserCreate = await prisma.meeting.create({
       data: {
-        startAt: new Date(2023, 7, 22+i, 15, 0, 0),
-        endAt: new Date(2023, 7, 22+i, 16, 0, 0),
+        startAt: new Date(2023, 7, 22 + i, 15, 0, 0),
         status: true,
         userId: user[i].id,
       },
     });
   }
 
-  
   return res.status(200).json({
     status: 200,
     message: "Fixtures créé",
   });
-    /* let currentDate = new Date(2023, 7, 22, 15, 0, 0)
+  /* let currentDate = new Date(2023, 7, 22, 15, 0, 0)
     let currentDateEnd = new Date(2023, 7, 22, 16, 0, 0)
     for (let i = 0; i < 100; i++) {
         
@@ -41,4 +39,4 @@ import prisma from "../../../lib/prisma";
       status: 200,
       message: "Fixtures créé",
     }); */
-  }
+}

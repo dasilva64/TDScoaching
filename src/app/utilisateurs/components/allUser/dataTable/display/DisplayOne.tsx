@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Display.module.scss";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const DisplayOne = ({ i }: any) => {
-  const dispatch = useDispatch();
   const { datas, sortBy } = useSelector((state: RootState) => state.Array);
   const [keyAr, setKeyAr] = useState<any>([]);
+  const router = useRouter();
+
   useEffect(() => {
     if (datas && datas.length > 0) {
       setKeyAr(Object.keys(datas[0]));
@@ -18,9 +20,10 @@ const DisplayOne = ({ i }: any) => {
     <>
       {datas && datas.length > 0 && (
         <tr
-          className={
-            i === 0 ? styles.table__body__tr : styles.table__body__tr__border
-          }
+          className={i === 0 ? styles.table__body__tr : styles.table__body__tr}
+          onClick={() => {
+            router.push(`/utilisateur/${datas[i]["id"]}`);
+          }}
         >
           {keyAr &&
             keyAr.map((p: any, index: any) => {
@@ -29,28 +32,24 @@ const DisplayOne = ({ i }: any) => {
                   if (i % 2 === 0) {
                     return (
                       <td
-                        className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td__border}`}
+                        className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td}`}
                         key={index}
                       >
                         {" "}
-                        <Link href={`/utilisateur/${datas[i]["id"]}`}>
-                          <div className={styles.table__body__tr__td__div}>
-                            {datas[i][p]}
-                          </div>
-                        </Link>
+                        <div className={styles.table__body__tr__td__div}>
+                          {datas[i][p]}
+                        </div>
                       </td>
                     );
                   } else {
                     return (
                       <td
-                        className={`${styles.table__body__tr__td__odd__first} ${styles.table__body__tr__td}`}
+                        className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td}`}
                         key={index}
                       >
-                        <Link href={`/utilisateur/${datas[i]["id"]}`}>
-                          <div className={styles.table__body__tr__td__div}>
-                            {datas[i][p]}
-                          </div>
-                        </Link>
+                        <div className={styles.table__body__tr__td__div}>
+                          {datas[i][p]}
+                        </div>
                       </td>
                     );
                   }
@@ -59,14 +58,12 @@ const DisplayOne = ({ i }: any) => {
                   if (i === 0) {
                     return (
                       <td
-                        className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td__border}`}
+                        className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}
                         key={index}
                       >
-                        <Link href={`/utilisateur/${datas[i]["id"]}`}>
-                          <div className={styles.table__body__tr__td__div}>
-                            {datas[i][p]}
-                          </div>
-                        </Link>
+                        <div className={styles.table__body__tr__td__div}>
+                          {datas[i][p]}
+                        </div>
                       </td>
                     );
                   } else {
@@ -75,18 +72,16 @@ const DisplayOne = ({ i }: any) => {
                         className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}
                         key={index}
                       >
-                        <Link href={`/utilisateur/${datas[i]["id"]}`}>
-                          <div className={styles.table__body__tr__td__div}>
-                            {datas[i][p]}
-                          </div>
-                        </Link>
+                        <div className={styles.table__body__tr__td__div}>
+                          {datas[i][p]}
+                        </div>
                       </td>
                     );
                   }
                 } else {
                   return (
                     <td
-                      className={`${styles.table__body__tr__td__odd} ${styles.table__body__tr__td}`}
+                      className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}
                       key={index}
                     >
                       <div className={styles.table__body__tr__td__div}>

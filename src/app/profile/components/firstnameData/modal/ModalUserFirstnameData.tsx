@@ -1,18 +1,36 @@
-import { AppDispatch, RootState } from "../../../../redux/store";
+import { AppDispatch } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "./ModalUserFirstnameData.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 import validator from "validator";
 import { TextField } from "@mui/material";
-import useUserGet from "@/app/components/hook/user/useUserGet";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
+import useGet from "@/app/components/hook/useGet";
+import { useRouter } from "next/navigation";
 
 const ModalUserFirstnameData = () => {
-  const { userData } = useUserGet();
-  const [inputPseudo, setInputPseudo] = useState<string>("");
+  const {
+    data: userData,
+    isLoading,
+    isError,
+  } = useGet("/api/user/getUserProfile");
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  let content;
+  if (isError) {
+    dispatch({
+      type: "flash/storeFlashMessage",
+      payload: {
+        type: "error",
+        flashMessage: "Erreur lors du chargement, veuillez réessayer",
+      },
+    });
+    router.push("/");
+  } else if (isLoading) {
+  }
+  const [inputPseudo, setInputPseudo] = useState<string>("");
   const [firstnameInput, setFirstnameInput] = useState<string>(
     userData.body.firstname
   );
@@ -53,7 +71,7 @@ const ModalUserFirstnameData = () => {
   useEffect(() => {
     const mutateMainData = async () => {
       mutate(
-        "/api/user/getUser",
+        "/api/user/getUserProfile",
         {
           ...data,
           body: {
@@ -127,6 +145,7 @@ const ModalUserFirstnameData = () => {
   };
   return (
     <>
+      <div className={styles.bg}></div>
       <div className={styles.modalEditMainUserData}>
         <button
           className={styles.modalEditMainUserData__btn}

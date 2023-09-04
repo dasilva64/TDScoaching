@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
 import styles from "./ModalDeleteMeeting.module.scss";
-import fetchCancel from "@/app/components/fetch/paiement/fetchCancel";
 import useSWRMutation from "swr/mutation";
 import { useDispatch } from "react-redux";
 import { mutate } from "swr";
+import fetchGet from "@/app/components/fetch/fetchGet";
 
 const ModalDeleteMeeting = () => {
   const dispatch = useDispatch();
-  const { trigger, data } = useSWRMutation("/api/paiement/cancel", fetchCancel);
+  const { trigger, data } = useSWRMutation("/api/paiement/cancel", fetchGet);
+  console.log(data);
   useEffect(() => {
     if (data && data.status === 200) {
       if (data.status === 200) {
-        mutate("/api/user/getUser", {
+        mutate("/api/user/getUserMeeting", {
           ...data,
         });
         dispatch({

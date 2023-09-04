@@ -13,7 +13,6 @@ datasource db {
 model Meeting {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   startAt   DateTime @db.Timestamp(6)
-  endAt     DateTime @db.Timestamp(6)
   status    Boolean
   userId    String   @db.Uuid
   limitDate String?  @db.VarChar
@@ -31,16 +30,12 @@ model User {
   registerToken Json?     @db.Json
   resetToken    Json?     @db.Json
   editEmail     Json?     @db.Json
-  phone         String    @unique @db.VarChar
   role          String    @db.VarChar
   twoFactor     Boolean
   status        Boolean
-  editPhone     Json?     @db.Json
   twoFactorCode Json?     @db.Json
   meetingId     String?   @db.Uuid
-  birth         String    @db.VarChar
   deleteToken   Json?     @db.Json
-  genre         String
   discovery     Boolean
   typeMeeting   Json      @db.Json
   Meeting       Meeting[]

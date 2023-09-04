@@ -1,0 +1,122 @@
+import { withIronSessionApiRoute } from "iron-session/next";
+import prisma from "../../../lib/prisma";
+import { Prisma } from "@prisma/client";
+import { Stripe } from "stripe";
+
+export default withIronSessionApiRoute(
+  async function accept(req, res) {
+    if (req.session.user) {
+      const { userId, meetingId } = await req.body;
+      let user = await prisma.user.findUnique({
+        where: {
+          id: req.session.user.id,
+        },
+      });
+      if (user === null) {
+        return res.status(404).json({
+          status: 404,
+          message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+        });
+      } else {
+        const meeting = await prisma.meeting.findUnique({
+          where: {
+            id: meetingId!,
+          },
+        });
+
+        /* const paymentIntent = await stripe.paymentIntents.capture(copyId, {
+          amount_to_capture: 100,
+        }); */
+
+        const userById = await prisma.user.findUnique({
+          where: { id: userId },
+        });
+        if (userById === null) {
+          return res.status(400).json({
+            status: 400,
+            message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+          });
+        } else {
+          const stripe = new Stripe(
+            "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f",
+            {
+              apiVersion: "2022-11-15",
+            }
+          );
+          let copyTypeMeeting: any = userById.typeMeeting;
+          const session = await stripe.checkout.sessions.retrieve(
+            copyTypeMeeting.paymentId
+          );
+          let copyId: any = session.payment_intent;
+
+          /* const paymentIntent = await stripe.paymentIntents.capture(copyId, {
+            amount_to_capture: 10000,
+          }); */
+          if (copyTypeMeeting.type === "flash") {
+            const paymentIntent = await stripe.paymentIntents.capture(copyId, {
+              amount_to_capture: 10000,
+            });
+          } else if (copyTypeMeeting.type === "longue") {
+            const paymentIntent = await stripe.paymentIntents.capture(copyId, {
+              amount_to_capture: 10000,
+            });
+          } else {
+            const paymentIntent = await stripe.paymentIntents.capture(copyId);
+          }
+          let editUser = await prisma.user.update({
+            where: {
+              id: meeting?.userId,
+            },
+            data: {
+              meetingId: null,
+              typeMeeting: {
+                ...copyTypeMeeting,
+                number: copyTypeMeeting.number - 1,
+              },
+            },
+          });
+          const meetingByUser = await prisma.meeting.findMany({
+            where: { userId: userId },
+            select: {
+              startAt: true,
+              status: true,
+            },
+          });
+          let userObject = {
+            id: userById?.id,
+            role: userById?.role,
+            firstname: userById?.firstname,
+            lastname: userById?.lastname,
+            mail: userById?.mail,
+            status: userById?.status,
+            editEmail: userById?.editEmail,
+            twoFactor: userById?.twoFactor,
+            twoFactorCode: userById?.twoFactorCode,
+            allMeetings: meetingByUser,
+            meeting: null,
+            discovery: userById.discovery,
+            typeMeeting: userById.typeMeeting,
+          };
+          return res.status(200).json({
+            status: 200,
+            message: "Votre rendez-vous a bien été accepté",
+            body: userObject,
+          });
+        }
+      }
+    } else {
+      return res.status(404).json({
+        status: 404,
+        message: "Vous n'êtes pas connecté, veuillez réessayer",
+      });
+    }
+  },
+  {
+    password:
+      "tesdfjklsjtesdfjktesdfjklsjdfljslkdfjlsjdflslqfdjkstlsjdfljslkdfjlsjdflslqfdjkstdfljslkdfjlsjdflslqfdjkst",
+    cookieName: "test",
+    cookieOptions: {
+      secure: process.env.NODE_ENV === "production",
+    },
+  }
+);

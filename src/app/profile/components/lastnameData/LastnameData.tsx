@@ -3,13 +3,19 @@
 import React from "react";
 import styles from "./LastnameData.module.scss";
 import Image from "next/image";
-import useUserGet from "@/app/components/hook/user/useUserGet";
 import { AppDispatch } from "@/app/redux/store";
 import { useDispatch } from "react-redux";
+import useGet from "@/app/components/hook/useGet";
+import { useRouter } from "next/navigation";
 
 const LastnameData = () => {
-  const { userData, isLoading, isError } = useUserGet();
+  const {
+    data: userData,
+    isLoading,
+    isError,
+  } = useGet("/api/user/getUserProfile");
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   let content;
   if (isError) {
     content = <div>error</div>;
@@ -46,7 +52,7 @@ const LastnameData = () => {
       </>
     );
   } else {
-    if (userData) {
+    if (userData.status === 200) {
       content = (
         <>
           <div
@@ -82,6 +88,8 @@ const LastnameData = () => {
           </div>
         </>
       );
+    } else {
+      router.push("/");
     }
   }
   return <>{content}</>;

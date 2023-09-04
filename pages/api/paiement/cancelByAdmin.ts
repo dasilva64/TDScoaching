@@ -36,19 +36,6 @@ export default withIronSessionApiRoute(
         let copyId: any = session.payment_intent;
         const paymentIntent = await stripe.paymentIntents.cancel(copyId);
 
-        let editUser = await prisma.user.update({
-          where: {
-            id: meeting?.userId,
-          },
-          data: {
-            meetingId: null,
-          },
-        });
-        let delMeeting = await prisma.meeting.delete({
-          where: {
-            id: meeting?.id,
-          },
-        });
         const userById = await prisma.user.findUnique({
           where: { id: userId },
         });
@@ -58,6 +45,23 @@ export default withIronSessionApiRoute(
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
           });
         } else {
+          let copyTypeMeeting: any = userById.typeMeeting;
+          delete copyTypeMeeting["paymentId"];
+          delete copyTypeMeeting["coaching"];
+          let editUser = await prisma.user.update({
+            where: {
+              id: meeting?.userId,
+            },
+            data: {
+              meetingId: null,
+              typeMeeting: { ...copyTypeMeeting },
+            },
+          });
+          let delMeeting = await prisma.meeting.delete({
+            where: {
+              id: meeting?.id,
+            },
+          });
           const meetingByUser = await prisma.meeting.findMany({
             where: { userId: userId },
             select: {
@@ -72,15 +76,11 @@ export default withIronSessionApiRoute(
             lastname: userById?.lastname,
             mail: userById?.mail,
             status: userById?.status,
-            phone: userById?.phone,
             editEmail: userById?.editEmail,
-            editPhone: userById?.editPhone,
             twoFactor: userById?.twoFactor,
             twoFactorCode: userById?.twoFactorCode,
             allMeetings: meetingByUser,
             meeting: null,
-            birth: userById.birth,
-            genre: userById.genre,
             discovery: userById.discovery,
             typeMeeting: userById.typeMeeting,
           };

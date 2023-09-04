@@ -45,7 +45,6 @@ export default withIronSessionApiRoute(
               lastname: editUser.lastname,
               email: editUser.mail,
               role: editUser.role,
-              phone: editUser.phone,
             };
             res.status(200).json({
               status: 200,

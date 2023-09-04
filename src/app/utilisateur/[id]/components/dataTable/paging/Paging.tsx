@@ -99,11 +99,11 @@ const Paging = () => {
   }, [countPage, currentPage, dispatch, nbShow]);
   return (
     <div className={styles.paging}>
-      {datas && datas.length === 0 && <p>Showing 0 to 0 of 0 entries </p>}
+      {datas && datas.length === 0 && <p>Affichage de 0 to 0 of 0 entries </p>}
       {datas && datas.length > 0 && (
         <>
           <p className={styles.paging__p}>
-            Showing {(currentPage - 1) * nbShow + 1} to{" "}
+            Affichage de {(currentPage - 1) * nbShow + 1} to{" "}
             {datas?.length! < currentPage * nbShow
               ? datas?.length
               : currentPage * nbShow}{" "}
@@ -134,7 +134,7 @@ const Paging = () => {
       {datas && datas.length === 0 && (
         <>
           <p className={styles.paging__p}>
-            Showing 0 to{" "}
+            Affichage de 0 to{" "}
             {datas?.length! < currentPage * nbShow
               ? datas?.length
               : currentPage * nbShow}{" "}
@@ -244,15 +244,15 @@ const Paging = () => {
 
   return (
     <div className={styles.paging}>
-      {datas && datas.length === 0 && <p>Showing 0 to 0 of 0 entries </p>}
+      {datas && datas.length === 0 && <p>Affichage de 0 à 0 sur 0 entrées </p>}
       {datas && datas.length > 0 && (
         <>
           <p className={styles.paging__p}>
-            Showing {(currentPage - 1) * nbShow + 1} to{" "}
+            Affichage de {(currentPage - 1) * nbShow + 1} à{" "}
             {datas?.length! < currentPage * nbShow
               ? datas?.length
               : currentPage * nbShow}{" "}
-            of {datas?.length} entries
+            sur {datas?.length} entrées
           </p>
           <div className={styles.paging__div}>
             <span
@@ -262,7 +262,7 @@ const Paging = () => {
                   dispatch({ type: "ArrayMeetingByUser/previousPage" });
               }}
             >
-              previous
+              Précédent
             </span>
             <div className={styles.paging__div__div}>
               {displayPagingElement}
@@ -274,7 +274,7 @@ const Paging = () => {
                   dispatch({ type: "ArrayMeetingByUser/nextPage" });
               }}
             >
-              next
+              Suivant
             </span>
           </div>
         </>
@@ -282,11 +282,11 @@ const Paging = () => {
       {datas && datas.length === 0 && (
         <>
           <p className={styles.paging__p}>
-            Showing 0 to{" "}
+            Affichage de 0 à{" "}
             {datas?.length! < currentPage * nbShow
               ? datas?.length
               : currentPage * nbShow}{" "}
-            of {datas?.length} entries
+            sur {datas?.length} entrées
           </p>
         </>
       )}

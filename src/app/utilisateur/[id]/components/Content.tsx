@@ -4,23 +4,24 @@ import React, { use, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import useGetById from "@/app/components/hook/user/useGetById";
 import styles from "./Content.module.scss";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/app/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/app/redux/store";
 import { useRouter } from "next/navigation";
 import NbShow from "./dataTable/nbShow/NbShow";
 import Search from "./dataTable/search/Search";
 import Display from "./dataTable/display/Display";
 import Paging from "./dataTable/paging/Paging";
 import useSWRMutation from "swr/mutation";
-import { mutate } from "swr";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
+import DisplayLoad from "./dataTable/display/DisplayLoad";
 
 const Content = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const { datas } = useSelector((state: RootState) => state.ArrayMeetingByUser);
   const queryParam: any = usePathname();
   let id = queryParam.toString().split("/");
-  const { data, isLoading, isError, mutate: mutateTest } = useGetById(id[2]);
+  const { data, isLoading, isError, mutate } = useGetById(id[2]);
   useEffect(() => {
     if (data) {
       if (data.status !== 200) {
@@ -28,7 +29,7 @@ const Content = () => {
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
-        //router.push("/tous-les-utilisateurs");
+        router.push("/tous-les-utilisateurs");
       }
     }
   }, [data, dispatch, router]);
@@ -45,7 +46,7 @@ const Content = () => {
           payload: { type: "error", flashMessage: dataCancel.message },
         });
       } else {
-        mutateTest({
+        mutate({
           ...dataCancel,
         });
         dispatch({
@@ -54,7 +55,7 @@ const Content = () => {
         });
       }
     }
-  }, [dataCancel, dispatch, mutateTest]);
+  }, [dataCancel, dispatch, mutate]);
 
   const { data: dataAccept, trigger: triggerAccept } = useSWRMutation(
     "/api/paiement/acceptByAdmin",
@@ -68,7 +69,7 @@ const Content = () => {
           payload: { type: "error", flashMessage: dataAccept.message },
         });
       } else {
-        mutateTest({
+        mutate({
           ...dataAccept,
         });
         dispatch({
@@ -77,7 +78,30 @@ const Content = () => {
         });
       }
     }
-  }, [dataAccept, dispatch, mutateTest]);
+  }, [dataAccept, dispatch, mutate]);
+
+  const { data: dataAcceptOther, trigger: triggerAcceptOther } = useSWRMutation(
+    "/api/paiement/acceptOtherByAdmin",
+    fetchPost
+  );
+  useEffect(() => {
+    if (dataAcceptOther) {
+      if (dataAcceptOther.status !== 200) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataAcceptOther.message },
+        });
+      } else {
+        mutate({
+          ...dataAcceptOther,
+        });
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataAcceptOther.message },
+        });
+      }
+    }
+  }, [dataAcceptOther, dispatch, mutate]);
 
   const { data: dataFinishMeeting, trigger: triggerFinishMeeting } =
     useSWRMutation("/api/meeting/finish", fetchPost);
@@ -96,11 +120,11 @@ const Content = () => {
         });
       }
     }
-  }, [dataFinishMeeting, dispatch, mutateTest]);
+  }, [dataFinishMeeting, dispatch, mutate]);
 
   useEffect(() => {
     const mutateFinishMeeting = () => {
-      mutateTest(
+      mutate(
         {
           ...dataFinishMeeting,
           body: {
@@ -114,21 +138,80 @@ const Content = () => {
     if (dataFinishMeeting && dataFinishMeeting.body) {
       mutateFinishMeeting();
     }
-  }, [dataFinishMeeting, mutateTest]);
+  }, [dataFinishMeeting, mutate]);
 
   let content;
   if (isError) content = <div>error</div>;
   else if (isLoading) {
     content = (
-      <div className={styles.loadData}>
-        Chargement des données
-        <div className={styles.loadData__arc}>
-          <div className={styles.loadData__arc__circle}></div>
+      <div className={styles.content__flex}>
+        <div className={styles.content__flex__div__left}>
+          <h2 className={styles.content__flex__div__left__h2}>
+            Information de l&apos;utilisateur
+          </h2>
+          <ul className={styles.content__flex__div__left__ul}>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Prénom</strong> :
+              <div className={styles.arc}>
+                <div className={styles.arc__circle}></div>
+              </div>
+            </li>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Nom de famille</strong> :
+              <div className={styles.arc}>
+                <div className={styles.arc__circle}></div>
+              </div>
+            </li>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Mail</strong> :
+              <div className={styles.arc}>
+                <div className={styles.arc__circle}></div>
+              </div>
+            </li>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Formule</strong> :
+              <div className={styles.arc}>
+                <div className={styles.arc__circle}></div>
+              </div>
+            </li>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Rendez-vous en cours</strong> :
+              <div className={styles.arc}>
+                <div className={styles.arc__circle}></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div className={styles.content__flex__div__right}>
+          <h2 className={styles.content__flex__div__right__h2}>
+            historique rendez-vous
+          </h2>
+          <>
+            <div>
+              <div className={styles.datatable__container__div}>
+                <NbShow />
+                <Search />
+              </div>
+            </div>
+            <DisplayLoad />
+            <Paging />
+          </>
         </div>
       </div>
     );
   } else {
     if (data.status === 200) {
+      let copyTypeMeeting = { ...data.body.typeMeeting };
       content = (
         <>
           <div className={styles.content__flex}>
@@ -147,24 +230,20 @@ const Content = () => {
                   <strong>Mail</strong> : {data.body.mail}
                 </li>
                 <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Téléphone</strong> : {data.body.phone}
+                  <strong>Formule</strong> : {copyTypeMeeting.type}
                 </li>
-                <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Genre</strong> : {data.body.genre}
-                </li>
-                <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Date de naissance</strong> : {data.body.birth}
-                </li>
-                <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Deux facteur</strong> :{" "}
-                  {data.body.twoFactor.toString()}
-                </li>
-                <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Status</strong> : {data.body.status.toString()}
-                </li>
-                <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Role</strong> : {data.body.role}
-                </li>
+                {copyTypeMeeting.type === "flash" && (
+                  <li className={styles.content__flex__div__left__ul__li}>
+                    <strong>Nombre de rendez-vous restant</strong> :{" "}
+                    {copyTypeMeeting.number}
+                  </li>
+                )}
+                {copyTypeMeeting.type === "longue" && (
+                  <li className={styles.content__flex__div__left__ul__li}>
+                    <strong>Nombre de rendez-vous restant</strong> :{" "}
+                    {copyTypeMeeting.number}
+                  </li>
+                )}
                 {data.body.meeting === null && (
                   <li className={styles.content__flex__div__left__ul__li}>
                     <strong>Rendez-vous en cours</strong> : aucun
@@ -177,14 +256,15 @@ const Content = () => {
                       <li
                         className={styles.content__flex__div__left__ul__ul__li}
                       >
-                        <strong>Start</strong> :{" "}
-                        {new Date(data.body.meeting.startAt).toLocaleString()}
+                        <strong>Type</strong> : {copyTypeMeeting.coaching}
                       </li>
                       <li
                         className={styles.content__flex__div__left__ul__ul__li}
                       >
-                        <strong>End</strong> :{" "}
-                        {new Date(data.body.meeting.endAt).toLocaleString()}
+                        <strong>Start</strong> :{" "}
+                        {new Date(data.body.meeting.startAt).toLocaleString(
+                          "fr-FR"
+                        )}
                       </li>
                       <li
                         className={styles.content__flex__div__left__ul__ul__li}
@@ -195,16 +275,77 @@ const Content = () => {
                     </ul>
                     {!data.body.discovery === false && (
                       <div>
-                        <button
-                          onClick={() => {
-                            triggerAccept({
-                              meetingId: data.body.meeting.id,
-                              userId: data.body.id,
-                            });
-                          }}
-                        >
-                          Accepter
-                        </button>
+                        {data.body.typeMeeting.type !== "unique" &&
+                          data.body.typeMeeting.number === 1 && (
+                            <button
+                              onClick={() => {
+                                if (data.body.typeMeeting.type === "flash") {
+                                  if (data.body.typeMeeting.number === 1) {
+                                    triggerAccept({
+                                      meetingId: data.body.meeting.id,
+                                      userId: data.body.id,
+                                    });
+                                  }
+                                } else if (
+                                  data.body.typeMeeting.type === "longue"
+                                ) {
+                                  if (data.body.typeMeeting.number === 1) {
+                                    triggerAccept({
+                                      meetingId: data.body.meeting.id,
+                                      userId: data.body.id,
+                                    });
+                                  }
+                                } else {
+                                  triggerAccept({
+                                    meetingId: data.body.meeting.id,
+                                    userId: data.body.id,
+                                  });
+                                }
+                              }}
+                            >
+                              Accepter
+                            </button>
+                          )}
+                        {data.body.typeMeeting.type === "unique" && (
+                          <button
+                            onClick={() => {
+                              if (data.body.typeMeeting.type === "flash") {
+                                if (data.body.typeMeeting.number === 3) {
+                                  triggerAccept({
+                                    meetingId: data.body.meeting.id,
+                                    userId: data.body.id,
+                                  });
+                                } else {
+                                  triggerAcceptOther({
+                                    meetingId: data.body.meeting.id,
+                                    userId: data.body.id,
+                                  });
+                                }
+                              } else if (
+                                data.body.typeMeeting.type === "longue"
+                              ) {
+                                if (data.body.typeMeeting.number === 10) {
+                                  triggerAccept({
+                                    meetingId: data.body.meeting.id,
+                                    userId: data.body.id,
+                                  });
+                                } else {
+                                  triggerAcceptOther({
+                                    meetingId: data.body.meeting.id,
+                                    userId: data.body.id,
+                                  });
+                                }
+                              } else {
+                                triggerAccept({
+                                  userId: data.body.id,
+                                });
+                              }
+                            }}
+                          >
+                            Accepter
+                          </button>
+                        )}
+
                         <button
                           onClick={() => {
                             trigger({
@@ -239,7 +380,7 @@ const Content = () => {
                 historique rendez-vous
               </h2>
               {data.body.allMeetings.length === 0 && <p>Aucun rendez-vous</p>}
-              {data.body.allMeetings.length > 0 && (
+              {data.body.allMeetings.length > 0 && datas !== null && (
                 <>
                   <div>
                     <div className={styles.datatable__container__div}>
@@ -259,7 +400,6 @@ const Content = () => {
       content = <div>Vous allez être rediriger vers le dashboard</div>;
     }
   }
-
   useEffect(() => {
     if (data && data.status === 200) {
       let copyOfItems = [...data.body.allMeetings];
@@ -267,9 +407,11 @@ const Content = () => {
       copyOfItems.map((p: any, index: any) => {
         copyOfItems[index] = {
           ...p,
-          status: p.status.toString(),
-          startAt: new Date(p.startAt).toLocaleString(),
+          Début: new Date(p.startAt).toLocaleString(),
+          Status: p.status.toString(),
         };
+        delete copyOfItems[index].startAt;
+        delete copyOfItems[index].status;
       });
       dispatch({
         type: "ArrayMeetingByUser/storeData",

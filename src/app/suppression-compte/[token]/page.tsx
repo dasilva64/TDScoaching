@@ -20,17 +20,12 @@ const page = () => {
       >
         Veuillez activer JavaScript pour profiter pleinement de notre site.
       </noscript>
-      <main className={styles.historique}>
-        <h1 className={styles.historique__h1}>
+      <main className={styles.delete}>
+        <h1 className={styles.delete__h1}>
           En attente de suppression du compte
         </h1>
-        <div className={styles.historique__container}>
-          <div className={styles.historique__article}>
-            <h2 className={styles.historique__article__h2}>en attente</h2>
-            <div className={styles.historique__article}>
-              <Display />
-            </div>
-          </div>
+        <div className={styles.delete__container}>
+          <Display />
         </div>
       </main>
     </>

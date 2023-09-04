@@ -20,19 +20,24 @@ const Display = () => {
   }
   if (isLoading) {
     content = (
-      <div className={styles.display__loadData}>
+      <div className={styles.display}>
         Chargement des données
-        <div className={styles.display__loadData__arc}>
-          <div className={styles.display__loadData__arc__circle}></div>
+        <div className={styles.display__arc}>
+          <div className={styles.display__arc__circle}></div>
         </div>
       </div>
     );
+  } else {
+    content = (
+      <div className={styles.display}>
+        <p className={styles.display__p}>
+          Votre compte va être supprimé et toutes les données associées seront
+          effacées.
+        </p>
+      </div>
+    );
   }
-  return (
-    <>
-      <div className={styles.display}>{content}</div>
-    </>
-  );
+  return <>{content}</>;
 };
 
 export default Display;

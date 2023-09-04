@@ -5,11 +5,15 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import styles from "./EmailSendTokenData.module.scss";
 import Image from "next/image";
-import useUserGet from "@/app/components/hook/user/useUserGet";
+import useGet from "@/app/components/hook/useGet";
 
 const EmailData = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { userData, isLoading, isError } = useUserGet();
+  const {
+    data: userData,
+    isLoading,
+    isError,
+  } = useGet("/api/user/getUserProfile");
 
   let content;
   if (isError) {

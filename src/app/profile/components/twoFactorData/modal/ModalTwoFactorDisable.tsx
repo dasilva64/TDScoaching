@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styles from "./ModalTwoFactorUser.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
-import fetchGet from "@/app/components/fetch/user/fetchGet";
+import fetchGet from "@/app/components/fetch/fetchGet";
 
 const ModalTwoFactorDisable = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,7 +34,7 @@ const ModalTwoFactorDisable = () => {
   useEffect(() => {
     const mutateMaindataReSendCode = async () => {
       mutate(
-        "/api/user/getUser",
+        "/api/user/getUserProfile",
         {
           ...data,
           body: {

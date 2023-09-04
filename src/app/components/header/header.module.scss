@@ -143,12 +143,12 @@
       opacity: 0.2;
     }
     &__load {
-      width: 124px;
+      width: 115px;
+      height: 39px;
       background-color: aqua;
       color: white;
       border: none;
       border-radius: 10px;
-      padding: 5px 15px;
       margin-left: 30px;
       cursor: pointer;
       font-size: 16px;
@@ -158,8 +158,8 @@
   &__log {
     margin-left: 30px;
     &__div {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       background-color: aqua;
       border-radius: 50%;
       cursor: pointer;
@@ -235,7 +235,7 @@
       box-shadow: 4px 5px 15px 0px black;
       left: 50%;
       bottom: 20px;
-      z-index: 6;
+      z-index: 999;
       transform: translateX(-50%);
       width: 95%;
       &__img {
@@ -272,7 +272,7 @@
       position: fixed;
       left: 50%;
       bottom: 20px;
-      z-index: 6;
+      z-index: 999;
       width: 95%;
       transform: translateX(-50%);
       &__img {
@@ -326,6 +326,19 @@
     text-align: center;
     margin: 2px 4px 20px 2px;
     z-index: 6;
+  }
+}
+
+.line {
+  &__show {
+    position: fixed;
+    height: 1px;
+    z-index: 1;
+    width: 100%;
+    box-shadow: aqua 0px 20px 90px 10px;
+  }
+  &__hide {
+    display: none;
   }
 }
 

@@ -6,11 +6,7 @@
   margin-right: 50px;
   &__head {
     display: flex;
-    justify-content: space-between;
-    &__nav {
-      display: flex;
-      justify-content: space-around;
-    }
+    justify-content: space-around;
     &__div {
       display: flex;
       &__marginR {
@@ -21,6 +17,7 @@
       }
     }
     &__previous {
+      cursor: pointer;
       width: 0px;
       height: 0px;
       border-top: 7px solid transparent;
@@ -28,6 +25,7 @@
       border-right: 10px solid black;
     }
     &__next {
+      cursor: pointer;
       width: 0px;
       height: 0px;
       border-top: 7px solid transparent;

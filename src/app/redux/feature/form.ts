@@ -24,13 +24,17 @@ const initialState = {
   displayModalCancelMeeting: false,
   displayModalMeeting: false,
   displayModalFirstMeeting: false,
+  displayModalOtherMeeting: false,
   dataModalMeeting: "",
   dataModalFirstMeeting: "",
+  dataModalOtherMeeting: "",
   displayModalDeleteAccount: false,
   displayModalCloseEmail: false,
   displayModalClosePhone: false,
   displayModalEditFormule: false,
   displayModalCancelFormule: false,
+  displayModalAddMeetingAdmin: false,
+  dataModalAddMeetingAdmin: "",
 };
 
 const form = createSlice({
@@ -203,6 +207,14 @@ const form = createSlice({
       state.displayModalFirstMeeting = false;
       state.dataModalFirstMeeting = "";
     },
+    openModalOtherMeeting: (state, action) => {
+      state.displayModalOtherMeeting = true;
+      state.dataModalOtherMeeting = action.payload.date;
+    },
+    closeModalOtherMeeting: (state) => {
+      state.displayModalOtherMeeting = false;
+      state.dataModalOtherMeeting = "";
+    },
     openModalDeleteAccount: (state) => {
       state.displayModalDeleteAccount = true;
     },
@@ -228,6 +240,14 @@ const form = createSlice({
     closeModalClosePhoneAndEditPhoneData: (state) => {
       state.displayModalClosePhone = false;
       state.displayModalEditPhoneData = false;
+    },
+    openModalAddMeetingAdmin: (state, action) => {
+      state.displayModalAddMeetingAdmin = true;
+      state.dataModalAddMeetingAdmin = action.payload.date;
+    },
+    closeModalAddMeetingAdmin: (state) => {
+      state.displayModalAddMeetingAdmin = false;
+      state.dataModalAddMeetingAdmin = "";
     },
   },
 });

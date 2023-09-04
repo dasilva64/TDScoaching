@@ -5,7 +5,7 @@ import { AppDispatch } from "../../redux/store";
 import validator from "validator";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import useSWRMutation from "swr/mutation";
-import fetchPost from "../fetch/user/FetchPost";
+import fetchPost from "../fetch/FetchPost";
 
 const FormLogin = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +19,6 @@ const FormLogin = () => {
   const [errorMessagePassword, setErrorMessagePassword] = useState<string>("");
   const [reSendEmail, setReSendEmail] = useState<boolean>(false);
   const [otherEmail, setOtherEmail] = useState<string>("");
-  const el = useRef(null);
 
   const handlerInputRememberMe = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRememberMeInput(e.target.checked);
@@ -85,7 +84,6 @@ const FormLogin = () => {
                   setErrorMessagePassword(element[1]);
                 }
               });
-              setValidEmailInput(false);
               setValidPasswordInput(false);
               setPasswordInput("");
             } else if (
@@ -95,18 +93,14 @@ const FormLogin = () => {
             ) {
               setReSendEmail(true);
               setOtherEmail(emailInput);
-              setValidEmailInput(false);
               setValidPasswordInput(false);
               setPasswordInput("");
-              setEmailInput("");
               dispatch({
                 type: "flash/storeFlashMessage",
                 payload: { type: "error", flashMessage: json.message },
               });
             } else {
               setPasswordInput("");
-              setEmailInput("");
-              setValidEmailInput(false);
               setValidPasswordInput(false);
               dispatch({
                 type: "flash/storeFlashMessage",

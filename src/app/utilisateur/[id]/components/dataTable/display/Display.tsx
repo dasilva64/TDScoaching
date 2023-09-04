@@ -11,11 +11,11 @@ const Display = () => {
   const { datas, currentPage, nbShow, sortBy } = useSelector(
     (state: RootState) => state.ArrayMeetingByUser
   );
-  useEffect(() => {
+  /* useEffect(() => {
     dispatch({
       type: "ArrayMeetingByUser/resetData",
     });
-  }, [dispatch]);
+  }, [dispatch]); */
   useEffect(() => {
     if (datas && datas.length > 0) {
       setKeyAr(Object.keys(datas[0]));
@@ -57,28 +57,32 @@ const Display = () => {
         }
       }
       setSee(ar);
-    }
-    let ar: any = [];
-    if (datas && datas.length > 0) {
-      for (let i = (currentPage - 1) * nbShow; i < currentPage * nbShow; i++) {
-        if (i < datas.length) {
-          ar.push(<DisplayOne key={i} i={i} />);
-        }
-      }
     } else {
-      ar.push(
-        <tr key={1}>
-          <td
-            colSpan={keyAr.length}
-            className={`${styles.table__body__tr__td__odd__first} ${styles.table__body__tr__td__odd__first__center}`}
-          >
-            Aucun utilisateur n&apos;a été trouvé
-          </td>
-        </tr>
-      );
+      let ar: any = [];
+      if (datas && datas.length > 0) {
+        for (
+          let i = (currentPage - 1) * nbShow;
+          i < currentPage * nbShow;
+          i++
+        ) {
+          if (i < datas.length) {
+            ar.push(<DisplayOne key={i} i={i} />);
+          }
+        }
+      } else {
+        ar.push(
+          <tr key={1}>
+            <td
+              colSpan={keyAr.length}
+              className={`${styles.table__body__tr__td__odd__first} ${styles.table__body__tr__td__odd__first__center}`}
+            >
+              Aucun utilisateur n&apos;a été trouvé
+            </td>
+          </tr>
+        );
+      }
+      setSee(ar);
     }
-
-    setSee(ar);
   }, [currentPage, datas, dispatch, keyAr, nbShow, sortBy]);
 
   const handlerSortBy = (e: any) => {

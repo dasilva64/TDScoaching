@@ -1,33 +1,42 @@
 "use client";
 
 import { RootState } from "../../../redux/store";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NbShow from "./dataTable/nbShow/NbShow";
 import Paging from "./dataTable/paging/Paging";
 import Search from "./dataTable/search/Search";
 import Display from "./dataTable/display/Display";
 import styles from "./AllUser.module.scss";
-import useGetAll from "@/app/components/hook/user/useGetAll";
+import DisplayLoad from "./dataTable/display/DisplayLoad";
+import useGet from "@/app/components/hook/useGet";
 
 const AllUser = () => {
-  const { datas, displayModal } = useSelector(
-    (state: RootState) => state.Array
-  );
+  const { datas } = useSelector((state: RootState) => state.Array);
   const dispatch = useDispatch();
 
-  const { data, isLoading, isError } = useGetAll();
+  const { data, isLoading, isError } = useGet("/api/user/getAll");
   let content;
   if (isError) {
     content = <div>error</div>;
   } else if (isLoading) {
     content = (
-      <div className={styles.datatable__loadData}>
-        Chargement des données
-        <div className={styles.datatable__loadData__arc}>
-          <div className={styles.datatable__loadData__arc__circle}></div>
+      <>
+        <div className={styles.datatable}>
+          <div className={styles.datatable__container}>
+            <>
+              <div>
+                <div className={styles.datatable__container__div}>
+                  <NbShow />
+                  <Search />
+                </div>
+              </div>
+              <DisplayLoad />
+              <Paging />
+            </>
+          </div>
         </div>
-      </div>
+      </>
     );
   } else {
     if (data) {
@@ -62,12 +71,36 @@ const AllUser = () => {
           if (p.meeting === null) {
             copyOfItems[index] = {
               ...p,
-              meeting: "aucun",
-              status: p.status.toString(),
+              Prénom: p.firstName,
+              Nom: p.lastName,
+              Mail: p.mail,
+              Téléphone: p.phone,
+              RendezVous: "aucun",
+              Status: p.status.toString(),
             };
+            delete copyOfItems[index].meeting;
+            delete copyOfItems[index].status;
+            delete copyOfItems[index].firstName;
+            delete copyOfItems[index].lastName;
+            delete copyOfItems[index].phone;
+            delete copyOfItems[index].mail;
           }
         } else if (p.meeting !== null) {
-          copyOfItems[index] = { ...p, status: p.status.toString() };
+          copyOfItems[index] = {
+            ...p,
+            Prénom: p.firstName,
+            Nom: p.lastName,
+            Mail: p.mail,
+            Téléphone: p.phone,
+            Status: p.status.toString(),
+            RendezVous: p.meeting,
+          };
+          delete copyOfItems[index].status;
+          delete copyOfItems[index].meeting;
+          delete copyOfItems[index].firstName;
+          delete copyOfItems[index].lastName;
+          delete copyOfItems[index].phone;
+          delete copyOfItems[index].mail;
         }
       });
       dispatch({
@@ -76,7 +109,6 @@ const AllUser = () => {
       });
     }
   }, [data, dispatch]);
-  console.log(datas);
   return <>{content}</>;
 };
 

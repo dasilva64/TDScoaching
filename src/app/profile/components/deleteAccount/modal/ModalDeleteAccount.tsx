@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 import Textarea from "@mui/joy/Textarea";
 import { FormHelperText, FormLabel, TextField } from "@mui/material";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
 
 const ModalDeleteAccount = () => {
   const router = useRouter();
@@ -116,6 +116,7 @@ const ModalDeleteAccount = () => {
   };
   return (
     <>
+      <div className={styles.bg}></div>
       <div className={styles.modalDeleteAccount}>
         <button
           className={styles.modalDeleteAccount__btn}

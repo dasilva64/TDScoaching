@@ -4,25 +4,17 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import useSWRMutation from "swr/mutation";
 import {
+  Checkbox,
   FormControl,
   FormControlLabel,
+  FormGroup,
   FormHelperText,
   FormLabel,
-  Radio,
-  RadioGroup,
   TextField,
 } from "@mui/material";
 import validator from "validator";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
-import { frFR } from "@mui/x-date-pickers/locales";
-import "dayjs/locale/fr";
-import fetchPost from "../fetch/user/FetchPost";
-
-const frenchLocale =
-  frFR.components.MuiLocalizationProvider.defaultProps.localeText;
+import fetchPost from "../fetch/FetchPost";
+import Link from "next/link";
 
 const FormRegister = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,9 +24,7 @@ const FormRegister = () => {
   const [lastnameInput, setLastnameInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>("");
-  const [phoneInput, setPhoneInput] = useState<string>("");
-  const [birthInput, setBirthInput] = useState<string>("");
-  const [genderInput, setGenderInput] = useState<string>("");
+  const [majorInput, setMajorInput] = useState<string>("");
   const [validEmailInput, setValidEmailInput] = useState<boolean>(false);
   const [validFirstnameInput, setValidFirstnameInput] =
     useState<boolean>(false);
@@ -42,23 +32,18 @@ const FormRegister = () => {
   const [validPasswordInput, setValidPasswordInput] = useState<boolean>(false);
   const [validPasswordComfirmInput, setValidPasswordComfirmInput] =
     useState<boolean>(false);
-  const [validPhoneInput, setValidPhoneInput] = useState<boolean>(false);
-  const [validBirthInput, setValidBirthInput] = useState<boolean>(false);
-  const [validGenderInput, setValidGenderInput] = useState<boolean>(false);
+  const [validMajorInput, setValidMajorInput] = useState<boolean>(false);
   const [firstnameInputError, setFirstnameInputError] = useState<string>("");
   const [lastnameInputError, setLastnameInputError] = useState<string>("");
   const [passwordInputError, setPasswordInputError] = useState<string>("");
   const [passwordComfirmInputError, setPasswordComfirmError] =
     useState<string>("");
   const [emailInputError, setEmailInputError] = useState<string>("");
-  const [phoneInputError, setPhoneInputError] = useState<string>("");
-  const [birthInputError, setBirthInputError] = useState<string>("");
-  const [genderInputError, setGenderInputError] = useState<string>("");
+  const [majorInputError, setMajorInputError] = useState<string>("");
 
   const { trigger, data } = useSWRMutation("/api/user/register", fetchPost);
 
   useEffect(() => {
-    console.log(data);
     if (data) {
       if (data.status === 200) {
         dispatch({
@@ -80,15 +65,6 @@ const FormRegister = () => {
           if (element[0] === "lastname") {
             setLastnameInputError(element[1]);
           }
-          if (element[0] === "phone") {
-            setPhoneInputError(element[1]);
-          }
-          if (element[0] === "birth") {
-            setBirthInputError(element[1]);
-          }
-          if (element[0] === "genre") {
-            setGenderInputError(element[1]);
-          }
         });
       } else {
         dispatch({
@@ -106,9 +82,7 @@ const FormRegister = () => {
       validLastnameInput === true &&
       validPasswordInput === true &&
       validPasswordComfirmInput === true &&
-      validPhoneInput === true &&
-      validBirthInput === true &&
-      validGenderInput === true
+      validMajorInput === true
     ) {
       if (inputPseudo.length === 0) {
         const fetchRegister = async () => {
@@ -117,10 +91,7 @@ const FormRegister = () => {
             password: validator.escape(passwordInput.trim()),
             firstname: validator.escape(firstnameInput.trim()),
             lastname: validator.escape(lastnameInput.trim()),
-            phone: validator.escape(phoneInput.trim()),
-            birth: dayjs(birthInput).format("YYYY-MM-DD"),
             pseudo: validator.escape(inputPseudo.trim()),
-            genre: validator.escape(genderInput.trim()),
           });
         };
         fetchRegister();
@@ -145,18 +116,8 @@ const FormRegister = () => {
           "Comfirmation mot de passe : doit être identique au mot de passe"
         );
       }
-      if (validPhoneInput === false) {
-        setPhoneInputError(
-          "Téléphone : doit être une numéro de téléphone valide commençant par 06 or 07"
-        );
-      }
-      if (validBirthInput === false) {
-        setBirthInputError(
-          "Date de naissance : vous devez être majeur pour vous inscrire"
-        );
-      }
-      if (validGenderInput === false) {
-        setGenderInputError("Sexe : doit être sélectionné");
+      if (validMajorInput === false) {
+        setMajorInputError("Vous devez être majeur pour vous inscrire");
       }
     }
   };
@@ -260,35 +221,9 @@ const FormRegister = () => {
     }
   };
 
-  const handlerInputBirth = (e: any) => {
-    let currentDate = new Date();
-    let limiteDate = currentDate.setFullYear(currentDate.getFullYear() - 18);
-    if (!e) {
-      setValidBirthInput(false);
-      setBirthInputError("Date de naissance : doit avoir le format jj/mm/aaaa");
-    } else {
-      setBirthInput(e.$d);
-      let choiceDate = new Date(e.$d);
-      if (choiceDate instanceof Date === false || isNaN(e.$d)) {
-        setValidBirthInput(false);
-        setBirthInputError(
-          "Date de naissance : doit avoir le format jj/mm/aaaa"
-        );
-      } else if (choiceDate.getTime() > new Date(limiteDate).getTime()) {
-        setValidBirthInput(false);
-        setBirthInputError(
-          "Date de naissance : vous devez être majeur pour vous inscrire"
-        );
-      } else {
-        setBirthInput(e.$d);
-        setValidBirthInput(true);
-        setBirthInputError("");
-      }
-    }
-  };
-
   return (
     <>
+      <div className={styles.bg}></div>
       <div className={styles.register}>
         <div className={styles.register__top}>
           <button
@@ -431,72 +366,36 @@ const FormRegister = () => {
             }}
             helperText={emailInputError}
           />
-          <TextField
-            value={phoneInput}
+          <FormControl
             style={{ margin: "10px 0px" }}
-            id={"phone"}
-            label={"Téléphone"}
+            component="fieldset"
             variant="standard"
-            type={"tel"}
-            placeholder={"Entrez votre numéro de téléphone"}
-            FormHelperTextProps={{ style: { color: "red" } }}
-            onChange={(e) => {
-              handlerInput(
-                e,
-                /^[0](6|7)[0-9]{8,8}$/,
-                setValidPhoneInput,
-                setPhoneInputError,
-                setPhoneInput,
-                "Téléphone : doit être une numéro de téléphone valide commençant par 06 or 07"
-              );
-            }}
-            helperText={phoneInputError}
-          />
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale="fr"
-            localeText={frenchLocale}
           >
-            <DatePicker
-              slotProps={{
-                textField: {
-                  variant: "standard",
-                  helperText: birthInputError,
-                  style: { color: "red" },
-                },
-              }}
-              label="Date de naissance"
-              onChange={(e: any) => {
-                handlerInputBirth(e);
-              }}
-            />
-          </LocalizationProvider>
-          <FormControl style={{ marginTop: "15px" }}>
-            <FormLabel id="demo-row-radio-buttons-group-label">Sexe</FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-              onChange={(e) => {
-                setGenderInput(e.target.value);
-                setValidGenderInput(true);
-                setGenderInputError("");
-              }}
-            >
+            <FormLabel component="legend">Êtes vous majeur ?</FormLabel>
+            <FormGroup>
               <FormControlLabel
-                value="femme"
-                control={<Radio />}
-                label="Femme"
+                control={
+                  <Checkbox
+                    onChange={(e) => {
+                      if (e.target.checked === true) {
+                        setMajorInput("true");
+                        setValidMajorInput(true);
+                        setMajorInputError("");
+                      } else {
+                        setMajorInput("false");
+                        setValidMajorInput(false);
+                        setMajorInputError(
+                          "Vous devez être majeur pour vous inscrire"
+                        );
+                      }
+                    }}
+                    name="gilad"
+                  />
+                }
+                label={validMajorInput ? "Oui" : "Non"}
               />
-              <FormControlLabel
-                value="homme"
-                control={<Radio />}
-                label="Homme"
-              />
-            </RadioGroup>
-            <FormHelperText style={{ color: "red", margin: "0px" }}>
-              {genderInputError}
-            </FormHelperText>
+            </FormGroup>
+            <FormHelperText>{majorInputError}</FormHelperText>
           </FormControl>
           <input
             type="text"
@@ -509,6 +408,13 @@ const FormRegister = () => {
               setInputPseudo(e.target.value);
             }}
           />
+          <p>
+            En vous inscrivant, vous acceptez nos{" "}
+            <Link target="_blank" href={"/conditions-generales-utilisations"}>
+              conditions générales d&apos;utilisations
+            </Link>{" "}
+            de notre site
+          </p>
           <div className={styles.register__form__submit}>
             <input
               className={styles.register__form__submit__btn}

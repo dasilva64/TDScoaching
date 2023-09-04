@@ -3,7 +3,7 @@ import prisma from "../../../lib/prisma";
 import { withIronSessionApiRoute } from "iron-session/next";
 
 export default withIronSessionApiRoute(
-  async function getUser(req: any, res: NextApiResponse) {
+  async function getAll(req: any, res: NextApiResponse) {
     if (req.method === "GET") {
       if (req.session.user) {
         const user = await prisma.user.findUnique({
@@ -31,13 +31,12 @@ export default withIronSessionApiRoute(
                 },
               },
             });
-            console.log("allUserObject", allUser);
             let copyAllUser: any = allUser;
             let allUserObject = [];
             for (let i = 0; i < copyAllUser.length; i++) {
               let userObject = {
                 id: copyAllUser[i].id,
-                mail: copyAllUser[i].email,
+                mail: copyAllUser[i].mail,
                 firstName: copyAllUser[i].firstname,
                 lastName: copyAllUser[i].lastname,
                 phone: copyAllUser[i].phone,

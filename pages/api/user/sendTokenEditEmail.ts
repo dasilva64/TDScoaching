@@ -77,8 +77,6 @@ export default withIronSessionApiRoute(
                 firstname: editUser.firstname,
                 lastname: editUser.lastname,
                 email: editUser.mail,
-                phone: editUser.phone,
-                editPhone: editUser.editPhone,
                 editEmail: {
                   newEmail: copyEditEmail.newEmail,
                 },

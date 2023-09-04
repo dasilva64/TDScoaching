@@ -1,4 +1,5 @@
 import validator from "validator";
+import moment from "moment";
 
 export const validationBody = (body: any) => {
   let arrayMessageError: any = [];
@@ -39,43 +40,6 @@ export const validationBody = (body: any) => {
         ]);
       }
     }
-    if (key === "phone") {
-      if (!validator.isMobilePhone(value.trim(), "fr-FR")) {
-        arrayMessageError.push([
-          "phone",
-          "Téléphone : doit être un numéro de téléphone valide commençant par 06 or 07",
-        ]);
-      }
-    }
-    if (key === "birth") {
-      if (!validator.isDate(value)) {
-        arrayMessageError.push([
-          "birth",
-          "Date de naissance : doit avoir le format jj/mm/aaaa",
-        ]);
-      } else {
-        let currentDate = new Date();
-        let limiteDate = currentDate.setFullYear(
-          currentDate.getFullYear() - 18
-        );
-        let choiceDate = new Date(value);
-        if (choiceDate.getTime() > new Date(limiteDate).getTime()) {
-          arrayMessageError.push([
-            "birth",
-            "Date de naissance : vous devez être majeur pour vous inscrire",
-          ]);
-        }
-      }
-    }
-    if (key === "genre") {
-      if (validator.isEmpty(value)) {
-        arrayMessageError.push(["genre", "Genre : ne peut pas être vide"]);
-      } else {
-        if (!validator.isIn(value, ["homme", "femme"])) {
-          arrayMessageError.push(["genre", "Genre : ne peut pas être vide"]);
-        }
-      }
-    }
     if (key === "formule") {
       if (validator.isEmpty(value)) {
         arrayMessageError.push(["formule", "Formule : ne peut pas être vide"]);
@@ -83,8 +47,41 @@ export const validationBody = (body: any) => {
         if (!validator.isIn(value, ["unique", "flash", "longue"])) {
           arrayMessageError.push([
             "formule",
-            "Formule : ne peut pas être vide",
+            "Formule : la valeur n'est pas valide",
           ]);
+        }
+      }
+    }
+    if (key === "typeCoaching") {
+      if (validator.isEmpty(value)) {
+        arrayMessageError.push([
+          "typeCoaching",
+          "Type de coaching : ne peut pas être vide",
+        ]);
+      } else {
+        if (!validator.isIn(value, ["familial", "couple", "professionnel"])) {
+          arrayMessageError.push([
+            "typeCoaching",
+            "Type de coaching : la valeur n'est pas valide",
+          ]);
+        }
+      }
+    }
+    if (key === "start") {
+      if (validator.isEmpty(value)) {
+        arrayMessageError.push(["start", "Date : ne peut pas être vide"]);
+      } else {
+        if (!moment(value).isValid()) {
+          arrayMessageError.push(["start", "Date : doit être une date valide"]);
+        }
+      }
+    }
+    if (key === "id" || key === "userId") {
+      if (validator.isEmpty(value)) {
+        arrayMessageError.push(["id", "Id : ne peut pas être vide"]);
+      } else {
+        if (!validator.isUUID(value) && value.length !== 36) {
+          arrayMessageError.push(["id", "Id : n'est pas un id valide"]);
         }
       }
     }

@@ -22,12 +22,33 @@
   }
 }
 
+.arc {
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  border-radius: 50%;
+  border-top: 1px solid black;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid black;
+  border-right: 1px solid transparent;
+  animation: load 2000ms both infinite ease-out;
+  &__circle {
+    position: relative;
+    right: -9px;
+    top: 0px;
+    width: 5px;
+    height: 5px;
+    background-color: black;
+    border-radius: 50%;
+  }
+}
+
 @keyframes load {
   0% {
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(-680deg);
+    transform: rotate(680deg);
   }
 }
 
@@ -63,12 +84,17 @@
           list-style-type: none;
           &__li {
             margin-bottom: 5px;
+            &__flex {
+              display: flex;
+            }
           }
+          
           &__ul {
             list-style-type: none;
             &__li {
               margin-bottom: 5px;
               margin-left: 20px;
+              
             }
           }
         }

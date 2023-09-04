@@ -48,7 +48,6 @@ export default withIronSessionApiRoute(
             lastname: editUser.lastname,
             email: editUser.mail,
             role: editUser.role,
-            phone: editUser.phone,
             twoFactorCode: { limitDate: copyTwoFactorCode.limitDate },
           };
           res.status(200).json({

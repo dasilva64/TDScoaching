@@ -378,7 +378,6 @@ const DatePickerMobile = ({ events }: any) => {
       getDate();
     }
   };
-  console.log(arMeeting);
   return (
     <>
       {choiceDate && (

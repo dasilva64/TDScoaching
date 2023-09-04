@@ -40,12 +40,10 @@ export default withIronSessionApiRoute(
               },
             });
             let userObject = {
-              id: editUser.id,
               firstname: editUser.firstname,
               lastname: editUser.lastname,
               email: editUser.mail,
-              role: editUser.role,
-              phone: editUser.phone,
+              twoFactor: editUser.twoFactor,
             };
             res.status(200).json({
               status: 200,

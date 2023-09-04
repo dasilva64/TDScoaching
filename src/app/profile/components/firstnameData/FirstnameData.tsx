@@ -1,18 +1,32 @@
 "use client";
 
-import useUserGet from "@/app/components/hook/user/useUserGet";
 import React from "react";
 import styles from "./FirstnameData.module.scss";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 import { AppDispatch } from "@/app/redux/store";
+import useGet from "@/app/components/hook/useGet";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 
 const FirstnameData = () => {
-  const { userData, isLoading, isError } = useUserGet();
+  const {
+    data: userData,
+    isLoading,
+    isError,
+  } = useGet("/api/user/getUserProfile");
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   let content;
   if (isError) {
-    content = <div>error</div>;
+    dispatch({
+      type: "flash/storeFlashMessage",
+      payload: {
+        type: "error",
+        flashMessage: "Erreur lors du chargement, veuillez réessayer",
+      },
+    });
+    router.push("/");
   } else if (isLoading) {
     content = (
       <>
@@ -46,7 +60,7 @@ const FirstnameData = () => {
       </>
     );
   } else {
-    if (userData) {
+    if (userData.status === 200) {
       content = (
         <>
           <div
@@ -82,6 +96,12 @@ const FirstnameData = () => {
           </div>
         </>
       );
+    } else {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: { type: "error", flashMessage: userData.message },
+      });
+      router.push("/");
     }
   }
   return <>{content}</>;

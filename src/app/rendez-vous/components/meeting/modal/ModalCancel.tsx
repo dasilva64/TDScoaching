@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
 import styles from "./ModalCancel.module.scss";
-import fetchCancel from "@/app/components/fetch/paiement/fetchCancel";
 import useSWRMutation from "swr/mutation";
 import { useDispatch } from "react-redux";
 import { mutate } from "swr";
-import useUserGet from "@/app/components/hook/user/useUserGet";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
-import fetchGet from "@/app/components/fetch/user/fetchGet";
+import fetchGet from "@/app/components/fetch/fetchGet";
 
 const ModalCancel = () => {
   const dispatch = useDispatch();
@@ -17,7 +14,7 @@ const ModalCancel = () => {
   useEffect(() => {
     if (data && data.status === 200) {
       if (data.status === 200) {
-        mutate("/api/user/getUser", {
+        mutate("/api/user/getUserMeeting", {
           ...data,
         });
         dispatch({

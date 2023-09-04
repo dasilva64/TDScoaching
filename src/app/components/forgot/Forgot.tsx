@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
 import validator from "validator";
-import fetchPost from "../fetch/user/FetchPost";
+import fetchPost from "../fetch/FetchPost";
 
 const Forgot = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -113,6 +113,7 @@ const Forgot = () => {
   };
   return (
     <>
+      <div className={styles.bg}></div>
       <div className={styles.forgot}>
         <div className={styles.forgot__top}>
           <button

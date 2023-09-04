@@ -3,13 +3,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./DatePickerDesktop.module.scss";
 import Image from "next/image";
-import fetchCreate from "@/app/components/fetch/meeting/fetchCreate";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { AppDispatch } from "@/app/redux/store";
-import fetchDeleteMeeting from "@/app/components/fetch/meeting/fetchDeleteMeeting";
+import fetchPost from "@/app/components/fetch/FetchPost";
 
 const DatePickerDesktop = ({ events }: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -56,7 +55,7 @@ const DatePickerDesktop = ({ events }: any) => {
     13: "20",
   };
 
-  const { data, trigger } = useSWRMutation("/api/meeting/add", fetchCreate);
+  /*   const { data, trigger } = useSWRMutation("/api/meeting/add", fetchPost);
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
@@ -74,11 +73,11 @@ const DatePickerDesktop = ({ events }: any) => {
         });
       }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch]); */
 
   const { data: dataDelete, trigger: triggerDelete } = useSWRMutation(
     "/api/meeting/deleteMeeting",
-    fetchDeleteMeeting
+    fetchPost
   );
   useEffect(() => {
     if (dataDelete) {
@@ -107,27 +106,38 @@ const DatePickerDesktop = ({ events }: any) => {
       for (let y = 0; y < newar.length; y++) {
         let arWeek = [];
         for (let i = 0; i < copyEvents.length; i++) {
-          let startDate = new Date(copyEvents[i]["startAt"]);
-          let eventDate = startDate.getDate();
-          let eventDay = startDate.getDay();
-          let eventMonth = startDate.getMonth();
-          let eventYear = startDate.getFullYear();
-          let eventHour = startDate.getUTCHours();
+          let frDate = new Date(copyEvents[i]["startAt"]).toLocaleString(
+            "fr-FR"
+          );
+          let split = frDate.split(" ");
+          let splitDate = split[0].split("/");
+          let splitHour = split[1].split(":");
+          let year = splitDate[2];
+          let month =
+            splitDate[1].charAt(0) === "0"
+              ? splitDate[1].slice(1)
+              : splitDate[1];
+          let date =
+            splitDate[0].charAt(0) === "0"
+              ? splitDate[0].slice(1)
+              : splitDate[0];
+          let hour =
+            splitHour[0].charAt(0) === "0"
+              ? splitHour[0].slice(1)
+              : splitHour[0];
 
           if (
-            eventYear.toString() === newar[y].getFullYear().toString() &&
-            (eventMonth + 1).toString() ===
-              (newar[y].getMonth() + 1).toString() &&
-            eventDate.toString() === newar[y].getDate().toString()
+            year.toString() === newar[y].getFullYear().toString() &&
+            month.toString() === (newar[y].getMonth() + 1).toString() &&
+            date.toString() === newar[y].getDate().toString()
           ) {
             let copyUser: any = { ...copyEvents[i].User };
             arWeek.push([
-              eventYear,
-              eventMonth + 1,
-              eventDate,
-              eventDay,
-              eventHour,
-              copyUser.id,
+              year,
+              month,
+              date,
+              hour,
+              copyEvents[i]["userId"],
               copyUser.firstname,
               copyUser.lastname,
             ]);
@@ -139,7 +149,6 @@ const DatePickerDesktop = ({ events }: any) => {
               newar[y].getFullYear(),
               newar[y].getMonth() + 1,
               newar[y].getDate(),
-              newar[y].getDay(),
             ],
             [arWeek],
           ]);
@@ -150,7 +159,6 @@ const DatePickerDesktop = ({ events }: any) => {
               newar[y].getFullYear(),
               newar[y].getMonth() + 1,
               newar[y].getDate(),
-              newar[y].getDay(),
             ],
           ]);
           arWeek = [];
@@ -427,16 +435,15 @@ const DatePickerDesktop = ({ events }: any) => {
                         if (p[1] && p[1].length > 0) {
                           for (let y = 0; y < p[1][0].length; y++) {
                             if (
-                              p[0][0] === p[1][0][y][0] &&
-                              p[0][1] === p[1][0][y][1] &&
-                              p[0][2] === p[1][0][y][2] &&
-                              p[0][3] === p[1][0][y][3]
+                              p[0][0].toString() === p[1][0][y][0].toString() &&
+                              p[0][1].toString() === p[1][0][y][1].toString() &&
+                              p[0][2].toString() === p[1][0][y][2].toString()
                             ) {
                               if (
-                                h[1].toString() === p[1][0][y][4].toString()
+                                h[1].toString() === p[1][0][y][3].toString()
                               ) {
                                 if (
-                                  id.toString() === p[1][0][y][5].toString()
+                                  id.toString() === p[1][0][y][4].toString()
                                 ) {
                                   return (
                                     <td
@@ -478,9 +485,9 @@ const DatePickerDesktop = ({ events }: any) => {
                                         }
                                       >
                                         <Link
-                                          href={`/utilisateur/${p[1][0][y][5]}`}
+                                          href={`/utilisateur/${p[1][0][y][4]}`}
                                         >
-                                          {p[1][0][y][6]} {p[1][0][y][7]}
+                                          {p[1][0][y][5]} {p[1][0][y][6]}
                                         </Link>
                                       </div>
                                     </td>
@@ -503,6 +510,23 @@ const DatePickerDesktop = ({ events }: any) => {
                               }
                               onClick={() => {
                                 let create: any = new Date(
+                                  p[0][0],
+                                  p[0][1] - 1,
+                                  p[0][2],
+                                  h[1]
+                                );
+                                if (
+                                  new Date(create).getTime() >
+                                  new Date().getTime()
+                                ) {
+                                  dispatch({
+                                    type: "form/openModalAddMeetingAdmin",
+                                    payload: {
+                                      date: create,
+                                    },
+                                  });
+                                }
+                                /* let create: any = new Date(
                                   Date.UTC(p[0][0], p[0][1] - 1, p[0][2], h[1])
                                 );
                                 let create2: any = new Date(
@@ -525,7 +549,7 @@ const DatePickerDesktop = ({ events }: any) => {
                                         "Vous ne pouvez pas créer un rendez-vous dans le passé",
                                     },
                                   });
-                                }
+                                } */
                               }}
                             >
                               <p

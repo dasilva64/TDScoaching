@@ -79,7 +79,6 @@ export default async function resetPassword(req: any, res: NextApiResponse) {
           }
         }
       } catch (error) {
-        console.log(error);
         return res.status(404).json({
           status: 404,
           message:

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styles from "./ModalCancelFormuleUser.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/redux/store";
-import fetchGet from "@/app/components/fetch/user/fetchGet";
+import fetchGet from "@/app/components/fetch/fetchGet";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 
@@ -21,7 +21,7 @@ const ModalCancelFormuleUser = () => {
     if (data) {
       if (data.status === 200) {
         mutate(
-          "/api/user/getUser",
+          "/api/user/getUserMeeting",
           {
             ...data,
             body: {

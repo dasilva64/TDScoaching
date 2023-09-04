@@ -1,77 +1,105 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import prisma from "../../../lib/prisma";
+import { validationBody } from "../../../lib/validation";
 
 export default withIronSessionApiRoute(
   async function get(req, res) {
     if (req.method === "POST") {
       if (req.session.user) {
         const { id } = await req.body;
+        if (id === undefined) {
+          return res.status(400).json({
+            status: 400,
+            message: "L'id de la requête est introuvable, veuillez réessayer",
+          });
+        }
+        if (req.body === undefined) {
+          return res.status(400).json({
+            status: 400,
+            message: "Une erreur est survenue, veuillez réessayer",
+          });
+        }
+        let arrayMessageError = validationBody(req.body);
+        if (arrayMessageError.length > 0) {
+          return res.status(400).json({
+            status: 400,
+            message: arrayMessageError,
+          });
+        }
         const user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
         });
         if (user === null) {
           return res.status(400).json({
             status: 400,
-            message: "L' n'a pas été trouvé, veuillez réessayer",
+            message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
           });
         } else {
-          const userById = await prisma.user.findUnique({
-            where: { id: id },
-          });
-          if (userById === null) {
+          if (user.role !== "ROLE_ADMIN") {
             return res.status(400).json({
               status: 400,
-              message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+              message: "Vous n'avez pas les droits pour accéder à cette page",
             });
           } else {
-            if (userById.meetingId === null) {
-              return res.status(404).json({
-                status: 404,
-                message: "L'utilisateur n'a pas de rendez-vous",
+            const userById = await prisma.user.findUnique({
+              where: { id: id },
+            });
+            if (userById === null) {
+              return res.status(400).json({
+                status: 400,
+                message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
               });
             } else {
-              if (userById.discovery === false) {
-                const userByIdDeleteMeeting = await prisma.user.update({
-                  where: { id: id },
-                  data: { meetingId: null, discovery: true },
+              if (userById.meetingId === null) {
+                return res.status(404).json({
+                  status: 404,
+                  message: "L'utilisateur n'a pas de rendez-vous",
                 });
               } else {
+                let copyTypeMeeting: any = user.typeMeeting;
+                delete copyTypeMeeting["coaching"];
                 const userByIdDeleteMeeting = await prisma.user.update({
-                  where: { id: id },
-                  data: { meetingId: null },
+                  where: { id: userById.id },
+                  data: {
+                    meetingId: null,
+                    discovery: true,
+                    typeMeeting: {
+                      ...copyTypeMeeting,
+                    },
+                  },
                 });
-              }
+                if (userByIdDeleteMeeting === null) {
+                  return res.status(404).json({
+                    status: 404,
+                    message:
+                      "Le rendez-vous n'as pas être terminé, veuillez réessayer",
+                  });
+                } else {
+                  const meetingByUser = await prisma.meeting.findMany({
+                    where: { userId: userById.id },
+                    select: {
+                      startAt: true,
+                      status: true,
+                    },
+                  });
+                  let userObject = {
+                    id: userById.id,
+                    firstname: userByIdDeleteMeeting.firstname,
+                    lastname: userByIdDeleteMeeting.lastname,
+                    mail: userByIdDeleteMeeting.mail,
+                    discovery: userByIdDeleteMeeting.discovery,
+                    allMeetings: meetingByUser,
+                    meeting: userByIdDeleteMeeting.meetingId,
+                    typeMeeting: userByIdDeleteMeeting.typeMeeting,
+                  };
 
-              const meetingByUser = await prisma.meeting.findMany({
-                where: { userId: id },
-                select: {
-                  startAt: true,
-                  status: true,
-                },
-              });
-              let userObject = {
-                id: userById?.id,
-                role: userById?.role,
-                firstname: userById?.firstname,
-                lastname: userById?.lastname,
-                mail: userById?.mail,
-                genre: userById?.genre,
-                discovery: userById?.discovery,
-                birth: userById?.birth,
-                status: userById?.status,
-                phone: userById?.phone,
-                editEmail: userById?.editEmail,
-                editPhone: userById?.editPhone,
-                twoFactor: userById?.twoFactor,
-                twoFactorCode: userById?.twoFactorCode,
-                allMeetings: meetingByUser,
-                meeting: null,
-              };
-              return res.status(200).json({
-                status: 200,
-                message: "Rendez-vous terminé avec succès",
-                body: userObject,
-              });
+                  return res.status(200).json({
+                    status: 200,
+                    message: "Rendez-vous terminé avec succès",
+                    body: userObject,
+                  });
+                }
+              }
             }
           }
         }

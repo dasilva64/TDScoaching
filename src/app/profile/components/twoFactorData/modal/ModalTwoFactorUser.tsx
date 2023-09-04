@@ -5,7 +5,7 @@ import styles from "./ModalTwoFactorUser.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 import { TextField } from "@mui/material";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
 
 const ModalTwoFactor = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,7 +39,7 @@ const ModalTwoFactor = () => {
   useEffect(() => {
     const mutateMainData = async () => {
       mutate(
-        "/api/user/getUser",
+        "/api/user/getUserProfile",
         {
           ...data,
           body: {
@@ -79,7 +79,7 @@ const ModalTwoFactor = () => {
     const mutateMaindataReSendCode = async () => {
       let copyNewEmail = dataReSendCode.body.editEmail;
       mutate(
-        "/api/user/getUser",
+        "/api/user/getUserProfile",
         {
           ...dataReSendCode,
           body: {

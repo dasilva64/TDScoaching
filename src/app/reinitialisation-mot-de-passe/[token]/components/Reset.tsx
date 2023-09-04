@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
 import validator from "validator";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
 
 const Reset = () => {
   const queryParam: any = usePathname();

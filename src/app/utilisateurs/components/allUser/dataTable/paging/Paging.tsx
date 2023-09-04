@@ -99,11 +99,11 @@ const Paging = () => {
   }, [countPage, currentPage, dispatch, nbShow]);
   return (
     <div className={styles.paging}>
-      {datas && datas.length === 0 && <p>Showing 0 to 0 of 0 entries </p>}
+      {datas && datas.length === 0 && <p>Affichage de 0 to 0 of 0 entries </p>}
       {datas && datas.length > 0 && (
         <>
           <p className={styles.paging__p}>
-            Showing {(currentPage - 1) * nbShow + 1} to{" "}
+            Affichage de {(currentPage - 1) * nbShow + 1} to{" "}
             {datas?.length! < currentPage * nbShow
               ? datas?.length
               : currentPage * nbShow}{" "}
@@ -134,7 +134,7 @@ const Paging = () => {
       {datas && datas.length === 0 && (
         <>
           <p className={styles.paging__p}>
-            Showing 0 to{" "}
+            Affichage de 0 to{" "}
             {datas?.length! < currentPage * nbShow
               ? datas?.length
               : currentPage * nbShow}{" "}
@@ -230,11 +230,11 @@ const Paging = () => {
         push(arPaging, null, null, "point", null, nbShow + 2);
         push(arPaging, countPage - 4, countPage + 1, "for", null, null);
       } else {
-        push(arPaging, null, null, "start", 1, (nbShow * currentPage) + 1);
-        push(arPaging, null, null, "point", null, (nbShow * currentPage) + 2);
+        push(arPaging, null, null, "start", 1, nbShow * currentPage + 1);
+        push(arPaging, null, null, "point", null, nbShow * currentPage + 2);
         push(arPaging, currentPage - 1, currentPage + 2, "for", null, null);
         push(arPaging, null, null, "point", null, 2);
-        push(arPaging, null, null, "end", countPage, (nbShow * currentPage) + 3);
+        push(arPaging, null, null, "end", countPage, nbShow * currentPage + 3);
       }
     } else {
       push(arPaging, 1, countPage + 1, "for", null, null);
@@ -244,15 +244,15 @@ const Paging = () => {
 
   return (
     <div className={styles.paging}>
-      {datas && datas.length === 0 && <p>Showing 0 to 0 of 0 entries </p>}
+      {datas && datas.length === 0 && <p>Affichage de 0 à 0 sur 0 entrées </p>}
       {datas && datas.length > 0 && (
         <>
           <p className={styles.paging__p}>
-            Showing {(currentPage - 1) * nbShow + 1} to{" "}
+            Affichage de {(currentPage - 1) * nbShow + 1} à{" "}
             {datas?.length! < currentPage * nbShow
               ? datas?.length
               : currentPage * nbShow}{" "}
-            of {datas?.length} entries
+            sur {datas?.length} entrées
           </p>
           <div className={styles.paging__div}>
             <span
@@ -261,9 +261,11 @@ const Paging = () => {
                 if (currentPage > 1) dispatch({ type: "Array/previousPage" });
               }}
             >
-              previous
+              Suivant
             </span>
-            <div className={styles.paging__div__div}>{displayPagingElement}</div>
+            <div className={styles.paging__div__div}>
+              {displayPagingElement}
+            </div>
             <span
               className={styles.paging__div__span}
               onClick={() => {
@@ -271,7 +273,7 @@ const Paging = () => {
                   dispatch({ type: "Array/nextPage" });
               }}
             >
-              next
+              Suivant
             </span>
           </div>
         </>
@@ -279,11 +281,11 @@ const Paging = () => {
       {datas && datas.length === 0 && (
         <>
           <p className={styles.paging__p}>
-            Showing 0 to{" "}
+            Affichage de 0 à{" "}
             {datas?.length! < currentPage * nbShow
               ? datas?.length
               : currentPage * nbShow}{" "}
-            of {datas?.length} entries
+            sur {datas?.length} entrées
           </p>
         </>
       )}

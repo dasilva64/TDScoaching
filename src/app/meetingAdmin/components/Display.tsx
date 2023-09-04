@@ -2,20 +2,20 @@
 
 import React from "react";
 import styles from "../page.module.scss";
-import { RootState, AppDispatch } from "../../redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DatePickerDesktop from "./datePicker/DatePickerDesktop";
 import DatePickerMobile from "./datePicker/DatePickerMobile";
-import useUserGet from "@/app/components/hook/user/useUserGet";
-import useAllAfterNow from "../../components/hook/meeting/useAllAfterNow";
+import useGet from "@/app/components/hook/useGet";
 
 const Display = () => {
   const [mobile, setMobile] = useState<boolean | null>(null);
 
-  const { allMeeting, isLoading, isError } = useAllAfterNow();
-
+  const {
+    data: allMeeting,
+    isLoading,
+    isError,
+  } = useGet("/api/meeting/getAllAfterNow");
+  console.log(allMeeting);
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth < 600) {

@@ -57,30 +57,6 @@ export default withIronSessionApiRoute(
             userEditMailObject = null;
           }
 
-          let userEditPhoneObject;
-          if (user.editPhone) {
-            let copyEditPhone: any = user.editPhone;
-            let limitDate = copyEditPhone.limitDate;
-            let convertInDate = new Date(limitDate);
-            if (convertInDate < new Date()) {
-              await prisma.user.update({
-                where: {
-                  id: user.id,
-                },
-                data: {
-                  editPhone: Prisma.JsonNull,
-                },
-              });
-              userEditPhoneObject = null;
-            } else {
-              userEditPhoneObject = {
-                newPhone: copyEditPhone.newPhone,
-                limitDate: copyEditPhone.limitDate,
-              };
-            }
-          } else {
-            userEditPhoneObject = null;
-          }
           let userTwoFactorObject;
           if (user.twoFactorCode) {
             let copyTwoFactorCode: any = user.twoFactorCode;
@@ -130,13 +106,9 @@ export default withIronSessionApiRoute(
               email: user.mail,
               meeting: meeting,
               meetings: allMeeting,
-              phone: user.phone,
               editEmail: userEditMailObject,
-              editPhone: userEditPhoneObject,
               twoFactor: user.twoFactor,
               twoFactorCode: userTwoFactorObject,
-              birth: user.birth,
-              genre: user.genre,
               discovery: user.discovery,
               typeMeeting: user.typeMeeting,
             };
@@ -154,13 +126,9 @@ export default withIronSessionApiRoute(
               email: user.mail,
               meeting: user.meetingId,
               meetings: allMeeting,
-              phone: user.phone,
               editEmail: userEditMailObject,
-              editPhone: userEditPhoneObject,
               twoFactor: user.twoFactor,
               twoFactorCode: userTwoFactorObject,
-              birth: user.birth,
-              genre: user.genre,
               discovery: user.discovery,
               typeMeeting: user.typeMeeting,
             };

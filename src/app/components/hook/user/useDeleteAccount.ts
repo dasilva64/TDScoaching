@@ -26,18 +26,19 @@ const useDeleteAccount = (token: string) => {
     if (data) {
       if (data.status === 200) {
         dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { flashMessage: data.message, type: "success" },
-        });
-        dispatch({
           type: "auth/logout",
         });
-        router.push("/");
-      } else {
         dispatch({
           type: "flash/storeFlashMessage",
-          payload: { flashMessage: data.message, type: "error" },
+          payload: {
+            flashMessage: "Votre compte à été supprimer",
+            type: "success",
+          },
         });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
         router.push("/");
       }
     }

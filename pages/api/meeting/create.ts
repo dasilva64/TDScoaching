@@ -4,26 +4,26 @@ import prisma from "../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export default withIronSessionApiRoute(
-  async function getuser(req: any, res: NextApiResponse) {
+  async function create(req: any, res: NextApiResponse) {
     if (req.method === "GET") {
       if (req.session.user) {
-        let userGet = await prisma.user.findUnique({
+        let user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
         });
-        if (userGet === null) {
+        if (user === null) {
           return res.status(404).json({
             status: 404,
-            message: "User not found",
+            message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
           });
         } else {
-          if (userGet.meetingId !== null) {
+          if (user.meetingId !== null) {
             let meeting = await prisma.meeting.findUnique({
-              where: { id: userGet.meetingId },
+              where: { id: user.meetingId },
             });
             if (meeting === null) {
               return res.status(404).json({
                 status: 404,
-                message: "Meeting not found",
+                message: "Le rendez-vous n'existe pas, veuillez réessayer",
               });
             } else {
               const editMeeting = await prisma.meeting.update({
@@ -47,7 +47,7 @@ export default withIronSessionApiRoute(
       } else {
         return res.status(404).json({
           status: 404,
-          message: "Vous n'êtes pas connecté",
+          message: "Vous n'êtes pas connecté, veuillez réessayer",
         });
       }
     } else {

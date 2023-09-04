@@ -1,18 +1,27 @@
+.bg {
+  width: 100%;
+  height: 100vh;
+  background-color: transparent;
+  position: fixed;
+  z-index: 998;
+  top: 0;
+}
+
 .register {
   background-color: white;
-  border: 2px solid black;
-  box-shadow: 5px 5px 5px 5px black;
+  border: 2px solid #1dd6fc;
+  box-shadow: 5px 5px 5px 5px #1dd6fc;
   border-radius: 20px;
   padding: 50px 30px;
   width: 400px;
   position: fixed;
   top: 50%;
   left: 50%;
-  height: 100%;
+  height: 90%;
   overflow: scroll;
   max-height: 860px;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  z-index: 999;
   &__top {
     display: flex;
     justify-content: space-between;

@@ -61,7 +61,7 @@ const Search = (): JSX.Element => {
   return (
     <div>
       <label className={styles.search__label} htmlFor="search">
-        Search :{" "}
+        Rechercher :{" "}
       </label>
       <input
         ref={inputRef}

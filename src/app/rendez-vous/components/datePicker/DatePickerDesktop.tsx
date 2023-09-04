@@ -6,11 +6,10 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/app/redux/store";
 
-const DatePickerDesktop = ({ events, discovery }: any) => {
+const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [arDateWeek, setArDateWeek] = useState<any>([]);
   const [all, setAll] = useState<any>(null);
-  const { id } = useSelector((state: any) => state.auth);
 
   const [startDateWeek, setStartDateWeek] = useState<string>("");
   const daystext: any = {
@@ -60,30 +59,32 @@ const DatePickerDesktop = ({ events, discovery }: any) => {
       for (let y = 0; y < newar.length; y++) {
         let arWeek = [];
         for (let i = 0; i < copyEvents.length; i++) {
-          let startDate = new Date(copyEvents[i]["startAt"]);
-          let eventDate = startDate.getDate();
-          let eventDay = startDate.getDay();
-          let eventMonth = startDate.getMonth();
-          let eventYear = startDate.getFullYear();
-          let eventHour = startDate.getUTCHours();
-
+          let frDate = new Date(copyEvents[i]["startAt"]).toLocaleString(
+            "fr-FR"
+          );
+          let split = frDate.split(" ");
+          let splitDate = split[0].split("/");
+          let splitHour = split[1].split(":");
+          let year = splitDate[2];
+          let month =
+            splitDate[1].charAt(0) === "0"
+              ? splitDate[1].slice(1)
+              : splitDate[1];
+          let date =
+            splitDate[0].charAt(0) === "0"
+              ? splitDate[0].slice(1)
+              : splitDate[0];
+          let hour =
+            splitHour[0].charAt(0) === "0"
+              ? splitHour[0].slice(1)
+              : splitHour[0];
           if (
-            eventYear.toString() === newar[y].getFullYear().toString() &&
-            (eventMonth + 1).toString() ===
-              (newar[y].getMonth() + 1).toString() &&
-            eventDate.toString() === newar[y].getDate().toString()
+            year.toString() === newar[y].getFullYear().toString() &&
+            month.toString() === (newar[y].getMonth() + 1).toString() &&
+            date.toString() === newar[y].getDate().toString()
           ) {
             let copyUser: any = { ...copyEvents[i].User };
-            arWeek.push([
-              eventYear,
-              eventMonth + 1,
-              eventDate,
-              eventDay,
-              eventHour,
-              copyUser.id,
-              copyUser.firstname,
-              copyUser.lastname,
-            ]);
+            arWeek.push([year, month, date, hour]);
           }
         }
         if (arWeek.length > 0) {
@@ -92,7 +93,6 @@ const DatePickerDesktop = ({ events, discovery }: any) => {
               newar[y].getFullYear(),
               newar[y].getMonth() + 1,
               newar[y].getDate(),
-              newar[y].getDay(),
             ],
             [arWeek],
           ]);
@@ -103,7 +103,6 @@ const DatePickerDesktop = ({ events, discovery }: any) => {
               newar[y].getFullYear(),
               newar[y].getMonth() + 1,
               newar[y].getDate(),
-              newar[y].getDay(),
             ],
           ]);
           arWeek = [];
@@ -127,6 +126,8 @@ const DatePickerDesktop = ({ events, discovery }: any) => {
       if (startDateWeek === "") {
         setAll(events);
         let current = new Date();
+        /* let ar = getAllDayInWeek(new Date());
+        getMeetingByWeek(ar); */
         if (current.getDay() === 6) {
           current.setDate(current.getDate() + 2);
           let ar = getAllDayInWeek(new Date(current));
@@ -154,7 +155,7 @@ const DatePickerDesktop = ({ events, discovery }: any) => {
       setAll(events);
     }
   }, [all?.length, arDateWeek, events, startDateWeek]);
-
+  console.log(arDateWeek);
   const changeDate = (wowtets: any) => {
     const getMeetingByWeek = (newar: any) => {
       let ar = [];
@@ -284,16 +285,34 @@ const DatePickerDesktop = ({ events, discovery }: any) => {
         dispatch({
           type: "form/openModalFirstMeeting",
           payload: {
-            date: create.toLocaleString(),
+            date: create,
           },
         });
       } else {
-        dispatch({
-          type: "form/openModalMeeting",
-          payload: {
-            date: create.toLocaleString(),
-          },
-        });
+        if (typeMeeting.type === "flash") {
+          if (typeMeeting.number === 3) {
+            dispatch({
+              type: "form/openModalMeeting",
+              payload: {
+                date: create,
+              },
+            });
+          } else {
+            dispatch({
+              type: "form/openModalOtherMeeting",
+              payload: {
+                date: create,
+              },
+            });
+          }
+        } else {
+          dispatch({
+            type: "form/openModalMeeting",
+            payload: {
+              date: create,
+            },
+          });
+        }
       }
     }
   };
@@ -382,10 +401,8 @@ const DatePickerDesktop = ({ events, discovery }: any) => {
                       <div
                         className={styles.datePicker__table__thead__tr__th__div}
                       >
-                        <span>{daystext[p[0][3]]}</span>
-                        <span>
-                          {p[0][2]} {monthstext[p[0][1]]}
-                        </span>
+                        <span>{p[0][2]}</span>
+                        <span>{monthstext[p[0][1]]}</span>
                       </div>
                     </th>
                   );
@@ -405,55 +422,31 @@ const DatePickerDesktop = ({ events, discovery }: any) => {
                         if (p[1] && p[1].length > 0) {
                           for (let y = 0; y < p[1][0].length; y++) {
                             if (
-                              p[0][0] === p[1][0][y][0] &&
-                              p[0][1] === p[1][0][y][1] &&
-                              p[0][2] === p[1][0][y][2] &&
-                              p[0][3] === p[1][0][y][3]
+                              p[0][0].toString() === p[1][0][y][0].toString() &&
+                              p[0][1].toString() === p[1][0][y][1].toString() &&
+                              p[0][2].toString() === p[1][0][y][2].toString()
                             ) {
                               if (
-                                h[1].toString() === p[1][0][y][4].toString()
+                                h[1].toString() === p[1][0][y][3].toString()
                               ) {
-                                if (
-                                  id.toString() === p[1][0][y][5].toString()
-                                ) {
-                                  return (
-                                    <td
-                                      className={`${styles.datePicker__table__tbody__tr__td} ${styles.datePicker__table__tbody__tr__td__previous}`}
-                                      key={index}
+                                return (
+                                  <td
+                                    className={`${styles.datePicker__table__tbody__tr__td} ${styles.datePicker__table__tbody__tr__td__previous}`}
+                                    key={index}
+                                  >
+                                    <div
+                                      className={
+                                        styles.datePicker__table__tbody__tr__td__div__previous
+                                      }
                                     >
-                                      <div
+                                      <p
                                         className={
-                                          styles.datePicker__table__tbody__tr__td__div__previous
+                                          styles.datePicker__table__tbody__tr__td__div__previous__p
                                         }
-                                      >
-                                        <p
-                                          className={
-                                            styles.datePicker__table__tbody__tr__td__div__previous__p
-                                          }
-                                        ></p>
-                                      </div>
-                                    </td>
-                                  );
-                                } else {
-                                  return (
-                                    <td
-                                      className={`${styles.datePicker__table__tbody__tr__td} ${styles.datePicker__table__tbody__tr__td__previous}`}
-                                      key={index}
-                                    >
-                                      <div
-                                        className={
-                                          styles.datePicker__table__tbody__tr__td__div__previous
-                                        }
-                                      >
-                                        <p
-                                          className={
-                                            styles.datePicker__table__tbody__tr__td__div__previous__p
-                                          }
-                                        ></p>
-                                      </div>
-                                    </td>
-                                  );
-                                }
+                                      ></p>
+                                    </div>
+                                  </td>
+                                );
                               }
                             }
                           }

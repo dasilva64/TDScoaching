@@ -3,15 +3,10 @@ import styles from "./page.module.scss";
 import DeleteAccount from "./components/deleteAccount/DeleteAccount";
 import EmailData from "./components/emailData/EmailData";
 import FirstnameData from "./components/firstnameData/FirstnameData";
-import MeetingData from "./components/meetingData/MeetingData";
 import PasswordData from "./components/passwordData/PasswordData";
-import PhoneData from "./components/phoneData/PhoneData";
 import TwoFactorData from "./components/twoFactorData/TwoFactorData";
 import LastnameData from "./components/lastnameData/LastnameData";
-import BirthData from "./components/birthData/BirthData";
-import GenderData from "./components/genderData/GenderData";
 import EmailSendTokenData from "./components/emailSendTokenData/EmailSendTokenData";
-import PhoneSendTokenData from "./components/phoneSendTokenData/PhoneSendTokenData";
 
 const Profile = async () => {
   return (
@@ -41,8 +36,6 @@ const Profile = async () => {
               </h3>
               <FirstnameData />
               <LastnameData />
-              <BirthData />
-              <GenderData />
             </div>
             <div className={styles.profile__main__container__content}>
               <h3 className={styles.profile__main__container__content__h3}>
@@ -55,7 +48,6 @@ const Profile = async () => {
               <h3 className={styles.profile__main__container__content__h3}>
                 Sécurité
               </h3>
-              <PhoneSendTokenData />
               <TwoFactorData />
             </div>
             <div className={styles.profile__main__container__content}>

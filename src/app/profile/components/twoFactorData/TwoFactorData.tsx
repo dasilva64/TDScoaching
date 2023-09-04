@@ -3,16 +3,19 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styles from "./TwoFactorData.module.scss";
-import { Switch } from "@mui/material";
-import useUserGet from "@/app/components/hook/user/useUserGet";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
 import Image from "next/image";
-import fetchGet from "@/app/components/fetch/user/fetchGet";
+import fetchGet from "@/app/components/fetch/fetchGet";
+import useGet from "@/app/components/hook/useGet";
 
 const TwoFactorData = () => {
   const dispatch = useDispatch();
-  const { userData, isLoading, isError } = useUserGet();
+  const {
+    data: userData,
+    isLoading,
+    isError,
+  } = useGet("/api/user/getUserProfile");
   let restDate;
   if (userData?.body.twoFactorCode) {
     let limitDate = userData?.body.twoFactorCode.limitDate;
@@ -45,7 +48,7 @@ const TwoFactorData = () => {
     const mutateTwoFactor = async () => {
       let copyTwoFactorCode = userData?.body.twoFactorCode;
       mutate(
-        "/api/user/getUser",
+        "/api/user/getUserProfile",
         {
           ...data,
           body: {
@@ -101,9 +104,9 @@ const TwoFactorData = () => {
           <div
             className={styles.card}
             onClick={() => {
-              dispatch({
+              /* dispatch({
                 type: "form/openModalEditFirstnameUserData",
-              });
+              }); */
             }}
           >
             <Image

@@ -15,7 +15,7 @@ const NbShow = (): JSX.Element => {
   };
   return (
     <div>
-      <label htmlFor="">Show </label>
+      <label htmlFor="">Affichage de </label>
       <select
         name="nb"
         id="nb"
@@ -28,7 +28,7 @@ const NbShow = (): JSX.Element => {
         <option value="50">50</option>
         <option value="100">100</option>
       </select>
-      <span> entries</span>
+      <span> entrées</span>
     </div>
   );
 };

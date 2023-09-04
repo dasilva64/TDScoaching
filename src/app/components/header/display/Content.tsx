@@ -2,17 +2,14 @@
 
 import styles from "../header.module.scss";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import EmailCheck from "@/app/profile/components/emailData/EmailData";
 import ModalUserSendToken from "@/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
-import ModalUserMainData from "@/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
 import ModalUserPasswordData from "@/app/profile/components/passwordData/modal/ModalUserPasswordData";
-import PhoneCheck from "@/app/profile/components/phoneData/PhoneData";
-import ModalPhoneSendTokenData from "@/app/profile/components/phoneSendTokenData/modal/ModalPhoneSendTokenData";
 import ModalTwoFactorDisable from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorDisable";
 import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorUser";
 import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
@@ -20,28 +17,28 @@ import Forgot from "../../forgot/Forgot";
 import FormLogin from "../../login/formLogin";
 import FormRegister from "../../register/formRegister";
 import SendCode from "../../sendCode/SendCode";
-import useCheck from "../../hook/user/useCheck";
 import ModalAddMeeting from "@/app/rendez-vous/components/modal/ModalAddMeeting";
 import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteMeeting";
 import ModalDeleteAccount from "@/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
 import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalCloseEmail";
-import ModalClosePhone from "@/app/profile/components/phoneData/modal/ModalClosePhone";
-import { AnimatePresence, motion, useCycle } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import Nav from "../components/Nav";
 import ModalUserFirstnameData from "@/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
 import ModalUserLastnameData from "@/app/profile/components/lastnameData/modal/ModalUserLastnameData";
-import ModalUserBirthData from "@/app/profile/components/birthData/modal/ModalUserBirthData";
-import ModalUserGenderData from "@/app/profile/components/genderData/modal/ModalUserGenderData";
-import ModalAddFirstMeeting from "@/app/rendez-vous/components/modal/ModalAddFirstMeeting";
-import ModalDeleteFirstMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteFirstMeeting";
+import ModalAddFirstMeeting from "@/app/rendez-vous/components/modal/ModalAddDiscoveryMeeting";
+import ModalDeleteFirstMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteDiscoveryMeeting";
 import ModalEditFormuleUser from "@/app/rendez-vous/components/modal/ModalEditFormuleUser";
 import ModalCancelFormuleUser from "@/app/rendez-vous/components/modal/ModalCancelFormuleUser";
+import ModalAddOtherMeeting from "@/app/rendez-vous/components/modal/ModalAddOtherMeeting";
+import useGet from "../../hook/useGet";
+import ModalAddMeetingAdmin from "@/app/meetingAdmin/components/modal/ModalAddMeetingAdmin";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
   const pathname = usePathname();
+  const [scroll, setScroll] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCheckUser = async () => {
@@ -50,7 +47,7 @@ const Content = () => {
     };
     fetchCheckUser();
   }, []);
-  const { data, isLoading, isError } = useCheck();
+  const { data, isLoading, isError } = useGet("/api/user/check");
   useEffect(() => {
     if (data) {
       if (data.body !== null) {
@@ -74,7 +71,15 @@ const Content = () => {
   if (data) {
     if (data.body === null) {
       content = (
-        <button className={styles.header__login} onClick={() => handlerClick()}>
+        <button
+          type="button"
+          className={styles.header__login}
+          onClick={() => {
+            handlerClick();
+            let body = document.body;
+            let test = body?.scrollHeight;
+          }}
+        >
           Se connecter
         </button>
       );
@@ -84,7 +89,12 @@ const Content = () => {
           <>
             <div className={styles.header__log}>
               <div
-                onClick={() => setDisplayLogMenu(!displayLogMenu)}
+                onClick={() => {
+                  setDisplayLogMenu(!displayLogMenu);
+                  if (isActive) {
+                    dispatch({ type: "menu/closeMenu" });
+                  }
+                }}
                 className={styles.header__log__div}
               ></div>
               {displayLogMenu === true && (
@@ -152,7 +162,12 @@ const Content = () => {
           <>
             <div className={styles.header__log}>
               <div
-                onClick={() => setDisplayLogMenu(!displayLogMenu)}
+                onClick={() => {
+                  setDisplayLogMenu(!displayLogMenu);
+                  if (isActive) {
+                    dispatch({ type: "menu/closeMenu" });
+                  }
+                }}
                 className={styles.header__log__div}
               ></div>
               {displayLogMenu === true && (
@@ -211,7 +226,6 @@ const Content = () => {
     }
   }
 
-  const router = useRouter();
   const [isClick, setIsClick] = useState<boolean>(false);
   const {
     displayFormLogin,
@@ -242,6 +256,8 @@ const Content = () => {
     displayModalDeleteFirstMeeting,
     displayModalEditFormule,
     displayModalCancelFormule,
+    displayModalOtherMeeting,
+    displayModalAddMeetingAdmin,
   } = useSelector((state: RootState) => state.form);
 
   const { flashMessage } = useSelector((state: RootState) => state.flash);
@@ -249,6 +265,45 @@ const Content = () => {
     dispatch({
       type: "form/toggleLogin",
     });
+  };
+
+  const classNameLine = () => {
+    if (
+      displayFormLogin === true ||
+      displayFormRegister === true ||
+      displaySendCode === true ||
+      displayFormCheck === true ||
+      displayFormForgot === true ||
+      displayModalEditFirstnameUserData === true ||
+      displayModalEditLastnameUserData === true ||
+      displayModalEditPasswordData === true ||
+      displayModalEditEmailSendData === true ||
+      displayModalEditEmailData === true ||
+      displayModalEditValidEmailData === true ||
+      displayModalEditPhoneData === true ||
+      displayModalEditPhoneSendData === true ||
+      displayModalEditValidPhoneData === true ||
+      displayModalTwoFactor === true ||
+      displayModalTwoFactorDisable === true ||
+      displayModalCancelMeeting === true ||
+      displayModalDeleteMeeting === true ||
+      displayModalMeeting === true ||
+      displayModalDeleteAccount === true ||
+      displayModalCloseEmail === true ||
+      displayModalClosePhone === true ||
+      displayModalEditBirthUserData === true ||
+      displayModalEditGenderUserData === true ||
+      displayModalFirstMeeting === true ||
+      displayModalDeleteFirstMeeting === true ||
+      displayModalEditFormule === true ||
+      displayModalCancelFormule === true ||
+      displayModalOtherMeeting === true ||
+      displayModalAddMeetingAdmin === true
+    ) {
+      return `${styles.line__hide}`;
+    } else {
+      return `${styles.line__show}`;
+    }
   };
 
   useEffect(() => {
@@ -288,19 +343,23 @@ const Content = () => {
           displayModalFirstMeeting === true ||
           displayModalDeleteFirstMeeting === true ||
           displayModalEditFormule === true ||
-          displayModalCancelFormule === true
+          displayModalCancelFormule === true ||
+          displayModalOtherMeeting === true ||
+          displayModalAddMeetingAdmin === true
         ) {
-          header.style.opacity = "0.01";
-          mainDiv.style.opacity = "0.01";
-          footerDiv.style.opacity = "0.01";
+          header.style.opacity = "0.02";
+          mainDiv.style.opacity = "0.02";
+          footerDiv.style.opacity = "0.02";
           htlmElement.style.height = "100%";
           htlmbody.style.height = "100%";
+          htlmbody.style.overflowY = "hidden";
         } else {
           mainDiv.style.opacity = "1";
           header.style.opacity = "1";
           footerDiv.style.opacity = "1";
-          htlmElement.style.height = "unset";
-          htlmbody.style.height = "unset";
+          htlmElement.style.height = "100%";
+          htlmbody.style.height = "100%";
+          htlmbody.style.overflowY = "unset";
         }
       }
     }
@@ -333,11 +392,10 @@ const Content = () => {
     displayModalDeleteFirstMeeting,
     displayModalEditFormule,
     displayModalCancelFormule,
+    displayModalOtherMeeting,
+    displayModalAddMeetingAdmin,
   ]);
 
-  const updateUseState = () => {
-    setIsClick(!isClick);
-  };
   if (typeof window !== "undefined") {
     window.addEventListener("resize", () => {
       if (window.innerWidth < 1201) {
@@ -379,7 +437,9 @@ const Content = () => {
       displayModalFirstMeeting ||
       displayModalDeleteFirstMeeting ||
       displayModalEditFormule ||
-      displayModalCancelFormule
+      displayModalCancelFormule ||
+      displayModalOtherMeeting ||
+      displayModalAddMeetingAdmin
     ) {
       /* if (displayLogMenu === true) {
         if (flashMessage && flashMessage[1].length > 0) {
@@ -405,7 +465,6 @@ const Content = () => {
     }
   };
   const displayFlash = () => {
-    console.log(flashMessage);
     if (flashMessage && flashMessage[1].length > 0) {
       if (
         displayFormLogin === true ||
@@ -517,7 +576,7 @@ const Content = () => {
       return null;
     }
   };
-  useEffect(() => {
+  /*  useEffect(() => {
     if (document) {
       let body = document.querySelector("body");
       if (body) {
@@ -526,7 +585,7 @@ const Content = () => {
             body.style.overflow = "hidden";
             body.style.height = "100vh";
           } else {
-            body.style.overflow = "unset";
+            body.style.overflow = "hidden";
             body.style.height = "unset";
           }
         } else {
@@ -535,7 +594,7 @@ const Content = () => {
         }
       }
     }
-  }, [isActive]);
+  }, [isActive]); */
   useEffect(() => {
     if (flashMessage && flashMessage[1].length > 0) {
       let timer = setTimeout(() => {
@@ -557,13 +616,9 @@ const Content = () => {
       {displayFormForgot === true && <Forgot />}
       {displayModalEditFirstnameUserData === true && <ModalUserFirstnameData />}
       {displayModalEditLastnameUserData === true && <ModalUserLastnameData />}
-      {displayModalEditBirthUserData === true && <ModalUserBirthData />}
-      {displayModalEditGenderUserData === true && <ModalUserGenderData />}
       {displayModalEditPasswordData && <ModalUserPasswordData />}
       {displayModalEditEmailSendData && <ModalUserSendToken />}
       {displayModalEditEmailData === true && <EmailCheck />}
-      {displayModalEditPhoneSendData === true && <ModalPhoneSendTokenData />}
-      {displayModalEditPhoneData === true && <PhoneCheck />}
       {displayModalTwoFactor === true && <ModalTwoFactor />}
       {displayModalTwoFactorDisable === true && <ModalTwoFactorDisable />}
       {displayModalCancelMeeting === true && <ModalCancel />}
@@ -572,10 +627,11 @@ const Content = () => {
       {displayModalFirstMeeting === true && <ModalAddFirstMeeting />}
       {displayModalDeleteAccount === true && <ModalDeleteAccount />}
       {displayModalCloseEmail === true && <ModalCloseEmail />}
-      {displayModalClosePhone === true && <ModalClosePhone />}
       {displayModalDeleteFirstMeeting === true && <ModalDeleteFirstMeeting />}
       {displayModalEditFormule === true && <ModalEditFormuleUser />}
       {displayModalCancelFormule === true && <ModalCancelFormuleUser />}
+      {displayModalOtherMeeting === true && <ModalAddOtherMeeting />}
+      {displayModalAddMeetingAdmin === true && <ModalAddMeetingAdmin />}
 
       {displayFlash()}
 
@@ -847,15 +903,7 @@ const Content = () => {
         </div>
         <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>
       </header>
-      <div
-        style={{
-          position: "fixed",
-          height: "1px",
-          zIndex: "1",
-          width: "100%",
-          boxShadow: "aqua 0px 20px 90px 10px",
-        }}
-      ></div>
+      <div className={classNameLine()}></div>
     </>
   );
 };

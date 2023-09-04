@@ -3,7 +3,7 @@ import { NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 
 export default withIronSessionApiRoute(
-  async function getuser(req: any, res: NextApiResponse) {
+  async function getAllByUser(req: any, res: NextApiResponse) {
     if (req.method === "GET") {
       if (req.session.user) {
         let userOne = await prisma.user.findUnique({

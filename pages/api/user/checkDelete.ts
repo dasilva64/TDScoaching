@@ -17,21 +17,11 @@ export default withIronSessionApiRoute(
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
           });
         } else {
-          console.log(user.editEmail);
           if (user.editEmail !== null) {
-            console.log(user.editEmail);
             let removeEditEmail = await prisma.user.update({
               where: { mail: user.mail },
               data: {
                 editEmail: Prisma.JsonNull,
-              },
-            });
-          }
-          if (user.editPhone !== null) {
-            let removeEditPhone = await prisma.user.update({
-              where: { mail: user.mail },
-              data: {
-                editPhone: Prisma.JsonNull,
               },
             });
           }

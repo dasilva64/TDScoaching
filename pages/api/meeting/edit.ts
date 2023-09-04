@@ -3,7 +3,7 @@ import { NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 
 export default withIronSessionApiRoute(
-  async function getuser(req: any, res: NextApiResponse) {
+  async function edit(req: any, res: NextApiResponse) {
     if (req.method === "POST") {
       if (req.session.user) {
         const { description } = await req.body;

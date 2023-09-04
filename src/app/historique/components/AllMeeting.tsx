@@ -1,6 +1,5 @@
 "use client";
 
-import useAllByUser from "@/app/components/hook/meeting/useAllByUser";
 import { RootState } from "@/app/redux/store";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,9 +8,10 @@ import NbShow from "./dataTable/nbShow/NbShow";
 import Paging from "./dataTable/paging/Paging";
 import styles from "./AllMeeting.module.scss";
 import Search from "./dataTable/search/Search";
+import useGet from "@/app/components/hook/useGet";
 
 const AllMeeting = () => {
-  const { data, isLoading, isError } = useAllByUser();
+  const { data, isLoading, isError } = useGet("/api/meeting/getAllByUser");
   const dispatch = useDispatch();
   const { datas } = useSelector((state: RootState) => state.ArrayHistorique);
   let content;

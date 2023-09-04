@@ -5,12 +5,12 @@ import { AppDispatch } from "../../../../redux/store";
 import useSWRMutation from "swr/mutation";
 import { TextField } from "@mui/material";
 import validator from "validator";
-import useUserGet from "@/app/components/hook/user/useUserGet";
-import fetchPost from "@/app/components/fetch/user/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
+import useGet from "@/app/components/hook/useGet";
 
 const ModalUserSendToken = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
-  const { userData } = useUserGet();
+  const { data: userData } = useGet("/api/user/getUserProfile");
   const dispatch = useDispatch<AppDispatch>();
   const [emailInput, setEmailInput] = useState<string>(userData?.body.email);
   const [validEmailInput, setValidEmailInput] = useState<boolean>(false);
@@ -104,6 +104,7 @@ const ModalUserSendToken = () => {
   };
   return (
     <>
+      <div className={styles.bg}></div>
       <div className={styles.modalEditEmailData}>
         <button
           className={styles.modalEditEmailData__btn}

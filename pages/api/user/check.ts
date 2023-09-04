@@ -14,6 +14,7 @@ export default withIronSessionApiRoute(
             status: 400,
             body: null,
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+            test: new Date().getTimezoneOffset(),
           });
         } else {
           return res.status(200).json({
@@ -21,6 +22,7 @@ export default withIronSessionApiRoute(
             body: {
               id: user.id,
               role: user.role,
+              test: new Date().getTimezoneOffset(),
             },
           });
         }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from './footer.module.scss'
+import styles from "./footer.module.scss";
 import GoTop from "../goTop/goTop";
 
 const Footer = () => {
@@ -20,22 +20,31 @@ const Footer = () => {
               </Link>
             </li>
             <li className={styles.footer__li}>
-              <Link className={styles.footer__a} href="/coaching-de-vie">
+              <Link className={styles.footer__a} href="/">
                 Coaching de vie
               </Link>
               <ul className={styles.footer__ul}>
                 <li className={styles.footer__li}>
-                  <Link className={styles.footer__a} href="/famille">
+                  <Link
+                    className={styles.footer__a}
+                    href="/coaching-de-vie/vie-familiale"
+                  >
                     Vie familiale
                   </Link>
                 </li>
                 <li className={styles.footer__li}>
-                  <Link className={styles.footer__a} href="/couple">
+                  <Link
+                    className={styles.footer__a}
+                    href="/coaching-de-vie/vie-de-couple"
+                  >
                     Vie de couple
                   </Link>
                 </li>
                 <li className={styles.footer__li}>
-                  <Link className={styles.footer__a} href="/pro">
+                  <Link
+                    className={styles.footer__a}
+                    href="/coaching-de-vie/vie-professionnelle"
+                  >
                     Vie professionnelle
                   </Link>
                 </li>
@@ -56,7 +65,10 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li className={styles.footer__li}>
-                  <Link className={styles.footer__a} href="/code-de-d%C3%A9ontologie">
+                  <Link
+                    className={styles.footer__a}
+                    href="/code-de-deontologie"
+                  >
                     Code de déontologie
                   </Link>
                 </li>
@@ -68,7 +80,7 @@ const Footer = () => {
               </Link>
             </li>
             <li className={styles.footer__li}>
-              <Link className={styles.footer__a} href="/politique">
+              <Link className={styles.footer__a} href="/">
                 Politique de confidentialité
               </Link>
             </li>
@@ -76,7 +88,9 @@ const Footer = () => {
         </div>
         <div>
           <h2 className={styles.footer__h2}>Nous retrouver</h2>
-          <ul className={`${styles.footer__ul} ${styles.footer__ul__lineHeight}`}>
+          <ul
+            className={`${styles.footer__ul} ${styles.footer__ul__lineHeight}`}
+          >
             <li className={styles.footer__li}>
               Mail :{" "}
               <Link
@@ -93,9 +107,12 @@ const Footer = () => {
                 07 81 67 31 25
               </Link>
             </li>
-            <li className={styles.footer__li}>Horaire : 8h - 20h du lundi au vendredi</li>
             <li className={styles.footer__li}>
-              <strong className={styles.footer__strong}>Bordeaux</strong>, <strong className={styles.footer__strong}>Chambery</strong>,{" "}
+              Horaire : 8h - 20h du lundi au vendredi
+            </li>
+            <li className={styles.footer__li}>
+              <strong className={styles.footer__strong}>Bordeaux</strong>,{" "}
+              <strong className={styles.footer__strong}>Chambery</strong>,{" "}
               <strong className={styles.footer__strong}>Lyon</strong>
             </li>
           </ul>

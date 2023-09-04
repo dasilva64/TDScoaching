@@ -51,7 +51,7 @@ export default withIronSessionApiRoute(
       return res.status(200).json({
         status: 200,
         message: "arrayMessageError",
-      });
+      }); /* 
       if (req.session.user) {
         let { start, typeCoaching, timeZone } = req.body;
         let arrayMessageError = validationBody(req.body);
@@ -186,7 +186,7 @@ export default withIronSessionApiRoute(
           status: 401,
           message: "Vous n'êtes pas connecté",
         });
-      }
+      } */
     } else {
       return res.status(404).json({
         status: 404,

@@ -2,12 +2,13 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import prisma from "../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 import { validationBody } from "../../../lib/validation";
+import { time } from "console";
 
 export default withIronSessionApiRoute(
   async function addFirst(req, res) {
     if (req.method === "POST") {
       if (req.session.user) {
-        let { start, typeCoaching } = req.body;
+        let { start, typeCoaching, timeZone } = req.body;
         let arrayMessageError = validationBody(req.body);
         if (arrayMessageError.length > 0) {
           return res.status(400).json({
@@ -30,9 +31,30 @@ export default withIronSessionApiRoute(
               message: "Vous avez déjà un rendez-vous de pris",
             });
           } else {
-            let dateStart = new Date(start);
+            console.log(timeZone);
+            let split = start.split(" ");
+            let splitDate = split[0].split("/");
+            let splitHour = split[1].split(":");
+            let dateStart = new Date(
+              Date.UTC(
+                splitDate[2],
+                splitDate[1] - 1,
+                splitDate[0],
+                Number(splitHour[0]) + Number(timeZone),
+                splitHour[1],
+                0,
+                0
+              )
+            );
             let isoDateStart = dateStart.toISOString();
-
+            /* return res.status(200).json({
+              status: 200,
+              message: "Rendez-vous pris avec succès",
+              start: start,
+              new: dateStart,
+              iso: isoDateStart,
+              timeZone: timeZone,
+            }); */
             const meeting = await prisma.meeting.findFirst({
               where: {
                 startAt: isoDateStart,
@@ -102,6 +124,7 @@ export default withIronSessionApiRoute(
                     new: dateStart,
                     iso: isoDateStart,
                     after: createMeeting.startAt,
+                    timeZone: timeZone,
                   });
                 }
               }

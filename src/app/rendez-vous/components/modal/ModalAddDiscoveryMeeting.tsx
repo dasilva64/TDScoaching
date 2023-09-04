@@ -82,13 +82,11 @@ const ModalAddFirstMeeting = () => {
   }, [data]);
   const handlerClick = () => {
     const fetchAddMeeting = async () => {
-      console.log(
-        "date dans la db",
-        new Date(dataModalFirstMeeting).toLocaleString("en-US")
-      );
+      console.log("date dans la db", dataModalFirstMeeting);
       trigger({
-        start: new Date(dataModalFirstMeeting).toLocaleString("en-US"),
+        start: new Date(dataModalFirstMeeting).toLocaleString("fr-FR"),
         typeCoaching: typeCoachingInput,
+        timeZone: new Date().getTimezoneOffset() / 60,
       });
     };
     fetchAddMeeting();

@@ -11,6 +11,7 @@ export default async function sendTokenEditPhone(req: any, res: any) {
       data: {
         startAt: new Date(2023, 7, 22 + i, 15, 0, 0),
         status: true,
+        typeMeeting: { type: "test" },
         userId: user[i].id,
       },
     });

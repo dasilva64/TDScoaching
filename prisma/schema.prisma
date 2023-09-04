@@ -11,13 +11,14 @@ datasource db {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Meeting {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  startAt   DateTime @db.Timestamp(6)
-  status    Boolean
-  userId    String   @db.Uuid
-  limitDate String?  @db.VarChar
-  paymentId String?  @unique
-  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  startAt     DateTime @db.Timestamp(6)
+  status      Boolean
+  userId      String   @db.Uuid
+  limitDate   String?  @db.VarChar
+  paymentId   String?  @unique
+  typeMeeting Json     @db.Json
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.

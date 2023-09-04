@@ -7,51 +7,6 @@ import nodemailer from "nodemailer";
 export default withIronSessionApiRoute(
   async function addFirst(req, res) {
     if (req.method === "POST") {
-      let smtpTransport = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-          user: process.env.SECRET_SMTP_EMAIL,
-          pass: process.env.SECRET_SMTP_PASSWORD,
-        },
-      });
-      let mailOptions = {
-        from: process.env.SECRET_SMTP_EMAIL,
-        to: process.env.SECRET_SMTP_EMAIL,
-        subject: "Validation de votre compte",
-        html: `<!DOCTYPE html>
-                <html lang="fr">
-                  <head>
-                    <title>tds coaching</title>
-                    <meta charset="UTF-8" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-                    <title>Document</title>
-                  </head>
-                  <body>
-                    
-                    <div style="width: 100%; height: 600px">
-                      <div style="text-align: center">
-                        <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
-                      </div>
-                      <div style="text-align: center; background: aqua; padding: 50px 0px">
-                        <h1 style="text-align: center">tds coaching</h1>
-                        <div style="text-align: center">
-                        <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendarcheck.png&w=750&q=75"
-                        </div>
-                        <h2 style="text-align: center">Rendez-vous confirmé</h2>
-                        <p style="text-align: center">Cliquer sur le lien pour valider votre compte</p>
-                        <p style="text-align: center">Ce lien est valide pendant 1 jour</p>
-                        <p style="text-align: center">Votre compte sera supprimé si vous ne valider pas votre comtpe</p>
-                      </div>
-                    </div>
-                  </body>
-                </html>`,
-      };
-      smtpTransport.sendMail(mailOptions);
-      return res.status(200).json({
-        status: 200,
-        message: "arrayMessageError",
-      }); /* 
       if (req.session.user) {
         let { start, typeCoaching, timeZone } = req.body;
         let arrayMessageError = validationBody(req.body);
@@ -102,12 +57,17 @@ export default withIronSessionApiRoute(
                 message: "Ce rendez-vous est déjà pris, veuillez réessayer",
               });
             } else {
+              let copyTypeMeeting: any = user.typeMeeting;
               const createMeetingObject: any = {
                 startAt: isoDateStart,
                 status: true,
                 userId: req.session.user.id,
                 limitDate: null,
                 paymentId: null,
+                typeMeeting: {
+                  ...copyTypeMeeting,
+                  coaching: typeCoaching,
+                },
               };
               const createMeeting = await prisma.meeting.create({
                 data: createMeetingObject,
@@ -119,7 +79,6 @@ export default withIronSessionApiRoute(
                     "Une erreur est survenue lors de la création du rendez-vous, veuillez réessayer",
                 });
               } else {
-                let copyTypeMeeting: any = user.typeMeeting;
                 const userEdit = await prisma.user.update({
                   where: {
                     id: user.id,
@@ -151,7 +110,45 @@ export default withIronSessionApiRoute(
                     from: process.env.SECRET_SMTP_EMAIL,
                     to: process.env.SECRET_SMTP_EMAIL,
                     subject: "Validation de votre compte",
-                    html: `<div style={{background: "yellow"}}><h1>tds coaching</h1><p>Cliquer sur le lien pour valider votre compte</p><p>Ce lien est valide pendant 1 jour</p><p>Votre compte sera supprimé si vous ne valider pas votre comtpe</p><a href='http://localhost:3000/email-validation/${token}'>Cliquer ici</a></div>`,
+                    html: `<!DOCTYPE html>
+                            <html lang="fr">
+                              <head>
+                                <title>tds coaching</title>
+                                <meta charset="UTF-8" />
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                                <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                                <title>Document</title>
+                              </head>
+                              <body>
+                                
+                                <div style="width: 100%; height: 600px">
+                                  <div style="text-align: center">
+                                    <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                                  </div>
+                                  <div style="text-align: center; background: aqua; padding: 50px 0px">
+                                    <h1 style="text-align: center">tds coaching</h1>
+                                    <div style="text-align: center">
+                                      <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendarcheck.png&w=750&q=75" width="80px" height="80px" />
+                                    </div>
+                                    <h2 style="text-align: center">Rendez-vous confirmé</h2>
+                                    <div style="width: 280px; margin: 0px auto 30px auto">
+                                        <p style="display: flex"><img style="margin-right: 5px" src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendar.png&w=750&q=75" width="20px" height="20px" />${createMeeting.startAt.toLocaleDateString(
+                                          "fr-FR",
+                                          {
+                                            weekday: "long",
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric",
+                                          }
+                                        )}<img style="margin: 0px 5px 0px 30px" src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Ftime.png&w=750&q=75" width="20px" height="20px" />${createMeeting.startAt.getHours()}h00</p>
+                                    </div>
+                                    <p>Type de rendez-vous : Découverte</p>
+                                    <p style="margin: 0px 0px 0px 30px">Type de coaching : ${typeCoaching}</p>
+                                    <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white; margin-top: 50px" href="https://testtds2.vercel.app/rendez-vous" target="_blank">Voir le rendez-vous</a>
+                                  </div>
+                                </div>
+                              </body>
+                            </html>`,
                   };
                   smtpTransport.sendMail(mailOptions);
                   const allMeeting = await prisma.meeting.findMany({
@@ -186,7 +183,7 @@ export default withIronSessionApiRoute(
           status: 401,
           message: "Vous n'êtes pas connecté",
         });
-      } */
+      }
     } else {
       return res.status(404).json({
         status: 404,

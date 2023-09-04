@@ -1,11 +1,60 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
-import { Prisma } from "@prisma/client";
+import nodemailer from "nodemailer";
 
 export default withIronSessionApiRoute(
   async function deleteMeeting(req: any, res: NextApiResponse) {
-    if (req.method === "GET") {
+    let smtpTransport = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.SECRET_SMTP_EMAIL,
+        pass: process.env.SECRET_SMTP_PASSWORD,
+      },
+    });
+    let mailOptions = {
+      from: process.env.SECRET_SMTP_EMAIL,
+      to: process.env.SECRET_SMTP_EMAIL,
+      subject: "Validation de votre compte",
+      html: `<!DOCTYPE html>
+              <html lang="fr">
+                <head>
+                  <title>tds coaching</title>
+                  <meta charset="UTF-8" />
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                  <title>Document</title>
+                </head>
+                <body>
+                  
+                  <div style="width: 100%; height: 600px">
+                    <div style="text-align: center">
+                      <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                    </div>
+                    <div style="text-align: center; background: aqua; padding: 50px 0px">
+                      <h1 style="text-align: center">tds coaching</h1>
+                      <div style="text-align: center">
+                        <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendarcancel.png&w=750&q=75" width="80px" height="80px" />
+                      </div>
+                      <h2 style="text-align: center">Rendez-vous annulé</h2>
+                      <div style="width: 280px; margin: 0px auto 30px auto">
+                          <p style="display: flex"><img style="margin-right: 5px" src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendar.png&w=750&q=75" width="20px" height="20px" />Jeudi 21 septembre<img style="margin: 0px 5px 0px 30px" src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Ftime.png&w=750&q=75" width="20px" height="20px" />09h00</p>
+                      </div>
+                      <p>Type de rendez-vous : Découverte</p>
+                      <p style="margin: 0px 0px 0px 30px">Type de coaching : test</p>
+                      <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white; margin-top: 50px" href="https://testtds2.vercel.app/rendez-vous" target="_blank">Prendre un rendez-vous</a>
+                    </div>
+                  </div>
+                </body>
+              </html>`,
+    };
+    smtpTransport.sendMail(mailOptions);
+    return res.status(200).json({
+      status: 200,
+      body: "ok",
+      message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+    });
+    /* if (req.method === "GET") {
       if (req.session.user) {
         const user = await prisma.user.findUnique({
           where: { id: req.session.user.id },
@@ -89,7 +138,7 @@ export default withIronSessionApiRoute(
         status: 404,
         message: "Une erreur est survenue, veuillez réessayer",
       });
-    }
+    } */
   },
   {
     password:

@@ -20,7 +20,7 @@ const Page = () => {
         Veuillez activer JavaScript pour profiter pleinement de notre site.
       </noscript>
       <main className={styles.meet}>
-        <h1 className={styles.meet__h1}>Prendre rendez-vous</h1>
+        <h1 className={styles.meet__h1}>Rendez-vous</h1>
         <div className={styles.meet__container}>
           <Display />
         </div>

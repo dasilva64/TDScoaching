@@ -32,32 +32,94 @@ const DisplayDiscoveryMeeting = ({ meetings, meeting, discovery }: any) => {
               : styles.myFirstMeeting__meeting__fullwidth
           }`}
         >
-          <h3 className={styles.myFirstMeeting__meeting__h3}>
-            Voici votre prochain rendez-vous :{" "}
-          </h3>
-          <p className={styles.myFirstMeeting__meeting__p}>
-            Votre prochain rendez vous est le{" "}
-            {new Date(meeting.startAt).toLocaleString("fr-FR")}
-          </p>
-          <div className={styles.myFirstMeeting__meeting__div}>
-            <button
-              className={styles.myFirstMeeting__meeting__div__btn}
-              onClick={() => {
-                setDisplayEdit(true);
-              }}
+          <div className={styles.myFirstMeeting__meeting__détail}>
+            <h3 className={styles.myFirstMeeting__meeting__détail__h3}>
+              Voici votre prochain rendez-vous :{" "}
+            </h3>
+            <p className={styles.myFirstMeeting__meeting__détail__p}>
+              <strong>Date</strong> :{" "}
+              {new Date(meeting.startAt).toLocaleDateString("fr-FR", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            <p className={styles.myFirstMeeting__meeting__détail__p}>
+              <strong>Heure</strong> :{" "}
+              {new Date(meeting.startAt).toLocaleTimeString("fr-FR")}
+            </p>
+            <p className={styles.myFirstMeeting__meeting__détail__p}>
+              <strong>Type de rendez-vous</strong> : {meeting.typeMeeting.type}
+            </p>
+            <p className={styles.myFirstMeeting__meeting__détail__p}>
+              <strong>Type de coaching</strong> : {meeting.typeMeeting.coaching}
+            </p>
+            <div
+              className={`${styles.myFirstMeeting__meeting__détail__div} ${
+                displayEdit === true
+                  ? styles.myFirstMeeting__meeting__détail__div__block
+                  : styles.myFirstMeeting__meeting__détail__div__flex
+              }`}
             >
-              Modifier votre rendez-vous
-            </button>
-            <button
-              className={styles.myFirstMeeting__meeting__div__btn}
-              onClick={() => {
-                dispatch({
-                  type: "form/openModalDeleteFirstMeeting",
-                });
-              }}
-            >
-              Supprimer votre rendez-vous découverte
-            </button>
+              {displayEdit === true && (
+                <button
+                  className={`${styles.myFirstMeeting__meeting__détail__div__btn} ${styles.myFirstMeeting__meeting__détail__div__btn__edit}`}
+                  onClick={() => {
+                    setDisplayEdit(false);
+                  }}
+                >
+                  Fermer le calendrier
+                </button>
+              )}
+              {displayEdit === false && (
+                <button
+                  className={`${styles.myFirstMeeting__meeting__détail__div__btn} ${styles.myFirstMeeting__meeting__détail__div__btn__edit}`}
+                  onClick={() => {
+                    setDisplayEdit(true);
+                  }}
+                >
+                  Modifier votre rendez-vous
+                </button>
+              )}
+
+              <button
+                className={`${styles.myFirstMeeting__meeting__détail__div__btn} ${styles.myFirstMeeting__meeting__détail__div__btn__delete}`}
+                onClick={() => {
+                  dispatch({
+                    type: "form/openModalDeleteFirstMeeting",
+                  });
+                }}
+              >
+                Supprimer ce rendez-vous
+              </button>
+            </div>
+          </div>
+          <div className={styles.myFirstMeeting__meeting__détail}>
+            <h3 className={styles.myFirstMeeting__meeting__détail__h3}>
+              visioconférence :{" "}
+            </h3>
+            <p className={styles.myFirstMeeting__meeting__détail__p}>
+              Ce rendez-vous se fait par visioconférence. Vous recevrez un mail
+              avec le lien de connexion 24h avant le rendez-vous.
+            </p>
+            <p className={styles.myFirstMeeting__meeting__détail__p}>
+              Si vous rencontrer un problème avec le lien de connexion veuillez
+              me contacter par{" "}
+              <a
+                className={styles.myFirstMeeting__meeting__détail__a}
+                href="mailto:contact@tds-coachingdevie.fr"
+              >
+                email
+              </a>{" "}
+              ou par{" "}
+              <a
+                className={styles.myFirstMeeting__meeting__détail__a}
+                href="tel:+33781673125"
+              >
+                téléphone
+              </a>
+            </p>
           </div>
         </div>
       </>

@@ -40,13 +40,13 @@ const Content = () => {
   const pathname = usePathname();
   const [scroll, setScroll] = useState<boolean>(false);
 
-  useEffect(() => {
+  /* useEffect(() => {
     const fetchCheckUser = async () => {
       let response = await fetch("/api/user/checkDelete");
       let json = await response.json();
     };
     fetchCheckUser();
-  }, []);
+  }, []); */
   const { data, isLoading, isError } = useGet("/api/user/check");
   useEffect(() => {
     if (data) {

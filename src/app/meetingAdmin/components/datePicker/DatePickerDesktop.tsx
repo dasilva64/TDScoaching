@@ -55,25 +55,6 @@ const DatePickerDesktop = ({ events }: any) => {
     13: "20",
   };
 
-  /*   const { data, trigger } = useSWRMutation("/api/meeting/add", fetchPost);
-  useEffect(() => {
-    if (data) {
-      if (data.status === 200) {
-        mutate(
-          "/api/meeting/getAllAfterNow",
-          {
-            ...data,
-            body: [...data.body],
-          },
-          { revalidate: false }
-        );
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: data.message },
-        });
-      }
-    }
-  }, [data, dispatch]); */
 
   const { data: dataDelete, trigger: triggerDelete } = useSWRMutation(
     "/api/meeting/deleteMeeting",

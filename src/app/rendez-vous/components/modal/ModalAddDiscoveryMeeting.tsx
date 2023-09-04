@@ -29,11 +29,13 @@ const ModalAddFirstMeeting = () => {
   const { dataModalFirstMeeting } = useSelector(
     (state: RootState) => state.form
   );
+  console.log("date avant la db", dataModalFirstMeeting);
   const closeForm = () => {
     dispatch({
       type: "form/closeModalFirstMeeting",
     });
   };
+  console.log("data depuis la db", data);
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
@@ -80,6 +82,10 @@ const ModalAddFirstMeeting = () => {
   }, [data]);
   const handlerClick = () => {
     const fetchAddMeeting = async () => {
+      console.log(
+        "date dans la db",
+        new Date(dataModalFirstMeeting).toLocaleString("en-US")
+      );
       trigger({
         start: new Date(dataModalFirstMeeting).toLocaleString("en-US"),
         typeCoaching: typeCoachingInput,

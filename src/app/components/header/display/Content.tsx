@@ -48,7 +48,6 @@ const Content = () => {
     fetchCheckUser();
   }, []);
   const { data, isLoading, isError } = useGet("/api/user/check");
-  console.log(data);
   useEffect(() => {
     if (data) {
       if (data.body !== null) {

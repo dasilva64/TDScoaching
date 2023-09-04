@@ -22,7 +22,6 @@ export default withIronSessionApiRoute(
             body: {
               id: user.id,
               role: user.role,
-              test: new Date().getTimezoneOffset(),
             },
           });
         }

@@ -35,11 +35,11 @@ export default withIronSessionApiRoute(
                           <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                             <h1 style="text-align: center">tds coaching</h1>
                             <div style="text-align: center">
-                              <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendarcheck.png&w=750&q=75" width="80px" height="80px" />
+                              <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Ftrash.svg&w=750&q=75" width="80px" height="80px" />
                             </div>
                             <h2 style="text-align: center">Suppression de votre compte</h2>
                             <p style="margin: 0px 40px 40px">Vous avez fait une demande de suppression de compte. En supprimant votre compte vous n'aurai plus accès au rendez-vous passée. Toutes les données qui sont enregistré vous concernant seront supprimé (email, prénom, nom de famille)</p>
-                            <p>Attention vous ne pourrez plus revenir en arrière après cette action.</p>
+                            <p><img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Ftriangle.svg&w=750&q=75" width="20px" height="20px" />Attention vous ne pourrez plus revenir en arrière après cette action.</p>
                             <p style="margin: 0px 0px 40px 0px">Pour supprimer votre compte veuillez cliquer sur le bouton ci-dessous.</p>
                             <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white; margin-top: 50px" href="http://localhost:3000/suppression-compte/${"token"}" target="_blank">Supprimer votre compte</a>
                           </div>

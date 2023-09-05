@@ -40,7 +40,31 @@ export default withIronSessionApiRoute(
               from: process.env.SECRET_SMTP_EMAIL,
               to: process.env.SECRET_SMTP_EMAIL,
               subject: "Validation de votre nouvelle adresse email",
-              html: `<div><h1>tds coaching</h1><p>Cliquer sur le lien pour valider votre adresse email</p><p>Ce lien est valable 1 jours</p><p>Votre code de vérification est ${random}</p></div>`,
+              html: `<!DOCTYPE html>
+              <html lang="fr">
+                <head>
+                  <title>tds coaching</title>
+                  <meta charset="UTF-8" />
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                  <title>Document</title>
+                </head>
+                <body>
+                  
+                  <div style="width: 100%">
+                    <div style="text-align: center">
+                      <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                    </div>
+                    <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
+                      <h1 style="text-align: center">tds coaching</h1>
+                      <h2 style="text-align: center">Validation de votre nouvelle addresse email</h2>
+                      <p style="margin-bottom: 20px">Pour activé votre nouvelle addresse email, veuillez entrer le code ci-dessous.</p>
+                      <p style="width: 100px; margin: auto; padding: 20px; background: white; border-radius: 10px">${random}</p>
+                      <p style="margin-top: 20px">Ce code est valide pendant 48h, au dela de ce temps il ne sera plus disponible</p>
+                    </div>
+                  </div>
+                </body>
+              </html>`,
             };
             smtpTransport.sendMail(mailOptions);
             return res.json({

@@ -71,7 +71,7 @@ export const validationBody = (body: any) => {
       if (validator.isEmpty(value)) {
         arrayMessageError.push(["start", "Date : ne peut pas être vide"]);
       } else {
-        if (!moment(value).isValid()) {
+        if (!moment(new Date(value).toISOString()).isValid()) {
           arrayMessageError.push(["start", "Date : doit être une date valide"]);
         }
       }

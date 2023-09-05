@@ -80,8 +80,9 @@ const ModalAddFirstMeeting = () => {
   }, [data]);
   const handlerClick = () => {
     const fetchAddMeeting = async () => {
+      console.log(new Date(dataModalFirstMeeting).toISOString());
       trigger({
-        start: new Date(dataModalFirstMeeting).toLocaleString("fr-FR"),
+        start: new Date(dataModalFirstMeeting).toISOString(),
         typeCoaching: typeCoachingInput,
         timeZone: new Date().getTimezoneOffset() / 60,
       });

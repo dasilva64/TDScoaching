@@ -31,7 +31,23 @@ export default withIronSessionApiRoute(
               message: "Vous avez déjà un rendez-vous de pris",
             });
           } else {
-            let split = start.split(" ");
+            let split = start.split("T");
+            let splitDate = split[0].split("-");
+            let splitHour = split[1].split(":");
+            let dateStart = new Date(
+              Date.UTC(
+                splitDate[0],
+                splitDate[1] - 1,
+                splitDate[2],
+                Number(splitHour[0]) + Number(timeZone),
+                splitHour[1],
+                0,
+                0
+              )
+            );
+            let isoDateStart = dateStart.toISOString();
+
+            /* let split = start.split(" ");
             let splitDate = split[0].split("/");
             let splitHour = split[1].split(":");
             let dateStart = new Date(
@@ -45,10 +61,10 @@ export default withIronSessionApiRoute(
                 0
               )
             );
-            let isoDateStart = dateStart.toISOString();
+            let isoDateStart = dateStart.toISOString(); */
             const meeting = await prisma.meeting.findFirst({
               where: {
-                startAt: isoDateStart,
+                startAt: start,
               },
             });
             if (meeting) {
@@ -59,7 +75,7 @@ export default withIronSessionApiRoute(
             } else {
               let copyTypeMeeting: any = user.typeMeeting;
               const createMeetingObject: any = {
-                startAt: isoDateStart,
+                startAt: start,
                 status: true,
                 userId: req.session.user.id,
                 limitDate: null,

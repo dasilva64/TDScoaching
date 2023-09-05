@@ -163,30 +163,33 @@ const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
       for (let y = 0; y < newar.length; y++) {
         let arWeek = [];
         for (let i = 0; i < copyEvents.length; i++) {
-          let startDate = new Date(copyEvents[i]["startAt"]);
-          let eventDate = startDate.getDate();
-          let eventDay = startDate.getDay();
-          let eventMonth = startDate.getMonth();
-          let eventYear = startDate.getFullYear();
-          let eventHour = startDate.getUTCHours();
+          let frDate = new Date(copyEvents[i]["startAt"]).toLocaleString(
+            "fr-FR"
+          );
+          let split = frDate.split(" ");
+          let splitDate = split[0].split("/");
+          let splitHour = split[1].split(":");
+          let year = splitDate[2];
+          let month =
+            splitDate[1].charAt(0) === "0"
+              ? splitDate[1].slice(1)
+              : splitDate[1];
+          let date =
+            splitDate[0].charAt(0) === "0"
+              ? splitDate[0].slice(1)
+              : splitDate[0];
+          let hour =
+            splitHour[0].charAt(0) === "0"
+              ? splitHour[0].slice(1)
+              : splitHour[0];
 
           if (
-            eventYear.toString() === newar[y].getFullYear().toString() &&
-            (eventMonth + 1).toString() ===
-              (newar[y].getMonth() + 1).toString() &&
-            eventDate.toString() === newar[y].getDate().toString()
+            year.toString() === newar[y].getFullYear().toString() &&
+            month.toString() === (newar[y].getMonth() + 1).toString() &&
+            date.toString() === newar[y].getDate().toString()
           ) {
             let copyUser: any = { ...copyEvents[i].User };
-            arWeek.push([
-              eventYear,
-              eventMonth + 1,
-              eventDate,
-              eventDay,
-              eventHour,
-              copyUser.id,
-              copyUser.firstname,
-              copyUser.lastname,
-            ]);
+            arWeek.push([year, month, date, hour]);
           }
         }
         if (arWeek.length > 0) {
@@ -195,7 +198,6 @@ const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
               newar[y].getFullYear(),
               newar[y].getMonth() + 1,
               newar[y].getDate(),
-              newar[y].getDay(),
             ],
             [arWeek],
           ]);
@@ -206,7 +208,6 @@ const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
               newar[y].getFullYear(),
               newar[y].getMonth() + 1,
               newar[y].getDate(),
-              newar[y].getDay(),
             ],
           ]);
           arWeek = [];
@@ -332,13 +333,15 @@ const DatePickerDesktop = ({ events, discovery, typeMeeting }: any) => {
             className={styles.datePicker__head__previous}
           ></span>
           <Image
+            className={styles.datePicker__head__home}
             onClick={() => {
               goCurrent();
             }}
             src="/assets/icone/home.png"
             alt=""
-            width={"20"}
-            height={"20"}
+            sizes="100vw"
+            width={"0"}
+            height={"0"}
           />
           {arDateWeek && arDateWeek.length > 0 && (
             <div className={styles.datePicker__head__div}>

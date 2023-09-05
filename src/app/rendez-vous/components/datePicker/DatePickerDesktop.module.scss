@@ -16,6 +16,15 @@
         margin-left: 5px;
       }
     }
+    &__home {
+      width: 20px;
+      height: 20px;
+      transition: all 400ms;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
     &__previous {
       cursor: pointer;
       width: 0px;
@@ -23,6 +32,10 @@
       border-top: 7px solid transparent;
       border-bottom: 7px solid transparent;
       border-right: 10px solid black;
+      transition: all 400ms;
+      &:hover {
+        transform: scale(1.2);
+      }
     }
     &__next {
       cursor: pointer;
@@ -31,6 +44,10 @@
       border-top: 7px solid transparent;
       border-bottom: 7px solid transparent;
       border-left: 10px solid black;
+      transition: all 400ms;
+      &:hover {
+        transform: scale(1.2);
+      }
     }
   }
   &__table {

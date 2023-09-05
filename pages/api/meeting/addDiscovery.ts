@@ -109,7 +109,15 @@ export default withIronSessionApiRoute(
                   let mailOptions = {
                     from: process.env.SECRET_SMTP_EMAIL,
                     to: process.env.SECRET_SMTP_EMAIL,
-                    subject: "Validation de votre compte",
+                    subject: `RDV confirmé le ${createMeeting.startAt.toLocaleDateString(
+                      "fr-FR",
+                      {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )} à ${createMeeting.startAt.getHours()}h00`,
                     html: `<!DOCTYPE html>
                             <html lang="fr">
                               <head>
@@ -121,11 +129,11 @@ export default withIronSessionApiRoute(
                               </head>
                               <body>
                                 
-                                <div style="width: 100%; height: 600px">
+                                <div style="width: 100%">
                                   <div style="text-align: center">
                                     <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
                                   </div>
-                                  <div style="text-align: center; background: aqua; padding: 50px 0px">
+                                  <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                     <h1 style="text-align: center">tds coaching</h1>
                                     <div style="text-align: center">
                                       <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendarcheck.png&w=750&q=75" width="80px" height="80px" />
@@ -143,7 +151,7 @@ export default withIronSessionApiRoute(
                                         )}<img style="margin: 0px 5px 0px 30px" src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Ftime.png&w=750&q=75" width="20px" height="20px" />${createMeeting.startAt.getHours()}h00</p>
                                     </div>
                                     <p>Type de rendez-vous : Découverte</p>
-                                    <p style="margin: 0px 0px 0px 30px">Type de coaching : ${typeCoaching}</p>
+                                    <p style="margin: 0px 0px 40px 0px">Type de coaching : ${typeCoaching}</p>
                                     <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white; margin-top: 50px" href="https://testtds2.vercel.app/rendez-vous" target="_blank">Voir le rendez-vous</a>
                                   </div>
                                 </div>

@@ -10,8 +10,7 @@ import Image from "next/image";
 import EmailCheck from "@/app/profile/components/emailData/EmailData";
 import ModalUserSendToken from "@/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
 import ModalUserPasswordData from "@/app/profile/components/passwordData/modal/ModalUserPasswordData";
-import ModalTwoFactorDisable from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorDisable";
-import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorUser";
+import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactor";
 import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
 import Forgot from "../../forgot/Forgot";
 import FormLogin from "../../login/formLogin";
@@ -32,6 +31,7 @@ import ModalCancelFormuleUser from "@/app/rendez-vous/components/modal/ModalCanc
 import useGet from "../../hook/useGet";
 import ModalAddMeetingAdmin from "@/app/meetingAdmin/components/modal/ModalAddMeetingAdmin";
 import ModalEditMeeting from "@/app/rendez-vous/components/modal/ModalEditMeeting";
+import ModalTwoFactorCode from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorCode";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
@@ -247,7 +247,7 @@ const Content = () => {
     displayModalEditPhoneSendData,
     displayModalEditValidPhoneData,
     displayModalTwoFactor,
-    displayModalTwoFactorDisable,
+    displayModalTwoFactorCode,
     displayModalCancelMeeting,
     displayModalMeeting,
     displayModalFirstMeeting,
@@ -285,7 +285,7 @@ const Content = () => {
       displayModalEditPhoneSendData === true ||
       displayModalEditValidPhoneData === true ||
       displayModalTwoFactor === true ||
-      displayModalTwoFactorDisable === true ||
+      displayModalTwoFactorCode === true ||
       displayModalCancelMeeting === true ||
       displayModalDeleteMeeting === true ||
       displayModalMeeting === true ||
@@ -332,7 +332,7 @@ const Content = () => {
           displayModalEditPhoneSendData === true ||
           displayModalEditValidPhoneData === true ||
           displayModalTwoFactor === true ||
-          displayModalTwoFactorDisable === true ||
+          displayModalTwoFactorCode === true ||
           displayModalCancelMeeting === true ||
           displayModalDeleteMeeting === true ||
           displayModalMeeting === true ||
@@ -378,7 +378,6 @@ const Content = () => {
     displayModalEditPhoneSendData,
     displayModalEditValidPhoneData,
     displayModalTwoFactor,
-    displayModalTwoFactorDisable,
     displayModalCancelMeeting,
     displayModalDeleteMeeting,
     displayModalMeeting,
@@ -395,6 +394,7 @@ const Content = () => {
     displayModalCancelFormule,
     displayModalAddMeetingAdmin,
     displayModalEditMeeting,
+    displayModalTwoFactorCode,
   ]);
 
   if (typeof window !== "undefined") {
@@ -426,7 +426,7 @@ const Content = () => {
       displayModalEditPhoneSendData ||
       displayModalEditValidPhoneData ||
       displayModalTwoFactor ||
-      displayModalTwoFactorDisable ||
+      displayModalTwoFactorCode ||
       displayModalCancelMeeting ||
       displayModalDeleteMeeting ||
       displayModalMeeting ||
@@ -621,7 +621,7 @@ const Content = () => {
       {displayModalEditEmailSendData && <ModalUserSendToken />}
       {displayModalEditEmailData === true && <EmailCheck />}
       {displayModalTwoFactor === true && <ModalTwoFactor />}
-      {displayModalTwoFactorDisable === true && <ModalTwoFactorDisable />}
+      {displayModalTwoFactorCode === true && <ModalTwoFactorCode />}
       {displayModalCancelMeeting === true && <ModalCancel />}
       {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
       {displayModalMeeting === true && <ModalAddMeeting />}

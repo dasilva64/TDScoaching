@@ -72,7 +72,31 @@ export default async function forgotPassword(
             from: process.env.SECRET_SMTP_EMAIL,
             to: process.env.SECRET_SMTP_EMAIL,
             subject: "Réinitialisation du mot de passe",
-            html: `<div><h1>tds coaching</h1><p>Cliquer sur le lien pour réinitialiser votre mot de passe</p><p>Ce lien n'est disponible pendant 1 jour</p><a href='http://localhost:3000/reinitialisation-mot-de-passe/${token}'>Cliquer ici</a></div>`,
+            html: `<!DOCTYPE html>
+                    <html lang="fr">
+                      <head>
+                        <title>tds coaching</title>
+                        <meta charset="UTF-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                        <title>Document</title>
+                      </head>
+                      <body>
+        
+                        <div style="width: 100%">
+                          <div style="text-align: center">
+                            <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                          </div>
+                          <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
+                            <h1 style="text-align: center">tds coaching</h1>
+                            <h2 style="text-align: center">Réinitialisation de votre mot de passe</h2>
+                            <p style="margin-bottom: 20px">Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous.</p>
+                            <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="http://localhost:3000/reinitialisation-mot-de-passe/${token}" target="_blank">Vérifier mon compte</a>
+                            <p style="margin-top: 20px">Ce lien est valide pendant 48h, au dela de ce temps il ne sera plus disponible et votre compte sera supprimé</p>
+                          </div>
+                        </div>
+                      </body>
+                    </html>`,
           };
           smtpTransport.sendMail(mailOptions);
           res.status(200).json({

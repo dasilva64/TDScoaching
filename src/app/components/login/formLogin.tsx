@@ -19,6 +19,10 @@ const FormLogin = () => {
   const [errorMessagePassword, setErrorMessagePassword] = useState<string>("");
   const [reSendEmail, setReSendEmail] = useState<boolean>(false);
   const [otherEmail, setOtherEmail] = useState<string>("");
+  const [displayInput, setDisplayInput] = useState(false);
+  const [codeInput, setCodeInput] = useState<string>("");
+  const [validCodeInput, setValidCodeInput] = useState<boolean>(false);
+  const [errorMessageCode, setErrorMessageCode] = useState<string>("");
 
   const handlerInputRememberMe = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRememberMeInput(e.target.checked);
@@ -74,7 +78,33 @@ const FormLogin = () => {
           let json = await response.json();
           if (json) {
             if (json.status === 200) {
-              window.location.reload();
+              if (json.body === null) {
+                const sendCode = async () => {
+                  let responseTwo = await fetch("/api/user/sendTwoFactorCode", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      email: validator.escape(emailInput.trim()),
+                      password: validator.escape(passwordInput.trim()),
+                      pseudo: validator.escape(inputPseudo.trim()),
+                    }),
+                  });
+                  let jsonTwo = await responseTwo.json();
+                  if (jsonTwo.status === 200) {
+                    setDisplayInput(true);
+                  } else {
+                    dispatch({
+                      type: "flash/storeFlashMessage",
+                      payload: { type: "error", flashMessage: json.message },
+                    });
+                  }
+                };
+                sendCode();
+              } else {
+                window.location.reload();
+              }
             } else if (json.status === 400) {
               json.message.forEach((element: string) => {
                 if (element[0] === "email") {
@@ -154,6 +184,47 @@ const FormLogin = () => {
       setErrorMessage(errorMessage);
     }
   };
+
+  const handlerSubmitCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validCodeInput === true) {
+      if (inputPseudo.length === 0) {
+        const fetchLogin = async () => {
+          console.log(passwordInput);
+          console.log(emailInput);
+          let response = await fetch("/api/user/loginTwoFactor", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: validator.escape(emailInput.trim()),
+              password: validator.escape(passwordInput.trim()),
+              remember: rememberMeInput,
+              pseudo: validator.escape(inputPseudo.trim()),
+              code: codeInput,
+            }),
+          });
+          let json = await response.json();
+          if (json) {
+            if (json.status === 200) {
+              window.location.reload();
+            } else {
+              dispatch({
+                type: "flash/storeFlashMessage",
+                payload: { type: "error", flashMessage: json.message },
+              });
+            }
+          }
+        };
+        fetchLogin();
+      }
+    } else {
+      if (validCodeInput === false) {
+        setErrorMessageCode("Code : ne doit pas être vide");
+      }
+    }
+  };
   return (
     <>
       <div className={styles.bg}></div>
@@ -162,94 +233,97 @@ const FormLogin = () => {
           <span className={styles.login__btn__cross}>&times;</span>
         </button>
         <h1 className={styles.login__h1}>Se connecter</h1>
-        <form
-          className={styles.login__form}
-          action=""
-          onSubmit={(e) => {
-            handlerSubmit(e);
-          }}
-        >
-          <TextField
-            autoFocus
-            value={emailInput}
-            id={"email"}
-            label={"Email"}
-            variant="standard"
-            type={"email"}
-            placeholder={"Entrez votre mail"}
-            FormHelperTextProps={{ style: { color: "red" } }}
-            onChange={(e) => {
-              handlerInput(
-                e,
-                "email",
-                /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
-                setValidEmailInput,
-                setErrorMessageEmail,
-                setEmailInput,
-                "Email : doit avoir un format valide"
-              );
+        {displayInput === false && (
+          <form
+            className={styles.login__form}
+            action=""
+            onSubmit={(e) => {
+              handlerSubmit(e);
             }}
-            helperText={errorMessageEmail}
-          />
-          <TextField
-            value={passwordInput}
-            style={{ margin: "20px 0px" }}
-            id={"password"}
-            label={"Mot de passe"}
-            variant="standard"
-            type={"password"}
-            placeholder={"Entrez votre mot de passe"}
-            FormHelperTextProps={{ style: { color: "red" } }}
-            onChange={(e) => {
-              handlerInput(
-                e,
-                "password",
-                /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
-                setValidPasswordInput,
-                setErrorMessagePassword,
-                setPasswordInput,
-                "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
-              );
-            }}
-            helperText={errorMessagePassword}
-          />
-          <FormControlLabel
-            className={styles.login__form__checkbox}
-            style={{
-              marginTop: "10px",
-              alignSelf: "start",
-              marginLeft: "0px",
-            }}
-            control={
-              <Checkbox
-                onChange={(e) => {
-                  handlerInputRememberMe(e);
-                }}
-              />
-            }
-            label="Se souvenir de moi"
-            labelPlacement="start"
-          />
-          <input
-            type="text"
-            name="pseudo"
-            id="pseudo"
-            style={{ display: "none" }}
-            tabIndex={-1}
-            autoComplete="off"
-            onChange={(e) => {
-              setInputPseudo(e.target.value);
-            }}
-          />
-          <div className={styles.login__form__submit}>
-            <input
-              className={styles.login__form__submit__btn}
-              type="submit"
-              value="Se connecter"
+          >
+            <TextField
+              autoFocus
+              value={emailInput}
+              id={"email"}
+              label={"Email"}
+              variant="standard"
+              type={"email"}
+              placeholder={"Entrez votre mail"}
+              FormHelperTextProps={{ style: { color: "red" } }}
+              onChange={(e) => {
+                handlerInput(
+                  e,
+                  "email",
+                  /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                  setValidEmailInput,
+                  setErrorMessageEmail,
+                  setEmailInput,
+                  "Email : doit avoir un format valide"
+                );
+              }}
+              helperText={errorMessageEmail}
             />
-          </div>
-        </form>
-        {reSendEmail === true && (
+            <TextField
+              value={passwordInput}
+              style={{ margin: "20px 0px" }}
+              id={"password"}
+              label={"Mot de passe"}
+              variant="standard"
+              type={"password"}
+              placeholder={"Entrez votre mot de passe"}
+              FormHelperTextProps={{ style: { color: "red" } }}
+              onChange={(e) => {
+                handlerInput(
+                  e,
+                  "password",
+                  /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
+                  setValidPasswordInput,
+                  setErrorMessagePassword,
+                  setPasswordInput,
+                  "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
+                );
+              }}
+              helperText={errorMessagePassword}
+            />
+            <FormControlLabel
+              className={styles.login__form__checkbox}
+              style={{
+                marginTop: "10px",
+                alignSelf: "start",
+                marginLeft: "0px",
+              }}
+              control={
+                <Checkbox
+                  onChange={(e) => {
+                    handlerInputRememberMe(e);
+                  }}
+                />
+              }
+              label="Se souvenir de moi"
+              labelPlacement="start"
+            />
+            <input
+              type="text"
+              name="pseudo"
+              id="pseudo"
+              style={{ display: "none" }}
+              tabIndex={-1}
+              autoComplete="off"
+              onChange={(e) => {
+                setInputPseudo(e.target.value);
+              }}
+            />
+            <div className={styles.login__form__submit}>
+              <input
+                className={styles.login__form__submit__btn}
+                type="submit"
+                value="Se connecter"
+              />
+            </div>
+          </form>
+        )}
+
+        {reSendEmail === true && displayInput === false && (
           <div className={styles.login__forgot}>
             <button
               className={styles.login__forgot__btn}
@@ -261,33 +335,73 @@ const FormLogin = () => {
             </button>
           </div>
         )}
-
-        <div className={styles.login__forgot}>
-          <button
-            className={styles.login__forgot__btn}
-            onClick={() => {
-              dispatch({
-                type: "auth/clearFlash",
-              });
-              dispatch({ type: "form/openForgot" });
+        {displayInput === false && (
+          <>
+            <div className={styles.login__forgot}>
+              <button
+                className={styles.login__forgot__btn}
+                onClick={() => {
+                  dispatch({
+                    type: "auth/clearFlash",
+                  });
+                  dispatch({ type: "form/openForgot" });
+                }}
+              >
+                Mot de passe oublié
+              </button>
+            </div>
+            <div className={styles.login__register}>
+              <button
+                className={styles.login__register__btn}
+                onClick={() => {
+                  dispatch({
+                    type: "auth/clearFlash",
+                  });
+                  dispatch({ type: "form/toggleRegister" });
+                }}
+              >
+                Créer un compte
+              </button>
+            </div>
+          </>
+        )}
+        {displayInput === true && (
+          <form
+            onSubmit={(e) => {
+              handlerSubmitCode(e);
             }}
           >
-            Mot de passe oublié
-          </button>
-        </div>
-        <div className={styles.login__register}>
-          <button
-            className={styles.login__register__btn}
-            onClick={() => {
-              dispatch({
-                type: "auth/clearFlash",
-              });
-              dispatch({ type: "form/toggleRegister" });
-            }}
-          >
-            Créer un compte
-          </button>
-        </div>
+            <TextField
+              value={codeInput}
+              style={{ margin: "20px 0px 0px 0px" }}
+              id={"code"}
+              label={"Code"}
+              variant="standard"
+              type={"text"}
+              placeholder={"Entrez votre code"}
+              FormHelperTextProps={{ style: { color: "red" } }}
+              onChange={(e) => {
+                handlerInput(
+                  e,
+                  "firstname",
+                  /^[0-9]{8,8}$/,
+                  setValidCodeInput,
+                  setErrorMessageCode,
+                  setCodeInput,
+                  "Code : 8 chiffres"
+                );
+              }}
+              helperText={errorMessageCode}
+            />
+            <div className={styles.modalEditMainUserData__form__submit}>
+              <input
+                className={styles.modalEditMainUserData__form__submit__btn}
+                type="submit"
+                value="Entrez"
+              />
+            </div>
+          </form>
+        )}
       </div>
     </>
   );

@@ -104,9 +104,9 @@ const TwoFactorData = () => {
           <div
             className={styles.card}
             onClick={() => {
-              /* dispatch({
-                type: "form/openModalEditFirstnameUserData",
-              }); */
+              dispatch({
+                type: "form/openModalTwoFactor",
+              });
             }}
           >
             <Image
@@ -122,7 +122,7 @@ const TwoFactorData = () => {
                 <strong>Double authentification</strong>
               </p>
               <p>
-                {userData?.body.twoFactor === true ? "Acitvé" : "Désactivé"}
+                {userData?.body.twoFactor === true ? "Activé" : "Désactivé"}
               </p>
             </div>
             <Image

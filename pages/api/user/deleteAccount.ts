@@ -1,7 +1,6 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import prisma from "../../../lib/prisma";
 import { Prisma } from "@prisma/client";
-import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import validator from "validator";
 

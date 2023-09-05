@@ -25,7 +25,7 @@ export default withIronSessionApiRoute(
         });
       } else {
         const user = await prisma.user.findUnique({
-          where: { mail: validator.escape(email.trim()) },
+          where: { mail: validator.escape(email.trim()), status: true },
         });
 
         let smtpTransport = nodemailer.createTransport({
@@ -40,11 +40,31 @@ export default withIronSessionApiRoute(
             from: process.env.SECRET_SMTP_EMAIL,
             to: process.env.SECRET_SMTP_EMAIL,
             subject: object,
-            html: `<div><h1>${validator.escape(
-              firstname.trim()
-            )} ${validator.escape(lastname.trim())}</h1><p>${validator.escape(
-              message
-            )}</p><p>pas de compte</p></div>`,
+            html: `<!DOCTYPE html>
+                            <html lang="fr">
+                              <head>
+                                <title>tds coaching</title>
+                                <meta charset="UTF-8" />
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                                <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                                <title>Document</title>
+                              </head>
+                              <body>
+                                
+                                <div style="width: 100%">
+                                  <div style="text-align: center">
+                                    <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                                  </div>
+                                  <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
+                                    <h1 style="text-align: center">tds coaching</h1>
+                                    <h2 style="text-align: center">${firstname} ${lastname} vous a envoyé un message</h2>
+                                    <p style="text-align: left; margin-left: 20px">Email : ${email}</p>
+                                    <p style="text-align: left; margin-left: 20px">Compte : l'utilisateur est inscrit</p>
+                                    <p style="text-align: left; margin-left: 20px">Message : ${message}</p>
+                                  </div>
+                                </div>
+                              </body>
+                            </html>`,
           };
           smtpTransport.sendMail(mailOptions);
         } else {
@@ -52,11 +72,31 @@ export default withIronSessionApiRoute(
             from: process.env.SECRET_SMTP_EMAIL,
             to: process.env.SECRET_SMTP_EMAIL,
             subject: object,
-            html: `<div><h1>${validator.escape(
-              firstname.trim()
-            )} ${validator.escape(lastname.trim())}</h1><p>${validator.escape(
-              message.trim()
-            )}</p><p>compte</p></div>`,
+            html: `<!DOCTYPE html>
+                            <html lang="fr">
+                              <head>
+                                <title>tds coaching</title>
+                                <meta charset="UTF-8" />
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                                <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                                <title>Document</title>
+                              </head>
+                              <body>
+                                
+                                <div style="width: 100%">
+                                  <div style="text-align: center">
+                                    <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                                  </div>
+                                  <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
+                                    <h1 style="text-align: center">tds coaching</h1>
+                                    <h2 style="text-align: center">${firstname} ${lastname} vous a envoyé un message</h2>
+                                    <p style="text-align: left; margin-left: 20px">Email : ${email}</p>
+                                    <p style="text-align: left; margin-left: 20px">Compte : l'utilisateur n'est pas inscrit</p>
+                                    <p style="text-align: left; margin-left: 20px">Message : ${message}</p>
+                                  </div>
+                                </div>
+                              </body>
+                            </html>`,
           };
           smtpTransport.sendMail(mailOptions);
         }

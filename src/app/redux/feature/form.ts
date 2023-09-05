@@ -20,7 +20,7 @@ const initialState = {
   displayModalEditEmailData: false,
   displayModalEditValidEmailData: false,
   displayModalTwoFactor: false,
-  displayModalTwoFactorDisable: false,
+  displayModalTwoFactorCode: false,
   displayModalCancelMeeting: false,
   displayModalMeeting: false,
   displayModalFirstMeeting: false,
@@ -179,11 +179,11 @@ const form = createSlice({
     closeModalTwoFactor: (state) => {
       state.displayModalTwoFactor = false;
     },
-    openModalTwoFactorDisable: (state) => {
-      state.displayModalTwoFactorDisable = true;
+    openModalTwoFactorCode: (state) => {
+      state.displayModalTwoFactorCode = true;
     },
-    closeModalTwoFactorDisable: (state) => {
-      state.displayModalTwoFactorDisable = false;
+    closeModalTwoFactorCode: (state) => {
+      state.displayModalTwoFactorCode = false;
     },
     openModalCancelMeeting: (state) => {
       state.displayModalCancelMeeting = true;

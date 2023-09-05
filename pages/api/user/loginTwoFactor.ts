@@ -4,11 +4,13 @@ import bcrypt from "bcrypt";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { validationBody } from "../../../lib/validation";
 import validator from "validator";
+import { Prisma } from "@prisma/client";
+import edit from "../meeting/edit";
 
 export default withIronSessionApiRoute(
   async function login(req: any, res: NextApiResponse) {
     if (req.method === "POST") {
-      const { email, password, pseudo } = await req.body;
+      const { email, password, pseudo, code } = await req.body;
       let arrayMessageError = validationBody(req.body);
       if (arrayMessageError.length > 0) {
         return res.status(400).json({
@@ -40,42 +42,47 @@ export default withIronSessionApiRoute(
                 "Mauvaise combinaison email/mot de passe, veuillez réessayer",
             });
           } else {
-            if (user.status === false && user.registerToken) {
-              let copyRegisterToken: any = user?.registerToken;
-              if (new Date().getTime() > copyRegisterToken.limitDate) {
-                const deleteUser = await prisma.user.delete({
-                  where: { mail: user.mail },
+            if (user.twoFactor === true) {
+              let copyTwoFactorCode: any = user.twoFactorCode;
+              if (Number(copyTwoFactorCode.token) === Number(code)) {
+                let editUser = await prisma.user.update({
+                  where: {
+                    id: user.id,
+                  },
+                  data: {
+                    twoFactorCode: Prisma.JsonNull,
+                  },
                 });
+                if (editUser === null) {
+                  return res.status(404).json({
+                    status: 404,
+                    message:
+                      "L'utilisateur n'as pas pu être modifié, veuillez réessayer",
+                  });
+                } else {
+                  let userObject = {
+                    role: user.role,
+                    id: user.id,
+                  };
+                  req.session.user = userObject;
+                  await req.session.save();
+                  return res.status(200).json({
+                    status: 200,
+                    body: userObject,
+                    message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
+                  });
+                }
+              } else {
                 return res.status(404).json({
                   status: 404,
-                  message:
-                    "Mauvaise combinaison email/mot de passe, veuillez réessayer",
+                  message: "Le code n'est pas correct, veuillez réessayer",
                 });
               }
-              return res.status(404).json({
-                status: 404,
-                message:
-                  "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail",
-              });
             } else {
-              if (user.twoFactor === true) {
-                return res.status(200).json({
-                  status: 200,
-                  body: null,
-                });
-              } else {
-                let userObject = {
-                  role: user.role,
-                  id: user.id,
-                };
-                req.session.user = userObject;
-                await req.session.save();
-                return res.status(200).json({
-                  status: 200,
-                  body: userObject,
-                  message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
-                });
-              }
+              res.status(404).json({
+                status: 404,
+                message: "Une erreur est survenue, veuillez réessayer",
+              });
             }
           }
         } else {

@@ -74,7 +74,11 @@ const Forgot = () => {
   }, [dateReSend, dispatch]);
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validInputEmail === true) {
+    trigger({
+      email: validator.escape(inputEmail.trim()),
+      pseudo: validator.escape(inputPseudo.trim()),
+    });
+    /* if (validInputEmail === true) {
       if (inputPseudo.length === 0) {
         const fetchApi = async () => {
           trigger({
@@ -88,7 +92,7 @@ const Forgot = () => {
       if (validInputEmail === false) {
         setInputEmailError("Email : doit avoir un format valide");
       }
-    }
+    } */
   };
 
   const handlerInput = (

@@ -245,15 +245,9 @@ const Content = () => {
                               mutate("/api/user/check", {
                                 ...json,
                               });
-                              window.location.reload();
-                              if (
-                                pathname === "/profile" ||
-                                pathname === "/meetings" ||
-                                pathname === "/meetingAdmin" ||
-                                pathname === "/utilisateurs"
-                              ) {
-                                router.push("/");
-                              }
+                              setTimeout(() => {
+                                window.location.reload();
+                              }, 2000);
                             }
                           };
                           logout();
@@ -405,14 +399,9 @@ const Content = () => {
                               mutate("/api/user/check", {
                                 ...json,
                               });
-                              window.location.reload();
-                              if (
-                                pathname === "/profile" ||
-                                pathname === "/historique" ||
-                                pathname === "/rendez-vous"
-                              ) {
-                                router.push("/");
-                              }
+                              setTimeout(() => {
+                                window.location.reload();
+                              }, 2000);
                             }
                           };
                           logout();

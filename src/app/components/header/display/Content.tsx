@@ -404,6 +404,7 @@ const Content = () => {
                               }, 2000);
                             }
                           };
+
                           logout();
                         }}
                       >

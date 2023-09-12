@@ -148,7 +148,7 @@ const FormLogin = () => {
                   type: "flash/storeFlashMessage",
                   payload: { type: "success", flashMessage: json.message },
                 });
-                clearState();
+                /* clearState(); */
                 setTimeout(() => {
                   window.location.reload();
                 }, 2000);
@@ -330,7 +330,7 @@ const FormLogin = () => {
               }}
             >
               <button className={styles.login__btn} onClick={() => closeForm()}>
-              <Image
+                <Image
                   className={styles.login__btn__img}
                   src="/assets/icone/xmark-solid.svg"
                   alt="arrow-left"

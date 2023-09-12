@@ -4,7 +4,7 @@ import prisma from "../../../lib/prisma";
 
 export default withIronSessionApiRoute(
   async function logout(req: any, res: NextApiResponse) {
-    if (req.method === "GET") {
+    if (req.method === "POST") {
       if (req.session.user) {
         const user = await prisma.user.findUnique({
           where: { id: req.session.user.id },

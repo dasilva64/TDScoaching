@@ -92,10 +92,10 @@ const Content = () => {
       }
     };
     fetchData("/api/user/check");
-  }, [dispatch, router]);
+  }, [dispatch]);
 
   let content;
-  if (isLog === false) {
+  if (isLog === true) {
     content = (
       <>
         <div className={styles.header__log}>

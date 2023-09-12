@@ -247,6 +247,7 @@ const Content = () => {
                               mutate("/api/user/check", {
                                 ...json,
                               });
+                              cache.delete("/api/user/check");
                               setTimeout(() => {
                                 window.location.reload();
                               }, 2000);
@@ -403,9 +404,9 @@ const Content = () => {
                                 ...json,
                               });
                               cache.delete("/api/user/check");
-                              /* setTimeout(() => {
+                              setTimeout(() => {
                                 window.location.reload();
-                              }, 2000); */
+                              }, 2000);
                             }
                           };
 

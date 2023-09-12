@@ -233,6 +233,7 @@ const Content = () => {
                           const logout = async () => {
                             let response = await fetch("/api/user/logout");
                             let json = await response.json();
+                            console.log(json);
                             if (json && json.status === 200) {
                               dispatch({
                                 type: "auth/logout",
@@ -248,9 +249,9 @@ const Content = () => {
                                 ...json,
                               });
                               cache.delete("/api/user/check");
-                              setTimeout(() => {
+                              /* setTimeout(() => {
                                 window.location.reload();
-                              }, 2000);
+                              }, 2000); */
                             }
                           };
                           logout();
@@ -388,6 +389,7 @@ const Content = () => {
                           const logout = async () => {
                             let response = await fetch("/api/user/logout");
                             let json = await response.json();
+                            console.log(json);
                             if (json && json.status === 200) {
                               dispatch({
                                 type: "flash/storeFlashMessage",
@@ -404,9 +406,9 @@ const Content = () => {
                                 ...json,
                               });
                               cache.delete("/api/user/check");
-                              setTimeout(() => {
+                              /* setTimeout(() => {
                                 window.location.reload();
-                              }, 2000);
+                              }, 2000); */
                             }
                           };
 

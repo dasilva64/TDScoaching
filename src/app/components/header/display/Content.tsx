@@ -245,6 +245,7 @@ const Content = () => {
                               mutate("/api/user/check", {
                                 ...json,
                               });
+                              window.location.reload();
                               if (
                                 pathname === "/profile" ||
                                 pathname === "/meetings" ||
@@ -404,6 +405,7 @@ const Content = () => {
                               mutate("/api/user/check", {
                                 ...json,
                               });
+                              window.location.reload();
                               if (
                                 pathname === "/profile" ||
                                 pathname === "/historique" ||

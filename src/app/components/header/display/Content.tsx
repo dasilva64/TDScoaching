@@ -75,7 +75,12 @@ const Content = () => {
   }, [data, dispatch]); */
   useEffect(() => {
     const fetchData = async (url: string) => {
-      let response = await fetch(url);
+      let response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       let json = await response.json();
       if (json.status === 200) {
         dispatch({

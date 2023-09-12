@@ -387,21 +387,22 @@ const Content = () => {
                             let json = await response.json();
                             if (json && json.status === 200) {
                               dispatch({
-                                type: "auth/logout",
-                              });
-                              dispatch({
                                 type: "flash/storeFlashMessage",
                                 payload: {
                                   type: "error",
                                   flashMessage: json.message,
                                 },
                               });
+                              dispatch({
+                                type: "auth/logout",
+                              });
+
                               mutate("/api/user/check", {
                                 ...json,
                               });
-                              setTimeout(() => {
+                              /* setTimeout(() => {
                                 window.location.reload();
-                              }, 2000);
+                              }, 2000); */
                             }
                           };
 

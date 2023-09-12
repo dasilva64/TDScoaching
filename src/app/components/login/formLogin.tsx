@@ -138,16 +138,17 @@ const FormLogin = () => {
                 });
               } else {
                 dispatch({
+                  type: "flash/storeFlashMessage",
+                  payload: { type: "success", flashMessage: json.message },
+                });
+                dispatch({
                   type: "auth/login",
                   payload: {
                     role: json.body.role,
                     id: json.body.id,
                   },
                 });
-                dispatch({
-                  type: "flash/storeFlashMessage",
-                  payload: { type: "success", flashMessage: json.message },
-                });
+
                 /* clearState(); */
                 setTimeout(() => {
                   window.location.reload();

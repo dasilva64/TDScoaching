@@ -8,7 +8,7 @@ const fetchData = async (url: string) => {
 
 function useGet(url: string) {
   const { data, error, isLoading, mutate } = useSWR(url, (url) =>
-  fetchData(url)
+    fetchData(url)
   );
 
   return {

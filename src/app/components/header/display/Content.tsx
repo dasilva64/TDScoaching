@@ -20,7 +20,8 @@ import Nav from "../components/Nav";
 import ModalUserFirstnameData from "@/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
 import ModalUserLastnameData from "@/app/profile/components/lastnameData/modal/ModalUserLastnameData";
 import useGet from "../../hook/useGet";
-import { mutate } from "swr";
+
+import { mutate, useSWRConfig } from "swr";
 import ModalEditFormuleUser from "@/app/rendez-vous/components/take/modal/ModalEditFormule";
 import ModalCancelMeeting from "@/app/rendez-vous/components/not-comfirm/modal/ModalCancelMeeting";
 import ModalDatePickerEditDesktop from "@/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
@@ -46,6 +47,7 @@ const Content = () => {
   const pathname = usePathname();
   const [onHoverLink, setOnHoverLink] = useState<string | null>(pathname);
   const router = useRouter();
+  const { cache } = useSWRConfig();
   const { isMobile } = useSelector((state: RootState) => state.Mobile);
   /* useEffect(() => {
     const fetchCheckUser = async () => {
@@ -400,6 +402,7 @@ const Content = () => {
                               mutate("/api/user/check", {
                                 ...json,
                               });
+                              cache.delete("/api/user/check");
                               /* setTimeout(() => {
                                 window.location.reload();
                               }, 2000); */

@@ -57,7 +57,7 @@ const Content = () => {
     fetchCheckUser();
   }, []); */
 
-  const { data, isLoading, isError } = useGet("/api/user/check");
+  /* const { data, isLoading, isError } = useGet("/api/user/check");
   console.log("data", data);
   useEffect(() => {
     if (data) {
@@ -71,9 +71,166 @@ const Content = () => {
         });
       }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch]); */
   let content;
-  if (isError) {
+  content = (
+    <>
+      <div className={styles.header__log}>
+        <div
+          onClick={() => {
+            setDisplayLogMenu(!displayLogMenu);
+            if (isActive) {
+              dispatch({ type: "menu/closeMenu" });
+            }
+          }}
+          className={styles.header__log__div}
+        ></div>
+        <>
+          <div
+            className={`${styles.header__log__container} ${
+              displayLogMenu === true
+                ? styles.header__log__container__show
+                : styles.header__log__container__hide
+            }`}
+          >
+            <ul
+              onMouseLeave={() => setOnHoverLink(pathname)}
+              className={`${styles.header__log__ul}`}
+            >
+              <li
+                onMouseOver={() => setOnHoverLink("/profile")}
+                className={`${styles.header__log__li} ${
+                  styles.header__log__li__1
+                } ${
+                  displayLogMenu === true
+                    ? styles.header__log__li__show
+                    : styles.header__log__li__hide
+                }`}
+              >
+                <Link
+                  className={styles.header__log__li__link}
+                  href="/profile"
+                  onClick={() => setDisplayLogMenu(false)}
+                >
+                  <div
+                    className={`${styles.header__log__li__point} ${
+                      onHoverLink === "/profile"
+                        ? styles.header__log__li__point__show
+                        : styles.header__log__li__point__hide
+                    }`}
+                  ></div>
+                  Compte
+                </Link>
+              </li>
+              <li
+                onMouseOver={() => setOnHoverLink("/historique")}
+                className={`${styles.header__log__li} ${
+                  styles.header__log__li__2
+                } ${
+                  displayLogMenu === true
+                    ? styles.header__log__li__show
+                    : styles.header__log__li__hide
+                }`}
+              >
+                <Link
+                  className={styles.header__log__li__link}
+                  href="/historique"
+                  onClick={() => setDisplayLogMenu(false)}
+                >
+                  <div
+                    className={`${styles.header__log__li__point} ${
+                      onHoverLink === "/historique"
+                        ? styles.header__log__li__point__show
+                        : styles.header__log__li__point__hide
+                    }`}
+                  ></div>
+                  Historique des rendez-vous
+                </Link>
+              </li>
+              <li
+                onMouseOver={() => setOnHoverLink("/rendez-vous")}
+                className={`${styles.header__log__li} ${
+                  styles.header__log__li__3
+                } ${
+                  displayLogMenu === true
+                    ? styles.header__log__li__show
+                    : styles.header__log__li__hide
+                }`}
+              >
+                <Link
+                  className={styles.header__log__li__link}
+                  href="/rendez-vous"
+                  onClick={() => setDisplayLogMenu(false)}
+                >
+                  <div
+                    className={`${styles.header__log__li__point} ${
+                      onHoverLink === "/rendez-vous"
+                        ? styles.header__log__li__point__show
+                        : styles.header__log__li__point__hide
+                    }`}
+                  ></div>
+                  Mes rendez-vous
+                </Link>
+              </li>
+              <li
+                onMouseOver={() => setOnHoverLink("/logout")}
+                className={`${styles.header__log__li} ${
+                  styles.header__log__li__4
+                } ${
+                  displayLogMenu === true
+                    ? styles.header__log__li__show
+                    : styles.header__log__li__hide
+                }`}
+              >
+                <span
+                  className={styles.header__log__li__link}
+                  onClick={() => {
+                    const logout = async () => {
+                      let response = await fetch("/api/user/logout");
+                      let json = await response.json();
+                      console.log(json);
+                      if (json && json.status === 200) {
+                        dispatch({
+                          type: "flash/storeFlashMessage",
+                          payload: {
+                            type: "error",
+                            flashMessage: json.message,
+                          },
+                        });
+                        dispatch({
+                          type: "auth/logout",
+                        });
+
+                        /* mutate("/api/user/check", {
+                          ...json,
+                        });
+                        cache.delete("/api/user/check"); */
+                        /* setTimeout(() => {
+                          window.location.reload();
+                        }, 2000); */
+                      }
+                    };
+
+                    logout();
+                  }}
+                >
+                  <div
+                    className={`${styles.header__log__li__point} ${
+                      onHoverLink === "/logout"
+                        ? styles.header__log__li__point__show
+                        : styles.header__log__li__point__hide
+                    }`}
+                  ></div>
+                  Déconnection
+                </span>
+              </li>
+            </ul>
+          </div>
+        </>
+      </div>
+    </>
+  );
+  /* if (isError) {
     content = <div>Erreur</div>;
   }
   if (isLoading) {
@@ -250,9 +407,7 @@ const Content = () => {
                                 ...json,
                               });
                               cache.delete("/api/user/check");
-                              /* setTimeout(() => {
-                                window.location.reload();
-                              }, 2000); */
+                              
                             }
                           };
                           logout();
@@ -407,9 +562,7 @@ const Content = () => {
                                 ...json,
                               });
                               cache.delete("/api/user/check");
-                              /* setTimeout(() => {
-                                window.location.reload();
-                              }, 2000); */
+                              
                             }
                           };
 
@@ -434,7 +587,7 @@ const Content = () => {
         );
       }
     }
-  }
+  } */
 
   const [isClick, setIsClick] = useState<boolean>(false);
   const { displayModalLogin } = useSelector(

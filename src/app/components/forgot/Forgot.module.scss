@@ -1,25 +1,23 @@
 .bg {
   width: 100%;
   height: 100vh;
-  background-color: transparent;
+  background-color: rgba($color: #000000, $alpha: 0.9);
   position: fixed;
-  z-index: 998;
+  z-index: 700;
   top: 0;
 }
 
 .forgot {
   background-color: white;
-  border: 2px solid #1dd6fc;
-  box-shadow: 5px 5px 5px 5px #1dd6fc;
+  box-shadow: 0px 0px 8px 8px aqua;
   border-radius: 20px;
   padding: 50px 30px;
-  width: 400px;
+  width: 50%;
   position: fixed;
-  top: 50%;
-  margin-top: 10px;
-  margin-bottom: 20px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  top: 50%;
+  max-height: 90%;
+  overflow: scroll;
   z-index: 999;
   &__top {
     display: flex;
@@ -39,36 +37,40 @@
       }
     }
     &__close {
-      border-radius: 5px;
-      background-color: orange;
-      color: white;
-      border: none;
       cursor: pointer;
+      float: right;
+      position: absolute;
+      right: 30px;
+      top: 25px;
+      border: none;
+      background-color: orange;
+      border-radius: 5px;
       transition: all 400ms;
+      padding: 5px;
       &:hover {
         transform: scale(1.05);
       }
-      &__cross {
-        font-size: 30px;
-        padding: 5px;
-        color: white;
-        display: inline-block;
+      &:hover > &__img {
+        transform: rotate(90deg);
+      }
+      &__img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         transition: all 400ms;
-        &:hover {
-          transform: rotate(90deg);
-        }
       }
     }
   }
   &__h1 {
     color: black;
-    margin: 20px 0px;
+    margin: 40px 0px;
     text-align: center;
   }
   &__form {
     display: flex;
     flex-direction: column;
     &__submit {
+      margin: 30px 0px 20px 0px;
       text-align: center;
       &__btn {
         cursor: pointer;
@@ -104,37 +106,6 @@
   }
 }
 
-.flash {
-  &__error {
-    background-color: white;
-    border-radius: 10px;
-    border: 2px solid red;
-    box-shadow: 2px 2px 2px 2px red;
-    color: red;
-    padding: 6px 15px;
-    text-align: center;
-    position: fixed;
-    left: 50%;
-    top: 20px;
-    z-index: 1;
-    transform: translateX(-50%);
-  }
-  &__success {
-    background-color: white;
-    border-radius: 10px;
-    border: 2px solid blue;
-    box-shadow: 2px 2px 2px 2px blue;
-    color: blue;
-    padding: 6px 15px;
-    text-align: center;
-    position: fixed;
-    left: 50%;
-    top: 20px;
-    z-index: 1;
-    transform: translateX(-50%);
-  }
-}
-
 @media screen and (max-width: 500px) {
   .forgot {
     padding: 30px 20px 40px 20px;
@@ -144,5 +115,17 @@
       font-size: 26px;
       margin-top: 30px;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .register {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .register {
+    width: 95%;
   }
 }

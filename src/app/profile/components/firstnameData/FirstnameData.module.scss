@@ -1,12 +1,14 @@
 .card {
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
-  padding: 10px 0px;
+  padding: 10px 0px 10px 10px;
   position: relative;
   display: flex;
+  background-color: rgba(0, 0, 0, 0.04);
   cursor: pointer;
+  transition: all 400ms;
   &:hover {
-    background-color: #f5f5f5;
+    background-color: aqua;
   }
   &__icone {
     position: absolute;
@@ -48,5 +50,23 @@
   }
   100% {
     transform: rotate(680deg);
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .card {
+    height: 60px;
+    &__info {
+      margin-left: 40px;
+      align-self: center;
+      &__p {
+        display: none;
+      }
+    }
+    &__arc {
+      position: absolute;
+      right: 50px;
+      bottom: 18px;
+    }
   }
 }

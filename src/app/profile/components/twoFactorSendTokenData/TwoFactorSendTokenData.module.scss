@@ -1,0 +1,77 @@
+.card {
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+  padding: 10px 0px 10px 10px;
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.04);
+  transition: all 400ms;
+  &:hover {
+    background-color: aqua;
+  }
+  &__icone {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  &__info {
+    margin-left: 60px;
+    &__icone {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  &__arc {
+    margin: 18px 10px 0px 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border-top: 1px solid black;
+    border-bottom: 1px solid transparent;
+    border-left: 1px solid black;
+    border-right: 1px solid transparent;
+    animation: load 2000ms both infinite ease-out;
+    &__circle {
+      position: relative;
+      right: -13px;
+      width: 5px;
+      height: 5px;
+      background-color: black;
+      border-radius: 50%;
+    }
+  }
+}
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(680deg);
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .card {
+    height: 60px;
+    &__info {
+      margin-left: 40px;
+      align-self: center;
+      &__p {
+        display: none;
+      }
+      &__load {
+        &__p {
+          width: 150px;
+        }
+      }
+    }
+    &__arc {
+      position: absolute;
+      right: 50px;
+      bottom: 18px;
+    }
+  }
+}

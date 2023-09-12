@@ -55,7 +55,6 @@ const DatePickerDesktop = ({ events }: any) => {
     13: "20",
   };
 
-
   const { data: dataDelete, trigger: triggerDelete } = useSWRMutation(
     "/api/meeting/deleteMeeting",
     fetchPost
@@ -501,7 +500,7 @@ const DatePickerDesktop = ({ events }: any) => {
                                   new Date().getTime()
                                 ) {
                                   dispatch({
-                                    type: "form/openModalAddMeetingAdmin",
+                                    type: "ModalAddMeetingAdmin/open",
                                     payload: {
                                       date: create,
                                     },

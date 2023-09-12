@@ -2,12 +2,19 @@
 
 import React from "react";
 import { useEffect, useState } from "react";
-import DatePickerDesktop from "./datePicker/DatePickerDesktop";
-import DisplayMeeting from "./meeting/DisplayMeeting";
-import DisplayDiscoveryMeeting from "./meeting/DisplayDiscoveryMeeting";
-import DisplayFormule from "./meeting/DisplayFormule";
-import styles from "../page.module.scss";
+import styles from "./Display.module.scss";
 import useGet from "@/app/components/hook/useGet";
+import HowDo from "./how-do/HowDo";
+import { useRouter } from "next/navigation";
+import { AppDispatch } from "@/app/redux/store";
+import { useDispatch } from "react-redux";
+import TakeDiscovery from "./takeDiscovery/TakeDiscovery";
+import MyDiscoveryMeeting from "./my-discovery-meeting/MyDiscoveryMeeting";
+import HowDoDiscovery from "./how-do-discovery/HowDoDiscovery";
+import Take from "./take/Take";
+import NotComfirm from "./not-comfirm/NotComfirm";
+import MyMeeting from "./my-meeting/MyMeeting";
+import Formule from "./formule/Formule";
 
 const Display = () => {
   const [mobile, setMobile] = useState<boolean | null>(null);
@@ -16,6 +23,8 @@ const Display = () => {
     isLoading,
     isError,
   } = useGet("/api/user/getUserMeeting");
+  const dispatch: AppDispatch = useDispatch();
+  const { push } = useRouter();
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth < 600) {
@@ -61,132 +70,134 @@ const Display = () => {
       </div>
     );
   } else {
-    content = (
-      <>
-        {/* {mobile === false &&
+    if (userData.status === 200) {
+      content = (
+        <>
+          {/* {mobile === false &&
           userData &&
           userData.body.meeting === null &&
           userData.body.typeMeeting !== null && (
             
           )} */}
-        {userData &&
-          !userData.body.meeting &&
-          userData.body.typeMeeting !== null &&
-          mobile === true &&
-          {
-            /* <DatePickerMobile
-              user={userData}
-              events={allMeeting}
-              setDisplayModal={setDisplayModal}
-              setDateMeeting={setDateMeeting}
-            /> */
-          }}
-        {userData?.body.typeMeeting.type === "découverte" && (
-          <>
-            {userData.body.meeting === null &&
-              userData.body.discovery === false && (
-                <>
-                  <h2 className={styles.meet__container__h2}>
-                    Comment faire ?
-                  </h2>
-                  <div className={styles.meet__container__how__discovery}>
-                    <div
-                      className={styles.meet__container__how__discovery__card}
-                    >
-                      <p>
-                        1. Sélectionnez la date souhaitée dans le calendrier
+
+          {userData?.body.typeMeeting.type === "découverte" && (
+            <>
+              {userData.body.meeting === null &&
+                userData.body.discovery === false && (
+                  <>
+                    <div className={styles.div}>
+                      <p className={styles.div__p}>
+                        Vous n&apos;avez pas de rendez vous de prévu, vous
+                        pouvez prendre rendez-vous en cliquant sur ce bouton{" "}
                       </p>
+                      <button
+                        className={styles.div__btn}
+                        onClick={() => {
+                          dispatch({
+                            type: "ModalDatePickerDiscovery/open",
+                          });
+                        }}
+                      >
+                        Prendre rendez-vous
+                      </button>
                     </div>
-                    <div
-                      className={styles.meet__container__how__discovery__card}
-                    >
-                      <p>
-                        2. Sélectionnez le type de coaching que vous souhaitez
-                        prendre
-                      </p>
+                    <div className={styles.content}>
+                      <HowDoDiscovery />
+                      <TakeDiscovery />
                     </div>
-                    <div
-                      className={styles.meet__container__how__discovery__card}
-                    >
-                      <p>
-                        4. Vous recevrez un mail de confirmation et le lien de
-                        la visioconférence 48h avant le rendez-vous
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
-            <div className={styles.meet__container__content}>
-              {userData?.body.meeting === null &&
-                userData?.body.discovery === false && (
-                  <DatePickerDesktop
-                    events={userData?.body.meetings}
-                    discovery={userData?.body.discovery}
-                  />
+                  </>
                 )}
-
-              <DisplayDiscoveryMeeting
-                meetings={userData?.body.meetings}
-                meeting={userData.body.meeting}
-                discovery={userData.body.discovery}
-              />
-            </div>
-          </>
-        )}
-        {userData?.body.typeMeeting.type !== "découverte" && (
-          <>
-            {userData.body.meeting === null && (
-              <>
-                <h2 className={styles.meet__container__h2}>Comment faire ?</h2>
-                <div className={styles.meet__container__how}>
-                  <div className={styles.meet__container__how__card}>
-                    <p>1. Sélectionnez la date souhaitée dans le calendrier</p>
-                  </div>
-                  <div className={styles.meet__container__how__card}>
-                    <p>
-                      2. Sélectionnez le type de coaching que vous souhaitez
-                      prendre
-                    </p>
-                  </div>
-                  <div className={styles.meet__container__how__card}>
-                    <p>
-                      3. Payez en ligne pour confirmer votre rendez-vous
-                      (paiement sécurisé)
-                    </p>
-                  </div>
-                  <div className={styles.meet__container__how__card}>
-                    <p>
-                      4. Vous recevrez un mail de confirmation et le lien de la
-                      visioconférence 48h avant le rendez-vous
-                    </p>
-                  </div>
-                </div>
-              </>
-            )}
-
-            <div className={styles.meet__container__content}>
-              {userData?.body.meeting === null && (
+              {userData.body.meeting !== null &&
+                userData.body.discovery === false && (
+                  <>
+                    <div className={styles.rappel}>
+                      <h2 className={styles.rappel__h2}>Offre actuelle</h2>
+                      <p className={styles.rappel__p}>
+                        Vous disposez d&apos;une offre{" "}
+                        <strong>{userData.body.typeMeeting.type}</strong>.
+                      </p>
+                      <p className={styles.rappel__p}>
+                        Vous pouvez changer d&apos;offre en supprimant le
+                        rendez-vous car il faudra effectué de nouveau un
+                        paiement
+                      </p>
+                    </div>
+                    <div className={styles.content}>
+                      <MyDiscoveryMeeting />
+                    </div>
+                  </>
+                )}
+            </>
+          )}
+          {userData?.body.typeMeeting.type !== "découverte" && (
+            <>
+              {userData.body.meeting === null && (
                 <>
-                  <DatePickerDesktop
-                    events={userData?.body.meetings}
-                    discovery={userData?.body.discovery}
-                    typeMeeting={userData?.body.typeMeeting}
-                  />
+                  <div className={styles.div}>
+                    <p className={styles.div__p}>
+                      Vous n&apos;avez pas de rendez vous de prévu, vous pouvez
+                      prendre rendez-vous en cliquant sur ce bouton{" "}
+                    </p>
+                    <button
+                      className={styles.div__btn}
+                      onClick={() => {
+                        dispatch({
+                          type: "ModalDatePicker/open",
+                        });
+                      }}
+                    >
+                      Prendre rendez-vous
+                    </button>
+                  </div>
+                  <div className={styles.content}>
+                    <HowDo />
+                    <Take />
+                  </div>
                 </>
               )}
-
-              <DisplayMeeting
-                meeting={userData.body.meeting}
-                discovery={userData.body.discovery}
-                typeMeeting={userData.body.typeMeeting}
-              />
-            </div>
-          </>
-        )}
-        {userData?.body.typeMeeting.type === "découverte" &&
-          userData?.body.discovery === true && <DisplayFormule />}
-      </>
-    );
+              {userData.body.meeting !== null &&
+                userData.body.meeting.status === false && (
+                  <div className={styles.contentNot}>
+                    <NotComfirm />
+                  </div>
+                )}
+              {userData.body.meeting !== null &&
+                userData.body.meeting.status === true && (
+                  <>
+                    <div className={styles.rappel}>
+                      <h2 className={styles.rappel__h2}>Offre actuelle</h2>
+                      <p className={styles.rappel__p}>
+                        Vous disposez d&apos;une offre{" "}
+                        <strong>{userData.body.typeMeeting.type}</strong>.
+                      </p>
+                      {userData.body.meeting.typeMeeting.type !== "unique" && (
+                        <p className={styles.rappel__p}>
+                          <strong>
+                            Rendez-vous restant (ce rendez-vous inclus)
+                          </strong>{" "}
+                          : {userData.body.meeting.typeMeeting.number}
+                        </p>
+                      )}
+                      <p className={styles.rappel__p}>
+                        Vous pouvez changer d&apos;offre en supprimant le
+                        rendez-vous car il faudra effectué de nouveau un
+                        paiement
+                      </p>
+                    </div>
+                    <div className={styles.content}>
+                      <MyMeeting />
+                    </div>
+                  </>
+                )}
+            </>
+          )}
+          {userData?.body.typeMeeting.type === "découverte" &&
+            userData?.body.discovery === true && <Formule />}
+        </>
+      );
+    } else {
+      content = <></>;
+    }
   }
 
   return <>{content}</>;

@@ -64,7 +64,7 @@ const Display = () => {
             colSpan={keyAr.length}
             className={`${styles.table__body__tr__td__odd__first} ${styles.table__body__tr__td__odd__first__center}`}
           >
-            Aucun utilisateur n&apos;a été trouvé
+            Aucun rendez-vous n&apos;a été trouvé
           </td>
         </tr>
       );
@@ -72,7 +72,6 @@ const Display = () => {
 
     setSee(ar);
   }, [currentPage, datas, dispatch, keyAr, nbShow, sortBy]);
-
   const handlerSortBy = (e: any) => {
     if (e.target.textContent === sortBy[0]) {
       if (sortBy[1] === "DESC") {

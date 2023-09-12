@@ -2,7 +2,6 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import prisma from "../../../lib/prisma";
 import { validationBody } from "../../../lib/validation";
 import validator from "validator";
-import { Prisma } from "@prisma/client";
 
 export default withIronSessionApiRoute(
   async function editFormuleUser(req, res) {
@@ -35,7 +34,13 @@ export default withIronSessionApiRoute(
             let copyFormule: any = user.typeMeeting;
             let data;
             if (copyFormule.type === "découverte") {
-              if (formule === "unique") {
+              if (user.meetingId !== null) {
+                return res.status(400).json({
+                  status: 400,
+                  message:
+                    "Vous ne pouvez pas changer d'offre car vous avez déjà un rendez-vous, veuillez l'annuler",
+                });
+              } else if (formule === "unique") {
                 data = { type: validator.escape(formule.trim()) };
               } else if (formule === "flash") {
                 data = {
@@ -49,7 +54,13 @@ export default withIronSessionApiRoute(
                 };
               }
             } else if (copyFormule.type === "unique") {
-              if (formule === "flash") {
+              if (user.meetingId !== null) {
+                return res.status(400).json({
+                  status: 400,
+                  message:
+                    "Vous ne pouvez pas changer d'offre car vous avez déjà un rendez-vous, veuillez l'annuler",
+                });
+              } else if (formule === "flash") {
                 data = {
                   type: validator.escape(formule.trim()),
                   number: 3,
@@ -61,7 +72,13 @@ export default withIronSessionApiRoute(
                 };
               }
             } else if (copyFormule.type === "flash") {
-              if (copyFormule.number === 3) {
+              if (user.meetingId !== null) {
+                return res.status(400).json({
+                  status: 400,
+                  message:
+                    "Vous ne pouvez pas changer d'offre car vous avez déjà un rendez-vous, veuillez l'annuler",
+                });
+              } else if (copyFormule.number === 3) {
                 if (formule === "unique") {
                   data = { type: validator.escape(formule.trim()) };
                 } else if (formule === "longue") {
@@ -78,7 +95,13 @@ export default withIronSessionApiRoute(
                 });
               }
             } else if (copyFormule.type === "longue") {
-              if (copyFormule.number === 10) {
+              if (user.meetingId !== null) {
+                return res.status(400).json({
+                  status: 400,
+                  message:
+                    "Vous ne pouvez pas changer d'offre car vous avez déjà un rendez-vous, veuillez l'annuler",
+                });
+              } else if (copyFormule.number === 10) {
                 if (formule === "unique") {
                   data = { type: validator.escape(formule.trim()) };
                 } else if (formule === "flash") {

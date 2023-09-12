@@ -18,7 +18,8 @@ export default withIronSessionApiRoute(
           req.session.destroy();
           return res.status(200).json({
             status: 200,
-            message: "Vous allez être déconnecté, veuillez patienter",
+            body: null,
+            message: "Vous êtes maintenant déconnecté",
           });
         }
       } else {

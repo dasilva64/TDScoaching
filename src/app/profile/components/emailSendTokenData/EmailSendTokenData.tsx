@@ -33,7 +33,7 @@ const EmailData = () => {
           <p>
             <strong>Email</strong>
           </p>
-          <p>Chargement des données</p>
+          <p className={styles.card__info__p}>Chargement des données</p>
         </div>
         <Image
           className={styles.card__info__icone}
@@ -56,7 +56,7 @@ const EmailData = () => {
             className={styles.card}
             onClick={() => {
               dispatch({
-                type: "form/openModalEditEmailSendData",
+                type: "ModalSendTokenEmail/open",
               });
             }}
           >

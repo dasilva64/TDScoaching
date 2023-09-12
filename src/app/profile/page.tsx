@@ -1,12 +1,11 @@
 import React from "react";
 import styles from "./page.module.scss";
 import DeleteAccount from "./components/deleteAccount/DeleteAccount";
-import EmailData from "./components/emailData/EmailData";
 import FirstnameData from "./components/firstnameData/FirstnameData";
 import PasswordData from "./components/passwordData/PasswordData";
-import TwoFactorData from "./components/twoFactorData/TwoFactorData";
 import LastnameData from "./components/lastnameData/LastnameData";
 import EmailSendTokenData from "./components/emailSendTokenData/EmailSendTokenData";
+import TwoFactorSendTokenData from "./components/twoFactorSendTokenData/TwoFactorSendTokenData";
 
 const Profile = async () => {
   return (
@@ -48,7 +47,7 @@ const Profile = async () => {
               <h3 className={styles.profile__main__container__content__h3}>
                 Sécurité
               </h3>
-              <TwoFactorData />
+              <TwoFactorSendTokenData />
             </div>
             <div className={styles.profile__main__container__content}>
               <h3 className={styles.profile__main__container__content__h3}>

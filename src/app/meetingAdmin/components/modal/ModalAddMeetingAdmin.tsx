@@ -7,20 +7,33 @@ import { TextField } from "@mui/material";
 import { useSelect } from "@mui/base";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { mutate } from "swr";
+import Image from "next/image";
 import useSWRMutation from "swr/mutation";
+import { AnimatePresence, motion } from "framer-motion";
 
 const ModalAddMeetingAdmin = () => {
+  const { displayModalAddMeetingAdmin, dataModalAddMeetingAdmin } = useSelector(
+    (state: RootState) => state.ModalAddMeetingAdmin
+  );
   const { data, isLoading, isError } = useGet("/api/user/getAll");
   const [searchInput, setSearchInput] = useState<string>("");
   const [validSearchInput, setValidSearchInput] = useState<boolean>(false);
   const [errorMessageSearch, setErrorMessageSearch] = useState<string>("");
   const [arrayData, setArrayData] = useState<any[]>([]);
   const [choiceUser, setChoiceUser] = useState<any[]>([]);
+  const clearState = () => {
+    setSearchInput("");
+    setValidSearchInput(false);
+    setErrorMessageSearch("");
+    setArrayData([]);
+    setChoiceUser([]);
+  };
   const dispatch = useDispatch<AppDispatch>();
-  const { data: dataMutate, trigger } = useSWRMutation(
-    "/api/meeting/add",
-    fetchPost
-  );
+  const {
+    data: dataMutate,
+    trigger,
+    reset,
+  } = useSWRMutation("/api/meeting/add", fetchPost);
   useEffect(() => {
     if (dataMutate) {
       if (dataMutate.status === 200) {
@@ -32,24 +45,24 @@ const ModalAddMeetingAdmin = () => {
           },
           { revalidate: false }
         );
+        reset();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: dataMutate.message },
         });
         dispatch({
-          type: "form/closeModalAddMeetingAdmin",
+          type: "ModalAddMeetingAdmin/close",
         });
+        clearState();
       }
     }
-  }, [dataMutate, dispatch]);
+  }, [dataMutate, dispatch, reset]);
   const closeForm = () => {
+    clearState();
     dispatch({
-      type: "form/closeModalAddMeetingAdmin",
+      type: "ModalAddMeetingAdmin/close",
     });
   };
-  const { dataModalAddMeetingAdmin } = useSelector(
-    (state: RootState) => state.form
-  );
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     type: string,
@@ -85,111 +98,145 @@ const ModalAddMeetingAdmin = () => {
   };
   return (
     <>
-      <div className={styles.bg}></div>
-      <div className={styles.modalAddMeeting}>
-        <button
-          className={styles.modalAddMeeting__btn}
-          onClick={() => closeForm()}
-        >
-          <span className={styles.modalAddMeeting__btn__cross}>&times;</span>
-        </button>
-        <h1 className={styles.modalAddMeeting__h1}>
-          Ajouter un client à ce rendez-vous
-        </h1>
-        <p>
-          Rappel rendez-vous :{" "}
-          {new Date(dataModalAddMeetingAdmin).toLocaleString("fr-FR")}
-        </p>
-        <TextField
-          style={{ width: "100%" }}
-          autoFocus
-          value={searchInput}
-          id={"email"}
-          label={"Email"}
-          variant="standard"
-          type={"email"}
-          placeholder={"Entrez votre mail"}
-          FormHelperTextProps={{ style: { color: "red" } }}
-          onChange={(e) => {
-            handlerInput(
-              e,
-              "email",
-              /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
-              setValidSearchInput,
-              setErrorMessageSearch,
-              setSearchInput,
-              "Recherche : doit avoir un format valide"
-            );
-          }}
-          helperText={errorMessageSearch}
-        />
-        {arrayData.length > 0 && (
-          <div className={styles.modalAddMeeting__div}>
-            {arrayData.map((element: any, index: number) => {
-              return (
-                <div
-                  key={index}
-                  onClick={() => {
-                    setChoiceUser([element]);
-                    setSearchInput("");
-                    setArrayData([]);
-                  }}
-                >
-                  <p>{element.mail}</p>
+      <AnimatePresence>
+        {displayModalAddMeetingAdmin === true && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { duration: 0.3 } }}
+              exit={{ opacity: 0 }}
+              className={styles.bg}
+              onClick={() => closeForm()}
+            />
+            <motion.div
+              className={styles.modalAddMeeting}
+              initial={{ y: 200, x: "-50%", opacity: 0 }}
+              animate={{
+                y: "-50%",
+                x: "-50%",
+                opacity: 1,
+                transition: { duration: 0.3 },
+              }}
+              exit={{
+                y: 200,
+                x: "-50%",
+                opacity: 0,
+                transition: { duration: 0.3 },
+              }}
+            >
+              <button
+                className={styles.modalAddMeeting__btn}
+                onClick={() => closeForm()}
+              >
+                <Image
+                  className={styles.modalAddMeeting__btn__img}
+                  src="/assets/icone/xmark-solid.svg"
+                  alt="arrow-left"
+                  width={30}
+                  height={30}
+                ></Image>
+              </button>
+              <h1 className={styles.modalAddMeeting__h1}>
+                Ajouter un client à ce rendez-vous
+              </h1>
+              <p>
+                Rappel rendez-vous :{" "}
+                {new Date(dataModalAddMeetingAdmin).toLocaleString("fr-FR")}
+              </p>
+              <TextField
+                style={{ width: "100%" }}
+                autoFocus
+                value={searchInput}
+                id={"email"}
+                label={"Email"}
+                variant="standard"
+                type={"email"}
+                placeholder={"Entrez votre mail"}
+                FormHelperTextProps={{ style: { color: "red" } }}
+                onChange={(e) => {
+                  handlerInput(
+                    e,
+                    "email",
+                    /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                    setValidSearchInput,
+                    setErrorMessageSearch,
+                    setSearchInput,
+                    "Recherche : doit avoir un format valide"
+                  );
+                }}
+                helperText={errorMessageSearch}
+              />
+              {arrayData.length > 0 && (
+                <div className={styles.modalAddMeeting__div}>
+                  {arrayData.map((element: any, index: number) => {
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          setChoiceUser([element]);
+                          setSearchInput("");
+                          setArrayData([]);
+                        }}
+                      >
+                        <p>{element.mail}</p>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
+              )}
+              {choiceUser.length === 1 && (
+                <div className={styles.modalAddMeeting__content}>
+                  <p className={styles.modalAddMeeting__content__p}>
+                    <strong>Utilisateur selectionné</strong> :{" "}
+                    {choiceUser[0].mail}
+                  </p>
+                  <button
+                    className={styles.modalAddMeeting__content__btn}
+                    onClick={() => {
+                      setChoiceUser([]);
+                    }}
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              )}
+              {choiceUser.length === 0 && (
+                <div className={styles.modalAddMeeting__content}>
+                  <button
+                    className={styles.modalAddMeeting__content__btn}
+                    onClick={() => {
+                      trigger({
+                        start: new Date(
+                          dataModalAddMeetingAdmin
+                        ).toLocaleString("en-US"),
+                      });
+                    }}
+                  >
+                    Créer un rendez-vous sans utilisateur
+                  </button>
+                </div>
+              )}
+              {choiceUser.length === 1 && (
+                <div className={styles.modalAddMeeting__content}>
+                  <button
+                    className={styles.modalAddMeeting__content__btn}
+                    onClick={() => {
+                      trigger({
+                        start: new Date(
+                          dataModalAddMeetingAdmin
+                        ).toLocaleString("en-US"),
+                        userId: choiceUser[0].id,
+                      });
+                    }}
+                  >
+                    Créer un rendez-vous avec l&apos;utilisateur
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </>
         )}
-        {choiceUser.length === 1 && (
-          <div className={styles.modalAddMeeting__content}>
-            <p className={styles.modalAddMeeting__content__p}>
-              <strong>Utilisateur selectionné</strong> : {choiceUser[0].mail}
-            </p>
-            <button
-              className={styles.modalAddMeeting__content__btn}
-              onClick={() => {
-                setChoiceUser([]);
-              }}
-            >
-              Supprimer
-            </button>
-          </div>
-        )}
-        {choiceUser.length === 0 && (
-          <div className={styles.modalAddMeeting__content}>
-            <button
-              className={styles.modalAddMeeting__content__btn}
-              onClick={() => {
-                trigger({
-                  start: new Date(dataModalAddMeetingAdmin).toLocaleString(
-                    "en-US"
-                  ),
-                });
-              }}
-            >
-              Créer un rendez-vous sans utilisateur
-            </button>
-          </div>
-        )}
-        {choiceUser.length === 1 && (
-          <div className={styles.modalAddMeeting__content}>
-            <button
-              className={styles.modalAddMeeting__content__btn}
-              onClick={() => {
-                trigger({
-                  start: new Date(dataModalAddMeetingAdmin).toLocaleString(
-                    "en-US"
-                  ),
-                  userId: choiceUser[0].id,
-                });
-              }}
-            >
-              Créer un rendez-vous avec l&apos;utilisateur
-            </button>
-          </div>
-        )}
-      </div>
+      </AnimatePresence>
     </>
   );
 };

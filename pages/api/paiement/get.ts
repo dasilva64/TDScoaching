@@ -93,6 +93,11 @@ export default withIronSessionApiRoute(
                 status: false,
                 userId: user.id,
                 paymentId: copyPaymentId,
+                typeMeeting: {
+                  ...copyTypeMeeting,
+                  paymentId: copyPaymentId,
+                  coaching: typeCoaching,
+                },
                 limitDate: new Date(
                   currentDate.setHours(currentDate.getHours() + 1)
                 )
@@ -109,7 +114,6 @@ export default withIronSessionApiRoute(
                     "Une erreur est survenue lors de la création du rendez-vous, veuillez réessayer",
                 });
               } else {
-                let copyTypeMeeting: any = user.typeMeeting;
                 const userEdit = await prisma.user.update({
                   where: {
                     id: user.id,

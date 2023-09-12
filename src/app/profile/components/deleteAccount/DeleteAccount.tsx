@@ -13,7 +13,7 @@ const DeleteAccount = () => {
         className={styles.card}
         onClick={() => {
           dispatch({
-            type: "form/openModalDeleteAccount",
+            type: "ModalDeleteAccount/open",
           });
         }}
       >

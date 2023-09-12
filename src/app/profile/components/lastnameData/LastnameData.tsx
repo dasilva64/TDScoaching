@@ -18,7 +18,13 @@ const LastnameData = () => {
   const router = useRouter();
   let content;
   if (isError) {
-    content = <div>error</div>;
+    dispatch({
+      type: "flash/storeFlashMessage",
+      payload: {
+        type: "error",
+        flashMessage: "Erreur lors du chargement, veuillez réessayer",
+      },
+    });
   } else if (isLoading) {
     content = (
       <>
@@ -35,7 +41,7 @@ const LastnameData = () => {
             <p>
               <strong>Nom de famille</strong>
             </p>
-            <p>Chargement des données</p>
+            <p className={styles.card__info__p}>Chargement des données</p>
           </div>
           <Image
             className={styles.card__info__icone}
@@ -59,7 +65,7 @@ const LastnameData = () => {
             className={styles.card}
             onClick={() => {
               dispatch({
-                type: "form/openModalEditLastnameUserData",
+                type: "ModalEditLastname/open",
               });
             }}
           >

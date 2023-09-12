@@ -36,96 +36,116 @@ export default withIronSessionApiRoute(
               });
             } else {
               let copyTypeMeeting: any = user.typeMeeting;
+              const stripe = new Stripe(
+                "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f",
+                {
+                  apiVersion: "2022-11-15",
+                }
+              );
+
+              const session = await stripe.checkout.sessions.retrieve(
+                copyTypeMeeting.paymentId
+              );
+              /* return res.status(400).json({
+                status: 400,
+                body: session,
+                message: "Le rendez-vous a bien été supprimé",
+              }); */
+              let copyId: any = session.payment_intent;
+              let paymentIntent;
               if (
-                copyTypeMeeting.type === "découverte" ||
+                copyTypeMeeting.type === "unique" ||
                 (copyTypeMeeting.type === "flash" &&
                   copyTypeMeeting.number === 3) ||
                 (copyTypeMeeting.type === "longue" &&
                   copyTypeMeeting.number === 10)
               ) {
-                return res.status(404).json({
-                  status: 404,
-                  message:
-                    "Vous ne pouvez pas supprimer ce rendez-vous, veuillez réessayer",
-                });
+                paymentIntent = await stripe.paymentIntents.cancel(copyId);
               } else if (
                 (copyTypeMeeting.type === "flash" &&
-                  copyTypeMeeting.number > 1) ||
+                  copyTypeMeeting.number !== 3) ||
                 (copyTypeMeeting.type === "longue" &&
-                  copyTypeMeeting.number > 1)
+                  copyTypeMeeting.number !== 10)
               ) {
-                return res.status(404).json({
-                  status: 404,
-                  message: "En cours de dev",
-                });
-              } else {
-                const stripe = new Stripe(
-                  "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f",
-                  {
-                    apiVersion: "2022-11-15",
-                  }
-                );
-                const session = await stripe.checkout.sessions.retrieve(
-                  meeting.paymentId!
-                );
-                let copyId: any = session.payment_intent;
-                const paymentIntent = await stripe.paymentIntents.cancel(
-                  copyId
-                );
-                if (paymentIntent.status === "canceled") {
-                  let copyTypeMeeting: any = user.typeMeeting;
-                  delete copyTypeMeeting["paymentId"];
-                  delete copyTypeMeeting["coaching"];
-                  let editUser = await prisma.user.update({
-                    where: {
-                      id: req.session.user.id,
-                    },
-                    data: {
-                      meetingId: null,
-                      typeMeeting: {
-                        ...copyTypeMeeting,
-                      },
-                    },
-                  });
-                  let delMeeting = await prisma.meeting.delete({
-                    where: {
-                      id: meeting.id,
-                    },
-                  });
-                  const allMeeting = await prisma.meeting.findMany({
-                    where: { startAt: { gte: new Date() } },
-                    select: {
-                      startAt: true,
-                    },
-                  });
-                  let meetingBody;
-                  if (user.meetingId === null) {
-                    meetingBody = null;
-                  } else {
-                    meetingBody = await prisma.meeting.findUnique({
-                      where: {
-                        id: user.meetingId,
-                      },
-                    });
-                  }
-                  let userObject = {
-                    meetings: allMeeting,
-                    meeting: meetingBody,
-                    typeMeeting: editUser.typeMeeting,
-                    discovery: editUser.discovery,
-                  };
-                  return res.status(200).json({
-                    status: 200,
-                    message: "Le rendez-vous a bien été supprimé",
-                    body: userObject,
-                  });
+                let get;
+                if (copyTypeMeeting.type === "flash") {
+                  get = 3 - copyTypeMeeting.number;
+                } else if (copyTypeMeeting.type === "longue") {
+                  get = 10 - copyTypeMeeting.number;
                 } else {
-                  return res.status(404).json({
-                    status: 404,
-                    message: "Une erreur est survenue, veuillez réessayer",
+                  return res.status(400).json({
+                    status: 400,
+                    message: "Le rendez-vous a bien été supprimé",
                   });
                 }
+                /* return res.status(400).json({
+                  status: 400,
+                  body: get * 10000,
+                  message: "Le rendez-vous a bien été supprimé",
+                }); */
+                paymentIntent = await stripe.paymentIntents.capture(copyId, {
+                  amount_to_capture: get * 10000,
+                });
+              } else {
+                return res.status(400).json({
+                  status: 400,
+                  message: "Le rendez-vous a bien été supprimé",
+                });
               }
+              //if (paymentIntent.status === "succeeded") {
+              delete copyTypeMeeting["paymentId"];
+              delete copyTypeMeeting["coaching"];
+              delete copyTypeMeeting["type"];
+              delete copyTypeMeeting["number"];
+              let editUser = await prisma.user.update({
+                where: {
+                  id: req.session.user.id,
+                },
+                data: {
+                  meetingId: null,
+                  typeMeeting: {
+                    type: "découverte",
+                  },
+                },
+              });
+              let delMeeting = await prisma.meeting.delete({
+                where: {
+                  id: meeting.id,
+                },
+              });
+              const allMeeting = await prisma.meeting.findMany({
+                where: { startAt: { gte: new Date() } },
+                select: {
+                  startAt: true,
+                },
+              });
+              let meetingBody;
+              if (user.meetingId === null) {
+                meetingBody = null;
+              } else {
+                meetingBody = await prisma.meeting.findUnique({
+                  where: {
+                    id: user.meetingId,
+                  },
+                });
+              }
+              let userObject = {
+                meetings: allMeeting,
+                meeting: meetingBody,
+                typeMeeting: editUser.typeMeeting,
+                discovery: editUser.discovery,
+              };
+              return res.status(200).json({
+                status: 200,
+                message: "Le rendez-vous a bien été supprimé",
+                body: userObject,
+              });
+              /* } else {
+                return res.status(404).json({
+                  status: 404,
+                  message: "Une erreur est survenue, veuillez réessayer",
+                });
+              } */
             }
           }
         }

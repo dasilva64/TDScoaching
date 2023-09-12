@@ -1,0 +1,99 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+}
+
+html,
+body {
+  width: 100vw;
+  //overflow-x: hidden;
+}
+
+/* * {
+  border: 1px solid red;
+} */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3 {
+  text-align: center;
+}
+
+.css-1d1r5q-MuiFormHelperText-root {
+  color: red !important;
+}
+
+.flash {
+  &__modal {
+    &__standard {
+      border-radius: 10px;
+      color: white;
+      padding: 15px 15px;
+      text-align: center;
+      position: fixed;
+      box-shadow: 4px 5px 15px 0px black;
+      bottom: 20px;
+      z-index: 1;
+      opacity: 0;
+      left: 50%;
+      transform: translateX(-50%) !important;
+      width: 95%;
+      transition: all 400ms;
+      height: 49px;
+      z-index: 999;
+      &__show {
+        transform: translateX(-50%);
+        z-index: 999;
+        opacity: 1;
+      }
+      &__hide {
+        transform: translateX(-300px);
+        z-index: 1;
+        opacity: 0;
+      }
+      &__img {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 20px;
+      }
+      &__span {
+        transform: translateY(-50%);
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        font-size: 30px;
+        color: white;
+        padding: 0px 10px 5px 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 400ms;
+        &__error {
+          &:hover {
+            background-color: white;
+            color: red;
+          }
+        }
+        &__success {
+          &:hover {
+            background-color: white;
+            color: green;
+          }
+        }
+      }
+    }
+    &__error {
+      background-color: red;
+    }
+    &__success {
+      background-color: green;
+    }
+  }
+}

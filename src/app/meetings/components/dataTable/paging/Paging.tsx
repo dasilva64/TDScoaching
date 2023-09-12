@@ -123,7 +123,7 @@ const Paging = () => {
                   dispatch({ type: "ArrayMeeting/previousPage" });
               }}
             >
-              Suivant
+              Précédent
             </span>
             <div className={styles.paging__div__div}>{see}</div>
             <span

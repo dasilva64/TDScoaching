@@ -5,41 +5,48 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import EmailCheck from "@/app/profile/components/emailData/EmailData";
 import ModalUserSendToken from "@/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
 import ModalUserPasswordData from "@/app/profile/components/passwordData/modal/ModalUserPasswordData";
-import ModalTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalTwoFactor";
-import ModalCancel from "@/app/rendez-vous/components/meeting/modal/ModalCancel";
 import Forgot from "../../forgot/Forgot";
 import FormLogin from "../../login/formLogin";
 import FormRegister from "../../register/formRegister";
-import SendCode from "../../sendCode/SendCode";
-import ModalAddMeeting from "@/app/rendez-vous/components/modal/ModalAddMeeting";
-import ModalDeleteMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteMeeting";
 import ModalDeleteAccount from "@/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
 import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalCloseEmail";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Nav from "../components/Nav";
 import ModalUserFirstnameData from "@/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
 import ModalUserLastnameData from "@/app/profile/components/lastnameData/modal/ModalUserLastnameData";
-import ModalAddFirstMeeting from "@/app/rendez-vous/components/modal/ModalAddDiscoveryMeeting";
-import ModalDeleteFirstMeeting from "@/app/rendez-vous/components/meeting/modal/ModalDeleteDiscoveryMeeting";
-import ModalEditFormuleUser from "@/app/rendez-vous/components/modal/ModalEditFormuleUser";
-import ModalCancelFormuleUser from "@/app/rendez-vous/components/modal/ModalCancelFormuleUser";
 import useGet from "../../hook/useGet";
+import { mutate } from "swr";
+import ModalEditFormuleUser from "@/app/rendez-vous/components/take/modal/ModalEditFormule";
+import ModalCancelMeeting from "@/app/rendez-vous/components/not-comfirm/modal/ModalCancelMeeting";
+import ModalDatePickerEditDesktop from "@/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
+import ModalAddDiscoveryMeeting from "@/app/rendez-vous/components/takeDiscovery/modal/ModalAddDiscoveryMeeting";
+import ModalDeleteDiscoveryMeeting from "@/app/rendez-vous/components/my-discovery-meeting/modal/ModalDeleteDiscoveryMeeting";
+import ModalDatePicker from "@/app/rendez-vous/components/take/modal/ModalDatePicker";
+import ModalAddMeeting from "@/app/rendez-vous/components/take/modal/ModalAddMeeting";
+import ModalEditDiscoveryMeeting from "@/app/rendez-vous/components/my-discovery-meeting/modal/ModalEditDiscoveryMeeting";
+import ModalDatePickerDiscovery from "@/app/rendez-vous/components/takeDiscovery/modal/ModalDatePickerDiscovery";
+import ModalDatePickerEditDiscovery from "@/app/rendez-vous/components/my-discovery-meeting/modal/ModalDatePickerEditDiscovery";
+import ModalDatePickerEdit from "@/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
+import ModalEditMeeting from "@/app/rendez-vous/components/my-meeting/modal/ModalEditMeeting";
+import ModalDeleteMeeting from "@/app/rendez-vous/components/my-meeting/modal/ModalDeleteMeeting";
 import ModalAddMeetingAdmin from "@/app/meetingAdmin/components/modal/ModalAddMeetingAdmin";
-import ModalEditMeeting from "@/app/rendez-vous/components/modal/ModalEditMeeting";
-import ModalTwoFactorCode from "@/app/profile/components/twoFactorData/modal/ModalTwoFactorCode";
+import ModalCloseTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalCloseTwoFactor";
+import ModalTwoFactorSendToken from "@/app/profile/components/twoFactorSendTokenData/Modal/ModalTwoFactorSendToken";
+import ModalTwoFactor from "@/app/profile/components/twoFactorData/ModalTwoFactor";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
   const pathname = usePathname();
-  const [scroll, setScroll] = useState<boolean>(false);
-
+  const [onHoverLink, setOnHoverLink] = useState<string | null>(pathname);
+  const router = useRouter();
+  const { isMobile } = useSelector((state: RootState) => state.Mobile);
   /* useEffect(() => {
     const fetchCheckUser = async () => {
       let response = await fetch("/api/user/checkDelete");
@@ -77,8 +84,6 @@ const Content = () => {
           className={styles.header__login}
           onClick={() => {
             handlerClick();
-            let body = document.body;
-            let test = body?.scrollHeight;
           }}
         >
           Se connecter
@@ -98,43 +103,130 @@ const Content = () => {
                 }}
                 className={styles.header__log__div}
               ></div>
-              {displayLogMenu === true && (
-                <>
-                  <ul className={styles.header__log__ul}>
-                    <li className={styles.header__log__li}>
+              <>
+                <div
+                  className={`${styles.header__log__container} ${
+                    displayLogMenu === true
+                      ? styles.header__log__container__show
+                      : styles.header__log__container__hide
+                  }`}
+                >
+                  <ul
+                    className={styles.header__log__ul}
+                    onMouseLeave={() => setOnHoverLink(pathname)}
+                  >
+                    <li
+                      className={`${styles.header__log__li} ${
+                        styles.header__log__li__1
+                      } ${
+                        displayLogMenu === true
+                          ? styles.header__log__li__show
+                          : styles.header__log__li__hide
+                      }`}
+                      onMouseOver={() => setOnHoverLink("/profile")}
+                    >
                       <Link
+                        className={styles.header__log__li__link}
                         href="/profile"
                         onClick={() => setDisplayLogMenu(false)}
                       >
+                        <div
+                          className={`${styles.header__log__li__point} ${
+                            onHoverLink === "/profile"
+                              ? styles.header__log__li__point__show
+                              : styles.header__log__li__point__hide
+                          }`}
+                        ></div>
                         Compte
                       </Link>
                     </li>
-                    <li className={styles.header__log__li}>
+                    <li
+                      className={`${styles.header__log__li} ${
+                        styles.header__log__li__2
+                      } ${
+                        displayLogMenu === true
+                          ? styles.header__log__li__show
+                          : styles.header__log__li__hide
+                      }`}
+                      onMouseOver={() => setOnHoverLink("/meetings")}
+                    >
                       <Link
+                        className={styles.header__log__li__link}
                         href="/meetings"
                         onClick={() => setDisplayLogMenu(false)}
                       >
+                        <div
+                          className={`${styles.header__log__li__point} ${
+                            onHoverLink === "/meetings"
+                              ? styles.header__log__li__point__show
+                              : styles.header__log__li__point__hide
+                          }`}
+                        ></div>
                         Historique des rendez-vous
                       </Link>
                     </li>
-                    <li className={styles.header__log__li}>
+                    <li
+                      className={`${styles.header__log__li} ${
+                        styles.header__log__li__3
+                      } ${
+                        displayLogMenu === true
+                          ? styles.header__log__li__show
+                          : styles.header__log__li__hide
+                      }`}
+                      onMouseOver={() => setOnHoverLink("/meetingAdmin")}
+                    >
                       <Link
+                        className={styles.header__log__li__link}
                         href="/meetingAdmin"
                         onClick={() => setDisplayLogMenu(false)}
                       >
+                        <div
+                          className={`${styles.header__log__li__point} ${
+                            onHoverLink === "/meetingAdmin"
+                              ? styles.header__log__li__point__show
+                              : styles.header__log__li__point__hide
+                          }`}
+                        ></div>
                         Tous les rendez-vous
                       </Link>
                     </li>
-                    <li className={styles.header__log__li}>
+                    <li
+                      className={`${styles.header__log__li} ${
+                        styles.header__log__li__4
+                      } ${
+                        displayLogMenu === true
+                          ? styles.header__log__li__show
+                          : styles.header__log__li__hide
+                      }`}
+                      onMouseOver={() => setOnHoverLink("/utilisateurs")}
+                    >
                       <Link
+                        className={styles.header__log__li__link}
                         href="/utilisateurs"
                         onClick={() => setDisplayLogMenu(false)}
                       >
+                        <div
+                          className={`${styles.header__log__li__point} ${
+                            onHoverLink === "/utilisateurs"
+                              ? styles.header__log__li__point__show
+                              : styles.header__log__li__point__hide
+                          }`}
+                        ></div>
                         Tous les utilisateurs
                       </Link>
                     </li>
-                    <li className={styles.header__log__li}>
-                      <button
+                    <li
+                      className={`${styles.header__log__li} ${
+                        styles.header__log__li__5
+                      } ${
+                        displayLogMenu === true
+                          ? styles.header__log__li__show
+                          : styles.header__log__li__hide
+                      }`}
+                      onMouseOver={() => setOnHoverLink("/logout")}
+                    >
+                      <span
+                        className={styles.header__log__li__link}
                         onClick={() => {
                           const logout = async () => {
                             let response = await fetch("/api/user/logout");
@@ -143,18 +235,42 @@ const Content = () => {
                               dispatch({
                                 type: "auth/logout",
                               });
-                              window.location.reload();
+                              dispatch({
+                                type: "flash/storeFlashMessage",
+                                payload: {
+                                  type: "error",
+                                  flashMessage: json.message,
+                                },
+                              });
+                              mutate("/api/user/check", {
+                                ...json,
+                              });
+                              if (
+                                pathname === "/profile" ||
+                                pathname === "/meetings" ||
+                                pathname === "/meetingAdmin" ||
+                                pathname === "/utilisateurs"
+                              ) {
+                                router.push("/");
+                              }
                             }
                           };
                           logout();
                         }}
                       >
+                        <div
+                          className={`${styles.header__log__li__point} ${
+                            onHoverLink === "/logout"
+                              ? styles.header__log__li__point__show
+                              : styles.header__log__li__point__hide
+                          }`}
+                        ></div>
                         Déconnection
-                      </button>
+                      </span>
                     </li>
                   </ul>
-                </>
-              )}
+                </div>
+              </>
             </div>
           </>
         );
@@ -171,35 +287,105 @@ const Content = () => {
                 }}
                 className={styles.header__log__div}
               ></div>
-              {displayLogMenu === true && (
-                <>
-                  <ul className={styles.header__log__ul}>
-                    <li className={styles.header__log__li}>
+              <>
+                <div
+                  className={`${styles.header__log__container} ${
+                    displayLogMenu === true
+                      ? styles.header__log__container__show
+                      : styles.header__log__container__hide
+                  }`}
+                >
+                  <ul
+                    onMouseLeave={() => setOnHoverLink(pathname)}
+                    className={`${styles.header__log__ul}`}
+                  >
+                    <li
+                      onMouseOver={() => setOnHoverLink("/profile")}
+                      className={`${styles.header__log__li} ${
+                        styles.header__log__li__1
+                      } ${
+                        displayLogMenu === true
+                          ? styles.header__log__li__show
+                          : styles.header__log__li__hide
+                      }`}
+                    >
                       <Link
+                        className={styles.header__log__li__link}
                         href="/profile"
                         onClick={() => setDisplayLogMenu(false)}
                       >
+                        <div
+                          className={`${styles.header__log__li__point} ${
+                            onHoverLink === "/profile"
+                              ? styles.header__log__li__point__show
+                              : styles.header__log__li__point__hide
+                          }`}
+                        ></div>
                         Compte
                       </Link>
                     </li>
-                    <li className={styles.header__log__li}>
+                    <li
+                      onMouseOver={() => setOnHoverLink("/historique")}
+                      className={`${styles.header__log__li} ${
+                        styles.header__log__li__2
+                      } ${
+                        displayLogMenu === true
+                          ? styles.header__log__li__show
+                          : styles.header__log__li__hide
+                      }`}
+                    >
                       <Link
+                        className={styles.header__log__li__link}
                         href="/historique"
                         onClick={() => setDisplayLogMenu(false)}
                       >
+                        <div
+                          className={`${styles.header__log__li__point} ${
+                            onHoverLink === "/historique"
+                              ? styles.header__log__li__point__show
+                              : styles.header__log__li__point__hide
+                          }`}
+                        ></div>
                         Historique des rendez-vous
                       </Link>
                     </li>
-                    <li className={styles.header__log__li}>
+                    <li
+                      onMouseOver={() => setOnHoverLink("/rendez-vous")}
+                      className={`${styles.header__log__li} ${
+                        styles.header__log__li__3
+                      } ${
+                        displayLogMenu === true
+                          ? styles.header__log__li__show
+                          : styles.header__log__li__hide
+                      }`}
+                    >
                       <Link
+                        className={styles.header__log__li__link}
                         href="/rendez-vous"
                         onClick={() => setDisplayLogMenu(false)}
                       >
+                        <div
+                          className={`${styles.header__log__li__point} ${
+                            onHoverLink === "/rendez-vous"
+                              ? styles.header__log__li__point__show
+                              : styles.header__log__li__point__hide
+                          }`}
+                        ></div>
                         Mes rendez-vous
                       </Link>
                     </li>
-                    <li className={styles.header__log__li}>
-                      <button
+                    <li
+                      onMouseOver={() => setOnHoverLink("/logout")}
+                      className={`${styles.header__log__li} ${
+                        styles.header__log__li__4
+                      } ${
+                        displayLogMenu === true
+                          ? styles.header__log__li__show
+                          : styles.header__log__li__hide
+                      }`}
+                    >
+                      <span
+                        className={styles.header__log__li__link}
                         onClick={() => {
                           const logout = async () => {
                             let response = await fetch("/api/user/logout");
@@ -208,18 +394,41 @@ const Content = () => {
                               dispatch({
                                 type: "auth/logout",
                               });
-                              window.location.reload();
+                              dispatch({
+                                type: "flash/storeFlashMessage",
+                                payload: {
+                                  type: "error",
+                                  flashMessage: json.message,
+                                },
+                              });
+                              mutate("/api/user/check", {
+                                ...json,
+                              });
+                              if (
+                                pathname === "/profile" ||
+                                pathname === "/historique" ||
+                                pathname === "/rendez-vous"
+                              ) {
+                                router.push("/");
+                              }
                             }
                           };
                           logout();
                         }}
                       >
+                        <div
+                          className={`${styles.header__log__li__point} ${
+                            onHoverLink === "/logout"
+                              ? styles.header__log__li__point__show
+                              : styles.header__log__li__point__hide
+                          }`}
+                        ></div>
                         Déconnection
-                      </button>
+                      </span>
                     </li>
                   </ul>
-                </>
-              )}
+                </div>
+              </>
             </div>
           </>
         );
@@ -228,78 +437,127 @@ const Content = () => {
   }
 
   const [isClick, setIsClick] = useState<boolean>(false);
-  const {
-    displayFormLogin,
-    displayFormRegister,
+  const { displayModalLogin } = useSelector(
+    (state: RootState) => state.ModalLogin
+  );
+  const { displayModalRegister } = useSelector(
+    (state: RootState) => state.ModalRegister
+  );
+  const { displayModalEditFirstname } = useSelector(
+    (state: RootState) => state.ModalEditFirstname
+  );
+
+  const { displayModalEditLastname } = useSelector(
+    (state: RootState) => state.ModalEditLastname
+  );
+  const { displayModalEditPassword } = useSelector(
+    (state: RootState) => state.ModalEditPassword
+  );
+  const { displayModalSendTokenEmail } = useSelector(
+    (state: RootState) => state.ModalSendTokenEmail
+  );
+  const { displayModalEditEmail } = useSelector(
+    (state: RootState) => state.ModalEditEmail
+  );
+  const { displayModalEditTwoFactor } = useSelector(
+    (state: RootState) => state.ModalEditTwoFactor
+  );
+  const { displayModalDeleteAccount } = useSelector(
+    (state: RootState) => state.ModalDeleteAccount
+  );
+  const { displayModalDatePickerDiscovery } = useSelector(
+    (state: RootState) => state.ModalDatePickerDiscovery
+  );
+  const { displayModalAddDiscoveryMeeting } = useSelector(
+    (state: RootState) => state.ModalAddDiscoveryMeeting
+  );
+  const { displayModalAddMeeting } = useSelector(
+    (state: RootState) => state.ModalAddMeeting
+  );
+  const { displayModalDatePickerEditDiscovery } = useSelector(
+    (state: RootState) => state.ModalDatePickerEditDiscovery
+  );
+  const { displayModalDeleteDiscoveryMeeting } = useSelector(
+    (state: RootState) => state.ModalDeleteDiscoveryMeeting
+  );
+  const { displayModalEditDiscoveryMeeting } = useSelector(
+    (state: RootState) => state.ModalEditDiscoveryMeeting
+  );
+  const { displayModalEditFormule } = useSelector(
+    (state: RootState) => state.ModalEditFormule
+  );
+  const { displayModalDatePicker } = useSelector(
+    (state: RootState) => state.ModalDatePicker
+  );
+  const { displayModalCancelMeeting } = useSelector(
+    (state: RootState) => state.ModalCancelMeeting
+  );
+  const { displayModalDatePickerEdit } = useSelector(
+    (state: RootState) => state.ModalDatePickerEdit
+  );
+  const { displayModalEditMeeting } = useSelector(
+    (state: RootState) => state.ModalEditMeeting
+  );
+  const { displayModalDeleteMeeting } = useSelector(
+    (state: RootState) => state.ModalDeleteMeeting
+  );
+  const { displayModalAddMeetingAdmin } = useSelector(
+    (state: RootState) => state.ModalAddMeetingAdmin
+  );
+  const { displayModalCancelTwoFactor } = useSelector(
+    (state: RootState) => state.ModalCancelTwoFactor
+  );
+  const { displayModalSendTokenTwoFactor } = useSelector(
+    (state: RootState) => state.ModalSendTokenTwoFactor
+  );
+  /* const { displayModalCancelMeeting } = useSelector(
+    (state: RootState) => state.ModalCancelMeeting
+  ); */
+  /* const {
     displayFormCheck,
     displaySendCode,
-    displayModalEditPasswordData,
-    displayModalEditFirstnameUserData,
-    displayModalEditLastnameUserData,
-    displayModalEditBirthUserData,
-    displayFormForgot,
-    displayModalEditGenderUserData,
-    displayModalEditEmailSendData,
-    displayModalEditEmailData,
     displayModalEditValidEmailData,
-    displayModalEditPhoneData,
     displayModalDeleteMeeting,
-    displayModalEditPhoneSendData,
-    displayModalEditValidPhoneData,
-    displayModalTwoFactor,
-    displayModalTwoFactorCode,
-    displayModalCancelMeeting,
     displayModalMeeting,
-    displayModalFirstMeeting,
-    displayModalDeleteAccount,
     displayModalCloseEmail,
-    displayModalClosePhone,
-    displayModalDeleteFirstMeeting,
-    displayModalEditFormule,
     displayModalCancelFormule,
     displayModalEditMeeting,
     displayModalAddMeetingAdmin,
-  } = useSelector((state: RootState) => state.form);
+    displayModalDatePickerEdit,
+  } = useSelector((state: RootState) => state.form); */
 
   const { flashMessage } = useSelector((state: RootState) => state.flash);
   const handlerClick = () => {
     dispatch({
-      type: "form/toggleLogin",
+      type: "ModalLogin/open",
     });
   };
-
   const classNameLine = () => {
     if (
-      displayFormLogin === true ||
-      displayFormRegister === true ||
-      displaySendCode === true ||
-      displayFormCheck === true ||
-      displayFormForgot === true ||
-      displayModalEditFirstnameUserData === true ||
-      displayModalEditLastnameUserData === true ||
-      displayModalEditPasswordData === true ||
-      displayModalEditEmailSendData === true ||
-      displayModalEditEmailData === true ||
-      displayModalEditValidEmailData === true ||
-      displayModalEditPhoneData === true ||
-      displayModalEditPhoneSendData === true ||
-      displayModalEditValidPhoneData === true ||
-      displayModalTwoFactor === true ||
-      displayModalTwoFactorCode === true ||
-      displayModalCancelMeeting === true ||
+      displayModalSendTokenTwoFactor === true ||
+      displayModalCancelTwoFactor === true ||
+      displayModalAddMeetingAdmin === true ||
       displayModalDeleteMeeting === true ||
-      displayModalMeeting === true ||
-      displayModalDeleteAccount === true ||
-      displayModalCloseEmail === true ||
-      displayModalClosePhone === true ||
-      displayModalEditBirthUserData === true ||
-      displayModalEditGenderUserData === true ||
-      displayModalFirstMeeting === true ||
-      displayModalDeleteFirstMeeting === true ||
-      displayModalEditFormule === true ||
-      displayModalCancelFormule === true ||
       displayModalEditMeeting === true ||
-      displayModalAddMeetingAdmin === true
+      displayModalDatePickerEdit === true ||
+      displayModalAddMeeting === true ||
+      displayModalDatePicker === true ||
+      displayModalEditDiscoveryMeeting === true ||
+      displayModalDatePickerEditDiscovery === true ||
+      displayModalLogin === true ||
+      displayModalRegister === true ||
+      displayModalDatePickerDiscovery === true ||
+      displayModalEditFirstname === true ||
+      displayModalEditLastname === true ||
+      displayModalEditPassword === true ||
+      displayModalSendTokenEmail === true ||
+      displayModalEditEmail === true ||
+      displayModalEditTwoFactor === true ||
+      displayModalCancelMeeting === true ||
+      displayModalDeleteAccount === true ||
+      displayModalAddDiscoveryMeeting === true ||
+      displayModalDeleteDiscoveryMeeting === true ||
+      displayModalEditFormule === true
     ) {
       return `${styles.line__hide}`;
     } else {
@@ -317,84 +575,72 @@ const Content = () => {
 
       if (mainDiv && footerDiv && htlmElement && htlmbody && header) {
         if (
-          displayFormLogin === true ||
-          displayFormRegister === true ||
-          displaySendCode === true ||
-          displayFormCheck === true ||
-          displayFormForgot === true ||
-          displayModalEditFirstnameUserData === true ||
-          displayModalEditLastnameUserData === true ||
-          displayModalEditPasswordData === true ||
-          displayModalEditEmailSendData === true ||
-          displayModalEditEmailData === true ||
-          displayModalEditValidEmailData === true ||
-          displayModalEditPhoneData === true ||
-          displayModalEditPhoneSendData === true ||
-          displayModalEditValidPhoneData === true ||
-          displayModalTwoFactor === true ||
-          displayModalTwoFactorCode === true ||
-          displayModalCancelMeeting === true ||
+          displayModalSendTokenTwoFactor === true ||
+          displayModalCancelTwoFactor === true ||
+          displayModalAddMeetingAdmin === true ||
           displayModalDeleteMeeting === true ||
-          displayModalMeeting === true ||
-          displayModalDeleteAccount === true ||
-          displayModalCloseEmail === true ||
-          displayModalClosePhone === true ||
-          displayModalEditBirthUserData === true ||
-          displayModalEditGenderUserData === true ||
-          displayModalFirstMeeting === true ||
-          displayModalDeleteFirstMeeting === true ||
-          displayModalEditFormule === true ||
-          displayModalCancelFormule === true ||
           displayModalEditMeeting === true ||
-          displayModalAddMeetingAdmin === true
+          displayModalDatePickerEdit === true ||
+          displayModalAddMeeting === true ||
+          displayModalDatePicker === true ||
+          displayModalEditDiscoveryMeeting === true ||
+          displayModalDatePickerEditDiscovery === true ||
+          displayModalLogin === true ||
+          displayModalRegister === true ||
+          displayModalDatePickerDiscovery === true ||
+          displayModalEditFirstname === true ||
+          displayModalEditLastname === true ||
+          displayModalEditPassword === true ||
+          displayModalSendTokenEmail === true ||
+          displayModalEditEmail === true ||
+          displayModalEditTwoFactor === true ||
+          displayModalCancelMeeting === true ||
+          displayModalDeleteAccount === true ||
+          displayModalAddDiscoveryMeeting === true ||
+          displayModalDeleteDiscoveryMeeting === true ||
+          displayModalEditFormule === true
         ) {
-          header.style.opacity = "0.02";
+          /* header.style.opacity = "0.02";
           mainDiv.style.opacity = "0.02";
           footerDiv.style.opacity = "0.02";
           htlmElement.style.height = "100%";
-          htlmbody.style.height = "100%";
+          htlmbody.style.height = "100%"; */
           htlmbody.style.overflowY = "hidden";
         } else {
-          mainDiv.style.opacity = "1";
+          /* mainDiv.style.opacity = "1";
           header.style.opacity = "1";
           footerDiv.style.opacity = "1";
           htlmElement.style.height = "100%";
-          htlmbody.style.height = "100%";
+          htlmbody.style.height = "100%"; */
           htlmbody.style.overflowY = "unset";
         }
       }
     }
   }, [
-    displayFormCheck,
-    displayModalEditEmailSendData,
-    displayFormForgot,
-    displayFormLogin,
-    displayFormRegister,
-    displayModalEditPasswordData,
-    displaySendCode,
-    displayModalEditEmailData,
-    displayModalEditValidEmailData,
-    displayModalEditPhoneData,
-    displayModalEditPhoneSendData,
-    displayModalEditValidPhoneData,
-    displayModalTwoFactor,
+    displayModalSendTokenEmail,
+    displayModalLogin,
+    displayModalRegister,
+    displayModalEditPassword,
+    displayModalEditEmail,
+    displayModalEditTwoFactor,
     displayModalCancelMeeting,
-    displayModalDeleteMeeting,
-    displayModalMeeting,
     displayModalDeleteAccount,
-    displayModalCloseEmail,
-    displayModalClosePhone,
-    displayModalEditFirstnameUserData,
-    displayModalEditLastnameUserData,
-    displayModalEditBirthUserData,
-    displayModalEditGenderUserData,
-    displayModalFirstMeeting,
-    displayModalDeleteFirstMeeting,
+    displayModalEditLastname,
+    displayModalAddDiscoveryMeeting,
+    displayModalDeleteDiscoveryMeeting,
     displayModalEditFormule,
-    displayModalCancelFormule,
-    displayModalAddMeetingAdmin,
+    displayModalDatePicker,
+    displayModalEditFirstname,
+    displayModalDatePickerDiscovery,
+    displayModalDatePickerEditDiscovery,
+    displayModalEditDiscoveryMeeting,
+    displayModalAddMeeting,
+    displayModalDatePickerEdit,
     displayModalEditMeeting,
-    displayModalTwoFactorCode,
+    displayModalDeleteMeeting,
+    displayModalAddMeetingAdmin,
+    displayModalCancelTwoFactor,
+    displayModalSendTokenTwoFactor,
   ]);
 
   if (typeof window !== "undefined") {
@@ -411,173 +657,7 @@ const Content = () => {
     });
   }
 
-  const ClassName = () => {
-    if (
-      displayFormLogin === true ||
-      displayFormForgot ||
-      displayFormRegister ||
-      displayModalEditFirstnameUserData ||
-      displayModalEditLastnameUserData ||
-      displayModalEditPasswordData ||
-      displayModalEditEmailSendData ||
-      displayModalEditEmailData ||
-      displayModalEditValidEmailData ||
-      displayModalEditPhoneData ||
-      displayModalEditPhoneSendData ||
-      displayModalEditValidPhoneData ||
-      displayModalTwoFactor ||
-      displayModalTwoFactorCode ||
-      displayModalCancelMeeting ||
-      displayModalDeleteMeeting ||
-      displayModalMeeting ||
-      displayModalDeleteAccount ||
-      displayModalCloseEmail ||
-      displayModalClosePhone ||
-      displayModalEditBirthUserData ||
-      displayModalEditGenderUserData ||
-      displayModalFirstMeeting ||
-      displayModalDeleteFirstMeeting ||
-      displayModalEditFormule ||
-      displayModalCancelFormule ||
-      displayModalEditMeeting ||
-      displayModalAddMeetingAdmin
-    ) {
-      /* if (displayLogMenu === true) {
-        if (flashMessage && flashMessage[1].length > 0) {
-          return `${styles.header__login__active} ${styles.header__header__margins}`;
-        }
-        return `${styles.header__login__active} ${styles.header__header__margin}`;
-      }
-      if (flashMessage && flashMessage[1].length > 0) {
-        return `${styles.header__login__active} ${styles.header__header__margins}`;
-      } */
-      return `${styles.header} ${styles.header__opacity}`;
-    } else {
-      /* if (displayLogMenu === true) {
-        if (flashMessage && flashMessage[1].length > 0) {
-          return `${styles.header} ${styles.header__header__margins}`;
-        }
-        return `${styles.header} ${styles.header__header__margin}`;
-      }
-      if (flashMessage && flashMessage[1].length > 0) {
-        return `${styles.header} ${styles.header__header__margins}`;
-      } */
-      return `${styles.header} ${styles.header__noOpacity}`;
-    }
-  };
-  const displayFlash = () => {
-    if (flashMessage && flashMessage[1].length > 0) {
-      if (
-        displayFormLogin === true ||
-        displayFormRegister === true ||
-        displaySendCode === true ||
-        displayFormCheck === true ||
-        displayFormForgot === true
-      ) {
-        if (flashMessage[0] === "error") {
-          return (
-            <div className={styles.flash__modal__error}>
-              <Image
-                className={styles.flash__modal__error__img}
-                width={25}
-                height={25}
-                src="/assets/icone/circle-exclamation-solid.svg"
-                alt="logo tdss coaching"
-                priority={true}
-              />
-              {flashMessage[1]}
-              <span
-                onClick={() => {
-                  dispatch({
-                    type: "flash/clearFlashMessage",
-                  });
-                }}
-                className={styles.flash__modal__error__span}
-              >
-                &times;
-              </span>
-            </div>
-          );
-        } else {
-          return (
-            <div className={styles.flash__modal__success}>
-              <Image
-                className={styles.flash__modal__success__img}
-                width={20}
-                height={20}
-                src="/assets/icone/check-solid.svg"
-                alt="logo tdss coaching"
-                priority={true}
-              />
-              {flashMessage[1]}
-              <span
-                onClick={() => {
-                  dispatch({
-                    type: "flash/clearFlashMessage",
-                  });
-                }}
-                className={styles.flash__modal__success__span}
-              >
-                &times;
-              </span>
-            </div>
-          );
-        }
-      }
-      if (flashMessage[0] === "error") {
-        return (
-          <div className={styles.flash__modal__error}>
-            <Image
-              className={styles.flash__modal__error__img}
-              width={25}
-              height={25}
-              src="/assets/icone/circle-exclamation-solid.svg"
-              alt="logo tdss coaching"
-              priority={true}
-            />
-            {flashMessage[1]}{" "}
-            <span
-              onClick={() => {
-                dispatch({
-                  type: "flash/clearFlashMessage",
-                });
-              }}
-              className={styles.flash__modal__error__span}
-            >
-              &times;
-            </span>
-          </div>
-        );
-      } else {
-        return (
-          <div className={styles.flash__modal__success}>
-            <Image
-              className={styles.flash__modal__success__img}
-              width={20}
-              height={20}
-              src="/assets/icone/check-solid.svg"
-              alt="logo tdss coaching"
-              priority={true}
-            />
-            {flashMessage[1]}{" "}
-            <span
-              onClick={() => {
-                dispatch({
-                  type: "flash/clearFlashMessage",
-                });
-              }}
-              className={styles.flash__modal__success__span}
-            >
-              &times;
-            </span>
-          </div>
-        );
-      }
-    } else {
-      return null;
-    }
-  };
-  /*  useEffect(() => {
+  /*   useEffect(() => {
     if (document) {
       let body = document.querySelector("body");
       if (body) {
@@ -609,32 +689,153 @@ const Content = () => {
     }
   }, [dispatch, flashMessage]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 768) {
+        if (isMobile === false || isMobile === null) {
+          //setMobile(true);
+          dispatch({
+            type: "Mobile/isMobile",
+          });
+        }
+      } else {
+        if (isMobile === true || isMobile === null) {
+          //setMobile(false);
+          dispatch({
+            type: "Mobile/notMobile",
+          });
+        }
+      }
+    }
+  }, [dispatch, isMobile]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", () => {
+        if (window.innerWidth < 768) {
+          if (isMobile === false || isMobile === null) {
+            dispatch({
+              type: "Mobile/isMobile",
+            });
+            //setMobile(true);
+          }
+        } else {
+          if (isMobile === true || isMobile === null) {
+            dispatch({
+              type: "Mobile/notMobile",
+            });
+            //setMobile(false);
+          }
+        }
+      });
+    }
+  }, [dispatch, isMobile]);
   return (
     <>
-      {displayFormLogin === true && <FormLogin />}
-      {displayFormRegister === true && <FormRegister />}
-      {displaySendCode === true && <SendCode />}
-      {displayFormForgot === true && <Forgot />}
-      {displayModalEditFirstnameUserData === true && <ModalUserFirstnameData />}
-      {displayModalEditLastnameUserData === true && <ModalUserLastnameData />}
-      {displayModalEditPasswordData && <ModalUserPasswordData />}
-      {displayModalEditEmailSendData && <ModalUserSendToken />}
-      {displayModalEditEmailData === true && <EmailCheck />}
-      {displayModalTwoFactor === true && <ModalTwoFactor />}
-      {displayModalTwoFactorCode === true && <ModalTwoFactorCode />}
-      {displayModalCancelMeeting === true && <ModalCancel />}
-      {displayModalDeleteMeeting === true && <ModalDeleteMeeting />}
-      {displayModalMeeting === true && <ModalAddMeeting />}
-      {displayModalFirstMeeting === true && <ModalAddFirstMeeting />}
-      {displayModalDeleteAccount === true && <ModalDeleteAccount />}
-      {displayModalCloseEmail === true && <ModalCloseEmail />}
-      {displayModalDeleteFirstMeeting === true && <ModalDeleteFirstMeeting />}
-      {displayModalEditFormule === true && <ModalEditFormuleUser />}
-      {displayModalCancelFormule === true && <ModalCancelFormuleUser />}
-      {displayModalEditMeeting === true && <ModalEditMeeting />}
-      {displayModalAddMeetingAdmin === true && <ModalAddMeetingAdmin />}
+      <FormLogin />
+      <FormRegister />
+      <Forgot />
+      <ModalUserFirstnameData />
+      <ModalUserLastnameData />
+      <ModalUserPasswordData />
+      <ModalUserSendToken />
+      <EmailCheck />
+      <ModalCloseEmail />
+      <ModalTwoFactor />
+      <ModalDeleteAccount />
+      <ModalCloseTwoFactor />
+      <ModalTwoFactorSendToken />
 
-      {displayFlash()}
+      {/* <ModalDatePickerDiscoveryMobile /> */}
+      <ModalDatePickerDiscovery />
+      <ModalAddDiscoveryMeeting />
+      <ModalDeleteDiscoveryMeeting />
+      <ModalEditDiscoveryMeeting />
+      <ModalDatePickerEditDiscovery />
+      <ModalDatePicker />
+      <ModalAddMeeting />
+      <ModalCancelMeeting />
+      <ModalDatePickerEdit />
+      <ModalEditMeeting />
+      <ModalDeleteMeeting />
+      <ModalAddMeetingAdmin />
+
+      {/* <ModalAddMeeting /> */}
+      {/* <ModalDeleteFirstMeeting /> */}
+      {/* {mobile === true ? null : <DatePickerEditDesktop />}
+      {mobile === true ? null : <ModalEditMeeting />} */}
+      <ModalEditFormuleUser />
+      <ModalCancelMeeting />
+      <ModalDatePickerEditDesktop />
+      {/* <DisplayModal
+        state={displayModalCancelMeeting}
+        textClassName="displayModalCancelMeeting"
+        component={<ModalCancel />}
+        componentFake={<ModalCancelFake />}
+      />
+      <DisplayModal
+        state={displayModalDeleteMeeting}
+        textClassName="displayModalDeleteMeeting"
+        component={<ModalDeleteMeeting />}
+        componentFake={<ModalDeleteMeetingFake />}
+      />
+
+      <DisplayModal
+        state={displayModalDatePicker}
+        textClassName="displayModalDatePicker"
+        component={
+          mobile === true ? <DatePickerMobile /> : <DatePickerDesktop />
+        }
+        componentFake={<ModalDeleteMeetingFake />}
+      /> */}
+      {/* {displayModalTwoFactorCode === true && <ModalTwoFactorCode />} */}
+      {/* {displayModalCancelMeeting === true && <ModalCancel />} */}
+      {/* {displayModalDeleteMeeting === true && <ModalDeleteMeeting />} */}
+      {/* {displayModalMeeting === true && <ModalAddMeeting />} */}
+      {/* {displayModalDeleteDiscoveryMeeting === true && <ModalDeleteFirstMeeting />} */}
+      {/* {displayModalEditFormule === true && <ModalEditFormuleUser />} */}
+      {/* {displayModalCancelFormule === true && <ModalCancelFormuleUser />} */}
+      {/* {displayModalEditMeeting === true && <ModalEditMeeting />} */}
+
+      {/* <DisplayModal
+        state={displayModalAddMeetingAdmin}
+        textClassName="displayModalAddMeetingAdmin"
+        component={<ModalAddMeetingAdmin />}
+        componentFake={<ModalDeleteMeetingFake />}
+      /> */}
+      {/* {displayModalAddMeetingAdmin === true && <ModalAddMeetingAdmin />} */}
+
+      <AnimatePresence>
+        {flashMessage && flashMessage[1].length > 0 && (
+          <>
+            <motion.div
+              className={`${`flash__modal__${flashMessage[0]}`} ${`flash__modal__standard`}`}
+              initial={{ y: 200, opacity: 0 }}
+              animate={{ y: 0, opacity: 1, transition: { duration: 0.3 } }}
+              exit={{ y: 200, opacity: 0, transition: { duration: 0.3 } }}
+            >
+              <Image
+                className={`flash__modal__standard__img`}
+                width={25}
+                height={25}
+                src="/assets/icone/circle-exclamation-solid.svg"
+                alt="logo tdss coaching"
+                priority={true}
+              />
+              {flashMessage[1]}{" "}
+              <span
+                onClick={() => {
+                  dispatch({
+                    type: "flash/clearFlashMessage",
+                  });
+                }}
+                className={`${`flash__modal__standard__span`} ${`flash__modal__standard__span__${flashMessage[0]}`}`}
+              >
+                &times;
+              </span>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       <header className={styles.header}>
         <figure className={styles.header__figure}>
@@ -888,9 +1089,18 @@ const Content = () => {
           <div className={styles.headerr}>
             <div
               onClick={() => {
-                dispatch({
-                  type: "menu/toggleMenu",
-                });
+                if (displayLogMenu === true) {
+                  setDisplayLogMenu(false);
+                  setTimeout(() => {
+                    dispatch({
+                      type: "menu/toggleMenu",
+                    });
+                  }, 500);
+                } else {
+                  dispatch({
+                    type: "menu/toggleMenu",
+                  });
+                }
               }}
               className={styles.button}
             >

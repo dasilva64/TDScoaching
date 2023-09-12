@@ -71,7 +71,7 @@ export default withIronSessionApiRoute(
               status: 200,
               body: editUser,
               message:
-                "Un code vous à été renvoyer pour valider votre numéro de téléphone",
+                "Un code vous à été renvoyer pour valider votre adresse email",
             });
           } else {
             return res.json({

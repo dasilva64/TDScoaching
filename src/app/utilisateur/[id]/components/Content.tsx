@@ -34,7 +34,7 @@ const Content = () => {
     }
   }, [data, dispatch, router]);
 
-  const { data: dataCancel, trigger } = useSWRMutation(
+  const { data: dataCancel, reset } = useSWRMutation(
     "/api/paiement/cancelByAdmin",
     fetchPost
   );
@@ -49,18 +49,20 @@ const Content = () => {
         mutate({
           ...dataCancel,
         });
+        reset();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: dataCancel.message },
         });
       }
     }
-  }, [dataCancel, dispatch, mutate]);
+  }, [dataCancel, dispatch, mutate, reset]);
 
-  const { data: dataAccept, trigger: triggerAccept } = useSWRMutation(
-    "/api/paiement/acceptByAdmin",
-    fetchPost
-  );
+  const {
+    data: dataAccept,
+    trigger: triggerAccept,
+    reset: resetAccept,
+  } = useSWRMutation("/api/paiement/acceptByAdmin", fetchPost);
   useEffect(() => {
     if (dataAccept) {
       if (dataAccept.status !== 200) {
@@ -72,18 +74,20 @@ const Content = () => {
         mutate({
           ...dataAccept,
         });
+        resetAccept();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: dataAccept.message },
         });
       }
     }
-  }, [dataAccept, dispatch, mutate]);
+  }, [dataAccept, dispatch, mutate, resetAccept]);
 
-  const { data: dataAcceptOther, trigger: triggerAcceptOther } = useSWRMutation(
-    "/api/paiement/acceptOtherByAdmin",
-    fetchPost
-  );
+  const {
+    data: dataAcceptOther,
+    trigger: triggerAcceptOther,
+    reset: resetAcceptOther,
+  } = useSWRMutation("/api/paiement/acceptOtherByAdmin", fetchPost);
   useEffect(() => {
     if (dataAcceptOther) {
       if (dataAcceptOther.status !== 200) {
@@ -95,16 +99,20 @@ const Content = () => {
         mutate({
           ...dataAcceptOther,
         });
+        resetAcceptOther();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: dataAcceptOther.message },
         });
       }
     }
-  }, [dataAcceptOther, dispatch, mutate]);
+  }, [dataAcceptOther, dispatch, mutate, resetAcceptOther]);
 
-  const { data: dataFinishMeeting, trigger: triggerFinishMeeting } =
-    useSWRMutation("/api/meeting/finish", fetchPost);
+  const {
+    data: dataFinishMeeting,
+    trigger: triggerFinishMeeting,
+    reset: resetFinisMeeting,
+  } = useSWRMutation("/api/meeting/finish", fetchPost);
 
   useEffect(() => {
     if (dataFinishMeeting) {
@@ -134,11 +142,12 @@ const Content = () => {
         },
         { revalidate: false }
       );
+      resetFinisMeeting();
     };
     if (dataFinishMeeting && dataFinishMeeting.body) {
       mutateFinishMeeting();
     }
-  }, [dataFinishMeeting, mutate]);
+  }, [dataFinishMeeting, mutate, resetFinisMeeting]);
 
   let content;
   if (isError) content = <div>error</div>;

@@ -1,25 +1,29 @@
-import { AppDispatch } from "../../../../redux/store";
+import { AppDispatch, RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserFirstnameData.module.scss";
 import useSWRMutation from "swr/mutation";
-import { mutate } from "swr";
 import validator from "validator";
 import { TextField } from "@mui/material";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useGet from "@/app/components/hook/useGet";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 
 const ModalUserFirstnameData = () => {
+  const { displayModalEditFirstname } = useSelector(
+    (state: RootState) => state.ModalEditFirstname
+  );
   const {
     data: userData,
     isLoading,
     isError,
+    mutate,
   } = useGet("/api/user/getUserProfile");
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  let content;
-  if (isError) {
+  /* if (isError) {
     dispatch({
       type: "flash/storeFlashMessage",
       payload: {
@@ -29,30 +33,42 @@ const ModalUserFirstnameData = () => {
     });
     router.push("/");
   } else if (isLoading) {
-  }
+  } */
+
   const [inputPseudo, setInputPseudo] = useState<string>("");
-  const [firstnameInput, setFirstnameInput] = useState<string>(
-    userData.body.firstname
-  );
+  const [firstnameInput, setFirstnameInput] = useState<string>("");
+  useEffect(() => {
+    if (isLoading) {
+      setFirstnameInput("");
+    } else {
+      if (userData) {
+        if (userData.status === 200) {
+          setFirstnameInput(userData.body.firstname);
+        } else {
+          setFirstnameInput("");
+        }
+      }
+    }
+  }, [isLoading, userData]);
   const [validFirstnameInput, setValidFirstnameInput] = useState<boolean>(true);
   const [errorMessageFirstname, setErrorMessageFirstname] =
     useState<string>("");
 
-  const { trigger, data } = useSWRMutation(
+  const { trigger, data, reset } = useSWRMutation(
     "/api/user/editFirstnameUser",
     fetchPost
   );
-
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
         dispatch({
           type: "flash/storeFlashMessage",
-          payload: { type: "succes", flashMessage: data.message },
+          payload: { type: "success", flashMessage: data.message },
         });
         dispatch({
-          type: "form/closeModalEditFirstnameUserData",
+          type: "ModalEditFirstname/close",
         });
+        clearState();
       } else if (data.status === 400) {
         data.message.forEach((element: string) => {
           if (element[0] === "firstname") {
@@ -71,7 +87,6 @@ const ModalUserFirstnameData = () => {
   useEffect(() => {
     const mutateMainData = async () => {
       mutate(
-        "/api/user/getUserProfile",
         {
           ...data,
           body: {
@@ -79,17 +94,21 @@ const ModalUserFirstnameData = () => {
             firstname: firstnameInput,
           },
         },
-        { revalidate: false }
+        {
+          revalidate: false,
+        }
       );
+      reset();
     };
     if (data && data.body) {
       mutateMainData();
     }
-  }, [data, firstnameInput]);
+  }, [data, firstnameInput, mutate, reset]);
 
   const closeForm = () => {
+    clearState();
     dispatch({
-      type: "form/closeModalEditFirstnameUserData",
+      type: "ModalEditFirstname/close",
     });
   };
 
@@ -113,6 +132,11 @@ const ModalUserFirstnameData = () => {
         setErrorMessageFirstname("Prénom : ne doit pas être vide");
       }
     }
+  };
+  const clearState = () => {
+    setErrorMessageFirstname("");
+    setValidFirstnameInput(false);
+    setFirstnameInput("");
   };
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -145,68 +169,100 @@ const ModalUserFirstnameData = () => {
   };
   return (
     <>
-      <div className={styles.bg}></div>
-      <div className={styles.modalEditMainUserData}>
-        <button
-          className={styles.modalEditMainUserData__btn}
-          onClick={() => closeForm()}
-        >
-          <span className={styles.modalEditMainUserData__btn__cross}>
-            &times;
-          </span>
-        </button>
-        <h1 className={styles.modalEditMainUserData__h1}>
-          Modifier votre prénom
-        </h1>
-        <form
-          className={styles.modalEditMainUserData__form}
-          action=""
-          onSubmit={(e) => {
-            handlerSubmit(e);
-          }}
-        >
-          <TextField
-            value={firstnameInput}
-            style={{ margin: "20px 0px 0px 0px" }}
-            id={"firstname"}
-            label={"Prénom"}
-            variant="standard"
-            type={"text"}
-            placeholder={"Entrez votre prénom"}
-            FormHelperTextProps={{ style: { color: "red" } }}
-            onChange={(e) => {
-              handlerInput(
-                e,
-                "firstname",
-                /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
-                setValidFirstnameInput,
-                setErrorMessageFirstname,
-                setFirstnameInput,
-                "Prénom : 3 lettres minimum"
-              );
-            }}
-            helperText={errorMessageFirstname}
-          />
-          <input
-            type="text"
-            name="pseudo"
-            id="pseudo"
-            style={{ display: "none" }}
-            tabIndex={-1}
-            autoComplete="off"
-            onChange={(e) => {
-              setInputPseudo(e.target.value);
-            }}
-          />
-          <div className={styles.modalEditMainUserData__form__submit}>
-            <input
-              className={styles.modalEditMainUserData__form__submit__btn}
-              type="submit"
-              value="Modifier"
+      <AnimatePresence>
+        {displayModalEditFirstname === true && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { duration: 0.3 } }}
+              exit={{ opacity: 0 }}
+              className={styles.bg}
+              onClick={() => closeForm()}
             />
-          </div>
-        </form>
-      </div>
+            <motion.div
+              className={styles.modalEditMainUserData}
+              initial={{ y: 200, x: "-50%", opacity: 0 }}
+              animate={{
+                y: "-50%",
+                x: "-50%",
+                opacity: 1,
+                transition: { duration: 0.3 },
+              }}
+              exit={{
+                y: 200,
+                x: "-50%",
+                opacity: 0,
+                transition: { duration: 0.3 },
+              }}
+            >
+              <button
+                className={styles.modalEditMainUserData__btn}
+                onClick={() => closeForm()}
+              >
+                <Image
+                  className={styles.modalEditMainUserData__btn__img}
+                  src="/assets/icone/xmark-solid.svg"
+                  alt="arrow-left"
+                  width={30}
+                  height={30}
+                ></Image>
+              </button>
+              <h1 className={styles.modalEditMainUserData__h1}>
+                Modifier votre prénom
+              </h1>
+              <form
+                className={styles.modalEditMainUserData__form}
+                action=""
+                onSubmit={(e) => {
+                  handlerSubmit(e);
+                }}
+              >
+                <TextField
+                  autoFocus
+                  value={firstnameInput}
+                  style={{ margin: "20px 0px 0px 0px" }}
+                  id={"firstname"}
+                  label={"Prénom"}
+                  variant="standard"
+                  type={"text"}
+                  placeholder={"Entrez votre prénom"}
+                  FormHelperTextProps={{ style: { color: "red" } }}
+                  onChange={(e) => {
+                    handlerInput(
+                      e,
+                      "firstname",
+                      /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
+                      setValidFirstnameInput,
+                      setErrorMessageFirstname,
+                      setFirstnameInput,
+                      "Prénom : 3 lettres minimum"
+                    );
+                  }}
+                  helperText={errorMessageFirstname}
+                />
+                <input
+                  type="text"
+                  name="pseudo"
+                  id="pseudo"
+                  style={{ display: "none" }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  onChange={(e) => {
+                    setInputPseudo(e.target.value);
+                  }}
+                />
+                <div className={styles.modalEditMainUserData__form__submit}>
+                  <input
+                    className={styles.modalEditMainUserData__form__submit__btn}
+                    type="submit"
+                    value="Modifier"
+                  />
+                </div>
+              </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };

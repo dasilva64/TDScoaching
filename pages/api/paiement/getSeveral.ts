@@ -1,0 +1,161 @@
+import { withIronSessionApiRoute } from "iron-session/next";
+import prisma from "../../../lib/prisma";
+import Stripe from "stripe";
+import { validationBody } from "../../../lib/validation";
+
+export default withIronSessionApiRoute(
+  async function getSeveral(req, res) {
+    if (req.method === "POST") {
+      if (req.session.user) {
+        let { start, typeCoaching } = req.body;
+        let arrayMessageError = validationBody(req.body);
+        if (arrayMessageError.length > 0) {
+          return res.status(400).json({
+            status: 400,
+            message: arrayMessageError,
+          });
+        }
+        const user = await prisma.user.findUnique({
+          where: { id: req.session.user.id },
+        });
+        if (user === null) {
+          return res.status(400).json({
+            status: 400,
+            message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
+          });
+        } else {
+          if (user.meetingId !== null) {
+            return res.status(404).json({
+              status: 404,
+              message: "Vous avez déjà un rendez-vous de pris",
+            });
+          } else {
+            let dateStart = new Date(start);
+            let isoDateStart = dateStart.toISOString();
+            const meeting = await prisma.meeting.findFirst({
+              where: {
+                startAt: isoDateStart,
+              },
+            });
+            if (meeting) {
+              return res.status(404).json({
+                status: 404,
+                message: "Ce rendez-vous est déjà pris, veuillez réessayer",
+              });
+            } else {
+              const stripe = new Stripe(
+                "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f",
+                {
+                  apiVersion: "2022-11-15",
+                }
+              );
+              let price;
+              let copyTypeMeeting: any = user.typeMeeting;
+              if (copyTypeMeeting.type === "flash") {
+                price = 30000;
+              } else if (copyTypeMeeting.type === "longue") {
+                price = 100000;
+              } else if (copyTypeMeeting.type === "unique") {
+                price = 10000;
+              } else {
+                return res.status(404).json({
+                  status: 404,
+                  message:
+                    "Sélectionnez une formule avant de prendre rendez-vous",
+                });
+              }
+              const priceId = "price_1NnlmiBp4Rgye6f3ZvTarBJT";
+
+              const session = await stripe.checkout.sessions.create({
+                mode: "subscription",
+                line_items: [
+                  {
+                    price: priceId,
+                    // For metered billing, do not pass quantity
+                    quantity: 1,
+                  },
+                ],
+                // {CHECKOUT_SESSION_ID} is a string literal; do not change it!
+                // the actual Session ID is returned in the query parameter when your customer
+                // is redirected to the success page.
+                customer_email: user?.mail,
+                locale: "fr",
+                success_url: "http://localhost:3000/api/meeting/create",
+                cancel_url: "http://localhost:3000/rendez-vous",
+              });
+              let copyPaymentId = session.id;
+              let currentDate = new Date();
+              const createMeetingObject: any = {
+                startAt: isoDateStart,
+                status: false,
+                userId: user.id,
+                paymentId: copyPaymentId,
+                typeMeeting: {
+                  ...copyTypeMeeting,
+                  paymentId: copyPaymentId,
+                  coaching: typeCoaching,
+                },
+                limitDate: new Date(
+                  currentDate.setHours(currentDate.getHours() + 1)
+                )
+                  .getTime()
+                  .toString(),
+              };
+              const createMeeting = await prisma.meeting.create({
+                data: createMeetingObject,
+              });
+              if (createMeeting === null) {
+                return res.status(400).json({
+                  status: 400,
+                  message:
+                    "Une erreur est survenue lors de la création du rendez-vous, veuillez réessayer",
+                });
+              } else {
+                const userEdit = await prisma.user.update({
+                  where: {
+                    id: user.id,
+                  },
+                  data: {
+                    meetingId: createMeeting.id,
+                    typeMeeting: {
+                      ...copyTypeMeeting,
+                      paymentId: copyPaymentId,
+                      coaching: typeCoaching,
+                    },
+                  },
+                });
+                if (userEdit === null) {
+                  return res.status(400).json({
+                    status: 400,
+                    message:
+                      "Une erreur est survenue lors de la création du rendez-vous, veuillez réessayer",
+                  });
+                } else {
+                  res.json({ url: session.url });
+                }
+              }
+            }
+          }
+        }
+      } else {
+        return res.status(404).json({
+          status: 404,
+          message: "Vous n'êtes pas connecté, veuillez réessayer",
+        });
+      }
+    } else {
+      return res.status(404).json({
+        status: 404,
+        message: "Une erreur est survenue, veuillez réessayer",
+      });
+    }
+  },
+  {
+    password:
+      "tesdfjklsjtesdfjktesdfjklsjdfljslkdfjlsjdflslqfdjkstlsjdfljslkdfjlsjdflslqfdjkstdfljslkdfjlsjdflslqfdjkst",
+    cookieName: "test",
+    cookieOptions: {
+      secure: process.env.NODE_ENV === "production",
+    },
+  }
+);

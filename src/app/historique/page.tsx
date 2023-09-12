@@ -25,10 +25,6 @@ export default function Historique() {
         </h1>
         <div className={styles.historique__container}>
           <div className={styles.historique__article}>
-            <h2 className={styles.historique__article__h2}>
-              Vous êtes en quête de bien-être ? Le coaching de vie peut vous
-              apporter des solutions.
-            </h2>
             <div>
               <AllMeeting />
             </div>

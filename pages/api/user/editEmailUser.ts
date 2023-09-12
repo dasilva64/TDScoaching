@@ -25,10 +25,16 @@ export default withIronSessionApiRoute(
                 editEmail: Prisma.JsonNull,
               },
             });
+            let userObject = {
+              firstname: editUser.firstname,
+              lastname: editUser.lastname,
+              email: editUser.mail,
+              twoFactor: editUser.twoFactor,
+            };
             res.status(200).json({
               status: 200,
               message: "Votre nouvel email est maintenant actif",
-              body: editUser,
+              body: userObject,
             });
           } else {
             res.json({

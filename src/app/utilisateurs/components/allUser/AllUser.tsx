@@ -74,7 +74,6 @@ const AllUser = () => {
               Prénom: p.firstName,
               Nom: p.lastName,
               Mail: p.mail,
-              Téléphone: p.phone,
               RendezVous: "aucun",
               Status: p.status.toString(),
             };
@@ -82,7 +81,6 @@ const AllUser = () => {
             delete copyOfItems[index].status;
             delete copyOfItems[index].firstName;
             delete copyOfItems[index].lastName;
-            delete copyOfItems[index].phone;
             delete copyOfItems[index].mail;
           }
         } else if (p.meeting !== null) {
@@ -91,7 +89,6 @@ const AllUser = () => {
             Prénom: p.firstName,
             Nom: p.lastName,
             Mail: p.mail,
-            Téléphone: p.phone,
             Status: p.status.toString(),
             RendezVous: p.meeting,
           };
@@ -99,7 +96,6 @@ const AllUser = () => {
           delete copyOfItems[index].meeting;
           delete copyOfItems[index].firstName;
           delete copyOfItems[index].lastName;
-          delete copyOfItems[index].phone;
           delete copyOfItems[index].mail;
         }
       });

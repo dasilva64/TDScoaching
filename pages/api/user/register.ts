@@ -7,7 +7,7 @@ import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 
 export default withIronSessionApiRoute(
-  async function sendTokenEditPhone(req, res) {
+  async function register(req, res) {
     if (req.method === "POST") {
       const { email, firstname, lastname, password, pseudo } = await req.body;
 

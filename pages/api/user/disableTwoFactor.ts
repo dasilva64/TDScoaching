@@ -19,11 +19,17 @@ export default withIronSessionApiRoute(
             where: { id: user.id },
             data: { twoFactor: false, twoFactorCode: Prisma.JsonNull },
           });
+          let userObject = {
+            firstname: editUser.firstname,
+            lastname: editUser.lastname,
+            email: editUser.mail,
+            twoFactor: editUser.twoFactor,
+          };
           res.status(200).json({
             status: 200,
             message:
               "Vous avez désactivé l'authentification à deux facteurs avec succès",
-            body: editUser,
+            body: userObject,
           });
         }
       } else {

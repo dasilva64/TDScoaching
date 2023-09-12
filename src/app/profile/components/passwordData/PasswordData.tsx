@@ -15,7 +15,7 @@ const PasswordData = () => {
         className={styles.card}
         onClick={() => {
           dispatch({
-            type: "form/openModalEditPasswordData",
+            type: "ModalEditPassword/open",
           });
         }}
       >

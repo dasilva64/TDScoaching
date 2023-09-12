@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import "./globals.css";
+import "./globals.scss";
 import { Inter } from "next/font/google";
 import { Providers } from "./redux/provider";
 import Footer from "./components/footer/footer";

@@ -1,6 +1,7 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import prisma from "../../../lib/prisma";
 import { validationBody } from "../../../lib/validation";
+import { Prisma } from "@prisma/client";
 
 export default withIronSessionApiRoute(
   async function get(req, res) {
@@ -59,6 +60,7 @@ export default withIronSessionApiRoute(
                     status: true,
                     userId: userId,
                     limitDate: null,
+                    typeMeeting: Prisma.JsonNull,
                   };
                   const meetingCreate = await prisma.meeting.create({
                     data: createMeetingObject,
@@ -78,6 +80,12 @@ export default withIronSessionApiRoute(
                           where: { id: userId },
                           data: {
                             meetingId: meetingCreate.id,
+                            typeMeeting: copyTypeMeeting,
+                          },
+                        });
+                        const editMeeting = await prisma.meeting.update({
+                          where: { id: meetingCreate.id },
+                          data: {
                             typeMeeting: copyTypeMeeting,
                           },
                         });

@@ -46,22 +46,6 @@ export default withIronSessionApiRoute(
               )
             );
             let isoDateStart = dateStart.toISOString();
-
-            /* let split = start.split(" ");
-            let splitDate = split[0].split("/");
-            let splitHour = split[1].split(":");
-            let dateStart = new Date(
-              Date.UTC(
-                splitDate[2],
-                splitDate[1] - 1,
-                splitDate[0],
-                Number(splitHour[0]) + Number(timeZone),
-                splitHour[1],
-                0,
-                0
-              )
-            );
-            let isoDateStart = dateStart.toISOString(); */
             const meeting = await prisma.meeting.findFirst({
               where: {
                 startAt: start,
@@ -179,6 +163,7 @@ export default withIronSessionApiRoute(
                     where: { startAt: { gte: new Date() } },
                     select: {
                       startAt: true,
+                      userId: true,
                     },
                   });
                   let userObject = {

@@ -15,12 +15,25 @@ export default withIronSessionApiRoute(
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
           });
         } else {
-          let userObject = {
-            firstname: user.firstname,
-            lastname: user.lastname,
-            email: user.mail,
-            twoFactor: user.twoFactor,
-          };
+          let copyEditEmail: any = user.editEmail;
+          let userObject;
+          if (copyEditEmail === null) {
+            userObject = {
+              firstname: user.firstname,
+              lastname: user.lastname,
+              email: user.mail,
+              twoFactor: user.twoFactor,
+              newEmail: "",
+            };
+          } else {
+            userObject = {
+              firstname: user.firstname,
+              lastname: user.lastname,
+              email: user.mail,
+              twoFactor: user.twoFactor,
+              newEmail: copyEditEmail.newEmail,
+            };
+          }
           return res.status(200).json({
             status: 200,
             body: userObject,

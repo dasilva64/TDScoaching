@@ -60,6 +60,7 @@ export default withIronSessionApiRoute(
                   where: { startAt: { gte: new Date() } },
                   select: {
                     startAt: true,
+                    userId: true,
                   },
                 });
                 let userObject = {

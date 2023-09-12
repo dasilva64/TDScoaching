@@ -3,7 +3,7 @@
   justify-content: space-between;
   position: fixed;
   width: 100%;
-  z-index: 5;
+  z-index: 699;
   background-color: white;
   top: 0;
   &__header {
@@ -157,8 +157,31 @@
 
   &__log {
     margin-left: 30px;
+    &__container {
+      background-color: rgb(41, 41, 41);
+      color: black;
+
+      position: absolute;
+      padding: 150px 50px 100px 40px;
+      z-index: 900;
+      height: 100vh;
+      right: 0px;
+      top: 0;
+      transition: all 300ms 400ms ease-in;
+      &__show {
+        z-index: 900;
+        transform: translateX(0px);
+      }
+      &__hide {
+        z-index: 0;
+        transform: translateX(390px);
+      }
+    }
     &__div {
       width: 50px;
+      height: 50px;
+      position: relative;
+      z-index: 999;
       height: 50px;
       background-color: aqua;
       border-radius: 50%;
@@ -166,18 +189,63 @@
     }
 
     &__ul {
-      background-color: aqua;
-      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       list-style-type: none;
-      position: absolute;
-      right: 25px;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 10px;
     }
     &__li {
+      font-size: 24px;
       color: white;
+
+      &__show {
+        animation: translateLink 1s ease-in-out;
+      }
+      &__2 {
+        animation-delay: 50ms;
+      }
+      &__3 {
+        animation-delay: 150ms;
+      }
+      &__4 {
+        animation-delay: 200ms;
+      }
+      &__5 {
+        animation-delay: 250ms;
+      }
+
+      &__link {
+        cursor: pointer;
+        position: relative;
+        font-weight: 300;
+      }
+      &__point {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: white;
+        position: absolute;
+        position: absolute;
+        left: -22px;
+        top: 50%;
+        transition: all 300ms 100ms ease-in-out;
+        &__hide {
+          transform: scale(0);
+        }
+        &__show {
+          transform: scale(1) translateY(-50%);
+        }
+      }
     }
+  }
+}
+
+@keyframes translateLink {
+  0% {
+    transform: translateX(200px);
+  }
+  100% {
+    transform: translateX(0px);
   }
 }
 
@@ -219,113 +287,6 @@
     font-size: 16px;
     transition: all 1s;
     bottom: -20px;
-  }
-}
-
-.flash {
-  &__modal {
-    &__error {
-      background-color: white;
-      border-radius: 10px;
-      background-color: red;
-      color: white;
-      padding: 15px 15px;
-      text-align: center;
-      position: fixed;
-      box-shadow: 4px 5px 15px 0px black;
-      left: 50%;
-      bottom: 20px;
-      z-index: 999;
-      transform: translateX(-50%);
-      width: 95%;
-      &__img {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        left: 20px;
-      }
-      &__span {
-        transform: translateY(-50%);
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        font-size: 30px;
-        color: white;
-        padding: 0px 10px 5px 10px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: all 400ms;
-        &:hover {
-          background-color: white;
-          color: red;
-        }
-      }
-    }
-    &__success {
-      background-color: white;
-      border-radius: 10px;
-      background-color: green;
-      box-shadow: 4px 5px 15px 0px black;
-      color: white;
-      padding: 15px 15px;
-      text-align: center;
-      position: fixed;
-      left: 50%;
-      bottom: 20px;
-      z-index: 999;
-      width: 95%;
-      transform: translateX(-50%);
-      &__img {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        left: 20px;
-      }
-      &__span {
-        transform: translateY(-50%);
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        font-size: 30px;
-        color: white;
-        padding: 0px 10px 5px 10px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: all 400ms;
-        &:hover {
-          background-color: white;
-          color: green;
-        }
-      }
-    }
-  }
-  &__error {
-    position: fixed;
-    top: -2px;
-    width: 100%;
-    background-color: white;
-    border-radius: 10px;
-    border: 4px solid red;
-    box-shadow: 2px 2px 2px 2px red;
-    color: red;
-    padding: 15px 15px;
-    text-align: center;
-    margin: 2px 4px 20px 2px;
-    z-index: 6;
-  }
-  &__success {
-    position: fixed;
-    top: -2px;
-    width: 100%;
-    background-color: white;
-    border-radius: 10px;
-    border: 4px solid blue;
-    box-shadow: 2px 2px 2px 2px blue;
-    color: blue;
-    padding: 15px 15px;
-    text-align: center;
-    margin: 2px 4px 20px 2px;
-    z-index: 6;
   }
 }
 
@@ -515,9 +476,9 @@
     }
 
     &__log {
-      position: absolute;
+      /* position: absolute;
       top: 50%;
-      transform: translateY(-50%);
+      transform: translateY(-50%); */
       z-index: 999;
       &__div {
         width: 50px;
@@ -527,16 +488,32 @@
         cursor: pointer;
       }
 
-      &__ul {
-        background-color: aqua;
+      //&__ul {
+      /* background-color: rgb(41, 41, 41);
         color: black;
         right: 0px;
-        width: 235px;
         list-style-type: none;
         position: absolute;
-        padding: 10px;
-        margin-top: 10px;
-        border-radius: 10px;
+        padding: 150px 50px 100px 40px; */
+      //margin-top: 10px;
+      //border-radius: 10px;
+      //}
+      &__li {
+        font-size: 24px;
+        color: white;
+        &__link {
+          position: relative;
+        }
+        &__point {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: white;
+          position: absolute;
+          position: absolute;
+          left: -22px;
+          top: 50%;
+        }
       }
     }
 

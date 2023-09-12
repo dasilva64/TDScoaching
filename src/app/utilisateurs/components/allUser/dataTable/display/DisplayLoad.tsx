@@ -11,7 +11,6 @@ const DisplayLoad = () => {
             <th className={`${styles.table__head__tr__th}`}>Prénom</th>
             <th className={`${styles.table__head__tr__th}`}>Nom</th>
             <th className={`${styles.table__head__tr__th}`}>Mail</th>
-            <th className={`${styles.table__head__tr__th}`}>Téléphone</th>
             <th className={`${styles.table__head__tr__th}`}>RendezVous</th>
             <th className={`${styles.table__head__tr__th}`}>Status</th>
           </tr>

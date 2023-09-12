@@ -45,32 +45,40 @@ export default withIronSessionApiRoute(
             if (user.twoFactor === true) {
               let copyTwoFactorCode: any = user.twoFactorCode;
               if (Number(copyTwoFactorCode.token) === Number(code)) {
-                let editUser = await prisma.user.update({
-                  where: {
-                    id: user.id,
-                  },
-                  data: {
-                    twoFactorCode: Prisma.JsonNull,
-                  },
-                });
-                if (editUser === null) {
+                let current = new Date();
+                if (current.getTime() > copyTwoFactorCode.limitDate) {
                   return res.status(404).json({
                     status: 404,
-                    message:
-                      "L'utilisateur n'as pas pu être modifié, veuillez réessayer",
+                    message: "Le code n'est plus valide, veuillez réessayer",
                   });
                 } else {
-                  let userObject = {
-                    role: user.role,
-                    id: user.id,
-                  };
-                  req.session.user = userObject;
-                  await req.session.save();
-                  return res.status(200).json({
-                    status: 200,
-                    body: userObject,
-                    message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
+                  let editUser = await prisma.user.update({
+                    where: {
+                      id: user.id,
+                    },
+                    data: {
+                      twoFactorCode: Prisma.JsonNull,
+                    },
                   });
+                  if (editUser === null) {
+                    return res.status(404).json({
+                      status: 404,
+                      message:
+                        "L'utilisateur n'as pas pu être modifié, veuillez réessayer",
+                    });
+                  } else {
+                    let userObject = {
+                      role: user.role,
+                      id: user.id,
+                    };
+                    req.session.user = userObject;
+                    await req.session.save();
+                    return res.status(200).json({
+                      status: 200,
+                      body: userObject,
+                      message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
+                    });
+                  }
                 }
               } else {
                 return res.status(404).json({

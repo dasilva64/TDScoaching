@@ -20,7 +20,7 @@ const DisplayOne = ({ i }: any) => {
     <>
       {datas && datas.length > 0 && (
         <tr
-          className={i === 0 ? styles.table__body__tr : styles.table__body__tr}
+          className={styles.table__body__tr}
           onClick={() => {
             router.push(`/utilisateur/${datas[i]["userId"]}`);
           }}

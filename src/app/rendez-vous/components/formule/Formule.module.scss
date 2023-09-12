@@ -1,0 +1,61 @@
+.formule {
+  display: block;
+  &__h3 {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+    margin-bottom: 50px;
+    &__card {
+      background-color: rgba(0, 0, 0, 0.04);
+      padding: 10px 20px;
+      border-radius: 20px;
+      &__h2 {
+        position: relative;
+        border-radius: 20px;
+        padding: 5px 15px;
+        left: 50%;
+        top: -30px;
+        color: white;
+        background-color: orange;
+        transform: translateX(-50%);
+        margin-bottom: 20px;
+      }
+      &__p {
+        margin-bottom: 20px;
+      }
+    }
+  }
+  &__link {
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: white;
+    border: 2px solid orange;
+    transition: all 400ms;
+    &:hover {
+      transform: scale(1.05);
+      background-color: orange;
+      color: white;
+    }
+  }
+  &__form {
+    margin-top: 30px;
+    &__input {
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: white;
+      border: 2px solid orange;
+      transition: all 400ms;
+      &:hover {
+        transform: scale(1.05);
+        background-color: orange;
+        color: white;
+      }
+    }
+  }
+}

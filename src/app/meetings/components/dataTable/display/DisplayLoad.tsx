@@ -8,12 +8,10 @@ const DisplayLoad = () => {
         <thead className={styles.table__head}>
           <tr className={styles.table__head__tr}>
             <th className={`${styles.table__head__tr__th}`}>id</th>
-            <th className={`${styles.table__head__tr__th}`}>startAt</th>
-            <th className={`${styles.table__head__tr__th}`}>endAt</th>
-            <th className={`${styles.table__head__tr__th}`}>status</th>
             <th className={`${styles.table__head__tr__th}`}>userId</th>
-            <th className={`${styles.table__head__tr__th}`}>prenom</th>
-            <th className={`${styles.table__head__tr__th}`}>nom</th>
+            <th className={`${styles.table__head__tr__th}`}>Prénom</th>
+            <th className={`${styles.table__head__tr__th}`}>Nom</th>
+            <th className={`${styles.table__head__tr__th}`}>Date</th>
           </tr>
         </thead>
         <tbody className={styles.table__body}>

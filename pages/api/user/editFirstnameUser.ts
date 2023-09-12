@@ -33,7 +33,7 @@ export default withIronSessionApiRoute(
           } else {
             let editUser = await prisma.user.update({
               where: {
-                id: req.session.user.id,
+                id: user.id,
               },
               data: {
                 firstname: validator.escape(firstname.trim()),

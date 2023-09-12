@@ -22,9 +22,15 @@ export default withIronSessionApiRoute(
               where: { id: user.id },
               data: { twoFactor: true, twoFactorCode: Prisma.JsonNull },
             });
+            let userObject = {
+              firstname: editUser.firstname,
+              lastname: editUser.lastname,
+              email: editUser.mail,
+              twoFactor: editUser.twoFactor,
+            };
             return res.status(200).json({
               status: 200,
-              body: editUser,
+              body: userObject,
               message: "L'authentification à deux facteurs est activé",
             });
           } else {

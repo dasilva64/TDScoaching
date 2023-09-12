@@ -9,7 +9,7 @@ import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 
 export default withIronSessionApiRoute(
-  async function sendTokenEditPhone(req, res) {
+  async function reSendEmailValidation(req, res) {
     if (req.method === "POST") {
       const { email } = await req.body;
       let arrayMessageError = validationBody(req.body);

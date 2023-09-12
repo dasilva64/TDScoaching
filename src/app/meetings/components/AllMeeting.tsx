@@ -72,14 +72,21 @@ const AllMeeting = () => {
           ...p,
           Prénom: copyUser.firstname,
           Nom: copyUser.lastname,
-          Début: new Date(p.startAt).toLocaleString(),
-          status: p.status.toString(),
+          Date: new Date(p.startAt).toLocaleString("fr-FR", {
+            timeZone: "Europe/Paris",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+          }),
         };
         delete newar[index].User;
+        delete newar[index].status;
         delete newar[index].limitDate;
         delete newar[index].paymentId;
         delete newar[index].endAt;
         delete newar[index].startAt;
+        delete newar[index].typeMeeting;
       });
       dispatch({
         type: "ArrayMeeting/storeData",

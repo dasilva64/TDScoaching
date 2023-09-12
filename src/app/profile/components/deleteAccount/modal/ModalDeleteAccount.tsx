@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ModalDeleteAccount.module.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -10,8 +10,14 @@ import { useRouter } from "next/navigation";
 import Textarea from "@mui/joy/Textarea";
 import { FormHelperText, FormLabel, TextField } from "@mui/material";
 import fetchPost from "@/app/components/fetch/FetchPost";
+import { AnimatePresence, motion } from "framer-motion";
+import { RootState } from "@/app/redux/store";
+import Image from "next/image";
 
 const ModalDeleteAccount = () => {
+  const { displayModalDeleteAccount } = useSelector(
+    (state: RootState) => state.ModalDeleteAccount
+  );
   const router = useRouter();
   const dispatch = useDispatch();
   const [reason, setReason] = useState<string>("");
@@ -29,11 +35,11 @@ const ModalDeleteAccount = () => {
     if (data) {
       if (data.status === 200) {
         dispatch({
-          type: "form/closeModalDeleteAccount",
+          type: "ModalDeleteAccount/close",
         });
         dispatch({
           type: "flash/storeFlashMessage",
-          payload: { type: "succes", flashMessage: data.message },
+          payload: { type: "success", flashMessage: data.message },
         });
       } else {
         if (
@@ -45,7 +51,7 @@ const ModalDeleteAccount = () => {
             payload: { type: "error", flashMessage: data.message },
           });
           dispatch({
-            type: "form/closeModalDeleteAccount",
+            type: "ModalDeleteAccount/close",
           });
           router.push("/rendez-vous");
         } else {
@@ -60,7 +66,7 @@ const ModalDeleteAccount = () => {
 
   const closeForm = () => {
     dispatch({
-      type: "form/closeModalDeleteAccount",
+      type: "ModalDeleteAccount/close",
     });
   };
 
@@ -116,85 +122,126 @@ const ModalDeleteAccount = () => {
   };
   return (
     <>
-      <div className={styles.bg}></div>
-      <div className={styles.modalDeleteAccount}>
-        <button
-          className={styles.modalDeleteAccount__btn}
-          onClick={() => closeForm()}
-        >
-          <span className={styles.modalDeleteAccount__btn__cross}>&times;</span>
-        </button>
-        <h1 className={styles.modalDeleteAccount__h1}>Suppression du compte</h1>
-        <div className={styles.modalDeleteAccount__div}>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="reasonInput">
-              Selectionnez une raison de la suppression de votre compte
-            </InputLabel>
-            <Select
-              labelId="Selectionnez une raison de la suppression de votre compte"
-              id="reasonSelect"
-              value={reason}
-              onChange={handleChange}
-              label="Age"
+      <AnimatePresence>
+        {displayModalDeleteAccount === true && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { duration: 0.3 } }}
+              exit={{ opacity: 0 }}
+              onClick={() => closeForm()}
+              className={styles.bg}
+            />
+            <motion.div
+              className={styles.modalDeleteAccount}
+              initial={{ y: 200, x: "-50%", opacity: 0 }}
+              animate={{
+                y: "-50%",
+                x: "-50%",
+                opacity: 1,
+                transition: { duration: 0.3 },
+              }}
+              exit={{
+                y: 200,
+                x: "-50%",
+                opacity: 0,
+                transition: { duration: 0.3 },
+              }}
             >
-              <MenuItem value="">
-                <em>
-                  Selectionnez une raison de la suppression de votre compte
-                </em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-              <MenuItem value={"autre"}>Autre</MenuItem>
-            </Select>
-            <FormHelperText>{reasonErrorMessage}</FormHelperText>
-          </FormControl>
-          {displayInput && (
-            <>
-              <FormLabel>Raison</FormLabel>
-              <Textarea
-                value={inputMessage}
-                onChange={(e) => {
-                  handlerInput(
-                    e,
-                    "message",
-                    /^[A-Za-z][A-Za-z0-9,?;.:!() ]{1,}$/,
-                    setValidInputMessage,
-                    setMessageInputError,
-                    setInputMessage,
-                    "Raison : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation) et doit commencer par une lettre"
-                  );
-                }}
-                placeholder="Entrez votre message"
-                minRows={2}
-              />
-              <FormHelperText>{messageInputError}</FormHelperText>
-            </>
-          )}
-          <button
-            onClick={() => {
-              if (reasonValid) {
-                trigger();
-              } else {
-                if (validinputMessage === true) {
-                  setMessageInputError("");
-                } else if (
-                  validinputMessage === false &&
-                  reasonValid === false &&
-                  displayInput === false
-                ) {
-                  setReasonErrorMessage("Veuillez selectionner une raison");
-                } else {
-                  setMessageInputError("Veuillez selectionner une raison");
-                }
-              }
-            }}
-            className={styles.modalDeleteAccount__btn__delete}
-          >
-            Supprimer
-          </button>
-        </div>
-      </div>
+              <button
+                className={styles.modalDeleteAccount__btn}
+                onClick={() => closeForm()}
+              >
+                <Image
+                  className={styles.modalDeleteAccount__btn__img}
+                  src="/assets/icone/xmark-solid.svg"
+                  alt="arrow-left"
+                  width={30}
+                  height={30}
+                ></Image>
+              </button>
+              <h1 className={styles.modalDeleteAccount__h1}>
+                Suppression du compte
+              </h1>
+              <div className={styles.modalDeleteAccount__div}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="reasonInput">
+                    Selectionnez une raison de la suppression de votre compte
+                  </InputLabel>
+                  <Select
+                    labelId="Selectionnez une raison de la suppression de votre compte"
+                    id="reasonSelect"
+                    value={reason}
+                    onChange={handleChange}
+                    label="Age"
+                  >
+                    <MenuItem value="">
+                      <em>
+                        Selectionnez une raison de la suppression de votre
+                        compte
+                      </em>
+                    </MenuItem>
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value={"autre"}>Autre</MenuItem>
+                  </Select>
+                  <FormHelperText>{reasonErrorMessage}</FormHelperText>
+                </FormControl>
+                {displayInput && (
+                  <>
+                    <FormLabel>Raison</FormLabel>
+                    <Textarea
+                      autoFocus
+                      value={inputMessage}
+                      onChange={(e) => {
+                        handlerInput(
+                          e,
+                          "message",
+                          /^[A-Za-z][A-Za-z0-9,?;.:!() ]{1,}$/,
+                          setValidInputMessage,
+                          setMessageInputError,
+                          setInputMessage,
+                          "Raison : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation) et doit commencer par une lettre"
+                        );
+                      }}
+                      placeholder="Entrez votre message"
+                      minRows={2}
+                    />
+                    <FormHelperText>{messageInputError}</FormHelperText>
+                  </>
+                )}
+                <button
+                  onClick={() => {
+                    if (reasonValid) {
+                      trigger();
+                    } else {
+                      if (validinputMessage === true) {
+                        setMessageInputError("");
+                      } else if (
+                        validinputMessage === false &&
+                        reasonValid === false &&
+                        displayInput === false
+                      ) {
+                        setReasonErrorMessage(
+                          "Veuillez selectionner une raison"
+                        );
+                      } else {
+                        setMessageInputError(
+                          "Veuillez selectionner une raison"
+                        );
+                      }
+                    }
+                  }}
+                  className={styles.modalDeleteAccount__btn__delete}
+                >
+                  Supprimer
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };

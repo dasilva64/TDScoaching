@@ -58,7 +58,7 @@ const Content = () => {
     fetchCheckUser();
   }, []); */
 
-  const { data, isLoading, isError } = usePost("/api/user/check");
+  const { data, isLoading, isError } = useGet("/api/user/check");
   useEffect(() => {
     if (data) {
       if (data.body !== null) {
@@ -388,7 +388,12 @@ const Content = () => {
                         className={styles.header__log__li__link}
                         onClick={() => {
                           const logout = async () => {
-                            let response = await fetch("/api/user/logout");
+                            let response = await fetch("/api/user/logout", {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                            });
                             let json = await response.json();
                             console.log(json);
                             if (json && json.status === 200) {

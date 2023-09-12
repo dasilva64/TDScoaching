@@ -676,7 +676,7 @@ const Content = () => {
       }
     }
   }, [isActive]); */
-  useEffect(() => {
+  /* useEffect(() => {
     if (flashMessage && flashMessage[1].length > 0) {
       let timer = setTimeout(() => {
         dispatch({
@@ -687,7 +687,7 @@ const Content = () => {
         clearTimeout(timer);
       };
     }
-  }, [dispatch, flashMessage]);
+  }, [dispatch, flashMessage]); */
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -809,9 +809,19 @@ const Content = () => {
           <>
             <motion.div
               className={`${`flash__modal__${flashMessage[0]}`} ${`flash__modal__standard`}`}
-              initial={{ y: 200, opacity: 0 }}
-              animate={{ y: 0, opacity: 1, transition: { duration: 0.3 } }}
-              exit={{ y: 200, opacity: 0, transition: { duration: 0.3 } }}
+              initial={{ y: 200, x: "-50%", opacity: 0 }}
+              animate={{
+                y: "-50%",
+                x: "-50%",
+                opacity: 1,
+                transition: { duration: 0.9 },
+              }}
+              exit={{
+                y: 200,
+                x: "-50%",
+                opacity: 0,
+                transition: { duration: 0.9 },
+              }}
             >
               <Image
                 className={`flash__modal__standard__img`}

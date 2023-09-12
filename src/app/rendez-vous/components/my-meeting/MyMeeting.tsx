@@ -10,7 +10,6 @@ const MyMeeting = () => {
     isLoading,
     isError,
   } = useGet("/api/user/getUserMeeting");
-  console.log(userData);
   const dispatch = useDispatch();
   return (
     <>

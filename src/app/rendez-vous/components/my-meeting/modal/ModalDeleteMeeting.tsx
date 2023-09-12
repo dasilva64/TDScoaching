@@ -31,7 +31,6 @@ const ModalDeleteMeeting = () => {
     "/api/paiement/cancel",
     fetchGet
   );
-  console.log(data);
   const { displayModalDeleteMeeting } = useSelector(
     (state: RootState) => state.ModalDeleteMeeting
   );

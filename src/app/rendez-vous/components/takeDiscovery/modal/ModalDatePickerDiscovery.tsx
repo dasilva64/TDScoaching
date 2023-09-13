@@ -415,7 +415,6 @@ const ModalDatePickerDiscovery = () => {
     let test = new Date();
     test.setDate(test.getDate() - 1);
     if (new Date(startPrevious).getTime() > new Date().getTime()) {
-      console.log("test");
       start.setDate(start.getDate() - 7);
       changeDate(start.toDateString());
       setArDateWeek([]);

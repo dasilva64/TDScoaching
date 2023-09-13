@@ -79,11 +79,6 @@ const EmailCheck = () => {
       mutate(
         {
           ...data,
-          body: {
-            ...data.body,
-            email: copyNewEmail,
-            editEmail: null,
-          },
         },
         { revalidate: false }
       );

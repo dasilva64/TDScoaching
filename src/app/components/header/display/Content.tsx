@@ -261,12 +261,14 @@ const Content = () => {
                         className={styles.header__log__li__link}
                         onClick={() => {
                           const logout = async () => {
-                            let response = await fetch("/api/user/logout");
+                            let response = await fetch("/api/user/logout", {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                            });
                             let json = await response.json();
                             if (json && json.status === 200) {
-                              dispatch({
-                                type: "auth/logout",
-                              });
                               dispatch({
                                 type: "flash/storeFlashMessage",
                                 payload: {
@@ -274,10 +276,24 @@ const Content = () => {
                                   flashMessage: json.message,
                                 },
                               });
-                              mutate("/api/user/check", {
-                                ...json,
-                              });
-                              cache.delete("/api/user/check");
+                              setTimeout(() => {
+                                dispatch({
+                                  type: "auth/logout",
+                                });
+
+                                mutate("/api/user/check", {
+                                  ...json,
+                                });
+                                cache.delete("/api/user/check");
+                                if (
+                                  pathname === "/meetings" ||
+                                  pathname === "/profile" ||
+                                  pathname === "/utilisateurs" ||
+                                  pathname === "/meetingAdmin"
+                                ) {
+                                  router.push("/");
+                                }
+                              }, 1000);
                             }
                           };
                           logout();
@@ -720,7 +736,7 @@ const Content = () => {
       }
     }
   }, [isActive]); */
-  /* useEffect(() => {
+  useEffect(() => {
     if (flashMessage && flashMessage[1].length > 0) {
       let timer = setTimeout(() => {
         dispatch({
@@ -731,7 +747,7 @@ const Content = () => {
         clearTimeout(timer);
       };
     }
-  }, [dispatch, flashMessage]); */
+  }, [dispatch, flashMessage]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {

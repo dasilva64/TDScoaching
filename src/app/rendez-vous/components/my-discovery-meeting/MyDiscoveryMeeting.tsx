@@ -12,6 +12,8 @@ const MyDiscoveryMeeting = () => {
     isLoading,
     isError,
   } = useGet("/api/user/getUserMeeting");
+  let current = new Date();
+  current.setHours(current.getHours() + 24);
   return (
     <>
       <div className={styles.myFirstMeeting__meeting__detail}>
@@ -63,36 +65,62 @@ const MyDiscoveryMeeting = () => {
             {userData.body.meeting.typeMeeting.coaching}
           </p>
         </div>
-        <div className={`${styles.myFirstMeeting__meeting__detail__content}`}>
-          <div
-            className={styles.myFirstMeeting__meeting__detail__content__submit}
-          >
-            <button
-              className={`${styles.myFirstMeeting__meeting__detail__content__submit__btn} ${styles.myMeeting__meeting__detail__content__submit__btn__edit}`}
-              onClick={() => {
-                dispatch({
-                  type: "ModalDatePickerEditDiscovery/open",
-                });
-              }}
+        {current.toISOString() < userData.body.meeting.startAt && (
+          <>
+            <div
+              className={`${styles.myFirstMeeting__meeting__detail__content}`}
             >
-              Déplacer votre rendez-vous
-            </button>
-          </div>
-          <div
-            className={styles.myFirstMeeting__meeting__detail__content__submit}
-          >
-            <button
-              className={`${styles.myFirstMeeting__meeting__detail__content__submit__btn} ${styles.myMeeting__meeting__detail__content__submit__btn__edit}`}
-              onClick={() => {
-                dispatch({
-                  type: "ModalDeleteDiscoveryMeeting/open",
-                });
-              }}
-            >
-              Supprimer mon rendez-vous de découverte
-            </button>
-          </div>
-        </div>
+              <div
+                className={
+                  styles.myFirstMeeting__meeting__detail__content__submit
+                }
+              >
+                <button
+                  className={`${styles.myFirstMeeting__meeting__detail__content__submit__btn} ${styles.myMeeting__meeting__detail__content__submit__btn__edit}`}
+                  onClick={() => {
+                    dispatch({
+                      type: "ModalDatePickerEditDiscovery/open",
+                    });
+                  }}
+                >
+                  Déplacer votre rendez-vous
+                </button>
+              </div>
+              <div
+                className={
+                  styles.myFirstMeeting__meeting__detail__content__submit
+                }
+              >
+                <button
+                  className={`${styles.myFirstMeeting__meeting__detail__content__submit__btn} ${styles.myMeeting__meeting__detail__content__submit__btn__edit}`}
+                  onClick={() => {
+                    dispatch({
+                      type: "ModalDeleteDiscoveryMeeting/open",
+                    });
+                  }}
+                >
+                  Supprimer mon rendez-vous de découverte
+                </button>
+              </div>
+            </div>
+            <p>
+              Vous pouvez effectué ces actions que 24h avant le rendez vous{" "}
+            </p>
+          </>
+        )}
+        {current.toISOString() > userData.body.meeting.startAt && (
+          <>
+            <p>
+              Le rendez vous se déroule dans moins de 24h, vous ne pouvez donc
+              pas le modifier ou le supprimer.
+            </p>
+            <p>
+              Vous pouvez tout de même m&apos;envoyer un mail si vous souhaitez
+              tout de même le supprimer
+            </p>
+            <button>Envoyer une demander de suppression</button>
+          </>
+        )}
       </div>
       <div className={`${styles.myFirstMeeting__meeting__visio}`}>
         <h2 className={styles.myFirstMeeting__meeting__visio__h2}>

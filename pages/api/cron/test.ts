@@ -5,20 +5,19 @@ import nodemailer from "nodemailer";
 import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 
-export default withIronSessionApiRoute(
-  async function send(req: any, res: NextApiResponse) {
-    let smtpTransport = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: process.env.SECRET_SMTP_EMAIL,
-        pass: process.env.SECRET_SMTP_PASSWORD,
-      },
-    });
-    let mailOptions = {
-      from: process.env.SECRET_SMTP_EMAIL,
-      to: process.env.SECRET_SMTP_EMAIL,
-      subject: "cron",
-      html: `<!DOCTYPE html>
+export default function send(req: any, res: NextApiResponse) {
+  let smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.SECRET_SMTP_EMAIL,
+      pass: process.env.SECRET_SMTP_PASSWORD,
+    },
+  });
+  let mailOptions = {
+    from: process.env.SECRET_SMTP_EMAIL,
+    to: process.env.SECRET_SMTP_EMAIL,
+    subject: "cron",
+    html: `<!DOCTYPE html>
                         <html lang="fr">
                           <head>
                             <title>tds coaching</title>
@@ -39,20 +38,11 @@ export default withIronSessionApiRoute(
                             </div>
                           </body>
                         </html>`,
-    };
-    smtpTransport.sendMail(mailOptions);
-    return res.status(200).json({
-      status: 200,
-      message:
-        "Merci de nous avoir contacter nous allons vous répondre le plus vite possible",
-    });
-  },
-  {
-    password:
-      "tesdfjklsjtesdfjktesdfjklsjdfljslkdfjlsjdflslqfdjkstlsjdfljslkdfjlsjdflslqfdjkstdfljslkdfjlsjdflslqfdjkst",
-    cookieName: "test",
-    cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
-    },
-  }
-);
+  };
+  smtpTransport.sendMail(mailOptions);
+  return res.status(200).json({
+    status: 200,
+    message:
+      "Merci de nous avoir contacter nous allons vous répondre le plus vite possible",
+  });
+}

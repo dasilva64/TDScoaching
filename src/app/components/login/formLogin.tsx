@@ -141,15 +141,6 @@ const FormLogin = () => {
                   type: "flash/storeFlashMessage",
                   payload: { type: "success", flashMessage: json.message },
                 });
-                dispatch({
-                  type: "auth/login",
-                  payload: {
-                    role: json.body.role,
-                    id: json.body.id,
-                  },
-                });
-
-                /* clearState(); */
                 setTimeout(() => {
                   window.location.reload();
                 }, 2000);

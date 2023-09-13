@@ -69,6 +69,11 @@ const Content = () => {
             id: data.body.id,
           },
         });
+      } else {
+        dispatch({
+          type: "auth/logout",
+        });
+        setDisplayLogMenu(false);
       }
     }
   }, [data, dispatch]);
@@ -77,20 +82,34 @@ const Content = () => {
     content = <div>Erreur</div>;
   }
   if (isLoading) {
-    content = <div className={styles.header__login__load}></div>;
+    content = (
+      <div className={styles.header__log}>
+        <div className={styles.header__log__div}></div>
+      </div>
+    );
   }
   if (data) {
     if (data.body === null) {
       content = (
-        <button
-          type="button"
-          className={styles.header__login}
-          onClick={() => {
-            handlerClick();
-          }}
-        >
-          Se connecter
-        </button>
+        <>
+          <div className={styles.header__log}>
+            <div
+              className={styles.header__log__div}
+              onClick={() => {
+                handlerClick();
+              }}
+            >
+              <Image
+                className={styles.header__log__img}
+                width={25}
+                height={25}
+                src="/assets/icone/user-xmark-solid.svg"
+                alt="logo tdss coaching"
+                priority={true}
+              />
+            </div>
+          </div>
+        </>
       );
     } else {
       if (data.body.role === "ROLE_ADMIN") {
@@ -105,7 +124,17 @@ const Content = () => {
                   }
                 }}
                 className={styles.header__log__div}
-              ></div>
+              >
+                {" "}
+                <Image
+                  className={styles.header__log__img}
+                  width={25}
+                  height={25}
+                  src="/assets/icone/user-check-solid.svg"
+                  alt="logo tdss coaching"
+                  priority={true}
+                />
+              </div>
               <>
                 <div
                   className={`${styles.header__log__container} ${
@@ -234,7 +263,6 @@ const Content = () => {
                           const logout = async () => {
                             let response = await fetch("/api/user/logout");
                             let json = await response.json();
-                            console.log(json);
                             if (json && json.status === 200) {
                               dispatch({
                                 type: "auth/logout",
@@ -250,9 +278,6 @@ const Content = () => {
                                 ...json,
                               });
                               cache.delete("/api/user/check");
-                              /* setTimeout(() => {
-                                window.location.reload();
-                              }, 2000); */
                             }
                           };
                           logout();
@@ -286,7 +311,16 @@ const Content = () => {
                   }
                 }}
                 className={styles.header__log__div}
-              ></div>
+              >
+                <Image
+                  className={styles.header__log__img}
+                  width={25}
+                  height={25}
+                  src="/assets/icone/user-check-solid.svg"
+                  alt="logo tdss coaching"
+                  priority={true}
+                />
+              </div>
               <>
                 <div
                   className={`${styles.header__log__container} ${
@@ -395,8 +429,7 @@ const Content = () => {
                               },
                             });
                             let json = await response.json();
-                            console.log(json);
-                            if (json && json.status === 200) {
+                            if (json.status === 200) {
                               dispatch({
                                 type: "flash/storeFlashMessage",
                                 payload: {
@@ -404,17 +437,23 @@ const Content = () => {
                                   flashMessage: json.message,
                                 },
                               });
-                              dispatch({
-                                type: "auth/logout",
-                              });
+                              setTimeout(() => {
+                                dispatch({
+                                  type: "auth/logout",
+                                });
 
-                              mutate("/api/user/check", {
-                                ...json,
-                              });
-                              cache.delete("/api/user/check");
-                              /* setTimeout(() => {
-                                window.location.reload();
-                              }, 2000); */
+                                mutate("/api/user/check", {
+                                  ...json,
+                                });
+                                cache.delete("/api/user/check");
+                                if (
+                                  pathname === "/rendez-vous" ||
+                                  pathname === "/historique" ||
+                                  pathname === "/profile"
+                                ) {
+                                  router.push("/");
+                                }
+                              }, 1000);
                             }
                           };
 
@@ -816,16 +855,16 @@ const Content = () => {
               className={`${`flash__modal__${flashMessage[0]}`} ${`flash__modal__standard`}`}
               initial={{ y: 200, x: "-50%", opacity: 0 }}
               animate={{
-                y: "-50%",
+                y: -20,
                 x: "-50%",
                 opacity: 1,
-                transition: { duration: 0.9 },
+                transition: { duration: 0.3 },
               }}
               exit={{
                 y: 200,
                 x: "-50%",
                 opacity: 0,
-                transition: { duration: 0.9 },
+                transition: { duration: 0.3 },
               }}
             >
               <Image

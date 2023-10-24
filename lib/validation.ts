@@ -5,9 +5,9 @@ export const validationBody = (body: any) => {
   let arrayMessageError: any = [];
   Object.entries(body).forEach(([key, value]: any) => {
     if (key === "email") {
-      // if (!validator.isEmail(value.trim())) {
-      arrayMessageError.push(["email", "Email : doit être un email valide"]);
-      //}
+      if (!validator.isEmail(value.trim())) {
+        arrayMessageError.push(["email", "Email : doit être un email valide"]);
+      }
     }
     if (key === "firstname") {
       let regex = /^[a-zA-ZÀ-ÿ]+$/;

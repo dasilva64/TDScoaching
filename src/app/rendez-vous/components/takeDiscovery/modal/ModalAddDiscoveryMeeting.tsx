@@ -96,11 +96,11 @@ const ModalAddDiscoveryMeeting = () => {
   const handlerClick = () => {
     console.log(new Date().getTimezoneOffset() / 60);
     const fetchAddMeeting = async () => {
-      /* trigger({
+      trigger({
         start: new Date(dataModalAddDiscoveryMeeting).toISOString(),
         typeCoaching: typeCoachingInput,
         timeZone: new Date().getTimezoneOffset() / 60,
-      }); */
+      });
     };
     fetchAddMeeting();
   };

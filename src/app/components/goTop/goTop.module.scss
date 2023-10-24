@@ -1,4 +1,4 @@
-.top {
+.top__noFlash {
   border-radius: 3px;
   padding: 10px;
   font-size: 15px;
@@ -11,9 +11,24 @@
   bottom: 1em;
   right: 20px;
 }
-.top:before {
+.top__flash {
+  border-radius: 3px;
+  padding: 10px;
+  font-size: 15px;
+  text-align: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 99999;
+  position: fixed;
+  cursor: pointer;
+  bottom: 6em;
+  right: 20px;
+}
+.top__noFlash:before,
+.top__flash:before {
   content: "\25b2";
 }
-.top:hover {
+.top__noFlash:hover,
+.top__flash:hover {
   background: rgba(0, 0, 0, 1);
 }

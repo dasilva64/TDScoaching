@@ -55,26 +55,29 @@ export default withIronSessionApiRoute(
                       "L'utilisateur n'as pas été trouvé, veuillez réessayer",
                   });
                 } else {
-                  const createMeetingObject: any = {
-                    startAt: isoDateStart,
-                    status: true,
-                    userId: userId,
-                    limitDate: null,
-                    typeMeeting: Prisma.JsonNull,
-                  };
-                  const meetingCreate = await prisma.meeting.create({
-                    data: createMeetingObject,
-                  });
-                  if (meetingCreate === null) {
-                    return res.status(404).json({
-                      status: 404,
-                      message:
-                        "Le rendez-vous ne peut pas être créé, veuillez réessayer",
-                    });
-                  } else {
-                    let copyTypeMeeting: any = user?.typeMeeting;
-                    if (copyTypeMeeting.type !== "unique") {
-                      if (copyTypeMeeting.number > 1) {
+                  let copyTypeMeeting: any = user?.typeMeeting;
+                  if (
+                    copyTypeMeeting.type !== "unique" &&
+                    copyTypeMeeting.type !== "découverte"
+                  ) {
+                    if (copyTypeMeeting.number > 1) {
+                      const createMeetingObject: any = {
+                        startAt: isoDateStart,
+                        status: true,
+                        userId: userId,
+                        limitDate: null,
+                        typeMeeting: Prisma.JsonNull,
+                      };
+                      const meetingCreate = await prisma.meeting.create({
+                        data: createMeetingObject,
+                      });
+                      if (meetingCreate === null) {
+                        return res.status(404).json({
+                          status: 404,
+                          message:
+                            "Le rendez-vous ne peut pas être créé, veuillez réessayer",
+                        });
+                      } else {
                         copyTypeMeeting.number = copyTypeMeeting.number - 1;
                         const userEdit = await prisma.user.update({
                           where: { id: userId },
@@ -114,20 +117,20 @@ export default withIronSessionApiRoute(
                           body: array,
                           message: "Rendez-vous pris avec succès",
                         });
-                      } else {
-                        return res.status(404).json({
-                          status: 404,
-                          message:
-                            "Le client n'as plus de rendez-vous à ajouter, veuillez réessayer",
-                        });
                       }
                     } else {
                       return res.status(404).json({
                         status: 404,
                         message:
-                          "La formule du client ne correspond pas, veuillez réessayer",
+                          "Le client n'as plus de rendez-vous à ajouter, veuillez réessayer",
                       });
                     }
+                  } else {
+                    return res.status(404).json({
+                      status: 404,
+                      message:
+                        "La formule du client ne correspond pas, veuillez réessayer",
+                    });
                   }
                 }
               } else {

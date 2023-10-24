@@ -244,7 +244,9 @@ const Paging = () => {
 
   return (
     <div className={styles.paging}>
-      {datas && datas.length === 0 && <p>Affichage de 0 à 0 sur 0 entrées </p>}
+      {datas && datas.length === 0 && (
+        <p className={styles.paging__p}>Affichage de 0 à 0 sur 0 entrées </p>
+      )}
       {datas && datas.length > 0 && (
         <>
           <p className={styles.paging__p}>

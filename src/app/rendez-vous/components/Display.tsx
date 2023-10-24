@@ -17,6 +17,7 @@ import MyMeeting from "./my-meeting/MyMeeting";
 import Formule from "./formule/Formule";
 
 const Display = () => {
+  const router = useRouter();
   const [mobile, setMobile] = useState<boolean | null>(null);
   const {
     data: userData,
@@ -54,9 +55,11 @@ const Display = () => {
     }
   }, [mobile]);
   let content;
-  if (isError && isError.message) {
+  if (isError) {
     content = (
-      <div className={styles.profile__article__h2}>{isError.message}</div>
+      <div className={styles.profile__article__h2}>
+        erreur lors du chargement des données
+      </div>
     );
   } else if (isLoading) {
     content = (
@@ -88,7 +91,8 @@ const Display = () => {
                     <div className={styles.div}>
                       <p className={styles.div__p}>
                         Vous n&apos;avez pas de rendez vous de prévu, vous
-                        pouvez prendre rendez-vous en cliquant sur ce bouton{" "}
+                        pouvez prendre un rendez-vous de découverte en cliquant
+                        sur ce bouton{" "}
                       </p>
                       <button
                         className={styles.div__btn}
@@ -98,7 +102,7 @@ const Display = () => {
                           });
                         }}
                       >
-                        Prendre rendez-vous
+                        Prendre un rendez-vous de découverte
                       </button>
                     </div>
                     <div className={styles.content}>
@@ -115,11 +119,6 @@ const Display = () => {
                       <p className={styles.rappel__p}>
                         Vous disposez d&apos;une offre{" "}
                         <strong>{userData.body.typeMeeting.type}</strong>.
-                      </p>
-                      <p className={styles.rappel__p}>
-                        Vous pouvez changer d&apos;offre en supprimant le
-                        rendez-vous car il faudra effectué de nouveau un
-                        paiement
                       </p>
                     </div>
                     <div className={styles.content}>
@@ -195,8 +194,26 @@ const Display = () => {
             userData?.body.discovery === true && <Formule />}
         </>
       );
+    } else if (userData.status === 401) {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: {
+          type: "error",
+          flashMessage: userData.message,
+        },
+      });
+      router.push("/");
     } else {
-      content = <></>;
+      setTimeout(() => {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: userData.message,
+          },
+        });
+      }, 2000);
+      router.refresh();
     }
   }
 

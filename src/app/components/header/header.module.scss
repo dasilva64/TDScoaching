@@ -339,10 +339,10 @@
     &::before {
       content: "";
       display: block;
-      height: 1px;
+      height: 2px;
       width: 40%;
       margin: auto;
-      background-color: white;
+      background-color: black;
       position: relative;
       transition: transform 0.3s;
     }
@@ -360,11 +360,15 @@
     &::after {
       transform: rotate(45deg);
       top: -1px;
+      width: 60%;
+      right: 0px;
     }
 
     &::before {
       transform: rotate(-45deg);
       top: 0px;
+      width: 60%;
+      right: 0px;
     }
   }
 }

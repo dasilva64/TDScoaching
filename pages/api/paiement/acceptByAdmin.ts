@@ -114,7 +114,7 @@ export default withIronSessionApiRoute(
                           where: { userId: userById.id },
                           select: {
                             startAt: true,
-                            status: true,
+                            typeMeeting: true,
                           },
                         });
                         let userObject = {

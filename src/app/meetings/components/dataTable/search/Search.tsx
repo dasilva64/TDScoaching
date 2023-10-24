@@ -2,6 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Search.module.scss";
 import { RootState } from "@/app/redux/store";
+import IconButton from "@mui/material/IconButton";
+import Input from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { FormHelperText } from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 /**
  * React component - Component for display search bar and search element
@@ -59,8 +68,59 @@ const Search = (): JSX.Element => {
     }
   }, [datas]);
   return (
-    <div>
-      <label className={styles.search__label} htmlFor="search">
+    <div className={styles.search}>
+      <FormControl
+        variant="standard"
+        style={{ minWidth: "200px", width: "100%" }}
+      >
+        <InputLabel
+          sx={{
+            color: "black",
+            "&.Mui-focused": {
+              color: "#1976d2",
+            },
+          }}
+          htmlFor="standard-adornment-password"
+        >
+          Rechercher
+        </InputLabel>
+        <Input
+          id="standard-adornment-password"
+          placeholder={"Rechercher un utilisateur"}
+          type={"text"}
+          inputRef={inputRef}
+          onChange={(e) => handlerInputSearch(e)}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                sx={
+                  displayCancel
+                    ? {
+                        color: "black",
+                      }
+                    : {
+                        display: "none",
+                      }
+                }
+                aria-label="toggle password visibility"
+                onClick={() => {
+                  if (inputRef.current) inputRef.current.value = "";
+                  setDisplayCancel(false);
+                  if (onSearch === true) {
+                    dispatch({
+                      type: "ArrayMeetingByUser/storeDataSearchInv",
+                      payload: { datas: initialDatas },
+                    });
+                  }
+                }}
+              >
+                {displayCancel ? <DeleteForeverIcon /> : ""}
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </FormControl>
+      {/* <label className={styles.search__label} htmlFor="search">
         Rechercher :{" "}
       </label>
       <input
@@ -86,7 +146,7 @@ const Search = (): JSX.Element => {
         >
           &times;
         </span>
-      )}
+      )} */}
     </div>
   );
 };

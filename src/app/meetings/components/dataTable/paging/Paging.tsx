@@ -32,7 +32,7 @@ const Paging = () => {
                     payload: { page: i },
                   });
                 }}
-                key={i + 30}
+                key={i}
               >
                 {i}
               </span>
@@ -47,7 +47,7 @@ const Paging = () => {
                     payload: { page: i },
                   });
                 }}
-                key={i + 60}
+                key={i}
               >
                 {i}
               </span>

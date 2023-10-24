@@ -39,7 +39,17 @@ const useDeleteAccount = (token: string) => {
           window.location.reload();
         }, 2000);
       } else {
-        router.push("/");
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            flashMessage: data.message,
+            type: "error",
+          },
+        });
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
+        //router.push("/");
       }
     }
   }, [data, dispatch, router]);

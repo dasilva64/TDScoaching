@@ -38,10 +38,6 @@
     }
     &__close {
       cursor: pointer;
-      float: right;
-      position: absolute;
-      right: 30px;
-      top: 25px;
       border: none;
       background-color: orange;
       border-radius: 5px;
@@ -70,7 +66,7 @@
     display: flex;
     flex-direction: column;
     &__submit {
-      margin: 30px 0px 20px 0px;
+      margin: 30px auto 20px auto;
       text-align: center;
       &__btn {
         cursor: pointer;
@@ -85,6 +81,39 @@
           color: white;
           background-color: orange;
           transform: scale(1.05);
+        }
+        &__load {
+          border-radius: 10px;
+          border: 2px solid orange;
+          background-color: white;
+          padding: 0px 10px;
+          display: flex;
+          margin-top: 20px;
+          color: black;
+          &__span {
+            align-self: center;
+          }
+          &__arc {
+            position: relative;
+            bottom: 9px;
+            margin: 18px 10px 0px 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border-top: 1px solid black;
+            border-bottom: 1px solid transparent;
+            border-left: 1px solid black;
+            border-right: 1px solid transparent;
+            animation: load 2000ms both infinite ease-out;
+            &__circle {
+              position: relative;
+              right: -13px;
+              width: 5px;
+              height: 5px;
+              background-color: black;
+              border-radius: 50%;
+            }
+          }
         }
       }
     }
@@ -106,26 +135,25 @@
   }
 }
 
-@media screen and (max-width: 500px) {
-  .forgot {
-    padding: 30px 20px 40px 20px;
-    width: 300px;
-    box-shadow: 2px 2px 2px 2px black;
-    &__h1 {
-      font-size: 26px;
-      margin-top: 30px;
-    }
-  }
-}
-
 @media screen and (max-width: 768px) {
-  .register {
+  .forgot {
     width: 80%;
+    padding: 40px 20px;
   }
 }
 
 @media screen and (max-width: 425px) {
-  .register {
+  .forgot {
     width: 95%;
+    padding: 40px 10px;
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(680deg);
   }
 }

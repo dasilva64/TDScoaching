@@ -27,33 +27,42 @@
   &__btn {
     cursor: pointer;
     float: right;
-    position: relative;
-    top: -25px;
+    position: absolute;
+    right: 28px;
+    top: 25px;
     border: none;
     background-color: orange;
     border-radius: 5px;
     transition: all 400ms;
+    padding: 5px;
     &:hover {
       transform: scale(1.05);
     }
-    &__cross {
-      font-size: 30px;
-      color: white;
-      padding: 2px 5px;
-      display: inline-block;
+    &:hover > &__img {
+      transform: rotate(90deg);
+    }
+    &__img {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       transition: all 400ms;
-      &:hover {
-        transform: rotate(90deg);
-      }
     }
   }
   &__div {
     margin-top: 10px;
-    border: 2px solid black;
-    border-radius: 10px;
-    height: 100px;
+    box-shadow: 0px 0px 7px 4px aqua;
+    border-radius: 5px;
+    max-height: 150px;
     overflow: scroll;
-    padding: 10px;
+    &__choice {
+      padding: 10px;
+      cursor: pointer;
+      transition: all 400ms;
+      &:hover {
+        background-color: orange;
+        color: white;
+      }
+    }
   }
   &__content {
     margin-top: 20px;
@@ -77,13 +86,24 @@
   }
 }
 
-@media screen and (max-width: 500px) {
-  .login {
+@media screen and (max-width: 768px) {
+  .modalAddMeeting {
+    width: 80%;
     padding: 40px 20px;
-    width: 300px;
-    box-shadow: 2px 2px 2px 2px black;
-    &__h1 {
-      font-size: 26px;
+    &__btn {
+      right: 20px;
+      top: 22px;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .modalAddMeeting {
+    width: 95%;
+    padding: 40px 10px;
+    &__btn {
+      right: 14px;
+      top: 18px;
     }
   }
 }

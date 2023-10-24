@@ -63,11 +63,19 @@ export default async function resetPassword(req: any, res: NextApiResponse) {
                   where: { mail: user.mail },
                   data: { resetToken: Prisma.JsonNull, password: encrypt },
                 });
-                res.status(200).json({
-                  status: 200,
-                  message:
-                    "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
-                });
+                if (editUser === null) {
+                  return res.status(404).json({
+                    status: 404,
+                    message:
+                      "La midification du mot de passe a échoué, veuillez réessayer",
+                  });
+                } else {
+                  return res.status(200).json({
+                    status: 200,
+                    message:
+                      "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
+                  });
+                }
               }
             } else {
               return res.status(404).json({

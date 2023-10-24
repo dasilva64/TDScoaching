@@ -13,23 +13,26 @@ export default withIronSessionApiRoute(
         if (arrayMessageError.length > 0) {
           return res.status(400).json({
             status: 400,
+            type: "validation",
             message: arrayMessageError,
           });
         }
         if (pseudo.trim() !== "") {
-          return res.status(404).json({
-            status: 404,
+          return res.status(400).json({
+            status: 400,
+            type: "error",
             message:
-              "Une erreur est survenue lors de l'envoie du message, veuillez réessayer plus tard",
+              "Vous ne pouvez pas modifier votre mot de passe, veuillez réessayer",
           });
         } else {
           let user = await prisma.user.findUnique({
             where: { id: req.session.user.id },
           });
           if (user === null) {
-            return res.status(400).json({
-              status: 400,
-              message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
+            return res.status(404).json({
+              status: 404,
+              message:
+                "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
             });
           } else {
             const encrytpPassword = async () => {
@@ -43,23 +46,32 @@ export default withIronSessionApiRoute(
                 where: { mail: user?.mail },
                 data: { password: encrypt },
               });
-              res.status(200).json({
-                status: 200,
-                message: "Votre mot de passe a été modifié avec succès",
-              });
+              if (editUser === null) {
+                return res.status(400).json({
+                  status: 400,
+                  type: "error",
+                  message:
+                    "Une erreur est survenue lors de la modification de votre mot de passe, veuillez réessayer",
+                });
+              } else {
+                res.status(200).json({
+                  status: 200,
+                  message: "Votre mot de passe a été modifié avec succès",
+                });
+              }
             };
             encrytpPassword();
           }
         }
       } else {
-        return res.status(404).json({
-          status: 404,
+        return res.status(401).json({
+          status: 401,
           message: "Vous n'êtes pas connecté, veuillez réessayer",
         });
       }
     } else {
-      return res.status(404).json({
-        status: 404,
+      return res.status(405).json({
+        status: 405,
         message: "Une erreur est survenue, veuillez réessayer",
       });
     }

@@ -24,7 +24,7 @@ const PasswordData = () => {
           width="20"
           height="20"
           priority={true}
-          src={"/assets/icone/user-solid.svg"}
+          src={"/assets/icone/lock-solid.svg"}
           alt="bousole"
         />
         <div className={styles.card__info}>

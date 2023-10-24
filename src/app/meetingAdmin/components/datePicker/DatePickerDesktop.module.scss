@@ -1,12 +1,15 @@
 .datePicker {
   background: white;
-  padding: 20px;
   border-radius: 20px;
   width: 100%;
-  margin-right: 50px;
   &__head {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    background: aqua;
+    padding: 10px 0px;
+    border-radius: 10px;
+    width: 98%;
+    margin: auto;
     &__nav {
       display: flex;
       justify-content: space-around;
@@ -49,6 +52,12 @@
           &__div {
             display: flex;
             flex-direction: column;
+            background-color: orange;
+            color: white;
+            border-radius: 5px;
+            width: 90%;
+            margin: 20px auto;
+            padding: 5px 0px;
             & > span {
               text-align: center;
             }
@@ -99,23 +108,30 @@
               border-radius: 5px;
               background-color: green;
               transition: all 400ms;
+              display: flex;
               &:hover {
                 background-color: blue;
                 color: white;
+              }
+              &__link {
+                text-decoration: none;
+                color: white;
+                align-self: center;
+                overflow: scroll;
               }
               &__back {
                 cursor: pointer;
-              margin: auto;
-              justify-content: center;
-              width: 85%;
-              height: 85%;
-              border-radius: 5px;
-              background-color: red;
-              transition: all 400ms;
-              &:hover {
-                background-color: blue;
-                color: white;
-              }
+                margin: auto;
+                justify-content: center;
+                width: 85%;
+                height: 85%;
+                border-radius: 5px;
+                background-color: red;
+                transition: all 400ms;
+                &:hover {
+                  background-color: blue;
+                  color: white;
+                }
               }
             }
             &__other {
@@ -127,6 +143,29 @@
                 border-radius: 1px;
                 margin: 0 auto;
                 width: 29px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .datePicker {
+    &__table {
+      &__tbody {
+        &__tr {
+          &__td {
+            &__meeting {
+              &__me {
+                height: 100%;
+                &__link {
+                  width: 100px;
+                  margin: auto;
+                  align-self: center;
+                }
               }
             }
           }

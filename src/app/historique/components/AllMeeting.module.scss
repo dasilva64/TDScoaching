@@ -38,3 +38,15 @@
     transform: rotate(-680deg);
   }
 }
+
+@media screen and (max-width: 768px) {
+  .datatable {
+    &__container {
+      &__div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+    }
+  }
+}

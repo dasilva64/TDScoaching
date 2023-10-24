@@ -9,9 +9,12 @@ import useSWRMutation from "swr/mutation";
 import Image from "next/image";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const ModalTwoFactorSendToken = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const { displayModalSendTokenTwoFactor } = useSelector(
     (state: RootState) => state.ModalSendTokenTwoFactor
   );
@@ -21,51 +24,38 @@ const ModalTwoFactorSendToken = () => {
     isError,
     mutate,
   } = useGet("/api/user/getUserProfile");
+
+  useEffect(() => {
+    if (userData) {
+      if (userData.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: userData.message,
+          },
+        });
+        router.push("/");
+      } else if (userData.status !== 200) {
+        setTimeout(() => {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: userData.message,
+            },
+          });
+        }, 2000);
+        router.refresh();
+      }
+    }
+  }, [dispatch, isLoading, router, userData]);
   const [displayInput, setdisplayInput] = useState(false);
-  const { data, trigger, reset } = useSWRMutation(
+  const { data, trigger, reset, isMutating } = useSWRMutation(
     "/api/user/sendTokenTwoFactor",
     fetchGet
   );
 
-  const {
-    data: dataDisable,
-    trigger: triggerDisable,
-    reset: resetDisable,
-  } = useSWRMutation("/api/user/disableTwoFactor", fetchGet);
-  const dispatch = useDispatch<AppDispatch>();
-  useEffect(() => {
-    if (dataDisable) {
-      if (dataDisable.status === 200) {
-        dispatch({
-          type: "ModalSendTokenTwoFactor/close",
-        });
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: dataDisable.message },
-        });
-        resetDisable();
-      } else {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: dataDisable.message },
-        });
-      }
-    }
-  }, [dataDisable, dispatch, resetDisable]);
-  useEffect(() => {
-    const mutateMainData = async () => {
-      mutate(
-        {
-          ...dataDisable,
-        },
-        { revalidate: false }
-      );
-      resetDisable();
-    };
-    if (dataDisable && dataDisable.body) {
-      mutateMainData();
-    }
-  }, [dataDisable, mutate, resetDisable]);
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
@@ -80,6 +70,21 @@ const ModalTwoFactorSendToken = () => {
           payload: { type: "success", flashMessage: data.message },
         });
         reset();
+      } else if (data.status === 401) {
+        setTimeout(() => {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }, 2000);
+        router.push("/");
+      } else if (data.status === 400) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -88,12 +93,48 @@ const ModalTwoFactorSendToken = () => {
         reset();
       }
     }
-  }, [data, dispatch, reset]);
+  }, [data, dispatch, reset, router]);
 
   const closeForm = () => {
     dispatch({
       type: "ModalSendTokenTwoFactor/close",
     });
+  };
+
+  const displayButton = () => {
+    if (isMutating === false) {
+      return (
+        <Switch
+          checked={userData.body.twoFactor}
+          onChange={(e) => {
+            if (e.target.checked === true) {
+              dispatch({
+                type: "flash/clearFlashMessage",
+              });
+              trigger();
+            } else {
+              dispatch({
+                type: "ModalComfirmDisableTwoFactor/open",
+              });
+            }
+          }}
+        />
+      );
+    } else if (isMutating === true) {
+      return (
+        <button disabled className={styles.modalTwoFactor__switch__load}>
+          <span className={styles.modalTwoFactor__switch__load__span}>
+            Chargement
+          </span>
+
+          <div className={styles.modalTwoFactor__switch__load__arc}>
+            <div
+              className={styles.modalTwoFactor__switch__load__arc__circle}
+            ></div>
+          </div>
+        </button>
+      );
+    }
   };
   return (
     <>
@@ -138,16 +179,28 @@ const ModalTwoFactorSendToken = () => {
               <h1 className={styles.modalTwoFactor__h1}>
                 Modifier l&apos;authentification à deux facteurs
               </h1>
-              <Switch
-                checked={userData.body.twoFactor}
-                onChange={(e) => {
-                  if (e.target.checked === true) {
-                    trigger();
-                  } else {
-                    triggerDisable();
-                  }
-                }}
-              />
+              <p className={styles.modalTwoFactor__p}>
+                L&apos;authentification à deux facteurs est un moyen de
+                sécuriser votre compte en plus de votre mot de passe. Lorsque
+                vous vous connectez, vous devrez entrer votre mot de passe et un
+                code à 8 chiffres qui vous sera alors envoyé dans votre boite
+                mail.
+              </p>
+              {userData.body.twoFactor === true && (
+                <p className={styles.modalTwoFactor__p}>
+                  Si vous désactivez l&apos;authentification à deux facteurs,
+                  vous devrez à nouveau la configurer pour la réactiver.
+                </p>
+              )}
+              {userData.body.twoFactor === false && (
+                <p className={styles.modalTwoFactor__p}>
+                  Vous n&apos;avez pas la double authentification
+                  d&apos;activée.
+                </p>
+              )}
+              <div className={styles.modalTwoFactor__switch}>
+                {displayButton()}
+              </div>
             </motion.div>
           </>
         )}

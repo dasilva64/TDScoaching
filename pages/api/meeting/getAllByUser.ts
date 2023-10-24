@@ -12,7 +12,8 @@ export default withIronSessionApiRoute(
         if (userOne === null) {
           return res.status(404).json({
             status: 404,
-            message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+            message:
+              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
           });
         } else {
           const allMeetingByUser = await prisma.meeting.findMany({
@@ -24,15 +25,16 @@ export default withIronSessionApiRoute(
           });
         }
       } else {
-        return res.status(404).json({
-          status: 404,
+        return res.status(401).json({
+          status: 401,
           message: "Vous n'êtes pas connecté, veuillez réessayer",
         });
       }
     } else {
-      return res.status(404).json({
-        status: 404,
-        message: "bad request",
+      return res.status(405).json({
+        status: 405,
+        message:
+          "La méthode de la requête n'est pas autorisé, veuillez réessayer",
       });
     }
   },

@@ -37,6 +37,7 @@
     border: 2px solid orange;
     border-radius: 30px;
     transition: all 0.3s ease-in-out;
+    animation: test 1s infinite;
     &:hover {
       background-color: white;
       color: orange;
@@ -95,5 +96,17 @@
     &__p {
       font-size: 16px;
     }
+  }
+}
+
+@keyframes test {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
   }
 }

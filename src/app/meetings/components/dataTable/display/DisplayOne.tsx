@@ -22,7 +22,7 @@ const DisplayOne = ({ i }: any) => {
         <tr
           className={styles.table__body__tr}
           onClick={() => {
-            router.push(`/utilisateur/${datas[i]["userId"]}`);
+            router.push(`/utilisateur/${datas[i]["UserId"]}`);
           }}
         >
           {keyAr &&

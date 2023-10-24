@@ -134,7 +134,7 @@ export default withIronSessionApiRoute(
                       "Une erreur est survenue lors de la création du rendez-vous, veuillez réessayer",
                   });
                 } else {
-                  res.json({ url: session.url });
+                  return res.status(200).json({ url: session.url });
                 }
               }
             }

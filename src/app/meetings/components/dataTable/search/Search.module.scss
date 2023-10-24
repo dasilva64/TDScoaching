@@ -9,3 +9,11 @@
     right: 20px;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .search {
+    width: 100%;
+    align-self: center;
+    margin-bottom: 20px;
+  }
+}

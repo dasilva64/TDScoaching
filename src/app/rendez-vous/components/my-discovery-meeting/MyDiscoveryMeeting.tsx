@@ -21,49 +21,51 @@ const MyDiscoveryMeeting = () => {
           Voici votre prochain rendez-vous de découverte :{" "}
         </h2>
         <div className={styles.myFirstMeeting__meeting__detail__div}>
-          <p className={styles.myFirstMeeting__meeting__detail__p}>
-            <Image
-              className={styles.myFirstMeeting__meeting__detail__p__img}
-              src="/assets/icone/calendar-regular.svg"
-              alt="clock"
-              width={25}
-              height={25}
-            />
-            {" : "}
-            {new Date(userData.body.meeting.startAt).toLocaleDateString(
-              "fr-FR",
-              {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }
-            )}
-          </p>
-          <p className={styles.myFirstMeeting__meeting__detail__p}>
-            <Image
-              className={styles.myFirstMeeting__meeting__detail__p__img}
-              src="/assets/icone/clock-solid.svg"
-              alt="clock"
-              width={25}
-              height={25}
-            />
-            {" : "}
-            {new Date(userData.body.meeting.startAt).toLocaleTimeString(
-              "fr-FR"
-            )}
-          </p>
-          <p className={styles.myFirstMeeting__meeting__detail__p}>
-            <Image
-              className={styles.myFirstMeeting__meeting__detail__p__img}
-              src="/assets/icone/coach.png"
-              alt="clock"
-              width={25}
-              height={25}
-            />
-            {" : "}
-            {userData.body.meeting.typeMeeting.coaching}
-          </p>
+          <div className={styles.myFirstMeeting__meeting__detail__div__div}>
+            <p className={styles.myFirstMeeting__meeting__detail__p}>
+              <Image
+                className={styles.myFirstMeeting__meeting__detail__p__img}
+                src="/assets/icone/calendar-regular.svg"
+                alt="clock"
+                width={25}
+                height={25}
+              />
+              {" : "}
+              {new Date(userData.body.meeting.startAt).toLocaleDateString(
+                "fr-FR",
+                {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )}
+            </p>
+            <p className={styles.myFirstMeeting__meeting__detail__p}>
+              <Image
+                className={styles.myFirstMeeting__meeting__detail__p__img}
+                src="/assets/icone/clock-solid.svg"
+                alt="clock"
+                width={25}
+                height={25}
+              />
+              {" : "}
+              {new Date(userData.body.meeting.startAt).toLocaleTimeString(
+                "fr-FR"
+              )}
+            </p>
+            <p className={styles.myFirstMeeting__meeting__detail__p}>
+              <Image
+                className={styles.myFirstMeeting__meeting__detail__p__img}
+                src="/assets/icone/coach.png"
+                alt="clock"
+                width={25}
+                height={25}
+              />
+              {" : "}
+              {userData.body.meeting.typeMeeting.coaching}
+            </p>
+          </div>
         </div>
         {current.toISOString() < userData.body.meeting.startAt && (
           <>
@@ -76,7 +78,7 @@ const MyDiscoveryMeeting = () => {
                 }
               >
                 <button
-                  className={`${styles.myFirstMeeting__meeting__detail__content__submit__btn} ${styles.myMeeting__meeting__detail__content__submit__btn__edit}`}
+                  className={`${styles.myFirstMeeting__meeting__detail__content__submit__btn} ${styles.myFirstMeeting__meeting__detail__content__submit__btn__edit}`}
                   onClick={() => {
                     dispatch({
                       type: "ModalDatePickerEditDiscovery/open",
@@ -92,7 +94,7 @@ const MyDiscoveryMeeting = () => {
                 }
               >
                 <button
-                  className={`${styles.myFirstMeeting__meeting__detail__content__submit__btn} ${styles.myMeeting__meeting__detail__content__submit__btn__edit}`}
+                  className={`${styles.myFirstMeeting__meeting__detail__content__submit__btn} ${styles.myFirstMeeting__meeting__detail__content__submit__btn__delete}`}
                   onClick={() => {
                     dispatch({
                       type: "ModalDeleteDiscoveryMeeting/open",

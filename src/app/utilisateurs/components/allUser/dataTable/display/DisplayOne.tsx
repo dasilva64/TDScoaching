@@ -9,6 +9,7 @@ const DisplayOne = ({ i }: any) => {
   const { datas, sortBy } = useSelector((state: RootState) => state.Array);
   const [keyAr, setKeyAr] = useState<any>([]);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (datas && datas.length > 0) {
@@ -22,6 +23,9 @@ const DisplayOne = ({ i }: any) => {
         <tr
           className={i === 0 ? styles.table__body__tr : styles.table__body__tr}
           onClick={() => {
+            dispatch({
+              type: "flash/clearFlashMessage",
+            });
             router.push(`/utilisateur/${datas[i]["id"]}`);
           }}
         >

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import DatePickerDesktop from "./datePicker/DatePickerDesktop";
 import DatePickerMobile from "./datePicker/DatePickerMobile";
 import useGet from "@/app/components/hook/useGet";
+import DatePicker from "./datePicker/DatePicker";
 
 const Display = () => {
   const [mobile, setMobile] = useState<boolean | null>(null);
@@ -15,6 +16,7 @@ const Display = () => {
     isLoading,
     isError,
   } = useGet("/api/meeting/getAllAfterNow");
+  console.log(allMeeting);
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth < 600) {
@@ -63,8 +65,9 @@ const Display = () => {
     content = (
       <>
         <div className={styles.meet__article}>
-          {mobile === false && <DatePickerDesktop events={allMeeting.body} />}
-          {mobile === true && <DatePickerMobile events={allMeeting.body} />}
+          <DatePicker events={allMeeting.body} />
+          {/* {mobile === false && <DatePickerDesktop events={allMeeting.body} />}
+          {mobile === true && <DatePickerMobile events={allMeeting.body} />} */}
         </div>
       </>
     );

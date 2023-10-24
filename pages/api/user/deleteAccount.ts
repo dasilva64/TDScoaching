@@ -3,6 +3,7 @@ import prisma from "../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import validator from "validator";
+import nodemailer from "nodemailer";
 
 export default withIronSessionApiRoute(
   async function deleteAccount(req, res) {
@@ -45,6 +46,50 @@ export default withIronSessionApiRoute(
                         "Vous ne pouvez pas supprimer votre compte car vous avez un rendez-vous de prévu",
                     });
                   } else {
+                    let smtpTransport = nodemailer.createTransport({
+                      service: "Gmail",
+                      auth: {
+                        user: process.env.SECRET_SMTP_EMAIL,
+                        pass: process.env.SECRET_SMTP_PASSWORD,
+                      },
+                    });
+                    let mailOptions = {
+                      from: process.env.SECRET_SMTP_EMAIL,
+                      to: process.env.SECRET_SMTP_EMAIL,
+                      subject: "Suppression de compte",
+                      html: `<!DOCTYPE html>
+                                  <html lang="fr">
+                                    <head>
+                                      <title>tds coaching</title>
+                                      <meta charset="UTF-8" />
+                                      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                                      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                                      <title>Document</title>
+                                    </head>
+                                    <body>
+                                      
+                                      <div style="width: 100%">
+                                        <div style="text-align: center">
+                                          <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                                        </div>
+                                        <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
+                                          <h1 style="text-align: center">tds coaching</h1>
+                                          <div style="text-align: center">
+                                            <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Ftrash.png&w=750&q=75" width="80px" height="80px" />
+                                          </div>
+                                          <h2 style="text-align: center">Suppression d'un compte</h2>
+                                          <ul style="list-style: none; padding: 0px">
+                                            <li style="margin: 0px 0px 10px 0px">Prénom : ${user.firstname}</li>
+                                            <li style="margin: 0px 0px 10px 0px">Nom de famille : ${user.lastname}</li>
+                                            <li style="margin: 0px 0px 10px 0px">Email : ${user.mail}</li>
+                                            <li style="margin: 0px 0px 10px 0px">Raison : ${user.deleteReason}</li>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </body>
+                                  </html>`,
+                    };
+                    smtpTransport.sendMail(mailOptions);
                     const deleteUser = await prisma.user.delete({
                       where: { id: user.id },
                     });
@@ -70,6 +115,11 @@ export default withIronSessionApiRoute(
               });
             }
           }
+        } else {
+          return res.status(404).json({
+            status: 404,
+            message: "Le token n'éxiste pas, veuillez réessayer",
+          });
         }
       } else {
         return res.status(404).json({

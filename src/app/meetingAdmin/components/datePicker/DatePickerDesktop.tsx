@@ -25,6 +25,21 @@ const DatePickerDesktop = ({ events }: any) => {
   };
 
   const monthstext: any = {
+    1: "Jan",
+    2: "Fév",
+    3: "Mar",
+    4: "Avr",
+    5: "Mai",
+    6: "Jui",
+    7: "Jui",
+    8: "Aoû",
+    9: "Sep",
+    10: "Oct",
+    11: "Nov",
+    12: "Déc",
+  };
+
+  const monthstexthead: any = {
     1: "Janvier",
     2: "Février",
     3: "Mars",
@@ -129,6 +144,7 @@ const DatePickerDesktop = ({ events }: any) => {
               newar[y].getFullYear(),
               newar[y].getMonth() + 1,
               newar[y].getDate(),
+              newar[y].getDay(),
             ],
             [arWeek],
           ]);
@@ -139,6 +155,7 @@ const DatePickerDesktop = ({ events }: any) => {
               newar[y].getFullYear(),
               newar[y].getMonth() + 1,
               newar[y].getDate(),
+              newar[y].getDay(),
             ],
           ]);
           arWeek = [];
@@ -312,6 +329,7 @@ const DatePickerDesktop = ({ events }: any) => {
   const goCurrent = () => {
     let current = new Date();
     changeDate(current.toDateString());
+    setArDateWeek([]);
   };
   return (
     <>
@@ -345,7 +363,7 @@ const DatePickerDesktop = ({ events }: any) => {
                     {arDateWeek[arDateWeek.length - 1][0][2]}
                   </p>
                   <p className={styles.datePicker__head__div__marginL}>
-                    {monthstext[arDateWeek[0][0][1]]}
+                    {monthstexthead[arDateWeek[0][0][1]]}
                   </p>
                 </>
               )}
@@ -356,14 +374,14 @@ const DatePickerDesktop = ({ events }: any) => {
                     {arDateWeek[0][0][2]}
                   </p>
                   <p className={styles.datePicker__head__div__marginR}>
-                    {monthstext[arDateWeek[0][0][1]]}
+                    {monthstexthead[arDateWeek[0][0][1]]}
                   </p>
                   <p>-</p>
                   <p className={styles.datePicker__head__div__marginL}>
                     {arDateWeek[arDateWeek.length - 1][0][2]}
                   </p>
                   <p className={styles.datePicker__head__div__marginL}>
-                    {monthstext[arDateWeek[arDateWeek.length - 1][0][1]]}
+                    {monthstexthead[arDateWeek[arDateWeek.length - 1][0][1]]}
                   </p>
                 </>
               )}
@@ -386,7 +404,7 @@ const DatePickerDesktop = ({ events }: any) => {
                 arDateWeek.map((p: any, index: any) => {
                   return (
                     <th
-                      className={styles.datePicker__table__thead__tr__th}
+                      //className={styles.datePicker__table__thead__tr__th}
                       key={index}
                     >
                       <div
@@ -394,7 +412,8 @@ const DatePickerDesktop = ({ events }: any) => {
                       >
                         <span>{daystext[p[0][3]]}</span>
                         <span>
-                          {p[0][2]}/{p[0][1]}
+                          {p[0][2]} {monthstext[p[0][1]]}
+                          {"."}
                         </span>
                       </div>
                     </th>
@@ -465,6 +484,9 @@ const DatePickerDesktop = ({ events }: any) => {
                                         }
                                       >
                                         <Link
+                                          className={
+                                            styles.datePicker__table__tbody__tr__td__meeting__me__link
+                                          }
                                           href={`/utilisateur/${p[1][0][y][4]}`}
                                         >
                                           {p[1][0][y][5]} {p[1][0][y][6]}

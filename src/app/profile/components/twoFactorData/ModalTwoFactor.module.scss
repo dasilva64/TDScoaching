@@ -12,7 +12,7 @@
   box-shadow: 0px 0px 8px 8px aqua;
   border-radius: 20px;
   padding: 50px 30px;
-  width: 40%;
+  width: 60%;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -28,8 +28,8 @@
     cursor: pointer;
     float: right;
     position: absolute;
-    right: 58px;
-    top: 22px;
+    right: 28px;
+    top: 25px;
     border: none;
     background-color: orange;
     border-radius: 5px;
@@ -57,7 +57,7 @@
     flex-direction: column;
     &__submit {
       text-align: center;
-      margin: 50px 0px 20px 0px;
+      margin: 50px auto 20px auto;
       &__btn {
         cursor: pointer;
         border-radius: 10px;
@@ -71,23 +71,121 @@
           transform: scale(1.05);
           color: white;
         }
+        &__load {
+          border-radius: 10px;
+          border: 2px solid orange;
+          background-color: white;
+          padding: 0px 10px;
+          display: flex;
+          color: black;
+          &__span {
+            align-self: center;
+          }
+          &__arc {
+            position: relative;
+            bottom: 9px;
+            margin: 18px 10px 0px 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border-top: 1px solid black;
+            border-bottom: 1px solid transparent;
+            border-left: 1px solid black;
+            border-right: 1px solid transparent;
+            animation: load 2000ms both infinite ease-out;
+            &__circle {
+              position: relative;
+              right: -13px;
+              width: 5px;
+              height: 5px;
+              background-color: black;
+              border-radius: 50%;
+            }
+          }
+        }
       }
     }
   }
-  &__btn {
-    &__delete {
+  &__reSend {
+    text-align: center;
+    margin: 0px auto 0px auto;
+    &__btn {
       cursor: pointer;
       border-radius: 10px;
-      border: 2px solid red;
+      border: 2px solid orange;
       background-color: white;
       padding: 10px;
       color: black;
       transition: all 400ms;
       &:hover {
-        background-color: red;
+        background-color: orange;
         transform: scale(1.05);
         color: white;
       }
+      &__load {
+        border-radius: 10px;
+        border: 2px solid orange;
+        background-color: white;
+        padding: 0px 10px;
+        display: flex;
+        margin: auto;
+        color: black;
+        &__span {
+          align-self: center;
+        }
+        &__arc {
+          position: relative;
+          bottom: 9px;
+          margin: 18px 10px 0px 10px;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border-top: 1px solid black;
+          border-bottom: 1px solid transparent;
+          border-left: 1px solid black;
+          border-right: 1px solid transparent;
+          animation: load 2000ms both infinite ease-out;
+          &__circle {
+            position: relative;
+            right: -13px;
+            width: 5px;
+            height: 5px;
+            background-color: black;
+            border-radius: 50%;
+          }
+        }
+      }
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .modalTwoFactor {
+    width: 80%;
+    padding: 40px 20px;
+    &__btn {
+      right: 20px;
+      top: 22px;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .modalTwoFactor {
+    width: 95%;
+    padding: 40px 10px;
+    &__btn {
+      right: 14px;
+      top: 18px;
+    }
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(680deg);
   }
 }

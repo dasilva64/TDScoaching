@@ -20,9 +20,11 @@
   max-height: 90%;
   overflow: scroll;
   z-index: 999;
+  display: flex;
+  flex-direction: column;
   &__div {
-    margin-top: 20px;
     text-align: center;
+    margin: 20px auto 20px auto;
     &__btn {
       background-color: white;
       border-radius: 10px;
@@ -35,6 +37,38 @@
         background-color: orange;
         color: white;
       }
+      &__load {
+        border-radius: 10px;
+        border: 2px solid orange;
+        background-color: white;
+        padding: 0px 10px;
+        display: flex;
+        color: black;
+        &__span {
+          align-self: center;
+        }
+        &__arc {
+          position: relative;
+          bottom: 9px;
+          margin: 18px 10px 0px 10px;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border-top: 1px solid black;
+          border-bottom: 1px solid transparent;
+          border-left: 1px solid black;
+          border-right: 1px solid transparent;
+          animation: load 2000ms both infinite ease-out;
+          &__circle {
+            position: relative;
+            right: -13px;
+            width: 5px;
+            height: 5px;
+            background-color: black;
+            border-radius: 50%;
+          }
+        }
+      }
     }
   }
   &__h1 {
@@ -46,8 +80,8 @@
     cursor: pointer;
     float: right;
     position: absolute;
-    right: 58px;
-    top: 22px;
+    right: 28px;
+    top: 25px;
     border: none;
     background-color: orange;
     border-radius: 5px;
@@ -65,5 +99,36 @@
       align-items: center;
       transition: all 400ms;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .modalComfirm {
+    width: 80%;
+    padding: 40px 20px;
+    &__btn {
+      right: 20px;
+      top: 22px;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .modalComfirm {
+    width: 95%;
+    padding: 40px 10px;
+    &__btn {
+      right: 14px;
+      top: 18px;
+    }
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(680deg);
   }
 }

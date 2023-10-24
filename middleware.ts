@@ -48,6 +48,7 @@ export const config = {
   matcher: [
     "/profile",
     "/utilisateurs",
+    "/historique",
     "/meetings",
     "/rendez-vous",
     "/meetingAdmin",

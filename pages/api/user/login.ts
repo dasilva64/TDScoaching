@@ -14,14 +14,15 @@ export default withIronSessionApiRoute(
       if (arrayMessageError.length > 0) {
         return res.status(400).json({
           status: 400,
+          type: "validation",
           message: arrayMessageError,
         });
       }
       if (pseudo.trim() !== "") {
-        return res.status(404).json({
-          status: 404,
-          message:
-            "Une erreur est survenue lors de la connection, veuillez réessayer plus tard",
+        return res.status(400).json({
+          status: 400,
+          type: "error",
+          message: "Vous ne pouvez pas vous connecter, veuillez réessayer",
         });
       } else {
         const user = await prisma.user.findUnique({
@@ -35,8 +36,9 @@ export default withIronSessionApiRoute(
             user.password
           );
           if (decode === false) {
-            return res.status(404).json({
-              status: 404,
+            return res.status(400).json({
+              status: 400,
+              type: "error",
               message:
                 "Mauvaise combinaison email/mot de passe, veuillez réessayer",
             });
@@ -47,14 +49,16 @@ export default withIronSessionApiRoute(
                 const deleteUser = await prisma.user.delete({
                   where: { mail: user.mail },
                 });
-                return res.status(404).json({
-                  status: 404,
+                return res.status(400).json({
+                  status: 400,
+                  type: "error",
                   message:
-                    "Mauvaise combinaison email/mot de passe, veuillez réessayer",
+                    "Votre compte a été supprimé car vous ne l'avez pas validé à temps, veuillez vous réinscrire",
                 });
               }
-              return res.status(404).json({
-                status: 404,
+              return res.status(400).json({
+                status: 400,
+                type: "error",
                 message:
                   "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail",
               });
@@ -142,9 +146,10 @@ export default withIronSessionApiRoute(
         }
       }
     } else {
-      res.status(404).json({
-        status: 404,
-        message: "Une erreur est survenue, veuillez réessayer",
+      return res.status(405).json({
+        status: 405,
+        message:
+          "La méthode de la requête n'est pas autorisé, veuillez réessayer",
       });
     }
   },

@@ -12,7 +12,8 @@ export default withIronSessionApiRoute(
         if (user === null) {
           return res.status(404).json({
             status: 404,
-            message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+            message:
+              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
           });
         } else {
           if (user.editEmail) {
@@ -29,18 +30,33 @@ export default withIronSessionApiRoute(
                 },
               },
             });
-            let smtpTransport = nodemailer.createTransport({
-              service: "Gmail",
-              auth: {
-                user: process.env.SECRET_SMTP_EMAIL,
-                pass: process.env.SECRET_SMTP_PASSWORD,
-              },
-            });
-            let mailOptions = {
-              from: process.env.SECRET_SMTP_EMAIL,
-              to: process.env.SECRET_SMTP_EMAIL,
-              subject: "Validation de votre nouvelle adresse email",
-              html: `<!DOCTYPE html>
+            if (editUser === null) {
+              return res.status(400).json({
+                status: 400,
+                message:
+                  "Une erreur est survenue lors de la modification de votre email, veuillez réessayer",
+              });
+            } else {
+              let userObject = {
+                id: editUser.id,
+                role: editUser.role,
+                firstname: editUser.firstname,
+                lastname: editUser.lastname,
+                email: editUser.mail,
+                newEmail: copyEditEmail.newEmail,
+              };
+              let smtpTransport = nodemailer.createTransport({
+                service: "Gmail",
+                auth: {
+                  user: process.env.SECRET_SMTP_EMAIL,
+                  pass: process.env.SECRET_SMTP_PASSWORD,
+                },
+              });
+              let mailOptions = {
+                from: process.env.SECRET_SMTP_EMAIL,
+                to: process.env.SECRET_SMTP_EMAIL,
+                subject: "Validation de votre nouvelle adresse email",
+                html: `<!DOCTYPE html>
               <html lang="fr">
                 <head>
                   <title>tds coaching</title>
@@ -65,14 +81,15 @@ export default withIronSessionApiRoute(
                   </div>
                 </body>
               </html>`,
-            };
-            smtpTransport.sendMail(mailOptions);
-            return res.json({
-              status: 200,
-              body: editUser,
-              message:
-                "Un code vous à été renvoyer pour valider votre adresse email",
-            });
+              };
+              smtpTransport.sendMail(mailOptions);
+              return res.json({
+                status: 200,
+                body: userObject,
+                message:
+                  "Un code vous à été renvoyer pour valider votre adresse email",
+              });
+            }
           } else {
             return res.json({
               status: 400,
@@ -82,15 +99,16 @@ export default withIronSessionApiRoute(
           }
         }
       } else {
-        return res.status(404).json({
-          status: 404,
+        return res.status(401).json({
+          status: 401,
           message: "Vous n'êtes pas connecté, veuillez réessayer",
         });
       }
     } else {
-      return res.status(404).json({
-        status: 404,
-        message: "Une erreur est survenue, veuillez réessayer",
+      return res.status(405).json({
+        status: 405,
+        message:
+          "La méthode de la requête n'est pas autorisé, veuillez réessayer",
       });
     }
   },

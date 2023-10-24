@@ -11,10 +11,10 @@ export default withIronSessionApiRoute(
           where: { id: req.session.user.id },
         });
         if (user === null) {
-          return res.status(200).json({
-            status: 400,
-            body: null,
-            message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+          return res.status(404).json({
+            status: 404,
+            message:
+              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
           });
         } else {
           const updateUser = await prisma.user.update({
@@ -23,32 +23,39 @@ export default withIronSessionApiRoute(
               editEmail: Prisma.JsonNull,
             },
           });
-          let userObject = {
-            id: updateUser.id,
-            role: updateUser.role,
-            firstname: updateUser.firstname,
-            lastname: updateUser.lastname,
-            email: updateUser.mail,
-            editEmail: updateUser.editEmail,
-          };
-          return res.status(200).json({
-            status: 200,
-            message: "Votre demande de modification d'email à été annulé",
-            body: userObject,
-          });
+          if (updateUser === null) {
+            return res.status(400).json({
+              status: 400,
+              message:
+                "Une erreur est survenue lors de la modification de votre email, veuillez réessayer",
+            });
+          } else {
+            let userObject = {
+              id: updateUser.id,
+              role: updateUser.role,
+              firstname: updateUser.firstname,
+              lastname: updateUser.lastname,
+              email: updateUser.mail,
+              editEmail: updateUser.editEmail,
+            };
+            return res.status(200).json({
+              status: 200,
+              message: "Votre demande de modification d'email à été annulé",
+              body: userObject,
+            });
+          }
         }
       } else {
-        return res.status(200).json({
-          status: 404,
+        return res.status(401).json({
+          status: 401,
           message: "Vous n'êtes pas connecté, veuillez réessayer",
-          body: null,
         });
       }
     } else {
-      return res.status(404).json({
-        status: 404,
-        body: null,
-        message: "Une erreur est survenue, veuillez réessayer",
+      return res.status(405).json({
+        status: 405,
+        message:
+          "La méthode de la requête n'est pas autorisé, veuillez réessayer",
       });
     }
   },

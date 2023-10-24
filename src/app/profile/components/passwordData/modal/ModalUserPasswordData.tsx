@@ -3,10 +3,21 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserPasswordData.module.scss";
 import useSWRMutation from "swr/mutation";
-import { TextField } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  IconButton,
+  Input,
+  InputAdornment,
+  InputLabel,
+  TextField,
+} from "@mui/material";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+import { useRouter } from "next/navigation";
 
 const ModalUserPasswordData = () => {
   const { displayModalEditPassword } = useSelector(
@@ -22,8 +33,9 @@ const ModalUserPasswordData = () => {
   const [errorMessagePassword, setErrorMessagePassword] = useState<string>("");
   const [errorMessagePasswordComfirm, setErrorMessagePasswordComfirm] =
     useState<string>("");
+  const router = useRouter();
 
-  const { trigger, data, reset } = useSWRMutation(
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/api/user/editPasswordUser",
     fetchPost
   );
@@ -31,6 +43,7 @@ const ModalUserPasswordData = () => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
+        clearState();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
@@ -39,13 +52,30 @@ const ModalUserPasswordData = () => {
           type: "ModalEditPassword/close",
         });
         reset();
+      } else if (data.status === 401) {
+        setTimeout(() => {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }, 2000);
+        router.push("/");
       } else if (data.status === 400) {
-        data.message.forEach((element: string) => {
-          if (element[0] === "password") {
-            setErrorMessagePassword(element[1]);
-          }
-        });
-        reset();
+        if (data.type === "validation") {
+          data.message.forEach((element: string) => {
+            if (element[0] === "password") {
+              setErrorMessagePassword(element[1]);
+            }
+          });
+          reset();
+        } else {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -54,9 +84,10 @@ const ModalUserPasswordData = () => {
         reset();
       }
     }
-  }, [data, dispatch, reset]);
+  }, [data, dispatch, reset, router]);
 
   const closeForm = () => {
+    clearState();
     dispatch({
       type: "ModalEditPassword/close",
     });
@@ -64,6 +95,9 @@ const ModalUserPasswordData = () => {
 
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    dispatch({
+      type: "flash/clearFlashMessage",
+    });
     if (validPasswordInput === true || validPasswordComfirmInput === true) {
       if (passwordInput === passwordComfirmInput) {
         if (inputPseudo.length === 0) {
@@ -161,6 +195,21 @@ const ModalUserPasswordData = () => {
       }
     }
   };
+  const clearState = () => {
+    setErrorMessagePassword("");
+    setErrorMessagePasswordComfirm("");
+    setValidPasswordInput(false);
+    setValidPasswordComfirmInput(false);
+    setPasswordInput("");
+    setPasswordComfirmInput("");
+  };
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPasswordComfirm, setShowPasswordComfirm] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleClickShowPasswordComfirm = () =>
+    setShowPasswordComfirm((show) => !show);
+
   return (
     <>
       <AnimatePresence>
@@ -211,7 +260,54 @@ const ModalUserPasswordData = () => {
                   handlerSubmit(e);
                 }}
               >
-                <TextField
+                <FormControl
+                  variant="standard"
+                  style={{ margin: "20px 0px 0px 0px" }}
+                >
+                  <InputLabel
+                    sx={{
+                      color: "black",
+                      "&.Mui-focused": {
+                        color: "#1976d2",
+                      },
+                    }}
+                    htmlFor="standard-adornment-password"
+                  >
+                    Mot de passe
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-password"
+                    autoFocus
+                    value={passwordInput}
+                    placeholder={"Entrez votre mot de passe"}
+                    type={showPassword ? "text" : "password"}
+                    onChange={(e) => {
+                      handlerInput(
+                        e,
+                        "password",
+                        /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{2,}$/,
+                        setValidPasswordInput,
+                        setErrorMessagePassword,
+                        setPasswordInput,
+                        "Mot de passe : doit avoir une lettre en minuscule, un nombre et 8 caractères minimum"
+                      );
+                    }}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText style={{ color: "red" }}>
+                    {errorMessagePassword}
+                  </FormHelperText>
+                </FormControl>
+                {/* <TextField
                   autoFocus
                   value={passwordInput}
                   style={{ margin: "20px 0px 0px 0px" }}
@@ -229,12 +325,71 @@ const ModalUserPasswordData = () => {
                       setValidPasswordInput,
                       setErrorMessagePassword,
                       setPasswordInput,
-                      "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
+                      "Mot de passe : doit avoir une lettre en minuscule, un nombre et 8 caractères minimum"
                     );
                   }}
                   helperText={errorMessagePassword}
-                />
-                <TextField
+                /> */}
+                <FormControl variant="standard" style={{ margin: "20px 0px" }}>
+                  <InputLabel
+                    sx={{
+                      color: "black",
+                      "&.Mui-focused": {
+                        color: "#1976d2",
+                      },
+                    }}
+                    htmlFor="standard-adornment-password-comfirm"
+                  >
+                    Comfirmation de mot de passe
+                  </InputLabel>
+                  <Input
+                    id="standard-adornment-password-comfirm"
+                    value={passwordComfirmInput}
+                    placeholder={"Entrez votre comfirmation de mot de passe"}
+                    type={showPasswordComfirm ? "text" : "password"}
+                    onChange={(e) => {
+                      let removeSpace = "";
+                      if (e.target.value.charAt(0) === " ") {
+                        removeSpace = e.target.value.replace(/\s/, "");
+                        setPasswordComfirmInput(removeSpace);
+                      } else {
+                        removeSpace = e.target.value.replace(/\s+/g, "");
+                        setPasswordComfirmInput(removeSpace);
+                      }
+                      if (
+                        passwordInput.length > 0 &&
+                        removeSpace !== passwordInput
+                      ) {
+                        setValidPasswordComfirmInput(false);
+                        setErrorMessagePasswordComfirm(
+                          "Comfirmation mot de passe : les mots de passe doivent être identique"
+                        );
+                      } else {
+                        setValidPasswordComfirmInput(true);
+
+                        setErrorMessagePasswordComfirm("");
+                      }
+                    }}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPasswordComfirm}
+                        >
+                          {showPasswordComfirm ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText style={{ color: "red" }}>
+                    {errorMessagePasswordComfirm}
+                  </FormHelperText>
+                </FormControl>
+                {/* <TextField
                   value={passwordComfirmInput}
                   style={{ margin: "20px 0px" }}
                   id={"comfirmPassword"}
@@ -267,7 +422,7 @@ const ModalUserPasswordData = () => {
                     }
                   }}
                   helperText={errorMessagePasswordComfirm}
-                />
+                /> */}
                 <input
                   type="text"
                   name="pseudo"
@@ -280,11 +435,47 @@ const ModalUserPasswordData = () => {
                   }}
                 />
                 <div className={styles.modalEditPasswordData__form__submit}>
-                  <input
-                    className={styles.modalEditPasswordData__form__submit__btn}
-                    type="submit"
-                    value="Modifier"
-                  />
+                  {isMutating && (
+                    <>
+                      <button
+                        disabled
+                        className={
+                          styles.modalEditPasswordData__form__submit__btn__load
+                        }
+                      >
+                        <span
+                          className={
+                            styles.modalEditPasswordData__form__submit__btn__load__span
+                          }
+                        >
+                          Chargement
+                        </span>
+
+                        <div
+                          className={
+                            styles.modalEditPasswordData__form__submit__btn__load__arc
+                          }
+                        >
+                          <div
+                            className={
+                              styles.modalEditPasswordData__form__submit__btn__load__arc__circle
+                            }
+                          ></div>
+                        </div>
+                      </button>
+                    </>
+                  )}
+                  {isMutating === false && (
+                    <>
+                      <input
+                        className={
+                          styles.modalEditPasswordData__form__submit__btn
+                        }
+                        type="submit"
+                        value="Modifier"
+                      />
+                    </>
+                  )}
                 </div>
               </form>
             </motion.div>

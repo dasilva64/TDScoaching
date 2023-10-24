@@ -1,134 +1,148 @@
+.container {
+  overflow: scroll;
+}
+
 .table {
-    width: 100%;
-    border-spacing: 1px;
-    clear: both;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    &__head {
-        &__tr {
-            background: aqua;
+  width: 100%;
+  border-spacing: 3px;
+  clear: both;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  &__head {
+    &__tr {
+      background: aqua;
       cursor: pointer;
-            &__th {
-                padding: 10px 18px;
-                &:hover {
-                    background-color: orange;
-                  }
-                &__both {
-                    background-image: url('/assets/icone/sort_both.png');
-                    background-repeat: no-repeat;
-                background-position: center right;
-                &__little {
-                    width: 1px;
-                    background-image: url('/assets/icone/sort_both.png');
-                    background-repeat: no-repeat;
-                background-position: center right;
-                  }
-                }
-                &__asc {
-                    background-image: url('/assets/icone/sort_asc.png');
-                    background-repeat: no-repeat;
-                background-position: center right;
-                &__little {
-                    width: 1px;
-                    background-image: url('/assets/icone/sort_asc.png');
-                    background-repeat: no-repeat;
-                background-position: center right;
-                  }
-                }
-                &__desc {
-                    background-image: url('/assets/icone/sort_desc.png');
-                    background-repeat: no-repeat;
-                background-position: center right;
-                &__little {
-                    width: 1px;
-                    background-image: url('/assets/icone/sort_desc.png');
-                    background-repeat: no-repeat;
-                background-position: center right;
-                  }
-                }
-            }
+      &__th {
+        border-radius: 5px;
+        padding: 10px 18px;
+
+        &:hover {
+          background-color: orange;
         }
-    }
-    &__body {
-        &__tr {
-            max-height: 35px;
-            &:hover * {
-                background-color: unset;
-              }
-              &:hover {
-                color: white;
-                background-color: orange;
-              }
-              &__border {
-                max-height: 35px;
-                &:hover {
-                  color: white;
-                  background-color: orange;
-                }
-              }
-            &__td {
-                cursor: pointer;
-                max-height: 35px;
-                border-top: 1px solid #ddd;
-                padding: 8px 10px;
-                &__div {
-                    max-height: 20px;
-                    overflow: scroll;
-                }
-                &__border {
-                    padding: 8px 10px;
-                    border-top: none;
-                }
-                &__even {
-                    background-color: #f9f9f9;
-                    &__first {
-                        background-color: aqua;
-                    }
-                }
-                &__odd {
-                    &__first {
-                        background-color: #fafafa;
-                        &__center {
-                            text-align: center;
-                            padding: 8px 10px;
-                        }
-                    }
-                }
-                
-            }
+        &__both {
+          background-image: url("/assets/icone/arrows-up-down-solid.svg");
+          background-repeat: no-repeat;
+          background-position: center right;
+          background-size: 15% 40%;
+
+          &__little {
+            width: 1px;
+            background-image: url("/assets/icone/arrows-up-down-solid.svg");
+            background-repeat: no-repeat;
+            background-position: center right;
+            background-size: 15% 40%;
+          }
         }
+        &__asc {
+          background-image: url("/assets/icone/arrow-up-solid.svg");
+          background-repeat: no-repeat;
+          background-position: center right;
+          background-size: 15% 40%;
+          &__little {
+            width: 1px;
+            background-image: url("/assets/icone/arrow-up-solid.svg");
+            background-repeat: no-repeat;
+            background-position: center right;
+            background-size: 15% 40%;
+          }
+        }
+        &__desc {
+          background-image: url("/assets/icone/arrow-down-solid.svg");
+          background-repeat: no-repeat;
+          background-position: center right;
+          background-size: 15% 40%;
+          &__little {
+            width: 1px;
+            background-image: url("/assets/icone/arrow-down-solid.svg");
+            background-repeat: no-repeat;
+            background-position: center right;
+            background-size: 15% 40%;
+          }
+        }
+      }
     }
+  }
+  &__body {
+    &__tr {
+      max-height: 35px;
+
+      &:hover * {
+        background-color: unset;
+      }
+      &:hover {
+        color: white;
+        background-color: orange;
+      }
+      &__border {
+        max-height: 35px;
+
+        &:hover {
+          color: white;
+          background-color: orange;
+        }
+      }
+      &__td {
+        border-radius: 5px;
+        cursor: pointer;
+        max-height: 35px;
+        padding: 8px 10px;
+        &__div {
+          max-height: 20px;
+          overflow: scroll;
+        }
+        &__border {
+          padding: 8px 10px;
+          border-top: none;
+        }
+        &__even {
+          background-color: #f9f9f9;
+          &__first {
+            background-color: aqua;
+          }
+        }
+        &__odd {
+          &__first {
+            background-color: #fafafa;
+            &__center {
+              text-align: center;
+              padding: 8px 10px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .arc {
-    width: 15px;
-    height: 15px;
-    margin-left: 5px;
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  position: relative;
+  left: 50%;
+  transform: translatex(-50%);
+  border-radius: 50%;
+  border-top: 1px solid black;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid black;
+  border-right: 1px solid transparent;
+  animation: load 2000ms both infinite ease-out;
+  &__circle {
     position: relative;
-    left: 50%;
-    transform: translatex(-50%);
+    right: -9px;
+    top: 0px;
+    width: 5px;
+    height: 5px;
+    background-color: black;
     border-radius: 50%;
-    border-top: 1px solid black;
-    border-bottom: 1px solid transparent;
-    border-left: 1px solid black;
-    border-right: 1px solid transparent;
-    animation: load 2000ms both infinite ease-out;
-    &__circle {
-      position: relative;
-      right: -9px;
-      top: 0px;
-      width: 5px;
-      height: 5px;
-      background-color: black;
-      border-radius: 50%;
-    }
   }
-  
-  @keyframes load {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(680deg);
-    }
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
   }
+  100% {
+    transform: rotate(680deg);
+  }
+}

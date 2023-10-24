@@ -149,6 +149,16 @@ const Display = () => {
                           {key}
                         </th>
                       );
+                    } else if (key === "RendezVous") {
+                      return (
+                        <th
+                          className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__min} ${styles.table__head__tr__th__asc}`}
+                          onClick={(e) => handlerSortBy(e)}
+                          key={index}
+                        >
+                          {key}
+                        </th>
+                      );
                     }
                     return (
                       <th
@@ -164,6 +174,16 @@ const Display = () => {
                       return (
                         <th
                           className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__desc__little}`}
+                          onClick={(e) => handlerSortBy(e)}
+                          key={index}
+                        >
+                          {key}
+                        </th>
+                      );
+                    } else if (key === "RendezVous") {
+                      return (
+                        <th
+                          className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__min} ${styles.table__head__tr__th__desc}`}
                           onClick={(e) => handlerSortBy(e)}
                           key={index}
                         >
@@ -186,6 +206,16 @@ const Display = () => {
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__both__little}`}
+                        onClick={(e) => handlerSortBy(e)}
+                        key={index}
+                      >
+                        {key}
+                      </th>
+                    );
+                  } else if (key === "RendezVous") {
+                    return (
+                      <th
+                        className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__min} ${styles.table__head__tr__th__both}`}
                         onClick={(e) => handlerSortBy(e)}
                         key={index}
                       >

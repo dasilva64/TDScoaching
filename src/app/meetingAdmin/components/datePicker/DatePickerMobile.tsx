@@ -6,9 +6,11 @@ import Image from "next/image";
 import { current } from "@reduxjs/toolkit";
 import { start } from "repl";
 import { RootState } from "../../../redux/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 
 const DatePickerMobile = ({ events }: any) => {
+  const dispatch = useDispatch();
   const { id } = useSelector((state: any) => state.auth);
   const monthstext: any = {
     1: "Janvier",
@@ -39,7 +41,6 @@ const DatePickerMobile = ({ events }: any) => {
     3: 2026,
     4: 2027,
   };
-
 
   const [choiceDate, setChoiceDate] = useState<null | any>(null);
   const [arMeeting, setArMeeting] = useState<null | any>(null);
@@ -99,26 +100,40 @@ const DatePickerMobile = ({ events }: any) => {
       let currentDate = new Date();
       for (const [key, value] of Object.entries(hourtext)) {
         for (let i = 0; i < copyEvents.length - 1; i++) {
-          let startDate = new Date(copyEvents[i]["startAt"]);
+          let frDate = new Date(copyEvents[i]["startAt"]).toLocaleString(
+            "fr-FR"
+          );
+          let split = frDate.split(" ");
+          let splitDate = split[0].split("/");
+          let splitHour = split[1].split(":");
+          let year = splitDate[2];
+          let month =
+            splitDate[1].charAt(0) === "0"
+              ? splitDate[1].slice(1)
+              : splitDate[1];
+          let date =
+            splitDate[0].charAt(0) === "0"
+              ? splitDate[0].slice(1)
+              : splitDate[0];
+          let hour =
+            splitHour[0].charAt(0) === "0"
+              ? splitHour[0].slice(1)
+              : splitHour[0];
 
-          if (startDate.getTime() > currentDate.getTime()) {
-            if (startDate.getFullYear() === currentDate.getFullYear()) {
-              if (
-                startDate.getMonth().toString() ===
-                currentDate.getMonth().toString()
-              ) {
-                if (
-                  startDate.getDate().toString() ===
-                  currentDate.getDate().toString()
-                ) {
-                  if (startDate.getUTCHours().toString() === value) {
-                    ar.push([value, copyEvents[i]]);
-                  } else {
-                    ar.push([value, null]);
-                  }
+          /* if (
+            new Date(copyEvents[i]["startAt"]).getTime() > currentDate.getTime()
+          ) { */
+          if (year.toString() === currentDate.getFullYear().toString()) {
+            if (month.toString() === (currentDate.getMonth() + 1).toString()) {
+              if (date.toString() === currentDate.getDate().toString()) {
+                if (hour.toString() === value) {
+                  ar.push([value, copyEvents[i]]);
+                } else {
+                  ar.push([value, null]);
                 }
               }
             }
+            //}
           }
         }
       }
@@ -127,7 +142,6 @@ const DatePickerMobile = ({ events }: any) => {
       setArMeeting(ar);
     }
   }, [choiceDate, events]);
-
   const previous = () => {
     if (choiceDate) {
       if (new Date(choiceDate).getTime() >= new Date().getTime()) {
@@ -155,11 +169,15 @@ const DatePickerMobile = ({ events }: any) => {
   };
 
   const handlerClick = (year: any, month: any, day: any, hour: any) => {
-    let create = new Date(year, month, day, day, hour);
-    let test = new Date();
+    let create = new Date(year, month, day, hour[0]);
+    //console.log(year, month + 1, day, hour);
     if (new Date(create).getTime() > new Date().getTime()) {
-      /* setDisplayModal(true);
-      setDateMeeting(create); */
+      dispatch({
+        type: "ModalAddMeetingAdmin/open",
+        payload: {
+          date: create,
+        },
+      });
     }
   };
   const hourtext: any = {
@@ -181,16 +199,27 @@ const DatePickerMobile = ({ events }: any) => {
   const getDate = () => {
     let copyEvents = [...events];
     let ar = [];
-    for (const [key, value] of Object.entries(hourtext)) {
-      for (let i = 0; i < copyEvents.length; i++) {
-        let startDate = new Date(copyEvents[i]["startAt"]);
+
+    for (let i = 0; i < copyEvents.length - 1; i++) {
+      for (const [key, value] of Object.entries(hourtext)) {
+        let frDate = new Date(copyEvents[i]["startAt"]).toLocaleString("fr-FR");
+
+        let split = frDate.split(" ");
+        let splitDate = split[0].split("/");
+        let splitHour = split[1].split(":");
+        let year = splitDate[2];
+        let month =
+          splitDate[1].charAt(0) === "0" ? splitDate[1].slice(1) : splitDate[1];
+        let date =
+          splitDate[0].charAt(0) === "0" ? splitDate[0].slice(1) : splitDate[0];
+        let hour =
+          splitHour[0].charAt(0) === "0" ? splitHour[0].slice(1) : splitHour[0];
+
         //if (startDate.getTime() > choiceDate.getTime()) {
-        if (startDate.getFullYear() === choiceDate.getFullYear()) {
-          if (
-            startDate.getMonth().toString() === choiceDate.getMonth().toString()
-          ) {
-            if (Number(startDate.getDate()) === Number(choiceDate.getDate())) {
-              if (startDate.getUTCHours().toString() === value) {
+        if (year.toString() === choiceDate.getFullYear().toString()) {
+          if (month.toString() === (choiceDate.getMonth() + 1).toString()) {
+            if (Number(date) === Number(choiceDate.getDate())) {
+              if (hour.toString() === value) {
                 ar.push([value, copyEvents[i]]);
                 break;
               } else {
@@ -389,16 +418,12 @@ const DatePickerMobile = ({ events }: any) => {
               }}
               className={styles.datePicker__head__previous}
             ></span>
-            <Image
+            <div
               className={styles.datePicker__head__home}
               onClick={() => {
                 goCurrent();
               }}
-              src="/assets/icone/home.png"
-              alt=""
-              width={"20"}
-              height={"20"}
-            />
+            ></div>
             <div className={styles.datePicker__head__div}>
               <div
                 className={`${styles.datePicker__head__div__div} ${styles.datePicker__head__div__div__day}`}
@@ -574,7 +599,8 @@ const DatePickerMobile = ({ events }: any) => {
               </tr>
             </thead>
             <tbody>
-              {arMeeting && arMeeting.length > 0 &&
+              {arMeeting &&
+                arMeeting.length > 0 &&
                 Object.entries(arMeeting).map((h: any, index: any) => {
                   return (
                     <tr
@@ -605,30 +631,45 @@ const DatePickerMobile = ({ events }: any) => {
                                 styles.datePicker__table__tbody__tr__td__div__p
                               }
                             >
-                              none
+                              {h[1][0]} h
                             </p>
                           </div>
                         </td>
                       )}
-                      {h[1][1] !== null && h[1][1].id === id && (
+                      {h[1][1] !== null && h[1][1].userId === id && (
                         <td
                           onClick={() => {}}
-                          className={
-                            styles.datePicker__table__tbody__tr__td__meeting__me
-                          }
+                          className={styles.datePicker__table__tbody__tr__td}
                           key={index}
                         >
-                          yes + me
+                          <div
+                            className={
+                              styles.datePicker__table__tbody__tr__td__meeting__me
+                            }
+                          ></div>
                         </td>
                       )}
-                      {h[1][1] !== null && h[1][1].id !== id && (
+                      {h[1][1] !== null && h[1][1].userId !== id && (
                         <td
                           onClick={() => {}}
-                          className={
-                            styles.datePicker__table__tbody__tr__td__meeting__other
-                          }
+                          className={styles.datePicker__table__tbody__tr__td}
                           key={index}
-                        >yes + other</td>
+                        >
+                          <div
+                            className={
+                              styles.datePicker__table__tbody__tr__td__meeting__other
+                            }
+                          >
+                            <Link
+                              className={
+                                styles.datePicker__table__tbody__tr__td__meeting__other__p
+                              }
+                              href={`/utilisateur/${h[1][1].userId}`}
+                            >
+                              {h[1][1].User.firstname} {h[1][1].User.lastname}
+                            </Link>
+                          </div>
+                        </td>
                       )}
                       {/* {arMeeting &&
                         arMeeting.map((p: any) => {
@@ -725,47 +766,44 @@ const DatePickerMobile = ({ events }: any) => {
                     </tr>
                   );
                 })}
-                {arMeeting && arMeeting.length === 0 && (
-                  Object.entries(hourtext).map((p: any, index: any) => {
-                    return (
-                      <tr
+              {arMeeting &&
+                arMeeting.length === 0 &&
+                Object.entries(hourtext).map((p: any, index: any) => {
+                  return (
+                    <tr
+                      key={index}
+                      className={styles.datePicker__table__tbody__tr}
+                    >
+                      <td
+                        onClick={() => {
+                          handlerClick(
+                            choiceDate.getFullYear(),
+                            choiceDate.getMonth(),
+                            choiceDate.getDate(),
+                            p
+                          );
+                        }}
+                        className={styles.datePicker__table__tbody__tr__td}
                         key={index}
-                        className={styles.datePicker__table__tbody__tr}
                       >
-                        <td
-                          onClick={() => {
-                            handlerClick(
-                              choiceDate.getFullYear(),
-                              choiceDate.getMonth(),
-                              choiceDate.getDate(),
-                              p
-                            );
-                          }}
-                          className={styles.datePicker__table__tbody__tr__td}
-                          key={index}
+                        <div
+                          className={
+                            styles.datePicker__table__tbody__tr__td__div
+                          }
+                          onClick={() => {}}
                         >
-                          <div
-
+                          <p
                             className={
-                              styles.datePicker__table__tbody__tr__td__div
+                              styles.datePicker__table__tbody__tr__td__div__p
                             }
-                            onClick={() => {}}
                           >
-                            <p
-
-                              className={
-                                styles.datePicker__table__tbody__tr__td__div__p
-                              }
-                            >
-                              {p[1]} h
-                            </p>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  }
-                    ))
-                  }
+                            {p[1]} h
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>

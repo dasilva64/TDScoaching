@@ -14,6 +14,7 @@ import Paging from "./dataTable/paging/Paging";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import DisplayLoad from "./dataTable/display/DisplayLoad";
+import DisplayError from "./dataTable/display/DisplayError";
 
 const Content = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,12 +25,45 @@ const Content = () => {
   const { data, isLoading, isError, mutate } = useGetById(id[2]);
   useEffect(() => {
     if (data) {
-      if (data.status !== 200) {
+      if (data.status === 401 || data.status === 403) {
         dispatch({
           type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: data.message },
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
         });
-        router.push("/tous-les-utilisateurs");
+        router.push("/");
+      } else if (data.status === 404) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
+        });
+        router.push("/utilisateurs");
+      } else if (data.status === 400) {
+        data.message.forEach((element: string) => {
+          if (element[0] === "id") {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: {
+                type: "error",
+                flashMessage: "L'id de l'utilisateur n'as pas un format valide",
+              },
+            });
+          }
+        });
+        router.push("/utilisateurs");
+      } else if (data.status === 405) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
+        });
       }
     }
   }, [data, dispatch, router]);
@@ -112,6 +146,7 @@ const Content = () => {
     data: dataFinishMeeting,
     trigger: triggerFinishMeeting,
     reset: resetFinisMeeting,
+    isMutating: isMutatingFinishMeeting,
   } = useSWRMutation("/api/meeting/finish", fetchPost);
 
   useEffect(() => {
@@ -135,10 +170,6 @@ const Content = () => {
       mutate(
         {
           ...dataFinishMeeting,
-          body: {
-            ...dataFinishMeeting.body,
-            meeting: null,
-          },
         },
         { revalidate: false }
       );
@@ -150,8 +181,7 @@ const Content = () => {
   }, [dataFinishMeeting, mutate, resetFinisMeeting]);
 
   let content;
-  if (isError) content = <div>error</div>;
-  else if (isLoading) {
+  if (isError) {
     content = (
       <div className={styles.content__flex}>
         <div className={styles.content__flex__div__left}>
@@ -162,7 +192,61 @@ const Content = () => {
             <li
               className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
             >
-              <strong>Prénom</strong> :
+              <strong>Prénom</strong>&nbsp;: Erreur de chargement des données
+            </li>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Nom de famille</strong>&nbsp;: Erreur de chargement des
+              données
+            </li>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Mail</strong>&nbsp;: Erreur de chargement des données
+            </li>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Formule</strong>&nbsp;: Erreur de chargement des données
+            </li>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Rendez-vous en cours</strong>&nbsp;: Erreur de chargement
+              des
+            </li>
+          </ul>
+        </div>
+        <div className={styles.content__flex__div__right}>
+          <h2 className={styles.content__flex__div__right__h2}>
+            historique rendez-vous
+          </h2>
+          <>
+            <div>
+              <div className={styles.datatable__container__div}>
+                <NbShow />
+                <Search />
+              </div>
+            </div>
+            <DisplayError />
+            <Paging />
+          </>
+        </div>
+      </div>
+    );
+  } else if (isLoading) {
+    content = (
+      <div className={styles.content__flex}>
+        <div className={styles.content__flex__div__left}>
+          <h2 className={styles.content__flex__div__left__h2}>
+            Information de l&apos;utilisateur
+          </h2>
+          <ul className={styles.content__flex__div__left__ul}>
+            <li
+              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+            >
+              <strong>Prénom </strong>&nbsp;: Chargement
               <div className={styles.arc}>
                 <div className={styles.arc__circle}></div>
               </div>
@@ -170,7 +254,7 @@ const Content = () => {
             <li
               className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
             >
-              <strong>Nom de famille</strong> :
+              <strong>Nom de famille</strong>&nbsp;: Chargement
               <div className={styles.arc}>
                 <div className={styles.arc__circle}></div>
               </div>
@@ -178,7 +262,7 @@ const Content = () => {
             <li
               className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
             >
-              <strong>Mail</strong> :
+              <strong>Mail</strong>&nbsp;: Chargement
               <div className={styles.arc}>
                 <div className={styles.arc__circle}></div>
               </div>
@@ -186,7 +270,7 @@ const Content = () => {
             <li
               className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
             >
-              <strong>Formule</strong> :
+              <strong>Formule</strong>&nbsp;: Chargement
               <div className={styles.arc}>
                 <div className={styles.arc__circle}></div>
               </div>
@@ -194,7 +278,7 @@ const Content = () => {
             <li
               className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
             >
-              <strong>Rendez-vous en cours</strong> :
+              <strong>Rendez-vous en cours</strong>&nbsp;: Chargement
               <div className={styles.arc}>
                 <div className={styles.arc__circle}></div>
               </div>
@@ -275,15 +359,9 @@ const Content = () => {
                           "fr-FR"
                         )}
                       </li>
-                      <li
-                        className={styles.content__flex__div__left__ul__ul__li}
-                      >
-                        <strong>Status</strong> :{" "}
-                        {data.body.meeting.status.toString()}
-                      </li>
                     </ul>
                     {!data.body.discovery === false && (
-                      <div>
+                      <div className={styles.content__flex__div__left__ul__div}>
                         {data.body.typeMeeting.type !== "unique" &&
                           data.body.typeMeeting.number === 1 && (
                             <button
@@ -318,6 +396,9 @@ const Content = () => {
                           )}
                         {data.body.typeMeeting.type === "unique" && (
                           <button
+                            className={
+                              styles.content__flex__div__left__ul__div__btn
+                            }
                             onClick={() => {
                               if (data.body.typeMeeting.type === "flash") {
                                 if (data.body.typeMeeting.number === 3) {
@@ -358,16 +439,54 @@ const Content = () => {
                       </div>
                     )}
                     {data.body.discovery === false && (
-                      <div>
-                        <button
-                          onClick={() => {
-                            triggerFinishMeeting({
-                              id: data.body.id,
-                            });
-                          }}
-                        >
-                          Terminer
-                        </button>
+                      <div className={styles.content__flex__div__left__ul__div}>
+                        {isMutatingFinishMeeting === false && (
+                          <button
+                            className={
+                              styles.content__flex__div__left__ul__div__btn
+                            }
+                            onClick={() => {
+                              dispatch({
+                                type: "flash/clearFlashMessage",
+                              });
+                              triggerFinishMeeting({
+                                id: data.body.id,
+                              });
+                            }}
+                          >
+                            Terminer
+                          </button>
+                        )}
+                        {isMutatingFinishMeeting === true && (
+                          <>
+                            <button
+                              disabled
+                              className={
+                                styles.content__flex__div__left__ul__div__btn__load
+                              }
+                            >
+                              <span
+                                className={
+                                  styles.content__flex__div__left__ul__div__btn__load__span
+                                }
+                              >
+                                Chargement
+                              </span>
+
+                              <div
+                                className={
+                                  styles.content__flex__div__left__ul__div__btn__load__arc
+                                }
+                              >
+                                <div
+                                  className={
+                                    styles.content__flex__div__left__ul__div__btn__load__arc__circle
+                                  }
+                                ></div>
+                              </div>
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
                   </>
@@ -395,8 +514,45 @@ const Content = () => {
           </div>
         </>
       );
-    } else {
-      content = <div>Vous allez être rediriger vers le dashboard</div>;
+    } else if (data.status === 401 || data.status === 403) {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: {
+          type: "error",
+          flashMessage: data.message,
+        },
+      });
+      router.push("/");
+    } else if (data.status === 404) {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: {
+          type: "error",
+          flashMessage: data.message,
+        },
+      });
+      router.push("/utilisateurs");
+    } else if (data.status === 400) {
+      data.message.forEach((element: string) => {
+        if (element[0] === "id") {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: "L'id de l'utilisateur n'as pas un format valide",
+            },
+          });
+        }
+      });
+      router.push("/utilisateurs");
+    } else if (data.status === 405) {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: {
+          type: "error",
+          flashMessage: data.message,
+        },
+      });
     }
   }
   useEffect(() => {
@@ -404,13 +560,28 @@ const Content = () => {
       let copyOfItems = [...data.body.allMeetings];
 
       copyOfItems.map((p: any, index: any) => {
-        copyOfItems[index] = {
-          ...p,
-          Début: new Date(p.startAt).toLocaleString(),
-          Status: p.status.toString(),
-        };
+        if (
+          p.typeMeeting.type === "unique" ||
+          p.typeMeeting.type === "découverte"
+        ) {
+          copyOfItems[index] = {
+            ...p,
+            Début: new Date(p.startAt).toLocaleString(),
+            Coaching: p.typeMeeting.coaching,
+            Offre: p.typeMeeting.type,
+          };
+        } else {
+          copyOfItems[index] = {
+            ...p,
+            Début: new Date(p.startAt).toLocaleString(),
+            Coaching: p.typeMeeting.coaching,
+            Offre: p.typeMeeting.type,
+            Restant: p.typeMeeting.number,
+          };
+        }
+
         delete copyOfItems[index].startAt;
-        delete copyOfItems[index].status;
+        delete copyOfItems[index].typeMeeting;
       });
       dispatch({
         type: "ArrayMeetingByUser/storeData",

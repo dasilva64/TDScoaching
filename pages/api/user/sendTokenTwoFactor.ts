@@ -1,7 +1,7 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import prisma from "../../../lib/prisma";
 import twilio from "twilio";
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
 
 export default withIronSessionApiRoute(
   async function sendTokenTwoFactor(req, res) {
@@ -11,15 +11,15 @@ export default withIronSessionApiRoute(
           where: { id: req.session.user.id },
         });
         if (user === null) {
-          return res.status(400).json({
-            status: 400,
-            message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
+          return res.status(404).json({
+            status: 404,
+            message:
+              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
           });
         } else {
-          let min = Math.ceil(10000000);
-          let max = Math.floor(99999998);
-          let random = Math.floor(Math.random() * (max - min + 1)) + min;
-          let current = new Date();
+          let min = 10000000;
+          let max = 99999998;
+          let random = Math.floor(Math.random() * (max - min)) + min;
           let editUser = await prisma.user.update({
             where: {
               id: req.session.user.id,
@@ -27,30 +27,35 @@ export default withIronSessionApiRoute(
             data: {
               twoFactorCode: {
                 token: random,
-                limitDate: current.setMinutes(current.getMinutes() + 5),
               },
             },
           });
-          let copyTwoFactorCode: any = editUser.twoFactorCode;
-          let userObject = {
-            id: editUser.id,
-            firstname: editUser.firstname,
-            lastname: editUser.lastname,
-            email: editUser.mail,
-            twoFactorCode: { limitDate: copyTwoFactorCode.limitDate },
-          };
-          let smtpTransport = nodemailer.createTransport({
-            service: "Gmail",
-            auth: {
-              user: process.env.SECRET_SMTP_EMAIL,
-              pass: process.env.SECRET_SMTP_PASSWORD,
-            },
-          });
-          let mailOptions = {
-            from: process.env.SECRET_SMTP_EMAIL,
-            to: process.env.SECRET_SMTP_EMAIL,
-            subject: "Double authentification",
-            html: `<!DOCTYPE html>
+          if (editUser === null) {
+            return res.status(400).json({
+              status: 400,
+              type: "error",
+              message:
+                "Une erreur est survenue lors de la modification de l'authentification à deux facteur, veuillez réessayer",
+            });
+          } else {
+            let userObject = {
+              id: editUser.id,
+              firstname: editUser.firstname,
+              lastname: editUser.lastname,
+              email: editUser.mail,
+            };
+            let smtpTransport = nodemailer.createTransport({
+              service: "Gmail",
+              auth: {
+                user: process.env.SECRET_SMTP_EMAIL,
+                pass: process.env.SECRET_SMTP_PASSWORD,
+              },
+            });
+            let mailOptions = {
+              from: process.env.SECRET_SMTP_EMAIL,
+              to: process.env.SECRET_SMTP_EMAIL,
+              subject: "Double authentification",
+              html: `<!DOCTYPE html>
                   <html lang="fr">
                     <head>
                       <title>tds coaching</title>
@@ -75,23 +80,33 @@ export default withIronSessionApiRoute(
                       </div>
                     </body>
                   </html>`,
-          };
-          smtpTransport.sendMail(mailOptions);
-          res.status(200).json({
-            status: 200,
-            message: "Un code de vérification vous a été envoyé par email",
-            body: userObject,
-          });
+            };
+            smtpTransport.sendMail(mailOptions);
+            if (user.twoFactorCode === null) {
+              return res.status(200).json({
+                status: 200,
+                body: userObject,
+                message:
+                  "Un code de vérification vous a été envoyé sur votre addresse email",
+              });
+            } else {
+              return res.status(200).json({
+                status: 200,
+                body: userObject,
+                message: `Un nouveau code e vérification vous a été envoyé sur votre addresse email`,
+              });
+            }
+          }
         }
       } else {
-        return res.status(404).json({
-          status: 404,
+        return res.status(401).json({
+          status: 401,
           message: "Vous n'êtes pas connecté, veuillez réessayer",
         });
       }
     } else {
-      return res.status(404).json({
-        status: 404,
+      return res.status(405).json({
+        status: 405,
         message: "Une erreur est survenue, veuillez réessayer",
       });
     }

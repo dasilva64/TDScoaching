@@ -19,7 +19,7 @@ const Formule = () => {
   const [inputFormule, setInputFormule] = useState<string>("");
   const [validFormuleInput, setValidFormuleInput] = useState<boolean>(false);
   const [errorMessageFormule, setErrorMessageFormule] = useState<string>("");
-  const { trigger, data, reset } = useSWRMutation(
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/api/user/editFormuleUser",
     fetchPost
   );
@@ -65,6 +65,9 @@ const Formule = () => {
   }, [data, dispatch, inputFormule, reset]);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    dispatch({
+      type: "flash/clearFlashMessage",
+    });
     if (validFormuleInput === true) {
       if (inputPseudo.length === 0) {
         const fetchEdit = async () => {
@@ -156,11 +159,28 @@ const Formule = () => {
             setInputPseudo(e.target.value);
           }}
         />
-        <input
-          className={styles.formule__form__input}
-          type="submit"
-          value="Envoyer"
-        />
+        {isMutating && (
+          <>
+            <button disabled className={styles.formule__form__input__load}>
+              <span className={styles.formule__form__input__load__span}>
+                Chargement
+              </span>
+
+              <div className={styles.formule__form__input__load__arc}>
+                <div
+                  className={styles.formule__form__input__load__arc__circle}
+                ></div>
+              </div>
+            </button>
+          </>
+        )}
+        {isMutating === false && (
+          <input
+            className={styles.formule__form__input}
+            type="submit"
+            value="Envoyer"
+          />
+        )}
       </form>
     </div>
   );

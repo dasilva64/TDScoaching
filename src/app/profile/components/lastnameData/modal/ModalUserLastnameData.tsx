@@ -4,11 +4,21 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserLastnameData.module.scss";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
-import { TextField } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  Input,
+  InputAdornment,
+  InputLabel,
+  TextField,
+} from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useGet from "@/app/components/hook/useGet";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import Visibility from "@mui/icons-material/Visibility";
+import { useRouter } from "next/navigation";
 
 const ModalUserLastnameData = () => {
   const { displayModalEditLastname } = useSelector(
@@ -21,6 +31,7 @@ const ModalUserLastnameData = () => {
   } = useGet("/api/user/getUserProfile");
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const [lastnameInput, setLastnameInput] = useState<string>("");
   useEffect(() => {
     if (isLoading) {
@@ -29,65 +40,118 @@ const ModalUserLastnameData = () => {
       if (userData) {
         if (userData.status === 200) {
           setLastnameInput(userData.body.lastname);
+        } else if (userData.status === 401) {
+          setTimeout(() => {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: {
+                type: "error",
+                flashMessage: userData.message,
+              },
+            });
+          }, 2000);
+          router.push("/");
         } else {
-          setLastnameInput("");
+          setTimeout(() => {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: {
+                type: "error",
+                flashMessage: userData.message,
+              },
+            });
+          }, 2000);
+          router.refresh();
         }
       }
     }
-  }, [isLoading, userData]);
+  }, [dispatch, isLoading, router, userData]);
   const [validLastnameInput, setValidLastnameInput] = useState<boolean>(true);
   const [errorMessageLastname, setErrorMessageLastname] = useState<string>("");
 
-  const { trigger, data, reset } = useSWRMutation(
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/api/user/editLastnameUser",
     fetchPost
   );
 
   useEffect(() => {
+    const clearState = () => {
+      setErrorMessageLastname("");
+      setValidLastnameInput(true);
+      if (userData) {
+        if (userData.body) {
+          setLastnameInput(userData.body.lastname);
+        }
+      }
+    };
     if (data) {
       if (data.status === 200) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: data.message },
-        });
-        dispatch({
-          type: "ModalEditLastname/close",
-        });
+        mutate(
+          {
+            ...data,
+            body: {
+              ...data.body,
+              lastname: lastnameInput,
+            },
+          },
+          { revalidate: false }
+        );
+        reset();
+        if (isMutating === false) {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: data.message },
+          });
+          dispatch({
+            type: "ModalEditLastname/close",
+          });
+          clearState();
+        }
+      } else if (data.status === 401) {
+        setTimeout(() => {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }, 2000);
+        router.push("/");
       } else if (data.status === 400) {
-        data.message.forEach((element: string) => {
-          if (element[0] === "lastname") {
-            setErrorMessageLastname(element[1]);
-          }
-        });
+        if (data.type === "validation") {
+          data.message.forEach((element: string) => {
+            if (element[0] === "lastname") {
+              setErrorMessageLastname(element[1]);
+            }
+          });
+          reset();
+        } else {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
+        reset();
       }
     }
-  }, [data, dispatch]);
-
-  useEffect(() => {
-    const mutateMainData = async () => {
-      mutate(
-        {
-          ...data,
-          body: {
-            ...data.body,
-            lastname: lastnameInput,
-          },
-        },
-        { revalidate: false }
-      );
-      reset();
-    };
-    if (data && data.body) {
-      mutateMainData();
-    }
-  }, [data, lastnameInput, mutate, reset]);
+  }, [
+    data,
+    dispatch,
+    isMutating,
+    lastnameInput,
+    mutate,
+    reset,
+    router,
+    userData,
+  ]);
 
   const closeForm = () => {
+    clearState();
     dispatch({
       type: "ModalEditLastname/close",
     });
@@ -95,6 +159,9 @@ const ModalUserLastnameData = () => {
 
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    dispatch({
+      type: "flash/clearFlashMessage",
+    });
     if (validLastnameInput === true) {
       if (inputPseudo.length === 0) {
         const fetchLogin = async () => {
@@ -106,11 +173,17 @@ const ModalUserLastnameData = () => {
         fetchLogin();
       }
     } else {
-      if (
-        userData.body.lastname !== lastnameInput &&
-        validLastnameInput === false
-      ) {
-        setErrorMessageLastname("Nom de famille : ne doit pas être vide");
+      if (validLastnameInput === false) {
+        setErrorMessageLastname("Nom de famille : 3 lettres minimum");
+      }
+    }
+  };
+  const clearState = () => {
+    setErrorMessageLastname("");
+    setValidLastnameInput(true);
+    if (userData) {
+      if (userData.body) {
+        setLastnameInput(userData.body.lastname);
       }
     }
   };
@@ -193,7 +266,51 @@ const ModalUserLastnameData = () => {
                   handlerSubmit(e);
                 }}
               >
-                <TextField
+                <FormControl variant="standard" style={{ margin: "20px 0px" }}>
+                  <InputLabel
+                    sx={{
+                      color: "black",
+                      "&.Mui-focused": {
+                        color: "#1976d2",
+                      },
+                    }}
+                    htmlFor="standard-adornment-lastname"
+                  >
+                    Nom de famille
+                  </InputLabel>
+                  <Input
+                    autoFocus
+                    id="standard-adornment-lastname"
+                    value={lastnameInput}
+                    placeholder={"Entrez votre nom de famille"}
+                    type={"text"}
+                    onChange={(e) => {
+                      handlerInput(
+                        e,
+                        "lastname",
+                        /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
+                        setValidLastnameInput,
+                        setErrorMessageLastname,
+                        setLastnameInput,
+                        "Nom de famille : 3 lettres minimum"
+                      );
+                    }}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <PersonIcon
+                          aria-label="toggle lastname visibility"
+                          sx={{ padding: "0px", color: "black" }}
+                        >
+                          <Visibility />
+                        </PersonIcon>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText style={{ color: "red" }}>
+                    {errorMessageLastname}
+                  </FormHelperText>
+                </FormControl>
+                {/* <TextField
                   autoFocus
                   value={lastnameInput}
                   style={{ margin: "20px 0px" }}
@@ -215,7 +332,7 @@ const ModalUserLastnameData = () => {
                     );
                   }}
                   helperText={errorMessageLastname}
-                />
+                /> */}
                 <input
                   type="text"
                   name="pseudo"
@@ -228,11 +345,47 @@ const ModalUserLastnameData = () => {
                   }}
                 />
                 <div className={styles.modalEditMainUserData__form__submit}>
-                  <input
-                    className={styles.modalEditMainUserData__form__submit__btn}
-                    type="submit"
-                    value="Modifier"
-                  />
+                  {isMutating && (
+                    <>
+                      <button
+                        disabled
+                        className={
+                          styles.modalEditMainUserData__form__submit__btn__load
+                        }
+                      >
+                        <span
+                          className={
+                            styles.modalEditMainUserData__form__submit__btn__load__span
+                          }
+                        >
+                          Chargement
+                        </span>
+
+                        <div
+                          className={
+                            styles.modalEditMainUserData__form__submit__btn__load__arc
+                          }
+                        >
+                          <div
+                            className={
+                              styles.modalEditMainUserData__form__submit__btn__load__arc__circle
+                            }
+                          ></div>
+                        </div>
+                      </button>
+                    </>
+                  )}
+                  {isMutating === false && (
+                    <>
+                      <input
+                        className={
+                          styles.modalEditMainUserData__form__submit__btn
+                        }
+                        type="submit"
+                        value="Modifier"
+                      />
+                    </>
+                  )}
                 </div>
               </form>
             </motion.div>

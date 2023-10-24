@@ -190,13 +190,14 @@ export default withIronSessionApiRoute(
       } else {
         return res.status(401).json({
           status: 401,
-          message: "Vous n'êtes pas connecté",
+          message: "Vous n'êtes pas connecté, veuillez réessayer",
         });
       }
     } else {
-      return res.status(404).json({
-        status: 404,
-        message: "Une erreur est survenue, veuillez réessayer",
+      return res.status(405).json({
+        status: 405,
+        message:
+          "La méthode de la requête n'est pas autorisé, veuillez réessayer",
       });
     }
   },

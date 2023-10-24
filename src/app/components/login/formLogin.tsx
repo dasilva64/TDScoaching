@@ -3,10 +3,22 @@ import styles from "./formLogin.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import validator from "validator";
-import { Checkbox, FormControlLabel, TextField } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  FormHelperText,
+  TextField,
+} from "@mui/material";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
-import { mutate } from "swr";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import IconButton from "@mui/material/IconButton";
+import Input from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 
@@ -36,27 +48,44 @@ const FormLogin = () => {
     setRememberMeInput(e.target.checked);
   };
 
-  const { data, trigger, reset } = useSWRMutation(
+  const { data, trigger, reset, isMutating } = useSWRMutation(
     "/api/user/reSendEmailValidation",
     fetchPost
   );
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: data.message },
-        });
-        setReSendEmail(false);
         reset();
+        if (isMutating === false) {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: data.message },
+          });
+          setReSendEmail(false);
+        }
+      } else if (data.status === 400) {
+        if (data.type === "validation") {
+          reset();
+          data.message.forEach((element: string) => {
+            if (element[0] === "email") {
+              dispatch({
+                type: "flash/storeFlashMessage",
+                payload: { type: "success", flashMessage: "L'addresse e" },
+              });
+            }
+          });
+        }
       } else {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: data.message },
-        });
+        reset();
+        if (isMutating === false) {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+        }
       }
     }
-  }, [data, dispatch, reset]);
+  }, [data, dispatch, isMutating, reset]);
 
   const clearState = () => {
     setCodeInput("");
@@ -80,25 +109,31 @@ const FormLogin = () => {
     data: dataReSendCode,
     trigger: triggerReSendCode,
     reset: resetReSendCode,
+    isMutating: isMutatingReSendCode,
   } = useSWRMutation("/api/user/sendTwoFactorCode", fetchPost);
   useEffect(() => {
     if (dataReSendCode) {
       if (dataReSendCode.status === 200) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: dataReSendCode.message },
-        });
-        setReSendCode(false);
-        setCodeInput("");
-        resetReSendCode();
+        if (isMutatingReSendCode === false) {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: dataReSendCode.message },
+          });
+          setReSendCode(false);
+          setValidCodeInput(false);
+          setCodeInput("");
+          resetReSendCode();
+        }
       } else {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: dataReSendCode.message },
-        });
+        if (isMutatingReSendCode === false) {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: dataReSendCode.message },
+          });
+        }
       }
     }
-  }, [dataReSendCode, dispatch, resetReSendCode]);
+  }, [dataReSendCode, dispatch, isMutatingReSendCode, resetReSendCode]);
 
   const closeForm = () => {
     /* dispatch({
@@ -111,85 +146,114 @@ const FormLogin = () => {
   };
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    if (validEmailInput === true && validPasswordInput === true) {
-      if (inputPseudo.length === 0) {
-        const fetchLogin = async () => {
-          let response = await fetch("/api/user/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: validator.escape(emailInput.trim()),
-              password: validator.escape(passwordInput.trim()),
-              remember: rememberMeInput,
-              pseudo: validator.escape(inputPseudo.trim()),
-            }),
-          });
-          let json = await response.json();
-          if (json) {
-            if (json.status === 200) {
-              if (json.body === null) {
-                setDisplayInput(true);
-                dispatch({
-                  type: "flash/storeFlashMessage",
-                  payload: { type: "success", flashMessage: json.message },
-                });
-              } else {
-                dispatch({
-                  type: "flash/storeFlashMessage",
-                  payload: { type: "success", flashMessage: json.message },
-                });
-                setTimeout(() => {
-                  window.location.reload();
-                }, 2000);
-              }
-            } else if (json.status === 400) {
-              json.message.forEach((element: string) => {
-                if (element[0] === "email") {
-                  setErrorMessageEmail(element[1]);
-                }
-                if (element[0] === "password") {
-                  setErrorMessagePassword(element[1]);
-                }
-              });
-              setTimeout(() => {
-                setIsLoading(false);
-              }, 2000);
-            } else if (
-              json.status === 404 &&
-              json.message ===
-                "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
-            ) {
-              setReSendEmail(true);
-              setOtherEmail(emailInput);
+    dispatch({
+      type: "flash/clearFlashMessage",
+    });
+    //if (validEmailInput === true && validPasswordInput === true) {
+    if (inputPseudo.length === 0) {
+      setIsLoading(true);
+      const fetchLogin = async () => {
+        let response = await fetch("/api/user/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: validator.escape(emailInput.trim()),
+            password: validator.escape(passwordInput.trim()),
+            remember: rememberMeInput,
+            pseudo: validator.escape(inputPseudo.trim()),
+          }),
+        });
+        let json = await response.json();
+        if (json) {
+          if (json.status === 200) {
+            if (json.body === null) {
+              setDisplayInput(true);
+              setIsLoading(false);
               dispatch({
                 type: "flash/storeFlashMessage",
-                payload: { type: "error", flashMessage: json.message },
+                payload: { type: "success", flashMessage: json.message },
               });
-              setTimeout(() => {
-                setIsLoading(false);
-              }, 2000);
             } else {
               dispatch({
                 type: "flash/storeFlashMessage",
-                payload: { type: "error", flashMessage: json.message },
+                payload: { type: "success", flashMessage: json.message },
               });
               setTimeout(() => {
-                setIsLoading(false);
+                window.location.reload();
               }, 2000);
             }
+          } else if (json.status === 400) {
+            if (json.type === "validation") {
+              setTimeout(() => {
+                setIsLoading(false);
+                json.message.forEach((element: string) => {
+                  if (element[0] === "email") {
+                    setErrorMessageEmail(element[1]);
+                  }
+                  if (element[0] === "password") {
+                    setErrorMessagePassword(element[1]);
+                  }
+                });
+              }, 1000);
+            } else {
+              if (
+                json.message ===
+                "Votre compte a été supprimé car vous ne l'avez pas validé à temps, veuillez vous réinscrire"
+              ) {
+                dispatch({
+                  type: "flash/storeFlashMessage",
+                  payload: { type: "error", flashMessage: json.message },
+                });
+                setTimeout(() => {
+                  setIsLoading(false);
+                  clearState();
+                  dispatch({
+                    type: "auth/clearFlash",
+                  });
+                  dispatch({ type: "ModalRegister/open" });
+                  dispatch({ type: "ModalLogin/close" });
+                }, 1000);
+              } else if (
+                json.message ===
+                "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
+              ) {
+                setTimeout(() => {
+                  setIsLoading(false);
+                  setReSendEmail(true);
+                  setOtherEmail(emailInput);
+                  dispatch({
+                    type: "flash/storeFlashMessage",
+                    payload: { type: "error", flashMessage: json.message },
+                  });
+                }, 1000);
+              } else {
+                setTimeout(() => {
+                  setIsLoading(false);
+                  dispatch({
+                    type: "flash/storeFlashMessage",
+                    payload: { type: "error", flashMessage: json.message },
+                  });
+                }, 1000);
+              }
+            }
+          } else {
+            setTimeout(() => {
+              setIsLoading(false);
+              dispatch({
+                type: "flash/storeFlashMessage",
+                payload: { type: "error", flashMessage: json.message },
+              });
+            }, 1000);
           }
-        };
-        if (inputPseudo.length === 0) {
-          fetchLogin();
         }
+      };
+      if (inputPseudo.length === 0) {
+        fetchLogin();
       }
-    } else {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
+    }
+    /* } else {
       if (validEmailInput === false) {
         setErrorMessageEmail("Email : doit avoir un format valide");
       }
@@ -198,7 +262,7 @@ const FormLogin = () => {
           "Mot de passe : doit avoir une lettre en minuscule, un nombre et 8 caractères minimum"
         );
       }
-    }
+    } */
   };
 
   const handlerInput = (
@@ -232,9 +296,9 @@ const FormLogin = () => {
   };
   const handlerSubmitCode = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     if (validCodeInput === true) {
       if (inputPseudo.length === 0) {
+        setIsLoading(true);
         const fetchLogin = async () => {
           let response = await fetch("/api/user/loginTwoFactor", {
             method: "POST",
@@ -253,17 +317,9 @@ const FormLogin = () => {
           if (json) {
             if (json.status === 200) {
               dispatch({
-                type: "auth/login",
-                payload: {
-                  role: json.body.role,
-                  id: json.body.id,
-                },
-              });
-              dispatch({
                 type: "flash/storeFlashMessage",
                 payload: { type: "success", flashMessage: json.message },
               });
-              clearState();
               setTimeout(() => {
                 window.location.reload();
               }, 2000);
@@ -271,16 +327,23 @@ const FormLogin = () => {
               if (
                 json.message === "Le code n'est plus valide, veuillez réessayer"
               ) {
-                setReSendCode(true);
-                dispatch({
-                  type: "flash/storeFlashMessage",
-                  payload: { type: "error", flashMessage: json.message },
-                });
+                setTimeout(() => {
+                  setIsLoading(false);
+                  setReSendCode(true);
+                  dispatch({
+                    type: "flash/storeFlashMessage",
+                    payload: { type: "error", flashMessage: json.message },
+                  });
+                }, 2000);
               } else {
-                dispatch({
-                  type: "flash/storeFlashMessage",
-                  payload: { type: "error", flashMessage: json.message },
-                });
+                setTimeout(() => {
+                  setIsLoading(false);
+                  setReSendCode(true);
+                  dispatch({
+                    type: "flash/storeFlashMessage",
+                    payload: { type: "error", flashMessage: json.message },
+                  });
+                }, 2000);
               }
             }
           }
@@ -292,6 +355,16 @@ const FormLogin = () => {
         setErrorMessageCode("Code : ne doit pas être vide");
       }
     }
+  };
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword((show) => !show);
+  };
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
   };
   return (
     <>
@@ -342,50 +415,99 @@ const FormLogin = () => {
                     }
                   }}
                 >
-                  <TextField
-                    autoFocus
-                    value={emailInput}
-                    id={"email"}
-                    label={"Email"}
+                  <FormControl variant="standard">
+                    <InputLabel
+                      sx={{
+                        color: "black",
+                        "&.Mui-focused": {
+                          color: "#1976d2",
+                        },
+                      }}
+                      htmlFor="standard-adornment-email"
+                    >
+                      Email
+                    </InputLabel>
+                    <Input
+                      autoFocus
+                      id="standard-adornment-email"
+                      value={emailInput}
+                      placeholder={"Entrez votre mail"}
+                      type={"text"}
+                      onChange={(e) => {
+                        handlerInput(
+                          e,
+                          "email",
+                          /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                          setValidEmailInput,
+                          setErrorMessageEmail,
+                          setEmailInput,
+                          "Email : doit avoir un format valide"
+                        );
+                      }}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <AlternateEmailIcon
+                            sx={{ color: "black" }}
+                            aria-label="toggle email visibility"
+                          >
+                            <Visibility />
+                          </AlternateEmailIcon>
+                        </InputAdornment>
+                      }
+                    />
+                    <FormHelperText style={{ color: "red" }}>
+                      {errorMessageEmail}
+                    </FormHelperText>
+                  </FormControl>
+
+                  <FormControl
                     variant="standard"
-                    type={"email"}
-                    placeholder={"Entrez votre mail"}
-                    FormHelperTextProps={{ style: { color: "red" } }}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        "email",
-                        /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
-                        setValidEmailInput,
-                        setErrorMessageEmail,
-                        setEmailInput,
-                        "Email : doit avoir un format valide"
-                      );
-                    }}
-                    helperText={errorMessageEmail}
-                  />
-                  <TextField
-                    value={passwordInput}
                     style={{ margin: "20px 0px" }}
-                    id={"password"}
-                    label={"Mot de passe"}
-                    variant="standard"
-                    type={"password"}
-                    placeholder={"Entrez votre mot de passe"}
-                    FormHelperTextProps={{ style: { color: "red" } }}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        "password",
-                        /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
-                        setValidPasswordInput,
-                        setErrorMessagePassword,
-                        setPasswordInput,
-                        "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
-                      );
-                    }}
-                    helperText={errorMessagePassword}
-                  />
+                  >
+                    <InputLabel
+                      sx={{
+                        color: "black",
+                        "&.Mui-focused": {
+                          color: "#1976d2",
+                        },
+                      }}
+                      htmlFor="standard-adornment-password"
+                    >
+                      Mot de passe
+                    </InputLabel>
+                    <Input
+                      id="standard-adornment-password"
+                      value={passwordInput}
+                      placeholder={"Entrez votre mot de passe"}
+                      type={showPassword ? "text" : "password"}
+                      onChange={(e) => {
+                        handlerInput(
+                          e,
+                          "password",
+                          /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
+                          setValidPasswordInput,
+                          setErrorMessagePassword,
+                          setPasswordInput,
+                          "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
+                        );
+                      }}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            sx={{ padding: "0px", color: "black" }}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                    <FormHelperText style={{ color: "red" }}>
+                      {errorMessagePassword}
+                    </FormHelperText>
+                  </FormControl>
+
                   <FormControlLabel
                     className={styles.login__form__checkbox}
                     style={{
@@ -427,7 +549,23 @@ const FormLogin = () => {
                         disabled
                         className={styles.login__form__submit__btn__load}
                       >
-                        Chargement ...
+                        <span
+                          className={
+                            styles.login__form__submit__btn__load__span
+                          }
+                        >
+                          Chargement
+                        </span>
+
+                        <div
+                          className={styles.login__form__submit__btn__load__arc}
+                        >
+                          <div
+                            className={
+                              styles.login__form__submit__btn__load__arc__circle
+                            }
+                          ></div>
+                        </div>
                       </button>
                     )}
                   </div>
@@ -435,16 +573,45 @@ const FormLogin = () => {
               )}
 
               {reSendEmail === true && displayInput === false && (
-                <div className={styles.login__forgot}>
-                  <button
-                    className={styles.login__forgot__btn}
-                    onClick={() => {
-                      trigger({ email: otherEmail });
-                    }}
-                  >
-                    Renvoyer un mail de validation à {otherEmail}
-                  </button>
-                </div>
+                <>
+                  <div className={styles.login__forgot}>
+                    {isMutating && (
+                      <>
+                        <button
+                          disabled
+                          className={styles.login__forgot__btn__load}
+                        >
+                          <span
+                            className={styles.login__forgot__btn__load__span}
+                          >
+                            Chargement
+                          </span>
+
+                          <div className={styles.login__forgot__btn__load__arc}>
+                            <div
+                              className={
+                                styles.login__forgot__btn__load__arc__circle
+                              }
+                            ></div>
+                          </div>
+                        </button>
+                      </>
+                    )}
+                    {isMutating === false && (
+                      <button
+                        className={styles.login__forgot__btn}
+                        onClick={() => {
+                          dispatch({
+                            type: "flash/clearFlashMessage",
+                          });
+                          trigger({ email: otherEmail });
+                        }}
+                      >
+                        Renvoyer un mail de validation à {otherEmail}
+                      </button>
+                    )}
+                  </div>
+                </>
               )}
               {displayInput === false && (
                 <>
@@ -516,27 +683,78 @@ const FormLogin = () => {
                       helperText={errorMessageCode}
                     />
                     <div className={styles.login__form__submit}>
-                      <input
-                        className={styles.login__form__submit__btn}
-                        type="submit"
-                        value="Vérifier le code"
-                      />
+                      {isLoading === false && (
+                        <input
+                          className={styles.login__form__submit__btn}
+                          type="submit"
+                          value="Vérifier le code"
+                        />
+                      )}
+                      {isLoading === true && (
+                        <button
+                          disabled
+                          className={styles.login__form__submit__btn__load}
+                        >
+                          <span
+                            className={
+                              styles.login__form__submit__btn__load__span
+                            }
+                          >
+                            Chargement
+                          </span>
+
+                          <div
+                            className={
+                              styles.login__form__submit__btn__load__arc
+                            }
+                          >
+                            <div
+                              className={
+                                styles.login__form__submit__btn__load__arc__circle
+                              }
+                            ></div>
+                          </div>
+                        </button>
+                      )}
                     </div>
                   </form>
                   {reSendCode === true && (
                     <div className={styles.login__forgot}>
-                      <button
-                        className={styles.login__forgot__btn}
-                        onClick={() => {
-                          triggerReSendCode({
-                            email: validator.escape(emailInput.trim()),
-                            password: validator.escape(passwordInput.trim()),
-                            pseudo: validator.escape(inputPseudo.trim()),
-                          });
-                        }}
-                      >
-                        Renvoyer un code
-                      </button>
+                      {isMutatingReSendCode === false && (
+                        <button
+                          className={styles.login__forgot__btn}
+                          onClick={() => {
+                            triggerReSendCode({
+                              email: validator.escape(emailInput.trim()),
+                              password: validator.escape(passwordInput.trim()),
+                              pseudo: validator.escape(inputPseudo.trim()),
+                            });
+                          }}
+                        >
+                          Renvoyer un code
+                        </button>
+                      )}
+
+                      {isMutatingReSendCode === true && (
+                        <button
+                          disabled
+                          className={styles.login__forgot__btn__load}
+                        >
+                          <span
+                            className={styles.login__forgot__btn__load__span}
+                          >
+                            Chargement
+                          </span>
+
+                          <div className={styles.login__forgot__btn__load__arc}>
+                            <div
+                              className={
+                                styles.login__forgot__btn__load__arc__circle
+                              }
+                            ></div>
+                          </div>
+                        </button>
+                      )}
                     </div>
                   )}
                 </>

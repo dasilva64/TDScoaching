@@ -99,30 +99,96 @@ const Display = () => {
 
   const sortByF = (element: any, sort: any) => {
     if (sortBy[0] !== "" && sortBy[1] !== "" && keyAr[0]) {
-      let arr: any = datas;
-      let newat: any = Object.entries(arr).sort(function (a: any, b: any): any {
-        if (sort === "DESC") {
-          return a[1][element]
-            .toString()
-            .localeCompare(b[1][element].toString(), undefined, {
-              numeric: true,
-              sensitivity: "base",
-            });
-        } else {
-          return b[1][element]
-            .toString()
-            .localeCompare(a[1][element].toString(), undefined, {
-              numeric: true,
-              sensitivity: "base",
-            });
+      if (element === "Date") {
+        let arMonth = [
+          "janvier",
+          "février",
+          "mars",
+          "avril",
+          "mai",
+          "juin",
+          "juillet",
+          "août",
+          "septembre",
+          "octobre",
+          "novembre",
+          "décembre",
+        ];
+        let arr: any = datas;
+        let newat: any = Object.entries(arr).sort(function (
+          a: any,
+          b: any
+        ): any {
+          if (sort === "DESC") {
+            let splitA = a[1][element].split(" ");
+            let createA = new Date(
+              splitA[2],
+              arMonth.indexOf(splitA[1]) + 1,
+              splitA[0],
+              splitA[4]
+            ).getTime();
+            let splitB = b[1][element].split(" ");
+            let createB = new Date(
+              splitB[2],
+              arMonth.indexOf(splitB[1]) + 1,
+              splitB[0],
+              splitB[4]
+            ).getTime();
+            return createA > createB ? 1 : -1;
+            //return createA - createB;
+          } else {
+            let splitA = a[1][element].split(" ");
+            let createA: any = new Date(
+              splitA[2],
+              arMonth.indexOf(splitA[1]) + 1,
+              splitA[0],
+              splitA[4]
+            ).getTime();
+            let splitB = b[1][element].split(" ");
+            let createB: any = new Date(
+              splitB[2],
+              arMonth.indexOf(splitB[1]) + 1,
+              splitB[0],
+              splitB[4]
+            ).getTime();
+            return createB > createA ? 1 : -1;
+            //return createB - createA;
+          }
+        });
+        let test: any = [];
+        for (let i = 0; i < newat.length; i++) {
+          test.push(newat[i][1]);
         }
-      });
+        dispatch({ type: "ArrayMeeting/storeData", payload: { datas: test } });
+      } else {
+        let arr: any = datas;
+        let newat: any = Object.entries(arr).sort(function (
+          a: any,
+          b: any
+        ): any {
+          if (sort === "DESC") {
+            return a[1][element]
+              .toString()
+              .localeCompare(b[1][element].toString(), undefined, {
+                numeric: true,
+                sensitivity: "base",
+              });
+          } else {
+            return b[1][element]
+              .toString()
+              .localeCompare(a[1][element].toString(), undefined, {
+                numeric: true,
+                sensitivity: "base",
+              });
+          }
+        });
 
-      let test: any = [];
-      for (let i = 0; i < newat.length; i++) {
-        test.push(newat[i][1]);
+        let test: any = [];
+        for (let i = 0; i < newat.length; i++) {
+          test.push(newat[i][1]);
+        }
+        dispatch({ type: "ArrayMeeting/storeData", payload: { datas: test } });
       }
-      dispatch({ type: "ArrayMeeting/storeData", payload: { datas: test } });
     }
   };
   return (
@@ -134,10 +200,20 @@ const Display = () => {
               keyAr.map((key: any, index: any) => {
                 if (key === sortBy[0]) {
                   if (sortBy[1] === "ASC") {
-                    if (key === "id" || key === "userId") {
+                    if (key === "Id" || key === "UserId") {
                       return (
                         <th
                           className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__asc__little}`}
+                          onClick={(e) => handlerSortBy(e)}
+                          key={index}
+                        >
+                          {key}
+                        </th>
+                      );
+                    } else if (key === "Date") {
+                      return (
+                        <th
+                          className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__date} ${styles.table__head__tr__th__asc}`}
                           onClick={(e) => handlerSortBy(e)}
                           key={index}
                         >
@@ -155,10 +231,20 @@ const Display = () => {
                       </th>
                     );
                   } else {
-                    if (key === "id" || key === "userId") {
+                    if (key === "Id" || key === "UserId") {
                       return (
                         <th
                           className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__desc__little}`}
+                          onClick={(e) => handlerSortBy(e)}
+                          key={index}
+                        >
+                          {key}
+                        </th>
+                      );
+                    } else if (key === "Date") {
+                      return (
+                        <th
+                          className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__date} ${styles.table__head__tr__th__desc}`}
                           onClick={(e) => handlerSortBy(e)}
                           key={index}
                         >
@@ -177,10 +263,20 @@ const Display = () => {
                     );
                   }
                 } else {
-                  if (key === "id" || key === "userId") {
+                  if (key === "Id" || key === "UserId") {
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__both__little}`}
+                        onClick={(e) => handlerSortBy(e)}
+                        key={index}
+                      >
+                        {key}
+                      </th>
+                    );
+                  } else if (key === "Date") {
+                    return (
+                      <th
+                        className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__date} ${styles.table__head__tr__th__both}`}
                         onClick={(e) => handlerSortBy(e)}
                         key={index}
                       >

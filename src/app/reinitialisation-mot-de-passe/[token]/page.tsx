@@ -21,10 +21,13 @@ const ResetPassword = () => {
         Veuillez activer JavaScript pour profiter pleinement de notre site.
       </noscript>
       <main className={styles.reset}>
-        <h1 className={styles.reset__h1}>Réiniitalisation du mot de passe</h1>
+        <h1 className={styles.reset__h1}>Réinitialisation du mot de passe</h1>
         <div className={styles.reset__container}>
           <div className={styles.reset__article}>
-            <h2 className={styles.reset__article__h2}>Formulaire</h2>
+            <p className={styles.reset__article__p}>
+              Vous pouvez réinitialiser votre mot de passe en remplissant le
+              formulaire ci-dessous.
+            </p>
             <Reset />
           </div>
         </div>

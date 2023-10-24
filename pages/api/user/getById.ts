@@ -12,6 +12,7 @@ export default withIronSessionApiRoute(
         if (arrayMessageError.length > 0) {
           return res.status(400).json({
             status: 400,
+            type: "validation",
             message: arrayMessageError,
           });
         }
@@ -19,14 +20,15 @@ export default withIronSessionApiRoute(
           where: { id: req.session.user.id },
         });
         if (user === null) {
-          return res.status(400).json({
-            status: 400,
-            message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
+          return res.status(404).json({
+            status: 404,
+            message:
+              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
           });
         } else {
           if (user.role !== "ROLE_ADMIN") {
-            return res.status(400).json({
-              status: 400,
+            return res.status(403).json({
+              status: 403,
               message: "Vous n'avez pas les droits pour accéder à cette page",
             });
           } else {
@@ -34,9 +36,9 @@ export default withIronSessionApiRoute(
               where: { id: id },
             });
             if (userById === null) {
-              return res.status(400).json({
-                status: 400,
-                message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+              return res.status(404).json({
+                status: 404,
+                message: `L'utilisateur avec l'id : ${id} n'a pas été trouvé, veuillez réessayer`,
               });
             } else {
               let meeting;
@@ -50,11 +52,13 @@ export default withIronSessionApiRoute(
                   let editUser = await prisma.user.update({
                     where: {
                       id: userById.id,
+                      status: true,
                     },
                     data: {
                       meetingId: null,
                     },
                   });
+                  meeting = null;
                 } else {
                   meeting = meetingByUser;
                 }
@@ -63,7 +67,7 @@ export default withIronSessionApiRoute(
                 where: { userId: userById.id },
                 select: {
                   startAt: true,
-                  status: true,
+                  typeMeeting: true,
                 },
               });
               let userObject = {
@@ -84,15 +88,16 @@ export default withIronSessionApiRoute(
           }
         }
       } else {
-        return res.status(404).json({
-          status: 404,
+        return res.status(401).json({
+          status: 401,
           message: "Vous n'êtes pas connecté, veuillez réessayer",
         });
       }
     } else {
-      return res.status(404).json({
-        status: 404,
-        message: "Une erreur est survenue, veuillez réessayer",
+      return res.status(405).json({
+        status: 405,
+        message:
+          "La méthode de la requête n'est pas autorisé, veuillez réessayer",
       });
     }
   },

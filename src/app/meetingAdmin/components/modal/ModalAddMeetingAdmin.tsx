@@ -3,13 +3,22 @@ import styles from "./ModalAddMeetingAdmin.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import useGet from "@/app/components/hook/useGet";
-import { TextField } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  Input,
+  InputAdornment,
+  InputLabel,
+  TextField,
+} from "@mui/material";
 import { useSelect } from "@mui/base";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { mutate } from "swr";
+import PersonIcon from "@mui/icons-material/Person";
 import Image from "next/image";
 import useSWRMutation from "swr/mutation";
 import { AnimatePresence, motion } from "framer-motion";
+import Visibility from "@mui/icons-material/Visibility";
 
 const ModalAddMeetingAdmin = () => {
   const { displayModalAddMeetingAdmin, dataModalAddMeetingAdmin } = useSelector(
@@ -52,6 +61,12 @@ const ModalAddMeetingAdmin = () => {
         });
         dispatch({
           type: "ModalAddMeetingAdmin/close",
+        });
+        clearState();
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataMutate.message },
         });
         clearState();
       }
@@ -143,7 +158,54 @@ const ModalAddMeetingAdmin = () => {
                 Rappel rendez-vous :{" "}
                 {new Date(dataModalAddMeetingAdmin).toLocaleString("fr-FR")}
               </p>
-              <TextField
+              <FormControl
+                variant="standard"
+                style={{ width: "100%", marginTop: "20px" }}
+              >
+                <InputLabel
+                  sx={{
+                    color: "black",
+                    "&.Mui-focused": {
+                      color: "#1976d2",
+                    },
+                  }}
+                  htmlFor="standard-adornment-user"
+                >
+                  Utilisateur
+                </InputLabel>
+                <Input
+                  autoFocus
+                  id="standard-adornment-user"
+                  value={searchInput}
+                  placeholder={"Entrez le prénom, nom ou mail de l'utilisateur"}
+                  type={"text"}
+                  onChange={(e) => {
+                    handlerInput(
+                      e,
+                      "email",
+                      /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                      setValidSearchInput,
+                      setErrorMessageSearch,
+                      setSearchInput,
+                      "Recherche : doit avoir un format valide"
+                    );
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <PersonIcon
+                        aria-label="toggle firstname visibility"
+                        sx={{ padding: "0px", color: "black" }}
+                      >
+                        <Visibility />
+                      </PersonIcon>
+                    </InputAdornment>
+                  }
+                />
+                <FormHelperText style={{ color: "red" }}>
+                  {errorMessageSearch}
+                </FormHelperText>
+              </FormControl>
+              {/* <TextField
                 style={{ width: "100%" }}
                 autoFocus
                 value={searchInput}
@@ -165,12 +227,13 @@ const ModalAddMeetingAdmin = () => {
                   );
                 }}
                 helperText={errorMessageSearch}
-              />
+              /> */}
               {arrayData.length > 0 && (
                 <div className={styles.modalAddMeeting__div}>
                   {arrayData.map((element: any, index: number) => {
                     return (
                       <div
+                        className={styles.modalAddMeeting__div__choice}
                         key={index}
                         onClick={() => {
                           setChoiceUser([element]);

@@ -36,12 +36,24 @@ const ModalAddMeeting = () => {
       type: "ModalAddMeeting/close",
     });
   };
-  const { trigger, data } = useSWRMutation("/api/paiement/get", fetchPost);
+  const { trigger, data, isMutating, reset } = useSWRMutation(
+    "/api/paiement/get",
+    fetchPost
+  );
   useEffect(() => {
     if (data) {
-      window.location.href = data.url;
+      if (data.status === 200) {
+        reset();
+        window.location.href = data.url;
+      } else {
+        reset();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+      }
     }
-  }, [data]);
+  }, [data, dispatch, reset]);
 
   const { trigger: triggerSeveral, data: dataSeveral } = useSWRMutation(
     "/api/paiement/getSeveral",
@@ -131,7 +143,7 @@ const ModalAddMeeting = () => {
               >
                 <FormGroup>
                   <FormLabel id="demo-radio-buttons-group-label">
-                    Type de coaching
+                    Veuillez choissir un type de coaching pour ce rendez-vous
                   </FormLabel>
                   <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"

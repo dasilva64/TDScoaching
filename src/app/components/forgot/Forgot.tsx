@@ -2,10 +2,19 @@ import React, { useEffect, useState } from "react";
 import styles from "./Forgot.module.scss";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { TextField } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  Input,
+  InputAdornment,
+  InputLabel,
+  TextField,
+} from "@mui/material";
 import validator from "validator";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import Visibility from "@mui/icons-material/Visibility";
 
 const Forgot = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -15,6 +24,7 @@ const Forgot = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [displayReSendEmail, setDisplayReSendEmail] = useState<boolean>(false);
   const [emailUser, setEmailUser] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { displayModalForgot } = useSelector(
     (state: RootState) => state.ModalForgot
   );
@@ -26,13 +36,17 @@ const Forgot = () => {
     setInputEmailError("");
     setDisplayReSendEmail(false);
     setEmailUser("");
+    setIsLoading(false);
   };
 
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    dispatch({
+      type: "flash/clearFlashMessage",
+    });
     if (validInputEmail === true) {
       if (inputPseudo.length === 0) {
+        setIsLoading(true);
         const fetchApi = async () => {
           let response = await fetch("/api/user/forgotPassword", {
             method: "POST",
@@ -47,25 +61,32 @@ const Forgot = () => {
           let json = await response.json();
           if (json.status === 200) {
             dispatch({ type: "ModalForgot/close" });
+            clearState();
             dispatch({
               type: "flash/storeFlashMessage",
               payload: { flashMessage: json.message, type: "success" },
             });
           } else if (json.status === 400) {
-            json.message.forEach((element: string) => {
-              if (element[0] === "email") {
-                setInputEmailError(element[1]);
-              }
-            });
+            setTimeout(() => {
+              setIsLoading(false);
+              json.message.forEach((element: string) => {
+                if (element[0] === "email") {
+                  setInputEmailError(element[1]);
+                }
+              });
+            }, 2000);
           } else {
-            if (json.type === "reset") {
-              setDisplayReSendEmail(true);
-              setEmailUser(json.email);
-            }
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { flashMessage: json.message, type: "error" },
-            });
+            setTimeout(() => {
+              if (json.type === "reset") {
+                setDisplayReSendEmail(true);
+                setEmailUser(json.email);
+              }
+              setIsLoading(false);
+              dispatch({
+                type: "flash/storeFlashMessage",
+                payload: { type: "error", flashMessage: json.message },
+              });
+            }, 2000);
           }
         };
         fetchApi();
@@ -163,7 +184,7 @@ const Forgot = () => {
                 }}
                 className={styles.forgot__form}
               >
-                <TextField
+                {/* <TextField
                   autoFocus
                   value={inputEmail}
                   style={{ margin: "10px 0px" }}
@@ -171,6 +192,14 @@ const Forgot = () => {
                   label={"Email"}
                   variant="standard"
                   type={"email"}
+                  sx={{
+                    "& label": {
+                      color: "black",
+                      "&.Mui-focused": {
+                        color: "#1976d2",
+                      },
+                    },
+                  }}
                   placeholder={"Entrez votre email"}
                   FormHelperTextProps={{ style: { color: "red" } }}
                   onChange={(e) => {
@@ -184,7 +213,50 @@ const Forgot = () => {
                     );
                   }}
                   helperText={inputEmailError}
-                />
+                /> */}
+                <FormControl variant="standard">
+                  <InputLabel
+                    sx={{
+                      color: "black",
+                      "&.Mui-focused": {
+                        color: "#1976d2",
+                      },
+                    }}
+                    htmlFor="standard-adornment-email"
+                  >
+                    Email
+                  </InputLabel>
+                  <Input
+                    autoFocus
+                    id="standard-adornment-email"
+                    value={inputEmail}
+                    placeholder={"Entrez votre mail"}
+                    type={"text"}
+                    onChange={(e) => {
+                      handlerInput(
+                        e,
+                        /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                        setValidInputEmail,
+                        setInputEmailError,
+                        setInputEmail,
+                        "Email : doit être un email valide"
+                      );
+                    }}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <AlternateEmailIcon
+                          sx={{ color: "black" }}
+                          aria-label="toggle email visibility"
+                        >
+                          <Visibility />
+                        </AlternateEmailIcon>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText style={{ color: "red" }}>
+                    {inputEmailError}
+                  </FormHelperText>
+                </FormControl>
                 <input
                   type="text"
                   name="pseudo"
@@ -198,11 +270,36 @@ const Forgot = () => {
                 />
 
                 <div className={styles.forgot__form__submit}>
-                  <input
-                    className={styles.forgot__form__submit__btn}
-                    type="submit"
-                    value="Récupérer son mot de passe"
-                  />
+                  {isLoading === false && (
+                    <input
+                      className={styles.forgot__form__submit__btn}
+                      type="submit"
+                      value="Récupérer son mot de passe"
+                    />
+                  )}
+
+                  {isLoading === true && (
+                    <button
+                      disabled
+                      className={styles.forgot__form__submit__btn__load}
+                    >
+                      <span
+                        className={styles.forgot__form__submit__btn__load__span}
+                      >
+                        Chargement
+                      </span>
+
+                      <div
+                        className={styles.forgot__form__submit__btn__load__arc}
+                      >
+                        <div
+                          className={
+                            styles.forgot__form__submit__btn__load__arc__circle
+                          }
+                        ></div>
+                      </div>
+                    </button>
+                  )}
                 </div>
               </form>
               {displayReSendEmail && (

@@ -13,7 +13,7 @@ const ModalDeleteDiscoverytMeeting = () => {
   const { displayModalDeleteDiscoveryMeeting } = useSelector(
     (state: RootState) => state.ModalDeleteDiscoveryMeeting
   );
-  const { trigger, data, reset } = useSWRMutation(
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/api/meeting/deleteMeeting",
     fetchGet
   );
@@ -99,17 +99,40 @@ const ModalDeleteDiscoverytMeeting = () => {
                 reprendre un autre.
               </p>
               <div className={styles.deleteModal__div}>
-                <button
-                  className={styles.deleteModal__div__btn}
-                  onClick={() => {
-                    const fetchDeleteeeting = async () => {
-                      trigger();
-                    };
-                    fetchDeleteeeting();
-                  }}
-                >
-                  Supprimer ce rendez-vous
-                </button>
+                {isMutating === false && (
+                  <button
+                    className={styles.deleteModal__div__btn}
+                    onClick={() => {
+                      const fetchDeleteeeting = async () => {
+                        dispatch({
+                          type: "flash/clearFlashMessage",
+                        });
+                        trigger();
+                      };
+                      fetchDeleteeeting();
+                    }}
+                  >
+                    Supprimer ce rendez-vous
+                  </button>
+                )}
+                {isMutating === true && (
+                  <button
+                    disabled
+                    className={styles.deleteModal__div__btn__load}
+                  >
+                    <span className={styles.deleteModal__div__btn__load__span}>
+                      Chargement
+                    </span>
+
+                    <div className={styles.deleteModal__div__btn__load__arc}>
+                      <div
+                        className={
+                          styles.deleteModal__div__btn__load__arc__circle
+                        }
+                      ></div>
+                    </div>
+                  </button>
+                )}
               </div>
             </motion.div>
           </>

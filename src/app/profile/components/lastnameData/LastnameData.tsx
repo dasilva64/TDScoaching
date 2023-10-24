@@ -25,34 +25,64 @@ const LastnameData = () => {
         flashMessage: "Erreur lors du chargement, veuillez réessayer",
       },
     });
-  } else if (isLoading) {
     content = (
       <>
-        <div className={styles.card}>
+        <div className={styles.card__load}>
           <Image
-            className={styles.card__icone}
+            className={styles.card__load__icone}
             width="20"
             height="20"
             priority={true}
             src={"/assets/icone/user-solid.svg"}
             alt="bousole"
           />
-          <div className={styles.card__info}>
+          <div className={styles.card__load__info}>
             <p>
               <strong>Nom de famille</strong>
             </p>
-            <p className={styles.card__info__p}>Chargement des données</p>
+            <p className={styles.card__load__info__p__error}>
+              Erreur de chargement
+            </p>
           </div>
           <Image
-            className={styles.card__info__icone}
+            className={styles.card__load__info__icone}
             width="20"
             height="20"
             priority={true}
             src={"/assets/icone/chevron-right-solid.svg"}
             alt="bousole"
           />
-          <div className={styles.card__arc}>
-            <div className={styles.card__arc__circle}></div>
+        </div>
+      </>
+    );
+  } else if (isLoading) {
+    content = (
+      <>
+        <div className={styles.card__load}>
+          <Image
+            className={styles.card__load__icone}
+            width="20"
+            height="20"
+            priority={true}
+            src={"/assets/icone/user-solid.svg"}
+            alt="bousole"
+          />
+          <div className={styles.card__load__info}>
+            <p>
+              <strong>Nom de famille</strong>
+            </p>
+            <p className={styles.card__load__info__p}>Chargement des données</p>
+          </div>
+          <Image
+            className={styles.card__load__info__icone}
+            width="20"
+            height="20"
+            priority={true}
+            src={"/assets/icone/chevron-right-solid.svg"}
+            alt="bousole"
+          />
+          <div className={styles.card__load__arc}>
+            <div className={styles.card__load__arc__circle}></div>
           </div>
         </div>
       </>
@@ -94,8 +124,26 @@ const LastnameData = () => {
           </div>
         </>
       );
-    } else {
+    } else if (userData.status === 401) {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: {
+          type: "error",
+          flashMessage: userData.message,
+        },
+      });
       router.push("/");
+    } else {
+      setTimeout(() => {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: userData.message,
+          },
+        });
+      }, 2000);
+      router.refresh();
     }
   }
   return <>{content}</>;

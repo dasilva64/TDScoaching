@@ -10,15 +10,42 @@ import Display from "./dataTable/display/Display";
 import styles from "./AllUser.module.scss";
 import DisplayLoad from "./dataTable/display/DisplayLoad";
 import useGet from "@/app/components/hook/useGet";
+import DisplayError from "./dataTable/display/DisplayError";
+import { useRouter } from "next/navigation";
 
 const AllUser = () => {
   const { datas } = useSelector((state: RootState) => state.Array);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { data, isLoading, isError } = useGet("/api/user/getAll");
   let content;
   if (isError) {
-    content = <div>error</div>;
+    dispatch({
+      type: "flash/storeFlashMessage",
+      payload: {
+        type: "error",
+        flashMessage: "Erreur lors du chargement, veuillez réessayer",
+      },
+    });
+    content = (
+      <>
+        <div className={styles.datatable}>
+          <div className={styles.datatable__container}>
+            <>
+              <div>
+                <div className={styles.datatable__container__div}>
+                  <NbShow />
+                  <Search />
+                </div>
+              </div>
+              <DisplayError />
+              <Paging />
+            </>
+          </div>
+        </div>
+      </>
+    );
   } else if (isLoading) {
     content = (
       <>
@@ -39,7 +66,7 @@ const AllUser = () => {
       </>
     );
   } else {
-    if (data) {
+    if (data.status === 200) {
       content = (
         <>
           <div className={styles.datatable}>
@@ -60,6 +87,28 @@ const AllUser = () => {
           </div>
         </>
       );
+    } else if (data.status === 401 || data.status === 403) {
+      setTimeout(() => {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
+        });
+      }, 2000);
+      router.push("/");
+    } else {
+      setTimeout(() => {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
+        });
+      }, 2000);
+      router.refresh();
     }
   }
   useEffect(() => {
@@ -67,33 +116,37 @@ const AllUser = () => {
       let copyOfItems = [...data.body];
 
       copyOfItems.map((p: any, index: any) => {
-        if (p.meeting === null || p.meeting === "aucun") {
-          if (p.meeting === null) {
+        if (p.idMeeting === null || p.meeting === "aucun") {
+          if (p.idMeeting === null) {
             copyOfItems[index] = {
               ...p,
               Prénom: p.firstName,
               Nom: p.lastName,
               Mail: p.mail,
               RendezVous: "aucun",
-              Status: p.status.toString(),
             };
-            delete copyOfItems[index].meeting;
-            delete copyOfItems[index].status;
+            delete copyOfItems[index].allMeeting;
+            delete copyOfItems[index].idMeeting;
             delete copyOfItems[index].firstName;
             delete copyOfItems[index].lastName;
             delete copyOfItems[index].mail;
           }
-        } else if (p.meeting !== null) {
+        } else if (p.idMeeting !== null) {
+          let date = null;
+          for (let i = 0; i < p.allMeeting.length; i++) {
+            if (p.allMeeting[i].id === p.idMeeting) {
+              date = p.allMeeting[i].startAt;
+            }
+          }
           copyOfItems[index] = {
             ...p,
             Prénom: p.firstName,
             Nom: p.lastName,
             Mail: p.mail,
-            Status: p.status.toString(),
-            RendezVous: p.meeting,
+            RendezVous: new Date(date).toLocaleString("fr-FR"),
           };
-          delete copyOfItems[index].status;
-          delete copyOfItems[index].meeting;
+          delete copyOfItems[index].allMeeting;
+          delete copyOfItems[index].idMeeting;
           delete copyOfItems[index].firstName;
           delete copyOfItems[index].lastName;
           delete copyOfItems[index].mail;

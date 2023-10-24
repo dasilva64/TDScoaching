@@ -12,7 +12,7 @@ const ModalEditDiscoveryMeeting = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { dataModalEditDiscoveryMeeting, displayModalEditDiscoveryMeeting } =
     useSelector((state: RootState) => state.ModalEditDiscoveryMeeting);
-  const { data, trigger, reset } = useSWRMutation(
+  const { data, trigger, reset, isMutating } = useSWRMutation(
     "/api/meeting/edit",
     fetchPost
   );
@@ -126,14 +126,38 @@ const ModalEditDiscoveryMeeting = () => {
                 )}
               </p>
               <div className={styles.modalComfirm__div}>
-                <button
-                  className={styles.modalComfirm__div__btn}
-                  onClick={() => {
-                    handlerClick();
-                  }}
-                >
-                  Comfirmer
-                </button>
+                {isMutating === false && (
+                  <button
+                    className={styles.modalComfirm__div__btn}
+                    onClick={() => {
+                      dispatch({
+                        type: "flash/clearFlashMessage",
+                      });
+                      handlerClick();
+                    }}
+                  >
+                    Comfirmer
+                  </button>
+                )}
+
+                {isMutating === true && (
+                  <button
+                    disabled
+                    className={styles.modalComfirm__div__btn__load}
+                  >
+                    <span className={styles.modalComfirm__div__btn__load__span}>
+                      Chargement
+                    </span>
+
+                    <div className={styles.modalComfirm__div__btn__load__arc}>
+                      <div
+                        className={
+                          styles.modalComfirm__div__btn__load__arc__circle
+                        }
+                      ></div>
+                    </div>
+                  </button>
+                )}
               </div>
             </motion.div>
           </>

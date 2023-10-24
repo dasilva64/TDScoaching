@@ -24,7 +24,7 @@ const ModalAddDiscoveryMeeting = () => {
   const [validTypeCoachingInput, setValidTypeCoachingInput] =
     useState<boolean>(false);
   const [typeCoachingInput, setTypeCoachingInput] = useState<string>("");
-  const { trigger, data, reset } = useSWRMutation(
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/api/meeting/addDiscovery",
     fetchPost
   );
@@ -94,12 +94,13 @@ const ModalAddDiscoveryMeeting = () => {
     }
   }, [data, reset]);
   const handlerClick = () => {
+    console.log(new Date().getTimezoneOffset() / 60);
     const fetchAddMeeting = async () => {
-      trigger({
+      /* trigger({
         start: new Date(dataModalAddDiscoveryMeeting).toISOString(),
         typeCoaching: typeCoachingInput,
         timeZone: new Date().getTimezoneOffset() / 60,
-      });
+      }); */
     };
     fetchAddMeeting();
   };
@@ -154,13 +155,13 @@ const ModalAddDiscoveryMeeting = () => {
                 bancaire est nécessaire.
               </p>
               <FormControl
-                style={{ margin: "10px 0px", display: "block" }}
+                style={{ margin: "30px 0px", display: "block" }}
                 component="fieldset"
                 variant="standard"
               >
                 <FormGroup>
                   <FormLabel id="demo-radio-buttons-group-label">
-                    Type de coaching
+                    Veuillez choissir un type de coaching pour ce rendez-vous
                   </FormLabel>
                   <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
@@ -193,20 +194,43 @@ const ModalAddDiscoveryMeeting = () => {
                 </FormGroup>
               </FormControl>
               <div className={styles.modalComfirm__div}>
-                <button
-                  className={styles.modalComfirm__div__btn}
-                  onClick={() => {
-                    if (validTypeCoachingInput === true) {
-                      handlerClick();
-                    } else {
-                      setErrorMessageTypeCoaching(
-                        "Veuillez choisir un type de coaching"
-                      );
-                    }
-                  }}
-                >
-                  Comfirmer
-                </button>
+                {isMutating === false && (
+                  <button
+                    className={styles.modalComfirm__div__btn}
+                    onClick={() => {
+                      dispatch({
+                        type: "flash/clearFlashMessage",
+                      });
+                      if (validTypeCoachingInput === true) {
+                        handlerClick();
+                      } else {
+                        setErrorMessageTypeCoaching(
+                          "Veuillez choisir un type de coaching"
+                        );
+                      }
+                    }}
+                  >
+                    Comfirmer
+                  </button>
+                )}
+                {isMutating === true && (
+                  <button
+                    disabled
+                    className={styles.modalComfirm__div__btn__load}
+                  >
+                    <span className={styles.modalComfirm__div__btn__load__span}>
+                      Chargement
+                    </span>
+
+                    <div className={styles.modalComfirm__div__btn__load__arc}>
+                      <div
+                        className={
+                          styles.modalComfirm__div__btn__load__arc__circle
+                        }
+                      ></div>
+                    </div>
+                  </button>
+                )}
               </div>
             </motion.div>
           </>

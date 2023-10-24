@@ -10,14 +10,33 @@ import Display from "./dataTable/display/Display";
 import Paging from "./dataTable/paging/Paging";
 import DisplayLoad from "./dataTable/display/DisplayLoad";
 import useGet from "@/app/components/hook/useGet";
+import DisplayError from "./dataTable/display/DisplayError";
 
 const AllMeeting = () => {
   const { datas } = useSelector((state: RootState) => state.ArrayMeeting);
   const dispatch = useDispatch();
   const { data, isLoading, isError } = useGet("/api/meeting/getAll");
   let content;
-  if (isError) content = <div>error</div>;
-  else if (isLoading) {
+  if (isError) {
+    content = (
+      <>
+        <div className={styles.datatable}>
+          <div className={styles.datatable__container}>
+            <>
+              <div>
+                <div className={styles.datatable__container__div}>
+                  <NbShow />
+                  <Search />
+                </div>
+              </div>
+              <DisplayError />
+              <Paging />
+            </>
+          </div>
+        </div>
+      </>
+    );
+  } else if (isLoading) {
     content = (
       <>
         <div className={styles.datatable}>
@@ -64,12 +83,12 @@ const AllMeeting = () => {
   useEffect(() => {
     if (data && data.status === 200) {
       let newar = [...data.body];
-
       newar.map((p: any, index: any) => {
         let copyUser = { ...p.User };
-
         newar[index] = {
           ...p,
+          Id: p.id,
+          UserId: copyUser.id,
           Prénom: copyUser.firstname,
           Nom: copyUser.lastname,
           Date: new Date(p.startAt).toLocaleString("fr-FR", {
@@ -87,6 +106,8 @@ const AllMeeting = () => {
         delete newar[index].endAt;
         delete newar[index].startAt;
         delete newar[index].typeMeeting;
+        delete newar[index].id;
+        delete newar[index].userId;
       });
       dispatch({
         type: "ArrayMeeting/storeData",

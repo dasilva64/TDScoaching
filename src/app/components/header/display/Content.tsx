@@ -39,7 +39,7 @@ import ModalAddMeetingAdmin from "@/app/meetingAdmin/components/modal/ModalAddMe
 import ModalCloseTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalCloseTwoFactor";
 import ModalTwoFactorSendToken from "@/app/profile/components/twoFactorSendTokenData/Modal/ModalTwoFactorSendToken";
 import ModalTwoFactor from "@/app/profile/components/twoFactorData/ModalTwoFactor";
-import usePost from "../../hook/usePost";
+import ModalComfirmDisable from "@/app/profile/components/twoFactorSendTokenData/Modal/ModalComfirmDisable";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
@@ -219,7 +219,7 @@ const Content = () => {
                               : styles.header__log__li__point__hide
                           }`}
                         ></div>
-                        Tous les rendez-vous
+                        Calendrier
                       </Link>
                     </li>
                     <li
@@ -260,6 +260,7 @@ const Content = () => {
                       <span
                         className={styles.header__log__li__link}
                         onClick={() => {
+                          setDisplayLogMenu(false);
                           const logout = async () => {
                             let response = await fetch("/api/user/logout", {
                               method: "POST",
@@ -269,13 +270,6 @@ const Content = () => {
                             });
                             let json = await response.json();
                             if (json && json.status === 200) {
-                              dispatch({
-                                type: "flash/storeFlashMessage",
-                                payload: {
-                                  type: "error",
-                                  flashMessage: json.message,
-                                },
-                              });
                               setTimeout(() => {
                                 dispatch({
                                   type: "auth/logout",
@@ -293,7 +287,14 @@ const Content = () => {
                                 ) {
                                   router.push("/");
                                 }
-                              }, 1000);
+                                dispatch({
+                                  type: "flash/storeFlashMessage",
+                                  payload: {
+                                    type: "error",
+                                    flashMessage: json.message,
+                                  },
+                                });
+                              }, 600);
                             }
                           };
                           logout();
@@ -437,6 +438,7 @@ const Content = () => {
                       <span
                         className={styles.header__log__li__link}
                         onClick={() => {
+                          setDisplayLogMenu(false);
                           const logout = async () => {
                             let response = await fetch("/api/user/logout", {
                               method: "POST",
@@ -446,13 +448,6 @@ const Content = () => {
                             });
                             let json = await response.json();
                             if (json.status === 200) {
-                              dispatch({
-                                type: "flash/storeFlashMessage",
-                                payload: {
-                                  type: "error",
-                                  flashMessage: json.message,
-                                },
-                              });
                               setTimeout(() => {
                                 dispatch({
                                   type: "auth/logout",
@@ -469,7 +464,14 @@ const Content = () => {
                                 ) {
                                   router.push("/");
                                 }
-                              }, 1000);
+                                dispatch({
+                                  type: "flash/storeFlashMessage",
+                                  payload: {
+                                    type: "error",
+                                    flashMessage: json.message,
+                                  },
+                                });
+                              }, 600);
                             }
                           };
 
@@ -570,6 +572,9 @@ const Content = () => {
   const { displayModalSendTokenTwoFactor } = useSelector(
     (state: RootState) => state.ModalSendTokenTwoFactor
   );
+  const { displayModalComfirmDisableTwoFactor } = useSelector(
+    (state: RootState) => state.ModalComfirmDisableTwoFactor
+  );
   /* const { displayModalCancelMeeting } = useSelector(
     (state: RootState) => state.ModalCancelMeeting
   ); */
@@ -617,7 +622,8 @@ const Content = () => {
       displayModalDeleteAccount === true ||
       displayModalAddDiscoveryMeeting === true ||
       displayModalDeleteDiscoveryMeeting === true ||
-      displayModalEditFormule === true
+      displayModalEditFormule === true ||
+      displayModalComfirmDisableTwoFactor === true
     ) {
       return `${styles.line__hide}`;
     } else {
@@ -658,7 +664,8 @@ const Content = () => {
           displayModalDeleteAccount === true ||
           displayModalAddDiscoveryMeeting === true ||
           displayModalDeleteDiscoveryMeeting === true ||
-          displayModalEditFormule === true
+          displayModalEditFormule === true ||
+          displayModalComfirmDisableTwoFactor === true
         ) {
           /* header.style.opacity = "0.02";
           mainDiv.style.opacity = "0.02";
@@ -701,6 +708,7 @@ const Content = () => {
     displayModalAddMeetingAdmin,
     displayModalCancelTwoFactor,
     displayModalSendTokenTwoFactor,
+    displayModalComfirmDisableTwoFactor,
   ]);
 
   if (typeof window !== "undefined") {
@@ -791,19 +799,24 @@ const Content = () => {
   }, [dispatch, isMobile]);
   return (
     <>
+      {typeof window !== "undefined" &&
+        window.location.pathname === "/profile" && (
+          <>
+            <ModalUserFirstnameData />
+            <ModalUserLastnameData />
+            <ModalUserPasswordData />
+            <ModalUserSendToken />
+            <EmailCheck />
+            <ModalCloseEmail />
+            <ModalTwoFactor />
+            <ModalDeleteAccount />
+            <ModalCloseTwoFactor />
+            <ModalTwoFactorSendToken />
+          </>
+        )}
       <FormLogin />
       <FormRegister />
       <Forgot />
-      <ModalUserFirstnameData />
-      <ModalUserLastnameData />
-      <ModalUserPasswordData />
-      <ModalUserSendToken />
-      <EmailCheck />
-      <ModalCloseEmail />
-      <ModalTwoFactor />
-      <ModalDeleteAccount />
-      <ModalCloseTwoFactor />
-      <ModalTwoFactorSendToken />
 
       {/* <ModalDatePickerDiscoveryMobile /> */}
       <ModalDatePickerDiscovery />
@@ -818,6 +831,7 @@ const Content = () => {
       <ModalEditMeeting />
       <ModalDeleteMeeting />
       <ModalAddMeetingAdmin />
+      <ModalComfirmDisable />
 
       {/* <ModalAddMeeting /> */}
       {/* <ModalDeleteFirstMeeting /> */}

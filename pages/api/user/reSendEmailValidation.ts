@@ -16,6 +16,7 @@ export default withIronSessionApiRoute(
       if (arrayMessageError.length > 0) {
         return res.status(400).json({
           status: 400,
+          type: "validation",
           message: arrayMessageError,
         });
       }
@@ -25,7 +26,7 @@ export default withIronSessionApiRoute(
       if (userEmail === null) {
         return res.status(404).json({
           status: 404,
-          message: "Aucun utilisateur n'utilise cet email, veuillez réessayer",
+          message: "L'utilisateur n'as pas été trouvé, veuillez réessayer",
         });
       } else {
         let token = jwt.sign(
@@ -43,18 +44,26 @@ export default withIronSessionApiRoute(
             registerToken: registerTokenObject,
           },
         });
-        let smtpTransport = nodemailer.createTransport({
-          service: "Gmail",
-          auth: {
-            user: process.env.SECRET_SMTP_EMAIL,
-            pass: process.env.SECRET_SMTP_PASSWORD,
-          },
-        });
-        let mailOptions = {
-          from: process.env.SECRET_SMTP_EMAIL,
-          to: process.env.SECRET_SMTP_EMAIL,
-          subject: "Validation of your account",
-          html: `<!DOCTYPE html>
+        if (editRegisterToken === null) {
+          return res.status(400).json({
+            status: 400,
+            type: "error",
+            message:
+              "Une erreur est survenue lors de la modification de l'utilisateur, veuillez réessayer",
+          });
+        } else {
+          let smtpTransport = nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+              user: process.env.SECRET_SMTP_EMAIL,
+              pass: process.env.SECRET_SMTP_PASSWORD,
+            },
+          });
+          let mailOptions = {
+            from: process.env.SECRET_SMTP_EMAIL,
+            to: process.env.SECRET_SMTP_EMAIL,
+            subject: "Validation of your account",
+            html: `<!DOCTYPE html>
                           <html lang="fr">
                             <head>
                               <title>tds coaching</title>
@@ -79,17 +88,19 @@ export default withIronSessionApiRoute(
                               </div>
                             </body>
                           </html>`,
-        };
-        smtpTransport.sendMail(mailOptions);
-        return res.status(200).json({
-          status: 200,
-          message: "Un email vous a été renvoyer pour activer votre compte",
-        });
+          };
+          smtpTransport.sendMail(mailOptions);
+          return res.status(200).json({
+            status: 200,
+            message: "Un email vous a été renvoyer pour activer votre compte",
+          });
+        }
       }
     } else {
-      return res.status(404).json({
-        status: 404,
-        message: "Une erreur est survenue, veuillez réessayer",
+      return res.status(405).json({
+        status: 405,
+        message:
+          "La méthode de la requête n'est pas autorisé, veuillez réessayer",
       });
     }
   },

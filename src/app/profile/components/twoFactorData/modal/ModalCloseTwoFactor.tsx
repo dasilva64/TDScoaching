@@ -5,10 +5,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import styles from "./ModalCloseTwoFactor.module.scss";
+import { useRouter } from "next/navigation";
 
 const ModalCloseTwoFactor = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { trigger, data, reset } = useSWRMutation(
+  const router = useRouter();
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/api/user/cancelTwoFactor",
     fetchGet
   );
@@ -29,6 +31,21 @@ const ModalCloseTwoFactor = () => {
           payload: { type: "success", flashMessage: data.message },
         });
         reset();
+      } else if (data.status === 401) {
+        setTimeout(() => {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }, 2000);
+        router.push("/");
+      } else if (data.status === 400) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -37,7 +54,7 @@ const ModalCloseTwoFactor = () => {
         reset();
       }
     }
-  }, [data, dispatch, reset]);
+  }, [data, dispatch, reset, router]);
 
   return (
     <>
@@ -78,20 +95,56 @@ const ModalCloseTwoFactor = () => {
                   className={styles.modalCloseEmail__reSend__btn}
                   onClick={() => {
                     dispatch({
+                      type: "flash/clearFlashMessage",
+                    });
+                    dispatch({
                       type: "ModalCancelTwoFactor/close",
                     });
                   }}
                 >
                   Continuer
                 </button>
-                <button
-                  className={styles.modalCloseEmail__reSend__btn}
-                  onClick={() => {
-                    trigger();
-                  }}
-                >
-                  Quitter
-                </button>
+                {isMutating && (
+                  <>
+                    <button
+                      disabled
+                      className={styles.modalCloseEmail__reSend__btn__load}
+                    >
+                      <span
+                        className={
+                          styles.modalCloseEmail__reSend__btn__load__span
+                        }
+                      >
+                        Chargement
+                      </span>
+
+                      <div
+                        className={
+                          styles.modalCloseEmail__reSend__btn__load__arc
+                        }
+                      >
+                        <div
+                          className={
+                            styles.modalCloseEmail__reSend__btn__load__arc__circle
+                          }
+                        ></div>
+                      </div>
+                    </button>
+                  </>
+                )}
+                {!isMutating && (
+                  <button
+                    className={styles.modalCloseEmail__reSend__btn}
+                    onClick={() => {
+                      dispatch({
+                        type: "flash/clearFlashMessage",
+                      });
+                      trigger();
+                    }}
+                  >
+                    Quitter
+                  </button>
+                )}
               </div>
             </motion.div>
           </>

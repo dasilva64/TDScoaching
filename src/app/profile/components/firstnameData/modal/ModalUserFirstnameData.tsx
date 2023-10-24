@@ -4,36 +4,33 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserFirstnameData.module.scss";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
-import { TextField } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import {
+  FormControl,
+  FormHelperText,
+  Input,
+  InputAdornment,
+  InputLabel,
+  TextField,
+} from "@mui/material";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useGet from "@/app/components/hook/useGet";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import Visibility from "@mui/icons-material/Visibility";
 
 const ModalUserFirstnameData = () => {
+  const router = useRouter();
   const { displayModalEditFirstname } = useSelector(
     (state: RootState) => state.ModalEditFirstname
   );
   const {
     data: userData,
     isLoading,
-    isError,
     mutate,
   } = useGet("/api/user/getUserProfile");
-  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  /* if (isError) {
-    dispatch({
-      type: "flash/storeFlashMessage",
-      payload: {
-        type: "error",
-        flashMessage: "Erreur lors du chargement, veuillez réessayer",
-      },
-    });
-    router.push("/");
-  } else if (isLoading) {
-  } */
 
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const [firstnameInput, setFirstnameInput] = useState<string>("");
@@ -42,68 +39,120 @@ const ModalUserFirstnameData = () => {
       setFirstnameInput("");
     } else {
       if (userData) {
+        console.log(userData);
         if (userData.status === 200) {
           setFirstnameInput(userData.body.firstname);
+        } else if (userData.status === 401) {
+          setTimeout(() => {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: {
+                type: "error",
+                flashMessage: userData.message,
+              },
+            });
+          }, 2000);
+          router.push("/");
         } else {
-          setFirstnameInput("");
+          setTimeout(() => {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: {
+                type: "error",
+                flashMessage: userData.message,
+              },
+            });
+          }, 2000);
+          router.refresh();
         }
       }
     }
-  }, [isLoading, userData]);
+  }, [dispatch, isLoading, router, userData]);
   const [validFirstnameInput, setValidFirstnameInput] = useState<boolean>(true);
   const [errorMessageFirstname, setErrorMessageFirstname] =
     useState<string>("");
 
-  const { trigger, data, reset } = useSWRMutation(
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/api/user/editFirstnameUser",
     fetchPost
   );
   useEffect(() => {
+    const clearState = () => {
+      setErrorMessageFirstname("");
+      setValidFirstnameInput(true);
+      if (userData) {
+        if (userData.body) {
+          setFirstnameInput(userData.body.firstname);
+        }
+      }
+    };
     if (data) {
       if (data.status === 200) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: data.message },
-        });
-        dispatch({
-          type: "ModalEditFirstname/close",
-        });
-        clearState();
-      } else if (data.status === 400) {
-        data.message.forEach((element: string) => {
-          if (element[0] === "firstname") {
-            setErrorMessageFirstname(element[1]);
+        mutate(
+          {
+            ...data,
+            body: {
+              ...data.body,
+              firstname: firstnameInput,
+            },
+          },
+          {
+            revalidate: false,
           }
-        });
+        );
+        reset();
+        if (isMutating === false) {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: data.message },
+          });
+          dispatch({
+            type: "ModalEditFirstname/close",
+          });
+          clearState();
+        }
+      } else if (data.status === 401) {
+        setTimeout(() => {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }, 2000);
+        router.push("/");
+      } else if (data.status === 400) {
+        if (data.type === "validation") {
+          data.message.forEach((element: string) => {
+            if (element[0] === "firstname") {
+              setErrorMessageFirstname(element[1]);
+            }
+          });
+          reset();
+        } else {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
+        reset();
       }
     }
-  }, [data, dispatch]);
-
-  useEffect(() => {
-    const mutateMainData = async () => {
-      mutate(
-        {
-          ...data,
-          body: {
-            ...data.body,
-            firstname: firstnameInput,
-          },
-        },
-        {
-          revalidate: false,
-        }
-      );
-      reset();
-    };
-    if (data && data.body) {
-      mutateMainData();
-    }
-  }, [data, firstnameInput, mutate, reset]);
+  }, [
+    data,
+    dispatch,
+    firstnameInput,
+    isMutating,
+    mutate,
+    reset,
+    router,
+    userData,
+  ]);
 
   const closeForm = () => {
     clearState();
@@ -114,6 +163,9 @@ const ModalUserFirstnameData = () => {
 
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    dispatch({
+      type: "flash/clearFlashMessage",
+    });
     if (validFirstnameInput === true) {
       if (inputPseudo.length === 0) {
         const fetchLogin = async () => {
@@ -125,18 +177,19 @@ const ModalUserFirstnameData = () => {
         fetchLogin();
       }
     } else {
-      if (
-        userData.body.firstname !== firstnameInput &&
-        validFirstnameInput === false
-      ) {
-        setErrorMessageFirstname("Prénom : ne doit pas être vide");
+      if (validFirstnameInput === false) {
+        setErrorMessageFirstname("Prénom : 3 lettres minimum");
       }
     }
   };
   const clearState = () => {
     setErrorMessageFirstname("");
-    setValidFirstnameInput(false);
-    setFirstnameInput("");
+    setValidFirstnameInput(true);
+    if (userData) {
+      if (userData.body) {
+        setFirstnameInput(userData.body.firstname);
+      }
+    }
   };
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -217,7 +270,54 @@ const ModalUserFirstnameData = () => {
                   handlerSubmit(e);
                 }}
               >
-                <TextField
+                <FormControl
+                  variant="standard"
+                  style={{ margin: "20px 0px 0px 0px" }}
+                >
+                  <InputLabel
+                    sx={{
+                      color: "black",
+                      "&.Mui-focused": {
+                        color: "#1976d2",
+                      },
+                    }}
+                    htmlFor="standard-adornment-firstname"
+                  >
+                    Prénom
+                  </InputLabel>
+                  <Input
+                    autoFocus
+                    id="standard-adornment-firstname"
+                    value={firstnameInput}
+                    placeholder={"Entrez votre prénom"}
+                    type={"text"}
+                    onChange={(e) => {
+                      handlerInput(
+                        e,
+                        "firstname",
+                        /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
+                        setValidFirstnameInput,
+                        setErrorMessageFirstname,
+                        setFirstnameInput,
+                        "Prénom : 3 lettres minimum"
+                      );
+                    }}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <PersonIcon
+                          aria-label="toggle firstname visibility"
+                          sx={{ padding: "0px", color: "black" }}
+                        >
+                          <Visibility />
+                        </PersonIcon>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText style={{ color: "red" }}>
+                    {errorMessageFirstname}
+                  </FormHelperText>
+                </FormControl>
+                {/* <TextField
                   autoFocus
                   value={firstnameInput}
                   style={{ margin: "20px 0px 0px 0px" }}
@@ -239,7 +339,7 @@ const ModalUserFirstnameData = () => {
                     );
                   }}
                   helperText={errorMessageFirstname}
-                />
+                /> */}
                 <input
                   type="text"
                   name="pseudo"
@@ -252,11 +352,47 @@ const ModalUserFirstnameData = () => {
                   }}
                 />
                 <div className={styles.modalEditMainUserData__form__submit}>
-                  <input
-                    className={styles.modalEditMainUserData__form__submit__btn}
-                    type="submit"
-                    value="Modifier"
-                  />
+                  {isMutating && (
+                    <>
+                      <button
+                        disabled
+                        className={
+                          styles.modalEditMainUserData__form__submit__btn__load
+                        }
+                      >
+                        <span
+                          className={
+                            styles.modalEditMainUserData__form__submit__btn__load__span
+                          }
+                        >
+                          Chargement
+                        </span>
+
+                        <div
+                          className={
+                            styles.modalEditMainUserData__form__submit__btn__load__arc
+                          }
+                        >
+                          <div
+                            className={
+                              styles.modalEditMainUserData__form__submit__btn__load__arc__circle
+                            }
+                          ></div>
+                        </div>
+                      </button>
+                    </>
+                  )}
+                  {isMutating === false && (
+                    <>
+                      <input
+                        className={
+                          styles.modalEditMainUserData__form__submit__btn
+                        }
+                        type="submit"
+                        value="Modifier"
+                      />
+                    </>
+                  )}
                 </div>
               </form>
             </motion.div>

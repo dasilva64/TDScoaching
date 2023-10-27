@@ -9,18 +9,22 @@
   padding: 20px;
   border-radius: 10px;
   &__h3 {
+    text-align: left;
     font-size: 18px;
   }
   &__img {
     position: absolute;
-    top: 20px;
+    top: 50%;
+    transform: translateY(-50%);
     right: 15px;
     transition: all 400ms ease-in;
     &__up {
-      transform: rotate(180deg);
+      transform: rotate(180deg) translateY(-50%);
+      transform-origin: top;
     }
     &__down {
-      transform: rotate(0deg);
+      transform: rotate(0deg) translateY(-50%);
+      transform-origin: top;
     }
   }
   &__p {
@@ -40,6 +44,7 @@
     &__show {
       opacity: 1;
       height: 200px;
+      margin-bottom: 20px;
     }
     &__hide {
       opacity: 0;
@@ -52,7 +57,7 @@
   .card {
     &__p {
       &__show {
-        height: 150px;
+        height: 120px;
       }
     }
   }
@@ -71,6 +76,10 @@
 
 @media screen and (max-width: 425px) {
   .card {
+    padding: 15px;
+    &__h3 {
+      max-width: 90%;
+    }
     &__p {
       &__show {
         height: 200px;

@@ -60,7 +60,8 @@
     &__container {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 50px;
+      row-gap: 40px;
+      column-gap: 50px;
     }
   }
   &__what {
@@ -235,6 +236,39 @@
   }
 }
 
+@media screen and (max-width: 1800px) {
+  .home {
+    &__goal {
+      &__container {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 20px;
+        column-gap: 50px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .home {
+    &__goal {
+      &__container {
+        row-gap: 10px;
+        column-gap: 20px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1115px) {
+  .home {
+    &__goal {
+      &__container {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 1024px) {
   .home {
     &__who {
@@ -262,18 +296,14 @@
         }
       }
     }
-    &__goal {
-      &__container {
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-      }
-    }
   }
 }
 
 @media screen and (max-width: 768px) {
   .home {
     &__bg {
+      height: calc(100vh - 75px);
+      margin-top: 75px;
       &__container {
         &__h1 {
           font-size: 38px;
@@ -326,7 +356,7 @@
       }
     }
     &__goal {
-      margin: 50px 5% 50px 5%;
+      margin: 0 5% 0 5%;
       &__h2 {
         font-size: 38px;
       }
@@ -340,6 +370,8 @@
 @media screen and (max-width: 425px) {
   .home {
     &__bg {
+      height: calc(100vh - 70px);
+      margin-top: 70px;
       &__container {
         width: 100%;
         &__h1 {
@@ -348,6 +380,28 @@
         &__p {
           width: 200px;
         }
+      }
+    }
+    &__who {
+      &__container {
+        &__h2 {
+          padding-top: 30px;
+          padding-bottom: 20px;
+        }
+      }
+    }
+    &__what {
+      &__container {
+        &__h2 {
+          padding-top: 30px;
+          padding-bottom: 20px;
+        }
+      }
+    }
+    &__goal {
+      &__h2 {
+        padding-top: 30px;
+        padding-bottom: 20px;
       }
     }
   }

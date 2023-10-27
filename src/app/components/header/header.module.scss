@@ -568,7 +568,29 @@
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 768px) {
+  .header {
+    &__logo {
+      width: 70px;
+      height: 70px;
+    }
+    &__log {
+      right: 80px;
+      &__div {
+        width: 45px;
+        height: 45px;
+      }
+    }
+  }
+  .headerr {
+    .button {
+      width: 45px;
+      height: 45px;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
   .header {
     &__figcaption {
       display: none;
@@ -588,6 +610,7 @@
     &__log {
       right: 80px;
       &__div {
+        left: 15px;
         width: 40px;
         height: 40px;
       }

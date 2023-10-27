@@ -49,7 +49,7 @@ export default function Home() {
         <section className={styles.home__who} id="anchor">
           <div className={styles.home__who__container}>
             <h2 className={styles.home__who__container__h2}>
-              Vous êtes en quête de bien-être ?
+              Vous êtes en quête <br /> de bien-être ?
             </h2>
 
             <p className={styles.home__who__container__p}>
@@ -97,7 +97,7 @@ export default function Home() {
         <section className={styles.home__what}>
           <div className={styles.home__what__container}>
             <h2 className={styles.home__what__container__h2}>
-              Le coaching de vie, c’est quoi ?
+              Le coaching de vie, <br /> c’est quoi ?
             </h2>
 
             <div className={styles.home__what__container__content}>

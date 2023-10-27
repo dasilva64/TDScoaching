@@ -4,6 +4,11 @@ import Parallax from "../components/framer/parallax";
 import Timeline from "./components/Timeline";
 import styles from "./page.module.scss";
 import Image from "next/image";
+import {
+  VerticalTimeline,
+  VerticalTimelineElement,
+} from "react-vertical-timeline-component";
+import "react-vertical-timeline-component/style.min.css";
 
 const About = () => {
   return (
@@ -118,7 +123,8 @@ const About = () => {
         <section className={styles.about__certificate}>
           <h2 className={styles.about__certificate__h2}>Mes formations</h2>
           <div className={styles.about__certificate__container}>
-            <div className={styles.about__certificate__container__line}>
+            <Timeline />
+            {/* <div className={styles.about__certificate__container__line}>
               <div className={styles.about__certificate__container__card__left}>
                 <div
                   className={
@@ -313,7 +319,7 @@ const About = () => {
                   2013
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
         <section className={styles.about__speciality}>

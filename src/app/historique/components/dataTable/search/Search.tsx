@@ -21,7 +21,7 @@ const Search = (): JSX.Element => {
   );
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const handlerInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlerInputSearch = (e: any) => {
     if (e.target.value.length === 0) {
       setDisplayCancel(false);
       if (onSearch === true) {

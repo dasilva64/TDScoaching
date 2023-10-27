@@ -57,7 +57,7 @@ const ModalCloseEmail = () => {
         reset();
       }
     }
-  }, [data, dispatch, reset]);
+  }, [data, dispatch, reset, router]);
 
   return (
     <>

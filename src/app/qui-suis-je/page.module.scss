@@ -10,10 +10,11 @@
     }
   }
   &__certificate {
+    padding: 0 0 50px 0;
     &__h2 {
       text-align: center;
       color: black;
-      margin-top: 100px;
+      margin-top: 50px;
       margin-bottom: 60px;
       font-size: 48px;
     }
@@ -21,93 +22,6 @@
       margin-left: 10%;
       margin-right: 10%;
       text-align: justify;
-      height: 1200px;
-      &__ul {
-        background-color: white;
-        text-justify: inter-word;
-        line-height: 30.996000289916992px;
-        border: 5px solid orange;
-        border-radius: 20px;
-        padding: 20px;
-        padding-left: 30px;
-        border: 2px solid orange;
-        box-shadow: 10px 10px orange;
-      }
-      &__line {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 5px;
-        background-color: black;
-      }
-      &__card {
-        &__left {
-          position: relative;
-          right: 250px;
-          transform: translateX(-50%);
-          margin: 10px 0px 10px 0px;
-          width: 400px;
-          padding: 40px;
-          background-color: #1dd6fc;
-          border-radius: 5px;
-          &__triangle {
-            position: absolute;
-            top: 20px;
-            right: -10px;
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 10px solid #1dd6fc;
-          }
-          &__cercle {
-            position: absolute;
-            top: 16px;
-            right: -68px;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #1dd6fc;
-          }
-          &__date {
-            position: absolute;
-            right: -140px;
-            top: 20px;
-          }
-        }
-        &__right {
-          transform: translateX(-50%);
-          margin: 10px 0px 10px 250px;
-          width: 400px;
-          padding: 40px;
-          background-color: orange;
-          border-radius: 5px;
-          &__triangle {
-            position: absolute;
-            top: 20px;
-            left: -10px;
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 10px solid orange;
-          }
-          &__cercle {
-            position: absolute;
-            top: 15px;
-            left: -62px;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: orange;
-          }
-          &__date {
-            position: absolute;
-            left: -140px;
-            top: 20px;
-          }
-        }
-      }
     }
   }
   &__parcour {
@@ -138,6 +52,7 @@
       }
       &__p {
         font-size: 18px;
+        line-height: 22px;
       }
     }
   }
@@ -156,6 +71,7 @@
         justify-content: space-between;
         &__p {
           font-size: 18px;
+          line-height: 22px;
         }
       }
     }
@@ -309,6 +225,7 @@
 @media screen and (max-width: 425px) {
   .about {
     &__bg {
+      margin-top: 75px;
       &__img {
         height: 250px;
       }

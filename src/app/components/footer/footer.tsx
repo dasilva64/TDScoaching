@@ -8,7 +8,9 @@ const Footer = () => {
       <div className={styles.footer__container}>
         <div>
           <h2 className={styles.footer__h2}>Plan du site</h2>
-          <ul className={styles.footer__ul}>
+          <ul
+            className={`${styles.footer__ul} ${styles.footer__ul__lineHeightMin}`}
+          >
             <li className={styles.footer__li}>
               <Link className={styles.footer__a} href="/">
                 Accueil
@@ -23,32 +25,6 @@ const Footer = () => {
               <Link className={styles.footer__a} href="/">
                 Coaching de vie
               </Link>
-              <ul className={styles.footer__ul}>
-                <li className={styles.footer__li}>
-                  <Link
-                    className={styles.footer__a}
-                    href="/coaching-de-vie/vie-familiale"
-                  >
-                    Vie familiale
-                  </Link>
-                </li>
-                <li className={styles.footer__li}>
-                  <Link
-                    className={styles.footer__a}
-                    href="/coaching-de-vie/vie-de-couple"
-                  >
-                    Vie de couple
-                  </Link>
-                </li>
-                <li className={styles.footer__li}>
-                  <Link
-                    className={styles.footer__a}
-                    href="/coaching-de-vie/vie-professionnelle"
-                  >
-                    Vie professionnelle
-                  </Link>
-                </li>
-              </ul>
             </li>
             <li className={styles.footer__li}>
               <span className={styles.footer__a}>Mes prestations</span>

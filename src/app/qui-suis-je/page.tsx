@@ -57,19 +57,34 @@ const About = () => {
                 Mon parcours professionnel :
               </h2>
               <p className={styles.about__parcour__container__p}>
-                Aux cours de 30 années passées dans le management des
-                organisations au sein du ministère de la défense, j’ai développé
-                des compétences qui m’ont permis de m’adapter continuellement à
-                de nouvelles fonctions et de nouveaux environnements.
-                <br />
-                A la suite d’un travail personnel en psychothérapie,
-                comportementalisme et psychanalyse, j’ai décidé d’engager une
-                reconversion professionnelle dans le coaching.
-                <br />
-                Ayant obtenu une certification de coach de vie, j’accompagne
-                aujourd’hui des personnes qui souhaitent prendre conscience de
-                leurs forces et apprendre à se mobiliser dans un objectif de
-                bien-être et de performance.
+                Je m’appelle Thierry DA SILVA SEABRA et je suis coach
+                professionnel certifié. J’ai été manager au sein du ministère de
+                la défense pendant 30 ans. J’ai aimé cet univers stimulant fait
+                de rigueur et d’exigence où j’ai pu développer le goût de
+                l’effort et la confiance en soi. Cela m’a permis de m’adapter à
+                des conditions difficiles, des situations de stress intense, en
+                développant une certaine résilience. Depuis une dizaine
+                d’années, je ressens le besoin de relever de nouveaux défis et
+                de servir l’humain différemment. C’est dans ce cadre que j’ai
+                suivi une formation de coach professionnel certifié à l’Institut
+                international de Coaching de Genève, dont le programme est
+                accrédité par l’ICF, première fédération internationale de
+                coaching. Je prépare également l’accréditation internationale
+                ACC délivrée par la fédération internationale de coaching.
+                Aujourd’hui notre société constitue un environnement propice au
+                cumul de situations stressantes auxquelles peuvent être exposées
+                les personnes : inégalités socio- économiques, insécurité,
+                violence, haine, chômage et pauvreté entre autres. Nous ne
+                sommes pas forcément tous concernés par le processus de
+                résilience. En revanche, nous sommes tous concernés par la
+                capacité que nous avons à nous adapter, à être ouvert et
+                flexible pour faire des situations stressantes une occasion
+                d&#39;apprendre, de rebondir afin d’éviter que cela devienne un
+                traumatisme. C’est de cette façon que je conçois ma mission :
+                permettre aux personnes d’atteindre un niveau de performance
+                plus élevé de façon à les libérer du stress à travers mes
+                activités de coaching et leur permettre de reprendre sereinement
+                le cours de leur vie en réalisant leurs rêves.
               </p>
             </div>
           </div>
@@ -124,202 +139,6 @@ const About = () => {
           <h2 className={styles.about__certificate__h2}>Mes formations</h2>
           <div className={styles.about__certificate__container}>
             <Timeline />
-            {/* <div className={styles.about__certificate__container__line}>
-              <div className={styles.about__certificate__container__card__left}>
-                <div
-                  className={
-                    styles.about__certificate__container__card__left__triangle
-                  }
-                ></div>
-                <div
-                  className={
-                    styles.about__certificate__container__card__left__cercle
-                  }
-                ></div>
-                <h3
-                  className={
-                    styles.about__certificate__container__card__left__h3
-                  }
-                >
-                  Certificat de coach professionnel – International NLP
-                </h3>
-                <p
-                  className={
-                    styles.about__certificate__container__card__left__date
-                  }
-                >
-                  2013
-                </p>
-              </div>
-              <div
-                className={styles.about__certificate__container__card__right}
-              >
-                <div
-                  className={
-                    styles.about__certificate__container__card__right__triangle
-                  }
-                ></div>
-                <div
-                  className={
-                    styles.about__certificate__container__card__right__cercle
-                  }
-                ></div>
-                <h3
-                  className={
-                    styles.about__certificate__container__card__right__h3
-                  }
-                >
-                  Certificat de formation en mémoire, concentration et
-                  créativité – Formalis – Accréditation IPHM et Qualiopi
-                </h3>
-                <p
-                  className={
-                    styles.about__certificate__container__card__right__date
-                  }
-                >
-                  2013
-                </p>
-              </div>
-              <div className={styles.about__certificate__container__card__left}>
-                <div
-                  className={
-                    styles.about__certificate__container__card__left__triangle
-                  }
-                ></div>
-                <div
-                  className={
-                    styles.about__certificate__container__card__left__cercle
-                  }
-                ></div>
-                <h3
-                  className={
-                    styles.about__certificate__container__card__left__h3
-                  }
-                >
-                  Certificat de formation en coaching de vie – Formalis –
-                  Accréditation IPHM et Qualiopi
-                </h3>
-                <p
-                  className={
-                    styles.about__certificate__container__card__left__date
-                  }
-                >
-                  2013
-                </p>
-              </div>
-              <div
-                className={styles.about__certificate__container__card__right}
-              >
-                <div
-                  className={
-                    styles.about__certificate__container__card__right__triangle
-                  }
-                ></div>
-                <div
-                  className={
-                    styles.about__certificate__container__card__right__cercle
-                  }
-                ></div>
-                <h3
-                  className={
-                    styles.about__certificate__container__card__right__h3
-                  }
-                >
-                  Certificat de formation en coaching parental – Formalis –
-                  Accréditation IPHM et Qualiopi
-                </h3>
-                <p
-                  className={
-                    styles.about__certificate__container__card__right__date
-                  }
-                >
-                  2013
-                </p>
-              </div>
-              <div className={styles.about__certificate__container__card__left}>
-                <div
-                  className={
-                    styles.about__certificate__container__card__left__triangle
-                  }
-                ></div>
-                <div
-                  className={
-                    styles.about__certificate__container__card__left__cercle
-                  }
-                ></div>
-                <h3
-                  className={
-                    styles.about__certificate__container__card__left__h3
-                  }
-                >
-                  Certificat de formation en coaching conjugal – Formalis –
-                  Accréditation IPHM et Qualiopi
-                </h3>
-                <p
-                  className={
-                    styles.about__certificate__container__card__left__date
-                  }
-                >
-                  2013
-                </p>
-              </div>
-              <div
-                className={styles.about__certificate__container__card__right}
-              >
-                <div
-                  className={
-                    styles.about__certificate__container__card__right__triangle
-                  }
-                ></div>
-                <div
-                  className={
-                    styles.about__certificate__container__card__right__cercle
-                  }
-                ></div>
-                <h3
-                  className={
-                    styles.about__certificate__container__card__right__h3
-                  }
-                >
-                  DESS Certificat d’aptitude à l’administration des entreprises
-                  – Université Paris 1-Panthéon Sorbonne
-                </h3>
-                <p
-                  className={
-                    styles.about__certificate__container__card__right__date
-                  }
-                >
-                  2013
-                </p>
-              </div>
-              <div className={styles.about__certificate__container__card__left}>
-                <div
-                  className={
-                    styles.about__certificate__container__card__left__triangle
-                  }
-                ></div>
-                <div
-                  className={
-                    styles.about__certificate__container__card__left__cercle
-                  }
-                ></div>
-                <h3
-                  className={
-                    styles.about__certificate__container__card__left__h3
-                  }
-                >
-                  Master of Business Administration (MBA) – IAE Paris –
-                  Université Paris 1-Panthéon Sorbonne
-                </h3>
-                <p
-                  className={
-                    styles.about__certificate__container__card__left__date
-                  }
-                >
-                  2013
-                </p>
-              </div>
-            </div> */}
           </div>
         </section>
         <section className={styles.about__speciality}>

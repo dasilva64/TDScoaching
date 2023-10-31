@@ -984,8 +984,22 @@ const Content = () => {
                 Qui suis-je ?
               </Link>
             </li>
-            <li className={`${styles.header__li} ${styles.header__li__hover}`}>
-              <span className={`${styles.header__a}`}>Coaching de vie</span>
+            <li className={`${styles.header__li}`}>
+              <Link
+                className={
+                  pathname == "/coaching-de-vie"
+                    ? `${styles.header__a} ${styles.active}`
+                    : `${styles.header__a}`
+                }
+                tabIndex={0}
+                href="/coaching-de-vie"
+                onClick={(e) => {
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                }}
+              >
+                Coaching de vie
+              </Link>
+              {/* <span className={`${styles.header__a}`}>Coaching de vie</span>
               <span
                 tabIndex={0}
                 aria-label="sous menu coaching de vie"
@@ -1049,7 +1063,7 @@ const Content = () => {
                     Vie professionnelle
                   </Link>
                 </li>
-              </ul>
+              </ul> */}
             </li>
             <li className={`${styles.header__li} ${styles.header__li__hover}`}>
               <span className={`${styles.header__a}`}>Mes prestations</span>
@@ -1109,7 +1123,8 @@ const Content = () => {
                         : `${styles.header__a}`
                     }
                     tabIndex={0}
-                    href="/code-de-deontologie"
+                    href="/assets/pdf/Code-deontologie-ICF-France.pdf"
+                    target="_blank"
                     onClick={(e) => {
                       displayLogMenu === true ? setDisplayLogMenu(false) : null;
                     }}

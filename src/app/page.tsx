@@ -55,11 +55,9 @@ export default function Home() {
             <p className={styles.home__who__container__p}>
               En offrant un espace pour la réflexion, le coaching peut aider à
               améliorer la qualité de vie et favoriser la croissance
-              personnelle.
-            </p>
-            <p className={styles.home__who__container__p}>
-              Comment ? En encourageant l&apos;autoréflexion et la prise de
-              conscience de ses propres pensées, comportements et motivations.
+              personnelle. Comment ? En encourageant l&apos;autoréflexion et la
+              prise de conscience de ses propres pensées, comportements et
+              motivations.
             </p>
 
             <div className={styles.home__who__container__content}>

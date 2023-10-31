@@ -36,15 +36,26 @@
     top: -5px;
     padding: 20px 10px 10px 10px;
     height: 0;
-    text-align: justify;
     color: white;
     box-shadow: 5px 5px 5px aqua;
     transition: all 400ms ease-in;
-    font-size: 18px;
+    font-size: 16px;
+    line-height: 22px;
     &__show {
       opacity: 1;
-      height: 200px;
+      height: 125px;
       margin-bottom: 20px;
+    }
+    &__about {
+      &__show {
+        opacity: 1;
+        height: 195px;
+        margin-bottom: 20px;
+      }
+      &__hide {
+        opacity: 0;
+        height: 0;
+      }
     }
     &__hide {
       opacity: 0;
@@ -56,8 +67,13 @@
 @media screen and (max-width: 1024px) {
   .card {
     &__p {
+      &__about {
+        &__show {
+          height: 100px;
+        }
+      }
       &__show {
-        height: 120px;
+        height: 110px;
       }
     }
   }
@@ -66,9 +82,6 @@
 @media screen and (max-width: 768px) {
   .card {
     &__h3 {
-      font-size: 16px;
-    }
-    &__p {
       font-size: 16px;
     }
   }
@@ -81,8 +94,13 @@
       max-width: 90%;
     }
     &__p {
+      &__about {
+        &__show {
+          height: 210px;
+        }
+      }
       &__show {
-        height: 200px;
+        height: 225px;
       }
     }
   }

@@ -3,9 +3,27 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./Card.module.scss";
+import { usePathname, useRouter } from "next/navigation";
 
 const Card = ({ title, content }: any) => {
   const [show, setShow] = React.useState(false);
+  const pathname = usePathname();
+  console.log(pathname);
+  const p = () => {
+    if (pathname === "/") {
+      if (show === true) {
+        return styles.card__p__show;
+      } else {
+        return styles.card__p__hide;
+      }
+    } else {
+      if (show === true) {
+        return styles.card__p__about__show;
+      } else {
+        return styles.card__p__about__hide;
+      }
+    }
+  };
   return (
     <>
       <div>
@@ -27,13 +45,7 @@ const Card = ({ title, content }: any) => {
             alt="bousole"
           />
         </div>
-        <p
-          className={`${
-            show === true ? styles.card__p__show : styles.card__p__hide
-          } ${styles.card__p}`}
-        >
-          {content}
-        </p>{" "}
+        <p className={`${p()} ${styles.card__p}`}>{content}</p>{" "}
       </div>
     </>
   );

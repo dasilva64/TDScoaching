@@ -32,15 +32,66 @@ const Tarif = () => {
             alt="bousole"
           />
         </section>
-        <section className={styles.tarif__main}>
-          <h1 className={styles.tarif__main__h1}>Tarif / Durée</h1>
-          <div className={styles.tarif__main__container}>
-            <div className={styles.test}>
-              <div className={styles.test__ok}>pack découverte</div>
+        <section className={styles.tarif__packs}>
+          <h1 className={styles.tarif__packs__h1}>Offres packs</h1>
+          <div className={styles.tarif__packs__container}>
+            <div className={styles.tarif__packs__container__card}>
+              <h3 className={styles.tarif__packs__container__card__h3}>
+                Pack coaching unique
+              </h3>
+              <ul className={styles.tarif__packs__container__card__ul}>
+                <li>1 entretien découverte offert</li>
+                <li>1 séances de coaching</li>
+                <li>1 bilan final offert</li>
+              </ul>
+              <p className={styles.tarif__packs__container__card__price}>
+                100 euros
+              </p>
+            </div>
+            <div className={styles.tarif__packs__container__card}>
+              <h3 className={styles.tarif__packs__container__card__h3}>
+                Pack coaching flash
+              </h3>
+              <ul className={styles.tarif__packs__container__card__ul}>
+                <li>1 entretien découverte offert</li>
+                <li>3 séances de coaching</li>
+                <li>1 bilan final offert</li>
+              </ul>
+              <p className={styles.tarif__packs__container__card__price}>
+                300 euros
+              </p>
+            </div>
+            <div className={styles.tarif__packs__container__card}>
+              <h3 className={styles.tarif__packs__container__card__h3}>
+                Pack coaching long
+              </h3>
+              <ul className={styles.tarif__packs__container__card__ul}>
+                <li>1 entretien découverte offert</li>
+                <li>10 séances de coaching</li>
+                <li>1 point d’étape offert (Après séance 5)</li>
+                <li>1 bilan final offert</li>
+              </ul>
+              <p className={styles.tarif__packs__container__card__price}>
+                1 000 euros
+              </p>
+            </div>
+            <div className={styles.tarif__packs__container__card}>
+              <h3 className={styles.tarif__packs__container__card__h3}>
+                Pack coaching full time
+              </h3>
+              <ul className={styles.tarif__packs__container__card__ul}>
+                <li>1 entretien découverte offert</li>
+                <li>20 séances de coaching</li>
+                <li>2 points d’étape offerts (Après séances 7 et 14)</li>
+                <li>1 bilan final offert</li>
+              </ul>
+              <p className={styles.tarif__packs__container__card__price}>
+                2 000 euros
+              </p>
             </div>
           </div>
         </section>
-        <h1 className={styles.tarif__h1}>Tarif / Durée</h1>
+
         <div className={styles.tarif__container}>
           <div className={styles.tarif__article}>
             <ul className={styles.tarif__article__ul}>
@@ -51,32 +102,6 @@ const Tarif = () => {
               <li>Séance découverte : 50 € (durée 30 à 45 mn)</li>
               <li>Séances coaching : 80 € (durée 1 heure)</li>
             </ul>
-            <h2 className={styles.tarif__article__h2}>
-              Offres de tarifs en packs
-            </h2>
-            <div className={styles.tarif__article__flex}>
-              <div>
-                <p className={styles.tarif__article__flex__div__p}>
-                  Problématiques dites « simples »<br />
-                  Séance découverte + Pack 5 séances
-                  <br />
-                  3 mois d’accompagnement
-                  <br />
-                  380 euros
-                </p>
-              </div>
-              <div>
-                <p className={styles.tarif__article__flex__div__p}>
-                  Coaching classNameique
-                  <br />
-                  Séance découverte + Pack 10 séances
-                  <br />
-                  6 mois d’accompagnement
-                  <br />
-                  730 euros
-                </p>
-              </div>
-            </div>
             <div>
               <h2 className={styles.tarif__article__h2}>Durée :</h2>
 

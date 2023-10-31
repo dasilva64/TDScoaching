@@ -8,18 +8,19 @@
   &__li {
     list-style-type: none;
   }
-  &__ul__lineHeight {
-    line-height: 50px;
-  }
   &__ul {
+    font-size: 16px;
     padding-left: 40px;
     &__lineHeight {
       line-height: 50px;
     }
+    &__lineHeightMin {
+      line-height: 22px;
+    }
   }
   &__a {
     color: black;
-    font-size: 18px;
+    font-size: 16px;
     text-decoration: none;
     &:hover {
       color: orange;
@@ -39,21 +40,22 @@
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 768px) {
   .footer {
-    padding-bottom: 20px;
+    padding-bottom: 50px;
     &__container {
       display: block;
     }
     &__ul {
       padding-left: 20px;
       &__lineHeight {
-        line-height: 30px;
+        line-height: 22px;
       }
     }
-    &__a,
-    &__li {
-      font-size: 14px;
+    &__h2 {
+      font-size: 32px;
+      padding-top: 40px;
+      margin-bottom: 30px;
     }
   }
 }

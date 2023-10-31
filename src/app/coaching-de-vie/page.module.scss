@@ -1,0 +1,256 @@
+.coaching {
+  &__bg {
+    position: relative;
+    z-index: 2;
+    margin-top: 80px;
+    &__img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+  }
+
+  &__type {
+    padding: 50px 0 50px 0;
+    &__h2 {
+      padding-top: 80px;
+      padding-bottom: 100px;
+      font-size: 48px;
+      margin: 0 10% 0 10%;
+    }
+    &__content {
+      margin: 0 10% 0 10%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      &__div {
+        padding: 20px;
+        box-shadow: 0px 0px 14px 5px aqua;
+        border-radius: 10px;
+        &__h3 {
+          width: fit-content;
+          margin: 0px auto 20px auto;
+          padding: 10px 30px;
+          background-color: orange;
+          border-radius: 20px;
+          color: white;
+        }
+        &__p {
+          font-size: 18px;
+          line-height: 22px;
+        }
+        &__margin {
+          margin-bottom: 30px;
+        }
+      }
+    }
+  }
+  &__help {
+    padding: 50px 0 50px 0;
+    &__p {
+      margin: 80px 10% 100px 10%;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      font-style: italic;
+      line-height: 22px;
+    }
+    background-color: rgba(0, 0, 0, 0.03);
+    &__container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      margin: 0 10% 0 10%;
+      gap: 50px;
+      &__div {
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 14px 5px aqua;
+      }
+    }
+  }
+  &__delivery {
+    padding: 130px 0 50px 0;
+    &__container {
+      margin: 0 10% 0 10%;
+      display: flex;
+      justify-content: space-between;
+      &__card {
+        width: 40%;
+        position: relative;
+        height: 260px;
+        border: 1px solid aqua;
+        box-shadow: 5px 5px 5px aqua;
+        transition: all 300ms ease-in;
+        &:hover {
+          box-shadow: 10px 10px 10px aqua;
+          transform: scale(1.01);
+        }
+        padding: 20px;
+        border-radius: 10px;
+        &__h3 {
+          margin-bottom: 30px;
+        }
+        &__img {
+          float: right;
+          position: relative;
+          top: -50px;
+        }
+        &__p {
+          text-align: justify;
+        }
+        &__btn {
+          margin: auto;
+          display: block;
+          width: 57%;
+          text-align: center;
+          margin-top: 30px;
+          border: 1px solid orange;
+          padding: 10px;
+          background-color: orange;
+          border-radius: 20px;
+          transition: all 300ms ease-in;
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .about {
+    &__certificate {
+      &__container {
+        &__line {
+          left: 30%;
+        }
+        &__card {
+          &__left {
+            position: unset;
+            margin: 10px 0px 10px 250px;
+            &__triangle {
+              left: -10px;
+              border-right: 10px solid #1dd6fc;
+              border-left: unset;
+            }
+            &__cercle {
+              top: 15px;
+              left: -62px;
+              width: 30px;
+              height: 30px;
+            }
+            &__date {
+              left: -140px;
+              width: 40px;
+            }
+          }
+        }
+      }
+    }
+    &__speciality {
+      &__container {
+        &__content {
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .coaching {
+    &__bg {
+      &__img {
+        height: 300px;
+      }
+    }
+    &__type {
+      &__h2 {
+        font-size: 36px;
+        margin: 0 5% 0 5%;
+      }
+      &__content {
+        grid-template-columns: 1fr;
+        &__div {
+          &__h3 {
+            font-size: 18px;
+          }
+        }
+        &__p {
+          font-size: 16px;
+        }
+      }
+    }
+    &__help {
+      padding: 50px 0 50px 0;
+      &__p {
+        margin: 80px 5% 100px 5%;
+        font-size: 16px;
+      }
+      &__container {
+        grid-template-columns: 1fr;
+        margin: 0 5% 0 5%;
+      }
+    }
+    &__delivery {
+      padding: 130px 0 50px 0;
+      &__container {
+        margin: 0 5% 0 5%;
+        display: block;
+        &__card {
+          width: 100%;
+          position: relative;
+          height: 260px;
+          border: 1px solid aqua;
+          box-shadow: 5px 5px 5px aqua;
+          transition: all 300ms ease-in;
+          &:hover {
+            box-shadow: 10px 10px 10px aqua;
+            transform: scale(1.01);
+          }
+          padding: 20px;
+          border-radius: 10px;
+          &__h3 {
+            margin-bottom: 30px;
+          }
+          &__img {
+            float: right;
+            position: relative;
+            top: -50px;
+          }
+          &__p {
+            text-align: justify;
+          }
+          &__btn {
+            margin: auto;
+            display: block;
+            width: 57%;
+            text-align: center;
+            margin-top: 30px;
+            border: 1px solid orange;
+            padding: 10px;
+            background-color: orange;
+            border-radius: 20px;
+            transition: all 300ms ease-in;
+            &:hover {
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .about {
+    &__bg {
+      margin-top: 75px;
+      &__img {
+        height: 250px;
+      }
+    }
+  }
+}

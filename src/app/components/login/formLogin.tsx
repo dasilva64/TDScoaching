@@ -149,111 +149,111 @@ const FormLogin = () => {
     dispatch({
       type: "flash/clearFlashMessage",
     });
-    //if (validEmailInput === true && validPasswordInput === true) {
-    if (inputPseudo.length === 0) {
-      setIsLoading(true);
-      const fetchLogin = async () => {
-        let response = await fetch("/api/user/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: validator.escape(emailInput.trim()),
-            password: validator.escape(passwordInput.trim()),
-            remember: rememberMeInput,
-            pseudo: validator.escape(inputPseudo.trim()),
-          }),
-        });
-        let json = await response.json();
-        if (json) {
-          if (json.status === 200) {
-            if (json.body === null) {
-              setDisplayInput(true);
-              setIsLoading(false);
-              dispatch({
-                type: "flash/storeFlashMessage",
-                payload: { type: "success", flashMessage: json.message },
-              });
+    if (validEmailInput === true && validPasswordInput === true) {
+      if (inputPseudo.length === 0) {
+        setIsLoading(true);
+        const fetchLogin = async () => {
+          let response = await fetch("/api/user/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: validator.escape(emailInput.trim()),
+              password: validator.escape(passwordInput.trim()),
+              remember: rememberMeInput,
+              pseudo: validator.escape(inputPseudo.trim()),
+            }),
+          });
+          let json = await response.json();
+          if (json) {
+            if (json.status === 200) {
+              if (json.body === null) {
+                setDisplayInput(true);
+                setIsLoading(false);
+                dispatch({
+                  type: "flash/storeFlashMessage",
+                  payload: { type: "success", flashMessage: json.message },
+                });
+              } else {
+                dispatch({
+                  type: "flash/storeFlashMessage",
+                  payload: { type: "success", flashMessage: json.message },
+                });
+                setTimeout(() => {
+                  window.location.reload();
+                }, 2000);
+              }
+            } else if (json.status === 400) {
+              if (json.type === "validation") {
+                setTimeout(() => {
+                  setIsLoading(false);
+                  json.message.forEach((element: string) => {
+                    if (element[0] === "email") {
+                      setErrorMessageEmail(element[1]);
+                    }
+                    if (element[0] === "password") {
+                      setErrorMessagePassword(element[1]);
+                    }
+                  });
+                }, 1000);
+              } else {
+                if (
+                  json.message ===
+                  "Votre compte a été supprimé car vous ne l'avez pas validé à temps, veuillez vous réinscrire"
+                ) {
+                  dispatch({
+                    type: "flash/storeFlashMessage",
+                    payload: { type: "error", flashMessage: json.message },
+                  });
+                  setTimeout(() => {
+                    setIsLoading(false);
+                    clearState();
+                    dispatch({
+                      type: "auth/clearFlash",
+                    });
+                    dispatch({ type: "ModalRegister/open" });
+                    dispatch({ type: "ModalLogin/close" });
+                  }, 1000);
+                } else if (
+                  json.message ===
+                  "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
+                ) {
+                  setTimeout(() => {
+                    setIsLoading(false);
+                    setReSendEmail(true);
+                    setOtherEmail(emailInput);
+                    dispatch({
+                      type: "flash/storeFlashMessage",
+                      payload: { type: "error", flashMessage: json.message },
+                    });
+                  }, 1000);
+                } else {
+                  setTimeout(() => {
+                    setIsLoading(false);
+                    dispatch({
+                      type: "flash/storeFlashMessage",
+                      payload: { type: "error", flashMessage: json.message },
+                    });
+                  }, 1000);
+                }
+              }
             } else {
-              dispatch({
-                type: "flash/storeFlashMessage",
-                payload: { type: "success", flashMessage: json.message },
-              });
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
-            }
-          } else if (json.status === 400) {
-            if (json.type === "validation") {
               setTimeout(() => {
                 setIsLoading(false);
-                json.message.forEach((element: string) => {
-                  if (element[0] === "email") {
-                    setErrorMessageEmail(element[1]);
-                  }
-                  if (element[0] === "password") {
-                    setErrorMessagePassword(element[1]);
-                  }
-                });
-              }, 1000);
-            } else {
-              if (
-                json.message ===
-                "Votre compte a été supprimé car vous ne l'avez pas validé à temps, veuillez vous réinscrire"
-              ) {
                 dispatch({
                   type: "flash/storeFlashMessage",
                   payload: { type: "error", flashMessage: json.message },
                 });
-                setTimeout(() => {
-                  setIsLoading(false);
-                  clearState();
-                  dispatch({
-                    type: "auth/clearFlash",
-                  });
-                  dispatch({ type: "ModalRegister/open" });
-                  dispatch({ type: "ModalLogin/close" });
-                }, 1000);
-              } else if (
-                json.message ===
-                "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
-              ) {
-                setTimeout(() => {
-                  setIsLoading(false);
-                  setReSendEmail(true);
-                  setOtherEmail(emailInput);
-                  dispatch({
-                    type: "flash/storeFlashMessage",
-                    payload: { type: "error", flashMessage: json.message },
-                  });
-                }, 1000);
-              } else {
-                setTimeout(() => {
-                  setIsLoading(false);
-                  dispatch({
-                    type: "flash/storeFlashMessage",
-                    payload: { type: "error", flashMessage: json.message },
-                  });
-                }, 1000);
-              }
+              }, 1000);
             }
-          } else {
-            setTimeout(() => {
-              setIsLoading(false);
-              dispatch({
-                type: "flash/storeFlashMessage",
-                payload: { type: "error", flashMessage: json.message },
-              });
-            }, 1000);
           }
+        };
+        if (inputPseudo.length === 0) {
+          fetchLogin();
         }
-      };
-      if (inputPseudo.length === 0) {
-        fetchLogin();
       }
-    }
-    /* } else {
+    } else {
       if (validEmailInput === false) {
         setErrorMessageEmail("Email : doit avoir un format valide");
       }
@@ -262,7 +262,7 @@ const FormLogin = () => {
           "Mot de passe : doit avoir une lettre en minuscule, un nombre et 8 caractères minimum"
         );
       }
-    } */
+    }
   };
 
   const handlerInput = (

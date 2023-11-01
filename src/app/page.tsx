@@ -2,6 +2,8 @@ import styles from "./page.module.scss";
 import Image from "next/image";
 import GoDown from "./components/goDown/goDown";
 import Card from "./components/card/Card";
+import WhileInView from "./components/framer/WhileInView";
+import Parallax from "./components/framer/parallax";
 
 export default function Home() {
   return (
@@ -33,7 +35,10 @@ export default function Home() {
             alt="bousole"
           />
           <div className={styles.home__bg__container}>
-            <h1 className={styles.home__bg__container__h1}>Thierry Da Silva</h1>
+            <h1 className={styles.home__bg__container__h1}>
+              Thierry <br />
+              Da Silva
+            </h1>
             <p className={styles.home__bg__container__p}>
               Coach de vie certifié, je vous accompagne dans votre
             </p>
@@ -46,7 +51,7 @@ export default function Home() {
           </div>
           <GoDown />
         </section>
-        <section className={styles.home__who} id="anchor">
+        <section className={styles.home__who}>
           <div className={styles.home__who__container}>
             <h2 className={styles.home__who__container__h2}>
               Vous êtes en quête <br /> de bien-être ?
@@ -76,7 +81,10 @@ export default function Home() {
                   libérer son potentiel pour maximiser ses performances.
                 </p>
               </div>
-              <div className={styles.home__who__container__content__div__card}>
+              <WhileInView
+                type="y"
+                className={styles.home__who__container__content__div__card}
+              >
                 <Image
                   className={
                     styles.home__who__container__content__div__card__img
@@ -88,7 +96,7 @@ export default function Home() {
                   src={"/assets/img/avenue.jpg"}
                   alt="bousole"
                 />
-              </div>
+              </WhileInView>
             </div>
           </div>
         </section>
@@ -99,7 +107,10 @@ export default function Home() {
             </h2>
 
             <div className={styles.home__what__container__content}>
-              <div className={styles.home__what__container__content__card}>
+              <WhileInView
+                type="y"
+                className={styles.home__what__container__content__card}
+              >
                 <Image
                   width="0"
                   height="0"
@@ -109,7 +120,7 @@ export default function Home() {
                   src={"/assets/img/avenue.jpg"}
                   alt="bousole"
                 />
-              </div>
+              </WhileInView>
 
               <div className={styles.home__what__container__content__div}>
                 <p className={styles.home__what__container__content__div__p}>

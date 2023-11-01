@@ -3,12 +3,14 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./Card.module.scss";
+import { motion, useAnimation, useInView } from "framer-motion";
+
 import { usePathname, useRouter } from "next/navigation";
+import WhileInView from "../framer/WhileInView";
 
 const Card = ({ title, content }: any) => {
   const [show, setShow] = React.useState(false);
   const pathname = usePathname();
-  console.log(pathname);
   const p = () => {
     if (pathname === "/") {
       if (show === true) {
@@ -26,7 +28,7 @@ const Card = ({ title, content }: any) => {
   };
   return (
     <>
-      <div>
+      <WhileInView type="y">
         <div
           className={styles.card}
           onClick={() => {
@@ -46,7 +48,7 @@ const Card = ({ title, content }: any) => {
           />
         </div>
         <p className={`${p()} ${styles.card__p}`}>{content}</p>{" "}
-      </div>
+      </WhileInView>
     </>
   );
 };

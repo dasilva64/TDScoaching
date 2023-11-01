@@ -80,11 +80,6 @@
         height: 260px;
         border: 1px solid aqua;
         box-shadow: 5px 5px 5px aqua;
-        transition: all 300ms ease-in;
-        &:hover {
-          box-shadow: 10px 10px 10px aqua;
-          transform: scale(1.01);
-        }
         padding: 20px;
         border-radius: 10px;
         &__h3 {

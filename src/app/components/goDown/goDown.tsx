@@ -13,10 +13,11 @@ const GoDown = () => {
           if (document)
             document
               .getElementById("anchor")
-              ?.scrollIntoView({ behavior: "smooth" });
+              ?.scrollIntoView({ block: "start", behavior: "smooth" });
         }}
       >
         <Image
+          id="anchor"
           width={20}
           height={20}
           src="/assets/icone/arrow-down-solid.svg"

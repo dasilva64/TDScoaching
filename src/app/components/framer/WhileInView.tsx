@@ -3,32 +3,36 @@
 import React, { useEffect, useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 
-const WhileInView = ({ className, children, style }: any) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const mainControls = useAnimation();
-  useEffect(() => {
-    if (isInView) {
-      mainControls.start("visible");
-    }
-  }, [isInView, mainControls]);
-
-  return (
-    <motion.div
-      style={style}
-      className={className}
-      ref={ref}
-      variants={{
-        hidden: { opacity: 0 },
-        visible: { opacity: 1 },
-      }}
-      initial="hidden"
-      animate={mainControls}
-      transition={{ duration: 1, type: "spring", bounce: 0.4 }}
-    >
-      {children}
-    </motion.div>
-  );
+const WhileInView = ({ children, className, style, type }: any) => {
+  if (type === "x") {
+    return (
+      <motion.div
+        style={style}
+        className={className}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{ visible: { translateX: 0 }, hidden: { translateX: -200 } }}
+        transition={{ type: "spring", bounce: 0.25 }}
+      >
+        {children}
+      </motion.div>
+    );
+  } else if (type === "y") {
+    return (
+      <motion.div
+        style={style}
+        className={className}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{ visible: { translateY: 0 }, hidden: { translateY: 200 } }}
+        transition={{ type: "spring", bounce: 0.25 }}
+      >
+        {children}
+      </motion.div>
+    );
+  }
 };
 
 export default WhileInView;

@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./page.module.scss";
 import Image from "next/image";
 import Link from "next/link";
+import WhileInView from "../components/framer/WhileInView";
 
 const page = () => {
   return (
@@ -40,7 +41,8 @@ const page = () => {
           </h2>
           <div className={styles.coaching__type__content}>
             <div>
-              <article
+              <WhileInView
+                type="y"
                 className={`${styles.coaching__type__content__div} ${styles.coaching__type__content__div__margin}`}
               >
                 <h3 className={styles.coaching__type__content__div__h3}>
@@ -52,8 +54,11 @@ const page = () => {
                   et aux enjeux autour de la scolarité qui rendent votre tâche
                   de parent particulièrement délicate.
                 </p>
-              </article>
-              <article className={styles.coaching__type__content__div}>
+              </WhileInView>
+              <WhileInView
+                type="y"
+                className={styles.coaching__type__content__div}
+              >
                 <h3 className={styles.coaching__type__content__div__h3}>
                   Professionnel
                 </h3>
@@ -64,10 +69,13 @@ const page = () => {
                   question d’une réorientation ou d’une reconversion
                   professionnelle.
                 </p>
-              </article>
+              </WhileInView>
             </div>
 
-            <article className={styles.coaching__type__content__div}>
+            <WhileInView
+              type="y"
+              className={styles.coaching__type__content__div}
+            >
               <h3 className={styles.coaching__type__content__div__h3}>
                 Couple
               </h3>
@@ -83,7 +91,7 @@ const page = () => {
                 concessions de part et d’autre. Ce travail n’est pas toujours
                 simple à réaliser.
               </p>
-            </article>
+            </WhileInView>
           </div>
         </section>
         <section className={styles.coaching__help}>
@@ -93,67 +101,103 @@ const page = () => {
             professionnel, le coaching peut vous aider à :
           </p>
           <div className={styles.coaching__help__container}>
-            <div className={styles.coaching__help__container__div}>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Surmonter une difficulté ou un blocage
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Prendre une décision importante
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Trouver sa voie personnelle
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Vivre le changement
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 S’accomplir dans la durée
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Profiter pleinement du temps retrouvé
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Trouver sa voie professionnelle
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Trouver un emploi en accord avec son potentiel et ses
                 motivations
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Concrétiser son potentiel et réaliser ses objectifs
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Réussir et s’affirmer dans sa fonction
               </h3>
-            </div>
-            <div className={styles.coaching__help__container__div}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__help__container__div}
+            >
               <h3 className={styles.coaching__help__container__div__h3}>
                 Piloter son évolution de carrière et sa reconversion
               </h3>
-            </div>
+            </WhileInView>
           </div>
         </section>
         <section className={styles.coaching__delivery}>
           <div className={styles.coaching__delivery__container}>
-            <div className={styles.coaching__delivery__container__card}>
+            <WhileInView
+              type="y"
+              className={styles.coaching__delivery__container__card}
+            >
               <h3 className={styles.coaching__delivery__container__card__h3}>
                 Mes prestations
               </h3>
@@ -175,8 +219,11 @@ const page = () => {
               >
                 Mes prestations
               </Link>
-            </div>
-            <div className={styles.coaching__delivery__container__card}>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={styles.coaching__delivery__container__card}
+            >
               <h3 className={styles.coaching__delivery__container__card__h3}>
                 Rendez-vous
               </h3>
@@ -198,7 +245,7 @@ const page = () => {
               >
                 Prendre rendez-vous
               </Link>
-            </div>
+            </WhileInView>
           </div>
         </section>
       </main>

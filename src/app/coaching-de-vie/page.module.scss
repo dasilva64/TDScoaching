@@ -5,24 +5,27 @@
     margin-top: 80px;
     &__img {
       width: 100%;
-      height: 400px;
+      height: 200px;
       object-fit: cover;
     }
   }
 
   &__type {
-    padding: 50px 0 50px 0;
+    padding: 0px 0 50px 0;
     &__h2 {
+      text-align: center;
+      color: black;
       padding-top: 80px;
-      padding-bottom: 100px;
+      border-bottom: 1px solid orange;
+      width: 550px;
       font-size: 48px;
-      margin: 0 10% 0 10%;
+      margin: 0px auto 30px auto;
     }
     &__content {
       margin: 0 10% 0 10%;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 40px;
+      gap: 50px;
       &__div {
         padding: 20px;
         box-shadow: 0px 0px 14px 5px aqua;
@@ -46,13 +49,13 @@
     }
   }
   &__help {
-    padding: 50px 0 50px 0;
+    padding: 0px 0 50px 0;
     &__p {
-      margin: 80px 10% 100px 10%;
+      padding: 80px 10% 30px 10%;
       text-align: center;
       font-size: 18px;
       font-weight: bold;
-      font-style: italic;
+      font-family: "Parisienne";
       line-height: 22px;
     }
     background-color: rgba(0, 0, 0, 0.03);
@@ -69,9 +72,9 @@
     }
   }
   &__delivery {
-    padding: 130px 0 50px 0;
+    padding: 0px 0 50px 0;
     &__container {
-      margin: 0 10% 0 10%;
+      margin: 80px 10% 0 10%;
       display: flex;
       justify-content: space-between;
       &__card {
@@ -164,10 +167,13 @@
     &__type {
       &__h2 {
         font-size: 36px;
-        margin: 0 5% 0 5%;
+        margin: 0px 5% 30px 5%;
+        width: 90%;
       }
       &__content {
+        margin: 0px 5% 50px 5%;
         grid-template-columns: 1fr;
+        gap: 30px;
         &__div {
           &__h3 {
             font-size: 18px;
@@ -179,9 +185,8 @@
       }
     }
     &__help {
-      padding: 50px 0 50px 0;
+      padding: 0px 0 50px 0;
       &__p {
-        margin: 80px 5% 100px 5%;
         font-size: 16px;
       }
       &__container {
@@ -190,21 +195,17 @@
       }
     }
     &__delivery {
-      padding: 130px 0 50px 0;
+      padding: 80px 0 0px 0;
       &__container {
         margin: 0 5% 0 5%;
         display: block;
         &__card {
           width: 100%;
           position: relative;
+          margin-bottom: 50px;
           height: 260px;
           border: 1px solid aqua;
           box-shadow: 5px 5px 5px aqua;
-          transition: all 300ms ease-in;
-          &:hover {
-            box-shadow: 10px 10px 10px aqua;
-            transform: scale(1.01);
-          }
           padding: 20px;
           border-radius: 10px;
           &__h3 {
@@ -240,11 +241,16 @@
 }
 
 @media screen and (max-width: 425px) {
-  .about {
+  .coaching {
     &__bg {
       margin-top: 75px;
       &__img {
-        height: 250px;
+        height: 200px;
+      }
+    }
+    &__type {
+      &__h2 {
+        width: 90%;
       }
     }
   }

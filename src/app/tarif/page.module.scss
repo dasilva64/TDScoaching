@@ -5,20 +5,23 @@
     margin-top: 80px;
     &__img {
       width: 100%;
-      height: 400px;
+      height: 200px;
       object-fit: cover;
     }
   }
   &__packs {
     &__h1 {
       text-align: center;
+      color: black;
+      padding-top: 80px;
+      border-bottom: 1px solid orange;
+      width: 550px;
       font-size: 48px;
-      margin-top: 80px;
+      margin: 0px auto 30px auto;
     }
     &__container {
-      margin: 40px 10%;
-      padding-top: 60px;
-      padding-bottom: 100px;
+      margin: 0px 10%;
+      padding-bottom: 50px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 40px;
@@ -50,7 +53,7 @@
     }
   }
   &__delivery {
-    padding: 130px 0 50px 0;
+    padding: 80px 0 50px 0;
     &__container {
       margin: 0 10% 0 10%;
       display: flex;
@@ -151,144 +154,12 @@
       }
     }
   }
-  &__h1 {
-    margin-top: 80px;
-    font-size: 60px;
-  }
-  &__container {
-    margin-top: 45px;
-    padding-top: 60px;
-    padding-bottom: 100px;
-  }
-  &__article {
-    margin-top: 40px;
-    margin-left: 10%;
-    margin-right: 10%;
-    &__ul {
-      border-radius: 20px;
-      padding: 20px;
-      border: 2px solid orange;
-      box-shadow: 10px 10px orange;
-      padding-left: 25px;
-    }
-    &__flex {
-      display: flex;
-      justify-content: space-between;
-      &__div {
-        text-align: center;
-        font-size: 21px;
-        width: 45%;
-        &__p {
-          border-radius: 20px;
-          padding: 20px;
-          border: 2px solid orange;
-          box-shadow: 10px 10px orange;
-        }
-      }
-    }
-    &__h2 {
-      text-align: center;
-      margin-top: 100px;
-      margin-bottom: 60px;
-      font-size: 30px;
-    }
-  }
-}
-
-@media screen and (max-width: 1500px) {
-  .tarif {
-    &__packs {
-      &__h1 {
-        text-align: center;
-        font-size: 48px;
-        margin-top: 80px;
-      }
-      &__container {
-        margin: 40px 10%;
-        padding-top: 60px;
-        padding-bottom: 100px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        &__card {
-          padding: 20px 30px;
-          border-radius: 10px;
-          box-shadow: 0px 0px 14px 5px aqua;
-          &__h3 {
-            text-align: center;
-            font-size: 26px;
-            width: fit-content;
-            color: white;
-            padding: 10px 20px;
-            background-color: orange;
-            border-radius: 10px;
-            margin: 0px auto 20px auto;
-          }
-          &__price {
-            text-align: center;
-            font-size: 30px;
-            color: white;
-            padding: 10px 20px;
-            width: fit-content;
-            background-color: orange;
-            border-radius: 10px;
-            margin: 20px auto 0px auto;
-          }
-        }
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .tarif {
-    &__packs {
-      &__h1 {
-        text-align: center;
-        font-size: 48px;
-        margin-top: 80px;
-      }
-      &__container {
-        margin: 40px 10%;
-        padding-top: 60px;
-        padding-bottom: 100px;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-        &__card {
-          padding: 20px 30px;
-          border-radius: 10px;
-          box-shadow: 0px 0px 14px 5px aqua;
-          &__h3 {
-            text-align: center;
-            font-size: 26px;
-            width: fit-content;
-            color: white;
-            padding: 10px 20px;
-            background-color: orange;
-            border-radius: 10px;
-            margin: 0px auto 20px auto;
-          }
-          &__price {
-            text-align: center;
-            font-size: 30px;
-            color: white;
-            padding: 10px 20px;
-            width: fit-content;
-            background-color: orange;
-            border-radius: 10px;
-            margin: 20px auto 0px auto;
-          }
-        }
-      }
-    }
-  }
 }
 
 @media screen and (max-width: 768px) {
   .tarif {
     &__delivery {
-      padding: 130px 0 50px 0;
+      padding: 80px 0 0px 0;
       &__container {
         margin: 0 5% 0 5%;
         display: block;
@@ -298,11 +169,7 @@
           height: 260px;
           border: 1px solid aqua;
           box-shadow: 5px 5px 5px aqua;
-          transition: all 300ms ease-in;
-          &:hover {
-            box-shadow: 10px 10px 10px aqua;
-            transform: scale(1.01);
-          }
+          margin-bottom: 50px;
           padding: 20px;
           border-radius: 10px;
           &__h3 {
@@ -332,6 +199,11 @@
             }
           }
         }
+      }
+    }
+    &__packs {
+      &__container {
+        grid-template-columns: 1fr;
       }
     }
   }

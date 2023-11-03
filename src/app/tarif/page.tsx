@@ -64,8 +64,8 @@ const Tarif = () => {
                 alt="bousole"
               />
               <p className={styles.tarif__packs__head__right__p}>
-                Les séances sont assurées par Thierry Da Silva, Coach Certifiée
-                et fondatrice de TDS-Coaching
+                Les séances sont assurées par Thierry Da Silva, Coach
+                professionnel certifié.
               </p>
             </div>
           </div>

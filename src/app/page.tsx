@@ -41,7 +41,7 @@ export default function Home() {
               Da Silva
             </h1>
             <p className={styles.home__bg__container__p}>
-              Coach de vie certifié, je vous accompagne dans votre
+              Coach professionnel certifié, je vous accompagne dans votre
             </p>
             <p className={styles.home__bg__container__p}>
               développement personnel et professionnel.

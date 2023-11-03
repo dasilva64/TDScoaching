@@ -1081,7 +1081,23 @@ const Content = () => {
                 </li>
               </ul> */}
             </li>
-            <li className={`${styles.header__li} ${styles.header__li__hover}`}>
+            <li className={styles.header__li}>
+              <Link
+                className={
+                  pathname == "/tarif"
+                    ? `${styles.header__a} ${styles.active}`
+                    : `${styles.header__a}`
+                }
+                tabIndex={0}
+                href="/tarif"
+                onClick={(e) => {
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                }}
+              >
+                Tarifs et modalite
+              </Link>
+            </li>
+            {/* <li className={`${styles.header__li} ${styles.header__li__hover}`}>
               <span className={`${styles.header__a}`}>Mes prestations</span>
               <span
                 tabIndex={0}
@@ -1149,7 +1165,7 @@ const Content = () => {
                   </Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
             <li className={styles.header__li}>
               <Link
                 className={

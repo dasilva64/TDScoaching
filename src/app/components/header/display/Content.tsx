@@ -40,6 +40,8 @@ import ModalCloseTwoFactor from "@/app/profile/components/twoFactorData/modal/Mo
 import ModalTwoFactorSendToken from "@/app/profile/components/twoFactorSendTokenData/Modal/ModalTwoFactorSendToken";
 import ModalTwoFactor from "@/app/profile/components/twoFactorData/ModalTwoFactor";
 import ModalComfirmDisable from "@/app/profile/components/twoFactorSendTokenData/Modal/ModalComfirmDisable";
+import DiscoveryModal from "@/app/tarif/components/DiscoveryModal";
+import NormalModal from "@/app/tarif/components/NormalModal";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
@@ -575,6 +577,12 @@ const Content = () => {
   const { displayModalComfirmDisableTwoFactor } = useSelector(
     (state: RootState) => state.ModalComfirmDisableTwoFactor
   );
+  const { displayModalDiscovery } = useSelector(
+    (state: RootState) => state.ModalDiscovery
+  );
+  const { displayModalNormal } = useSelector(
+    (state: RootState) => state.ModalNormal
+  );
   /* const { displayModalCancelMeeting } = useSelector(
     (state: RootState) => state.ModalCancelMeeting
   ); */
@@ -623,7 +631,9 @@ const Content = () => {
       displayModalAddDiscoveryMeeting === true ||
       displayModalDeleteDiscoveryMeeting === true ||
       displayModalEditFormule === true ||
-      displayModalComfirmDisableTwoFactor === true
+      displayModalComfirmDisableTwoFactor === true ||
+      displayModalDiscovery === true ||
+      displayModalNormal === true
     ) {
       return `${styles.line__hide}`;
     } else {
@@ -665,7 +675,9 @@ const Content = () => {
           displayModalAddDiscoveryMeeting === true ||
           displayModalDeleteDiscoveryMeeting === true ||
           displayModalEditFormule === true ||
-          displayModalComfirmDisableTwoFactor === true
+          displayModalComfirmDisableTwoFactor === true ||
+          displayModalDiscovery === true ||
+          displayModalNormal === true
         ) {
           /* header.style.opacity = "0.02";
           mainDiv.style.opacity = "0.02";
@@ -709,6 +721,8 @@ const Content = () => {
     displayModalCancelTwoFactor,
     displayModalSendTokenTwoFactor,
     displayModalComfirmDisableTwoFactor,
+    displayModalDiscovery,
+    displayModalNormal,
   ]);
 
   if (typeof window !== "undefined") {
@@ -832,6 +846,8 @@ const Content = () => {
       <ModalDeleteMeeting />
       <ModalAddMeetingAdmin />
       <ModalComfirmDisable />
+      <DiscoveryModal />
+      <NormalModal />
 
       {/* <ModalAddMeeting /> */}
       {/* <ModalDeleteFirstMeeting /> */}
@@ -1112,7 +1128,7 @@ const Content = () => {
                       displayLogMenu === true ? setDisplayLogMenu(false) : null;
                     }}
                   >
-                    Tarif / Durée
+                    Tarif
                   </Link>
                 </li>
                 <li className={styles.header__li}>

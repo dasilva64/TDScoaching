@@ -37,6 +37,8 @@ import ModalAddMeetingAdmin from "./feature/modal/ModalAddMeetingAdmin";
 import ModalCancelTwoFactor from "./feature/modal/ModalCancelTwoFactor";
 import ModalSendTokenTwoFactor from "./feature/modal/ModalSendTokenTwoFactor";
 import ModalComfirmDisableTwoFactor from "./feature/modal/ModalComfirmDisableTwoFactor";
+import ModalDiscovery from "./feature/modal/ModalDiscovery";
+import ModalNormal from "./feature/modal/ModalNormal";
 
 export const store = configureStore({
   reducer: {
@@ -75,6 +77,8 @@ export const store = configureStore({
     ModalDatePickerEdit: ModalDatePickerEdit.reducer,
     ModalSendTokenTwoFactor: ModalSendTokenTwoFactor.reducer,
     ModalComfirmDisableTwoFactor: ModalComfirmDisableTwoFactor.reducer,
+    ModalDiscovery: ModalDiscovery.reducer,
+    ModalNormal: ModalNormal.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

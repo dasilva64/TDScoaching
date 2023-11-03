@@ -10,14 +10,51 @@
     }
   }
   &__packs {
-    &__h1 {
-      text-align: center;
-      color: black;
+    &__head {
       padding-top: 80px;
-      border-bottom: 1px solid orange;
-      width: 550px;
-      font-size: 48px;
-      margin: 0px auto 30px auto;
+      margin: 0px 10% 0px 10%;
+      display: flex;
+      justify-content: space-between;
+
+      &__left {
+        &__h1 {
+          text-align: center;
+          color: black;
+          border-bottom: 1px solid orange;
+          width: 200px;
+          font-size: 48px;
+          margin: 0px 0px 30px 0px;
+        }
+        &__p {
+          width: 70%;
+          line-height: 22px;
+          font-size: 18px;
+        }
+      }
+      &__right {
+        &__img {
+          position: relative;
+          z-index: 3;
+          object-fit: cover;
+          width: 250px;
+          height: 150px;
+          border-radius: 50%;
+          shape-outside: circle();
+          margin-right: 60px;
+          border: 5px solid aqua;
+        }
+        &__p {
+          position: relative;
+          top: -75px;
+          text-align: center;
+          padding: 75px 10px 10px 10px;
+          z-index: 1;
+          width: 250px;
+          background-color: aqua;
+          border-bottom-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+        }
+      }
     }
     &__container {
       margin: 0px 10%;
@@ -27,27 +64,63 @@
       gap: 40px;
       &__card {
         padding: 20px 30px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 14px 5px aqua;
+        border-radius: 30px;
+        box-shadow: inset 0px 0px 10px 5px black;
         &__h3 {
           text-align: center;
           font-size: 26px;
           width: fit-content;
           color: white;
           padding: 10px 20px;
-          background-color: orange;
           border-radius: 10px;
-          margin: 0px auto 20px auto;
+          margin: 0px auto 30px auto;
+        }
+        &__ul {
+          list-style-type: none;
+          line-height: 22px;
+
+          &__li {
+            display: flex;
+            color: white;
+            font-size: 18px;
+            margin-bottom: 5px;
+            &__icone {
+              margin-right: 10px;
+            }
+          }
+        }
+        &__div {
+          text-align: center;
+          margin: 30px 0px;
         }
         &__price {
           text-align: center;
-          font-size: 30px;
-          color: white;
-          padding: 10px 20px;
-          width: fit-content;
-          background-color: orange;
-          border-radius: 10px;
+          font-size: 36px;
           margin: 20px auto 0px auto;
+          color: white;
+          font-weight: 800;
+          &__sign {
+            position: relative;
+            top: -10px;
+            left: 5px;
+            font-size: 20px;
+          }
+        }
+        &__unique {
+          background-color: aqua;
+          border: 3px solid aqua;
+        }
+        &__flash {
+          background-color: rgba(255, 166, 0, 0.307);
+          border: 3px solid rgba(255, 166, 0, 0.307);
+        }
+        &__long {
+          background-color: rgba(0, 128, 0, 0.278);
+          border: 3px solid rgba(0, 128, 0, 0.278);
+        }
+        &__full {
+          background-color: rgba(255, 0, 0, 0.339);
+          border: 3px solid rgba(255, 0, 0, 0.339);
         }
       }
     }
@@ -91,65 +164,6 @@
           &:hover {
             transform: scale(1.1);
           }
-        }
-      }
-    }
-  }
-  &__modalite {
-    padding: 50px 0 50px 0;
-    background-color: rgba(0, 0, 0, 0.03);
-    &__container {
-      margin: 0 10% 0 10%;
-      &__h2 {
-        margin-bottom: 60px;
-        font-size: 48px;
-      }
-      &__content {
-        margin-top: 40px;
-        display: flex;
-        justify-content: space-between;
-        &__p {
-          font-size: 18px;
-          line-height: 22px;
-        }
-      }
-    }
-  }
-  &__discovery {
-    padding: 50px 0 50px 0;
-    &__container {
-      margin: 0 10% 0 10%;
-      &__h2 {
-        margin-bottom: 60px;
-        font-size: 48px;
-      }
-      &__content {
-        margin-top: 40px;
-        display: flex;
-        justify-content: space-between;
-        &__p {
-          font-size: 18px;
-          line-height: 22px;
-        }
-      }
-    }
-  }
-  &__next {
-    padding: 50px 0 50px 0;
-    background-color: rgba(0, 0, 0, 0.03);
-    &__container {
-      margin: 0 10% 0 10%;
-      &__h2 {
-        margin-bottom: 60px;
-        font-size: 48px;
-      }
-      &__content {
-        margin-top: 40px;
-        display: flex;
-        justify-content: space-between;
-        &__p {
-          font-size: 18px;
-          line-height: 22px;
         }
       }
     }

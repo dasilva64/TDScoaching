@@ -141,7 +141,7 @@ const About = () => {
             <Timeline />
           </div>
         </section>
-        <section className={styles.about__speciality}>
+        {/*  <section className={styles.about__speciality}>
           <div className={styles.about__speciality__container}>
             <h2 className={styles.about__speciality__container__h2}>
               Mes spécialitées :
@@ -169,7 +169,7 @@ const About = () => {
               />
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
     </>
   );

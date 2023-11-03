@@ -5,26 +5,33 @@
     margin-top: 80px;
     &__img {
       width: 100%;
-      height: 400px;
+      height: 200px;
       object-fit: cover;
     }
   }
   &__main {
     margin: 0px 10%;
     &__h1 {
+      text-align: center;
+      color: black;
+      padding-top: 80px;
+      border-bottom: 1px solid orange;
+      width: 303px;
       font-size: 48px;
-      margin: 40px 0px;
+      margin: 0px auto 30px auto;
     }
     &__p {
       margin-bottom: 30px;
       font-size: 18px;
+      line-height: 22px;
     }
     &__container {
-      display: flex;
-      justify-content: space-between;
       margin-bottom: 50px;
       &__content {
+        display: flex;
+        justify-content: space-between;
         &__card {
+          width: 47%;
           padding: 20px 40px;
           border-radius: 10px;
           border: 2px solid orange;
@@ -42,7 +49,7 @@
         }
       }
       &__form {
-        width: 60%;
+        width: 100%;
         margin-top: -20px;
         display: flex;
         flex-direction: column;
@@ -68,17 +75,15 @@
   }
 }
 
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1240px) {
   .contact {
     &__main {
       &__container {
-        display: block;
         &__content {
-          display: flex;
-          justify-content: space-around;
-        }
-        &__form {
-          width: 100%;
+          display: block;
+          &__card {
+            width: 100%;
+          }
         }
       }
     }
@@ -101,12 +106,8 @@
 
 @media screen and (max-width: 768px) {
   .contact {
-    &__bg {
-      &__img {
-        height: 300px;
-      }
-    }
     &__main {
+      margin: 0px 5%;
       &__h1 {
         font-size: 40px;
       }
@@ -115,7 +116,6 @@
       }
       &__container {
         &__content {
-          display: block;
           &__card {
             font-size: 16px;
           }
@@ -127,9 +127,16 @@
 
 @media screen and (max-width: 425px) {
   .contact {
-    &__bg {
-      &__img {
-        height: 250px;
+    &__main {
+      &__container {
+        &__content {
+          &__card {
+            &__p {
+              display: flex;
+              flex-direction: column;
+            }
+          }
+        }
       }
     }
   }

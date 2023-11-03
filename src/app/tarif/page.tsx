@@ -75,9 +75,9 @@ const Tarif = () => {
               type="y"
               className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__unique}`}
             >
-              <h3 className={styles.tarif__packs__container__card__h3}>
+              <h2 className={styles.tarif__packs__container__card__h3}>
                 Pack coaching unique
-              </h3>
+              </h2>
               <ul className={styles.tarif__packs__container__card__ul}>
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image
@@ -161,9 +161,9 @@ const Tarif = () => {
               type="y"
               className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__flash}`}
             >
-              <h3 className={styles.tarif__packs__container__card__h3}>
+              <h2 className={styles.tarif__packs__container__card__h3}>
                 Pack coaching flash
-              </h3>
+              </h2>
               <ul className={styles.tarif__packs__container__card__ul}>
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image
@@ -247,9 +247,9 @@ const Tarif = () => {
               type="y"
               className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__long}`}
             >
-              <h3 className={styles.tarif__packs__container__card__h3}>
+              <h2 className={styles.tarif__packs__container__card__h3}>
                 Pack coaching long
-              </h3>
+              </h2>
               <ul className={styles.tarif__packs__container__card__ul}>
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image
@@ -346,9 +346,9 @@ const Tarif = () => {
               type="y"
               className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__full}`}
             >
-              <h3 className={styles.tarif__packs__container__card__h3}>
+              <h2 className={styles.tarif__packs__container__card__h3}>
                 Pack coaching full time
-              </h3>
+              </h2>
               <ul className={styles.tarif__packs__container__card__ul}>
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image

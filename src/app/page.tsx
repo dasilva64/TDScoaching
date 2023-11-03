@@ -4,6 +4,7 @@ import GoDown from "./components/goDown/goDown";
 import Card from "./components/card/Card";
 import WhileInView from "./components/framer/WhileInView";
 import Parallax from "./components/framer/parallax";
+import GoTarif from "./components/goTarif/goTarif";
 
 export default function Home() {
   return (
@@ -45,9 +46,7 @@ export default function Home() {
             <p className={styles.home__bg__container__p}>
               développement personnel et professionnel.
             </p>
-            <button className={styles.home__bg__container__btn}>
-              Voir les offres
-            </button>
+            <GoTarif />
           </div>
           <GoDown />
         </section>

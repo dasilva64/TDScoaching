@@ -18,7 +18,6 @@
 
       &__left {
         &__h1 {
-          text-align: center;
           color: black;
           border-bottom: 1px solid orange;
           width: 200px;
@@ -46,7 +45,10 @@
         &__p {
           position: relative;
           top: -75px;
+          line-height: 22px;
+          font-size: 18px;
           text-align: center;
+          color: white;
           padding: 75px 10px 10px 10px;
           z-index: 1;
           width: 250px;
@@ -68,7 +70,7 @@
         box-shadow: inset 0px 0px 10px 5px black;
         &__h3 {
           text-align: center;
-          font-size: 26px;
+          font-size: 48px;
           width: fit-content;
           color: white;
           padding: 10px 20px;
@@ -80,12 +82,14 @@
           line-height: 22px;
 
           &__li {
-            display: flex;
+            position: relative;
             color: white;
             font-size: 18px;
+            padding-left: 10px;
             margin-bottom: 5px;
             &__icone {
-              margin-right: 10px;
+              position: absolute;
+              left: -20px;
             }
           }
         }
@@ -125,44 +129,37 @@
       }
     }
   }
-  &__delivery {
-    padding: 80px 0 50px 0;
-    &__container {
-      margin: 0 10% 0 10%;
-      display: flex;
-      justify-content: space-between;
-      &__card {
-        width: 40%;
-        position: relative;
-        height: 260px;
-        border: 1px solid aqua;
-        box-shadow: 5px 5px 5px aqua;
-        padding: 20px;
-        border-radius: 10px;
-        &__h3 {
-          margin-bottom: 30px;
+}
+
+@media screen and (max-width: 1000px) {
+  .tarif {
+    &__packs {
+      &__head {
+        display: block;
+        &__left {
+          &__h1 {
+            margin: 0px auto 30px auto;
+            width: 150px;
+          }
+          &__p {
+            width: 100%;
+          }
         }
-        &__img {
-          float: right;
-          position: relative;
-          top: -50px;
-        }
-        &__p {
-          text-align: justify;
-        }
-        &__btn {
-          margin: auto;
-          display: block;
-          width: 57%;
-          text-align: center;
+        &__right {
           margin-top: 30px;
-          border: 1px solid orange;
-          padding: 10px;
-          background-color: orange;
-          border-radius: 20px;
-          transition: all 300ms ease-in;
-          &:hover {
-            transform: scale(1.1);
+          text-align: center;
+          &__img {
+            margin-right: 0px;
+          }
+          &__p {
+            margin: auto;
+          }
+        }
+      }
+      &__container {
+        &__card {
+          &__h3 {
+            padding: 10px 0px;
           }
         }
       }
@@ -172,81 +169,41 @@
 
 @media screen and (max-width: 768px) {
   .tarif {
-    &__delivery {
-      padding: 80px 0 0px 0;
-      &__container {
-        margin: 0 5% 0 5%;
-        display: block;
-        &__card {
-          width: 100%;
-          position: relative;
-          height: 260px;
-          border: 1px solid aqua;
-          box-shadow: 5px 5px 5px aqua;
-          margin-bottom: 50px;
-          padding: 20px;
-          border-radius: 10px;
-          &__h3 {
-            margin-bottom: 30px;
-          }
-          &__img {
-            float: right;
-            position: relative;
-            top: -50px;
+    &__packs {
+      &__head {
+        margin: 0px 5% 0px 5%;
+        &__left {
+          &__h1 {
+            font-size: 36px;
           }
           &__p {
-            text-align: justify;
+            font-size: 16px;
           }
-          &__btn {
-            margin: auto;
-            display: block;
-            width: 57%;
-            text-align: center;
-            margin-top: 30px;
-            border: 1px solid orange;
-            padding: 10px;
-            background-color: orange;
-            border-radius: 20px;
-            transition: all 300ms ease-in;
-            &:hover {
-              transform: scale(1.1);
-            }
+        }
+        &__right {
+          &__p {
+            font-size: 16px;
           }
         }
       }
-    }
-    &__packs {
       &__container {
         grid-template-columns: 1fr;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .tarif {
-    &__h1 {
-      margin-top: 40px;
-      font-size: 40px;
-    }
-    &__article {
-      margin-left: 5%;
-      margin-right: 5%;
-      text-align: justify;
-      &__h2 {
-        font-size: 26px;
-        margin-top: 40px;
-      }
-      &__ul {
-        padding: 11px 0px 11px 20px;
-      }
-      &__flex {
-        display: block;
-        &__div {
-          margin-bottom: 20px;
-          width: unset;
-          &__p {
-            padding: 10px;
+        margin: 0px 5%;
+        &__card {
+          &__h3 {
+            font-size: 36px;
+            padding: 10px 0px;
+          }
+          &__ul {
+            padding-left: 10px;
+            &__li {
+              font-size: 16px;
+              position: relative;
+              &__icone {
+                position: absolute;
+                left: -25px;
+              }
+            }
           }
         }
       }

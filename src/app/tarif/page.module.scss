@@ -29,6 +29,18 @@
           line-height: 22px;
           font-size: 18px;
         }
+        &__offer {
+          width: 70%;
+          line-height: 22px;
+          text-align: center;
+          font-size: 18px;
+          background-color: orange;
+          color: white;
+          padding: 10px;
+          margin-top: 20px;
+          border-radius: 10px;
+          animation: updown 2s infinite;
+        }
       }
       &__right {
         &__img {
@@ -62,13 +74,15 @@
       margin: 0px 10%;
       padding-bottom: 50px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 40px;
       &__card {
         padding: 20px 30px;
         border-radius: 30px;
         box-shadow: inset 0px 0px 10px 5px black;
+        height: 100%;
         &__h3 {
+          line-height: 36px;
           text-align: center;
           font-size: 48px;
           width: fit-content;
@@ -85,11 +99,12 @@
             position: relative;
             color: white;
             font-size: 18px;
-            padding-left: 10px;
+            padding-left: 20px;
             margin-bottom: 5px;
             &__icone {
               position: absolute;
-              left: -20px;
+              left: -15px;
+              top: -5px;
             }
           }
         }
@@ -100,7 +115,7 @@
         &__price {
           text-align: center;
           font-size: 36px;
-          margin: 20px auto 0px auto;
+          margin: 40px auto 80px auto;
           color: white;
           font-weight: 800;
           &__sign {
@@ -111,20 +126,32 @@
           }
         }
         &__unique {
-          background-color: aqua;
-          border: 3px solid aqua;
+          background-color: rgba(255, 0, 0, 0.339);
+          border: 3px solid rgba(255, 0, 0, 0.339);
+          margin-bottom: 30px;
         }
         &__flash {
-          background-color: rgba(255, 166, 0, 0.307);
-          border: 3px solid rgba(255, 166, 0, 0.307);
+          background-color: rgba(255, 166, 0, 0.556);
+          border: 3px solid rgba(255, 166, 0, 0.556);
         }
         &__long {
           background-color: rgba(0, 128, 0, 0.278);
           border: 3px solid rgba(0, 128, 0, 0.278);
         }
-        &__full {
-          background-color: rgba(255, 0, 0, 0.339);
-          border: 3px solid rgba(255, 0, 0, 0.339);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .tarif {
+    &__packs {
+      &__container {
+        grid-template-columns: 1fr;
+        &__card {
+          &__price {
+            margin: 0px auto 0px auto;
+          }
         }
       }
     }
@@ -142,6 +169,9 @@
             width: 150px;
           }
           &__p {
+            width: 100%;
+          }
+          &__offer {
             width: 100%;
           }
         }
@@ -187,7 +217,6 @@
         }
       }
       &__container {
-        grid-template-columns: 1fr;
         margin: 0px 5%;
         &__card {
           &__h3 {
@@ -208,5 +237,17 @@
         }
       }
     }
+  }
+}
+
+@keyframes updown {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
   }
 }

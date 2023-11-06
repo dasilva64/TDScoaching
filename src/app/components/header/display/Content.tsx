@@ -1094,7 +1094,7 @@ const Content = () => {
                   displayLogMenu === true ? setDisplayLogMenu(false) : null;
                 }}
               >
-                Tarifs et modalite
+                Tarifs et modalité
               </Link>
             </li>
             {/* <li className={`${styles.header__li} ${styles.header__li__hover}`}>

@@ -27,29 +27,20 @@ const Footer = () => {
               </Link>
             </li>
             <li className={styles.footer__li}>
-              <span className={styles.footer__a}>Mes prestations</span>
-              <ul className={styles.footer__ul}>
-                <li className={styles.footer__li}>
-                  <Link className={styles.footer__a} href="/modalite">
-                    {" "}
-                    Modalités du coaching
-                  </Link>
-                </li>
-                <li className={styles.footer__li}>
-                  <Link className={styles.footer__a} href="/tarif">
-                    Tarif / Durée
-                  </Link>
-                </li>
-                <li className={styles.footer__li}>
-                  <Link
-                    className={styles.footer__a}
-                    href="/code-de-deontologie"
-                  >
-                    Code de déontologie
-                  </Link>
-                </li>
-              </ul>
+              <Link className={styles.footer__a} href="/tarif">
+                Tarifs et modalité
+              </Link>
             </li>
+            <li className={styles.footer__li}>
+              <Link
+                className={styles.footer__a}
+                href="/assets/pdf/Code-deontologie-ICF-France.pdf"
+                target="_blank"
+              >
+                Code de déontologie
+              </Link>
+            </li>
+
             <li className={styles.footer__li}>
               <Link className={styles.footer__a} href="/contact">
                 Contact

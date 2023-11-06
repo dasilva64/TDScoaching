@@ -18,7 +18,7 @@
       border-bottom: 1px solid orange;
       width: 303px;
       font-size: 48px;
-      margin: 0px auto 30px auto;
+      margin: 0px auto 40px auto;
     }
     &__p {
       margin-bottom: 30px;
@@ -34,9 +34,8 @@
           width: 47%;
           padding: 20px 40px;
           border-radius: 10px;
-          border: 2px solid orange;
-          box-shadow: 5px 5px orange;
-          margin-bottom: 30px;
+          box-shadow: 0px 0px 14px 5px aqua;
+          margin-bottom: 40px;
           font-size: 18px;
           &__link {
             color: black;
@@ -50,24 +49,25 @@
       }
       &__form {
         width: 100%;
-        margin-top: -20px;
+        margin-top: -10px;
         display: flex;
         flex-direction: column;
         &__submit {
-          margin-top: 30px;
+          margin-top: 20px;
           cursor: pointer;
           border: 1px solid orange;
           padding: 10px;
-          background-color: orange;
+          background-color: white;
           border-radius: 10px;
           color: black;
           transition: all 400ms;
           position: relative;
           z-index: 1;
-          font-size: 21px;
           height: unset;
-          & :hover {
+          &:hover {
             transform: scale(1.1);
+            background-color: orange;
+            color: white;
           }
         }
       }

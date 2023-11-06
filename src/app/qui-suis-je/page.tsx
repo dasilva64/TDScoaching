@@ -54,7 +54,7 @@ const About = () => {
             />
             <div>
               <h2 className={styles.about__parcour__container__h2}>
-                Mon parcours professionnel :
+                Mon parcours professionnel
               </h2>
               <p className={styles.about__parcour__container__p}>
                 Je m’appelle Thierry DA SILVA SEABRA et je suis coach

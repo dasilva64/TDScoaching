@@ -15,9 +15,19 @@
   font-size: 16px;
 }
 
+.vertical-timeline-element-title {
+  font-size: 18px;
+}
+
 @media screen and (max-width: 1169px) {
   .vertical-timeline-element-date {
     color: white;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .vertical-timeline-element-title {
+    font-size: 16px;
   }
 }
 

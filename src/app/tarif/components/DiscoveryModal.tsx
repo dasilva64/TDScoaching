@@ -53,7 +53,29 @@ const DiscoveryModal = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={styles.login__h1}>Rendez-vous de découverte</h1>
+              <h1 className={styles.login__h1}>Séance découverte</h1>
+              <p className={styles.login__p}>
+                <Image
+                  className={styles.login__p__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/clock-solid.svg"}
+                  alt="bousole"
+                />
+                : 30mn / 45mn
+              </p>
+              <p className={styles.login__p}>
+                <Image
+                  className={styles.login__p__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/location-dot-solid.svg"}
+                  alt="bousole"
+                />
+                : En distanciel (Visio)
+              </p>
               <p>
                 Le coaching débutera par une première séance dite de «
                 découverte ». Il s’agit d’une séance de rencontre de 30 à 45

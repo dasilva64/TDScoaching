@@ -234,7 +234,7 @@ const ContactForm = () => {
           }}
           helperText={objectInputError}
         />
-        <FormLabel>Message</FormLabel>
+        <FormLabel sx={{ marginTop: "20px" }}>Message</FormLabel>
         <Textarea
           value={inputMessage}
           onChange={(e) => {

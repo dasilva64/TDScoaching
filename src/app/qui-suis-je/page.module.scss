@@ -15,9 +15,8 @@
       text-align: center;
       color: black;
       padding-top: 80px;
-      font-size: 48px;
       border-bottom: 1px solid orange;
-      width: 353px;
+      width: 323px;
       font-size: 48px;
       margin: 0px auto 30px auto;
     }
@@ -33,7 +32,6 @@
       text-align: center;
       color: black;
       padding-top: 80px;
-      font-size: 48px;
       border-bottom: 1px solid orange;
       width: 353px;
       font-size: 48px;
@@ -55,11 +53,10 @@
       }
       &__h2 {
         color: black;
-        text-align: left;
         border-bottom: 1px solid orange;
-        width: 510px;
+        width: 340px;
         font-size: 32px;
-        margin: 0px auto 30px auto;
+        margin: 0px 0px 30px 290px;
       }
       &__p {
         font-size: 18px;
@@ -93,69 +90,6 @@
       }
     }
   }
-  &__speciality {
-    padding: 0px 0 50px 0;
-    background-color: rgba(0, 0, 0, 0.03);
-    &__container {
-      margin: 0 10% 0 10%;
-      &__h2 {
-        text-align: center;
-        color: black;
-        padding-top: 80px;
-        font-size: 48px;
-        border-bottom: 1px solid orange;
-        width: 353px;
-        font-size: 48px;
-        margin: 0px auto 30px auto;
-      }
-      &__content {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 50px;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .about {
-    &__certificate {
-      &__container {
-        &__line {
-          left: 30%;
-        }
-        &__card {
-          &__left {
-            position: unset;
-            margin: 10px 0px 10px 250px;
-            &__triangle {
-              left: -10px;
-              border-right: 10px solid #1dd6fc;
-              border-left: unset;
-            }
-            &__cercle {
-              top: 15px;
-              left: -62px;
-              width: 30px;
-              height: 30px;
-            }
-            &__date {
-              left: -140px;
-              width: 40px;
-            }
-          }
-        }
-      }
-    }
-    &__speciality {
-      &__container {
-        &__content {
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
-        }
-      }
-    }
-  }
 }
 
 @media screen and (max-width: 768px) {
@@ -170,6 +104,7 @@
         margin: 0 5% 0 5%;
         &__h2 {
           font-size: 36px;
+          width: 330px;
         }
         &__content {
           &__p {
@@ -181,40 +116,17 @@
     &__certificate {
       &__h2 {
         font-size: 36px;
+        width: 240px;
       }
       &__container {
         margin: 0 5% 0 5%;
-        &__line {
-          left: 25%;
-        }
-        &__card {
-          &__left {
-            width: 300px;
-            padding: 20px;
-            &__cercle {
-              left: -80px;
-            }
-            &__h3 {
-              font-size: 18px;
-            }
-          }
-          &__right {
-            width: 300px;
-            padding: 20px;
-            &__cercle {
-              left: -80px;
-            }
-            &__h3 {
-              font-size: 18px;
-            }
-          }
-        }
       }
     }
     &__parcour {
       margin: 0px 5% 50px 5%;
       &__h1 {
         font-size: 36px;
+        width: 300px;
       }
       &__container {
         padding-top: 0;
@@ -224,25 +136,15 @@
         &__h2 {
           font-size: 24px;
           width: 270px;
+          margin: 0px auto 30px auto;
         }
         &__img {
           margin: auto;
           float: unset;
-          margin-bottom: 50px;
+          margin-bottom: 30px;
         }
         &__p {
           font-size: 16px;
-        }
-      }
-    }
-    &__speciality {
-      &__container {
-        margin: 0 5% 0 5%;
-        &__h2 {
-          font-size: 36px;
-        }
-        &__content {
-          grid-template-columns: 1fr;
         }
       }
     }
@@ -261,57 +163,13 @@
       &__container {
         margin: 0 5% 0 5%;
         &__h2 {
-          width: 100%;
+          width: 80%;
         }
       }
     }
     &__certificate {
       &__h2 {
-        width: 90%;
-        margin: 0px 5% 30px 5%;
-      }
-      &__container {
-        &__line {
-          left: 20%;
-        }
-        &__card {
-          &__left {
-            transform: unset;
-            margin: 10px;
-            width: 200px;
-            padding: 10px;
-            position: relative;
-            right: -15px;
-            &__date {
-              left: -68px;
-              top: 47px;
-            }
-            &__cercle {
-              left: -65px;
-            }
-            &__h3 {
-              font-size: 16px;
-            }
-          }
-          &__right {
-            width: 200px;
-            padding: 10px;
-            transform: unset;
-            margin: 10px;
-            position: relative;
-            right: -15px;
-            &__date {
-              left: -68px;
-              top: 47px;
-            }
-            &__cercle {
-              left: -65px;
-            }
-            &__h3 {
-              font-size: 16px;
-            }
-          }
-        }
+        width: 80%;
       }
     }
     &__parcour {
@@ -326,13 +184,6 @@
         &__img {
           width: 200px;
           height: 200px;
-        }
-      }
-    }
-    &__speciality {
-      &__container {
-        &__h2 {
-          width: 100%;
         }
       }
     }

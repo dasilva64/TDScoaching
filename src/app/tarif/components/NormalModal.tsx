@@ -54,7 +54,40 @@ const NormalModal = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={styles.login__h1}>Rendez-vous de découverte</h1>
+              <h1 className={styles.login__h1}>Séance coaching</h1>
+              <p className={styles.login__p}>
+                <Image
+                  className={styles.login__p__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/clock-solid.svg"}
+                  alt="bousole"
+                />
+                : 45mn / 1h
+              </p>
+              <p className={styles.login__p}>
+                <Image
+                  className={styles.login__p__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/location-dot-solid.svg"}
+                  alt="bousole"
+                />
+                : En distanciel (Visio)
+              </p>
+              <p className={styles.login__p}>
+                <Image
+                  className={styles.login__p__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/dollar-sign-solid.svg"}
+                  alt="bousole"
+                />
+                : par carte bancaire
+              </p>
               <p className={styles.tarif__next__container__content__p}>
                 Ensuite, le véritable travail de coaching commence. Les séances
                 de coaching dureront entre 45mn et 1h et seront généralement

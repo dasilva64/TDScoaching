@@ -105,94 +105,182 @@ const page = () => {
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Surmonter une difficulté ou un blocage
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Prendre une décision importante
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Trouver sa voie personnelle
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Vivre le changement
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 S’accomplir dans la durée
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Profiter pleinement du temps retrouvé
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Trouver sa voie professionnelle
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Trouver un emploi en accord avec son potentiel et ses
                 motivations
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Concrétiser son potentiel et réaliser ses objectifs
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Réussir et s’affirmer dans sa fonction
-              </h3>
+              </h4>
             </WhileInView>
             <WhileInView
               type="y"
               className={styles.coaching__help__container__div}
             >
-              <h3 className={styles.coaching__help__container__div__h3}>
+              <h4 className={styles.coaching__help__container__div__h4}>
+                <Image
+                  className={styles.coaching__help__container__div__h4__icone}
+                  width="20"
+                  height="20"
+                  priority={true}
+                  src={"/assets/icone/check-solid-black.svg"}
+                  alt="bousole"
+                />
                 Piloter son évolution de carrière et sa reconversion
-              </h3>
+              </h4>
             </WhileInView>
           </div>
         </section>
-        <section className={styles.coaching__delivery}>
+        {/* <section className={styles.coaching__delivery}>
           <div className={styles.coaching__delivery__container}>
             <WhileInView
               type="y"
@@ -247,7 +335,7 @@ const page = () => {
               </Link>
             </WhileInView>
           </div>
-        </section>
+        </section> */}
       </main>
     </>
   );

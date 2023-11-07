@@ -15,6 +15,7 @@
       &__th {
         border-radius: 5px;
         padding: 10px 18px;
+        min-width: 140px;
         &:hover {
           background-color: orange;
           color: white;
@@ -25,40 +26,40 @@
         &__both {
           background-image: url("/assets/icone/arrows-up-down-solid.svg");
           background-repeat: no-repeat;
-          background-position: center right;
+          background-position: 95% center;
           background-size: 25% 40%;
 
           &__little {
             width: 1px;
             background-image: url("/assets/icone/arrows-up-down-solid.svg");
             background-repeat: no-repeat;
-            background-position: center right;
+            background-position: 95% center;
             background-size: 25% 40%;
           }
         }
         &__asc {
           background-image: url("/assets/icone/arrow-up-solid.svg");
           background-repeat: no-repeat;
-          background-position: center right;
+          background-position: 95% center;
           background-size: 25% 40%;
           &__little {
             width: 1px;
             background-image: url("/assets/icone/arrow-up-solid.svg");
             background-repeat: no-repeat;
-            background-position: center right;
+            background-position: 95% center;
             background-size: 25% 40%;
           }
         }
         &__desc {
           background-image: url("/assets/icone/arrow-down-solid.svg");
           background-repeat: no-repeat;
-          background-position: center right;
+          background-position: 95% center;
           background-size: 25% 40%;
           &__little {
             width: 1px;
             background-image: url("/assets/icone/arrow-down-solid.svg");
             background-repeat: no-repeat;
-            background-position: center right;
+            background-position: 95% center;
             background-size: 25% 40%;
           }
         }

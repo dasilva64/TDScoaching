@@ -26,6 +26,9 @@
 }
 
 @media screen and (max-width: 769px) {
+  .css-f2kq0q-MuiFormControl-root {
+    min-width: unset;
+  }
   .vertical-timeline-element-title {
     font-size: 16px;
   }

@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./HowDo.module.scss";
+import Image from "next/image";
 
 const HowDo = () => {
   return (
@@ -58,6 +59,22 @@ const HowDo = () => {
             <p className={styles.HowDo__container__card__p}>
               Vous recevrez un mail de confirmation et le lien de la
               visioconférence 48h avant le rendez-vous
+            </p>
+          </div>
+          <div
+            className={`${styles.HowDo__container__card} ${styles.HowDo__container__card__secure}`}
+          >
+            <Image
+              width="30"
+              height="30"
+              priority={true}
+              src={"/assets/icone/paiement-securise.png"}
+              alt="bousole"
+            />
+            <p
+              className={`${styles.HowDo__container__card__p} ${styles.HowDo__container__card__p__secure}`}
+            >
+              <strong>Paiement sécurisé</strong>
             </p>
           </div>
         </div>

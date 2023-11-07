@@ -4,13 +4,11 @@
   &__main {
     margin: 0px 20%;
     &__h1 {
-      padding-top: 200px;
+      padding-top: 160px;
       padding-bottom: 30px;
       font-size: 48px;
     }
     &__container {
-      margin-top: 45px;
-      padding-top: 10px;
       padding-bottom: 100px;
       &__content {
         padding: 10px;
@@ -22,6 +20,7 @@
           text-align: start;
           margin-top: 10px;
           margin-bottom: 15px;
+          font-family: "Parisienne";
         }
       }
     }
@@ -51,7 +50,7 @@
     &__main {
       margin: 0px 5%;
       &__h1 {
-        font-size: 38px;
+        font-size: 36px;
         padding-top: 160px;
       }
       &__container {

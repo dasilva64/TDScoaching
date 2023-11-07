@@ -32,7 +32,7 @@ export default function Home() {
             height="0"
             sizes="100vw"
             priority={true}
-            src={"/assets/img/test.jpg"}
+            src={"/assets/img/moi5.jpg"}
             alt="bousole"
           />
           <div className={styles.home__bg__container}>

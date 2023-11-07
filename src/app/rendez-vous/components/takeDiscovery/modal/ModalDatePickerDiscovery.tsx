@@ -852,9 +852,9 @@ const ModalDatePickerDiscovery = () => {
                 transition: { duration: 0.3 },
               }}
             >
-              <h2 style={{ marginBottom: "50px", marginTop: "50px" }}>
+              <h1 style={{ marginBottom: "50px", marginTop: "50px" }}>
                 Sélectionnez un date pour votre rendez-vous de découverte
-              </h2>
+              </h1>
               <button className={styles.btn} onClick={() => closeForm()}>
                 <Image
                   className={styles.btn__img}

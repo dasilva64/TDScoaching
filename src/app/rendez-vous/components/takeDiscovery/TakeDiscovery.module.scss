@@ -12,6 +12,7 @@
     transform: translateX(-50%);
     background-color: orange;
     padding: 10px;
+    font-size: 32px;
     width: 500px;
     border-radius: 30px;
     margin: 20px auto 30px auto;
@@ -108,8 +109,14 @@
 @media screen and (max-width: 768px) {
   .TakeDiscovery {
     flex-direction: column;
+    padding: 50px 10px 30px 10px;
+    &__h2 {
+      font-size: 26px;
+      width: 95%;
+    }
     &__container {
       &__offre {
+        padding: 10px 15px;
         &__content {
           &__p {
             font-size: 16px;
@@ -137,6 +144,14 @@
           }
         }
       }
+    }
+  }
+}
+
+@media screen and (max-width: 371px) {
+  .TakeDiscovery {
+    &__h2 {
+      top: -60px;
     }
   }
 }

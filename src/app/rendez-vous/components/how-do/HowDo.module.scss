@@ -16,6 +16,7 @@
     background-color: orange;
     padding: 10px;
     width: 250px;
+    font-size: 32px;
     border-radius: 30px;
     margin: 20px auto 30px auto;
     color: white;
@@ -24,16 +25,20 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
     margin-top: 30px;
     &__card {
       display: flex;
       padding: 10px;
       border-radius: 10px;
       background-color: aqua;
-      margin-bottom: 35px;
       &__p {
         font-size: 18px;
         color: black;
+        &__secure {
+          align-self: center;
+          margin-left: 30px;
+        }
       }
       &__div {
         position: relative;
@@ -68,12 +73,21 @@
     width: 100%;
     padding: 50px 30px 10px 30px;
     margin-bottom: 40px;
+    &__container {
+      &__card {
+        margin-bottom: 30px;
+      }
+    }
   }
 }
 
 @media screen and (max-width: 768px) {
   .HowDo {
+    padding: 50px 10px 10px 10px;
     flex-direction: column;
+    &__h2 {
+      font-size: 26px;
+    }
     &__container {
       &__card {
         &__p {

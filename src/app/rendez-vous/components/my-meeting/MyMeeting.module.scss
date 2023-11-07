@@ -6,6 +6,7 @@
   &__h3 {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 32px;
   }
   &__container {
     &__p {
@@ -215,6 +216,9 @@
 
 @media screen and (max-width: 768px) {
   .myMeeting {
+    &__h3 {
+      font-size: 26px;
+    }
     &__meeting {
       &__detail {
         &__h2 {

@@ -103,7 +103,7 @@ export default withIronSessionApiRoute(
               
                               <div style="width: 100%">
                                 <div style="text-align: center">
-                                  <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                                  <img src="https://tds-lilac.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
                                 </div>
                                 <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                   <h1 style="text-align: center">tds coaching</h1>

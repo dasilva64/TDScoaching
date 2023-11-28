@@ -88,7 +88,6 @@ const DatePicker = ({ events }: any) => {
     trigger: triggerDelete,
     reset: resetDelete,
   } = useSWRMutation("/api/meeting/deleteByAdmin", fetchPost);
-  console.log(dataDelete);
   useEffect(() => {
     if (dataDelete) {
       if (dataDelete.status === 200) {
@@ -482,7 +481,16 @@ const DatePicker = ({ events }: any) => {
             month.toString() === (newar[y].getMonth() + 1).toString() &&
             date.toString() === newar[y].getDate().toString()
           ) {
-            arWeek.push([year, month, date, hour, copyEvents[i]["userId"]]);
+            let copyUser: any = { ...copyEvents[i].User };
+            arWeek.push([
+              year,
+              month,
+              date,
+              hour,
+              copyEvents[i]["userId"],
+              copyUser.firstname,
+              copyUser.lastname,
+            ]);
           }
         }
         if (arWeek.length > 0) {

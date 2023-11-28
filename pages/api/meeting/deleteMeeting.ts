@@ -66,16 +66,16 @@ export default withIronSessionApiRoute(
 
                               <div style="width: 100%">
                                 <div style="text-align: center">
-                                  <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                                  <img src="https://tds-lilac.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
                                 </div>
                                 <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                   <h1 style="text-align: center">tds coaching</h1>
                                   <div style="text-align: center">
-                                    <img src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendarcancel.png&w=750&q=75" width="80px" height="80px" />
+                                    <img src="https://tds-lilac.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendarcancel.png&w=750&q=75" width="80px" height="80px" />
                                   </div>
                                   <h2 style="text-align: center">Rendez-vous annulé</h2>
                                   <div style="width: 280px; margin: 0px auto 30px auto">
-                                      <p style="display: flex"><img style="margin-right: 5px" src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendar.png&w=750&q=75" width="20px" height="20px" />${meeting.startAt.toLocaleDateString(
+                                      <p style="display: flex"><img style="margin-right: 5px" src="https://tds-lilac.vercel.app/_next/image?url=%2Fassets%2Ficone%2Fcalendar.png&w=750&q=75" width="20px" height="20px" />${meeting.startAt.toLocaleDateString(
                                         "fr-FR",
                                         {
                                           weekday: "long",
@@ -83,13 +83,13 @@ export default withIronSessionApiRoute(
                                           month: "long",
                                           day: "numeric",
                                         }
-                                      )}<img style="margin: 0px 5px 0px 30px" src="https://testtds2.vercel.app/_next/image?url=%2Fassets%2Ficone%2Ftime.png&w=750&q=75" width="20px" height="20px" />${meeting.startAt.getHours()}h00</p>
+                                      )}<img style="margin: 0px 5px 0px 30px" src="https://tds-lilac.vercel.app/_next/image?url=%2Fassets%2Ficone%2Ftime.png&w=750&q=75" width="20px" height="20px" />${meeting.startAt.getHours()}h00</p>
                                   </div>
                                   <p>Type de rendez-vous : ${copyType.type}</p>
                                   <p style="margin: 0px 0px 40px 0px">Type de coaching : ${
                                     copyType.coaching
                                   }</p>
-                                  <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://testtds2.vercel.app/rendez-vous" target="_blank">Prendre un rendez-vous</a>
+                                  <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tds-lilac.vercel.app/rendez-vous" target="_blank">Prendre un rendez-vous</a>
                                 </div>
                               </div>
                             </body>

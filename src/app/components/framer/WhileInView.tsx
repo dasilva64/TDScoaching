@@ -12,7 +12,10 @@ const WhileInView = ({ children, className, style, type }: any) => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        variants={{ visible: { translateX: 0 }, hidden: { translateX: -200 } }}
+        variants={{
+          visible: { translateX: 0, opacity: 1 },
+          hidden: { translateX: -200, opacity: 0 },
+        }}
         transition={{ type: "spring", bounce: 0.25 }}
       >
         {children}

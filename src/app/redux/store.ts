@@ -39,6 +39,8 @@ import ModalSendTokenTwoFactor from "./feature/modal/ModalSendTokenTwoFactor";
 import ModalComfirmDisableTwoFactor from "./feature/modal/ModalComfirmDisableTwoFactor";
 import ModalDiscovery from "./feature/modal/ModalDiscovery";
 import ModalNormal from "./feature/modal/ModalNormal";
+import ModalSurMesure from "./feature/modal/ModalSurMesure";
+import ModalContract from "./feature/modal/ModalContract";
 
 export const store = configureStore({
   reducer: {
@@ -79,6 +81,8 @@ export const store = configureStore({
     ModalComfirmDisableTwoFactor: ModalComfirmDisableTwoFactor.reducer,
     ModalDiscovery: ModalDiscovery.reducer,
     ModalNormal: ModalNormal.reducer,
+    ModalSurMesure: ModalSurMesure.reducer,
+    ModalContract: ModalContract.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

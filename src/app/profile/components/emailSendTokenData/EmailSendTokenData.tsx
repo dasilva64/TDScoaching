@@ -110,7 +110,7 @@ const EmailData = () => {
               <p>
                 <strong>Email</strong>
               </p>
-              <p>{userData?.body.email}</p>
+              <p className={styles.card__info__p}>{userData?.body.email}</p>
             </div>
             <Image
               className={styles.card__info__icone}

@@ -16,6 +16,7 @@ export default withIronSessionApiRoute(
               "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
           });
         } else {
+          let link = null;
           const allMeeting = await prisma.meeting.findMany({
             where: { startAt: { gte: new Date() } },
             select: {
@@ -33,11 +34,26 @@ export default withIronSessionApiRoute(
               },
             });
           }
+          if (meeting !== null) {
+            let current = new Date();
+            let meetingDate = new Date(meeting.startAt);
+            let dateSendLink = meetingDate.setHours(
+              meetingDate.getHours() - 48
+            );
+            if (current.getTime() > dateSendLink) {
+              link = "https://www.google.com/?client=safari&channel=mac_bm";
+            } else {
+              link = null;
+            }
+          } else {
+            link = null;
+          }
           let userObject = {
             meetings: allMeeting,
             meeting: meeting,
             typeMeeting: user.typeMeeting,
             discovery: user.discovery,
+            link: link,
           };
           return res.status(200).json({
             status: 200,

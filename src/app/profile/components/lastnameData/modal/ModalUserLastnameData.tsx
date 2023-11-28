@@ -174,7 +174,9 @@ const ModalUserLastnameData = () => {
       }
     } else {
       if (validLastnameInput === false) {
-        setErrorMessageLastname("Nom de famille : 3 lettres minimum");
+        setErrorMessageLastname(
+          "Nom de famille : 3 lettres minimum et 40 lettres maximum"
+        );
       }
     }
   };
@@ -288,11 +290,11 @@ const ModalUserLastnameData = () => {
                       handlerInput(
                         e,
                         "lastname",
-                        /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
+                        /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,40}$/,
                         setValidLastnameInput,
                         setErrorMessageLastname,
                         setLastnameInput,
-                        "Nom de famille : 3 lettres minimum"
+                        "Nom de famille : 3 lettres minimum et 40 lettres maximum"
                       );
                     }}
                     endAdornment={

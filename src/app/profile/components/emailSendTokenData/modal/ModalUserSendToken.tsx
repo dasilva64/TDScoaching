@@ -123,6 +123,7 @@ const ModalUserSendToken = () => {
   }, [data, dispatch, mutate, reset, router, userData]);
 
   const closeForm = () => {
+    clearState();
     dispatch({
       type: "ModalSendTokenEmail/close",
     });
@@ -265,7 +266,7 @@ const ModalUserSendToken = () => {
                     onChange={(e) => {
                       handlerInput(
                         e,
-                        "firstname",
+                        "email",
                         /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
                         setValidEmailInput,
                         setErrorMessageEmail,

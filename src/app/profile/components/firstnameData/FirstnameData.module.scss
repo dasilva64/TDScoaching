@@ -31,6 +31,11 @@
   &__info {
     margin-left: 60px;
     transition: all 400ms;
+    &__p {
+      word-wrap: break-word;
+      word-break: break-word;
+      margin-right: 60px;
+    }
     &__icone {
       position: absolute;
       right: 10px;
@@ -97,12 +102,12 @@
 
 @media screen and (max-width: 425px) {
   .card {
-    height: 60px;
+    min-height: 60px;
     &__info {
       margin-left: 40px;
       align-self: center;
       &__p {
-        display: none;
+        margin-right: 40px;
       }
     }
     &__arc {

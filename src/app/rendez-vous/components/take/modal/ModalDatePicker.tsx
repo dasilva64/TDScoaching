@@ -187,6 +187,7 @@ const ModalDatePicker = () => {
     ) {
       if (startDateWeek === "") {
         let current = new Date();
+        current.setDate(current.getDate() + 3);
         /* let ar = getAllDayInWeek(new Date());
                 getMeetingByWeek(ar); */
         if (current.getDay() === 6) {
@@ -403,8 +404,8 @@ const ModalDatePicker = () => {
   const previous = () => {
     let start = new Date(startDateWeek);
 
-    let end = new Date(startDateWeek);
-    end.setDate(end.getDate() + 5);
+    /* let end = new Date(startDateWeek);
+    end.setDate(end.getDate() + 5); */
     let current = new Date();
     let startPrevious = new Date(start);
     startPrevious.setDate(startPrevious.getDate() - 7);
@@ -415,16 +416,21 @@ const ModalDatePicker = () => {
       changeDate(start.toDateString());
       setArDateWeek([]);
     } else {
-      let dayWeek = [];
-      for (let i = 0; i < 5; i++) {
-        dayWeek.push(new Date(startPrevious));
-        if (current.getDate() === startPrevious.getDate()) {
-          start.setDate(start.getDate() - 7);
-          changeDate(start.toDateString());
-          setArDateWeek([]);
-          break;
+      let limitDate = new Date();
+      limitDate.setDate(limitDate.getDate() + 3);
+      if (limitDate.getDay() === 6 || limitDate.getDay() === 0) {
+      } else {
+        let dayWeek = [];
+        for (let i = 0; i < 5; i++) {
+          dayWeek.push(new Date(startPrevious));
+          if (current.getDate() === startPrevious.getDate()) {
+            start.setDate(start.getDate() - 7);
+            changeDate(start.toDateString());
+            setArDateWeek([]);
+            break;
+          }
+          startPrevious.setDate(startPrevious.getDate() + 1);
         }
-        startPrevious.setDate(startPrevious.getDate() + 1);
       }
     }
   };
@@ -510,9 +516,20 @@ const ModalDatePicker = () => {
   };
 
   const goCurrent = () => {
-    let current = new Date();
-    changeDate(current.toDateString());
-    setArDateWeek([]);
+    let limit = new Date();
+    limit.setDate(limit.getDate() + 3);
+    if (limit.getDay() === 6) {
+      limit.setDate(limit.getDate() + 2);
+    } else if (limit.getDay() === 0) {
+      limit.setDate(limit.getDate() + 1);
+    }
+    limit.setDate(limit.getDate() - limit.getDay() + 1);
+    if (startDateWeek !== limit.toDateString()) {
+      let current = new Date();
+      current.setDate(current.getDate() + 3);
+      changeDate(current.toDateString());
+      setArDateWeek([]);
+    }
   };
   const closeForm = () => {
     dispatch({

@@ -112,7 +112,9 @@ const FirstnameData = () => {
                 <p>
                   <strong>Prénom</strong>
                 </p>
-                <p>{userData?.body.firstname}</p>
+                <p className={styles.card__info__p}>
+                  {userData?.body.firstname}
+                </p>
               </div>
               <Image
                 className={styles.card__info__icone}

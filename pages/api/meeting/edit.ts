@@ -56,6 +56,17 @@ export default withIronSessionApiRoute(
                     "Une erreur est survenue lors de la modification du rendez-vous, veuillez réessayer",
                 });
               } else {
+                let link = null;
+                let current = new Date();
+                let meetingDate = new Date(editMetting.startAt);
+                let dateSendLink = meetingDate.setHours(
+                  meetingDate.getHours() - 48
+                );
+                if (current.getTime() > dateSendLink) {
+                  link = "https://www.google.com/?client=safari&channel=mac_bm";
+                } else {
+                  link = null;
+                }
                 const allMeeting = await prisma.meeting.findMany({
                   where: { startAt: { gte: new Date() } },
                   select: {
@@ -68,6 +79,7 @@ export default withIronSessionApiRoute(
                   meetings: allMeeting,
                   discovery: user.discovery,
                   typeMeeting: user.typeMeeting,
+                  link: link,
                 };
                 return res.status(200).json({
                   status: 200,

@@ -295,9 +295,7 @@ const ModalDeleteAccount = () => {
                     <button
                       onClick={() => {
                         if (reasonValid) {
-                          console.log("ok");
                           if (inputPseudo.length === 0) {
-                            console.log("ok2");
                             trigger({ reason: reason, pseudo: inputPseudo });
                           }
                         } else {

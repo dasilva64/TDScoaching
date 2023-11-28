@@ -16,7 +16,6 @@ const Display = () => {
     isLoading,
     isError,
   } = useGet("/api/meeting/getAllAfterNow");
-  console.log(allMeeting);
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth < 600) {
@@ -72,6 +71,7 @@ const Display = () => {
       </>
     );
   }
+
   return <>{content}</>;
 };
 

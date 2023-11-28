@@ -94,7 +94,6 @@ const ModalAddDiscoveryMeeting = () => {
     }
   }, [data, reset]);
   const handlerClick = () => {
-    console.log(new Date().getTimezoneOffset() / 60);
     const fetchAddMeeting = async () => {
       trigger({
         start: new Date(dataModalAddDiscoveryMeeting).toISOString(),

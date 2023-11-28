@@ -170,7 +170,6 @@ const DatePickerMobile = ({ events }: any) => {
 
   const handlerClick = (year: any, month: any, day: any, hour: any) => {
     let create = new Date(year, month, day, hour[0]);
-    //console.log(year, month + 1, day, hour);
     if (new Date(create).getTime() > new Date().getTime()) {
       dispatch({
         type: "ModalAddMeetingAdmin/open",

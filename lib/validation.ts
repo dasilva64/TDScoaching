@@ -5,25 +5,33 @@ export const validationBody = (body: any) => {
   let arrayMessageError: any = [];
   Object.entries(body).forEach(([key, value]: any) => {
     if (key === "email") {
-      if (!validator.isEmail(value.trim())) {
-        arrayMessageError.push(["email", "Email : doit être un email valide"]);
+      let regex = /^.{5,50}$/;
+      if (!validator.isEmail(value.trim(), { ignore_max_length: true })) {
+        arrayMessageError.push(["email", "Email : doit être un format valide"]);
+      } else {
+        if (!validator.matches(value.trim(), regex)) {
+          arrayMessageError.push([
+            "email",
+            "Email : doit contenir entre 5 et 50 caractères",
+          ]);
+        }
       }
     }
     if (key === "firstname") {
-      let regex = /^[a-zA-ZÀ-ÿ]+$/;
+      let regex = /^[a-zA-ZÀ-ÿ]{3,40}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["firstname", "Prénom : ne peut pas être vide"]);
       } else {
         if (!validator.matches(value.trim(), regex)) {
           arrayMessageError.push([
             "firstname",
-            "Prénom : ne peut contenir que des lettres",
+            "Prénom : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères",
           ]);
         }
       }
     }
     if (key === "lastname") {
-      let regex = /^[a-zA-ZÀ-ÿ]+$/;
+      let regex = /^[a-zA-ZÀ-ÿ]{3,40}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push([
           "lastname",
@@ -33,7 +41,7 @@ export const validationBody = (body: any) => {
         if (!validator.matches(value.trim(), regex)) {
           arrayMessageError.push([
             "lastname",
-            "Nom de famille : ne peut contenir que des lettres",
+            "Nom de famille : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères",
           ]);
         }
       }

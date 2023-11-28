@@ -37,6 +37,11 @@
       transform: translateY(-50%);
       transition: all 400ms;
     }
+    &__p {
+      word-wrap: break-word;
+      word-break: break-word;
+      margin-right: 60px;
+    }
   }
   &__arc {
     margin: 18px 10px 0px 10px;
@@ -115,12 +120,12 @@
 
 @media screen and (max-width: 425px) {
   .card {
-    height: 60px;
+    min-height: 60px;
     &__info {
       margin-left: 40px;
       align-self: center;
       &__p {
-        display: none;
+        margin-right: 40px;
       }
     }
     &__arc {

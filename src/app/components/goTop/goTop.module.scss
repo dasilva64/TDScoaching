@@ -5,11 +5,11 @@
   text-align: center;
   color: #fff;
   background: rgba(0, 0, 0, 0.25);
-  z-index: 99999;
+  z-index: 998;
   position: fixed;
   cursor: pointer;
   bottom: 1em;
-  right: 20px;
+  right: 1%;
 }
 .top__flash {
   border-radius: 3px;
@@ -18,11 +18,11 @@
   text-align: center;
   color: #fff;
   background: rgba(0, 0, 0, 0.25);
-  z-index: 99999;
+  z-index: 998;
   position: fixed;
   cursor: pointer;
-  bottom: 6em;
-  right: 20px;
+  bottom: 4em;
+  right: 1%;
 }
 .top__noFlash:before,
 .top__flash:before {
@@ -31,4 +31,23 @@
 .top__noFlash:hover,
 .top__flash:hover {
   background: rgba(0, 0, 0, 1);
+}
+
+@media screen and (max-width: 600px) {
+  .top__noFlash {
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 15px;
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 99999;
+    position: fixed;
+    cursor: pointer;
+    bottom: 1em;
+    right: 1%;
+  }
+  .top__flash {
+    bottom: 5em;
+  }
 }

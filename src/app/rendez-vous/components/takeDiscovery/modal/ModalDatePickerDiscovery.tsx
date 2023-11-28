@@ -1423,7 +1423,7 @@ const ModalDatePickerDiscovery = () => {
                                           styles.datePickermobile__table__tbody__tr__td__div__p
                                         }
                                       >
-                                        {p[0][3]}h00
+                                        {p[0]}h00
                                       </p>
                                     </div>
                                   </td>

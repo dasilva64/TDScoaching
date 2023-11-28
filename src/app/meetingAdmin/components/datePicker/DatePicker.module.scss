@@ -24,6 +24,7 @@
       width: 20px;
       height: 20px;
       background-image: url("/assets/icone/house-solid.svg");
+      background-repeat: no-repeat;
       transition: all 400ms;
       cursor: pointer;
       &:hover {
@@ -152,6 +153,8 @@
                 color: white;
                 align-self: center;
                 overflow: scroll;
+                white-space: nowrap;
+                padding: 0px 5px;
               }
               &__back {
                 cursor: pointer;
@@ -255,6 +258,7 @@
       width: 20px;
       height: 20px;
       background-image: url("/assets/icone/house-solid.svg");
+      background-repeat: no-repeat;
       transition: all 400ms;
       cursor: pointer;
       &:hover {

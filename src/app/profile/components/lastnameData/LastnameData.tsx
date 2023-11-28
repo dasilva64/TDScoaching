@@ -111,7 +111,7 @@ const LastnameData = () => {
               <p>
                 <strong>Nom de famille</strong>
               </p>
-              <p>{userData?.body.lastname}</p>
+              <p className={styles.card__info__p}>{userData?.body.lastname}</p>
             </div>
             <Image
               className={styles.card__info__icone}

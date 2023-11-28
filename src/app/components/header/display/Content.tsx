@@ -42,6 +42,9 @@ import ModalTwoFactor from "@/app/profile/components/twoFactorData/ModalTwoFacto
 import ModalComfirmDisable from "@/app/profile/components/twoFactorSendTokenData/Modal/ModalComfirmDisable";
 import DiscoveryModal from "@/app/tarif/components/DiscoveryModal";
 import NormalModal from "@/app/tarif/components/NormalModal";
+import ModalSurMesure from "@/app/redux/feature/modal/ModalSurMesure";
+import SurMesureModal from "@/app/rendez-vous/components/formule/components/SurMesureModal";
+import ContractModal from "@/app/rendez-vous/components/formule/components/ContractModal";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
@@ -583,6 +586,12 @@ const Content = () => {
   const { displayModalNormal } = useSelector(
     (state: RootState) => state.ModalNormal
   );
+  const { displayModalSurMesure } = useSelector(
+    (state: RootState) => state.ModalSurMesure
+  );
+  const { displayModalContract } = useSelector(
+    (state: RootState) => state.ModalContract
+  );
   /* const { displayModalCancelMeeting } = useSelector(
     (state: RootState) => state.ModalCancelMeeting
   ); */
@@ -633,7 +642,9 @@ const Content = () => {
       displayModalEditFormule === true ||
       displayModalComfirmDisableTwoFactor === true ||
       displayModalDiscovery === true ||
-      displayModalNormal === true
+      displayModalNormal === true ||
+      displayModalSurMesure === true ||
+      displayModalContract === true
     ) {
       return `${styles.line__hide}`;
     } else {
@@ -677,7 +688,9 @@ const Content = () => {
           displayModalEditFormule === true ||
           displayModalComfirmDisableTwoFactor === true ||
           displayModalDiscovery === true ||
-          displayModalNormal === true
+          displayModalNormal === true ||
+          displayModalSurMesure === true ||
+          displayModalContract === true
         ) {
           /* header.style.opacity = "0.02";
           mainDiv.style.opacity = "0.02";
@@ -723,6 +736,8 @@ const Content = () => {
     displayModalComfirmDisableTwoFactor,
     displayModalDiscovery,
     displayModalNormal,
+    displayModalSurMesure,
+    displayModalContract,
   ]);
 
   if (typeof window !== "undefined") {
@@ -848,6 +863,8 @@ const Content = () => {
       <ModalComfirmDisable />
       <DiscoveryModal />
       <NormalModal />
+      <SurMesureModal />
+      <ContractModal />
 
       {/* <ModalAddMeeting /> */}
       {/* <ModalDeleteFirstMeeting /> */}

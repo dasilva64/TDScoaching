@@ -114,13 +114,13 @@ const Display = () => {
               {userData.body.meeting !== null &&
                 userData.body.discovery === false && (
                   <>
-                    <div className={styles.rappel}>
+                    {/* <div className={styles.rappel}>
                       <h2 className={styles.rappel__h2}>Offre actuelle</h2>
                       <p className={styles.rappel__p}>
                         Vous disposez d&apos;une offre{" "}
                         <strong>{userData.body.typeMeeting.type}</strong>.
                       </p>
-                    </div>
+                    </div> */}
                     <div className={styles.content}>
                       <MyDiscoveryMeeting />
                     </div>

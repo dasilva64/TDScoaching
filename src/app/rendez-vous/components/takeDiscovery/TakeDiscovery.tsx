@@ -27,7 +27,7 @@ const TakeDiscovery = () => {
                 Ce rendez-vous est gratuit et sans engagement. Il permet de
                 faire connaissance et de définir ensemble vos objectifs et vos
                 besoins. Vous pouvez sélectionner une date en cliquant sur le
-                calendrier.
+                bouton ci-dessus.
               </p>
               <div
                 className={styles.TakeDiscovery__container__offre__content__div}

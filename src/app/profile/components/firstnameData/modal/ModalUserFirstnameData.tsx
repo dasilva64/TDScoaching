@@ -39,7 +39,6 @@ const ModalUserFirstnameData = () => {
       setFirstnameInput("");
     } else {
       if (userData) {
-        console.log(userData);
         if (userData.status === 200) {
           setFirstnameInput(userData.body.firstname);
         } else if (userData.status === 401) {
@@ -178,7 +177,9 @@ const ModalUserFirstnameData = () => {
       }
     } else {
       if (validFirstnameInput === false) {
-        setErrorMessageFirstname("Prénom : 3 lettres minimum");
+        setErrorMessageFirstname(
+          "Prénom : 3 lettres minimum et 40 lettres maximum"
+        );
       }
     }
   };
@@ -295,11 +296,11 @@ const ModalUserFirstnameData = () => {
                       handlerInput(
                         e,
                         "firstname",
-                        /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
+                        /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,40}$/,
                         setValidFirstnameInput,
                         setErrorMessageFirstname,
                         setFirstnameInput,
-                        "Prénom : 3 lettres minimum"
+                        "Prénom : 3 lettres minimum et 40 lettres maximum"
                       );
                     }}
                     endAdornment={

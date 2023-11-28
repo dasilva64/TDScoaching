@@ -68,7 +68,7 @@ h2 {
       text-align: center;
       position: fixed;
       box-shadow: 4px 5px 15px 0px black;
-      bottom: 20px;
+      bottom: 0px;
       z-index: 1;
       left: 50%;
       width: 95%;
@@ -110,6 +110,17 @@ h2 {
     }
     &__success {
       background-color: green;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .flash {
+    &__modal {
+      &__standard {
+        bottom: -10px;
+        width: 98%;
+      }
     }
   }
 }

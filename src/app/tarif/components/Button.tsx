@@ -1,6 +1,6 @@
 "use client";
 
-import fetchGet from "../../../../test/app/components/fetch/fetchGet";
+import fetchGet from "../../components/fetch/fetchGet";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";

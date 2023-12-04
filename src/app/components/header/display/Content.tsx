@@ -10,18 +10,18 @@ import Image from "next/image";
 import EmailCheck from "../../../../../test/app/profile/components/emailData/EmailData";
 import ModalUserSendToken from "../../../../../test/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
 import ModalUserPasswordData from "../../../../../test/app/profile/components/passwordData/modal/ModalUserPasswordData";
-import Forgot from "../../../../../test/app/components/forgot/Forgot";
+/* import Forgot from "../../../../../test/app/components/forgot/Forgot";
 import FormLogin from "../../../../../test/app/components/login/formLogin";
-import FormRegister from "../../../../../test/app/components/register/formRegister";
+import FormRegister from "../../../../../test/app/components/register/formRegister"; */
 import ModalDeleteAccount from "../../../../../test/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
 import ModalCloseEmail from "../../../../../test/app/profile/components/emailData/modal/ModalCloseEmail";
 import { AnimatePresence, motion } from "framer-motion";
 import Nav from "../components/Nav";
 import ModalUserFirstnameData from "../../../../../test/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
 import ModalUserLastnameData from "../../../../../test/app/profile/components/lastnameData/modal/ModalUserLastnameData";
-import useGet from "../../../../../test/app/components/hook/useGet";
+//import useGet from "../../../../../test/app/components/hook/useGet";
 
-import { mutate, useSWRConfig } from "swr";
+//import { mutate, useSWRConfig } from "swr";
 import ModalEditFormuleUser from "../../../../../test/app/rendez-vous/components/take/modal/ModalEditFormule";
 import ModalCancelMeeting from "../../../../../test/app/rendez-vous/components/not-comfirm/modal/ModalCancelMeeting";
 import ModalDatePickerEditDesktop from "../../../../../test/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
@@ -55,7 +55,7 @@ const Content = () => {
   const pathname = usePathname();
   const [onHoverLink, setOnHoverLink] = useState<string | null>(pathname);
   const router = useRouter();
-  const { cache } = useSWRConfig();
+  //const { cache } = useSWRConfig();
   const { isMobile } = useSelector((state: RootState) => state.Mobile);
   /* useEffect(() => {
     const fetchCheckUser = async () => {

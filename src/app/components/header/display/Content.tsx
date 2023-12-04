@@ -7,44 +7,46 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import EmailCheck from "@/app/profile/components/emailData/EmailData";
-import ModalUserSendToken from "@/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
-import ModalUserPasswordData from "@/app/profile/components/passwordData/modal/ModalUserPasswordData";
-import Forgot from "../../forgot/Forgot";
-import FormLogin from "../../login/formLogin";
-import FormRegister from "../../register/formRegister";
-import ModalDeleteAccount from "@/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
-import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalCloseEmail";
+import EmailCheck from "../../../../../test/app/profile/components/emailData/EmailData";
+import ModalUserSendToken from "../../../../../test/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
+import ModalUserPasswordData from "../../../../../test/app/profile/components/passwordData/modal/ModalUserPasswordData";
+import Forgot from "../../../../../test/app/components/forgot/Forgot";
+import FormLogin from "../../../../../test/app/components/login/formLogin";
+import FormRegister from "../../../../../test/app/components/register/formRegister";
+import ModalDeleteAccount from "../../../../../test/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
+import ModalCloseEmail from "../../../../../test/app/profile/components/emailData/modal/ModalCloseEmail";
 import { AnimatePresence, motion } from "framer-motion";
 import Nav from "../components/Nav";
-import ModalUserFirstnameData from "@/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
-import ModalUserLastnameData from "@/app/profile/components/lastnameData/modal/ModalUserLastnameData";
-import useGet from "../../hook/useGet";
+import ModalUserFirstnameData from "../../../../../test/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
+import ModalUserLastnameData from "../../../../../test/app/profile/components/lastnameData/modal/ModalUserLastnameData";
+import useGet from "../../../../../test/app/components/hook/useGet";
 
 import { mutate, useSWRConfig } from "swr";
-import ModalEditFormuleUser from "@/app/rendez-vous/components/take/modal/ModalEditFormule";
-import ModalCancelMeeting from "@/app/rendez-vous/components/not-comfirm/modal/ModalCancelMeeting";
-import ModalDatePickerEditDesktop from "@/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
-import ModalAddDiscoveryMeeting from "@/app/rendez-vous/components/takeDiscovery/modal/ModalAddDiscoveryMeeting";
-import ModalDeleteDiscoveryMeeting from "@/app/rendez-vous/components/my-discovery-meeting/modal/ModalDeleteDiscoveryMeeting";
-import ModalDatePicker from "@/app/rendez-vous/components/take/modal/ModalDatePicker";
-import ModalAddMeeting from "@/app/rendez-vous/components/take/modal/ModalAddMeeting";
-import ModalEditDiscoveryMeeting from "@/app/rendez-vous/components/my-discovery-meeting/modal/ModalEditDiscoveryMeeting";
-import ModalDatePickerDiscovery from "@/app/rendez-vous/components/takeDiscovery/modal/ModalDatePickerDiscovery";
-import ModalDatePickerEditDiscovery from "@/app/rendez-vous/components/my-discovery-meeting/modal/ModalDatePickerEditDiscovery";
-import ModalDatePickerEdit from "@/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
-import ModalEditMeeting from "@/app/rendez-vous/components/my-meeting/modal/ModalEditMeeting";
-import ModalDeleteMeeting from "@/app/rendez-vous/components/my-meeting/modal/ModalDeleteMeeting";
-import ModalAddMeetingAdmin from "@/app/meetingAdmin/components/modal/ModalAddMeetingAdmin";
-import ModalCloseTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalCloseTwoFactor";
-import ModalTwoFactorSendToken from "@/app/profile/components/twoFactorSendTokenData/Modal/ModalTwoFactorSendToken";
-import ModalTwoFactor from "@/app/profile/components/twoFactorData/ModalTwoFactor";
-import ModalComfirmDisable from "@/app/profile/components/twoFactorSendTokenData/Modal/ModalComfirmDisable";
+import ModalEditFormuleUser from "../../../../../test/app/rendez-vous/components/take/modal/ModalEditFormule";
+import ModalCancelMeeting from "../../../../../test/app/rendez-vous/components/not-comfirm/modal/ModalCancelMeeting";
+import ModalDatePickerEditDesktop from "../../../../../test/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
+import ModalAddDiscoveryMeeting from "../../../../../test/app/rendez-vous/components/takeDiscovery/modal/ModalAddDiscoveryMeeting";
+import ModalDeleteDiscoveryMeeting from "../../../../../test/app/rendez-vous/components/my-discovery-meeting/modal/ModalDeleteDiscoveryMeeting";
+import ModalDatePicker from "../../../../../test/app/rendez-vous/components/take/modal/ModalDatePicker";
+import ModalAddMeeting from "../../../../../test/app/rendez-vous/components/take/modal/ModalAddMeeting";
+import ModalEditDiscoveryMeeting from "../../../../../test/app/rendez-vous/components/my-discovery-meeting/modal/ModalEditDiscoveryMeeting";
+import ModalDatePickerDiscovery from "../../../../../test/app/rendez-vous/components/takeDiscovery/modal/ModalDatePickerDiscovery";
+import ModalDatePickerEditDiscovery from "../../../../../test/app/rendez-vous/components/my-discovery-meeting/modal/ModalDatePickerEditDiscovery";
+import ModalDatePickerEdit from "../../../../../test/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
+import ModalEditMeeting from "../../../../../test/app/rendez-vous/components/my-meeting/modal/ModalEditMeeting";
+import ModalDeleteMeeting from "../../../../../test/app/rendez-vous/components/my-meeting/modal/ModalDeleteMeeting";
+import ModalAddMeetingAdmin from "../../../../../test/app/meetingAdmin/components/modal/ModalAddMeetingAdmin";
+import ModalCloseTwoFactor from "../../../../../test/app/profile/components/twoFactorData/modal/ModalCloseTwoFactor";
+import ModalTwoFactorSendToken from "../../../../../test/app/profile/components/twoFactorSendTokenData/Modal/ModalTwoFactorSendToken";
+import ModalTwoFactor from "../../../../../test/app/profile/components/twoFactorData/ModalTwoFactor";
+import ModalComfirmDisable from "../../../../../test/app/profile/components/twoFactorSendTokenData/Modal/ModalComfirmDisable";
 import DiscoveryModal from "@/app/tarif/components/DiscoveryModal";
 import NormalModal from "@/app/tarif/components/NormalModal";
 import ModalSurMesure from "@/app/redux/feature/modal/ModalSurMesure";
-import SurMesureModal from "@/app/rendez-vous/components/formule/components/SurMesureModal";
-import ContractModal from "@/app/rendez-vous/components/formule/components/ContractModal";
+import SurMesureModal from "../../../../../test/app/rendez-vous/components/formule/components/SurMesureModal";
+import ContractModal from "../../../../../test/app/rendez-vous/components/formule/components/ContractModal";
+import ModalComfirmDeleteContrat from "../../../../../test/app/rendez-vous/components/take/modal/ModalComfirmDeleteContrat";
+import ModalComfirmEditContrat from "../../../../../test/app/rendez-vous/components/take/modal/ModalComfirmEditContrat";
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
@@ -63,7 +65,7 @@ const Content = () => {
     fetchCheckUser();
   }, []); */
 
-  const { data, isLoading, isError } = useGet("/api/user/check");
+  /* const { data, isLoading, isError } = useGet("/api/user/check");
   useEffect(() => {
     if (data) {
       if (data.body !== null) {
@@ -501,10 +503,10 @@ const Content = () => {
         );
       }
     }
-  }
+  } */
 
   const [isClick, setIsClick] = useState<boolean>(false);
-  const { displayModalLogin } = useSelector(
+  /* const { displayModalLogin } = useSelector(
     (state: RootState) => state.ModalLogin
   );
   const { displayModalRegister } = useSelector(
@@ -592,6 +594,18 @@ const Content = () => {
   const { displayModalContract } = useSelector(
     (state: RootState) => state.ModalContract
   );
+  const { displayModalComfirmDeleteContrat } = useSelector(
+    (state: RootState) => state.ModalComfirmDeleteContrat
+  );
+  const { displayModalComfirmEditContrat } = useSelector(
+    (state: RootState) => state.ModalComfirmEditContrat
+  ); */
+  const { displayModalDiscovery } = useSelector(
+    (state: RootState) => state.ModalDiscovery
+  );
+  const { displayModalNormal } = useSelector(
+    (state: RootState) => state.ModalNormal
+  );
   /* const { displayModalCancelMeeting } = useSelector(
     (state: RootState) => state.ModalCancelMeeting
   ); */
@@ -615,37 +629,7 @@ const Content = () => {
     });
   };
   const classNameLine = () => {
-    if (
-      displayModalSendTokenTwoFactor === true ||
-      displayModalCancelTwoFactor === true ||
-      displayModalAddMeetingAdmin === true ||
-      displayModalDeleteMeeting === true ||
-      displayModalEditMeeting === true ||
-      displayModalDatePickerEdit === true ||
-      displayModalAddMeeting === true ||
-      displayModalDatePicker === true ||
-      displayModalEditDiscoveryMeeting === true ||
-      displayModalDatePickerEditDiscovery === true ||
-      displayModalLogin === true ||
-      displayModalRegister === true ||
-      displayModalDatePickerDiscovery === true ||
-      displayModalEditFirstname === true ||
-      displayModalEditLastname === true ||
-      displayModalEditPassword === true ||
-      displayModalSendTokenEmail === true ||
-      displayModalEditEmail === true ||
-      displayModalEditTwoFactor === true ||
-      displayModalCancelMeeting === true ||
-      displayModalDeleteAccount === true ||
-      displayModalAddDiscoveryMeeting === true ||
-      displayModalDeleteDiscoveryMeeting === true ||
-      displayModalEditFormule === true ||
-      displayModalComfirmDisableTwoFactor === true ||
-      displayModalDiscovery === true ||
-      displayModalNormal === true ||
-      displayModalSurMesure === true ||
-      displayModalContract === true
-    ) {
+    if (displayModalDiscovery === true || displayModalNormal === true) {
       return `${styles.line__hide}`;
     } else {
       return `${styles.line__show}`;
@@ -661,37 +645,7 @@ const Content = () => {
       let header = document.querySelector("header");
 
       if (mainDiv && footerDiv && htlmElement && htlmbody && header) {
-        if (
-          displayModalSendTokenTwoFactor === true ||
-          displayModalCancelTwoFactor === true ||
-          displayModalAddMeetingAdmin === true ||
-          displayModalDeleteMeeting === true ||
-          displayModalEditMeeting === true ||
-          displayModalDatePickerEdit === true ||
-          displayModalAddMeeting === true ||
-          displayModalDatePicker === true ||
-          displayModalEditDiscoveryMeeting === true ||
-          displayModalDatePickerEditDiscovery === true ||
-          displayModalLogin === true ||
-          displayModalRegister === true ||
-          displayModalDatePickerDiscovery === true ||
-          displayModalEditFirstname === true ||
-          displayModalEditLastname === true ||
-          displayModalEditPassword === true ||
-          displayModalSendTokenEmail === true ||
-          displayModalEditEmail === true ||
-          displayModalEditTwoFactor === true ||
-          displayModalCancelMeeting === true ||
-          displayModalDeleteAccount === true ||
-          displayModalAddDiscoveryMeeting === true ||
-          displayModalDeleteDiscoveryMeeting === true ||
-          displayModalEditFormule === true ||
-          displayModalComfirmDisableTwoFactor === true ||
-          displayModalDiscovery === true ||
-          displayModalNormal === true ||
-          displayModalSurMesure === true ||
-          displayModalContract === true
-        ) {
+        if (displayModalDiscovery === true || displayModalNormal === true) {
           /* header.style.opacity = "0.02";
           mainDiv.style.opacity = "0.02";
           footerDiv.style.opacity = "0.02";
@@ -708,37 +662,7 @@ const Content = () => {
         }
       }
     }
-  }, [
-    displayModalSendTokenEmail,
-    displayModalLogin,
-    displayModalRegister,
-    displayModalEditPassword,
-    displayModalEditEmail,
-    displayModalEditTwoFactor,
-    displayModalCancelMeeting,
-    displayModalDeleteAccount,
-    displayModalEditLastname,
-    displayModalAddDiscoveryMeeting,
-    displayModalDeleteDiscoveryMeeting,
-    displayModalEditFormule,
-    displayModalDatePicker,
-    displayModalEditFirstname,
-    displayModalDatePickerDiscovery,
-    displayModalDatePickerEditDiscovery,
-    displayModalEditDiscoveryMeeting,
-    displayModalAddMeeting,
-    displayModalDatePickerEdit,
-    displayModalEditMeeting,
-    displayModalDeleteMeeting,
-    displayModalAddMeetingAdmin,
-    displayModalCancelTwoFactor,
-    displayModalSendTokenTwoFactor,
-    displayModalComfirmDisableTwoFactor,
-    displayModalDiscovery,
-    displayModalNormal,
-    displayModalSurMesure,
-    displayModalContract,
-  ]);
+  }, [displayModalDiscovery, displayModalNormal]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("resize", () => {
@@ -828,7 +752,7 @@ const Content = () => {
   }, [dispatch, isMobile]);
   return (
     <>
-      {typeof window !== "undefined" &&
+      {/* {typeof window !== "undefined" &&
         window.location.pathname === "/profile" && (
           <>
             <ModalUserFirstnameData />
@@ -845,10 +769,10 @@ const Content = () => {
         )}
       <FormLogin />
       <FormRegister />
-      <Forgot />
+      <Forgot /> */}
 
       {/* <ModalDatePickerDiscoveryMobile /> */}
-      <ModalDatePickerDiscovery />
+      {/* <ModalDatePickerDiscovery />
       <ModalAddDiscoveryMeeting />
       <ModalDeleteDiscoveryMeeting />
       <ModalEditDiscoveryMeeting />
@@ -862,55 +786,17 @@ const Content = () => {
       <ModalAddMeetingAdmin />
       <ModalComfirmDisable />
       <DiscoveryModal />
-      <NormalModal />
+      
       <SurMesureModal />
       <ContractModal />
+      <ModalComfirmDeleteContrat />
+      <ModalComfirmEditContrat />
 
-      {/* <ModalAddMeeting /> */}
-      {/* <ModalDeleteFirstMeeting /> */}
-      {/* {mobile === true ? null : <DatePickerEditDesktop />}
-      {mobile === true ? null : <ModalEditMeeting />} */}
       <ModalEditFormuleUser />
       <ModalCancelMeeting />
-      <ModalDatePickerEditDesktop />
-      {/* <DisplayModal
-        state={displayModalCancelMeeting}
-        textClassName="displayModalCancelMeeting"
-        component={<ModalCancel />}
-        componentFake={<ModalCancelFake />}
-      />
-      <DisplayModal
-        state={displayModalDeleteMeeting}
-        textClassName="displayModalDeleteMeeting"
-        component={<ModalDeleteMeeting />}
-        componentFake={<ModalDeleteMeetingFake />}
-      />
-
-      <DisplayModal
-        state={displayModalDatePicker}
-        textClassName="displayModalDatePicker"
-        component={
-          mobile === true ? <DatePickerMobile /> : <DatePickerDesktop />
-        }
-        componentFake={<ModalDeleteMeetingFake />}
-      /> */}
-      {/* {displayModalTwoFactorCode === true && <ModalTwoFactorCode />} */}
-      {/* {displayModalCancelMeeting === true && <ModalCancel />} */}
-      {/* {displayModalDeleteMeeting === true && <ModalDeleteMeeting />} */}
-      {/* {displayModalMeeting === true && <ModalAddMeeting />} */}
-      {/* {displayModalDeleteDiscoveryMeeting === true && <ModalDeleteFirstMeeting />} */}
-      {/* {displayModalEditFormule === true && <ModalEditFormuleUser />} */}
-      {/* {displayModalCancelFormule === true && <ModalCancelFormuleUser />} */}
-      {/* {displayModalEditMeeting === true && <ModalEditMeeting />} */}
-
-      {/* <DisplayModal
-        state={displayModalAddMeetingAdmin}
-        textClassName="displayModalAddMeetingAdmin"
-        component={<ModalAddMeetingAdmin />}
-        componentFake={<ModalDeleteMeetingFake />}
-      /> */}
-      {/* {displayModalAddMeetingAdmin === true && <ModalAddMeetingAdmin />} */}
-
+      <ModalDatePickerEditDesktop /> */}
+      <NormalModal />
+      <DiscoveryModal />
       <AnimatePresence>
         {flashMessage && flashMessage[1].length > 0 && (
           <>
@@ -1199,7 +1085,7 @@ const Content = () => {
               </Link>
             </li>
           </ul>
-          {content}
+          {/* {content} */}
         </nav>
 
         {/* <button

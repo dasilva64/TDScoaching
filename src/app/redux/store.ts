@@ -41,6 +41,8 @@ import ModalDiscovery from "./feature/modal/ModalDiscovery";
 import ModalNormal from "./feature/modal/ModalNormal";
 import ModalSurMesure from "./feature/modal/ModalSurMesure";
 import ModalContract from "./feature/modal/ModalContract";
+import ModalComfirmDeleteContrat from "./feature/modal/ModalComfirmDeleteContrat";
+import ModalComfirmEditContrat from "./feature/modal/ModalComfirmEditContrat";
 
 export const store = configureStore({
   reducer: {
@@ -83,6 +85,8 @@ export const store = configureStore({
     ModalNormal: ModalNormal.reducer,
     ModalSurMesure: ModalSurMesure.reducer,
     ModalContract: ModalContract.reducer,
+    ModalComfirmDeleteContrat: ModalComfirmDeleteContrat.reducer,
+    ModalComfirmEditContrat: ModalComfirmEditContrat.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -34,6 +34,16 @@ yarn-error.log*
 /.env
 *.env
 
+/test
+/test/*
+/test/**/*
+/test/**/**/*
+/test/**/**/**/*
+/test/**/**/**/**/*
+/test/**/**/**/**/**/*
+/test/**/**/**/**/**/**/*
+/test/**/**/**/**/**/**/**/*
+
 # vercel
 .vercel
 

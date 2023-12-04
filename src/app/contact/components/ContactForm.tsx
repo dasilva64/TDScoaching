@@ -8,7 +8,7 @@ import { FormHelperText, FormLabel, TextField } from "@mui/material";
 import useSWRMutation from "swr/mutation";
 import Textarea from "@mui/joy/Textarea";
 import validator from "validator";
-import fetchPost from "@/app/components/fetch/FetchPost";
+import fetchPost from "../../../../test/app/components/fetch/FetchPost";
 
 const ContactForm = () => {
   const [inputFirstname, setInputFirstname] = useState<string>("");

@@ -1,6 +1,6 @@
 "use client";
 
-import fetchGet from "@/app/components/fetch/fetchGet";
+import fetchGet from "../../../../test/app/components/fetch/fetchGet";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -8,10 +8,10 @@ import useSWRMutation from "swr/mutation";
 import styles from "./Button.module.scss";
 
 const Button = () => {
-  const { trigger, data, reset } = useSWRMutation("/api/user/check", fetchGet);
+  //const { trigger, data, reset } = useSWRMutation("/api/user/check", fetchGet);
   const dispatch = useDispatch();
   const router = useRouter();
-  useEffect(() => {
+  /* useEffect(() => {
     if (data) {
       if (data.status === 200) {
         reset();
@@ -40,9 +40,18 @@ const Button = () => {
         reset();
       }
     }
-  }, [data, dispatch, reset, router]);
+  }, [data, dispatch, reset, router]); */
   const handleClick = () => {
-    trigger();
+    //trigger();
+    router.push("/contact");
+    dispatch({
+      type: "flash/storeFlashMessage",
+      payload: {
+        type: "success",
+        flashMessage:
+          "Vous ne pouvez pas réserver de séance pour le moment, veuillez me contacter",
+      },
+    });
   };
   return (
     <button

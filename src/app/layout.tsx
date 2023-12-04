@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { Providers } from "./redux/provider";
 import Footer from "./components/footer/footer";
 import Header from "./components/header/header";
-import { CanvasProvider } from "./rendez-vous/components/formule/CanvasContext";
+import { CanvasProvider } from "../../test/app/rendez-vous/components/formule/CanvasContext";
 //const Header = lazy(() => import("./components/header/header"));
 const inter = Inter({ subsets: ["latin"] });
 

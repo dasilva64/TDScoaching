@@ -7,22 +7,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import EmailCheck from "../../../../../test/app/profile/components/emailData/EmailData";
+/* import EmailCheck from "../../../../../test/app/profile/components/emailData/EmailData";
 import ModalUserSendToken from "../../../../../test/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
-import ModalUserPasswordData from "../../../../../test/app/profile/components/passwordData/modal/ModalUserPasswordData";
+import ModalUserPasswordData from "../../../../../test/app/profile/components/passwordData/modal/ModalUserPasswordData"; */
 /* import Forgot from "../../../../../test/app/components/forgot/Forgot";
 import FormLogin from "../../../../../test/app/components/login/formLogin";
 import FormRegister from "../../../../../test/app/components/register/formRegister"; */
-import ModalDeleteAccount from "../../../../../test/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
-import ModalCloseEmail from "../../../../../test/app/profile/components/emailData/modal/ModalCloseEmail";
+//import ModalDeleteAccount from "../../../../../test/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
+//import ModalCloseEmail from "../../../../../test/app/profile/components/emailData/modal/ModalCloseEmail";
 import { AnimatePresence, motion } from "framer-motion";
 import Nav from "../components/Nav";
-import ModalUserFirstnameData from "../../../../../test/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
-import ModalUserLastnameData from "../../../../../test/app/profile/components/lastnameData/modal/ModalUserLastnameData";
+/* import ModalUserFirstnameData from "../../../../../test/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
+import ModalUserLastnameData from "../../../../../test/app/profile/components/lastnameData/modal/ModalUserLastnameData"; */
 //import useGet from "../../../../../test/app/components/hook/useGet";
 
 //import { mutate, useSWRConfig } from "swr";
-import ModalEditFormuleUser from "../../../../../test/app/rendez-vous/components/take/modal/ModalEditFormule";
+/* import ModalEditFormuleUser from "../../../../../test/app/rendez-vous/components/take/modal/ModalEditFormule";
 import ModalCancelMeeting from "../../../../../test/app/rendez-vous/components/not-comfirm/modal/ModalCancelMeeting";
 import ModalDatePickerEditDesktop from "../../../../../test/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
 import ModalAddDiscoveryMeeting from "../../../../../test/app/rendez-vous/components/takeDiscovery/modal/ModalAddDiscoveryMeeting";
@@ -39,14 +39,14 @@ import ModalAddMeetingAdmin from "../../../../../test/app/meetingAdmin/component
 import ModalCloseTwoFactor from "../../../../../test/app/profile/components/twoFactorData/modal/ModalCloseTwoFactor";
 import ModalTwoFactorSendToken from "../../../../../test/app/profile/components/twoFactorSendTokenData/Modal/ModalTwoFactorSendToken";
 import ModalTwoFactor from "../../../../../test/app/profile/components/twoFactorData/ModalTwoFactor";
-import ModalComfirmDisable from "../../../../../test/app/profile/components/twoFactorSendTokenData/Modal/ModalComfirmDisable";
+import ModalComfirmDisable from "../../../../../test/app/profile/components/twoFactorSendTokenData/Modal/ModalComfirmDisable"; */
 import DiscoveryModal from "@/app/tarif/components/DiscoveryModal";
 import NormalModal from "@/app/tarif/components/NormalModal";
 import ModalSurMesure from "@/app/redux/feature/modal/ModalSurMesure";
-import SurMesureModal from "../../../../../test/app/rendez-vous/components/formule/components/SurMesureModal";
+/* import SurMesureModal from "../../../../../test/app/rendez-vous/components/formule/components/SurMesureModal";
 import ContractModal from "../../../../../test/app/rendez-vous/components/formule/components/ContractModal";
 import ModalComfirmDeleteContrat from "../../../../../test/app/rendez-vous/components/take/modal/ModalComfirmDeleteContrat";
-import ModalComfirmEditContrat from "../../../../../test/app/rendez-vous/components/take/modal/ModalComfirmEditContrat";
+import ModalComfirmEditContrat from "../../../../../test/app/rendez-vous/components/take/modal/ModalComfirmEditContrat"; */
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);

@@ -1,4 +1,4 @@
-import { getIronSession } from "iron-session/edge";
+/* import { getIronSession } from "iron-session/edge";
 import { Bungee_Shade } from "next/font/google";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -57,3 +57,4 @@ export const config = {
     "/suppression-compte/:path*",
   ],
 };
+ */

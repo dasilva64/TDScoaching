@@ -55,7 +55,7 @@ const Button = () => {
   };
   return (
     <button
-      className={styles.button}
+      className={`${styles.button} modalOpen`}
       onClick={() => {
         handleClick();
       }}

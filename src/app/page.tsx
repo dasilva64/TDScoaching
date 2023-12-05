@@ -33,7 +33,7 @@ export default function Home() {
             sizes="100vw"
             priority={true}
             src={"/assets/img/moi5.jpg"}
-            alt="bousole"
+            alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
           />
           <div className={styles.home__bg__container}>
             <h1 className={styles.home__bg__container__h1}>

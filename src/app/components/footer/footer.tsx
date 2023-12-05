@@ -12,28 +12,34 @@ const Footer = () => {
             className={`${styles.footer__ul} ${styles.footer__ul__lineHeightMin}`}
           >
             <li className={styles.footer__li}>
-              <Link className={styles.footer__a} href="/">
+              <Link className={`${styles.footer__a} modalOpen`} href="/">
                 Accueil
               </Link>
             </li>
             <li className={styles.footer__li}>
-              <Link className={styles.footer__a} href="/qui-suis-je">
+              <Link
+                className={`${styles.footer__a} modalOpen`}
+                href="/qui-suis-je"
+              >
                 Qui suis-je ?
               </Link>
             </li>
             <li className={styles.footer__li}>
-              <Link className={styles.footer__a} href="/">
+              <Link
+                className={`${styles.footer__a} modalOpen`}
+                href="/coaching-de-vie"
+              >
                 Coaching de vie
               </Link>
             </li>
             <li className={styles.footer__li}>
-              <Link className={styles.footer__a} href="/tarif">
+              <Link className={`${styles.footer__a} modalOpen`} href="/tarif">
                 Tarifs et modalité
               </Link>
             </li>
             <li className={styles.footer__li}>
               <Link
-                className={styles.footer__a}
+                className={`${styles.footer__a} modalOpen`}
                 href="/assets/pdf/Code-deontologie-ICF-France.pdf"
                 target="_blank"
               >
@@ -42,15 +48,15 @@ const Footer = () => {
             </li>
 
             <li className={styles.footer__li}>
-              <Link className={styles.footer__a} href="/contact">
+              <Link className={`${styles.footer__a} modalOpen`} href="/contact">
                 Contact
               </Link>
             </li>
-            <li className={styles.footer__li}>
+            {/* <li className={styles.footer__li}>
               <Link className={styles.footer__a} href="/">
                 Politique de confidentialité
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
         <div>
@@ -61,7 +67,7 @@ const Footer = () => {
             <li className={styles.footer__li}>
               Mail :{" "}
               <Link
-                className={styles.footer__a}
+                className={`${styles.footer__a} modalOpen`}
                 href="mailto:contact@tds-coachingdevie.fr"
               >
                 contact@tds-coachingdevie.fr
@@ -69,7 +75,10 @@ const Footer = () => {
             </li>
             <li className={styles.footer__li}>
               Tel :{" "}
-              <Link className={styles.footer__a} href="tel:+33781673125">
+              <Link
+                className={`${styles.footer__a} modalOpen`}
+                href="tel:+33781673125"
+              >
                 {" "}
                 07 81 67 31 25
               </Link>

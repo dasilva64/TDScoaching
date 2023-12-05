@@ -26,32 +26,12 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 50px;
-      &__div {
-        padding: 20px;
-        box-shadow: 0px 0px 14px 5px aqua;
-        border-radius: 10px;
-        &__h3 {
-          width: fit-content;
-          margin: 0px auto 20px auto;
-          padding: 10px 30px;
-          background-color: orange;
-          border-radius: 20px;
-          color: white;
-        }
-        &__p {
-          font-size: 18px;
-          line-height: 22px;
-        }
-        &__margin {
-          margin-bottom: 30px;
-        }
-      }
     }
   }
   &__help {
     padding: 0px 0 50px 0;
     &__p {
-      padding: 80px 10% 30px 10%;
+      padding: 80px 10% 50px 10%;
       text-align: center;
       font-size: 32px;
       font-weight: bold;
@@ -64,20 +44,6 @@
       grid-template-columns: 1fr 1fr 1fr;
       margin: 0 10% 0 10%;
       gap: 50px;
-      &__div {
-        padding: 10px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 14px 5px aqua;
-        background-color: white;
-        &__h4 {
-          position: relative;
-          padding-left: 25px;
-          &__icone {
-            position: absolute;
-            left: 0px;
-          }
-        }
-      }
     }
   }
   &__delivery {
@@ -180,9 +146,9 @@
         width: 90%;
       }
       &__content {
-        margin: 0px 5% 50px 5%;
+        margin: 0px 5% 20px 5%;
         grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 0px;
         &__div {
           &__h3 {
             font-size: 18px;
@@ -195,9 +161,6 @@
     }
     &__help {
       padding: 0px 0 50px 0;
-      &__p {
-        font-size: 16px;
-      }
       &__container {
         grid-template-columns: 1fr;
         margin: 0 5% 0 5%;
@@ -260,6 +223,11 @@
     &__type {
       &__h2 {
         width: 90%;
+      }
+    }
+    &__help {
+      &__container {
+        gap: 30px;
       }
     }
   }

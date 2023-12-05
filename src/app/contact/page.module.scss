@@ -128,6 +128,12 @@
 
 @media screen and (max-width: 425px) {
   .contact {
+    &__bg {
+      margin-top: 74px;
+      &__img {
+        height: 200px;
+      }
+    }
     &__main {
       &__container {
         &__content {

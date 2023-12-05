@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./DiscoveryModal.module.scss";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,14 @@ const NormalModal = () => {
   const { displayModalNormal } = useSelector(
     (state: RootState) => state.ModalNormal
   );
+  useEffect(() => {
+    if (displayModalNormal === true) {
+      let test = document.querySelectorAll(".modalOpen");
+      test.forEach((tab) => {
+        tab.setAttribute("tabindex", "-1");
+      });
+    }
+  }, [displayModalNormal]);
   return (
     <>
       <AnimatePresence>
@@ -44,7 +52,11 @@ const NormalModal = () => {
                 transition: { duration: 0.3 },
               }}
             >
-              <button className={styles.login__btn} onClick={() => closeForm()}>
+              <button
+                className={styles.login__btn}
+                autoFocus
+                onClick={() => closeForm()}
+              >
                 <Image
                   className={styles.login__btn__img}
                   src="/assets/icone/xmark-solid.svg"

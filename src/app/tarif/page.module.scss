@@ -115,7 +115,7 @@
         &__price {
           text-align: center;
           font-size: 36px;
-          margin: 40px auto 80px auto;
+          margin: 80px auto 40px auto;
           color: white;
           font-weight: 800;
           &__sign {
@@ -150,7 +150,10 @@
         grid-template-columns: 1fr;
         &__card {
           &__price {
-            margin: 0px auto 0px auto;
+            margin: 40px auto 0px auto;
+          }
+          &__unique {
+            margin-bottom: 0px;
           }
         }
       }
@@ -209,6 +212,9 @@
           &__p {
             font-size: 16px;
           }
+          &__offer {
+            font-size: 16px;
+          }
         }
         &__right {
           &__p {
@@ -236,6 +242,13 @@
           }
         }
       }
+    }
+  }
+}
+@media screen and (max-width: 425px) {
+  .tarif {
+    &__bg {
+      margin-top: 74px;
     }
   }
 }

@@ -3,6 +3,9 @@ import styles from "./page.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 import WhileInView from "../components/framer/WhileInView";
+import Card from "../components/card/Card";
+import CardType from "./components/CardType";
+import CardHelp from "./components/CardHelp";
 
 const page = () => {
   return (
@@ -41,46 +44,28 @@ const page = () => {
           </h2>
           <div className={styles.coaching__type__content}>
             <div>
-              <WhileInView
-                type="y"
-                className={`${styles.coaching__type__content__div} ${styles.coaching__type__content__div__margin}`}
-              >
-                <h3 className={styles.coaching__type__content__div__h3}>
-                  Famille
-                </h3>
-                <p className={styles.coaching__type__content__div__p}>
-                  Vous êtes soumis au rythme effréné de la vie, au stress, à la
+              <CardType
+                title="Famille"
+                content="Vous êtes soumis au rythme effréné de la vie, au stress, à la
                   fatigue quotidienne, au tempérament imprévisible des enfants
                   et aux enjeux autour de la scolarité qui rendent votre tâche
-                  de parent particulièrement délicate.
-                </p>
-              </WhileInView>
-              <WhileInView
-                type="y"
-                className={styles.coaching__type__content__div}
-              >
-                <h3 className={styles.coaching__type__content__div__h3}>
-                  Professionnel
-                </h3>
-                <p className={styles.coaching__type__content__div__p}>
-                  Soumis à des objectifs chiffrés, des procédures rigides et des
-                  réorganisations fréquentes, les salariés considèrent souvent
-                  que leur travail perd son sens. Alors peut se poser la
-                  question d’une réorientation ou d’une reconversion
-                  professionnelle.
-                </p>
-              </WhileInView>
-            </div>
+                  de parent particulièrement délicate."
+                type="famille"
+              />
 
-            <WhileInView
-              type="y"
-              className={styles.coaching__type__content__div}
-            >
-              <h3 className={styles.coaching__type__content__div__h3}>
-                Couple
-              </h3>
-              <p className={styles.coaching__type__content__div__p}>
-                La vie de couple est l’espace où chacun laisse éclore ce qu’il a
+              <CardType
+                title="Professionnel"
+                content="Soumis à des objectifs chiffrés, des procédures rigides et des
+                réorganisations fréquentes, les salariés considèrent souvent
+                que leur travail perd son sens. Alors peut se poser la
+                question d’une réorientation ou d’une reconversion
+                professionnelle."
+                type="pro"
+              />
+            </div>
+            <CardType
+              title="Couple"
+              content="La vie de couple est l’espace où chacun laisse éclore ce qu’il a
                 de plus fragile et délicat. Il est le territoire où nous pouvons
                 révéler sans crainte nos faiblesses comme nos forces. Tous les
                 couples, à un moment ou à un autre, vivent des moments agréables
@@ -89,9 +74,9 @@ const page = () => {
                 croyances, des envies qui leur sont propres. La rencontre de ces
                 deux cultures nécessite un partage, des ajustements, des
                 concessions de part et d’autre. Ce travail n’est pas toujours
-                simple à réaliser.
-              </p>
-            </WhileInView>
+                simple à réaliser."
+              type="couple"
+            />
           </div>
         </section>
         <section className={styles.coaching__help}>
@@ -101,183 +86,20 @@ const page = () => {
             professionnel, le coaching peut vous aider à :
           </p>
           <div className={styles.coaching__help__container}>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Surmonter une difficulté ou un blocage
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Prendre une décision importante
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Trouver sa voie personnelle
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Vivre le changement
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                S’accomplir dans la durée
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Profiter pleinement du temps retrouvé
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Trouver sa voie professionnelle
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Trouver un emploi en accord avec son potentiel et ses
-                motivations
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Concrétiser son potentiel et réaliser ses objectifs
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Réussir et s’affirmer dans sa fonction
-              </h4>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__help__container__div}
-            >
-              <h4 className={styles.coaching__help__container__div__h4}>
-                <Image
-                  className={styles.coaching__help__container__div__h4__icone}
-                  width="20"
-                  height="20"
-                  priority={true}
-                  src={"/assets/icone/check-solid-black.svg"}
-                  alt="bousole"
-                />
-                Piloter son évolution de carrière et sa reconversion
-              </h4>
-            </WhileInView>
+            <CardHelp title="Surmonter une difficulté ou un blocage" />
+            <CardHelp title="Prendre une décision importante" />
+            <CardHelp title="Trouver sa voie personnelle" />
+            <CardHelp title="Vivre le changement" />
+            <CardHelp title="S’accomplir dans la durée" />
+            <CardHelp title="Profiter pleinement du temps retrouvé" />
+            <CardHelp title="Trouver sa voie professionnelle" />
+            <CardHelp
+              title="Trouver un emploi en accord avec son potentiel et ses
+                motivations"
+            />
+            <CardHelp title="Concrétiser son potentiel et réaliser ses objectifs" />
+            <CardHelp title="Réussir et s’affirmer dans sa fonction" />
+            <CardHelp title="Piloter son évolution de carrière et sa reconversion" />
           </div>
         </section>
         {/* <section className={styles.coaching__delivery}>

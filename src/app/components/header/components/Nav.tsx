@@ -22,34 +22,9 @@ const navItems = [
     type: "menu",
   },
   {
-    title: "Vie familiale",
-    href: "/vie-familiale",
-    type: "sous-menu",
-  },
-  {
-    title: "Vie de couple",
-    href: "/vie-de-couple",
-    type: "sous-menu",
-  },
-  {
-    title: "Vie professionnelle",
-    href: "/vie-professionnelle",
-    type: "sous-menu",
-  },
-  {
-    title: "Modalités du coaching",
-    href: "/modalite",
-    type: "sous-menu",
-  },
-  {
     title: "Tarifs / durée",
     href: "/tarif",
-    type: "sous-menu",
-  },
-  {
-    title: "Code de déontologie",
-    href: "/code-de-deontologie",
-    type: "sous-menu",
+    type: "menu",
   },
   {
     title: "Contact",

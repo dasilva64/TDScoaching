@@ -147,6 +147,7 @@ const ContactForm = () => {
         }}
       >
         <TextField
+          autoFocus
           value={inputLastname}
           id={"lastname"}
           style={{ margin: "10px 0px" }}

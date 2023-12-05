@@ -842,7 +842,7 @@ const Content = () => {
 
       <header className={styles.header}>
         <figure className={styles.header__figure}>
-          <Link className="link" href="/" tabIndex={0}>
+          <Link className="link modalOpen" href="/" tabIndex={0}>
             <Image
               className={styles.header__logo}
               width={0}
@@ -875,8 +875,8 @@ const Content = () => {
               <Link
                 className={
                   pathname == "/"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
                 }
                 tabIndex={0}
                 href="/"
@@ -891,8 +891,8 @@ const Content = () => {
               <Link
                 className={
                   pathname == "/qui-suis-je"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
                 }
                 tabIndex={0}
                 href="/qui-suis-je"
@@ -907,8 +907,8 @@ const Content = () => {
               <Link
                 className={
                   pathname == "/coaching-de-vie"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
                 }
                 tabIndex={0}
                 href="/coaching-de-vie"
@@ -988,8 +988,8 @@ const Content = () => {
               <Link
                 className={
                   pathname == "/tarif"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
                 }
                 tabIndex={0}
                 href="/tarif"
@@ -1073,8 +1073,8 @@ const Content = () => {
               <Link
                 className={
                   pathname == "/contact"
-                    ? `${styles.header__a} ${styles.active}`
-                    : `${styles.header__a}`
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
                 }
                 href="/contact"
                 onClick={(e) => {

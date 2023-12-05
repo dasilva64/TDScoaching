@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./DiscoveryModal.module.scss";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,21 @@ const DiscoveryModal = () => {
   const { displayModalDiscovery } = useSelector(
     (state: RootState) => state.ModalDiscovery
   );
+  useEffect(() => {
+    if (displayModalDiscovery === true) {
+      let test = document.querySelectorAll(".modalOpen");
+      test.forEach((tab) => {
+        tab.removeAttribute("tabindex");
+        tab.setAttribute("tabindex", "-1");
+      });
+    } else {
+      let test = document.querySelectorAll(".modalOpen");
+      test.forEach((tab) => {
+        tab.removeAttribute("tabindex");
+        tab.setAttribute("tabindex", "0");
+      });
+    }
+  }, [displayModalDiscovery]);
   return (
     <>
       <AnimatePresence>
@@ -29,6 +44,7 @@ const DiscoveryModal = () => {
               onClick={() => closeForm()}
             />
             <motion.div
+              role="dialog"
               className={styles.login}
               initial={{ y: 200, x: "-50%", opacity: 0 }}
               animate={{
@@ -44,7 +60,11 @@ const DiscoveryModal = () => {
                 transition: { duration: 0.3 },
               }}
             >
-              <button className={styles.login__btn} onClick={() => closeForm()}>
+              <button
+                className={styles.login__btn}
+                autoFocus
+                onClick={() => closeForm()}
+              >
                 <Image
                   className={styles.login__btn__img}
                   src="/assets/icone/xmark-solid.svg"

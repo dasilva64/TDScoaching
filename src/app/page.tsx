@@ -28,7 +28,7 @@ export default function Home() {
       </noscript>
       <main className={styles.home}>
         <section className={styles.home__bg}>
-          <Image
+          {/* <Image
             className={styles.home__bg__img}
             width="0"
             height="0"
@@ -36,7 +36,7 @@ export default function Home() {
             priority={true}
             src={"/assets/img/moi5.jpg"}
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
-          />
+          /> */}
           <div className={styles.home__bg__container}>
             <h1 className={styles.home__bg__container__h1}>
               Thierry <br />

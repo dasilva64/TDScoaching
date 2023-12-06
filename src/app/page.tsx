@@ -7,6 +7,8 @@ import Parallax from "./components/framer/parallax";
 import GoTarif from "./components/goTarif/goTarif";
 
 export default function Home() {
+  //ghjghjghnhn
+  let test = 3;
   return (
     <>
       <noscript

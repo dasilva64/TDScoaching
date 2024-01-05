@@ -92,8 +92,8 @@ export default function Home() {
                   height="0"
                   sizes="100vw"
                   priority={true}
-                  src={"/assets/img/avenue.jpg"}
-                  alt="bousole"
+                  src={"/assets/test/sunset.jpg"}
+                  alt=""
                 />
               </WhileInView>
             </div>
@@ -116,8 +116,8 @@ export default function Home() {
                   sizes="100vw"
                   className={styles.home__what__container__content__card__img}
                   priority={true}
-                  src={"/assets/img/avenue.jpg"}
-                  alt="bousole"
+                  src={"/assets/test/man.jpg"}
+                  alt=""
                 />
               </WhileInView>
 

@@ -14,7 +14,7 @@ export const metadata = {
   description:
     "Le coaching de vie, c’est quoi ? Vous êtes en quête de bien-être ? Etes-vous prêt à libérer tout votre potentiel ? Comment puis-je vous aider ?",
   icons: {
-    icon: "./assets/logo/logo.png",
+    icon: "https://www.tdscoaching.fr/assets/logo/logo.png",
   },
 };
 

@@ -16,6 +16,9 @@ export const metadata = {
   icons: {
     icon: "https://www.tdscoaching.fr/assets/logo/logo3.png",
   },
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
 };
 
 export default function RootLayout({

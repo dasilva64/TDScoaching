@@ -6,6 +6,10 @@ import Button from "./components/Button";
 import ButtonOpenDiscovery from "./components/ButtonOpenDiscovery";
 import ButtonOpenNormal from "./components/ButtonOpenNormal";
 
+export const metadata = {
+  title: "Coach de vie tarif - tdscoaching",
+};
+
 const Tarif = () => {
   return (
     <>

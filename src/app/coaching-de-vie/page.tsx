@@ -7,6 +7,10 @@ import Card from "../components/card/Card";
 import CardType from "./components/CardType";
 import CardHelp from "./components/CardHelp";
 
+export const metadata = {
+  title: "Coaching familial, professionnel et de couple - tdscoaching",
+};
+
 const page = () => {
   return (
     <>

@@ -2,6 +2,9 @@ import React from "react";
 import styles from "./page.module.scss";
 import ContactForm from "./components/ContactForm";
 import Image from "next/image";
+export const metadata = {
+  title: "Contactez votre coach de vie - tdscoaching",
+};
 
 const Contact = () => {
   return (

@@ -10,6 +10,10 @@ import {
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 
+export const metadata = {
+  title: "Thierry DA SILVA coach professionnel certifié - tdscoaching",
+};
+
 const About = () => {
   return (
     <>

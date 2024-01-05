@@ -5,7 +5,6 @@ import Image from "next/image";
 import Button from "./components/Button";
 import ButtonOpenDiscovery from "./components/ButtonOpenDiscovery";
 import ButtonOpenNormal from "./components/ButtonOpenNormal";
-
 export const metadata = {
   title: "Coach de vie tarif - tdscoaching",
 };
@@ -32,12 +31,11 @@ const Tarif = () => {
         <section className={styles.tarif__bg}>
           <Image
             className={styles.tarif__bg__img}
-            width="0"
-            height="0"
             sizes="100vw"
             quality={100}
+            fill={true}
             priority={true}
-            src={"/assets/test/sunlight.jpg"}
+            src={"/assets/img/avenue.jpg"}
             alt="Avenue dans une forêt"
           />
         </section>

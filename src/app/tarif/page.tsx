@@ -37,7 +37,7 @@ const Tarif = () => {
             sizes="100vw"
             quality={100}
             priority={true}
-            src={"/assets/img/avenue.jpg"}
+            src={"/assets/img/sunlight.jpg"}
             alt="Avenue dans une forêt"
           />
         </section>

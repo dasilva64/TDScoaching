@@ -54,7 +54,7 @@ const About = () => {
               sizes="100vw"
               priority={true}
               src={"/assets/img/moi.jpeg"}
-              alt="bousole"
+              alt="Thierry DA SILVA coach professionnel certifié"
             />
             <div>
               <h2 className={styles.about__parcour__container__h2}>
@@ -122,19 +122,6 @@ const About = () => {
                 passionnante où je mets tout mon savoir-faire dans un
                 accompagnement sans jugements ni critiques.
               </p>
-              <Image
-                width="0"
-                height="0"
-                sizes="100vw"
-                style={{
-                  objectFit: "contain",
-                  position: "relative",
-                  zIndex: 2,
-                }}
-                priority={true}
-                src={"/assets/img/vision.png"}
-                alt="bousole"
-              />
             </div>
           </div>
         </section>

@@ -93,7 +93,7 @@ export default function Home() {
                   sizes="100vw"
                   priority={true}
                   src={"/assets/test/sunset.jpg"}
-                  alt=""
+                  alt="Coucher de soleil sur la plage avec deux personnes qui sautent"
                 />
               </WhileInView>
             </div>
@@ -117,7 +117,7 @@ export default function Home() {
                   className={styles.home__what__container__content__card__img}
                   priority={true}
                   src={"/assets/test/man.jpg"}
-                  alt=""
+                  alt="Coucher de soleil dans la forêt avec une personne debout"
                 />
               </WhileInView>
 

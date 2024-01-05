@@ -35,9 +35,10 @@ const Tarif = () => {
             width="0"
             height="0"
             sizes="100vw"
+            quality={100}
             priority={true}
             src={"/assets/img/avenue.jpg"}
-            alt="bousole"
+            alt="Avenue dans une forêt"
           />
         </section>
         <section className={styles.tarif__packs}>
@@ -64,7 +65,7 @@ const Tarif = () => {
                 sizes="100vw"
                 priority={true}
                 src={"/assets/img/moi.jpeg"}
-                alt="bousole"
+                alt="Thierry DA SILVA coach professionnel certifié"
               />
               <p className={styles.tarif__packs__head__right__p}>
                 Les séances sont assurées par Thierry Da Silva, coach

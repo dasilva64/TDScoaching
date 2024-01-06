@@ -148,6 +148,7 @@ const ContactForm = () => {
       >
         <TextField
           autoFocus
+          inputProps={{ className: "modalOpen" }}
           value={inputLastname}
           id={"lastname"}
           style={{ margin: "10px 0px" }}
@@ -160,7 +161,7 @@ const ContactForm = () => {
             handlerInput(
               e,
               "lastname",
-              /^[A-Za-z ]{3,}$/,
+              /^[A-Za-zÀ-ÿ ]{3,40}$/,
               setValidInputLastname,
               setLastnameInputError,
               setInputLastname,
@@ -170,6 +171,7 @@ const ContactForm = () => {
           helperText={lastnameInputError}
         />
         <TextField
+          inputProps={{ className: "modalOpen" }}
           value={inputFirstname}
           id={"firstname"}
           style={{ margin: "10px 0px" }}
@@ -182,7 +184,7 @@ const ContactForm = () => {
             handlerInput(
               e,
               "firstname",
-              /^[A-Za-z ]{3,}$/,
+              /^[A-Za-zÀ-ÿ ]{3,40}$/,
               setValidInputFirstname,
               setFirstnameInputError,
               setInputFirstname,
@@ -192,6 +194,7 @@ const ContactForm = () => {
           helperText={firstnameInputError}
         />
         <TextField
+          inputProps={{ className: "modalOpen" }}
           value={inputEmail}
           id={"email"}
           style={{ margin: "10px 0px" }}
@@ -208,12 +211,13 @@ const ContactForm = () => {
               setValidInputEmail,
               setEmailInputError,
               setInputEmail,
-              "Email : doit avoir un format valide"
+              "Email : doit avoir un format valide et contenir entre 5 et 50 caractères"
             );
           }}
           helperText={emailInputError}
         />
         <TextField
+          inputProps={{ className: "modalOpen" }}
           value={inputObject}
           id={"object"}
           style={{ margin: "10px 0px" }}
@@ -226,11 +230,11 @@ const ContactForm = () => {
             handlerInput(
               e,
               "object",
-              /^[A-Za-z0-9][A-Za-z0-9,?;.:!() ]{1,}$/,
+              /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'@#-_\. ]{1,50}$/,
               setValidInputObject,
               setObjectInputError,
               setInputObject,
-              "Objet : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation)"
+              "Objet : doit contenir entre 2 et 50 caractères (lettres, chiffres, ponctuation) et ne peut pas commencer par une ponctuation"
             );
           }}
           helperText={objectInputError}
@@ -238,15 +242,20 @@ const ContactForm = () => {
         <FormLabel sx={{ marginTop: "20px" }}>Message</FormLabel>
         <Textarea
           value={inputMessage}
+          slotProps={{
+            textarea: {
+              className: "modalOpen",
+            },
+          }}
           onChange={(e) => {
             handlerInput(
               e,
               "message",
-              /^[A-Za-z0-9][A-Za-z0-9,?;.:!() ]{1,}$/,
+              /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'@#-_\. ]{1,}$/,
               setValidInputMessage,
               setMessageInputError,
               setInputMessage,
-              "Message : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation)"
+              "Message : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation) et ne peut pas commencer par une ponctuation"
             );
           }}
           placeholder="Entrez votre message"
@@ -267,7 +276,7 @@ const ContactForm = () => {
         />
         <div>
           <input
-            className={styles.contact__main__container__form__submit}
+            className={`${styles.contact__main__container__form__submit} modalOpen`}
             type="submit"
             value="Envoyer"
           />

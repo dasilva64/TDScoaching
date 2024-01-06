@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       disallow: "/private/",
-      allow: "/",
+      allow: ["/", "/contact", "/tarif", "/qui-suis-je", "/coaching-de-vie"],
     },
     sitemap: "https://www.tdscoaching.fr/sitemap.xml",
   };

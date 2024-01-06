@@ -6,6 +6,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import styles from "./Button.module.scss";
+import Link from "next/link";
 
 const Button = () => {
   //const { trigger, data, reset } = useSWRMutation("/api/user/check", fetchGet);
@@ -43,7 +44,7 @@ const Button = () => {
   }, [data, dispatch, reset, router]); */
   const handleClick = () => {
     //trigger();
-    router.push("/contact");
+    //router.push("/contact");
     dispatch({
       type: "flash/storeFlashMessage",
       payload: {
@@ -54,14 +55,15 @@ const Button = () => {
     });
   };
   return (
-    <button
+    <Link
+      href="/contact"
       className={`${styles.button} modalOpen`}
       onClick={() => {
         handleClick();
       }}
     >
       Réserver une séance
-    </button>
+    </Link>
   );
 };
 

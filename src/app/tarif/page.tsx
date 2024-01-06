@@ -32,10 +32,10 @@ const Tarif = () => {
           <Image
             className={styles.tarif__bg__img}
             sizes="100vw"
-            quality={100}
-            fill={true}
+            width="0"
+            height="400"
             priority={true}
-            src={"/assets/img/avenue.jpg"}
+            src={"/assets/test/sunlight.jpg"}
             alt="Avenue dans une forêt"
           />
         </section>

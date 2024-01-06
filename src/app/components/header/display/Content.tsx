@@ -50,6 +50,30 @@ import ModalComfirmEditContrat from "../../../../../test/app/rendez-vous/compone
 
 const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
+  useEffect(() => {
+    if (document) {
+      console.log(isActive);
+      if (isActive === true) {
+        let body = document.querySelector("body");
+        let htmlElementRequiresChange = document.querySelectorAll(".modalOpen");
+        htmlElementRequiresChange.forEach((tab) => {
+          tab.setAttribute("tabindex", "-1");
+        });
+        if (body) {
+          body.style.overflow = "hidden";
+        }
+      } else {
+        let body = document.querySelector("body");
+        let htmlElementRequiresChange = document.querySelectorAll(".modalOpen");
+        htmlElementRequiresChange.forEach((tab) => {
+          tab.setAttribute("tabindex", "1");
+        });
+        if (body) {
+          body.style.overflow = "unset";
+        }
+      }
+    }
+  }, [isActive]);
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
   const pathname = usePathname();
@@ -1121,7 +1145,8 @@ const Content = () => {
         </button> */}
         <div className={styles.main}>
           <div className={styles.headerr}>
-            <div
+            <button
+              tabIndex={1}
               onClick={() => {
                 if (displayLogMenu === true) {
                   setDisplayLogMenu(false);
@@ -1136,14 +1161,14 @@ const Content = () => {
                   });
                 }
               }}
-              className={styles.button}
+              className={`${styles.button}`}
             >
               <div
                 className={`${styles.burger} ${
                   isActive ? styles.burgerActive : ""
                 }`}
               ></div>
-            </div>
+            </button>
           </div>
         </div>
         <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>

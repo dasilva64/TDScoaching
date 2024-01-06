@@ -6,7 +6,7 @@ import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 
 //export default withIronSessionApiRoute(
-export async function send(req: any, res: NextApiResponse) {
+export default async function send(req: any, res: NextApiResponse) {
   if (req.method === "POST") {
     const { email, firstname, lastname, object, message, pseudo } =
       await req.body;
@@ -102,7 +102,7 @@ export async function send(req: any, res: NextApiResponse) {
       } */
       let mailOptions = {
         from: process.env.SECRET_SMTP_EMAIL,
-        to: process.env.SECRET_SMTP_EMAIL,
+        to: "contact@tds-coachingdevie.fr",
         subject: object,
         html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -121,9 +121,17 @@ export async function send(req: any, res: NextApiResponse) {
                                 </div>
                                 <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                   <h1 style="text-align: center">tds coaching</h1>
-                                  <h2 style="text-align: center">${firstname} ${lastname} vous a envoyé un message</h2>
-                                  <p style="text-align: left; margin-left: 20px">Email : ${email}</p>
-                                  <p style="text-align: left; margin-left: 20px">Message : ${message}</p>
+                                  <h2 style="text-align: center">${validator.escape(
+                                    firstname
+                                  )} ${validator.escape(
+          lastname
+        )} vous a envoyé un message</h2>
+                                  <p style="text-align: left; margin-left: 20px">Email : ${validator.escape(
+                                    email
+                                  )}</p>
+                                  <p style="text-align: left; margin-left: 20px">Message : ${validator.escape(
+                                    message
+                                  )}</p>
                                 </div>
                               </div>
                             </body>

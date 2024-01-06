@@ -37,7 +37,7 @@ const page = () => {
             height="0"
             sizes="100vw"
             priority={true}
-            src={"/assets/img/avenue.jpg"}
+            src={"/assets/test/sunlight.jpg"}
             alt="bousole"
           />
         </section>

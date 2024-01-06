@@ -18,7 +18,7 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "firstname") {
-      let regex = /^[a-zA-ZÀ-ÿ]{3,40}$/;
+      let regex = /^[a-zA-ZÀ-ÿ ]{3,40}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["firstname", "Prénom : ne peut pas être vide"]);
       } else {
@@ -31,7 +31,7 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "lastname") {
-      let regex = /^[a-zA-ZÀ-ÿ]{3,40}$/;
+      let regex = /^[a-zA-ZÀ-ÿ ]{3,40}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push([
           "lastname",
@@ -48,27 +48,27 @@ export const validationBody = (body: any) => {
     }
     if (key === "object") {
       // give me a regex for accept all punctuation
-      let regex = /^[A-Za-z0-9,()?!;:"'@#-_\. ]{0,50}$/;
+      let regex = /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'@#-_\. ]{1,50}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["object", "Objet : ne peut pas être vide"]);
       } else {
         if (!validator.matches(value.trim(), regex)) {
           arrayMessageError.push([
             "object",
-            "Objet : ne peut contenir que des lettres, des chiffres, des ponctuations et doit contenir moins de 50 caractères",
+            "Objet : doit contenir entre 2 et 50 caractères (lettres, chiffres, ponctuation) et ne peut pas commencer par une ponctuation",
           ]);
         }
       }
     }
     if (key === "message") {
-      let regex = /^[A-Za-z0-9,()?!;:"'@#-_\. ]+$/;
+      let regex = /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'@#-_\. ]{1,}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["message", "Message : ne peut pas être vide"]);
       } else {
         if (!validator.matches(value.trim(), regex)) {
           arrayMessageError.push([
             "message",
-            "Message : ne peut contenir que des lettres, des chiffres et des ponctuations",
+            "Message : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation) et ne peut pas commencer par une ponctuation",
           ]);
         }
       }

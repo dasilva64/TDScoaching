@@ -29,8 +29,9 @@ const Card = ({ title, content }: any) => {
   return (
     <>
       <WhileInView type="y">
-        <div
-          className={styles.card}
+        <button
+          tabIndex={1}
+          className={`${styles.card} modalOpen`}
           onClick={() => {
             setShow(!show);
           }}
@@ -46,7 +47,7 @@ const Card = ({ title, content }: any) => {
             src={"/assets/icone/chevron-down-solid.svg"}
             alt="bousole"
           />
-        </div>
+        </button>
         <p className={`${p()} ${styles.card__p}`}>{content}</p>{" "}
       </WhileInView>
     </>

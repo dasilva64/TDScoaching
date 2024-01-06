@@ -32,7 +32,7 @@ const Contact = () => {
             height="400"
             sizes="100vw"
             priority={true}
-            src={"/assets/img/avenue.jpg"}
+            src={"/assets/test/sunlight.jpg"}
             alt="bousole"
           />
         </section>
@@ -43,9 +43,7 @@ const Contact = () => {
               <p className={styles.contact__main__container__content__card__p}>
                 <strong>Adresse email :</strong>
                 <a
-                  className={
-                    styles.contact__main__container__content__card__link
-                  }
+                  className={`${styles.contact__main__container__content__card__link} modalOpen`}
                   href="mailto:contact@tds-coachingdevie.fr"
                 >
                   {" "}
@@ -57,9 +55,7 @@ const Contact = () => {
               <p>
                 <strong>Téléphone :</strong>
                 <a
-                  className={
-                    styles.contact__main__container__content__card__link
-                  }
+                  className={`${styles.contact__main__container__content__card__link} modalOpen`}
                   href="tel:+33781673125"
                 >
                   {" "}

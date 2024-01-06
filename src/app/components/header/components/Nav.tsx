@@ -3,6 +3,9 @@ import styles from "./Nav.module.scss";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { menuSlide } from "./anim";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import Link from "./Link";
 
 const navItems = [
@@ -36,7 +39,8 @@ const navItems = [
 const Nav = () => {
   const pathname = usePathname();
   const [selectedIndicator, setSelectedIndicator] = useState(pathname);
-
+  const router = useRouter();
+  const dispatch = useDispatch();
   return (
     <motion.div
       variants={menuSlide}
@@ -45,6 +49,22 @@ const Nav = () => {
       exit="exit"
       className={styles.menu}
     >
+      <div className={styles.logo}>
+        <Image
+          onClick={() => {
+            dispatch({ type: "menu/closeMenu" });
+            router.push("/");
+          }}
+          className={styles.logo__img}
+          width={0}
+          height={0}
+          sizes="100vw"
+          src="/assets/logo/logo3.png"
+          alt="logo tdss coaching"
+          priority={true}
+        />
+      </div>
+      <div className={styles.line}></div>
       <div className={styles.body}>
         <div
           onMouseLeave={() => {
@@ -64,6 +84,16 @@ const Nav = () => {
           })}
         </div>
       </div>
+      <div className={styles.line__bottom}></div>
+      <button
+        onClick={() => {
+          dispatch({ type: "menu/closeMenu" });
+          router.back();
+        }}
+        className={styles.back}
+      >
+        Retour à la page précedente
+      </button>
     </motion.div>
   );
 };

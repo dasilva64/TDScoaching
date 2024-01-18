@@ -16,7 +16,7 @@ export async function GET() {
       where: { id: session.id },
     });
     if (user === null) {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 404,
           message:
@@ -46,13 +46,13 @@ export async function GET() {
           typeMeeting: user.typeMeeting,
         };
       }
-      return Response.json({
+      return NextResponse.json({
         status: 200,
         body: userObject,
       });
     }
   } else {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",

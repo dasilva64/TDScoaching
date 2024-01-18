@@ -12,15 +12,15 @@ export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn !== true) {
-    return Response.json(defaultSession);
+    return NextResponse.json(defaultSession);
   } else {
     const user = await prisma.user.findUnique({
       where: { id: session.id },
     });
     if (user === null) {
-      return Response.json(defaultSession);
+      return NextResponse.json(defaultSession);
     } else {
-      return Response.json(session);
+      return NextResponse.json(session);
     }
   }
 }
@@ -28,7 +28,7 @@ export async function GET() {
 export async function DELETE() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   if (session.isLoggedIn !== true) {
-    return Response.json(
+    return NextResponse.json(
       { message: "Vous n'êtes pas connecté" },
       { status: 401 }
     );
@@ -37,13 +37,13 @@ export async function DELETE() {
       where: { id: session.id },
     });
     if (user === null) {
-      return Response.json(
+      return NextResponse.json(
         { message: "Utilisateur introuvable", status: 400 },
         { status: 400 }
       );
     } else {
       session.destroy();
-      return Response.json({
+      return NextResponse.json({
         status: 200,
         message: "Vous êtes maintenant déconnecté",
       });

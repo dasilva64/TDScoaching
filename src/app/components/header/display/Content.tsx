@@ -982,7 +982,7 @@ const Content = () => {
 
       <header className={styles.header}>
         <figure className={styles.header__figure}>
-          <Link className="link modalOpen" href="/">
+          <Link className="link modalOpen" href="/" tabIndex={0}>
             <Image
               className={styles.header__logo}
               width={0}

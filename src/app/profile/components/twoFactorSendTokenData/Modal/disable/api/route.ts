@@ -15,7 +15,7 @@ export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn !== true) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
@@ -27,7 +27,7 @@ export async function GET() {
       where: { id: session.id },
     });
     if (user === null) {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 404,
           message:
@@ -41,7 +41,7 @@ export async function GET() {
         data: { twoFactor: false, twoFactorCode: Prisma.JsonNull },
       });
       if (editUser === null) {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 400,
             message:
@@ -56,7 +56,7 @@ export async function GET() {
           email: editUser.mail,
           twoFactor: editUser.twoFactor,
         };
-        return Response.json({
+        return NextResponse.json({
           status: 200,
           message:
             "Vous avez désactivé l'authentification à deux facteurs avec succès",

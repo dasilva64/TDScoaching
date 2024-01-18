@@ -13,7 +13,7 @@ export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn !== true) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
@@ -25,7 +25,7 @@ export async function GET() {
       where: { id: session.id },
     });
     if (user === null) {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 404,
           message:
@@ -35,7 +35,7 @@ export async function GET() {
       );
     } else {
       if (user.role !== "ROLE_ADMIN") {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 403,
             message: "Vous n'avez pas accès à cette page, veuillez réessayer",
@@ -69,7 +69,7 @@ export async function GET() {
           allUserObject.push(userObject);
         }
 
-        return Response.json({
+        return NextResponse.json({
           status: 200,
           body: allUserObject,
         });

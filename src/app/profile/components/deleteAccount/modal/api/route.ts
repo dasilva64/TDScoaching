@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import validator from "validator";
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn !== true) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     let arrayMessageError = validationBody({ reason: reason });
 
     if (arrayMessageError.length > 0) {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 400,
           type: "validation",
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       );
     }
     if (pseudo.trim() !== "") {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 400,
           type: "error",
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
         where: { id: session.id },
       });
       if (user === null) {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 404,
             message:
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
             },
           });
           if (editUser === null) {
-            return Response.json(
+            return NextResponse.json(
               {
                 status: 400,
                 type: "error",
@@ -134,14 +134,14 @@ export async function POST(request: NextRequest) {
                             </html>`,
             };
             smtpTransport.sendMail(mailOptions);
-            return Response.json({
+            return NextResponse.json({
               status: 200,
               message:
                 "Un email vous a été envoyer pour supprimer votre compte",
             });
           }
         } else {
-          return Response.json(
+          return NextResponse.json(
             {
               status: 400,
               type: "error",

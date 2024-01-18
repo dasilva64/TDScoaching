@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../lib/prisma";
 import { validationBody } from "../../../../../lib/validation";
 import validator from "validator";
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     message: message,
   });
   if (arrayMessageError.length > 0) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "validation",
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     );
   }
   if (pseudo.trim() !== "") {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "error",
@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
                         </html>`,
       };
       smtpTransport.sendMail(mailOptions); */
-    return Response.json({
+    return NextResponse.json({
       status: 200,
       message:
         "Merci de nous avoir contacter nous allons vous répondre le plus vite possible",

@@ -37,10 +37,10 @@ export default function Home() {
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
           />
           <div className={styles.home__bg__container}>
-            {/* <h1 className={styles.home__bg__container__h1}>
+            <h1 className={styles.home__bg__container__h1}>
               Thierry <br />
               Da Silva
-            </h1> */}
+            </h1>
             <p className={styles.home__bg__container__p}>
               Coach professionnel certifié, je vous accompagne dans votre
             </p>

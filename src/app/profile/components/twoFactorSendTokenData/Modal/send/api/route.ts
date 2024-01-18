@@ -14,7 +14,7 @@ export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn !== true) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
@@ -26,7 +26,7 @@ export async function GET() {
       where: { id: session.id },
     });
     if (user === null) {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 404,
           message:
@@ -49,7 +49,7 @@ export async function GET() {
         },
       });
       if (editUser === null) {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 400,
             type: "error",
@@ -104,14 +104,14 @@ export async function GET() {
         };
         smtpTransport.sendMail(mailOptions);
         if (user.twoFactorCode === null) {
-          return Response.json({
+          return NextResponse.json({
             status: 200,
             body: userObject,
             message:
               "Un code de vérification vous a été envoyé sur votre addresse email",
           });
         } else {
-          return Response.json({
+          return NextResponse.json({
             status: 200,
             body: userObject,
             message: `Un nouveau code e vérification vous a été envoyé sur votre addresse email`,

@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import { SessionData, sessionOptions } from "../../../../../lib/session";
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   };
   let arrayMessageError = validationBody({ email: email, password: password });
   if (arrayMessageError.length > 0) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "validation",
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     );
   }
   if (pseudo.trim() !== "") {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "error",
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         user.password
       );
       if (decode === false) {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 400,
             type: "error",
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
             const deleteUser = await prisma.user.delete({
               where: { mail: user.mail },
             });
-            return Response.json(
+            return NextResponse.json(
               {
                 status: 400,
                 type: "error",
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
               { status: 400 }
             );
           }
-          return Response.json(
+          return NextResponse.json(
             {
               status: 400,
               type: "error",
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
                       </html>`,
             };
             smtpTransport.sendMail(mailOptions);
-            return Response.json({
+            return NextResponse.json({
               status: 200,
               body: null,
               message: `Un code vous a été envoyé sur votre addresse email`,
@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
             session.id = user.id;
             session.role = user.role;
             await session.save();
-            return Response.json({
+            return NextResponse.json({
               status: 200,
               body: userObject,
               message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
         }
       }
     } else {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 404,
           message:

@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import { validationBody } from "../../../../../lib/validation";
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     email: email,
   });
   if (arrayMessageError.length > 0) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "validation",
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     );
   }
   if (pseudo.trim() !== "") {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "error",
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       where: { mail: validator.escape(email.trim()) },
     });
     if (user === null) {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 404,
           message:
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
         let currentDate = new Date();
         let difference = limitDate.getTime() - currentDate.getTime();
         let differenceDate = new Date(difference);
-        return Response.json(
+        return NextResponse.json(
           {
             status: 404,
             type: "reset",
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
                     </html>`,
         };
         smtpTransport.sendMail(mailOptions);
-        return Response.json({
+        return NextResponse.json({
           status: 200,
           message: "Un email vous a été envoyer pour récupérer votre compte",
         });

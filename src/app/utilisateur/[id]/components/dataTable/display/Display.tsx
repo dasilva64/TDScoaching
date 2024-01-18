@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DisplayOne from "./DisplayOne";
 import styles from "./Display.module.scss";
-import { RootState } from "../../../../../../src/app/redux/store";
+import { RootState } from "@/app/redux/store";
 
 const Display = () => {
   const [keyAr, setKeyAr] = useState<string[]>([]);

@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import { validationBody } from "../../../../../lib/validation";
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     lastname: lastname,
   });
   if (arrayMessageError.length > 0) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "validation",
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     );
   }
   if (pseudo.trim() !== "") {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "error",
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       });
 
       if (UserCreate === null) {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 404,
             message: "Impossible de créer un utilisateur, veuillez réessayer",
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
                       </html>`,
         };
         smtpTransport.sendMail(mailOptions);
-        return Response.json({
+        return NextResponse.json({
           status: 200,
           message: "Un  vous a été envoyer pour activer votre compte",
         });
@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
             });
 
             if (UserCreate === null) {
-              return Response.json(
+              return NextResponse.json(
                 {
                   status: 404,
                   message:
@@ -214,14 +214,14 @@ export async function POST(request: NextRequest) {
                             </html>`,
               };
               smtpTransport.sendMail(mailOptions);
-              return Response.json({
+              return NextResponse.json({
                 status: 200,
                 message:
                   "Un email vous a été envoyer pour activer votre compte",
               });
             }
           } else {
-            return Response.json(
+            return NextResponse.json(
               {
                 status: 404,
                 message:
@@ -231,7 +231,7 @@ export async function POST(request: NextRequest) {
             );
           }
         } else {
-          return Response.json(
+          return NextResponse.json(
             {
               status: 404,
               message:
@@ -241,7 +241,7 @@ export async function POST(request: NextRequest) {
           );
         }
       } else {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 404,
             message:

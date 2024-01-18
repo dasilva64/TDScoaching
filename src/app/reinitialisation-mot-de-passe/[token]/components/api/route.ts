@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import validator from "validator";
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     password: password,
   });
   if (arrayMessageError.length > 0) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "validation",
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     );
   }
   if (pseudo.trim() !== "") {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 400,
         type: "error",
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
         where: { mail: decodeToken.user },
       });
       if (user === null) {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 404,
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
         );
       } else {
         if (user.resetToken === null) {
-          return Response.json(
+          return NextResponse.json(
             {
               status: 404,
               message:
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
                 where: { mail: user.mail },
                 data: { resetToken: Prisma.JsonNull },
               });
-              return Response.json(
+              return NextResponse.json(
                 {
                   status: 404,
                   message:
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
                 data: { resetToken: Prisma.JsonNull, password: encrypt },
               });
               if (editUser === null) {
-                return Response.json(
+                return NextResponse.json(
                   {
                     status: 404,
                     message:
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
                   { status: 404 }
                 );
               } else {
-                return Response.json({
+                return NextResponse.json({
                   status: 200,
                   message:
                     "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
               }
             }
           } else {
-            return Response.json(
+            return NextResponse.json(
               {
                 status: 404,
                 message:
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
         }
       }
     } catch (error) {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 404,
           message:

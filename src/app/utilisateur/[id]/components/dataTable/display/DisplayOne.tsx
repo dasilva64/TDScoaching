@@ -1,7 +1,7 @@
-import { RootState } from "../../../../../../src/app/redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Display.module.scss";
+import { RootState } from "@/app/redux/store";
 
 const DisplayOne = ({ i }: any) => {
   const dispatch = useDispatch();

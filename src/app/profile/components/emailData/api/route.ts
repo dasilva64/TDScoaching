@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import validator from "validator";
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn !== true) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     let arrayMessageError = validationBody({ code: code });
 
     if (arrayMessageError.length > 0) {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 400,
           type: "validation",
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       );
     }
     if (pseudo.trim() !== "") {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 400,
           type: "error",
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         where: { id: session.id },
       });
       if (user === null) {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 404,
             message:
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
             },
           });
           if (editUser === null) {
-            return Response.json(
+            return NextResponse.json(
               {
                 status: 400,
                 type: "error",
@@ -86,14 +86,14 @@ export async function POST(request: NextRequest) {
               email: editUser.mail,
               twoFactor: editUser.twoFactor,
             };
-            return Response.json({
+            return NextResponse.json({
               status: 200,
               message: "Votre nouvel email est maintenant actif",
               body: userObject,
             });
           }
         } else {
-          return Response.json(
+          return NextResponse.json(
             {
               status: 400,
               type: "error",
@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn !== true) {
-    return Response.json(
+    return NextResponse.json(
       {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
       where: { id: session.id },
     });
     if (user === null) {
-      return Response.json(
+      return NextResponse.json(
         {
           status: 404,
           message:
@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
           },
         });
         if (editUser === null) {
-          return Response.json(
+          return NextResponse.json(
             {
               status: 400,
               message:
@@ -202,7 +202,7 @@ export async function GET(request: NextRequest) {
               </html>`,
           };
           smtpTransport.sendMail(mailOptions);
-          return Response.json({
+          return NextResponse.json({
             status: 200,
             body: userObject,
             message:
@@ -210,7 +210,7 @@ export async function GET(request: NextRequest) {
           });
         }
       } else {
-        return Response.json(
+        return NextResponse.json(
           {
             status: 400,
             message: "Aucune modification d'email en cours, veuillez réessayer",

@@ -25,7 +25,7 @@ const NormalModal = () => {
     } else {
       let test = document.querySelectorAll(".modalOpen");
       test.forEach((tab) => {
-        tab.setAttribute("tabindex", "1");
+        tab.setAttribute("tabindex", "0");
       });
     }
   }, [displayModalNormal]);

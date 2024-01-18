@@ -83,7 +83,7 @@ const Content = () => {
         let body = document.querySelector("body");
         let htmlElementRequiresChange = document.querySelectorAll(".modalOpen");
         htmlElementRequiresChange.forEach((tab) => {
-          tab.setAttribute("tabindex", "1");
+          tab.setAttribute("tabindex", "0");
         });
         if (body) {
           body.style.overflow = "unset";

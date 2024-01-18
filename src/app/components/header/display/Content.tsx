@@ -988,7 +988,7 @@ const Content = () => {
               width={0}
               height={0}
               sizes="100vw"
-              src="/assets/logo/logo.png"
+              src="/assets/logo/logo3.png"
               alt="logo tdss coaching"
               priority={true}
             />

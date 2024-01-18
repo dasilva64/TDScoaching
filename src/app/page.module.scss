@@ -312,6 +312,7 @@
       height: calc(100vh - 75px);
       margin-top: 75px;
       &__container {
+        padding: 40px 0 40px 40px;
         &__h1 {
           font-size: 36px;
         }
@@ -380,13 +381,8 @@
       height: calc(100vh - 70px);
       margin-top: 70px;
       &__container {
+        padding: 40px 20px 40px 20px;
         width: 100%;
-        &__h1 {
-          width: 200px;
-        }
-        &__p {
-          width: 200px;
-        }
       }
     }
     &__who {

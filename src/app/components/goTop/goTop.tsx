@@ -14,6 +14,9 @@ const GoTop = () => {
   };
   useEffect(() => {
     if (document) {
+      if (document.documentElement.scrollTop > 50) {
+        setDisplayGoTop(true);
+      }
       document.addEventListener("scroll", () => {
         if (document.documentElement.scrollTop > 50) {
           setDisplayGoTop(true);
@@ -127,7 +130,7 @@ const GoTop = () => {
       return <></>;
     } else {
       return (
-        <motion.div
+        <motion.button
           className={`${
             flashMessage && flashMessage[1].length > 0
               ? styles.top__flash
@@ -149,7 +152,7 @@ const GoTop = () => {
             opacity: 0,
             transition: { duration: 0.3 },
           }}
-        ></motion.div>
+        ></motion.button>
       );
     }
   };

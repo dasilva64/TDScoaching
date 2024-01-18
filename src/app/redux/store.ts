@@ -2,7 +2,6 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 import form from "./feature/form";
-import auth from "./feature/auth";
 import flash from "./feature/flash";
 import Array from "./feature/Array";
 import ArrayMeeting from "./feature/ArrayMeeting";
@@ -46,7 +45,7 @@ import ModalComfirmEditContrat from "./feature/modal/ModalComfirmEditContrat";
 
 export const store = configureStore({
   reducer: {
-    auth: auth.reducer,
+    //auth: auth.reducer,
     flash: flash.reducer,
     Array: Array.reducer,
     ArrayMeeting: ArrayMeeting.reducer,

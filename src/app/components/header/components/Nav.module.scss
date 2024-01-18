@@ -40,14 +40,18 @@
 }
 .logo {
   background-color: rgb(41, 41, 41);
-  &__img {
-    cursor: pointer;
+  &__link {
     position: relative;
     margin-top: 8px;
     width: 73px;
     left: 50%;
     transform: translateX(-50%);
     height: 73px;
+    &__img {
+      cursor: pointer;
+      width: 73px;
+      height: 73px;
+    }
   }
 }
 .line {

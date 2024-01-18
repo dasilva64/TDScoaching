@@ -12,6 +12,8 @@ import "react-vertical-timeline-component/style.min.css";
 
 export const metadata = {
   title: "Thierry DA SILVA coach professionnel certifié - tdscoaching",
+  description:
+    "Thierry DA SILVA coach professionnel certifié, vous accompagne pour surmonter vos difficultés et vous accomplir dans la durée",
 };
 
 const About = () => {

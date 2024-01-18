@@ -5,6 +5,7 @@ import Card from "./components/card/Card";
 import WhileInView from "./components/framer/WhileInView";
 import Parallax from "./components/framer/parallax";
 import GoTarif from "./components/goTarif/goTarif";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -150,7 +151,7 @@ export default function Home() {
           </div>
         </section>
         <section className={styles.home__goal}>
-          <h2 className={styles.home__goal__h2}>Quel est votre objectif ?</h2>
+          <h2 className={styles.home__goal__h2}>Développons votre potentiel</h2>
 
           <div className={styles.home__goal__container}>
             <Card

@@ -21,7 +21,7 @@ import Nav from "../components/Nav";
 import ModalUserLastnameData from "../../../../../test/app/profile/components/lastnameData/modal/ModalUserLastnameData"; */
 //import useGet from "../../../../../test/app/components/hook/useGet";
 
-//import { mutate, useSWRConfig } from "swr";
+import { mutate, useSWRConfig } from "swr";
 /* import ModalEditFormuleUser from "../../../../../test/app/rendez-vous/components/take/modal/ModalEditFormule";
 import ModalCancelMeeting from "../../../../../test/app/rendez-vous/components/not-comfirm/modal/ModalCancelMeeting";
 import ModalDatePickerEditDesktop from "../../../../../test/app/rendez-vous/components/my-meeting/modal/ModalDatePickerEdit";
@@ -43,6 +43,24 @@ import ModalComfirmDisable from "../../../../../test/app/profile/components/twoF
 import DiscoveryModal from "@/app/tarif/components/DiscoveryModal";
 import NormalModal from "@/app/tarif/components/NormalModal";
 import ModalSurMesure from "@/app/redux/feature/modal/ModalSurMesure";
+import useGet from "../../hook/useGet";
+import FormLogin from "../../login/FormLogin";
+import useSWRMutation from "swr/mutation";
+import fetchDelete from "../../fetch/FetchDelete";
+import { defaultSession } from "../../../../../lib/session";
+import ModalUserFirstnameData from "@/app/profile/components/firstnameData/modal/ModalUserFirstnameData";
+import ModalUserLastnameData from "@/app/profile/components/lastnameData/modal/ModalUserLastnameData";
+import ModalUserPasswordData from "@/app/profile/components/passwordData/modal/ModalUserPasswordData";
+import ModalUserSendToken from "@/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
+import ModalTwoFactorSendToken from "@/app/profile/components/twoFactorSendTokenData/Modal/send/ModalTwoFactorSendToken";
+import ModalComfirmDisable from "@/app/profile/components/twoFactorSendTokenData/Modal/disable/ModalComfirmDisable";
+import EmailCheck from "@/app/profile/components/emailData/EmailData";
+import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalCloseEmail";
+import ModalDeleteAccount from "@/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
+import ModalTwoFactor from "@/app/profile/components/twoFactorData/ModalTwoFactor";
+import ModalCloseTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalCloseTwoFactor";
+import FormRegister from "../../register/formRegister";
+import Forgot from "../../forgot/Forgot";
 /* import SurMesureModal from "../../../../../test/app/rendez-vous/components/formule/components/SurMesureModal";
 import ContractModal from "../../../../../test/app/rendez-vous/components/formule/components/ContractModal";
 import ModalComfirmDeleteContrat from "../../../../../test/app/rendez-vous/components/take/modal/ModalComfirmDeleteContrat";
@@ -52,7 +70,6 @@ const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
   useEffect(() => {
     if (document) {
-      console.log(isActive);
       if (isActive === true) {
         let body = document.querySelector("body");
         let htmlElementRequiresChange = document.querySelectorAll(".modalOpen");
@@ -76,10 +93,9 @@ const Content = () => {
   }, [isActive]);
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const router = useRouter();
   const pathname = usePathname();
   const [onHoverLink, setOnHoverLink] = useState<string | null>(pathname);
-  const router = useRouter();
-  //const { cache } = useSWRConfig();
   const { isMobile } = useSelector((state: RootState) => state.Mobile);
   /* useEffect(() => {
     const fetchCheckUser = async () => {
@@ -89,29 +105,34 @@ const Content = () => {
     fetchCheckUser();
   }, []); */
 
-  /* const { data, isLoading, isError } = useGet("/api/user/check");
+  /* const {
+    trigger,
+    data: test,
+    reset,
+  } = useSWRMutation("/components/header/api", fetchDelete);
+  useEffect(() => {
+    if (test) {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: {
+          type: "error",
+          flashMessage: test.message,
+        },
+      });
+      reset();
+    }
+  }, [dispatch, reset, test]);
+  const { data, isLoading } = useGet("/components/header/api");
   useEffect(() => {
     if (data) {
-      if (data.body !== null) {
-        dispatch({
-          type: "auth/login",
-          payload: {
-            role: data.body.role,
-            id: data.body.id,
-          },
-        });
-      } else {
-        dispatch({
-          type: "auth/logout",
-        });
-        setDisplayLogMenu(false);
+      if (data.isLoggedIn === false) {
+        if (pathname === "/profile") {
+          router.push("/");
+        }
       }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, pathname, router]);
   let content;
-  if (isError) {
-    content = <div>Erreur</div>;
-  }
   if (isLoading) {
     content = (
       <div className={styles.header__log}>
@@ -120,7 +141,7 @@ const Content = () => {
     );
   }
   if (data) {
-    if (data.body === null) {
+    if (data.isLoggedIn === false) {
       content = (
         <>
           <div className={styles.header__log}>
@@ -143,7 +164,7 @@ const Content = () => {
         </>
       );
     } else {
-      if (data.body.role === "ROLE_ADMIN") {
+      if (data.role === "ROLE_ADMIN") {
         content = (
           <>
             <div className={styles.header__log}>
@@ -293,14 +314,21 @@ const Content = () => {
                         onClick={() => {
                           setDisplayLogMenu(false);
                           const logout = async () => {
-                            let response = await fetch("/api/user/logout", {
-                              method: "POST",
-                              headers: {
-                                "Content-Type": "application/json",
-                              },
+                            trigger(null, {
+                              optimisticData: defaultSession,
                             });
-                            let json = await response.json();
-                            if (json && json.status === 200) {
+
+                             let response = await fetch(
+                              "/components/header/api",
+                              {
+                                method: "DELETE",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                              }
+                            );
+                            let json = await response.json(); 
+                             if (json && json.status === 200) {
                               setTimeout(() => {
                                 dispatch({
                                   type: "auth/logout",
@@ -326,7 +354,7 @@ const Content = () => {
                                   },
                                 });
                               }, 600);
-                            }
+                            } 
                           };
                           logout();
                         }}
@@ -347,7 +375,7 @@ const Content = () => {
             </div>
           </>
         );
-      } else if (data.body.role === "ROLE_USER") {
+      } else if (data.role === "ROLE_USER") {
         content = (
           <>
             <div className={styles.header__log}>
@@ -471,14 +499,17 @@ const Content = () => {
                         onClick={() => {
                           setDisplayLogMenu(false);
                           const logout = async () => {
-                            let response = await fetch("/api/user/logout", {
-                              method: "POST",
-                              headers: {
-                                "Content-Type": "application/json",
-                              },
-                            });
+                            let response = await fetch(
+                              "/components/header/api",
+                              {
+                                method: "DELETE",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                              }
+                            );
                             let json = await response.json();
-                            if (json.status === 200) {
+                             if (json.status === 200) {
                               setTimeout(() => {
                                 dispatch({
                                   type: "auth/logout",
@@ -503,7 +534,7 @@ const Content = () => {
                                   },
                                 });
                               }, 600);
-                            }
+                            } 
                           };
 
                           logout();
@@ -530,9 +561,44 @@ const Content = () => {
   } */
 
   const [isClick, setIsClick] = useState<boolean>(false);
-  /* const { displayModalLogin } = useSelector(
+  const { displayModalLogin } = useSelector(
     (state: RootState) => state.ModalLogin
   );
+
+  const { displayModalEditFirstname } = useSelector(
+    (state: RootState) => state.ModalEditFirstname
+  );
+  const { displayModalEditLastname } = useSelector(
+    (state: RootState) => state.ModalEditLastname
+  );
+  const { displayModalEditPassword } = useSelector(
+    (state: RootState) => state.ModalEditPassword
+  );
+  const { displayModalSendTokenEmail } = useSelector(
+    (state: RootState) => state.ModalSendTokenEmail
+  );
+  const { displayModalSendTokenTwoFactor } = useSelector(
+    (state: RootState) => state.ModalSendTokenTwoFactor
+  );
+  const { displayModalEditEmail } = useSelector(
+    (state: RootState) => state.ModalEditEmail
+  );
+  const { displayModalCancelEmail } = useSelector(
+    (state: RootState) => state.ModalCancelEmail
+  );
+  const { displayModalDeleteAccount } = useSelector(
+    (state: RootState) => state.ModalDeleteAccount
+  );
+  const { displayModalEditTwoFactor } = useSelector(
+    (state: RootState) => state.ModalEditTwoFactor
+  );
+  const { displayModalCancelTwoFactor } = useSelector(
+    (state: RootState) => state.ModalCancelTwoFactor
+  );
+  const { displayModalForgot } = useSelector(
+    (state: RootState) => state.ModalForgot
+  );
+  /*
   const { displayModalRegister } = useSelector(
     (state: RootState) => state.ModalRegister
   );
@@ -543,15 +609,9 @@ const Content = () => {
   const { displayModalEditLastname } = useSelector(
     (state: RootState) => state.ModalEditLastname
   );
-  const { displayModalEditPassword } = useSelector(
-    (state: RootState) => state.ModalEditPassword
-  );
-  const { displayModalSendTokenEmail } = useSelector(
-    (state: RootState) => state.ModalSendTokenEmail
-  );
-  const { displayModalEditEmail } = useSelector(
-    (state: RootState) => state.ModalEditEmail
-  );
+ 
+  
+  
   const { displayModalEditTwoFactor } = useSelector(
     (state: RootState) => state.ModalEditTwoFactor
   );
@@ -600,9 +660,7 @@ const Content = () => {
   const { displayModalCancelTwoFactor } = useSelector(
     (state: RootState) => state.ModalCancelTwoFactor
   );
-  const { displayModalSendTokenTwoFactor } = useSelector(
-    (state: RootState) => state.ModalSendTokenTwoFactor
-  );
+  
   const { displayModalComfirmDisableTwoFactor } = useSelector(
     (state: RootState) => state.ModalComfirmDisableTwoFactor
   );
@@ -653,7 +711,22 @@ const Content = () => {
     });
   };
   const classNameLine = () => {
-    if (displayModalDiscovery === true || displayModalNormal === true) {
+    if (
+      displayModalDiscovery === true ||
+      displayModalNormal === true ||
+      displayModalLogin === true ||
+      displayModalEditFirstname === true ||
+      displayModalEditLastname === true ||
+      displayModalEditPassword === true ||
+      displayModalSendTokenEmail === true ||
+      displayModalSendTokenTwoFactor === true ||
+      displayModalEditEmail === true ||
+      displayModalCancelEmail === true ||
+      displayModalDeleteAccount === true ||
+      displayModalEditTwoFactor === true ||
+      displayModalCancelTwoFactor === true ||
+      displayModalForgot === true
+    ) {
       return `${styles.line__hide}`;
     } else {
       return `${styles.line__show}`;
@@ -669,7 +742,22 @@ const Content = () => {
       let header = document.querySelector("header");
 
       if (mainDiv && footerDiv && htlmElement && htlmbody && header) {
-        if (displayModalDiscovery === true || displayModalNormal === true) {
+        if (
+          displayModalDiscovery === true ||
+          displayModalNormal === true ||
+          displayModalLogin === true ||
+          displayModalEditFirstname === true ||
+          displayModalEditLastname === true ||
+          displayModalEditPassword === true ||
+          displayModalSendTokenEmail === true ||
+          displayModalSendTokenTwoFactor === true ||
+          displayModalEditEmail === true ||
+          displayModalCancelEmail === true ||
+          displayModalDeleteAccount === true ||
+          displayModalEditTwoFactor === true ||
+          displayModalCancelTwoFactor === true ||
+          displayModalForgot === true
+        ) {
           /* header.style.opacity = "0.02";
           mainDiv.style.opacity = "0.02";
           footerDiv.style.opacity = "0.02";
@@ -686,7 +774,22 @@ const Content = () => {
         }
       }
     }
-  }, [displayModalDiscovery, displayModalNormal]);
+  }, [
+    displayModalDiscovery,
+    displayModalLogin,
+    displayModalNormal,
+    displayModalEditFirstname,
+    displayModalEditLastname,
+    displayModalEditPassword,
+    displayModalSendTokenEmail,
+    displayModalSendTokenTwoFactor,
+    displayModalEditEmail,
+    displayModalCancelEmail,
+    displayModalDeleteAccount,
+    displayModalEditTwoFactor,
+    displayModalCancelTwoFactor,
+    displayModalForgot,
+  ]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("resize", () => {
@@ -776,22 +879,35 @@ const Content = () => {
   }, [dispatch, isMobile]);
   return (
     <>
-      {/* {typeof window !== "undefined" &&
+      <FormLogin />
+      {typeof window !== "undefined" &&
         window.location.pathname === "/profile" && (
           <>
             <ModalUserFirstnameData />
             <ModalUserLastnameData />
             <ModalUserPasswordData />
             <ModalUserSendToken />
+            <ModalTwoFactorSendToken />
+            <ModalComfirmDisable />
+            <EmailCheck />
+            <ModalCloseEmail />
+            <ModalDeleteAccount />
+            <ModalTwoFactor />
+            <ModalCloseTwoFactor />
+            {/* <ModalUserLastnameData />
+            
+            
             <EmailCheck />
             <ModalCloseEmail />
             <ModalTwoFactor />
             <ModalDeleteAccount />
             <ModalCloseTwoFactor />
-            <ModalTwoFactorSendToken />
+             */}
           </>
         )}
-      <FormLogin />
+      <FormRegister />
+      <Forgot />
+      {/* <FormLogin />
       <FormRegister />
       <Forgot /> */}
 
@@ -808,7 +924,7 @@ const Content = () => {
       <ModalEditMeeting />
       <ModalDeleteMeeting />
       <ModalAddMeetingAdmin />
-      <ModalComfirmDisable />
+      
       <DiscoveryModal />
       
       <SurMesureModal />
@@ -1143,10 +1259,10 @@ const Content = () => {
             ></span>
           </div>
         </button> */}
-        <div className={styles.main}>
+        {/* <div className={styles.main}>
           <div className={styles.headerr}>
             <button
-              tabIndex={1}
+              tabIndex={0}
               onClick={() => {
                 if (displayLogMenu === true) {
                   setDisplayLogMenu(false);
@@ -1171,7 +1287,7 @@ const Content = () => {
             </button>
           </div>
         </div>
-        <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>
+        <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence> */}
       </header>
       <div className={classNameLine()}></div>
     </>

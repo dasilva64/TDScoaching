@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+/* import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface AuthType {
   role: string;
@@ -29,4 +29,4 @@ const auth = createSlice({
   },
 });
 
-export default auth;
+export default auth; */

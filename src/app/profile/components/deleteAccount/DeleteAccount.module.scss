@@ -1,0 +1,51 @@
+.card {
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+  padding: 10px 0px 10px 10px;
+  position: relative;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.04);
+  height: 60px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 400ms;
+  &:hover {
+    background-color: orange;
+  }
+  &:hover > .card__info {
+    color: white;
+  }
+  &:hover > .card__icone {
+    filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(300deg)
+      brightness(105%) contrast(101%);
+  }
+  &:hover > .card__info__icone {
+    filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(300deg)
+      brightness(105%) contrast(101%);
+  }
+  &__icone {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 400ms;
+  }
+  &__info {
+    align-self: center;
+    margin-left: 60px;
+    &__icone {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: all 400ms;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .card {
+    &__info {
+      margin-left: 40px;
+    }
+  }
+}

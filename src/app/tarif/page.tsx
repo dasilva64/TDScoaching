@@ -7,6 +7,8 @@ import ButtonOpenDiscovery from "./components/ButtonOpenDiscovery";
 import ButtonOpenNormal from "./components/ButtonOpenNormal";
 export const metadata = {
   title: "Coach de vie tarif - tdscoaching",
+  description:
+    "Explorez mes trois packs de coaching sur mesure pour les couples, les familles et les professionnels : pack unique, pack flash et pack sur mesure.",
 };
 
 const Tarif = () => {

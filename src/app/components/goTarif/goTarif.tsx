@@ -8,7 +8,7 @@ import Link from "next/link";
 const GoTarif = () => {
   const router = useRouter();
   return (
-    <Link href="/tarif" className={`${styles.btn} modalOpen`} tabIndex={1}>
+    <Link href="/tarif" className={`${styles.btn} modalOpen`} tabIndex={0}>
       Voir les offres
     </Link>
   );

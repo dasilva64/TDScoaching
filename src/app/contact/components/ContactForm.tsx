@@ -32,7 +32,10 @@ const ContactForm = () => {
   const [objectInputError, setObjectInputError] = useState<string>("");
   const [messageInputError, setMessageInputError] = useState<string>("");
 
-  const { trigger, data } = useSWRMutation("/api/contact/send", fetchPost);
+  const { trigger, data, reset } = useSWRMutation(
+    "/contact/components/api",
+    fetchPost
+  );
 
   useEffect(() => {
     if (data) {
@@ -46,6 +49,7 @@ const ContactForm = () => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
+        reset();
       } else if (data.status === 400) {
         data.message.forEach((element: string) => {
           if (element[0] === "firstname") {
@@ -71,7 +75,7 @@ const ContactForm = () => {
         });
       }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, reset]);
 
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,19 +103,29 @@ const ContactForm = () => {
       }
     } else {
       if (validinputEmail === false) {
-        setEmailInputError("Email : ne peut pas être vide");
+        if (inputEmail.length === 0) {
+          setEmailInputError("Email : ne peut pas être vide");
+        }
       }
       if (validinputFirstname === false) {
-        setFirstnameInputError("Prénom : ne peut pas être vide");
+        if (inputFirstname.length === 0) {
+          setFirstnameInputError("Prénom : ne peut pas être vide");
+        }
       }
       if (validinputLastname === false) {
-        setLastnameInputError("Nom de famille : ne peut pas être vide");
+        if (inputLastname.length === 0) {
+          setLastnameInputError("Nom de famille : ne peut pas être vide");
+        }
       }
       if (validinputObject === false) {
-        setObjectInputError("Objet : ne peut pas être vide");
+        if (inputObject.length === 0) {
+          setObjectInputError("Objet : ne peut pas être vide");
+        }
       }
       if (validinputMessage === false) {
-        setMessageInputError("Message : ne peut pas être vide");
+        if (inputMessage.length === 0) {
+          setMessageInputError("Message : ne peut pas être vide");
+        }
       }
     }
   };
@@ -161,7 +175,7 @@ const ContactForm = () => {
             handlerInput(
               e,
               "lastname",
-              /^[A-Za-zÀ-ÿ ]{3,40}$/,
+              /^[A-Za-zÀ-ÿ{:} ]{3,40}$/,
               setValidInputLastname,
               setLastnameInputError,
               setInputLastname,

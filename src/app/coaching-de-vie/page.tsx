@@ -9,6 +9,8 @@ import CardHelp from "./components/CardHelp";
 
 export const metadata = {
   title: "Coaching familial, professionnel et de couple - tdscoaching",
+  description:
+    "Découvrez les différents types de coaching que je propose pour vous aidez à surmonter vos difficultés et à vous accomplir dans la durée : coaching familial, coaching professionnel et coaching de couple",
 };
 
 const page = () => {

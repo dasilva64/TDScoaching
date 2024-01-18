@@ -47,7 +47,6 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "object") {
-      // give me a regex for accept all punctuation
       let regex = /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'@#-_\. ]{1,50}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["object", "Objet : ne peut pas être vide"]);

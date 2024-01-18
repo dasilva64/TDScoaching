@@ -4,6 +4,8 @@ import ContactForm from "./components/ContactForm";
 import Image from "next/image";
 export const metadata = {
   title: "Contactez votre coach de vie - tdscoaching",
+  description:
+    "Vous pouvez me contacter par mail : contact@tds-coachingdevie.fr ou par téléphone : 0781673125",
 };
 
 const Contact = () => {

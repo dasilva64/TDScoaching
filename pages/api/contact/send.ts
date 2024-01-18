@@ -1,46 +1,46 @@
-import { NextApiResponse } from "next";
+/* import { NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
-import { withIronSessionApiRoute } from "iron-session/next";
+import { withIronSessionApiRoute } from "iron-session";
 import nodemailer from "nodemailer";
 import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 
-//export default withIronSessionApiRoute(
-export default async function send(req: any, res: NextApiResponse) {
-  if (req.method === "POST") {
-    const { email, firstname, lastname, object, message, pseudo } =
-      await req.body;
-    let arrayMessageError = validationBody(req.body);
-    if (arrayMessageError.length > 0) {
-      return res.status(400).json({
-        status: 400,
-        message: arrayMessageError,
-      });
-    }
-    if (pseudo.trim() !== "") {
-      return res.status(404).json({
-        status: 404,
-        message:
-          "Une erreur est survenue lors de l'envoie du message, veuillez réessayer plus tard",
-      });
-    } else {
-      /* const user = await prisma.user.findUnique({
-        where: { mail: validator.escape(email.trim()), status: true },
-      }); */
+export default withIronSessionApiRoute(
+  async function send(req: any, res: NextApiResponse) {
+    if (req.method === "POST") {
+      const { email, firstname, lastname, object, message, pseudo } =
+        await req.body;
+      let arrayMessageError = validationBody(req.body);
+      if (arrayMessageError.length > 0) {
+        return res.status(400).json({
+          status: 400,
+          message: arrayMessageError,
+        });
+      }
+      if (pseudo.trim() !== "") {
+        return res.status(404).json({
+          status: 404,
+          message:
+            "Une erreur est survenue lors de l'envoie du message, veuillez réessayer plus tard",
+        });
+      } else {
+        const user = await prisma.user.findUnique({
+          where: { mail: validator.escape(email.trim()), status: true },
+        });
 
-      let smtpTransport = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-          user: process.env.SECRET_SMTP_EMAIL,
-          pass: process.env.SECRET_SMTP_PASSWORD,
-        },
-      });
-      /* if (user === null) {
-        let mailOptions = {
-          from: process.env.SECRET_SMTP_EMAIL,
-          to: process.env.SECRET_SMTP_EMAIL,
-          subject: object,
-          html: `<!DOCTYPE html>
+        let smtpTransport = nodemailer.createTransport({
+          service: "Gmail",
+          auth: {
+            user: process.env.SECRET_SMTP_EMAIL,
+            pass: process.env.SECRET_SMTP_PASSWORD,
+          },
+        });
+        if (user === null) {
+          let mailOptions = {
+            from: process.env.SECRET_SMTP_EMAIL,
+            to: process.env.SECRET_SMTP_EMAIL,
+            subject: object,
+            html: `<!DOCTYPE html>
                             <html lang="fr">
                               <head>
                                 <title>tds coaching</title>
@@ -65,14 +65,14 @@ export default async function send(req: any, res: NextApiResponse) {
                                 </div>
                               </body>
                             </html>`,
-        };
-        smtpTransport.sendMail(mailOptions);
-      } else {
-        let mailOptions = {
-          from: process.env.SECRET_SMTP_EMAIL,
-          to: process.env.SECRET_SMTP_EMAIL,
-          subject: object,
-          html: `<!DOCTYPE html>
+          };
+          smtpTransport.sendMail(mailOptions);
+        } else {
+          let mailOptions = {
+            from: process.env.SECRET_SMTP_EMAIL,
+            to: process.env.SECRET_SMTP_EMAIL,
+            subject: object,
+            html: `<!DOCTYPE html>
                             <html lang="fr">
                               <head>
                                 <title>tds coaching</title>
@@ -97,14 +97,14 @@ export default async function send(req: any, res: NextApiResponse) {
                                 </div>
                               </body>
                             </html>`,
-        };
-        smtpTransport.sendMail(mailOptions);
-      } */
-      let mailOptions = {
-        from: process.env.SECRET_SMTP_EMAIL,
-        to: "contact@tds-coachingdevie.fr",
-        subject: object,
-        html: `<!DOCTYPE html>
+          };
+          smtpTransport.sendMail(mailOptions);
+        }
+        let mailOptions = {
+          from: process.env.SECRET_SMTP_EMAIL,
+          to: "contact@tds-coachingdevie.fr",
+          subject: object,
+          html: `<!DOCTYPE html>
                           <html lang="fr">
                             <head>
                               <title>tds coaching</title>
@@ -124,8 +124,8 @@ export default async function send(req: any, res: NextApiResponse) {
                                   <h2 style="text-align: center">${validator.escape(
                                     firstname
                                   )} ${validator.escape(
-          lastname
-        )} vous a envoyé un message</h2>
+            lastname
+          )} vous a envoyé un message</h2>
                                   <p style="text-align: left; margin-left: 20px">Email : ${validator.escape(
                                     email
                                   )}</p>
@@ -136,22 +136,22 @@ export default async function send(req: any, res: NextApiResponse) {
                               </div>
                             </body>
                           </html>`,
-      };
-      smtpTransport.sendMail(mailOptions);
-      return res.status(200).json({
-        status: 200,
-        message:
-          "Merci de nous avoir contacter nous allons vous répondre le plus vite possible",
+        };
+        smtpTransport.sendMail(mailOptions);
+        return res.status(200).json({
+          status: 200,
+          message:
+            "Merci de nous avoir contacter nous allons vous répondre le plus vite possible",
+        });
+      }
+    } else {
+      return res.status(404).json({
+        status: 404,
+        message: "Une erreur est survenue, veuillez réessayer",
       });
     }
-  } else {
-    return res.status(404).json({
-      status: 404,
-      message: "Une erreur est survenue, veuillez réessayer",
-    });
-  }
-}
-/*, {
+  },
+  {
     password:
       "tesdfjklsjtesdfjktesdfjklsjdfljslkdfjlsjdflslqfdjkstlsjdfljslkdfjlsjdflslqfdjkstdfljslkdfjlsjdflslqfdjkst",
     cookieName: "test",

@@ -6,7 +6,8 @@ import { menuSlide } from "./anim";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import Link from "./Link";
+import LinkBurger from "./Link";
+import Link from "next/link";
 
 const navItems = [
   {
@@ -50,19 +51,24 @@ const Nav = () => {
       className={styles.menu}
     >
       <div className={styles.logo}>
-        <Image
+        <Link
+          className={styles.logo__link}
+          href="/"
+          tabIndex={0}
           onClick={() => {
             dispatch({ type: "menu/closeMenu" });
-            router.push("/");
           }}
-          className={styles.logo__img}
-          width={0}
-          height={0}
-          sizes="100vw"
-          src="/assets/logo/logo3.png"
-          alt="logo tdss coaching"
-          priority={true}
-        />
+        >
+          <Image
+            className={styles.logo__link__img}
+            width={0}
+            height={0}
+            sizes="100vw"
+            src="/assets/logo/logo3.png"
+            alt="logo tdss coaching"
+            priority={true}
+          />
+        </Link>
       </div>
       <div className={styles.line}></div>
       <div className={styles.body}>
@@ -74,12 +80,12 @@ const Nav = () => {
         >
           {navItems.map((data, index) => {
             return (
-              <Link
+              <LinkBurger
                 key={index}
                 data={{ ...data, index }}
                 isActive={selectedIndicator == data.href}
                 setSelectedIndicator={setSelectedIndicator}
-              ></Link>
+              ></LinkBurger>
             );
           })}
         </div>

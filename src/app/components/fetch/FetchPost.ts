@@ -7,9 +7,7 @@ const fetchPost = async (url: string, { arg }: { arg: any }) => {
     },
     body: JSON.stringify(arg),
   });
-  console.log("response", response);
   let json = await response.json();
-  console.log("json", json);
   return json;
 };
 

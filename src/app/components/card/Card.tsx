@@ -30,7 +30,7 @@ const Card = ({ title, content }: any) => {
     <>
       <WhileInView type="y">
         <button
-          tabIndex={1}
+          tabIndex={0}
           className={`${styles.card} modalOpen`}
           onClick={() => {
             setShow(!show);

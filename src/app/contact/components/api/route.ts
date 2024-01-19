@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../lib/prisma";
 import { validationBody } from "../../../../../lib/validation";
 import validator from "validator";
-import nodemailer from "nodemailer";
 
 export async function POST(request: NextRequest) {
   const { email, firstname, lastname, object, message, pseudo } =
@@ -46,14 +45,14 @@ export async function POST(request: NextRequest) {
       where: { mail: validator.escape(email.trim()), status: true },
     });
 
-    let smtpTransport = nodemailer.createTransport({
+    /* let smtpTransport = nodemailer.createTransport({
       service: "Gmail",
       auth: {
         user: process.env.SECRET_SMTP_EMAIL,
         pass: process.env.SECRET_SMTP_PASSWORD,
       },
-    });
-    if (user === null) {
+    }); */
+    /* if (user === null) {
       let mailOptions = {
         from: process.env.SECRET_SMTP_EMAIL,
         to: process.env.SECRET_SMTP_EMAIL,
@@ -133,7 +132,7 @@ export async function POST(request: NextRequest) {
                           </html>`,
       };
       smtpTransport.sendMail(mailOptions);
-    }
+    } */
     /* let mailOptions = {
         from: process.env.SECRET_SMTP_EMAIL,
         to: "contact@tds-coachingdevie.fr",

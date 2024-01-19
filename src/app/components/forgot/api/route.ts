@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { getIronSession } from "iron-session";
 import { validationBody } from "../../../../../lib/validation";
 import validator from "validator";
 import prisma from "../../../../../lib/prisma";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 
 export async function POST(request: NextRequest) {
   const { email, pseudo } = (await request.json()) as {
@@ -79,7 +75,7 @@ export async function POST(request: NextRequest) {
           where: { mail: validator.escape(email.trim()) },
           data: { resetToken: resetTokenObject },
         });
-        let smtpTransport = nodemailer.createTransport({
+        /* let smtpTransport = nodemailer.createTransport({
           service: "Gmail",
           auth: {
             user: process.env.SECRET_SMTP_EMAIL,
@@ -116,7 +112,7 @@ export async function POST(request: NextRequest) {
                       </body>
                     </html>`,
         };
-        smtpTransport.sendMail(mailOptions);
+        smtpTransport.sendMail(mailOptions); */
         return NextResponse.json({
           status: 200,
           message: "Un email vous a été envoyer pour récupérer votre compte",

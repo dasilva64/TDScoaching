@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { getIronSession } from "iron-session";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import prisma from "../../../../../../lib/prisma";
 import { validationBody } from "../../../../../../lib/validation";
 import { Prisma } from "@prisma/client";

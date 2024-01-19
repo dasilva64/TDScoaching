@@ -6,7 +6,6 @@ import prisma from "../../../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../../../lib/session";
 import { validationBody } from "../../../../../../lib/validation";
 import { Prisma } from "@prisma/client";
-import nodemailer from "nodemailer";
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -164,7 +163,7 @@ export async function GET(request: NextRequest) {
             email: editUser.mail,
             newEmail: copyEditEmail.newEmail,
           };
-          let smtpTransport = nodemailer.createTransport({
+          /* let smtpTransport = nodemailer.createTransport({
             service: "Gmail",
             auth: {
               user: process.env.SECRET_SMTP_EMAIL,
@@ -201,7 +200,7 @@ export async function GET(request: NextRequest) {
                 </body>
               </html>`,
           };
-          smtpTransport.sendMail(mailOptions);
+          smtpTransport.sendMail(mailOptions); */
           return NextResponse.json({
             status: 200,
             body: userObject,

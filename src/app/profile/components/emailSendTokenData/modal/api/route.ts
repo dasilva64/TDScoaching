@@ -2,12 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import prisma from "../../../../../../../lib/prisma";
-import nodemailer from "nodemailer";
-import {
-  SessionData,
-  sessionOptions,
-  defaultSession,
-} from "../../../../../../../lib/session";
+import { SessionData, sessionOptions } from "../../../../../../../lib/session";
 import validator from "validator";
 import { validationBody } from "../../../../../../../lib/validation";
 
@@ -101,7 +96,7 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
               );
             } else {
-              let smtpTransport = nodemailer.createTransport({
+              /* let smtpTransport = nodemailer.createTransport({
                 service: "Gmail",
                 auth: {
                   user: process.env.SECRET_SMTP_EMAIL,
@@ -138,7 +133,7 @@ export async function POST(request: NextRequest) {
                           </body>
                         </html>`,
               };
-              smtpTransport.sendMail(mailOptions);
+              smtpTransport.sendMail(mailOptions); */
               let copyEditEmail: any = editUser.editEmail;
               let userObject = {
                 firstname: editUser.firstname,

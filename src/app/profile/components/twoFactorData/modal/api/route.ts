@@ -1,14 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
-import {
-  SessionData,
-  defaultSession,
-  sessionOptions,
-} from "../../../../../../../lib/session";
+import { SessionData, sessionOptions } from "../../../../../../../lib/session";
 import prisma from "../../../../../../../lib/prisma";
-import validator from "validator";
-import nodemailer from "nodemailer";
 import { Prisma } from "@prisma/client";
 
 export async function GET() {

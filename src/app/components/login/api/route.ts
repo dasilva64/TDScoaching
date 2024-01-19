@@ -5,7 +5,6 @@ import { SessionData, sessionOptions } from "../../../../../lib/session";
 import { validationBody } from "../../../../../lib/validation";
 import validator from "validator";
 import bcrypt from "bcrypt";
-import nodemailer from "nodemailer";
 import prisma from "../../../../../lib/prisma";
 
 // login
@@ -99,7 +98,7 @@ export async function POST(request: NextRequest) {
                 },
               },
             });
-            let smtpTransport = nodemailer.createTransport({
+            /* let smtpTransport = nodemailer.createTransport({
               service: "Gmail",
               auth: {
                 user: process.env.SECRET_SMTP_EMAIL,
@@ -136,7 +135,7 @@ export async function POST(request: NextRequest) {
                         </body>
                       </html>`,
             };
-            smtpTransport.sendMail(mailOptions);
+            smtpTransport.sendMail(mailOptions); */
             return NextResponse.json({
               status: 200,
               body: null,

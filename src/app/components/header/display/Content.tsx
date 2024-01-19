@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import logo from "@/app/assets/img/logo.png";
 /* import EmailCheck from "../../../../../test/app/profile/components/emailData/EmailData";
 import ModalUserSendToken from "../../../../../test/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
 import ModalUserPasswordData from "../../../../../test/app/profile/components/passwordData/modal/ModalUserPasswordData"; */
@@ -988,7 +989,8 @@ const Content = () => {
               width={0}
               height={0}
               sizes="100vw"
-              src="/assets/logo/logo3.png"
+              //src="/assets/logo/logo3.png"
+              src="/assets/logo/logo3.webp"
               alt="logo tdss coaching"
               priority={true}
             />

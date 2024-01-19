@@ -64,7 +64,7 @@ const Nav = () => {
             width={0}
             height={0}
             sizes="100vw"
-            src="/assets/logo/logo3.png"
+            src="/assets/logo/logo3.webp"
             alt="logo tdss coaching"
             priority={true}
           />

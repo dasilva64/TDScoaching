@@ -4,9 +4,6 @@ import { Providers } from "./redux/provider";
 import Footer from "./components/footer/footer";
 import Header from "./components/header/header";
 import { Analytics } from "@vercel/analytics/react";
-import Home from "./page";
-//import { CanvasProvider } from "../../test/app/rendez-vous/components/formule/CanvasContext";
-//const Header = lazy(() => import("./components/header/header"));
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {

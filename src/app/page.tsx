@@ -36,7 +36,7 @@ export default function Home() {
             height="0"
             sizes="100vw"
             priority={true}
-            src={"/assets/img/moi5.webp"}
+            src={"/assets/img/moi8.webp"}
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
           />
           <div className={styles.home__bg__container}>

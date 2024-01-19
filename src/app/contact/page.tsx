@@ -8,6 +8,12 @@ export const metadata = {
     "Vous pouvez me contacter par mail : contact@tds-coachingdevie.fr ou par téléphone : 0781673125",
 };
 
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../Parisienne-Regular.ttf",
+  display: "swap",
+});
+
 const Contact = () => {
   return (
     <>
@@ -39,7 +45,9 @@ const Contact = () => {
           />
         </section>
         <section className={styles.contact__main}>
-          <h1 className={styles.contact__main__h1}>Contact</h1>
+          <h1 className={`${styles.contact__main__h1} ${Parisienne.className}`}>
+            Contact
+          </h1>
           <div className={styles.contact__main__container__content}>
             <div className={styles.contact__main__container__content__card}>
               <p className={styles.contact__main__container__content__card__p}>

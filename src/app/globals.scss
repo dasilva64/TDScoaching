@@ -1,13 +1,12 @@
-@font-face {
+/* @font-face {
   font-family: Parisienne;
   src: url("/assets/font/Parisienne/Parisienne-Regular.ttf");
-}
+} */
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
 }
 
 .vertical-timeline-element-date {
@@ -51,7 +50,6 @@ a {
 
 h1,
 h2 {
-  font-family: "Parisienne";
   text-align: center;
 }
 

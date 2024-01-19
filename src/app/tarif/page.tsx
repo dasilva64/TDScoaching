@@ -1,4 +1,3 @@
-import Link from "next/link";
 import WhileInView from "../components/framer/WhileInView";
 import styles from "./page.module.scss";
 import Image from "next/image";
@@ -10,6 +9,12 @@ export const metadata = {
   description:
     "Explorez mes trois packs de coaching sur mesure pour les couples, les familles et les professionnels : pack unique, pack flash et pack sur mesure.",
 };
+
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const Tarif = () => {
   return (
@@ -44,7 +49,11 @@ const Tarif = () => {
         <section className={styles.tarif__packs}>
           <div className={styles.tarif__packs__head}>
             <div className={styles.tarif__packs__head__left}>
-              <h1 className={styles.tarif__packs__head__left__h1}>Tarifs</h1>
+              <h1
+                className={`${styles.tarif__packs__head__left__h1} ${Parisienne.className}`}
+              >
+                Tarifs
+              </h1>
               <p className={styles.tarif__packs__head__left__p}>
                 {" "}
                 Explorez mes offres et packs conçus sur mesure pour les couples,
@@ -80,7 +89,9 @@ const Tarif = () => {
               type="y"
               className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__unique}`}
             >
-              <h2 className={styles.tarif__packs__container__card__h3}>
+              <h2
+                className={`${styles.tarif__packs__container__card__h3} ${Parisienne.className}`}
+              >
                 Pack unique
               </h2>
               <ul className={styles.tarif__packs__container__card__ul}>
@@ -127,7 +138,9 @@ const Tarif = () => {
               type="y"
               className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__flash}`}
             >
-              <h2 className={styles.tarif__packs__container__card__h3}>
+              <h2
+                className={`${styles.tarif__packs__container__card__h3} ${Parisienne.className}`}
+              >
                 Pack flash
               </h2>
               <ul className={styles.tarif__packs__container__card__ul}>
@@ -176,7 +189,9 @@ const Tarif = () => {
               type="y"
               className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__long}`}
             >
-              <h2 className={styles.tarif__packs__container__card__h3}>
+              <h2
+                className={`${styles.tarif__packs__container__card__h3} ${Parisienne.className}`}
+              >
                 Pack sur mesure
               </h2>
               <ul className={styles.tarif__packs__container__card__ul}>

@@ -1,14 +1,12 @@
-import Card from "../components/card/Card";
-import WhileInView from "../components/framer/WhileInView";
-import Parallax from "../components/framer/parallax";
 import Timeline from "./components/Timeline";
 import styles from "./page.module.scss";
 import Image from "next/image";
-import {
-  VerticalTimeline,
-  VerticalTimelineElement,
-} from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 export const metadata = {
   title: "Thierry DA SILVA coach professionnel certifié - tdscoaching",
@@ -47,7 +45,11 @@ const About = () => {
           />
         </section>
         <section className={styles.about__parcour}>
-          <h1 className={styles.about__parcour__h1}>Thierry Da Silva</h1>
+          <h1
+            className={`${styles.about__parcour__h1} ${Parisienne.className}`}
+          >
+            Thierry Da Silva
+          </h1>
           <div className={styles.about__parcour__container}>
             <Image
               className={styles.about__parcour__container__img}
@@ -59,7 +61,9 @@ const About = () => {
               alt="Thierry DA SILVA coach professionnel certifié"
             />
             <div>
-              <h2 className={styles.about__parcour__container__h2}>
+              <h2
+                className={`${styles.about__parcour__container__h2} ${Parisienne.className}`}
+              >
                 Mon parcours professionnel
               </h2>
               <p className={styles.about__parcour__container__p}>
@@ -97,7 +101,9 @@ const About = () => {
         </section>
         <section className={styles.about__vision}>
           <div className={styles.about__vision__container}>
-            <h2 className={styles.about__vision__container__h2}>
+            <h2
+              className={`${styles.about__vision__container__h2} ${Parisienne.className}`}
+            >
               Ma vision du coaching
             </h2>
             <div className={styles.about__vision__container__content}>
@@ -129,7 +135,11 @@ const About = () => {
         </section>
 
         <section className={styles.about__certificate}>
-          <h2 className={styles.about__certificate__h2}>Mes formations</h2>
+          <h2
+            className={`${styles.about__certificate__h2} ${Parisienne.className}`}
+          >
+            Mes formations
+          </h2>
           <div className={styles.about__certificate__container}>
             <Timeline />
           </div>

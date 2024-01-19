@@ -3,9 +3,12 @@ import Image from "next/image";
 import GoDown from "./components/goDown/goDown";
 import Card from "./components/card/Card";
 import WhileInView from "./components/framer/WhileInView";
-import Parallax from "./components/framer/parallax";
 import GoTarif from "./components/goTarif/goTarif";
-import Link from "next/link";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "./Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 export default function Home() {
   return (
@@ -53,7 +56,9 @@ export default function Home() {
         </section>
         <section className={styles.home__who}>
           <div className={styles.home__who__container}>
-            <h2 className={styles.home__who__container__h2}>
+            <h2
+              className={`${styles.home__who__container__h2} ${Parisienne.className}`}
+            >
               Vous êtes en quête <br /> de bien-être ?
             </h2>
 
@@ -67,7 +72,9 @@ export default function Home() {
 
             <div className={styles.home__who__container__content}>
               <div className={styles.home__who__container__content__div}>
-                <h2 className={styles.home__who__container__content__div__h3}>
+                <h2
+                  className={`${styles.home__who__container__content__div__h3} ${Parisienne.className}`}
+                >
                   Coacher une personne, c’est quoi ?
                 </h2>
 
@@ -102,7 +109,9 @@ export default function Home() {
         </section>
         <section className={styles.home__what}>
           <div className={styles.home__what__container}>
-            <h2 className={styles.home__what__container__h2}>
+            <h2
+              className={`${styles.home__what__container__h2} ${Parisienne.className}`}
+            >
               Le coaching de vie, <br /> c’est quoi ?
             </h2>
 
@@ -151,7 +160,9 @@ export default function Home() {
           </div>
         </section>
         <section className={styles.home__goal}>
-          <h2 className={styles.home__goal__h2}>Développons votre potentiel</h2>
+          <h2 className={`${styles.home__goal__h2} ${Parisienne.className}`}>
+            Développons votre potentiel
+          </h2>
 
           <div className={styles.home__goal__container}>
             <Card

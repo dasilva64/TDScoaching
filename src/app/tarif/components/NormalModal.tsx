@@ -4,7 +4,11 @@ import styles from "./DiscoveryModal.module.scss";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
-import { useSelect } from "@mui/base";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const NormalModal = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -70,7 +74,9 @@ const NormalModal = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={styles.login__h1}>Séance coaching</h1>
+              <h1 className={`${styles.login__h1} ${Parisienne.className}`}>
+                Séance coaching
+              </h1>
               <p className={styles.login__p}>
                 <Image
                   className={styles.login__p__icone}

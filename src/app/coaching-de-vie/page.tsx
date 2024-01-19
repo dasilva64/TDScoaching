@@ -1,9 +1,6 @@
 import React from "react";
 import styles from "./page.module.scss";
 import Image from "next/image";
-import Link from "next/link";
-import WhileInView from "../components/framer/WhileInView";
-import Card from "../components/card/Card";
 import CardType from "./components/CardType";
 import CardHelp from "./components/CardHelp";
 
@@ -12,6 +9,12 @@ export const metadata = {
   description:
     "Découvrez les différents types de coaching que je propose pour vous aidez à surmonter vos difficultés et à vous accomplir dans la durée : coaching familial, coaching professionnel et coaching de couple",
 };
+
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const page = () => {
   return (
@@ -45,7 +48,9 @@ const page = () => {
         </section>
 
         <section className={styles.coaching__type}>
-          <h2 className={styles.coaching__type__h2}>
+          <h2
+            className={`${styles.coaching__type__h2} ${Parisienne.className}`}
+          >
             Les différents types de coaching
           </h2>
           <div className={styles.coaching__type__content}>
@@ -86,7 +91,7 @@ const page = () => {
           </div>
         </section>
         <section className={styles.coaching__help}>
-          <p className={styles.coaching__help__p}>
+          <p className={`${styles.coaching__help__p} ${Parisienne.className}`}>
             Si vous cherchez à renforcer, améliorer et réparer les dynamiques
             opérant au sein de la famille, du couple et sur le plan
             professionnel, le coaching peut vous aider à :

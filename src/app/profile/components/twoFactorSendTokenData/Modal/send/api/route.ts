@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
+import nodemailer from "nodemailer";
 import {
   SessionData,
   sessionOptions,
@@ -62,7 +63,7 @@ export async function GET() {
           lastname: editUser.lastname,
           email: editUser.mail,
         };
-        /* let smtpTransport = nodemailer.createTransport({
+        let smtpTransport = nodemailer.createTransport({
           service: "Gmail",
           auth: {
             user: process.env.SECRET_SMTP_EMAIL,
@@ -99,7 +100,7 @@ export async function GET() {
                   </body>
                 </html>`,
         };
-        smtpTransport.sendMail(mailOptions); */
+        smtpTransport.sendMail(mailOptions);
         if (user.twoFactorCode === null) {
           return NextResponse.json({
             status: 200,

@@ -4,6 +4,7 @@ import validator from "validator";
 import prisma from "../../../../../lib/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 export async function POST(request: NextRequest) {
   const { email, password, firstname, lastname, pseudo } =
@@ -83,7 +84,7 @@ export async function POST(request: NextRequest) {
           { status: 404 }
         );
       } else {
-        /* let smtpTransport = nodemailer.createTransport({
+        let smtpTransport = nodemailer.createTransport({
           service: "Gmail",
           auth: {
             user: process.env.SECRET_SMTP_EMAIL,
@@ -120,7 +121,7 @@ export async function POST(request: NextRequest) {
                         </body>
                       </html>`,
         };
-        smtpTransport.sendMail(mailOptions); */
+        smtpTransport.sendMail(mailOptions);
         return NextResponse.json({
           status: 200,
           message: "Un  vous a été envoyer pour activer votre compte",
@@ -173,7 +174,7 @@ export async function POST(request: NextRequest) {
                 { status: 404 }
               );
             } else {
-              /* let smtpTransport = nodemailer.createTransport({
+              let smtpTransport = nodemailer.createTransport({
                 service: "Gmail",
                 auth: {
                   user: process.env.SECRET_SMTP_EMAIL,
@@ -210,7 +211,7 @@ export async function POST(request: NextRequest) {
                               </body>
                             </html>`,
               };
-              smtpTransport.sendMail(mailOptions); */
+              smtpTransport.sendMail(mailOptions);
               return NextResponse.json({
                 status: 200,
                 message:

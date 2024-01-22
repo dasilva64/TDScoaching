@@ -53,6 +53,20 @@ const FormRegister = () => {
   const { displayModalRegister } = useSelector(
     (state: RootState) => state.ModalRegister
   );
+
+  useEffect(() => {
+    if (displayModalRegister === true) {
+      let test = document.querySelectorAll(".modalOpen");
+      test.forEach((tab) => {
+        tab.setAttribute("tabindex", "-1");
+      });
+    } else {
+      let test = document.querySelectorAll(".modalOpen");
+      test.forEach((tab) => {
+        tab.setAttribute("tabindex", "0");
+      });
+    }
+  }, [displayModalRegister]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { data, trigger } = useSWRMutation(

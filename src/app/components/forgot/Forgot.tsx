@@ -30,7 +30,19 @@ const Forgot = () => {
   const { displayModalForgot } = useSelector(
     (state: RootState) => state.ModalForgot
   );
-
+  useEffect(() => {
+    if (displayModalForgot === true) {
+      let test = document.querySelectorAll(".modalOpen");
+      test.forEach((tab) => {
+        tab.setAttribute("tabindex", "-1");
+      });
+    } else {
+      let test = document.querySelectorAll(".modalOpen");
+      test.forEach((tab) => {
+        tab.setAttribute("tabindex", "0");
+      });
+    }
+  }, [displayModalForgot]);
   const { data, trigger } = useSWRMutation("/components/forgot/api", fetchPost);
 
   useEffect(() => {

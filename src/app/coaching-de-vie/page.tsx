@@ -42,7 +42,7 @@ const page = () => {
             height="0"
             sizes="100vw"
             priority={true}
-            src={"/assets/test/sunlight.jpg"}
+            src={"/assets/test/sunlight2.webp"}
             alt="bousole"
           />
         </section>

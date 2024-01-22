@@ -35,7 +35,6 @@
           text-align: center;
           font-size: 18px;
           background-color: orange;
-          color: white;
           padding: 10px;
           margin-top: 20px;
           border-radius: 10px;
@@ -60,7 +59,6 @@
           line-height: 22px;
           font-size: 18px;
           text-align: center;
-          color: white;
           padding: 75px 10px 10px 10px;
           z-index: 1;
           width: 250px;
@@ -86,7 +84,6 @@
           text-align: center;
           font-size: 48px;
           width: fit-content;
-          color: white;
           padding: 10px 20px;
           border-radius: 10px;
           margin: 0px auto 30px auto;
@@ -97,7 +94,6 @@
 
           &__li {
             position: relative;
-            color: white;
             font-size: 18px;
             padding-left: 20px;
             margin-bottom: 5px;
@@ -116,7 +112,6 @@
           text-align: center;
           font-size: 36px;
           margin: 80px auto 40px auto;
-          color: white;
           font-weight: 800;
           &__sign {
             position: relative;

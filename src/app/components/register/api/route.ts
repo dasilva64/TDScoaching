@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
         smtpTransport.sendMail(mailOptions);
         return NextResponse.json({
           status: 200,
-          message: "Un  vous a été envoyer pour activer votre compte",
+          message: "Un mail vous a été envoyer pour activer votre compte",
         });
       }
     } else {

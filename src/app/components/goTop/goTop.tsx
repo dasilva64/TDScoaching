@@ -135,10 +135,11 @@ const GoTop = () => {
             flashMessage && flashMessage[1].length > 0
               ? styles.top__flash
               : styles.top__noFlash
-          }`}
+          } modalOpen`}
           onClick={() => {
             goTop();
           }}
+          aria-label="goTop"
           initial={{ y: 20, x: "-50%", opacity: 0 }}
           animate={{
             y: "-50%",

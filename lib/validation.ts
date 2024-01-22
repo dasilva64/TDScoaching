@@ -72,10 +72,10 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "password") {
-      if (!validator.matches(value.trim(), /^(?=.*[a-z]).{1,}$/)) {
+      if (!validator.matches(value.trim(), /^[a-z]{1,}$/)) {
         arrayMessageError.push([
           "password",
-          "Mot de passe : doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre",
+          "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum",
         ]);
       }
     }

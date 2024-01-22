@@ -146,8 +146,8 @@ const Content = () => {
       content = (
         <>
           <div className={styles.header__log}>
-            <div
-              className={styles.header__log__div}
+            <button
+              className={`${styles.header__log__div} modalOpen`}
               onClick={() => {
                 handlerClick();
               }}
@@ -160,7 +160,7 @@ const Content = () => {
                 alt="logo tdss coaching"
                 priority={true}
               />
-            </div>
+            </button>
           </div>
         </>
       );
@@ -319,7 +319,7 @@ const Content = () => {
                               optimisticData: defaultSession,
                             });
 
-                             let response = await fetch(
+                            let response = await fetch(
                               "/components/header/api",
                               {
                                 method: "DELETE",
@@ -328,8 +328,8 @@ const Content = () => {
                                 },
                               }
                             );
-                            let json = await response.json(); 
-                             if (json && json.status === 200) {
+                            let json = await response.json();
+                            if (json && json.status === 200) {
                               setTimeout(() => {
                                 dispatch({
                                   type: "auth/logout",
@@ -355,7 +355,7 @@ const Content = () => {
                                   },
                                 });
                               }, 600);
-                            } 
+                            }
                           };
                           logout();
                         }}
@@ -500,6 +500,9 @@ const Content = () => {
                         onClick={() => {
                           setDisplayLogMenu(false);
                           const logout = async () => {
+                            trigger(null, {
+                              optimisticData: defaultSession,
+                            });
                             let response = await fetch(
                               "/components/header/api",
                               {
@@ -510,7 +513,7 @@ const Content = () => {
                               }
                             );
                             let json = await response.json();
-                             if (json.status === 200) {
+                            if (json.status === 200) {
                               setTimeout(() => {
                                 dispatch({
                                   type: "auth/logout",
@@ -535,7 +538,7 @@ const Content = () => {
                                   },
                                 });
                               }, 600);
-                            } 
+                            }
                           };
 
                           logout();
@@ -1227,7 +1230,7 @@ const Content = () => {
               </Link>
             </li>
           </ul>
-          {/* {content} */}
+          {/*  {content} */}
         </nav>
 
         {/* <button
@@ -1279,7 +1282,7 @@ const Content = () => {
                   });
                 }
               }}
-              className={`${styles.button}`}
+              className={`${styles.button} modalOpen`}
             >
               <div
                 className={`${styles.burger} ${

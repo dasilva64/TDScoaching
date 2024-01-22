@@ -19,7 +19,7 @@ const useUserEmailValidation = (token: string) => {
   const router = useRouter();
 
   const { data, isLoading, error } = useSWR(
-    [`/api/user/emailValidation`, token],
+    [`/email-validation/[hook]/components/api`, token],
     ([url, token]) => fetchUserEmailValidation(url, token)
   );
   useEffect(() => {

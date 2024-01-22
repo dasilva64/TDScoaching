@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
-import { SessionData, sessionOptions } from "../../../../../lib/session";
-import { validationBody } from "../../../../../lib/validation";
+import { SessionData, sessionOptions } from "../../../../../../lib/session";
+import { validationBody } from "../../../../../../lib/validation";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-import prisma from "../../../../../lib/prisma";
+import prisma from "../../../../../../lib/prisma";
 
 export async function POST(request: NextRequest) {
   const { email, password, pseudo } = (await request.json()) as {
@@ -166,11 +166,12 @@ export async function POST(request: NextRequest) {
     } else {
       return NextResponse.json(
         {
-          status: 404,
+          status: 400,
+          type: "error",
           message:
             "Mauvaise combinaison email/mot de passe, veuillez réessayer",
         },
-        { status: 404 }
+        { status: 400 }
       );
     }
   }

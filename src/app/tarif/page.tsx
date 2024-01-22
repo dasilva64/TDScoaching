@@ -42,7 +42,7 @@ const Tarif = () => {
             width="0"
             height="400"
             priority={true}
-            src={"/assets/test/sunlight.jpg"}
+            src={"/assets/test/sunlight2.webp"}
             alt="Avenue dans une forêt"
           />
         </section>
@@ -73,7 +73,7 @@ const Tarif = () => {
                 height="0"
                 sizes="100vw"
                 priority={true}
-                src={"/assets/img/moi.jpeg"}
+                src={"/assets/img/moi21.webp"}
                 alt="Thierry DA SILVA coach professionnel certifié"
               />
               <p className={styles.tarif__packs__head__right__p}>

@@ -27,6 +27,19 @@ const FormLogin = () => {
   const { displayModalLogin } = useSelector(
     (state: RootState) => state.ModalLogin
   );
+  useEffect(() => {
+    if (displayModalLogin === true) {
+      let test = document.querySelectorAll(".modalOpen");
+      test.forEach((tab) => {
+        tab.setAttribute("tabindex", "-1");
+      });
+    } else {
+      let test = document.querySelectorAll(".modalOpen");
+      test.forEach((tab) => {
+        tab.setAttribute("tabindex", "0");
+      });
+    }
+  }, [displayModalLogin]);
   const dispatch = useDispatch<AppDispatch>();
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const [emailInput, setEmailInput] = useState<string>("");
@@ -50,7 +63,7 @@ const FormLogin = () => {
   };
 
   const { data, trigger, reset, isMutating } = useSWRMutation(
-    "/api/user/reSendEmailValidation",
+    "/components/login/api/reSendEmailValidation",
     fetchPost
   );
   useEffect(() => {
@@ -147,7 +160,7 @@ const FormLogin = () => {
     trigger: login,
     data: loginData,
     reset: resetLogin,
-  } = useSWRMutation("/components/login/api", fetchPost);
+  } = useSWRMutation("/components/login/api/login", fetchPost);
   useEffect(() => {
     if (loginData) {
       if (loginData.status === 200) {
@@ -165,6 +178,8 @@ const FormLogin = () => {
         if (loginData.type === "validation") {
           setTimeout(() => {
             setIsLoading(false);
+            setPasswordInput("");
+            setValidPasswordInput(false);
             loginData.message.forEach((element: string) => {
               if (element[0] === "email") {
                 setErrorMessageEmail(element[1]);
@@ -173,6 +188,7 @@ const FormLogin = () => {
                 setErrorMessagePassword(element[1]);
               }
             });
+            resetLogin();
           }, 1000);
         } else {
           if (
@@ -184,6 +200,8 @@ const FormLogin = () => {
               payload: { type: "error", flashMessage: loginData.message },
             });
             setTimeout(() => {
+              setPasswordInput("");
+              setValidPasswordInput(false);
               setIsLoading(false);
               clearState();
               dispatch({
@@ -191,12 +209,15 @@ const FormLogin = () => {
               });
               dispatch({ type: "ModalRegister/open" });
               dispatch({ type: "ModalLogin/close" });
+              resetLogin();
             }, 1000);
           } else if (
             loginData.message ===
             "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
           ) {
             setTimeout(() => {
+              setPasswordInput("");
+              setValidPasswordInput(false);
               setIsLoading(false);
               setReSendEmail(true);
               setOtherEmail(emailInput);
@@ -204,14 +225,18 @@ const FormLogin = () => {
                 type: "flash/storeFlashMessage",
                 payload: { type: "error", flashMessage: loginData.message },
               });
+              resetLogin();
             }, 1000);
           } else {
             setTimeout(() => {
               setIsLoading(false);
+              setPasswordInput("");
+              setValidPasswordInput(false);
               dispatch({
                 type: "flash/storeFlashMessage",
                 payload: { type: "error", flashMessage: loginData.message },
               });
+              resetLogin();
             }, 1000);
           }
         }
@@ -566,11 +591,11 @@ const FormLogin = () => {
                         handlerInput(
                           e,
                           "password",
-                          /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
+                          /^[a-z]{1,}$/,
                           setValidPasswordInput,
                           setErrorMessagePassword,
                           setPasswordInput,
-                          "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
+                          "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
                         );
                       }}
                       endAdornment={
@@ -850,3 +875,7 @@ const FormLogin = () => {
 };
 
 export default FormLogin;
+
+///^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
+///^[a-zA-ZÀ-ÿ0-9-?!*:@~%)(.;+{"|$#}=['&,_]{1,}$/,
+///^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%)(.;+{"|$#}=['&,_])[A-Za-z\d-?!*:@~%)(.;+{"|$#}=['&,_]{1,}$/,

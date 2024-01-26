@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       where: { mail: validator.escape(email.trim()), status: true },
     });
 
-    let smtpTransport = nodemailer.createTransport({
+    /* let smtpTransport = nodemailer.createTransport({
       host: "smtp.ionos.com",
       port: 465,
       auth: {
@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
                           </html>`,
       };
       smtpTransport.sendMail(mailOptions);
-    }
+    } */
 
     return NextResponse.json({
       status: 200,

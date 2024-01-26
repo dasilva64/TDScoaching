@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
           { status: 404 }
         );
       } else {
-        let smtpTransport = nodemailer.createTransport({
+        /* let smtpTransport = nodemailer.createTransport({
           host: "smtp.ionos.com",
           port: 465,
           auth: {
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
                         </body>
                       </html>`,
         };
-        smtpTransport.sendMail(mailOptions);
+        smtpTransport.sendMail(mailOptions); */
         return NextResponse.json({
           status: 200,
           message: "Un mail vous a été envoyer pour activer votre compte",
@@ -186,7 +186,7 @@ export async function POST(request: NextRequest) {
                 { status: 404 }
               );
             } else {
-              let smtpTransport = nodemailer.createTransport({
+              /* let smtpTransport = nodemailer.createTransport({
                 service: "Gmail",
                 auth: {
                   user: process.env.SECRET_SMTP_EMAIL,
@@ -223,7 +223,7 @@ export async function POST(request: NextRequest) {
                               </body>
                             </html>`,
               };
-              smtpTransport.sendMail(mailOptions);
+              smtpTransport.sendMail(mailOptions); */
               return NextResponse.json({
                 status: 200,
                 message:

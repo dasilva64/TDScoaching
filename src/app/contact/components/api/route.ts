@@ -47,7 +47,8 @@ export async function POST(request: NextRequest) {
     });
 
     let smtpTransport = nodemailer.createTransport({
-      service: "Gmail",
+      host: "smtp.ionos.com",
+      port: 465,
       auth: {
         user: process.env.SECRET_SMTP_EMAIL,
         pass: process.env.SECRET_SMTP_PASSWORD,

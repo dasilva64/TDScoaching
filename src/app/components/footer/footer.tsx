@@ -52,6 +52,30 @@ const Footer = () => {
                 Contact
               </Link>
             </li>
+            <li className={styles.footer__li}>
+              <Link
+                className={`${styles.footer__a} modalOpen`}
+                href="/politique-de-confidentialite"
+              >
+                Politique de confidentialité
+              </Link>
+            </li>
+            <li className={styles.footer__li}>
+              <Link
+                className={`${styles.footer__a} modalOpen`}
+                href="/conditions-generales-utilisations"
+              >
+                Conditions générales d&apos;utilisations
+              </Link>
+            </li>
+            <li className={styles.footer__li}>
+              <Link
+                className={`${styles.footer__a} modalOpen`}
+                href="/mentions-legales"
+              >
+                Mentions légales
+              </Link>
+            </li>
             {/* <li className={styles.footer__li}>
               <Link className={styles.footer__a} href="/">
                 Politique de confidentialité

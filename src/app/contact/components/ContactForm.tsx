@@ -175,7 +175,7 @@ const ContactForm = () => {
             handlerInput(
               e,
               "lastname",
-              /^[A-Za-zÀ-ÿ ]{3,40}$/,
+              /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ ]{3,40}$/,
               setValidInputLastname,
               setLastnameInputError,
               setInputLastname,
@@ -198,7 +198,7 @@ const ContactForm = () => {
             handlerInput(
               e,
               "firstname",
-              /^[A-Za-zÀ-ÿ ]{3,40}$/,
+              /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ ]{3,40}$/,
               setValidInputFirstname,
               setFirstnameInputError,
               setInputFirstname,
@@ -244,7 +244,7 @@ const ContactForm = () => {
             handlerInput(
               e,
               "object",
-              /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ-,()?!;:"'#@_. ]{1,50}$/,
+              /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'#@_. -]{1,50}$/,
               setValidInputObject,
               setObjectInputError,
               setInputObject,
@@ -265,7 +265,7 @@ const ContactForm = () => {
             handlerInput(
               e,
               "message",
-              /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ-,()?!;:"'#@_. ]{1,}$/,
+              /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'#@_. -]{1,}$/,
               setValidInputMessage,
               setMessageInputError,
               setInputMessage,

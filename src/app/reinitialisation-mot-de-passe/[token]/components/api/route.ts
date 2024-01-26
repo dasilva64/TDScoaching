@@ -7,11 +7,13 @@ import { validationBody } from "../../../../../../lib/validation";
 import { Prisma } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
-  const { token, password, pseudo } = (await request.json()) as {
-    token: string;
-    password: string;
-    pseudo: string;
-  };
+  const { token, password, passwordConfirm, pseudo } =
+    (await request.json()) as {
+      token: string;
+      password: string;
+      passwordConfirm: string;
+      pseudo: string;
+    };
 
   let arrayMessageError = validationBody({
     token: token,
@@ -60,7 +62,7 @@ export async function POST(request: NextRequest) {
             {
               status: 404,
               message:
-                "Le lien de réinitialisation n'est plus valide, veuillez réessayer",
+                "Aucune demande de réinitialisation de mot de passe n'a été faite, veuillez réessayer",
             },
             { status: 404 }
           );
@@ -81,6 +83,16 @@ export async function POST(request: NextRequest) {
                 { status: 404 }
               );
             } else {
+              if (password !== passwordConfirm) {
+                return NextResponse.json(
+                  {
+                    status: 400,
+                    message:
+                      "Les mots de passe ne correspondent pas, veuillez réessayer",
+                  },
+                  { status: 400 }
+                );
+              }
               let encrypt = await bcrypt.hash(password, 10);
               let editUser = await prisma.user.update({
                 where: { mail: user.mail },
@@ -108,7 +120,7 @@ export async function POST(request: NextRequest) {
               {
                 status: 404,
                 message:
-                  "Le lien de réinitialisation n'est plus valide, veuillez réessayer",
+                  "Le lien de réinitialisation n'est pas valide, veuillez réessayer",
               },
               { status: 404 }
             );

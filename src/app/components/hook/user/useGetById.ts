@@ -5,6 +5,7 @@ const fetchWithToken = async (url: string, id: string) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Accept: "application/json",
     },
     body: JSON.stringify({ id: id }),
   });
@@ -14,7 +15,7 @@ const fetchWithToken = async (url: string, id: string) => {
 
 function useGetById(id: string) {
   const { data, error, isLoading, mutate } = useSWR(
-    ["/api/user/getById", id],
+    ["/utilisateur/[id]/components/api", id],
     ([url, id]) => fetchWithToken(url, id)
   );
   return {

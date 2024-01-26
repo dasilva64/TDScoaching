@@ -69,7 +69,7 @@ const FormRegister = () => {
   }, [displayModalRegister]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { data, trigger } = useSWRMutation(
+  const { data, trigger, reset } = useSWRMutation(
     "/components/register/api",
     fetchPost
   );
@@ -82,9 +82,16 @@ const FormRegister = () => {
         });
         clearState();
         dispatch({ type: "ModalRegister/close" });
+        reset();
       } else if (data.status === 400 && data.type === "validation") {
         setTimeout(() => {
           setIsLoading(false);
+          setPasswordInput("");
+          setPasswordComfirmInput("");
+          setValidPasswordInput(false);
+          setValidPasswordComfirmInput(false);
+          setValidEmailInput(false);
+          setEmailInput("");
           data.message.forEach((element: string) => {
             if (element[0] === "email") {
               setEmailInputError(element[1]);
@@ -99,18 +106,26 @@ const FormRegister = () => {
               setLastnameInputError(element[1]);
             }
           });
+          reset();
         }, 2000);
       } else {
         setTimeout(() => {
           setIsLoading(false);
+          setPasswordInput("");
+          setPasswordComfirmInput("");
+          setValidPasswordInput(false);
+          setValidPasswordComfirmInput(false);
+          setValidEmailInput(false);
+          setEmailInput("");
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { flashMessage: data.message, type: "error" },
           });
+          reset();
         }, 2000);
       }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, reset]);
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({
@@ -124,18 +139,20 @@ const FormRegister = () => {
       validPasswordComfirmInput === true &&
       validMajorInput === true
     ) {
-      if (inputPseudo.length === 0) {
-        setIsLoading(true);
-        const fetchRegister = async () => {
-          trigger({
-            email: validator.escape(emailInput.trim()),
-            password: validator.escape(passwordInput.trim()),
-            firstname: validator.escape(firstnameInput.trim()),
-            lastname: validator.escape(lastnameInput.trim()),
-            pseudo: validator.escape(inputPseudo.trim()),
-          });
+      if (passwordInput === passwordComfirmInput) {
+        if (inputPseudo.length === 0) {
+          setIsLoading(true);
+          const fetchRegister = async () => {
+            trigger({
+              email: validator.escape(emailInput.trim()),
+              password: validator.escape(passwordInput.trim()),
+              passwordComfirm: validator.escape(passwordComfirmInput.trim()),
+              firstname: validator.escape(firstnameInput.trim()),
+              lastname: validator.escape(lastnameInput.trim()),
+              pseudo: validator.escape(inputPseudo.trim()),
+            });
 
-          /* let response = await fetch("/components/register/api", {
+            /* let response = await fetch("/components/register/api", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -185,38 +202,52 @@ const FormRegister = () => {
               });
             }, 2000);
           } */
-        };
-        fetchRegister();
+          };
+          fetchRegister();
+        }
+      } else {
+        setValidPasswordInput(false);
+        setValidPasswordComfirmInput(false);
+        setPasswordComfirmError(
+          "Comfirmation mot de passe : les mots de passe sont identiques"
+        );
       }
     } else {
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
       if (validEmailInput === false) {
-        setEmailInputError("Email : doit avoir un format valide");
+        if (emailInput.length === 0) {
+          setEmailInputError("Email : ne peut être vide");
+        }
       }
       if (validFirstnameInput === false) {
-        setFirstnameInputError("Prénom : 3 lettres minimum");
+        if (firstnameInput.length === 0) {
+          setFirstnameInputError("Prénom : ne peut être vide");
+        }
       }
       if (validLastnameInput === false) {
-        setLastnameInputError("Nom de famille : 3 lettres minimum");
+        if (lastnameInput.length === 0) {
+          setLastnameInputError("Nom de famille : ne peut être vide");
+        }
       }
       if (validPasswordInput === false) {
-        setPasswordInputError(
-          "Mot de passe : doit avoir une lettre en minuscule, un nombre et 8 caractères minimum"
-        );
+        if (passwordInput.length === 0) {
+          setPasswordInputError("Mot de passe : ne peut être vide");
+        }
       }
       if (validPasswordComfirmInput === false) {
-        setPasswordComfirmError(
-          "Comfirmation mot de passe : doit être identique au mot de passe"
-        );
+        if (passwordComfirmInput.length === 0) {
+          setPasswordComfirmError(
+            "Comfirmation mot de passe : les mots de passe doivent être identique"
+          );
+        }
       }
       if (validMajorInput === false) {
         setMajorInputError("Vous devez être majeur pour vous inscrire");
       }
     }
   };
-
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     regex: RegExp,
@@ -273,11 +304,17 @@ const FormRegister = () => {
           "Comfirmation mot de passe : les mots de passe doivent être identique"
         );
         setValidPasswordComfirmInput(false);
-      } else {
+      } else if (
+        passwordComfirmInput.length > 0 &&
+        removeSpace === passwordComfirmInput
+      ) {
         setValidInput(true);
         setErrorMessage("");
         setPasswordComfirmError("");
         setValidPasswordComfirmInput(true);
+      } else {
+        setValidInput(true);
+        setErrorMessage("");
       }
     } else if (removeSpace.length === 0) {
       if (
@@ -376,6 +413,7 @@ const FormRegister = () => {
               animate={{ opacity: 1, transition: { duration: 0.3 } }}
               exit={{ opacity: 0 }}
               className={styles.bg}
+              onClick={() => closeForm()}
             />
             <motion.div
               initial={{ y: 200, x: "-50%", opacity: 0 }}
@@ -482,11 +520,11 @@ const FormRegister = () => {
                     onChange={(e) => {
                       handlerInput(
                         e,
-                        /^[A-Za-z][A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{2,}$/,
+                        /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
                         setValidFirstnameInput,
                         setFirstnameInputError,
                         setFirstnameInput,
-                        "Prénom : 3 lettres minimum"
+                        "Prénom : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
                       );
                     }}
                     endAdornment={
@@ -555,11 +593,11 @@ const FormRegister = () => {
                     onChange={(e) => {
                       handlerInput(
                         e,
-                        /^[A-Za-z][A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{2,}$/,
+                        /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
                         setValidLastnameInput,
                         setLastnameInputError,
                         setLastnameInput,
-                        "Nom de famille : 3 lettres minimum"
+                        "Nom de famille : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
                       );
                     }}
                     endAdornment={
@@ -598,11 +636,11 @@ const FormRegister = () => {
                     onChange={(e) => {
                       handlerInputPassword(
                         e,
-                        /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
                         setValidPasswordInput,
                         setPasswordInputError,
                         setPasswordInput,
-                        "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
+                        "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
                       );
                     }}
                     endAdornment={

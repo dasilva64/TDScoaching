@@ -124,7 +124,7 @@ const FormLogin = () => {
     trigger: triggerReSendCode,
     reset: resetReSendCode,
     isMutating: isMutatingReSendCode,
-  } = useSWRMutation("/api/user/sendTwoFactorCode", fetchPost);
+  } = useSWRMutation("/components/login/api/sendTwoFactorCode", fetchPost);
   useEffect(() => {
     if (dataReSendCode) {
       if (dataReSendCode.status === 200) {
@@ -164,6 +164,15 @@ const FormLogin = () => {
   useEffect(() => {
     if (loginData) {
       if (loginData.status === 200) {
+        /* if (loginData.body === null) {
+          setDisplayInput(true);
+          setIsLoading(false);
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: loginData.message },
+          });
+          resetLogin();
+        } else { */
         mutate("/components/header/api");
         clearState();
         dispatch({
@@ -174,6 +183,7 @@ const FormLogin = () => {
           payload: { type: "success", flashMessage: loginData.message },
         });
         resetLogin();
+        // }
       } else if (loginData.status === 400) {
         if (loginData.type === "validation") {
           setTimeout(() => {
@@ -362,12 +372,14 @@ const FormLogin = () => {
       }
     } else {
       if (validEmailInput === false) {
-        setErrorMessageEmail("Email : doit avoir un format valide");
+        if (emailInput.length === 0) {
+          setErrorMessageEmail("Email : ne peut pas être vide");
+        }
       }
       if (validPasswordInput === false) {
-        setErrorMessagePassword(
-          "Mot de passe : doit avoir une lettre en minuscule, un nombre et 8 caractères minimum"
-        );
+        if (passwordInput.length === 0) {
+          setErrorMessagePassword("Mot de passe : ne peut pas être vide");
+        }
       }
     }
   };
@@ -401,13 +413,62 @@ const FormLogin = () => {
       setErrorMessage(errorMessage);
     }
   };
-  const handlerSubmitCode = async (e: React.FormEvent) => {
+
+  /* const {
+    data: dataTwoFactor,
+    trigger: triggerTwoFactor,
+    reset: resetTwoFactor,
+  } = useSWRMutation("/components/login/api/loginTwoFactor", fetchPost);
+  useEffect(() => {
+    if (dataTwoFactor) {
+      if (dataTwoFactor.status === 200) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataTwoFactor.message },
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        if (
+          dataTwoFactor.message ===
+          "Le code n'est plus valide, veuillez réessayer"
+        ) {
+          setTimeout(() => {
+            setIsLoading(false);
+            setReSendCode(true);
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "error", flashMessage: dataTwoFactor.message },
+            });
+          }, 2000);
+        } else {
+          setTimeout(() => {
+            setIsLoading(false);
+            setReSendCode(true);
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "error", flashMessage: dataTwoFactor.message },
+            });
+          }, 2000);
+        }
+      }
+    }
+  }, [dataTwoFactor, dispatch]); */
+  /* const handlerSubmitCode = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validCodeInput === true) {
       if (inputPseudo.length === 0) {
         setIsLoading(true);
         const fetchLogin = async () => {
-          let response = await fetch("/api/user/loginTwoFactor", {
+          triggerTwoFactor({
+            email: validator.escape(emailInput.trim()),
+            password: validator.escape(passwordInput.trim()),
+            remember: rememberMeInput,
+            pseudo: validator.escape(inputPseudo.trim()),
+            code: codeInput,
+          }); */
+  /* let response = await fetch("/components/login/api/loginTwoFactor", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -453,8 +514,8 @@ const FormLogin = () => {
                 }, 2000);
               }
             }
-          }
-        };
+          } */
+  /* };
         fetchLogin();
       }
     } else {
@@ -462,7 +523,7 @@ const FormLogin = () => {
         setErrorMessageCode("Code : ne doit pas être vide");
       }
     }
-  };
+  }; */
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
@@ -591,11 +652,11 @@ const FormLogin = () => {
                         handlerInput(
                           e,
                           "password",
-                          /^[a-z]{1,}$/,
+                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
                           setValidPasswordInput,
                           setErrorMessagePassword,
                           setPasswordInput,
-                          "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
+                          "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#=&,_) et 8 caractères minimum"
                         );
                       }}
                       endAdornment={
@@ -720,41 +781,41 @@ const FormLogin = () => {
                   </div>
                 </>
               )}
-              {displayInput === false && (
-                <>
-                  <div className={styles.login__forgot}>
-                    <button
-                      className={styles.login__forgot__btn}
-                      onClick={() => {
-                        clearState();
-                        dispatch({
-                          type: "auth/clearFlash",
-                        });
-                        dispatch({ type: "ModalLogin/close" });
-                        dispatch({ type: "ModalForgot/open" });
-                      }}
-                    >
-                      Mot de passe oublié
-                    </button>
-                  </div>
-                  <div className={styles.login__register}>
-                    <button
-                      className={styles.login__register__btn}
-                      onClick={() => {
-                        clearState();
-                        dispatch({
-                          type: "auth/clearFlash",
-                        });
-                        dispatch({ type: "ModalRegister/open" });
-                        dispatch({ type: "ModalLogin/close" });
-                      }}
-                    >
-                      Créer un compte
-                    </button>
-                  </div>
-                </>
-              )}
-              {displayInput === true && (
+              {/* {displayInput === false && ( */}
+              <>
+                <div className={styles.login__forgot}>
+                  <button
+                    className={styles.login__forgot__btn}
+                    onClick={() => {
+                      clearState();
+                      dispatch({
+                        type: "auth/clearFlash",
+                      });
+                      dispatch({ type: "ModalLogin/close" });
+                      dispatch({ type: "ModalForgot/open" });
+                    }}
+                  >
+                    Mot de passe oublié
+                  </button>
+                </div>
+                <div className={styles.login__register}>
+                  <button
+                    className={styles.login__register__btn}
+                    onClick={() => {
+                      clearState();
+                      dispatch({
+                        type: "auth/clearFlash",
+                      });
+                      dispatch({ type: "ModalRegister/open" });
+                      dispatch({ type: "ModalLogin/close" });
+                    }}
+                  >
+                    Créer un compte
+                  </button>
+                </div>
+              </>
+              {/*  )} */}
+              {/* {displayInput === true && (
                 <>
                   <p>
                     L&apos;authentification à deux facteur est activé pour votre
@@ -865,7 +926,7 @@ const FormLogin = () => {
                     </div>
                   )}
                 </>
-              )}
+              )} */}
             </motion.div>
           </>
         )}
@@ -878,4 +939,4 @@ export default FormLogin;
 
 ///^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
 ///^[a-zA-ZÀ-ÿ0-9-?!*:@~%)(.;+{"|$#}=['&,_]{1,}$/,
-///^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%)(.;+{"|$#}=['&,_])[A-Za-z\d-?!*:@~%)(.;+{"|$#}=['&,_]{1,}$/,
+///^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{1,}$/,

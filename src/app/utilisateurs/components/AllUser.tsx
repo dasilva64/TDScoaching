@@ -120,11 +120,13 @@ const AllUser = () => {
           if (p.idMeeting === null) {
             copyOfItems[index] = {
               ...p,
+              Id: p.id,
               Prénom: p.firstName,
               Nom: p.lastName,
               Mail: p.mail,
               RendezVous: "aucun",
             };
+            delete copyOfItems[index].id;
             delete copyOfItems[index].allMeeting;
             delete copyOfItems[index].idMeeting;
             delete copyOfItems[index].firstName;
@@ -140,11 +142,13 @@ const AllUser = () => {
           }
           copyOfItems[index] = {
             ...p,
+            Id: p.id,
             Prénom: p.firstName,
             Nom: p.lastName,
             Mail: p.mail,
             RendezVous: new Date(date).toLocaleString("fr-FR"),
           };
+          delete copyOfItems[index].id;
           delete copyOfItems[index].allMeeting;
           delete copyOfItems[index].idMeeting;
           delete copyOfItems[index].firstName;

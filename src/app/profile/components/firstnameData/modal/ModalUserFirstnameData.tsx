@@ -42,27 +42,23 @@ const ModalUserFirstnameData = () => {
         if (userData.status === 200) {
           setFirstnameInput(userData.body.firstname);
         } else if (userData.status === 401) {
-          setTimeout(() => {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: {
-                type: "error",
-                flashMessage: userData.message,
-              },
-            });
-          }, 2000);
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: userData.message,
+            },
+          });
           router.push("/");
         } else {
-          setTimeout(() => {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: {
-                type: "error",
-                flashMessage: userData.message,
-              },
-            });
-          }, 2000);
-          router.refresh();
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: userData.message,
+            },
+          });
+          router.push("/");
         }
       }
     }
@@ -111,13 +107,11 @@ const ModalUserFirstnameData = () => {
           clearState();
         }
       } else if (data.status === 401) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: data.message },
-          });
-          reset();
-        }, 2000);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
         router.push("/");
       } else if (data.status === 400) {
         if (data.type === "validation") {
@@ -140,6 +134,7 @@ const ModalUserFirstnameData = () => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        router.push("/");
       }
     }
   }, [
@@ -177,20 +172,24 @@ const ModalUserFirstnameData = () => {
       }
     } else {
       if (validFirstnameInput === false) {
-        setErrorMessageFirstname(
-          "Prénom : 3 lettres minimum et 40 lettres maximum"
-        );
+        if (firstnameInput.length === 0) {
+          setErrorMessageFirstname("Prénom : ne peut pas être vide");
+        } else {
+          setErrorMessageFirstname(
+            "Prénom : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
+          );
+        }
       }
     }
   };
   const clearState = () => {
     setErrorMessageFirstname("");
     setValidFirstnameInput(true);
-    /*  if (userData) {
+    if (userData) {
       if (userData.body) {
         setFirstnameInput(userData.body.firstname);
       }
-    } */
+    }
   };
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -296,11 +295,11 @@ const ModalUserFirstnameData = () => {
                       handlerInput(
                         e,
                         "firstname",
-                        /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,40}$/,
+                        /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
                         setValidFirstnameInput,
                         setErrorMessageFirstname,
                         setFirstnameInput,
-                        "Prénom : 3 lettres minimum et 40 lettres maximum"
+                        "Prénom : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
                       );
                     }}
                     endAdornment={

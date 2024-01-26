@@ -5,6 +5,7 @@ import Card from "./components/card/Card";
 import WhileInView from "./components/framer/WhileInView";
 import GoTarif from "./components/goTarif/goTarif";
 import localFont from "next/font/local";
+import NoScript from "./components/noscript/NoScript";
 const Parisienne = localFont({
   src: "./Parisienne-Regular.ttf",
   display: "swap",
@@ -13,21 +14,8 @@ const Parisienne = localFont({
 export default function Home() {
   return (
     <>
-      <noscript
-        style={{
-          width: "100%",
-          padding: "20px 0",
-          background: "red",
-          position: "fixed",
-          bottom: "0",
-          left: "0",
-          zIndex: "999",
-          color: "white",
-          textAlign: "center",
-        }}
-      >
-        Veuillez activer JavaScript pour profiter pleinement de notre site.
-      </noscript>
+      <NoScript />
+
       <main className={styles.home}>
         <section className={styles.home__bg}>
           <Image

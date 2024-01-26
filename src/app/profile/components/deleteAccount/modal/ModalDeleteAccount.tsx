@@ -47,13 +47,11 @@ const ModalDeleteAccount = () => {
           reset();
         }
       } else if (data.status === 401) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: data.message },
-          });
-          reset();
-        }, 2000);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
         router.push("/");
       } else if (data.status === 400) {
         if (data.type === "validation") {
@@ -91,6 +89,7 @@ const ModalDeleteAccount = () => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        router.push("/");
       }
     }
   }, [data, dispatch, isMutating, reset, router]);
@@ -221,9 +220,38 @@ const ModalDeleteAccount = () => {
                         compte
                       </em>
                     </MenuItem>
-                    <MenuItem value={"Ten"}>Ten</MenuItem>
-                    <MenuItem value={"Twenty"}>Twenty</MenuItem>
-                    <MenuItem value={"Thirty"}>Thirty</MenuItem>
+                    <MenuItem
+                      value={
+                        "Vous avez atteint vos objectifs de coaching de vie et vous avez plus besoin des services offerts par le site"
+                      }
+                    >
+                      Vous avez atteint vos objectifs de coaching de vie et vous
+                      avez plus besoin des services offerts par le site
+                    </MenuItem>
+                    <MenuItem
+                      value={
+                        "Vous n&apos;êtes plus satisfait des services ou du coaching fourni par le site"
+                      }
+                    >
+                      Vous n&apos;êtes plus satisfait des services ou du
+                      coaching fourni par le site
+                    </MenuItem>
+                    <MenuItem
+                      value={
+                        "Des problèmes techniques récurrents ou persistants sur le site"
+                      }
+                    >
+                      Des problèmes techniques récurrents ou persistants sur le
+                      site
+                    </MenuItem>
+                    <MenuItem
+                      value={
+                        "Supprimer les données de mon compte pour protéger ma vie privée en ligne"
+                      }
+                    >
+                      Supprimer les données de mon compte pour protéger ma vie
+                      privée en ligne
+                    </MenuItem>
                     <MenuItem value={"autre"}>Autre</MenuItem>
                   </Select>
                   <FormHelperText>{reasonErrorMessage}</FormHelperText>

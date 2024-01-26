@@ -53,13 +53,11 @@ const ModalUserPasswordData = () => {
         });
         reset();
       } else if (data.status === 401) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: data.message },
-          });
-          reset();
-        }, 2000);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
         router.push("/");
       } else if (data.status === 400) {
         if (data.type === "validation") {
@@ -82,6 +80,7 @@ const ModalUserPasswordData = () => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        router.push("/");
       }
     }
   }, [data, dispatch, reset, router]);
@@ -98,11 +97,15 @@ const ModalUserPasswordData = () => {
     dispatch({
       type: "flash/clearFlashMessage",
     });
-    if (validPasswordInput === true || validPasswordComfirmInput === true) {
+    if (validPasswordInput === true && validPasswordComfirmInput === true) {
       if (passwordInput === passwordComfirmInput) {
         if (inputPseudo.length === 0) {
           const fetchLogin = async () => {
-            trigger({ password: passwordInput, pseudo: inputPseudo });
+            trigger({
+              password: passwordInput,
+              passwordComfirm: passwordComfirmInput,
+              pseudo: inputPseudo,
+            });
           };
           fetchLogin();
         }
@@ -142,7 +145,7 @@ const ModalUserPasswordData = () => {
       setInput(removeSpace);
     }
     setInput(removeSpace);
-    if (regex.test(removeSpace)) {
+    /* if (regex.test(removeSpace)) {
       if (
         passwordComfirmInput.length > 0 &&
         removeSpace !== passwordComfirmInput
@@ -153,11 +156,17 @@ const ModalUserPasswordData = () => {
           "Comfirmation mot de passe : les mots de passe doivent être identique"
         );
         setValidPasswordComfirmInput(false);
-      } else {
+      } else if (
+        passwordComfirmInput.length > 0 &&
+        removeSpace === passwordComfirmInput
+      ) {
         setValidInput(true);
         setErrorMessage("");
         setErrorMessagePasswordComfirm("");
         setValidPasswordComfirmInput(true);
+      } else {
+        setValidInput(true);
+        setErrorMessage("");
       }
     } else if (removeSpace.length === 0) {
       if (
@@ -193,9 +202,69 @@ const ModalUserPasswordData = () => {
         setValidInput(false);
         setErrorMessage(errorMessage);
       }
+    } */
+    if (regex.test(removeSpace)) {
+      if (
+        passwordComfirmInput.length > 0 &&
+        removeSpace !== passwordComfirmInput
+      ) {
+        setValidInput(true);
+        setErrorMessage("");
+        setErrorMessagePasswordComfirm(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else if (
+        passwordComfirmInput.length > 0 &&
+        removeSpace === passwordComfirmInput
+      ) {
+        setValidInput(true);
+        setErrorMessage("");
+        setErrorMessagePasswordComfirm("");
+        setValidPasswordComfirmInput(true);
+      } else {
+        setValidInput(true);
+        setErrorMessage("");
+      }
+    } else if (removeSpace.length === 0) {
+      if (
+        passwordComfirmInput.length > 0 &&
+        removeSpace !== passwordComfirmInput
+      ) {
+        setValidInput(false);
+        setErrorMessage("");
+        setErrorMessagePasswordComfirm(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setValidInput(false);
+        setErrorMessage("");
+        setErrorMessagePasswordComfirm("");
+        setValidPasswordComfirmInput(true);
+      }
+    } else {
+      if (
+        passwordComfirmInput.length > 0 &&
+        removeSpace !== passwordComfirmInput
+      ) {
+        setValidInput(false);
+        setErrorMessage(errorMessage);
+        setErrorMessagePasswordComfirm(
+          "Comfirmation mot de passe : les mots de passe doivent être identique"
+        );
+        setValidPasswordComfirmInput(false);
+      } else {
+        setValidInput(false);
+        setErrorMessage(errorMessage);
+        //setErrorMessagePasswordComfirm("");
+        setValidPasswordComfirmInput(false);
+      }
     }
   };
   const clearState = () => {
+    setShowPassword(false);
+    setShowPasswordComfirm(false);
     setErrorMessagePassword("");
     setErrorMessagePasswordComfirm("");
     setValidPasswordInput(false);
@@ -285,11 +354,11 @@ const ModalUserPasswordData = () => {
                       handlerInput(
                         e,
                         "password",
-                        /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{2,}$/,
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
                         setValidPasswordInput,
                         setErrorMessagePassword,
                         setPasswordInput,
-                        "Mot de passe : doit avoir une lettre en minuscule, un nombre et 8 caractères minimum"
+                        "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
                       );
                     }}
                     endAdornment={

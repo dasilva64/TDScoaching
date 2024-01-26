@@ -23,46 +23,58 @@ export async function POST(request: NextRequest) {
       { status: 401 }
     );
   } else {
-    const { password, pseudo } = (await request.json()) as {
-      password: string;
-      pseudo: string;
-    };
-    let arrayMessageError = validationBody({ password: password });
-
-    if (arrayMessageError.length > 0) {
+    let user = await prisma.user.findUnique({
+      where: { id: session.id },
+    });
+    if (user === null) {
+      session.destroy();
       return NextResponse.json(
         {
-          status: 400,
-          type: "validation",
-          message: arrayMessageError,
-        },
-        { status: 400 }
-      );
-    }
-    if (pseudo.trim() !== "") {
-      return NextResponse.json(
-        {
-          status: 400,
-          type: "error",
+          status: 404,
           message:
-            "Vous ne pouvez pas modifier votre mot de passe, veuillez réessayer",
+            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 400 }
+        { status: 404 }
       );
     } else {
-      let user = await prisma.user.findUnique({
-        where: { id: session.id },
-      });
-      if (user === null) {
+      const { password, passwordComfirm, pseudo } = (await request.json()) as {
+        password: string;
+        passwordComfirm: string;
+        pseudo: string;
+      };
+      let arrayMessageError = validationBody({ password: password });
+
+      if (arrayMessageError.length > 0) {
         return NextResponse.json(
           {
-            status: 404,
-            message:
-              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+            status: 400,
+            type: "validation",
+            message: arrayMessageError,
           },
-          { status: 404 }
+          { status: 400 }
+        );
+      }
+      if (pseudo.trim() !== "") {
+        return NextResponse.json(
+          {
+            status: 400,
+            type: "error",
+            message:
+              "Vous ne pouvez pas modifier votre mot de passe, veuillez réessayer",
+          },
+          { status: 400 }
         );
       } else {
+        if (password.trim() !== passwordComfirm.trim()) {
+          return NextResponse.json(
+            {
+              status: 400,
+              type: "error",
+              message: "Les mots de passe ne sont pas identiques",
+            },
+            { status: 400 }
+          );
+        }
         const saltRounds = 10;
         let encrypt = await bcrypt.hash(
           validator.escape(password.trim()),

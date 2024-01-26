@@ -33,7 +33,6 @@ const EmailCheck = () => {
   const {
     data: userData,
     isLoading,
-    isError,
     mutate,
   } = useGet("/profile/components/api");
   let content;
@@ -53,16 +52,14 @@ const EmailCheck = () => {
         });
         router.push("/");
       } else {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: userData.message,
-            },
-          });
-        }, 2000);
-        router.refresh();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: userData.message,
+          },
+        });
+        router.push("/");
       }
     }
   }
@@ -153,7 +150,7 @@ const EmailCheck = () => {
     dispatch({
       type: "flash/clearFlashMessage",
     });
-    //clearState();
+    clearState();
     dispatch({
       type: "ModalCancelEmail/open",
     });
@@ -206,6 +203,7 @@ const EmailCheck = () => {
           payload: { type: "error", flashMessage: dataReSendCode.message },
         });
         resetReSendCode();
+        router.push("/");
       }
     }
   }, [

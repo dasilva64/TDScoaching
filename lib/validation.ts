@@ -17,7 +17,7 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "firstname") {
-      let regex = /^[a-zA-ZÀ-ÿ ]{3,40}$/;
+      let regex = /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["firstname", "Prénom : ne peut pas être vide"]);
       } else {
@@ -30,7 +30,7 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "lastname") {
-      let regex = /^[a-zA-ZÀ-ÿ ]{3,40}$/;
+      let regex = /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push([
           "lastname",
@@ -46,7 +46,7 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "object") {
-      let regex = /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'@#-_\. ]{1,50}$/;
+      let regex = /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'#@_. -]{1,50}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["object", "Objet : ne peut pas être vide"]);
       } else {
@@ -59,7 +59,7 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "message") {
-      let regex = /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'@#-_\. ]{1,}$/;
+      let regex = /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'#@_. -]{1,}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["message", "Message : ne peut pas être vide"]);
       } else {
@@ -72,7 +72,12 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "password") {
-      if (!validator.matches(value.trim(), /^[a-z]{1,}$/)) {
+      if (
+        !validator.matches(
+          value.trim(),
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/
+        )
+      ) {
         arrayMessageError.push([
           "password",
           "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum",

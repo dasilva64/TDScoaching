@@ -16,6 +16,7 @@ export async function GET() {
       where: { id: session.id },
     });
     if (user === null) {
+      session.destroy();
       return NextResponse.json(
         {
           status: 404,

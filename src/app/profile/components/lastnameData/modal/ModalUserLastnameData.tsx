@@ -42,27 +42,23 @@ const ModalUserLastnameData = () => {
         if (userData.status === 200) {
           setLastnameInput(userData.body.lastname);
         } else if (userData.status === 401) {
-          setTimeout(() => {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: {
-                type: "error",
-                flashMessage: userData.message,
-              },
-            });
-          }, 2000);
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: userData.message,
+            },
+          });
           router.push("/");
         } else {
-          setTimeout(() => {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: {
-                type: "error",
-                flashMessage: userData.message,
-              },
-            });
-          }, 2000);
-          router.refresh();
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: userData.message,
+            },
+          });
+          router.push("/");
         }
       }
     }
@@ -79,15 +75,15 @@ const ModalUserLastnameData = () => {
     const clearState = () => {
       setErrorMessageLastname("");
       setValidLastnameInput(true);
-      /* if (userData) {
+      if (userData) {
         if (userData.body) {
           setLastnameInput(userData.body.lastname);
         }
-      } */
+      }
     };
     if (data) {
       if (data.status === 200) {
-        /* mutate(
+        mutate(
           {
             ...data,
             body: {
@@ -96,7 +92,7 @@ const ModalUserLastnameData = () => {
             },
           },
           { revalidate: false }
-        ); */
+        );
         reset();
         if (isMutating === false) {
           dispatch({
@@ -109,13 +105,11 @@ const ModalUserLastnameData = () => {
           clearState();
         }
       } else if (data.status === 401) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: data.message },
-          });
-          reset();
-        }, 2000);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
         router.push("/");
       } else if (data.status === 400) {
         if (data.type === "validation") {
@@ -138,9 +132,19 @@ const ModalUserLastnameData = () => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        router.push("/");
       }
     }
-  }, [data, dispatch, isMutating, lastnameInput, reset, router]);
+  }, [
+    data,
+    dispatch,
+    isMutating,
+    lastnameInput,
+    mutate,
+    reset,
+    router,
+    userData,
+  ]);
 
   const closeForm = () => {
     clearState();
@@ -166,20 +170,24 @@ const ModalUserLastnameData = () => {
       }
     } else {
       if (validLastnameInput === false) {
-        setErrorMessageLastname(
-          "Nom de famille : 3 lettres minimum et 40 lettres maximum"
-        );
+        if (lastnameInput.length === 0) {
+          setErrorMessageLastname("Nom de famille : ne peut pas être vide");
+        } else {
+          setErrorMessageLastname(
+            "Nom de famille : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
+          );
+        }
       }
     }
   };
   const clearState = () => {
     setErrorMessageLastname("");
     setValidLastnameInput(true);
-    /* if (userData) {
+    if (userData) {
       if (userData.body) {
         setLastnameInput(userData.body.lastname);
       }
-    } */
+    }
   };
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -282,11 +290,11 @@ const ModalUserLastnameData = () => {
                       handlerInput(
                         e,
                         "lastname",
-                        /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,40}$/,
+                        /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
                         setValidLastnameInput,
                         setErrorMessageLastname,
                         setLastnameInput,
-                        "Nom de famille : 3 lettres minimum et 40 lettres maximum"
+                        "Nom de famille : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
                       );
                     }}
                     endAdornment={

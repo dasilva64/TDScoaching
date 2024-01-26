@@ -17,6 +17,15 @@ export const sessionOptions: SessionOptions = {
   cookieName: "iron-examples-app-router-client-component-route-handler-swr",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
+    maxAge: undefined,
+  },
+};
+export const sessionOptionsRemeber: SessionOptions = {
+  password: "complex_password_at_least_32_characters_long",
+  cookieName: "iron-examples-app-router-client-component-route-handler-swr",
+  cookieOptions: {
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 60 * 24 * 30,
   },
 };
 

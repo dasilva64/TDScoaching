@@ -49,83 +49,19 @@ const GoTop = () => {
   const { displayModalEditEmail } = useSelector(
     (state: RootState) => state.ModalEditEmail
   );
-  const { displayModalEditTwoFactor } = useSelector(
-    (state: RootState) => state.ModalEditTwoFactor
-  );
   const { displayModalDeleteAccount } = useSelector(
     (state: RootState) => state.ModalDeleteAccount
   );
-  const { displayModalDatePickerDiscovery } = useSelector(
-    (state: RootState) => state.ModalDatePickerDiscovery
-  );
-  const { displayModalAddDiscoveryMeeting } = useSelector(
-    (state: RootState) => state.ModalAddDiscoveryMeeting
-  );
-  const { displayModalAddMeeting } = useSelector(
-    (state: RootState) => state.ModalAddMeeting
-  );
-  const { displayModalDatePickerEditDiscovery } = useSelector(
-    (state: RootState) => state.ModalDatePickerEditDiscovery
-  );
-  const { displayModalDeleteDiscoveryMeeting } = useSelector(
-    (state: RootState) => state.ModalDeleteDiscoveryMeeting
-  );
-  const { displayModalEditDiscoveryMeeting } = useSelector(
-    (state: RootState) => state.ModalEditDiscoveryMeeting
-  );
-  const { displayModalEditFormule } = useSelector(
-    (state: RootState) => state.ModalEditFormule
-  );
-  const { displayModalDatePicker } = useSelector(
-    (state: RootState) => state.ModalDatePicker
-  );
-  const { displayModalCancelMeeting } = useSelector(
-    (state: RootState) => state.ModalCancelMeeting
-  );
-  const { displayModalDatePickerEdit } = useSelector(
-    (state: RootState) => state.ModalDatePickerEdit
-  );
-  const { displayModalEditMeeting } = useSelector(
-    (state: RootState) => state.ModalEditMeeting
-  );
-  const { displayModalDeleteMeeting } = useSelector(
-    (state: RootState) => state.ModalDeleteMeeting
-  );
-  const { displayModalAddMeetingAdmin } = useSelector(
-    (state: RootState) => state.ModalAddMeetingAdmin
-  );
-  const { displayModalCancelTwoFactor } = useSelector(
-    (state: RootState) => state.ModalCancelTwoFactor
-  );
-  const { displayModalSendTokenTwoFactor } = useSelector(
-    (state: RootState) => state.ModalSendTokenTwoFactor
-  );
   const DisplayDiv = () => {
     if (
-      displayModalSendTokenTwoFactor === true ||
-      displayModalCancelTwoFactor === true ||
-      displayModalAddMeetingAdmin === true ||
-      displayModalDeleteMeeting === true ||
-      displayModalEditMeeting === true ||
-      displayModalDatePickerEdit === true ||
-      displayModalAddMeeting === true ||
-      displayModalDatePicker === true ||
-      displayModalEditDiscoveryMeeting === true ||
-      displayModalDatePickerEditDiscovery === true ||
       displayModalLogin === true ||
       displayModalRegister === true ||
-      displayModalDatePickerDiscovery === true ||
       displayModalEditFirstname === true ||
       displayModalEditLastname === true ||
       displayModalEditPassword === true ||
       displayModalSendTokenEmail === true ||
       displayModalEditEmail === true ||
-      displayModalEditTwoFactor === true ||
-      displayModalCancelMeeting === true ||
-      displayModalDeleteAccount === true ||
-      displayModalAddDiscoveryMeeting === true ||
-      displayModalDeleteDiscoveryMeeting === true ||
-      displayModalEditFormule === true
+      displayModalDeleteAccount === true
     ) {
       return <></>;
     } else {

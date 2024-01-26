@@ -69,24 +69,37 @@ const Reset = () => {
       type: "flash/clearFlashMessage",
     });
     if (validPasswordInput === true && validPasswordComfirmInput === true) {
-      if (inputPseudo.length === 0) {
-        const fetchReset = async () => {
-          trigger({
-            password: validator.escape(passwordInput.trim()),
-            token: validator.escape(token[2].trim()),
-            pseudo: validator.escape(inputPseudo.trim()),
-          });
-        };
-        fetchReset();
+      if (passwordInput === passwordComfirmInput) {
+        if (inputPseudo.length === 0) {
+          const fetchReset = async () => {
+            trigger({
+              password: validator.escape(passwordInput.trim()),
+              passwordConfirm: validator.escape(passwordComfirmInput.trim()),
+              token: validator.escape(token[2].trim()),
+              pseudo: validator.escape(inputPseudo.trim()),
+            });
+          };
+          fetchReset();
+        }
+      } else {
+        setValidPasswordInput(false);
+        setValidPasswordComfirmInput(false);
+        setPasswordComfirmError(
+          "Comfirmation mot de passe : les mots de passe sont identiques"
+        );
       }
     } else {
       if (validPasswordInput === false) {
-        setPasswordInputError("Mot de passe : ne doit pas être vide");
+        if (passwordInput.length === 0) {
+          setPasswordInputError("Mot de passe : ne peut pas être vide");
+        }
       }
       if (validPasswordComfirmInput === false) {
-        setPasswordComfirmError(
-          "Comfirmation mot de passe : ne doit pas être vide"
-        );
+        if (passwordComfirmInput.length === 0) {
+          setPasswordComfirmError(
+            "Comfirmation mot de passe : les mots de passe doivent être identique"
+          );
+        }
       }
     }
   };
@@ -119,11 +132,17 @@ const Reset = () => {
           "Comfirmation mot de passe : les mots de passe doivent être identique"
         );
         setValidPasswordComfirmInput(false);
-      } else {
+      } else if (
+        passwordComfirmInput.length > 0 &&
+        removeSpace === passwordComfirmInput
+      ) {
         setValidInput(true);
         setErrorMessage("");
         setPasswordComfirmError("");
         setValidPasswordComfirmInput(true);
+      } else {
+        setValidInput(true);
+        setErrorMessage("");
       }
     } else if (removeSpace.length === 0) {
       if (
@@ -196,11 +215,11 @@ const Reset = () => {
           onChange={(e) => {
             handlerInput(
               e,
-              /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
               setValidPasswordInput,
               setPasswordInputError,
               setPasswordInput,
-              "Mot de passe : doit avoir une lettre ne minuscule, un nombre et 8 caractères minimum"
+              "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#=&,_) et 8 caractères minimum"
             );
           }}
           endAdornment={

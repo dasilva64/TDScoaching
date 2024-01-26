@@ -20,44 +20,45 @@ export async function POST(request: NextRequest) {
       { status: 401 }
     );
   } else {
-    const { code, pseudo } = (await request.json()) as {
-      code: string;
-      pseudo: string;
-    };
-    let arrayMessageError = validationBody({ code: code });
-
-    if (arrayMessageError.length > 0) {
+    let user = await prisma.user.findUnique({
+      where: { id: session.id },
+    });
+    if (user === null) {
+      session.destroy();
       return NextResponse.json(
         {
-          status: 400,
-          type: "validation",
-          message: arrayMessageError,
-        },
-        { status: 400 }
-      );
-    }
-    if (pseudo.trim() !== "") {
-      return NextResponse.json(
-        {
-          status: 400,
-          type: "error",
+          status: 404,
           message:
-            "Vous ne pouvez pas modifier votre email, veuillez réessayer",
+            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 400 }
+        { status: 404 }
       );
     } else {
-      let user = await prisma.user.findUnique({
-        where: { id: session.id },
-      });
-      if (user === null) {
+      const { code, pseudo } = (await request.json()) as {
+        code: string;
+        pseudo: string;
+      };
+      let arrayMessageError = validationBody({ code: code });
+
+      if (arrayMessageError.length > 0) {
         return NextResponse.json(
           {
-            status: 404,
-            message:
-              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+            status: 400,
+            type: "validation",
+            message: arrayMessageError,
           },
-          { status: 404 }
+          { status: 400 }
+        );
+      }
+      if (pseudo.trim() !== "") {
+        return NextResponse.json(
+          {
+            status: 400,
+            type: "error",
+            message:
+              "Vous ne pouvez pas modifier votre email, veuillez réessayer",
+          },
+          { status: 400 }
         );
       } else {
         let copyEditEmail: any = user.editEmail;
@@ -188,7 +189,7 @@ export async function GET(request: NextRequest) {
                   
                   <div style="width: 100%">
                     <div style="text-align: center">
-                      <img src="https://tds-lilac.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                      <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
                     </div>
                     <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                       <h1 style="text-align: center">tds coaching</h1>

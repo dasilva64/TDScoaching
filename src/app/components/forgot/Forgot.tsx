@@ -27,6 +27,7 @@ const Forgot = () => {
   const [displayReSendEmail, setDisplayReSendEmail] = useState<boolean>(false);
   const [emailUser, setEmailUser] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingReset, setIsLoadingReset] = useState<boolean>(false);
   const { displayModalForgot } = useSelector(
     (state: RootState) => state.ModalForgot
   );
@@ -43,17 +44,22 @@ const Forgot = () => {
       });
     }
   }, [displayModalForgot]);
-  const { data, trigger } = useSWRMutation("/components/forgot/api", fetchPost);
+  const { data, trigger, reset } = useSWRMutation(
+    "/components/forgot/api/forgot",
+    fetchPost
+  );
 
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
         dispatch({ type: "ModalForgot/close" });
         clearState();
+
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
         });
+        reset();
       } else if (data.status === 400) {
         setTimeout(() => {
           setIsLoading(false);
@@ -62,6 +68,7 @@ const Forgot = () => {
               setInputEmailError(element[1]);
             }
           });
+          reset();
         }, 2000);
       } else {
         setTimeout(() => {
@@ -74,10 +81,41 @@ const Forgot = () => {
             type: "flash/storeFlashMessage",
             payload: { type: "error", flashMessage: data.message },
           });
+          reset();
         }, 2000);
       }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, reset]);
+  const {
+    data: dataResend,
+    trigger: triggerResend,
+    reset: resetResend,
+  } = useSWRMutation("/components/forgot/api/resend", fetchPost);
+  useEffect(() => {
+    if (dataResend) {
+      if (dataResend.status === 200) {
+        dispatch({ type: "ModalForgot/close" });
+        clearState();
+
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { flashMessage: dataResend.message, type: "success" },
+        });
+        resetResend();
+      } else {
+        setTimeout(() => {
+          setDisplayReSendEmail(false);
+          setEmailUser("");
+          setIsLoadingReset(false);
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: dataResend.message },
+          });
+          resetResend();
+        }, 2000);
+      }
+    }
+  });
   const clearState = () => {
     setInputPseudo("");
     setInputEmail("");
@@ -86,6 +124,7 @@ const Forgot = () => {
     setDisplayReSendEmail(false);
     setEmailUser("");
     setIsLoading(false);
+    setIsLoadingReset(false);
   };
 
   const handlerSubmit = (e: React.FormEvent) => {
@@ -181,6 +220,12 @@ const Forgot = () => {
               animate={{ opacity: 1, transition: { duration: 0.3 } }}
               exit={{ opacity: 0 }}
               className={styles.bg}
+              onClick={() => {
+                clearState();
+                dispatch({
+                  type: "ModalForgot/close",
+                });
+              }}
             />
             <motion.div
               className={styles.forgot}
@@ -355,13 +400,17 @@ const Forgot = () => {
                   )}
                 </div>
               </form>
-              {displayReSendEmail && (
-                <div className={styles.forgot__form__submit}>
+              {displayReSendEmail && isLoadingReset === false && (
+                <div className={styles.forgot__form__submit__resend}>
                   <button
-                    className={styles.forgot__form__submit__btn}
+                    className={styles.forgot__form__submit__resend__btn}
                     onClick={() => {
                       const fetchApi = async () => {
-                        let response = await fetch("/api/user/login", {
+                        setIsLoadingReset(true);
+                        triggerResend({
+                          email: validator.escape(emailUser.trim()),
+                        });
+                        /* let response = await fetch("/api/user/login", {
                           method: "POST",
                           headers: {
                             "Content-Type": "application/json",
@@ -392,12 +441,40 @@ const Forgot = () => {
                               type: "error",
                             },
                           });
-                        }
+                        } */
                       };
                       fetchApi();
                     }}
                   >
                     Renvoyer un code à l&apos;addresse {emailUser}
+                  </button>
+                </div>
+              )}
+              {displayReSendEmail && isLoadingReset === true && (
+                <div className={styles.forgot__form__submit__resend}>
+                  <button
+                    disabled
+                    className={styles.forgot__form__submit__resend__btn__load}
+                  >
+                    <span
+                      className={
+                        styles.forgot__form__submit__resend__btn__load__span
+                      }
+                    >
+                      Chargement
+                    </span>
+
+                    <div
+                      className={
+                        styles.forgot__form__submit__resend__btn__load__arc
+                      }
+                    >
+                      <div
+                        className={
+                          styles.forgot__form__submit__resend__btn__load__arc__circle
+                        }
+                      ></div>
+                    </div>
                   </button>
                 </div>
               )}

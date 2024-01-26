@@ -1,5 +1,5 @@
 .menu {
-  height: 100vh;
+  height: 100%;
   background-color: rgb(41, 41, 41);
   position: fixed;
   right: 0;
@@ -40,14 +40,15 @@
 }
 .logo {
   background-color: rgb(41, 41, 41);
+  margin: auto;
+  width: 73px;
   &__link {
     position: relative;
     margin-top: 8px;
-    width: 73px;
     left: 50%;
     transform: translateX(-50%);
-    height: 73px;
     &__img {
+      margin-top: 8px;
       cursor: pointer;
       width: 73px;
       height: 73px;
@@ -98,10 +99,14 @@
     }
   }
   .logo {
-    &__img {
-      margin-top: 8px;
-      width: 65px;
-      height: 65px;
+    margin: auto;
+    width: 65px;
+    &__link {
+      &__img {
+        margin-top: 8px;
+        width: 65px;
+        height: 65px;
+      }
     }
   }
 }
@@ -113,10 +118,16 @@
     }
   }
   .logo {
-    &__img {
-      margin-top: 8px;
-      width: 55px;
-      height: 55px;
+    margin: unset;
+
+    &__link {
+      position: unset;
+      margin-left: 20px;
+      &__img {
+        margin-top: 8px;
+        width: 55px;
+        height: 55px;
+      }
     }
   }
 }

@@ -1,24 +1,11 @@
+import NoScript from "../components/noscript/NoScript";
 import styles from "./page.module.scss";
 import Image from "next/image";
 
 const Modalite = () => {
   return (
     <>
-      <noscript
-        style={{
-          width: "100%",
-          padding: "20px 0",
-          background: "red",
-          position: "fixed",
-          bottom: "0",
-          left: "0",
-          zIndex: "999",
-          color: "white",
-          textAlign: "center",
-        }}
-      >
-        Veuillez activer JavaScript pour profiter pleinement de notre site.
-      </noscript>
+      <NoScript />
       <main className={styles.modalite}>
         <section className={styles.modalite__bg}>
           <Image

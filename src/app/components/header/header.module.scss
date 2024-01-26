@@ -1,11 +1,85 @@
+.line {
+  position: relative;
+  width: 98%;
+  height: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(153, 153, 153);
+  &__bottom {
+    position: relative;
+    width: 98%;
+    height: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(153, 153, 153);
+    margin-bottom: 20px;
+  }
+}
+
+.logo {
+  background-color: rgb(41, 41, 41);
+  margin: auto;
+  width: 73px;
+  &__link {
+    position: relative;
+    margin-top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    &__img {
+      margin-top: 8px;
+      cursor: pointer;
+      width: 73px;
+      height: 73px;
+    }
+  }
+}
+.div {
+  box-sizing: border-box;
+  overflow: scroll;
+  height: calc(100% - 170px);
+  padding: 20px 100px 20px 60px;
+}
+
 .header {
-  display: flex;
-  justify-content: space-between;
   position: fixed;
   width: 100%;
   z-index: 699;
   background-color: white;
   top: 0;
+  &__nocookie {
+    width: 100%;
+    background: red;
+    padding: 20px 20px 20px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    &__btn {
+      cursor: pointer;
+      border: none;
+      background-color: orange;
+      border-radius: 5px;
+      transition: all 400ms;
+      margin-left: 20px;
+      padding: 5px;
+      &:hover {
+        transform: scale(1.05);
+      }
+      &:hover > &__img {
+        transform: rotate(90deg);
+      }
+      &__img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 400ms;
+      }
+    }
+  }
+  &__div {
+    display: flex;
+  }
   &__header {
     &__margin {
       margin-bottom: 100px;
@@ -40,7 +114,6 @@
     margin-bottom: auto;
     font-size: 16px;
     position: relative;
-    z-index: 1;
     color: black;
     min-width: 200px;
   }
@@ -162,19 +235,20 @@
       color: black;
 
       position: absolute;
-      padding: 150px 50px 100px 40px;
+      //padding: 150px 50px 100px 40px;
       z-index: 900;
       height: 100vh;
       right: 0px;
       top: 0;
-      transition: all 300ms 400ms ease-in;
+      width: 100%;
+      transition: transform 800ms 0ms cubic-bezier(0.76, 0, 0.8, 1);
       &__show {
         z-index: 900;
         transform: translateX(0px);
       }
       &__hide {
         z-index: 0;
-        transform: translateX(390px);
+        transform: translateX(calc(100% + 390px));
       }
     }
     &__div {
@@ -198,6 +272,13 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      //height: calc(100% - 170px);
+      height: 100%;
+      min-height: 200px;
+      max-height: 240px;
+      justify-content: space-around;
+      //overflow: scroll;
+      //padding: 20px 100px 20px 60px;
       list-style-type: none;
     }
     &__li {
@@ -241,6 +322,21 @@
         &__show {
           transform: scale(1) translateY(-50%);
         }
+      }
+    }
+    &__btn {
+      background-color: aqua;
+      padding: 10px 20px;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      margin: auto;
+      transition: all 400ms;
+      &:hover {
+        transform: scale(1.1);
       }
     }
   }
@@ -312,6 +408,31 @@
 .main {
   position: relative;
   z-index: 999;
+  top: 0px;
+  right: 0px;
+  &__top {
+    position: relative;
+    z-index: 999;
+    top: -80px;
+    right: 0px;
+    &__test {
+      position: relative;
+      z-index: 999;
+      top: 0px;
+      right: 0px;
+    }
+  }
+  &__test {
+    transition: all 1s;
+  }
+}
+@keyframes test {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
 }
 
 .headerr {
@@ -450,7 +571,6 @@
       margin-bottom: auto;
       font-size: 16px;
       position: relative;
-      z-index: 1;
       color: black;
       min-width: 200px;
     }
@@ -577,7 +697,8 @@
       height: 70px;
     }
     &__log {
-      right: 80px;
+      //position: relative;
+      left: 20px;
       &__div {
         width: 45px;
         height: 45px;
@@ -612,9 +733,14 @@
     &__log {
       right: 80px;
       &__div {
-        left: 15px;
         width: 40px;
         height: 40px;
+      }
+    }
+    &__nocookie {
+      padding: 10px 10px 10px 10px;
+      &__btn {
+        margin-left: 10px;
       }
     }
   }

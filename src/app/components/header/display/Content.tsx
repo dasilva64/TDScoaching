@@ -53,13 +53,9 @@ import ModalUserFirstnameData from "@/app/profile/components/firstnameData/modal
 import ModalUserLastnameData from "@/app/profile/components/lastnameData/modal/ModalUserLastnameData";
 import ModalUserPasswordData from "@/app/profile/components/passwordData/modal/ModalUserPasswordData";
 import ModalUserSendToken from "@/app/profile/components/emailSendTokenData/modal/ModalUserSendToken";
-import ModalTwoFactorSendToken from "@/app/profile/components/twoFactorSendTokenData/Modal/send/ModalTwoFactorSendToken";
-import ModalComfirmDisable from "@/app/profile/components/twoFactorSendTokenData/Modal/disable/ModalComfirmDisable";
 import EmailCheck from "@/app/profile/components/emailData/EmailData";
 import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalCloseEmail";
 import ModalDeleteAccount from "@/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
-import ModalTwoFactor from "@/app/profile/components/twoFactorData/ModalTwoFactor";
-import ModalCloseTwoFactor from "@/app/profile/components/twoFactorData/modal/ModalCloseTwoFactor";
 import FormRegister from "../../register/formRegister";
 import Forgot from "../../forgot/Forgot";
 /* import SurMesureModal from "../../../../../test/app/rendez-vous/components/formule/components/SurMesureModal";
@@ -68,6 +64,18 @@ import ModalComfirmDeleteContrat from "../../../../../test/app/rendez-vous/compo
 import ModalComfirmEditContrat from "../../../../../test/app/rendez-vous/components/take/modal/ModalComfirmEditContrat"; */
 
 const Content = () => {
+  const [cookieEnabled, setCookieEnabled] = useState<boolean>(true);
+  const [closeCookieEnabled, setCloseCookieEnabled] = useState<boolean>(false);
+  useEffect(() => {
+    var cookie = navigator.cookieEnabled;
+    if (!cookie) {
+      setCookieEnabled(false);
+    } else {
+      setCookieEnabled(true);
+    }
+  }, []);
+  const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
+
   const { isActive } = useSelector((state: RootState) => state.menu);
   useEffect(() => {
     if (document) {
@@ -87,12 +95,34 @@ const Content = () => {
           tab.setAttribute("tabindex", "0");
         });
         if (body) {
-          body.style.overflow = "unset";
+          if (displayLogMenu === false) {
+            body.style.overflow = "unset";
+          }
+        }
+      }
+      if (displayLogMenu === true) {
+        let body = document.querySelector("body");
+        let htmlElementRequiresChange = document.querySelectorAll(".modalOpen");
+        htmlElementRequiresChange.forEach((tab) => {
+          tab.setAttribute("tabindex", "-1");
+        });
+        if (body) {
+          body.style.overflow = "hidden";
+        }
+      } else {
+        let body = document.querySelector("body");
+        let htmlElementRequiresChange = document.querySelectorAll(".modalOpen");
+        htmlElementRequiresChange.forEach((tab) => {
+          tab.setAttribute("tabindex", "0");
+        });
+        if (body) {
+          if (isActive === false) {
+            body.style.overflow = "unset";
+          }
         }
       }
     }
-  }, [isActive]);
-  const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
+  }, [displayLogMenu, isActive]);
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -106,23 +136,32 @@ const Content = () => {
     fetchCheckUser();
   }, []); */
 
-  /* const {
+  const {
     trigger,
-    data: test,
+    data: dataLogout,
     reset,
   } = useSWRMutation("/components/header/api", fetchDelete);
   useEffect(() => {
-    if (test) {
+    if (dataLogout) {
+      if (pathname) {
+        let split = pathname.split("/");
+        if (split[1] === "utilisateur") {
+          router.push("/");
+        }
+        if (pathname === "/profile" || pathname === "/utilisateurs") {
+          router.push("/");
+        }
+      }
       dispatch({
         type: "flash/storeFlashMessage",
         payload: {
           type: "error",
-          flashMessage: test.message,
+          flashMessage: dataLogout.message,
         },
       });
       reset();
     }
-  }, [dispatch, reset, test]);
+  }, [dispatch, pathname, reset, router, dataLogout]);
   const { data, isLoading } = useGet("/components/header/api");
   useEffect(() => {
     if (data) {
@@ -157,7 +196,7 @@ const Content = () => {
                 width={25}
                 height={25}
                 src="/assets/icone/user-xmark-solid.svg"
-                alt="logo tdss coaching"
+                alt="Icone utilisateur non connecté"
                 priority={true}
               />
             </button>
@@ -184,10 +223,11 @@ const Content = () => {
                   width={25}
                   height={25}
                   src="/assets/icone/user-check-solid.svg"
-                  alt="logo tdss coaching"
+                  alt="Icone utilisateur connecté"
                   priority={true}
                 />
               </div>
+
               <>
                 <div
                   className={`${styles.header__log__container} ${
@@ -196,36 +236,58 @@ const Content = () => {
                       : styles.header__log__container__hide
                   }`}
                 >
-                  <ul
-                    className={styles.header__log__ul}
-                    onMouseLeave={() => setOnHoverLink(pathname)}
-                  >
-                    <li
-                      className={`${styles.header__log__li} ${
-                        styles.header__log__li__1
-                      } ${
-                        displayLogMenu === true
-                          ? styles.header__log__li__show
-                          : styles.header__log__li__hide
-                      }`}
-                      onMouseOver={() => setOnHoverLink("/profile")}
+                  <div className={styles.logo}>
+                    <Link
+                      className={styles.logo__link}
+                      href="/"
+                      tabIndex={0}
+                      onClick={() => {
+                        dispatch({ type: "menu/closeMenu" });
+                      }}
                     >
-                      <Link
-                        className={styles.header__log__li__link}
-                        href="/profile"
-                        onClick={() => setDisplayLogMenu(false)}
+                      <Image
+                        className={styles.logo__link__img}
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        src="/assets/logo/logo3.webp"
+                        alt="logo tdss coaching"
+                        priority={true}
+                      />
+                    </Link>
+                  </div>
+                  <div className={styles.line}></div>
+                  <div className={styles.div}>
+                    <ul
+                      className={styles.header__log__ul}
+                      onMouseLeave={() => setOnHoverLink(pathname)}
+                    >
+                      <li
+                        className={`${styles.header__log__li} ${
+                          styles.header__log__li__1
+                        } ${
+                          displayLogMenu === true
+                            ? styles.header__log__li__show
+                            : styles.header__log__li__hide
+                        }`}
+                        onMouseOver={() => setOnHoverLink("/profile")}
                       >
-                        <div
-                          className={`${styles.header__log__li__point} ${
-                            onHoverLink === "/profile"
-                              ? styles.header__log__li__point__show
-                              : styles.header__log__li__point__hide
-                          }`}
-                        ></div>
-                        Compte
-                      </Link>
-                    </li>
-                    <li
+                        <Link
+                          className={styles.header__log__li__link}
+                          href="/profile"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          <div
+                            className={`${styles.header__log__li__point} ${
+                              onHoverLink === "/profile"
+                                ? styles.header__log__li__point__show
+                                : styles.header__log__li__point__hide
+                            }`}
+                          ></div>
+                          Compte
+                        </Link>
+                      </li>
+                      {/* <li
                       className={`${styles.header__log__li} ${
                         styles.header__log__li__2
                       } ${
@@ -249,8 +311,8 @@ const Content = () => {
                         ></div>
                         Historique des rendez-vous
                       </Link>
-                    </li>
-                    <li
+                    </li> */}
+                      {/* <li
                       className={`${styles.header__log__li} ${
                         styles.header__log__li__3
                       } ${
@@ -274,103 +336,51 @@ const Content = () => {
                         ></div>
                         Calendrier
                       </Link>
-                    </li>
-                    <li
-                      className={`${styles.header__log__li} ${
-                        styles.header__log__li__4
-                      } ${
-                        displayLogMenu === true
-                          ? styles.header__log__li__show
-                          : styles.header__log__li__hide
-                      }`}
-                      onMouseOver={() => setOnHoverLink("/utilisateurs")}
-                    >
-                      <Link
-                        className={styles.header__log__li__link}
-                        href="/utilisateurs"
-                        onClick={() => setDisplayLogMenu(false)}
+                    </li> */}
+                      <li
+                        className={`${styles.header__log__li} ${
+                          styles.header__log__li__4
+                        } ${
+                          displayLogMenu === true
+                            ? styles.header__log__li__show
+                            : styles.header__log__li__hide
+                        }`}
+                        onMouseOver={() => setOnHoverLink("/utilisateurs")}
                       >
-                        <div
-                          className={`${styles.header__log__li__point} ${
-                            onHoverLink === "/utilisateurs"
-                              ? styles.header__log__li__point__show
-                              : styles.header__log__li__point__hide
-                          }`}
-                        ></div>
-                        Tous les utilisateurs
-                      </Link>
-                    </li>
-                    <li
-                      className={`${styles.header__log__li} ${
-                        styles.header__log__li__5
-                      } ${
-                        displayLogMenu === true
-                          ? styles.header__log__li__show
-                          : styles.header__log__li__hide
-                      }`}
-                      onMouseOver={() => setOnHoverLink("/logout")}
-                    >
-                      <span
-                        className={styles.header__log__li__link}
-                        onClick={() => {
-                          setDisplayLogMenu(false);
-                          const logout = async () => {
-                            trigger(null, {
-                              optimisticData: defaultSession,
-                            });
-
-                            let response = await fetch(
-                              "/components/header/api",
-                              {
-                                method: "DELETE",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                },
-                              }
-                            );
-                            let json = await response.json();
-                            if (json && json.status === 200) {
-                              setTimeout(() => {
-                                dispatch({
-                                  type: "auth/logout",
-                                });
-
-                                mutate("/api/user/check", {
-                                  ...json,
-                                });
-                                cache.delete("/api/user/check");
-                                if (
-                                  pathname === "/meetings" ||
-                                  pathname === "/profile" ||
-                                  pathname === "/utilisateurs" ||
-                                  pathname === "/meetingAdmin"
-                                ) {
-                                  router.push("/");
-                                }
-                                dispatch({
-                                  type: "flash/storeFlashMessage",
-                                  payload: {
-                                    type: "error",
-                                    flashMessage: json.message,
-                                  },
-                                });
-                              }, 600);
-                            }
-                          };
-                          logout();
-                        }}
-                      >
-                        <div
-                          className={`${styles.header__log__li__point} ${
-                            onHoverLink === "/logout"
-                              ? styles.header__log__li__point__show
-                              : styles.header__log__li__point__hide
-                          }`}
-                        ></div>
-                        Déconnection
-                      </span>
-                    </li>
-                  </ul>
+                        <Link
+                          className={styles.header__log__li__link}
+                          href="/utilisateurs"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          <div
+                            className={`${styles.header__log__li__point} ${
+                              onHoverLink === "/utilisateurs"
+                                ? styles.header__log__li__point__show
+                                : styles.header__log__li__point__hide
+                            }`}
+                          ></div>
+                          Tous les utilisateurs
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className={styles.line__bottom}></div>
+                  <button
+                    className={styles.header__log__btn}
+                    onClick={() => {
+                      setDisplayLogMenu(false);
+                      const logout = async () => {
+                        trigger(null, {
+                          optimisticData: defaultSession,
+                        });
+                      };
+                      setTimeout(() => {
+                        logout();
+                      }, 800);
+                    }}
+                  >
+                    Se déconnecter
+                  </button>
                 </div>
               </>
             </div>
@@ -394,7 +404,7 @@ const Content = () => {
                   width={25}
                   height={25}
                   src="/assets/icone/user-check-solid.svg"
-                  alt="logo tdss coaching"
+                  alt="Icone utilisateur connecté"
                   priority={true}
                 />
               </div>
@@ -406,36 +416,58 @@ const Content = () => {
                       : styles.header__log__container__hide
                   }`}
                 >
-                  <ul
-                    onMouseLeave={() => setOnHoverLink(pathname)}
-                    className={`${styles.header__log__ul}`}
-                  >
-                    <li
-                      onMouseOver={() => setOnHoverLink("/profile")}
-                      className={`${styles.header__log__li} ${
-                        styles.header__log__li__1
-                      } ${
-                        displayLogMenu === true
-                          ? styles.header__log__li__show
-                          : styles.header__log__li__hide
-                      }`}
+                  <div className={styles.logo}>
+                    <Link
+                      className={styles.logo__link}
+                      href="/"
+                      tabIndex={0}
+                      onClick={() => {
+                        dispatch({ type: "menu/closeMenu" });
+                      }}
                     >
-                      <Link
-                        className={styles.header__log__li__link}
-                        href="/profile"
-                        onClick={() => setDisplayLogMenu(false)}
+                      <Image
+                        className={styles.logo__link__img}
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        src="/assets/logo/logo3.webp"
+                        alt="logo tdss coaching"
+                        priority={true}
+                      />
+                    </Link>
+                  </div>
+                  <div className={styles.line}></div>
+                  <div className={styles.div}>
+                    <ul
+                      onMouseLeave={() => setOnHoverLink(pathname)}
+                      className={`${styles.header__log__ul}`}
+                    >
+                      <li
+                        onMouseOver={() => setOnHoverLink("/profile")}
+                        className={`${styles.header__log__li} ${
+                          styles.header__log__li__1
+                        } ${
+                          displayLogMenu === true
+                            ? styles.header__log__li__show
+                            : styles.header__log__li__hide
+                        }`}
                       >
-                        <div
-                          className={`${styles.header__log__li__point} ${
-                            onHoverLink === "/profile"
-                              ? styles.header__log__li__point__show
-                              : styles.header__log__li__point__hide
-                          }`}
-                        ></div>
-                        Compte
-                      </Link>
-                    </li>
-                    <li
+                        <Link
+                          className={styles.header__log__li__link}
+                          href="/profile"
+                          onClick={() => setDisplayLogMenu(false)}
+                        >
+                          <div
+                            className={`${styles.header__log__li__point} ${
+                              onHoverLink === "/profile"
+                                ? styles.header__log__li__point__show
+                                : styles.header__log__li__point__hide
+                            }`}
+                          ></div>
+                          Compte
+                        </Link>
+                      </li>
+                      {/* <li
                       onMouseOver={() => setOnHoverLink("/historique")}
                       className={`${styles.header__log__li} ${
                         styles.header__log__li__2
@@ -459,8 +491,8 @@ const Content = () => {
                         ></div>
                         Historique des rendez-vous
                       </Link>
-                    </li>
-                    <li
+                    </li> */}
+                      {/* <li
                       onMouseOver={() => setOnHoverLink("/rendez-vous")}
                       className={`${styles.header__log__li} ${
                         styles.header__log__li__3
@@ -484,26 +516,26 @@ const Content = () => {
                         ></div>
                         Mes rendez-vous
                       </Link>
-                    </li>
-                    <li
-                      onMouseOver={() => setOnHoverLink("/logout")}
-                      className={`${styles.header__log__li} ${
-                        styles.header__log__li__4
-                      } ${
-                        displayLogMenu === true
-                          ? styles.header__log__li__show
-                          : styles.header__log__li__hide
-                      }`}
-                    >
-                      <span
-                        className={styles.header__log__li__link}
-                        onClick={() => {
-                          setDisplayLogMenu(false);
-                          const logout = async () => {
-                            trigger(null, {
-                              optimisticData: defaultSession,
-                            });
-                            let response = await fetch(
+                    </li> */}
+                      {/*<li
+                        onMouseOver={() => setOnHoverLink("/logout")}
+                        className={`${styles.header__log__li} ${
+                          styles.header__log__li__4
+                        } ${
+                          displayLogMenu === true
+                            ? styles.header__log__li__show
+                            : styles.header__log__li__hide
+                        }`}
+                      >
+                        <span
+                          className={styles.header__log__li__link}
+                          onClick={() => {
+                            setDisplayLogMenu(false);
+                            const logout = async () => {
+                              trigger(null, {
+                                optimisticData: defaultSession,
+                              });
+                               let response = await fetch(
                               "/components/header/api",
                               {
                                 method: "DELETE",
@@ -538,23 +570,41 @@ const Content = () => {
                                   },
                                 });
                               }, 600);
-                            }
-                          };
+                            } 
+                            };
 
-                          logout();
-                        }}
-                      >
-                        <div
-                          className={`${styles.header__log__li__point} ${
-                            onHoverLink === "/logout"
-                              ? styles.header__log__li__point__show
-                              : styles.header__log__li__point__hide
-                          }`}
-                        ></div>
-                        Déconnection
-                      </span>
-                    </li>
-                  </ul>
+                            logout();
+                          }}
+                        >
+                          <div
+                            className={`${styles.header__log__li__point} ${
+                              onHoverLink === "/logout"
+                                ? styles.header__log__li__point__show
+                                : styles.header__log__li__point__hide
+                            }`}
+                          ></div>
+                          Déconnection
+                        </span>
+                          </li>*/}
+                    </ul>
+                  </div>
+                  <div className={styles.line__bottom}></div>
+                  <button
+                    className={styles.header__log__btn}
+                    onClick={() => {
+                      setDisplayLogMenu(false);
+                      const logout = async () => {
+                        trigger(null, {
+                          optimisticData: defaultSession,
+                        });
+                      };
+                      setTimeout(() => {
+                        logout();
+                      }, 800);
+                    }}
+                  >
+                    Se déconnecter
+                  </button>
                 </div>
               </>
             </div>
@@ -562,7 +612,7 @@ const Content = () => {
         );
       }
     }
-  } */
+  }
 
   const [isClick, setIsClick] = useState<boolean>(false);
   const { displayModalLogin } = useSelector(
@@ -581,9 +631,6 @@ const Content = () => {
   const { displayModalSendTokenEmail } = useSelector(
     (state: RootState) => state.ModalSendTokenEmail
   );
-  const { displayModalSendTokenTwoFactor } = useSelector(
-    (state: RootState) => state.ModalSendTokenTwoFactor
-  );
   const { displayModalEditEmail } = useSelector(
     (state: RootState) => state.ModalEditEmail
   );
@@ -592,12 +639,6 @@ const Content = () => {
   );
   const { displayModalDeleteAccount } = useSelector(
     (state: RootState) => state.ModalDeleteAccount
-  );
-  const { displayModalEditTwoFactor } = useSelector(
-    (state: RootState) => state.ModalEditTwoFactor
-  );
-  const { displayModalCancelTwoFactor } = useSelector(
-    (state: RootState) => state.ModalCancelTwoFactor
   );
   const { displayModalForgot } = useSelector(
     (state: RootState) => state.ModalForgot
@@ -723,12 +764,9 @@ const Content = () => {
       displayModalEditLastname === true ||
       displayModalEditPassword === true ||
       displayModalSendTokenEmail === true ||
-      displayModalSendTokenTwoFactor === true ||
       displayModalEditEmail === true ||
       displayModalCancelEmail === true ||
       displayModalDeleteAccount === true ||
-      displayModalEditTwoFactor === true ||
-      displayModalCancelTwoFactor === true ||
       displayModalForgot === true
     ) {
       return `${styles.line__hide}`;
@@ -754,12 +792,9 @@ const Content = () => {
           displayModalEditLastname === true ||
           displayModalEditPassword === true ||
           displayModalSendTokenEmail === true ||
-          displayModalSendTokenTwoFactor === true ||
           displayModalEditEmail === true ||
           displayModalCancelEmail === true ||
           displayModalDeleteAccount === true ||
-          displayModalEditTwoFactor === true ||
-          displayModalCancelTwoFactor === true ||
           displayModalForgot === true
         ) {
           /* header.style.opacity = "0.02";
@@ -786,12 +821,9 @@ const Content = () => {
     displayModalEditLastname,
     displayModalEditPassword,
     displayModalSendTokenEmail,
-    displayModalSendTokenTwoFactor,
     displayModalEditEmail,
     displayModalCancelEmail,
     displayModalDeleteAccount,
-    displayModalEditTwoFactor,
-    displayModalCancelTwoFactor,
     displayModalForgot,
   ]);
 
@@ -891,13 +923,13 @@ const Content = () => {
             <ModalUserLastnameData />
             <ModalUserPasswordData />
             <ModalUserSendToken />
-            <ModalTwoFactorSendToken />
-            <ModalComfirmDisable />
+            {/* <ModalTwoFactorSendToken />
+            <ModalComfirmDisable /> */}
             <EmailCheck />
             <ModalCloseEmail />
             <ModalDeleteAccount />
-            <ModalTwoFactor />
-            <ModalCloseTwoFactor />
+            {/* <ModalTwoFactor /> 
+            <ModalCloseTwoFactor />*/}
             {/* <ModalUserLastnameData />
             
             
@@ -985,85 +1017,109 @@ const Content = () => {
       </AnimatePresence>
 
       <header className={styles.header}>
-        <figure className={styles.header__figure}>
-          <Link className="link modalOpen" href="/" tabIndex={0}>
-            <Image
-              className={styles.header__logo}
-              width={0}
-              height={0}
-              sizes="100vw"
-              //src="/assets/logo/logo3.png"
-              src="/assets/logo/logo3.webp"
-              alt="logo tdss coaching"
-              priority={true}
-            />
-          </Link>
-          <figcaption className={styles.header__figcaption}>
-            Coach de vie
-          </figcaption>
-        </figure>
-        <nav
-          className={
-            isClick === false
-              ? `${styles.header__nav}`
-              : `${styles.header__nav__mobile}`
-          }
-        >
-          <ul
+        {cookieEnabled === false && closeCookieEnabled === false && (
+          <>
+            <div className={styles.header__nocookie}>
+              <button
+                className={styles.header__nocookie__btn}
+                onClick={() => setCloseCookieEnabled(true)}
+              >
+                <Image
+                  className={styles.header__nocookie__btn__img}
+                  src="/assets/icone/xmark-solid.svg"
+                  alt="arrow-left"
+                  width={30}
+                  height={30}
+                ></Image>
+              </button>
+
+              <p>
+                Pour utiliser ce site, vous devez activer les cookies dans les
+                paramètres de votre navigateur.
+              </p>
+            </div>
+          </>
+        )}
+        <div className={styles.header__div}>
+          <figure className={styles.header__figure}>
+            <Link className="link modalOpen" href="/" tabIndex={0}>
+              <Image
+                className={styles.header__logo}
+                width={0}
+                height={0}
+                sizes="100vw"
+                //src="/assets/logo/logo3.png"
+                src="/assets/logo/logo3.webp"
+                alt="logo tdss coaching"
+                priority={true}
+              />
+            </Link>
+            <figcaption className={styles.header__figcaption}>
+              Coach de vie
+            </figcaption>
+          </figure>
+          <nav
             className={
               isClick === false
-                ? `${styles.header__ul}`
-                : `${styles.header__ul__mobile}`
+                ? `${styles.header__nav}`
+                : `${styles.header__nav__mobile}`
             }
           >
-            <li className={styles.header__li}>
-              <Link
-                className={
-                  pathname == "/"
-                    ? `${styles.header__a} ${styles.active} modalOpen`
-                    : `${styles.header__a} modalOpen`
-                }
-                tabIndex={0}
-                href="/"
-                onClick={(e) => {
-                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                }}
-              >
-                Accueil
-              </Link>
-            </li>
-            <li className={styles.header__li}>
-              <Link
-                className={
-                  pathname == "/qui-suis-je"
-                    ? `${styles.header__a} ${styles.active} modalOpen`
-                    : `${styles.header__a} modalOpen`
-                }
-                tabIndex={0}
-                href="/qui-suis-je"
-                onClick={(e) => {
-                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                }}
-              >
-                Qui suis-je ?
-              </Link>
-            </li>
-            <li className={`${styles.header__li}`}>
-              <Link
-                className={
-                  pathname == "/coaching-de-vie"
-                    ? `${styles.header__a} ${styles.active} modalOpen`
-                    : `${styles.header__a} modalOpen`
-                }
-                tabIndex={0}
-                href="/coaching-de-vie"
-                onClick={(e) => {
-                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                }}
-              >
-                Coaching de vie
-              </Link>
-              {/* <span className={`${styles.header__a}`}>Coaching de vie</span>
+            <ul
+              className={
+                isClick === false
+                  ? `${styles.header__ul}`
+                  : `${styles.header__ul__mobile}`
+              }
+            >
+              <li className={styles.header__li}>
+                <Link
+                  className={
+                    pathname == "/"
+                      ? `${styles.header__a} ${styles.active} modalOpen`
+                      : `${styles.header__a} modalOpen`
+                  }
+                  tabIndex={0}
+                  href="/"
+                  onClick={(e) => {
+                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                  }}
+                >
+                  Accueil
+                </Link>
+              </li>
+              <li className={styles.header__li}>
+                <Link
+                  className={
+                    pathname == "/qui-suis-je"
+                      ? `${styles.header__a} ${styles.active} modalOpen`
+                      : `${styles.header__a} modalOpen`
+                  }
+                  tabIndex={0}
+                  href="/qui-suis-je"
+                  onClick={(e) => {
+                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                  }}
+                >
+                  Qui suis-je ?
+                </Link>
+              </li>
+              <li className={`${styles.header__li}`}>
+                <Link
+                  className={
+                    pathname == "/coaching-de-vie"
+                      ? `${styles.header__a} ${styles.active} modalOpen`
+                      : `${styles.header__a} modalOpen`
+                  }
+                  tabIndex={0}
+                  href="/coaching-de-vie"
+                  onClick={(e) => {
+                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                  }}
+                >
+                  Coaching de vie
+                </Link>
+                {/* <span className={`${styles.header__a}`}>Coaching de vie</span>
               <span
                 tabIndex={0}
                 aria-label="sous menu coaching de vie"
@@ -1128,24 +1184,24 @@ const Content = () => {
                   </Link>
                 </li>
               </ul> */}
-            </li>
-            <li className={styles.header__li}>
-              <Link
-                className={
-                  pathname == "/tarif"
-                    ? `${styles.header__a} ${styles.active} modalOpen`
-                    : `${styles.header__a} modalOpen`
-                }
-                tabIndex={0}
-                href="/tarif"
-                onClick={(e) => {
-                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                }}
-              >
-                Tarifs et modalité
-              </Link>
-            </li>
-            {/* <li className={`${styles.header__li} ${styles.header__li__hover}`}>
+              </li>
+              <li className={styles.header__li}>
+                <Link
+                  className={
+                    pathname == "/tarif"
+                      ? `${styles.header__a} ${styles.active} modalOpen`
+                      : `${styles.header__a} modalOpen`
+                  }
+                  tabIndex={0}
+                  href="/tarif"
+                  onClick={(e) => {
+                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                  }}
+                >
+                  Tarifs et modalité
+                </Link>
+              </li>
+              {/* <li className={`${styles.header__li} ${styles.header__li__hover}`}>
               <span className={`${styles.header__a}`}>Mes prestations</span>
               <span
                 tabIndex={0}
@@ -1214,24 +1270,65 @@ const Content = () => {
                 </li>
               </ul>
             </li> */}
-            <li className={styles.header__li}>
-              <Link
-                className={
-                  pathname == "/contact"
-                    ? `${styles.header__a} ${styles.active} modalOpen`
-                    : `${styles.header__a} modalOpen`
-                }
-                href="/contact"
-                onClick={(e) => {
-                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
+              <li className={styles.header__li}>
+                <Link
+                  className={
+                    pathname == "/contact"
+                      ? `${styles.header__a} ${styles.active} modalOpen`
+                      : `${styles.header__a} modalOpen`
+                  }
+                  href="/contact"
+                  onClick={(e) => {
+                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                  }}
+                >
+                  Contact
+                </Link>
+              </li>
+            </ul>
+            {/* //cookieEnabled === true && */}
+            {cookieEnabled === true && content}
+          </nav>
+          <div
+            className={`${
+              cookieEnabled === true
+                ? styles.main
+                : cookieEnabled === false && isActive === false
+                ? styles.main
+                : closeCookieEnabled === true
+                ? styles.main__top__test
+                : styles.main__top
+            } ${styles.main__test}`}
+          >
+            <div className={styles.headerr}>
+              <button
+                tabIndex={0}
+                onClick={() => {
+                  if (displayLogMenu === true) {
+                    setDisplayLogMenu(false);
+                    setTimeout(() => {
+                      dispatch({
+                        type: "menu/toggleMenu",
+                      });
+                    }, 500);
+                  } else {
+                    dispatch({
+                      type: "menu/toggleMenu",
+                    });
+                  }
                 }}
+                className={`${styles.button} modalOpen`}
               >
-                Contact
-              </Link>
-            </li>
-          </ul>
-          {/*  {content} */}
-        </nav>
+                <div
+                  className={`${styles.burger} ${
+                    isActive ? styles.burgerActive : ""
+                  }`}
+                ></div>
+              </button>
+            </div>
+          </div>
+          <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>
+        </div>
 
         {/* <button
           className={styles.header__burger__btn}
@@ -1264,35 +1361,6 @@ const Content = () => {
             ></span>
           </div>
         </button> */}
-        {/* <div className={styles.main}>
-          <div className={styles.headerr}>
-            <button
-              tabIndex={0}
-              onClick={() => {
-                if (displayLogMenu === true) {
-                  setDisplayLogMenu(false);
-                  setTimeout(() => {
-                    dispatch({
-                      type: "menu/toggleMenu",
-                    });
-                  }, 500);
-                } else {
-                  dispatch({
-                    type: "menu/toggleMenu",
-                  });
-                }
-              }}
-              className={`${styles.button} modalOpen`}
-            >
-              <div
-                className={`${styles.burger} ${
-                  isActive ? styles.burgerActive : ""
-                }`}
-              ></div>
-            </button>
-          </div>
-        </div>
-        <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence> */}
       </header>
       <div className={classNameLine()}></div>
     </>

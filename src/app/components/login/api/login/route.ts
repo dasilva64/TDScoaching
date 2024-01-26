@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
-import { SessionData, sessionOptions } from "../../../../../../lib/session";
+import {
+  SessionData,
+  sessionOptions,
+  sessionOptionsRemeber,
+} from "../../../../../../lib/session";
 import { validationBody } from "../../../../../../lib/validation";
 import validator from "validator";
 import bcrypt from "bcrypt";
@@ -9,10 +13,11 @@ import nodemailer from "nodemailer";
 import prisma from "../../../../../../lib/prisma";
 
 export async function POST(request: NextRequest) {
-  const { email, password, pseudo } = (await request.json()) as {
+  const { email, password, pseudo, remember } = (await request.json()) as {
     email: string;
     password: string;
     pseudo: string;
+    remember: boolean;
   };
   let arrayMessageError = validationBody({ email: email, password: password });
   if (arrayMessageError.length > 0) {
@@ -82,7 +87,7 @@ export async function POST(request: NextRequest) {
             { status: 400 }
           );
         } else {
-          if (user.twoFactor === true) {
+          /* if (user.twoFactor === true) {
             let min = Math.ceil(10000000);
             let max = Math.floor(99999998);
             let random = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -122,7 +127,7 @@ export async function POST(request: NextRequest) {
           
                           <div style="width: 100%">
                             <div style="text-align: center">
-                              <img src="https://tds-lilac.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                              <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
                             </div>
                             <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                               <h1 style="text-align: center">tds coaching</h1>
@@ -141,26 +146,37 @@ export async function POST(request: NextRequest) {
               body: null,
               message: `Un code vous a été envoyé sur votre addresse email`,
             });
+          } else { */
+          let userObject = {
+            role: user.role,
+            id: user.id,
+          };
+          if (remember === true) {
+            const session = await getIronSession<SessionData>(
+              cookies(),
+              sessionOptionsRemeber
+            );
+            session.isLoggedIn = true;
+            session.id = user.id;
+            session.role = user.role;
+            await session.save();
           } else {
             const session = await getIronSession<SessionData>(
               cookies(),
               sessionOptions
             );
-
-            let userObject = {
-              role: user.role,
-              id: user.id,
-            };
             session.isLoggedIn = true;
             session.id = user.id;
             session.role = user.role;
             await session.save();
-            return NextResponse.json({
-              status: 200,
-              body: userObject,
-              message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
-            });
           }
+
+          return NextResponse.json({
+            status: 200,
+            body: userObject,
+            message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
+          });
+          //}
         }
       }
     } else {

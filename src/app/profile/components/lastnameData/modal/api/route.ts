@@ -22,44 +22,45 @@ export async function POST(request: NextRequest) {
       { status: 401 }
     );
   } else {
-    const { lastname, pseudo } = (await request.json()) as {
-      lastname: string;
-      pseudo: string;
-    };
-    let arrayMessageError = validationBody({ lastname: lastname });
-
-    if (arrayMessageError.length > 0) {
+    let user = await prisma.user.findUnique({
+      where: { id: session.id },
+    });
+    if (user === null) {
+      session.destroy();
       return NextResponse.json(
         {
-          status: 400,
-          type: "validation",
-          message: arrayMessageError,
-        },
-        { status: 400 }
-      );
-    }
-    if (pseudo.trim() !== "") {
-      return NextResponse.json(
-        {
-          status: 400,
-          type: "error",
+          status: 404,
           message:
-            "Vous ne pouvez pas modifier votre nom de famille, veuillez réessayer",
+            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 400 }
+        { status: 404 }
       );
     } else {
-      let user = await prisma.user.findUnique({
-        where: { id: session.id },
-      });
-      if (user === null) {
+      const { lastname, pseudo } = (await request.json()) as {
+        lastname: string;
+        pseudo: string;
+      };
+      let arrayMessageError = validationBody({ lastname: lastname });
+
+      if (arrayMessageError.length > 0) {
         return NextResponse.json(
           {
-            status: 404,
-            message:
-              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+            status: 400,
+            type: "validation",
+            message: arrayMessageError,
           },
-          { status: 404 }
+          { status: 400 }
+        );
+      }
+      if (pseudo.trim() !== "") {
+        return NextResponse.json(
+          {
+            status: 400,
+            type: "error",
+            message:
+              "Vous ne pouvez pas modifier votre nom de famille, veuillez réessayer",
+          },
+          { status: 400 }
         );
       } else {
         let editUser = await prisma.user.update({

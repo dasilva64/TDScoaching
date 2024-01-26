@@ -15,6 +15,11 @@ import DisplayLoad from "./dataTable/display/DisplayLoad";
 import DisplayError from "./dataTable/display/DisplayError";
 import useGetById from "@/app/components/hook/user/useGetById";
 import fetchPost from "@/app/components/fetch/FetchPost";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const Content = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -494,7 +499,9 @@ const Content = () => {
               </ul>
             </div>
             <div className={styles.content__flex__div__right}>
-              <h2 className={styles.content__flex__div__right__h2}>
+              <h2
+                className={`${styles.content__flex__div__right__h2} ${Parisienne.className}`}
+              >
                 historique rendez-vous
               </h2>
               {data.body.allMeetings.length === 0 && <p>Aucun rendez-vous</p>}

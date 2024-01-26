@@ -7,10 +7,11 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 
 export async function POST(request: NextRequest) {
-  const { email, password, firstname, lastname, pseudo } =
+  const { email, password, passwordComfirm, firstname, lastname, pseudo } =
     (await request.json()) as {
       email: string;
       password: string;
+      passwordComfirm: string;
       firstname: string;
       lastname: string;
       pseudo: string;
@@ -46,6 +47,16 @@ export async function POST(request: NextRequest) {
       where: { mail: validator.escape(email.trim()) },
     });
     if (userEmail === null) {
+      if (password.trim() !== passwordComfirm.trim()) {
+        return NextResponse.json(
+          {
+            status: 400,
+            type: "error",
+            message: "Les mots de passe ne sont pas identiques",
+          },
+          { status: 400 }
+        );
+      }
       const saltRounds = 10;
       let encrypt = await bcrypt.hash(
         validator.escape(password.trim()),
@@ -85,7 +96,8 @@ export async function POST(request: NextRequest) {
         );
       } else {
         let smtpTransport = nodemailer.createTransport({
-          service: "Gmail",
+          host: "smtp.ionos.com",
+          port: 465,
           auth: {
             user: process.env.SECRET_SMTP_EMAIL,
             pass: process.env.SECRET_SMTP_PASSWORD,
@@ -108,7 +120,7 @@ export async function POST(request: NextRequest) {
           
                           <div style="width: 100%">
                             <div style="text-align: center">
-                              <img src="https://tds-lilac.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                              <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
                             </div>
                             <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                               <h1 style="text-align: center">tds coaching</h1>
@@ -198,14 +210,14 @@ export async function POST(request: NextRequest) {
                 
                                 <div style="width: 100%">
                                   <div style="text-align: center">
-                                    <img src="https://tds-lilac.vercel.app/_next/image?url=%2Fassets%2Flogo%2Flogo.png&w=750&q=75" width="80px" height="80px" />
+                                    <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
                                   </div>
                                   <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                     <h1 style="text-align: center">tds coaching</h1>
                                     <h2 style="text-align: center">Validation de votre compte</h2>
                                     <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
                                     <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="http://localhost:3000/email-validation/${token}" target="_blank">Vérifier mon compte</a>
-                                    <p style="margin-top: 20px">Ce lien est valide pendant 48h, au dela de ce temps il ne sera plus disponible et votre compte sera supprimé</p>
+                                    <p style="margin-top: 20px">Ce lien est valide pendant 24h, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé.</p>
                                   </div>
                                 </div>
                               </body>

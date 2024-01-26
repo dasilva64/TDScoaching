@@ -50,16 +50,14 @@ const ModalUserSendToken = () => {
           });
           router.push("/");
         } else {
-          setTimeout(() => {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: {
-                type: "error",
-                flashMessage: userData.message,
-              },
-            });
-          }, 2000);
-          router.refresh();
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: userData.message,
+            },
+          });
+          router.push("/");
         }
       }
     }

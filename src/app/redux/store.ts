@@ -46,11 +46,13 @@ import ModalComfirmEditContrat from "./feature/modal/ModalComfirmEditContrat";
 export const store = configureStore({
   reducer: {
     //auth: auth.reducer,
-    flash: flash.reducer,
-    Array: Array.reducer,
+    /*
+    
     ArrayMeeting: ArrayMeeting.reducer,
+    ArrayHistorique: ArrayHistorique.reducer,*/
+    flash: flash.reducer,
     ArrayMeetingByUser: ArrayMeetingByUser.reducer,
-    ArrayHistorique: ArrayHistorique.reducer,
+    Array: Array.reducer,
     menu: menu.reducer,
     Mobile: Mobile.reducer,
     ModalLogin: ModalLogin.reducer,
@@ -58,15 +60,22 @@ export const store = configureStore({
     ModalForgot: ModalForgot.reducer,
     ModalEditFirstname: ModalEditFirstname.reducer,
     ModalEditLastname: ModalEditLastname.reducer,
-    ModalEditFormule: ModalEditFormule.reducer,
     ModalEditPassword: ModalEditPassword.reducer,
-    ModalEditTwoFactor: ModalEditTwoFactor.reducer,
-    ModalCancelMeeting: ModalCancelMeeting.reducer,
+    ModalSendTokenEmail: ModalSendTokenEmail.reducer,
     ModalEditEmail: ModalEditEmail.reducer,
     ModalCancelEmail: ModalCancelEmail.reducer,
-    ModalCancelTwoFactor: ModalCancelTwoFactor.reducer,
-    ModalSendTokenEmail: ModalSendTokenEmail.reducer,
     ModalDeleteAccount: ModalDeleteAccount.reducer,
+    ModalDiscovery: ModalDiscovery.reducer,
+    ModalNormal: ModalNormal.reducer,
+    /*ModalEditFormule: ModalEditFormule.reducer,
+    
+    ModalEditTwoFactor: ModalEditTwoFactor.reducer,
+    ModalCancelMeeting: ModalCancelMeeting.reducer,
+    
+    
+    ModalCancelTwoFactor: ModalCancelTwoFactor.reducer,
+    
+    
     ModalDatePickerDiscovery: ModalDatePickerDiscovery.reducer,
     ModalAddMeetingAdmin: ModalAddMeetingAdmin.reducer,
     ModalAddDiscoveryMeeting: ModalAddDiscoveryMeeting.reducer,
@@ -80,12 +89,12 @@ export const store = configureStore({
     ModalDatePickerEdit: ModalDatePickerEdit.reducer,
     ModalSendTokenTwoFactor: ModalSendTokenTwoFactor.reducer,
     ModalComfirmDisableTwoFactor: ModalComfirmDisableTwoFactor.reducer,
-    ModalDiscovery: ModalDiscovery.reducer,
-    ModalNormal: ModalNormal.reducer,
+    
+    
     ModalSurMesure: ModalSurMesure.reducer,
     ModalContract: ModalContract.reducer,
     ModalComfirmDeleteContrat: ModalComfirmDeleteContrat.reducer,
-    ModalComfirmEditContrat: ModalComfirmEditContrat.reducer,
+    ModalComfirmEditContrat: ModalComfirmEditContrat.reducer, */
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

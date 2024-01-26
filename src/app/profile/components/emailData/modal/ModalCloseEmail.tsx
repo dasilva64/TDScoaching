@@ -55,6 +55,7 @@ const ModalCloseEmail = () => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        router.push("/");
       }
     }
   }, [data, dispatch, reset, router]);

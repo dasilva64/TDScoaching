@@ -16,7 +16,6 @@ const DisplayOne = ({ i }: any) => {
       setKeyAr(Object.keys(datas[0]));
     }
   }, [datas]);
-
   return (
     <>
       {datas && datas.length > 0 && (
@@ -26,7 +25,7 @@ const DisplayOne = ({ i }: any) => {
             dispatch({
               type: "flash/clearFlashMessage",
             });
-            router.push(`/utilisateur/${datas[i]["id"]}`);
+            router.push(`/utilisateur/${datas[i]["Id"]}`);
           }}
         >
           {keyAr &&
@@ -34,25 +33,50 @@ const DisplayOne = ({ i }: any) => {
               if (datas[i] !== undefined) {
                 if (sortBy[0] === p) {
                   if (i % 2 === 0) {
+                    if (p === "Id") {
+                      return (
+                        <td
+                          className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td}`}
+                          key={index}
+                        >
+                          {" "}
+                          <div className={styles.table__body__tr__td__div__id}>
+                            {datas[i][p]}
+                          </div>
+                        </td>
+                      );
+                    }
                     return (
                       <td
                         className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td}`}
                         key={index}
                       >
                         {" "}
-                        <div className={styles.table__body__tr__td__div__id}>
+                        <div className={styles.table__body__tr__td__div}>
                           {datas[i][p]}
                         </div>
                       </td>
                     );
                   } else {
-                    console.log(p);
+                    if (p === "Id") {
+                      return (
+                        <td
+                          className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td}`}
+                          key={index}
+                        >
+                          {" "}
+                          <div className={styles.table__body__tr__td__div__id}>
+                            {datas[i][p]}
+                          </div>
+                        </td>
+                      );
+                    }
                     return (
                       <td
                         className={`${styles.table__body__tr__td__even__first} ${styles.table__body__tr__td}`}
                         key={index}
                       >
-                        <div className={styles.table__body__tr__td__div__id}>
+                        <div className={styles.table__body__tr__td__div}>
                           {datas[i][p]}
                         </div>
                       </td>
@@ -61,6 +85,19 @@ const DisplayOne = ({ i }: any) => {
                 }
                 if (i % 2 === 0) {
                   if (i === 0) {
+                    if (p === "Id") {
+                      return (
+                        <td
+                          className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}
+                          key={index}
+                        >
+                          {" "}
+                          <div className={styles.table__body__tr__td__div__id}>
+                            {datas[i][p]}
+                          </div>
+                        </td>
+                      );
+                    }
                     return (
                       <td
                         className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}
@@ -72,6 +109,19 @@ const DisplayOne = ({ i }: any) => {
                       </td>
                     );
                   } else {
+                    if (p === "Id") {
+                      return (
+                        <td
+                          className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}
+                          key={index}
+                        >
+                          {" "}
+                          <div className={styles.table__body__tr__td__div__id}>
+                            {datas[i][p]}
+                          </div>
+                        </td>
+                      );
+                    }
                     return (
                       <td
                         className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}
@@ -84,6 +134,19 @@ const DisplayOne = ({ i }: any) => {
                     );
                   }
                 } else {
+                  if (p === "Id") {
+                    return (
+                      <td
+                        className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}
+                        key={index}
+                      >
+                        {" "}
+                        <div className={styles.table__body__tr__td__div__id}>
+                          {datas[i][p]}
+                        </div>
+                      </td>
+                    );
+                  }
                   return (
                     <td
                       className={`${styles.table__body__tr__td__even} ${styles.table__body__tr__td}`}

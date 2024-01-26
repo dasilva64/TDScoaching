@@ -18,6 +18,7 @@ export async function GET() {
       where: { id: session.id },
     });
     if (user === null) {
+      session.destroy();
       return NextResponse.json(defaultSession);
     } else {
       return NextResponse.json(session);

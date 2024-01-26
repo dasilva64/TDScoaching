@@ -19,7 +19,7 @@ const useDeleteAccount = (token: string) => {
   const router = useRouter();
 
   const { data, isLoading, error } = useSWR(
-    [`/api/user/deleteAccount`, token],
+    [`/suppression-compte/[token]/components/api`, token],
     ([url, token]) => fetchDeleteAccount(url, token)
   );
   useEffect(() => {

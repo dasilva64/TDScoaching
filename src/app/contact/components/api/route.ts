@@ -56,8 +56,8 @@ export async function POST(request: NextRequest) {
     });
     if (user === null) {
       let mailOptions = {
-        from: process.env.SECRET_SMTP_EMAIL,
-        to: process.env.SECRET_SMTP_EMAIL_TO,
+        from: "thomasdasilva010@gmail.com",
+        to: "contact@tds-coachingdevie.fr",
         subject: object,
         html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -96,8 +96,8 @@ export async function POST(request: NextRequest) {
       smtpTransport.sendMail(mailOptions);
     } else {
       let mailOptions = {
-        from: process.env.SECRET_SMTP_EMAIL,
-        to: process.env.SECRET_SMTP_EMAIL_TO,
+        from: "thomasdasilva010@gmail.com",
+        to: "contact@tds-coachingdevie.fr",
         subject: object,
         html: `<!DOCTYPE html>
                           <html lang="fr">

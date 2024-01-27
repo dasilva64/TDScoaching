@@ -5,16 +5,30 @@ import validator from "validator";
 import nodemailer from "nodemailer";
 
 export async function POST(request: NextRequest) {
-  let smtpTransport = nodemailer.createTransport({
-    service: "smtp.ionos.com",
-    port: 465,
+  /* let smtpTransport = nodemailer.createTransport({
+    service: "smtp.ionos.fr",
+    port: 587,
     secure: true,
     auth: {
       user: process.env.SECRET_SMTP_EMAIL,
       pass: process.env.SECRET_SMTP_PASSWORD,
     },
-  });
-  let mailOptions = {
+  }); */
+  /* let smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.SECRET_SMTP_EMAIL_TEST,
+      pass: process.env.SECRET_SMTP_PASSWORD_TEST,
+    },
+  }); */
+  /* smtpTransport.verify(function (error, success) {
+    if (error) {
+      console.log("error", error);
+    } else {
+      console.log("Server is ready to take our messages");
+    }
+  }); */
+  /* let mailOptions = {
     from: "thomasdasilva010@gmail.com",
     to: "thomasdasilva010@gmail.com",
     subject: "object",
@@ -40,7 +54,7 @@ export async function POST(request: NextRequest) {
                         </body>
                       </html>`,
   };
-  smtpTransport.sendMail(mailOptions);
+  smtpTransport.sendMail(mailOptions); */
   const { email, firstname, lastname, object, message, pseudo } =
     (await request.json()) as {
       email: string;
@@ -78,9 +92,10 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   } else {
-    /* const user = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { mail: validator.escape(email.trim()), status: true },
-    }); */
+    });
+    console.log(user);
 
     /* let smtpTransport = nodemailer.createTransport({
       service: "gmail",

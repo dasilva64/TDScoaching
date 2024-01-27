@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     console.log(user);
 
     let smtpTransport = nodemailer.createTransport({
-      service: "gmail",
+      service: "Gmail",
       auth: {
         user: process.env.DB_TOM_MAIL,
         pass: process.env.DB_TOM_PASSWORD,

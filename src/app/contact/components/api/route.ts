@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     });
     let mailOptions = {
       from: "thomasdasilva010@gmail.com",
-      to: "contact@tds-coachingdevie.fr",
+      to: "thomasdasilva010@gmail.com",
       subject: object,
       html: `<!DOCTYPE html>
                         <html lang="fr">

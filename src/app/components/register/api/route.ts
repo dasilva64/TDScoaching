@@ -62,13 +62,13 @@ export async function POST(request: NextRequest) {
         validator.escape(password.trim()),
         saltRounds
       );
-      let token = jwt.sign(
+      /* let token = jwt.sign(
         { user: validator.escape(email.trim()) },
         process.env.SECRET_TOKEN_REGISTER as string
-      );
+      ); */
       let currentDate = new Date();
       let registerTokenObject = {
-        token: token,
+        token: "token",
         limitDate: currentDate.setDate(currentDate.getDate() + 1),
       };
       let UserCreate = await prisma.user.create({
@@ -152,13 +152,13 @@ export async function POST(request: NextRequest) {
               validator.escape(password.trim()),
               saltRounds
             );
-            let token = jwt.sign(
+            /*  let token = jwt.sign(
               { user: validator.escape(email.trim()) },
               process.env.SECRET_TOKEN_REGISTER as string
-            );
+            ); */
             let currentDate = new Date();
             let registerTokenObject = {
-              token: token,
+              token: "token",
               limitDate: currentDate.setDate(currentDate.getDate() + 1),
             };
             let UserCreate = await prisma.user.create({

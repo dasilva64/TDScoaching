@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
         accessToken: accessToken as string,
       },
       tls: {
-        rejectUnauthorized: true,
+        rejectUnauthorized: false,
       },
     });
 

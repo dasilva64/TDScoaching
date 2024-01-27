@@ -46,12 +46,19 @@ export async function POST(request: NextRequest) {
       where: { mail: validator.escape(email.trim()), status: true },
     }); */
     let smtpTransport = nodemailer.createTransport({
-      service: "gmail",
+      service: "Gmail",
       auth: {
         user: process.env.DB_TOM_MAIL,
         pass: process.env.DB_TOM_PASSWORD,
       },
     });
+    /* let smtpTransport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SECRET_SMTP_EMAIL,
+        pass: process.env.SECRET_SMTP_PASSWORD,
+      },
+    }); */
     let mailOptions = {
       from: "thomasdasilva010@gmail.com",
       to: "thomasdasilva010@gmail.com",

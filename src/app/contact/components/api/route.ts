@@ -97,13 +97,13 @@ export async function POST(request: NextRequest) {
     });
     console.log(user);
 
-    /* let smtpTransport = nodemailer.createTransport({
+    let smtpTransport = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.SECRET_SMTP_EMAIL,
-        pass: process.env.SECRET_SMTP_PASSWORD,
+        user: process.env.DB_TOM_MAIL,
+        pass: process.env.DB_TOM_PASSWORD,
       },
-    }); */
+    });
 
     /* let smtpTransport = nodemailer.createTransport({
       host: "smtp.ionos.com",
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
         user: process.env.SECRET_SMTP_EMAIL,
         pass: process.env.SECRET_SMTP_PASSWORD,
       },
-    });
+    });*/
     if (user === null) {
       let mailOptions = {
         from: "thomasdasilva010@gmail.com",
@@ -193,7 +193,7 @@ export async function POST(request: NextRequest) {
                           </html>`,
       };
       smtpTransport.sendMail(mailOptions);
-    } */
+    }
 
     return NextResponse.json({
       status: 200,

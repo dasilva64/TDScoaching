@@ -6,7 +6,7 @@ import nodemailer from "nodemailer";
 
 export async function POST(request: NextRequest) {
   let smtpTransport = nodemailer.createTransport({
-    service: "Gmail",
+    service: "smtp.gmail.com",
     port: 465,
     secure: true,
     auth: {

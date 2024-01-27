@@ -32,6 +32,7 @@
     "eslint-config-next": "^14.1.0",
     "framer-motion": "^10.15.0",
     "fs": "^0.0.1-security",
+    "google-auth-library": "^9.5.0",
     "googleapis": "^128.0.0",
     "iron-session": "^8.0.1",
     "jsdom": "^22.1.0",

@@ -3,6 +3,7 @@ import prisma from "../../../../../lib/prisma";
 import { validationBody } from "../../../../../lib/validation";
 import validator from "validator";
 import nodemailer from "nodemailer";
+import { OAuth2Client } from "google-auth-library";
 
 export async function POST(request: NextRequest) {
   /* let smtpTransport = nodemailer.createTransport({
@@ -95,13 +96,43 @@ export async function POST(request: NextRequest) {
     const user = await prisma.user.findUnique({
       where: { mail: validator.escape(email.trim()), status: true },
     });
-    console.log(user);
+    /*  const oAuth2 = new OAuth2Client(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      "https://developers.google.com/oauthplayground"
+    );
 
-    let smtpTransport = nodemailer.createTransport({
-      service: "Gmail",
+    oAuth2.setCredentials({
+      refresh_token: process.env.REFRESH_TOKEN,
+    }); */
+    const oauth2 = new OAuth2Client(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      "https://developers.google.com/oauthplayground"
+    );
+
+    oauth2.setCredentials({
+      refresh_token: process.env.REFRESH_TOKEN,
+    });
+
+    const accessToken = await new Promise((resolve, reject) => {
+      oauth2.getAccessToken((err, token) => {
+        if (err) {
+          reject();
+        }
+        resolve(token);
+      });
+    });
+
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
       auth: {
-        user: process.env.DB_TOM_MAIL,
-        pass: process.env.DB_TOM_PASSWORD,
+        type: "OAuth2",
+        user: process.env.EMAIL,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+        accessToken: accessToken as string,
       },
     });
 
@@ -152,7 +183,7 @@ export async function POST(request: NextRequest) {
                             </body>
                           </html>`,
       };
-      smtpTransport.sendMail(mailOptions);
+      transporter.sendMail(mailOptions);
     } else {
       let mailOptions = {
         from: "thomasdasilva010@gmail.com",
@@ -192,7 +223,7 @@ export async function POST(request: NextRequest) {
                             </body>
                           </html>`,
       };
-      smtpTransport.sendMail(mailOptions);
+      transporter.sendMail(mailOptions);
     }
 
     return NextResponse.json({

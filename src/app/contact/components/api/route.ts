@@ -42,10 +42,16 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   } else {
-    const user = await prisma.user.findUnique({
+    /* const user = await prisma.user.findUnique({
       where: { mail: validator.escape(email.trim()), status: true },
+    }); */
+    let smtpTransport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.DB_TOM_MAIL,
+        pass: process.env.DB_TOM_PASSWORD,
+      },
     });
-
     /* let smtpTransport = nodemailer.createTransport({
       host: "smtp.ionos.com",
       port: 465,

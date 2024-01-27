@@ -197,6 +197,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       status: 200,
+      body: user,
       message:
         "Merci de nous avoir contacter nous allons vous répondre le plus vite possible",
     });

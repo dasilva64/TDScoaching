@@ -38,6 +38,7 @@ const ContactForm = () => {
   );
 
   useEffect(() => {
+    console.log(data);
     if (data) {
       if (data.status === 200) {
         setInputFirstname("");

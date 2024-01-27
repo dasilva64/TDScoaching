@@ -150,9 +150,9 @@ export async function POST(NextRequest) {
       },
     });*/
     if (user === null) {
-      sendEmail({
+      await sendEmail({
         from: "thomasdasilva010@gmail.com",
-        to: "contact@tds-coachingdevie.fr",
+        to: "thomasdasilva010@gmail.com",
         subject: object,
         html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -190,9 +190,9 @@ export async function POST(NextRequest) {
       });
       //transporter.sendMail(mailOptions);
     } else {
-      sendEmail({
+      await sendEmail({
         from: "thomasdasilva010@gmail.com",
-        to: "contact@tds-coachingdevie.fr",
+        to: "thomasdasilva010@gmail.com",
         subject: object,
         html: `<!DOCTYPE html>
                           <html lang="fr">

@@ -3,6 +3,7 @@ import prisma from "../../../../../lib/prisma";
 import { validationBody } from "../../../../../lib/validation";
 import validator from "validator";
 import nodemailer from "nodemailer";
+import { google } from "googleapis";
 import { OAuth2Client } from "google-auth-library";
 
 export async function POST(request: NextRequest) {
@@ -105,24 +106,17 @@ export async function POST(request: NextRequest) {
     oAuth2.setCredentials({
       refresh_token: process.env.REFRESH_TOKEN,
     }); */
-    const oauth2 = new OAuth2Client(
+
+    const oauth2Client = new google.auth.OAuth2(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
       "https://developers.google.com/oauthplayground"
     );
-
-    oauth2.setCredentials({
+    oauth2Client.setCredentials({
       refresh_token: process.env.REFRESH_TOKEN,
     });
 
-    const accessToken = await new Promise((resolve, reject) => {
-      oauth2.getAccessToken((err, token) => {
-        if (err) {
-          reject();
-        }
-        resolve(token);
-      });
-    });
+    const accessToken = await oauth2Client.getAccessToken();
 
     let transporter = nodemailer.createTransport({
       service: "gmail",
@@ -133,6 +127,9 @@ export async function POST(request: NextRequest) {
         clientSecret: process.env.CLIENT_SECRET,
         refreshToken: process.env.REFRESH_TOKEN,
         accessToken: accessToken as string,
+      },
+      tls: {
+        rejectUnauthorized: true,
       },
     });
 

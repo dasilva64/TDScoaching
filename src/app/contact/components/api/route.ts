@@ -6,12 +6,12 @@ import nodemailer from "nodemailer";
 
 export async function POST(request: NextRequest) {
   let smtpTransport = nodemailer.createTransport({
-    service: "smtp.gmail.com",
+    service: "smtp.ionos.com",
     port: 465,
     secure: true,
     auth: {
-      user: process.env.DB_TOM_MAIL,
-      pass: process.env.DB_TOM_PASSWORD,
+      user: process.env.SECRET_SMTP_EMAIL,
+      pass: process.env.SECRET_SMTP_PASSWORD,
     },
   });
   let mailOptions = {

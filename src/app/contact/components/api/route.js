@@ -111,15 +111,15 @@ export async function POST(NextRequest) {
         refresh_token: process.env.REFRESH_TOKEN,
       });
 
-      const accessToken = await new Promise((resolve, reject) => {
+      /* const accessToken = await new Promise((resolve, reject) => {
         oauth2Client.getAccessToken((err, token) => {
           if (err) {
             reject("Failed to create access token :(");
           }
           resolve(token);
         });
-      });
-
+      }); */
+      const accessToken = await oauth2Client.getAccessToken();
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -131,7 +131,7 @@ export async function POST(NextRequest) {
           refreshToken: process.env.REFRESH_TOKEN,
         },
         tls: {
-          rejectUnauthorized: false
+          rejectUnauthorized: true
         }
       });
 

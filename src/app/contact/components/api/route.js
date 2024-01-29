@@ -153,7 +153,7 @@ export async function POST(NextRequest) {
     if (user === null) {
       let mailOptions = {
         from: "contact@tds-coachingdevie.fr",
-        to: "contact@tds-coachingdevie.fr",
+        to: "thomasdasilva010@gmail.com",
         subject: object,
         html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -193,7 +193,7 @@ export async function POST(NextRequest) {
     } else {
       let mailOptions = {
         from: "contact@tds-coachingdevie.fr",
-        to: "contact@tds-coachingdevie.fr",
+        to: "thomasdasilva010@gmail.com",
         subject: object,
         html: `<!DOCTYPE html>
                           <html lang="fr">

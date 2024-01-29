@@ -91,7 +91,7 @@ export async function POST(NextRequest) {
     const user = await prisma.user.findUnique({
       where: { mail: validator.escape(email.trim()), status: true },
     });
-    /*  const oAuth2 = new OAuth2Client(
+    /* const oAuth2 = new OAuth2Client(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
       "https://developers.google.com/oauthplayground"
@@ -99,7 +99,7 @@ export async function POST(NextRequest) {
 
     oAuth2.setCredentials({
       refresh_token: process.env.REFRESH_TOKEN,
-    }); */
+    });
     const createTransporter = async () => {
       const oauth2Client = new google.auth.OAuth2(
         process.env.CLIENT_ID,
@@ -111,14 +111,14 @@ export async function POST(NextRequest) {
         refresh_token: process.env.REFRESH_TOKEN,
       });
 
-      /* const accessToken = await new Promise((resolve, reject) => {
+      const accessToken = await new Promise((resolve, reject) => {
         oauth2Client.getAccessToken((err, token) => {
           if (err) {
             reject("Failed to create access token :(");
           }
           resolve(token);
         });
-      }); */
+      });
       const accessToken = await oauth2Client.getAccessToken();
       const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -140,17 +140,17 @@ export async function POST(NextRequest) {
     const sendEmail = async (emailOptions) => {
       let emailTransporter = await createTransporter();
       await emailTransporter.sendMail(emailOptions);
-    };
-    /* let smtpTransport = nodemailer.createTransport({
+    };*/
+    let smtpTransport = nodemailer.createTransport({
       host: "smtp.ionos.com",
       port: 465,
       auth: {
         user: process.env.SECRET_SMTP_EMAIL,
         pass: process.env.SECRET_SMTP_PASSWORD,
       },
-    });*/
+    });
     if (user === null) {
-      await sendEmail({
+      let mailOptions = {
         from: "contact@tds-coachingdevie.fr",
         to: "thomasdasilva010@gmail.com",
         subject: object,
@@ -187,10 +187,10 @@ export async function POST(NextRequest) {
                               </div>
                             </body>
                           </html>`,
-      });
-      //transporter.sendMail(mailOptions);
+      };
+      smtpTransport.sendMail(mailOptions);
     } else {
-      await sendEmail({
+      let mailOptions = {
         from: "contact@tds-coachingdevie.fr",
         to: "thomasdasilva010@gmail.com",
         subject: object,
@@ -227,8 +227,8 @@ export async function POST(NextRequest) {
                               </div>
                             </body>
                           </html>`,
-      });
-      //transporter.sendMail(mailOptions);
+      };
+      smtpTransport.sendMail(mailOptions);
     }
 
     return NextResponse.json({

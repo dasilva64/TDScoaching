@@ -141,9 +141,10 @@ export async function POST(NextRequest) {
       let emailTransporter = await createTransporter();
       await emailTransporter.sendMail(emailOptions);
     };*/
-    let smtpTransport = await nodemailer.createTransport({
+    let smtpTransport = nodemailer.createTransport({
       host: "smtp.ionos.com",
       port: 465,
+      secure: true,
       auth: {
         user: process.env.SECRET_SMTP_EMAIL,
         pass: process.env.SECRET_SMTP_PASSWORD,

@@ -141,7 +141,7 @@ export async function POST(NextRequest) {
       let emailTransporter = await createTransporter();
       await emailTransporter.sendMail(emailOptions);
     };*/
-    let smtpTransport = nodemailer.createTransport({
+    let smtpTransport = await nodemailer.createTransport({
       host: "smtp.ionos.com",
       port: 465,
       auth: {
@@ -188,7 +188,7 @@ export async function POST(NextRequest) {
                             </body>
                           </html>`,
       };
-      smtpTransport.sendMail(mailOptions);
+      await smtpTransport.sendMail(mailOptions);
     } else {
       let mailOptions = {
         from: "contact@tds-coachingdevie.fr",
@@ -228,7 +228,7 @@ export async function POST(NextRequest) {
                             </body>
                           </html>`,
       };
-      smtpTransport.sendMail(mailOptions);
+      await smtpTransport.sendMail(mailOptions);
     }
 
     return NextResponse.json({

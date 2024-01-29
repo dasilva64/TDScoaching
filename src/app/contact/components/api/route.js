@@ -152,7 +152,7 @@ export async function POST(NextRequest) {
     if (user === null) {
       await sendEmail({
         from: "contact@tds-coachingdevie.fr",
-        to: "thomasdasilva010@gmail.com",
+        to: "contact@tds-coachingdevie.fr",
         subject: object,
         html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -192,7 +192,7 @@ export async function POST(NextRequest) {
     } else {
       await sendEmail({
         from: "contact@tds-coachingdevie.fr",
-        to: "thomasdasilva010@gmail.com",
+        to: "contact@tds-coachingdevie.fr",
         subject: object,
         html: `<!DOCTYPE html>
                           <html lang="fr">

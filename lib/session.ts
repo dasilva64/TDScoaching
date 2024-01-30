@@ -13,16 +13,22 @@ export const defaultSession: SessionData = {
 };
 
 export const sessionOptions: SessionOptions = {
-  password: "complex_password_at_least_32_characters_long",
-  cookieName: "iron-examples-app-router-client-component-route-handler-swr",
+  password: {
+    1: process.env.IRON_PASSWORD!,
+    2: process.env.IRON_PASSWORD_TWO!,
+  },
+  cookieName: "iron-session-cookie-name-connect",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
     maxAge: undefined,
   },
 };
 export const sessionOptionsRemeber: SessionOptions = {
-  password: "complex_password_at_least_32_characters_long",
-  cookieName: "iron-examples-app-router-client-component-route-handler-swr",
+  password: {
+    1: process.env.IRON_PASSWORD!,
+    2: process.env.IRON_PASSWORD_TWO!,
+  },
+  cookieName: "iron-session-cookie-name-connect",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 30,

@@ -118,12 +118,16 @@ const ModalUserPasswordData = () => {
       }
     } else {
       if (validPasswordInput === false) {
-        setErrorMessagePassword("Mot de passe : ne doit pas être vide");
+        if (passwordInput.length === 0) {
+          setErrorMessagePassword("Mot de passe : ne peut pas être vide");
+        }
       }
       if (validPasswordComfirmInput === false) {
-        setErrorMessagePasswordComfirm(
-          "Comfirmation mot de passe : ne doit pas être vide"
-        );
+        if (passwordComfirmInput.length === 0) {
+          setErrorMessagePasswordComfirm(
+            "Comfirmation mot de passe : ne peut pas être vide"
+          );
+        }
       }
     }
   };

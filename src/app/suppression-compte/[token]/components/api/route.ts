@@ -95,15 +95,17 @@ export async function POST(request: NextRequest) {
                   );
                 } else {
                   let smtpTransport = nodemailer.createTransport({
-                    service: "Gmail",
+                    host: "smtp.ionos.fr",
+                    port: 465,
+                    secure: true,
                     auth: {
                       user: process.env.SECRET_SMTP_EMAIL,
                       pass: process.env.SECRET_SMTP_PASSWORD,
                     },
                   });
                   let mailOptions = {
-                    from: process.env.SECRET_SMTP_EMAIL,
-                    to: process.env.SECRET_SMTP_EMAIL,
+                    from: "contact@tds-coachingdevie.fr",
+                    to: "contact@tds-coachingdevie.fr",
                     subject: "Suppression de compte",
                     html: `<!DOCTYPE html>
                                 <html lang="fr">
@@ -137,7 +139,7 @@ export async function POST(request: NextRequest) {
                                   </body>
                                 </html>`,
                   };
-                  smtpTransport.sendMail(mailOptions);
+                  await smtpTransport.sendMail(mailOptions);
                   const deleteUser = await prisma.user.delete({
                     where: { id: user.id },
                   });

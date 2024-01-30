@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
             process.env.SECRET_TOKEN_DELETE as string
           );
           let limitDate = new Date();
-          limitDate.setMinutes(limitDate.getMinutes() + 1);
+          limitDate.setDate(limitDate.getDate() + 1);
 
           let editUser = await prisma.user.update({
             where: { id: session.id },
@@ -91,15 +91,17 @@ export async function POST(request: NextRequest) {
             );
           } else {
             let smtpTransport = nodemailer.createTransport({
-              service: "Gmail",
+              host: "smtp.ionos.fr",
+              port: 465,
+              secure: true,
               auth: {
                 user: process.env.SECRET_SMTP_EMAIL,
                 pass: process.env.SECRET_SMTP_PASSWORD,
               },
             });
             let mailOptions = {
-              from: process.env.SECRET_SMTP_EMAIL,
-              to: process.env.SECRET_SMTP_EMAIL,
+              from: "contact@tds-coachingdevie.fr",
+              to: editUser.mail,
               subject: "Suppression de compte",
               html: `<!DOCTYPE html>
                               <html lang="fr">
@@ -127,13 +129,14 @@ export async function POST(request: NextRequest) {
                                         <p style="display: flex"><img style="margin-right: 5px" src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Ficone%2Ftriangle.png&w=750&q=75" width="20px" height="20px" />Attention vous ne pourrez plus revenir en arrière après cette action.</p>
                                       </div>
                                       <p style="margin: 0px 0px 40px 0px">Pour supprimer votre compte veuillez cliquer sur le bouton ci-dessous.</p>
-                                      <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="http://localhost:3000/suppression-compte/${token}" target="_blank">Supprimer votre compte</a>
+                                      <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="https://tdscoaching.fr/suppression-compte/${token}" target="_blank">Supprimer votre compte</a>
+                                      <p style="margin-top: 20px">Ce lien est valide pendant 24h, au-delà de ce temps il ne sera plus disponible et vous devrez refaire une demande de suppression de compte</p>
                                     </div>
                                   </div>
                                 </body>
                               </html>`,
             };
-            smtpTransport.sendMail(mailOptions);
+            await smtpTransport.sendMail(mailOptions);
             return NextResponse.json({
               status: 200,
               message:

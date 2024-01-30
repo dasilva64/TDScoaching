@@ -10,12 +10,31 @@ import { SessionData, sessionOptions } from "../../../../../../lib/session";
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   if (session.isLoggedIn === true) {
+    let user = await prisma.user.findUnique({
+      where: { id: session.id },
+    });
+    if (user === null) {
+      session.destroy();
+      return NextResponse.json(
+        {
+          status: 400,
+          message:
+            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+        },
+        { status: 400 }
+      );
+    }
+    let userObject = {
+      role: user.role,
+      id: user.id,
+    };
     return NextResponse.json(
       {
-        status: 400,
-        message: "Vous êtes déjà connecté, veuillez réessayer",
+        status: 200,
+        body: userObject,
+        message: "Vous êtes déjà connecté",
       },
-      { status: 400 }
+      { status: 200 }
     );
   } else {
     const { token } = (await request.json()) as {

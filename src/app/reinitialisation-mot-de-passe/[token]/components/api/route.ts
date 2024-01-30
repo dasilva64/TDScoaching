@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
                   {
                     status: 404,
                     message:
-                      "La midification du mot de passe a échoué, veuillez réessayer",
+                      "La modification du mot de passe a échoué, veuillez réessayer",
                   },
                   { status: 404 }
                 );

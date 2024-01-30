@@ -22,9 +22,19 @@ const useDeleteAccount = (token: string) => {
     [`/suppression-compte/[token]/components/api`, token],
     ([url, token]) => fetchDeleteAccount(url, token)
   );
+  const pathname = usePathname();
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
+        if (pathname) {
+          let split = pathname.split("/");
+          if (split[1] === "utilisateur") {
+            router.push("/");
+          }
+          if (pathname === "/profile" || pathname === "/utilisateurs") {
+            router.push("/");
+          }
+        }
         dispatch({
           type: "auth/logout",
         });
@@ -35,9 +45,6 @@ const useDeleteAccount = (token: string) => {
             type: "success",
           },
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -46,13 +53,11 @@ const useDeleteAccount = (token: string) => {
             type: "error",
           },
         });
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
+        router.push("/");
         //router.push("/");
       }
     }
-  }, [data, dispatch, router]);
+  }, [data, dispatch, pathname, router]);
   return { data, isLoading, error };
 };
 

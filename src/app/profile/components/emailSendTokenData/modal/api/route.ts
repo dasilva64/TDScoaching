@@ -99,15 +99,17 @@ export async function POST(request: NextRequest) {
               );
             } else {
               let smtpTransport = nodemailer.createTransport({
-                service: "Gmail",
+                host: "smtp.ionos.fr",
+                port: 465,
+                secure: true,
                 auth: {
                   user: process.env.SECRET_SMTP_EMAIL,
                   pass: process.env.SECRET_SMTP_PASSWORD,
                 },
               });
               let mailOptions = {
-                from: process.env.SECRET_SMTP_EMAIL,
-                to: process.env.SECRET_SMTP_EMAIL,
+                from: "contact@tds-coachingdevie.fr",
+                to: editUser.mail,
                 subject: "Validation de votre nouvelle adresse email",
                 html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -129,13 +131,12 @@ export async function POST(request: NextRequest) {
                                   <h2 style="text-align: center">Validation de votre adresse email</h2>
                                   <p style="margin-bottom: 20px">Pour activer cette addresse email, veuillez entrer le code ci-dessous.</p>
                                   <p style="width: 100px; margin: auto; padding: 20px; background: white; border-radius: 10px">${random}</p>
-                                  <p style="margin-top: 20px">Ce lien est valide pendant 48h, au dela de ce temps il ne sera plus disponible et votre compte sera supprimé</p>
                                 </div>
                               </div>
                             </body>
                           </html>`,
               };
-              smtpTransport.sendMail(mailOptions);
+              await smtpTransport.sendMail(mailOptions);
               let copyEditEmail: any = editUser.editEmail;
               let userObject = {
                 firstname: editUser.firstname,

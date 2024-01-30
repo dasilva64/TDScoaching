@@ -18,10 +18,10 @@ async function getSession() {
 }
 
 const Profile = async () => {
-  /* const session = await getSession();
+  const session = await getSession();
   if (!session.isLoggedIn) {
     redirect("/");
-  } */
+  }
   return (
     <>
       <NoScript />

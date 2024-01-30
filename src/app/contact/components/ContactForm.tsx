@@ -32,48 +32,71 @@ const ContactForm = () => {
   const [objectInputError, setObjectInputError] = useState<string>("");
   const [messageInputError, setMessageInputError] = useState<string>("");
 
-  const { trigger, data, reset } = useSWRMutation(
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/contact/components/api",
     fetchPost
   );
 
   useEffect(() => {
-    console.log(data);
+    const clearState = () => {
+      setInputFirstname("");
+      setInputLastname("");
+      setInputEmail("");
+      setInputObject("");
+      setInputMessage("");
+      setInputPseudo("");
+      setValidInputFirstname(false);
+      setValidInputLastname(false);
+      setValidInputEmail(false);
+      setValidInputObject(false);
+      setValidInputMessage(false);
+      setFirstnameInputError("");
+      setLastnameInputError("");
+      setEmailInputError("");
+      setObjectInputError("");
+      setMessageInputError("");
+    };
     if (data) {
       if (data.status === 200) {
-        setInputFirstname("");
-        setInputLastname("");
-        setInputEmail("");
-        setInputObject("");
-        setInputMessage("");
+        clearState();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
         reset();
       } else if (data.status === 400) {
-        data.message.forEach((element: string) => {
-          if (element[0] === "firstname") {
-            setFirstnameInputError(element[1]);
-          }
-          if (element[0] === "lastname") {
-            setLastnameInputError(element[1]);
-          }
-          if (element[0] === "email") {
-            setEmailInputError(element[1]);
-          }
-          if (element[0] === "object") {
-            setObjectInputError(element[1]);
-          }
-          if (element[0] === "message") {
-            setMessageInputError(element[1]);
-          }
-        });
-      } else {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: data.message },
-        });
+        if (data.type === "validation") {
+          data.message.forEach((element: string) => {
+            if (element[0] === "firstname") {
+              setValidInputFirstname(false);
+              setFirstnameInputError(element[1]);
+            }
+            if (element[0] === "lastname") {
+              setValidInputLastname(false);
+              setLastnameInputError(element[1]);
+            }
+            if (element[0] === "email") {
+              setValidInputEmail(false);
+              setEmailInputError(element[1]);
+            }
+            if (element[0] === "object") {
+              setValidInputObject(false);
+              setObjectInputError(element[1]);
+            }
+            if (element[0] === "message") {
+              setValidInputMessage(false);
+              setMessageInputError(element[1]);
+            }
+          });
+          reset();
+        } else {
+          clearState();
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }
       }
     }
   }, [data, dispatch, reset]);
@@ -290,14 +313,43 @@ const ContactForm = () => {
           }}
         />
         <div>
-          <input
-            className={`${styles.contact__main__container__form__submit} modalOpen`}
-            type="submit"
-            value="Envoyer"
-          />
-          <div
-            className={styles.contact__main__container__form__input__error}
-          ></div>
+          {isMutating && (
+            <>
+              <button
+                disabled
+                className={styles.contact__main__container__form__submit__load}
+              >
+                <span
+                  className={
+                    styles.contact__main__container__form__submit__load__span
+                  }
+                >
+                  Chargement
+                </span>
+
+                <div
+                  className={
+                    styles.contact__main__container__form__submit__load__arc
+                  }
+                >
+                  <div
+                    className={
+                      styles.contact__main__container__form__submit__load__arc__circle
+                    }
+                  ></div>
+                </div>
+              </button>
+            </>
+          )}
+          {isMutating === false && (
+            <>
+              <input
+                className={`${styles.contact__main__container__form__submit} modalOpen`}
+                type="submit"
+                value="Envoyer"
+              />
+            </>
+          )}
         </div>
       </form>
     </>

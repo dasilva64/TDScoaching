@@ -11,12 +11,13 @@ import prisma from "../../../../../lib/prisma";
 export async function GET(request: Request) {
   const origin = request.headers.get("origin");
   console.log(origin);
+
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   let objectSession = {
     session: session,
     origin: request,
     test: "test",
-    request: Request,
+    url: request.url,
   };
   return NextResponse.json(objectSession);
   if (session.isLoggedIn !== true) {

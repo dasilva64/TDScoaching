@@ -618,6 +618,9 @@ const Content = () => {
   const { displayModalLogin } = useSelector(
     (state: RootState) => state.ModalLogin
   );
+  const { displayModalRegister } = useSelector(
+    (state: RootState) => state.ModalRegister
+  );
 
   const { displayModalEditFirstname } = useSelector(
     (state: RootState) => state.ModalEditFirstname
@@ -767,7 +770,8 @@ const Content = () => {
       displayModalEditEmail === true ||
       displayModalCancelEmail === true ||
       displayModalDeleteAccount === true ||
-      displayModalForgot === true
+      displayModalForgot === true ||
+      displayModalRegister === true
     ) {
       return `${styles.line__hide}`;
     } else {
@@ -795,7 +799,8 @@ const Content = () => {
           displayModalEditEmail === true ||
           displayModalCancelEmail === true ||
           displayModalDeleteAccount === true ||
-          displayModalForgot === true
+          displayModalForgot === true ||
+          displayModalRegister === true
         ) {
           /* header.style.opacity = "0.02";
           mainDiv.style.opacity = "0.02";
@@ -825,6 +830,7 @@ const Content = () => {
     displayModalCancelEmail,
     displayModalDeleteAccount,
     displayModalForgot,
+    displayModalRegister,
   ]);
 
   if (typeof window !== "undefined") {

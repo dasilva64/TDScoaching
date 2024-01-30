@@ -98,6 +98,7 @@ export async function POST(request: NextRequest) {
         let smtpTransport = nodemailer.createTransport({
           host: "smtp.ionos.fr",
           port: 465,
+          secure: true,
           auth: {
             user: process.env.SECRET_SMTP_EMAIL,
             pass: process.env.SECRET_SMTP_PASSWORD,
@@ -126,8 +127,8 @@ export async function POST(request: NextRequest) {
                               <h1 style="text-align: center">tds coaching</h1>
                               <h2 style="text-align: center">Validation de votre compte</h2>
                               <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
-                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="http://localhost:3000/email-validation/${token}" target="_blank">Vérifier mon compte</a>
-                              <p style="margin-top: 20px">Ce lien est valide pendant 48h, au dela de ce temps il ne sera plus disponible et votre compte sera supprimé</p>
+                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${token}" target="_blank">Vérifier mon compte</a>
+                              <p style="margin-top: 20px">Ce lien est valide pendant 24h, au dela de ce temps il ne sera plus disponible et votre compte sera supprimé</p>
                             </div>
                           </div>
                         </body>
@@ -218,7 +219,7 @@ export async function POST(request: NextRequest) {
                                     <h1 style="text-align: center">tds coaching</h1>
                                     <h2 style="text-align: center">Validation de votre compte</h2>
                                     <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
-                                    <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="http://localhost:3000/email-validation/${token}" target="_blank">Vérifier mon compte</a>
+                                    <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${token}" target="_blank">Vérifier mon compte</a>
                                     <p style="margin-top: 20px">Ce lien est valide pendant 24h, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé.</p>
                                   </div>
                                 </div>

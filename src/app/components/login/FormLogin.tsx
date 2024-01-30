@@ -71,6 +71,7 @@ const FormLogin = () => {
       if (data.status === 200) {
         reset();
         if (isMutating === false) {
+          dispatch({ type: "ModalLogin/close" });
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: data.message },
@@ -80,17 +81,33 @@ const FormLogin = () => {
       } else if (data.status === 400) {
         if (data.type === "validation") {
           reset();
+          clearState();
           data.message.forEach((element: string) => {
             if (element[0] === "email") {
               dispatch({
                 type: "flash/storeFlashMessage",
-                payload: { type: "success", flashMessage: "L'addresse e" },
+                payload: {
+                  type: "success",
+                  flashMessage: "L'addresse email doit être un format valide",
+                },
               });
             }
           });
+        } else {
+          reset();
+          clearState();
+          if (isMutating === false) {
+            dispatch({ type: "ModalLogin/close" });
+            dispatch({ type: "ModalRegister/open" });
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "error", flashMessage: data.message },
+            });
+          }
         }
       } else {
         reset();
+        clearState();
         if (isMutating === false) {
           dispatch({
             type: "flash/storeFlashMessage",
@@ -119,7 +136,7 @@ const FormLogin = () => {
     setOtherEmail("");
   };
 
-  const {
+  /* const {
     data: dataReSendCode,
     trigger: triggerReSendCode,
     reset: resetReSendCode,
@@ -147,7 +164,7 @@ const FormLogin = () => {
         }
       }
     }
-  }, [dataReSendCode, dispatch, isMutatingReSendCode, resetReSendCode]);
+  }, [dataReSendCode, dispatch, isMutatingReSendCode, resetReSendCode]); */
 
   const closeForm = () => {
     clearState();
@@ -214,11 +231,9 @@ const FormLogin = () => {
               setValidPasswordInput(false);
               setIsLoading(false);
               clearState();
-              dispatch({
-                type: "auth/clearFlash",
-              });
-              dispatch({ type: "ModalRegister/open" });
+
               dispatch({ type: "ModalLogin/close" });
+              dispatch({ type: "ModalRegister/open" });
               resetLogin();
             }, 1000);
           } else if (

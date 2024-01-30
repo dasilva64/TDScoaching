@@ -9,7 +9,6 @@ import {
 import { validationBody } from "../../../../../../lib/validation";
 import validator from "validator";
 import bcrypt from "bcrypt";
-import nodemailer from "nodemailer";
 import prisma from "../../../../../../lib/prisma";
 
 export async function POST(request: NextRequest) {
@@ -42,12 +41,12 @@ export async function POST(request: NextRequest) {
   } else {
     const user = await prisma.user.findUnique({
       where: {
-        mail: validator.escape(email),
+        mail: validator.escape(email.trim()),
       },
     });
     if (user) {
       const decode = await bcrypt.compare(
-        validator.escape(password),
+        validator.escape(password.trim()),
         user.password
       );
       if (decode === false) {

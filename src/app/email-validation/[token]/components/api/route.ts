@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import validator from "validator";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import prisma from "../../../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getIronSession } from "iron-session";
@@ -68,7 +66,7 @@ export async function POST(request: NextRequest) {
                 {
                   status: 404,
                   message:
-                    "Le lien de validation de votre est plus valide, vous pouvez un créer un nouveau compte",
+                    "Le lien de validation de votre n'est plus valide, vous pouvez créer un nouveau compte",
                 },
                 { status: 404 }
               );

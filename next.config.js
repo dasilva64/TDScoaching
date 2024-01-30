@@ -4,7 +4,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-/* const cspHeader = `
+const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
@@ -16,11 +16,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
     frame-ancestors 'none';
     block-all-mixed-content;
     upgrade-insecure-requests;
-` */
+`
 
 const nextConfig = {
   productionBrowserSourceMaps: true,
-  /* async headers() {
+  async headers() {
     return [
       {
         source: '/(.*)',
@@ -29,30 +29,10 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: cspHeader.replace(/\n/g, ''),
           },
-          { key: "Access-Control-Allow-Origin", value: "*" },
-          { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-          { key: "Access-Control-Allow-Headers", value: "Accept, Content-Type" },
         ],
-      }, */
-      /* {
-        // matching all API routes
-        source: "/",
-        headers: [
-          { key: "Access-Control-Allow-Origin", value: "https://www.tdscoaching.fr" },
-          { key: "Vary", value: "Origin" },
-          { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-          { key: "Access-Control-Allow-Headers", value: "Accept, Content-Type" },
-        ]
-      }, {
-        source: "/qui-suis-je",
-        headers: [
-          { key: "Access-Control-Allow-Origin", value: "https://www.tdscoaching.fr" },
-          { key: "Vary", value: "Origin" },
-          { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-          { key: "Access-Control-Allow-Headers", value: "Accept, Content-Type" },
-        ]
-
-      } */
+      },
+    ]
+  }
    /*  ]
   } */
     /* externals: {
@@ -61,6 +41,7 @@ const nextConfig = {
         html2canvas: "html2canvas",
         dompurify: "dompurify"
       } */
+      
 }
 
 module.exports = withBundleAnalyzer(nextConfig)

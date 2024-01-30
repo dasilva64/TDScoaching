@@ -8,7 +8,7 @@ import {
 } from "../../../../../lib/session";
 import prisma from "../../../../../lib/prisma";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   const origin = request.headers.get("origin");
   console.log(origin);
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);

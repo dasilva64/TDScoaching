@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   let objectSession = {
     session: session,
-    origin: origin,
+    origin: request.headers,
   };
   return NextResponse.json(objectSession);
   if (session.isLoggedIn !== true) {

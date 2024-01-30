@@ -321,29 +321,7 @@ const ModalUserLastnameData = () => {
                     {errorMessageLastname}
                   </FormHelperText>
                 </FormControl>
-                {/* <TextField
-                  autoFocus
-                  value={lastnameInput}
-                  style={{ margin: "20px 0px" }}
-                  id={"lastname"}
-                  label={"Nom de famille"}
-                  variant="standard"
-                  type={"text"}
-                  placeholder={"Entrez votre nom de famille"}
-                  FormHelperTextProps={{ style: { color: "red" } }}
-                  onChange={(e) => {
-                    handlerInput(
-                      e,
-                      "lastname",
-                      /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
-                      setValidLastnameInput,
-                      setErrorMessageLastname,
-                      setLastnameInput,
-                      "Nom de famille : 3 lettres minimum"
-                    );
-                  }}
-                  helperText={errorMessageLastname}
-                /> */}
+
                 <input
                   type="text"
                   name="pseudo"

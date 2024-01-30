@@ -39,7 +39,7 @@ export const middleware = async (request: NextRequest) => {
   } */
   const origin = request.headers.get("origin");
   console.log(origin);
-  if ((origin && !allowOrigin.includes(origin)) || !origin) {
+  if (origin && !allowOrigin.includes(origin)) {
     return new NextResponse(origin, {
       status: 200,
     });

@@ -34,7 +34,7 @@ export const middleware = async (request: NextRequest) => {
 
     return Response.redirect(`${request.nextUrl.origin}${redirectTo}`, 302);
   } */
-  const origin = request.headers.get("host");
+  /* const origin = request.headers.get("host");
   if ((origin && !allowOrigin.includes(origin)) || !origin) {
     return new NextResponse(null, {
       status: 400,
@@ -43,84 +43,84 @@ export const middleware = async (request: NextRequest) => {
         "content-type": "text/plain",
       },
     });
-  } else {
-    const res = NextResponse.next();
-    const session = await getIronSession<SessionData>(request, res, {
-      cookieName: "iron-examples-app-router-client-component-route-handler-swr",
-      password: "complex_password_at_least_32_characters_long",
-      cookieOptions: {
-        secure: process.env.NODE_ENV === "production",
-      },
-    });
-    let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
-    let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
+  } else { */
+  const res = NextResponse.next();
+  const session = await getIronSession<SessionData>(request, res, {
+    cookieName: "iron-examples-app-router-client-component-route-handler-swr",
+    password: "complex_password_at_least_32_characters_long",
+    cookieOptions: {
+      secure: process.env.NODE_ENV === "production",
+    },
+  });
+  let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
+  let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
 
-    if (session.isLoggedIn || Object.keys(session).length !== 0) {
-      if (
-        request.nextUrl.pathname.startsWith("/utilisateurs") ||
-        request.nextUrl.pathname.startsWith("/meetings") ||
-        request.nextUrl.pathname.startsWith("/meetingAdmin") ||
-        regex.test(request.nextUrl.pathname)
-      ) {
-        if (session.role !== "ROLE_ADMIN") {
-          return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
-        }
+  if (session.isLoggedIn || Object.keys(session).length !== 0) {
+    if (
+      request.nextUrl.pathname.startsWith("/utilisateurs") ||
+      request.nextUrl.pathname.startsWith("/meetings") ||
+      request.nextUrl.pathname.startsWith("/meetingAdmin") ||
+      regex.test(request.nextUrl.pathname)
+    ) {
+      if (session.role !== "ROLE_ADMIN") {
+        return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
       }
+    }
 
-      if (
-        request.nextUrl.pathname.startsWith("/rendez-vous") ||
-        regexTwo.test(request.nextUrl.pathname)
-      ) {
-        if (session.role !== "ROLE_USER") {
-          return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
-        }
+    if (
+      request.nextUrl.pathname.startsWith("/rendez-vous") ||
+      regexTwo.test(request.nextUrl.pathname)
+    ) {
+      if (session.role !== "ROLE_USER") {
+        return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
       }
     }
-    let regexDelete = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-    let regexValid = /\/email-validation\/[0-9A-Za-z-]+/g;
-    let regexReset = /\/reinitialisation-mot-de-passe\/[0-9A-Za-z-]+/g;
-    if (!session.isLoggedIn || Object.keys(session).length === 0) {
-      if (
-        request.nextUrl.pathname.startsWith("/") ||
-        request.nextUrl.pathname.startsWith("/coaching-de-vie") ||
-        request.nextUrl.pathname.startsWith("/contact") ||
-        request.nextUrl.pathname.startsWith(
-          "/conditions-generales-utilisations"
-        ) ||
-        request.nextUrl.pathname.startsWith("/mentions-legales") ||
-        request.nextUrl.pathname.startsWith("/politique-de-confidentialite") ||
-        request.nextUrl.pathname.startsWith("/qui-suis-je") ||
-        request.nextUrl.pathname.startsWith("/tarif") ||
-        regexDelete.test(request.nextUrl.pathname) ||
-        regexValid.test(request.nextUrl.pathname) ||
-        regexReset.test(request.nextUrl.pathname)
-      ) {
-        return res;
-      }
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-    if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
-      if (
-        request.nextUrl.pathname.startsWith("/") ||
-        request.nextUrl.pathname.startsWith("/coaching-de-vie") ||
-        request.nextUrl.pathname.startsWith("/contact") ||
-        request.nextUrl.pathname.startsWith(
-          "/conditions-generales-utilisations"
-        ) ||
-        request.nextUrl.pathname.startsWith("/mentions-legales") ||
-        request.nextUrl.pathname.startsWith("/politique-de-confidentialite") ||
-        request.nextUrl.pathname.startsWith("/qui-suis-je") ||
-        request.nextUrl.pathname.startsWith("/tarif") ||
-        regexDelete.test(request.nextUrl.pathname) ||
-        regexValid.test(request.nextUrl.pathname) ||
-        regexReset.test(request.nextUrl.pathname)
-      ) {
-        return res;
-      }
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-    return res;
   }
+  let regexDelete = /\/suppression-compte\/[0-9A-Za-z-]+/g;
+  let regexValid = /\/email-validation\/[0-9A-Za-z-]+/g;
+  let regexReset = /\/reinitialisation-mot-de-passe\/[0-9A-Za-z-]+/g;
+  if (!session.isLoggedIn || Object.keys(session).length === 0) {
+    if (
+      request.nextUrl.pathname.startsWith("/") ||
+      request.nextUrl.pathname.startsWith("/coaching-de-vie") ||
+      request.nextUrl.pathname.startsWith("/contact") ||
+      request.nextUrl.pathname.startsWith(
+        "/conditions-generales-utilisations"
+      ) ||
+      request.nextUrl.pathname.startsWith("/mentions-legales") ||
+      request.nextUrl.pathname.startsWith("/politique-de-confidentialite") ||
+      request.nextUrl.pathname.startsWith("/qui-suis-je") ||
+      request.nextUrl.pathname.startsWith("/tarif") ||
+      regexDelete.test(request.nextUrl.pathname) ||
+      regexValid.test(request.nextUrl.pathname) ||
+      regexReset.test(request.nextUrl.pathname)
+    ) {
+      return res;
+    }
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+  if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
+    if (
+      request.nextUrl.pathname.startsWith("/") ||
+      request.nextUrl.pathname.startsWith("/coaching-de-vie") ||
+      request.nextUrl.pathname.startsWith("/contact") ||
+      request.nextUrl.pathname.startsWith(
+        "/conditions-generales-utilisations"
+      ) ||
+      request.nextUrl.pathname.startsWith("/mentions-legales") ||
+      request.nextUrl.pathname.startsWith("/politique-de-confidentialite") ||
+      request.nextUrl.pathname.startsWith("/qui-suis-je") ||
+      request.nextUrl.pathname.startsWith("/tarif") ||
+      regexDelete.test(request.nextUrl.pathname) ||
+      regexValid.test(request.nextUrl.pathname) ||
+      regexReset.test(request.nextUrl.pathname)
+    ) {
+      return res;
+    }
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+  return res;
+  //}
 
   //const { user } = session;
 

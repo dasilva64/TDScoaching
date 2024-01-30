@@ -194,18 +194,6 @@ export const config = {
     "/meetingAdmin",
     "/rendez-vous",
     "/utilisateur/:path*",
-    "/suppression-compte",
-    "/",
-    "/coaching-de-vie",
-    "/contact",
-    "/conditions-generales-utilisations",
-    "/email-validation/:path*",
-    "/mentions-legales",
-    "/politique-de-confidentialite",
-    "/qui-suis-je",
-    "/reinitialisation-mot-de-passe/:path*",
-    "/suppression-compte/:path*",
-    "/tarif",
   ],
 };
 

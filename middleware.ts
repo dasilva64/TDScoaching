@@ -19,9 +19,23 @@ const allowOrigin = [
   "www.tdscoaching.fr/",
   "https://tdscoaching.fr",
   "https://td-scoaching.vercel.app",
+  "https://td-scoaching.vercel.app/",
   "https://www.td-scoaching.vercel.app",
+  "https://www.td-scoaching.vercel.app/",
   "https://www.tdscoaching.fr/",
   "https://tdscoaching.fr",
+  "https://td-scoaching-da-silvas-projects-8d267400.vercel.app",
+  "https://www.td-scoaching-da-silvas-projects-8d267400.vercel.app",
+  "https://td-scoaching-da-silvas-projects-8d267400.vercel.app/",
+  "https://www.td-scoaching-da-silvas-projects-8d267400.vercel.app/",
+  "https://td-scoaching-git-main-da-silvas-projects-8d267400.vercel.app",
+  "https://td-scoaching-git-main-da-silvas-projects-8d267400.vercel.app/",
+  "https://www.td-scoaching-git-main-da-silvas-projects-8d267400.vercel.app",
+  "https://www.td-scoaching-git-main-da-silvas-projects-8d267400.vercel.app/",
+  "https://td-scoaching-rg2gzxmmt-da-silvas-projects-8d267400.vercel.app",
+  "https://td-scoaching-rg2gzxmmt-da-silvas-projects-8d267400.vercel.app/",
+  "https://www.td-scoaching-rg2gzxmmt-da-silvas-projects-8d267400.vercel.app/",
+  "https://www.td-scoaching-rg2gzxmmt-da-silvas-projects-8d267400.vercel.app",
 ];
 
 export const middleware = async (request: NextRequest) => {

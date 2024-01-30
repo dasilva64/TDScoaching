@@ -22,7 +22,13 @@ export async function POST(NextRequest) {
         type: "validation",
         message: arrayMessageError,
       },
-      { status: 400 }
+      { status: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          "Vary": "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        }, }
     );
   }
   if (pseudo.trim() !== "") {
@@ -33,7 +39,13 @@ export async function POST(NextRequest) {
         message:
           "Une erreur est survenue lors de l'envoie du message, veuillez réessayer plus tard",
       },
-      { status: 400 }
+      { status: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          "Vary": "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        }, }
     );
   } else {
     const user = await prisma.user.findUnique({
@@ -171,6 +183,14 @@ export async function POST(NextRequest) {
       body: user,
       message:
         "Merci de nous avoir contacter, nous allons vous répondre le plus vite possible",
+    }, {
+      
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            "Vary": "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
     });
   }
 }

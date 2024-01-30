@@ -19,7 +19,15 @@ export async function POST(request: NextRequest) {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
       },
-      { status: 401 }
+      {
+        status: 401,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     let user = await prisma.user.findUnique({
@@ -33,7 +41,15 @@ export async function POST(request: NextRequest) {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     } else {
       const { firstname, pseudo } = (await request.json()) as {
@@ -49,7 +65,15 @@ export async function POST(request: NextRequest) {
             type: "validation",
             message: arrayMessageError,
           },
-          { status: 400 }
+          {
+            status: 400,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       }
       if (pseudo.trim() !== "") {
@@ -60,7 +84,15 @@ export async function POST(request: NextRequest) {
             message:
               "Vous ne pouvez pas modifier votre prénom, veuillez réessayer",
           },
-          { status: 400 }
+          {
+            status: 400,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       } else {
         let editUser = await prisma.user.update({
@@ -79,7 +111,16 @@ export async function POST(request: NextRequest) {
               message:
                 "Une erreur est survenue lors de la modification de votre prénom, veuillez réessayer",
             },
-            { status: 400 }
+            {
+              status: 400,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         } else {
           let userObject = {
@@ -88,11 +129,22 @@ export async function POST(request: NextRequest) {
             email: editUser.mail,
             twoFactor: editUser.twoFactor,
           };
-          return NextResponse.json({
-            status: 200,
-            message: "Votre prénom a été mis à jours avec succès",
-            body: userObject,
-          });
+          return NextResponse.json(
+            {
+              status: 200,
+              message: "Votre prénom a été mis à jours avec succès",
+              body: userObject,
+            },
+            {
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
+          );
         }
       }
     }

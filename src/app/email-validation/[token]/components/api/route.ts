@@ -21,7 +21,15 @@ export async function POST(request: NextRequest) {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 400 }
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     }
     let userObject = {
@@ -34,7 +42,15 @@ export async function POST(request: NextRequest) {
         body: userObject,
         message: "Vous êtes déjà connecté",
       },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     const { token } = (await request.json()) as {
@@ -59,7 +75,15 @@ export async function POST(request: NextRequest) {
             status: 404,
             message: "Le token n'est pas valide, veuillez réessayer",
           },
-          { status: 404 }
+          {
+            status: 404,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       }
       let user = await prisma.user.findUnique({
@@ -71,7 +95,15 @@ export async function POST(request: NextRequest) {
             status: 404,
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
           },
-          { status: 404 }
+          {
+            status: 404,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       } else {
         if (user.registerToken && user.status === false) {
@@ -87,7 +119,16 @@ export async function POST(request: NextRequest) {
                   message:
                     "Le lien de validation de votre n'est plus valide, vous pouvez créer un nouveau compte",
                 },
-                { status: 404 }
+                {
+                  status: 404,
+                  headers: {
+                    "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                    Vary: "Origin",
+                    "Access-Control-Allow-Methods":
+                      "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Accept",
+                  },
+                }
               );
             } else {
               if (user.status === false) {
@@ -95,11 +136,23 @@ export async function POST(request: NextRequest) {
                   where: { id: user.id },
                   data: { status: true, registerToken: Prisma.JsonNull },
                 });
-                return NextResponse.json({
-                  status: 200,
-                  message:
-                    "Votre compte est activé, vous pouvez maintenant vous connecter",
-                });
+                return NextResponse.json(
+                  {
+                    status: 200,
+                    message:
+                      "Votre compte est activé, vous pouvez maintenant vous connecter",
+                  },
+                  {
+                    headers: {
+                      "Access-Control-Allow-Origin":
+                        "https://www.tdscoaching.fr",
+                      Vary: "Origin",
+                      "Access-Control-Allow-Methods":
+                        "GET, POST, PUT, DELETE, OPTIONS",
+                      "Access-Control-Allow-Headers": "Content-Type, Accept",
+                    },
+                  }
+                );
               }
             }
           } else {
@@ -109,7 +162,16 @@ export async function POST(request: NextRequest) {
                 message: "Le token n'est pas valide, veuillez réessayer",
                 body: user,
               },
-              { status: 404 }
+              {
+                status: 404,
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
             );
           }
         } else {
@@ -119,7 +181,16 @@ export async function POST(request: NextRequest) {
               message:
                 "Votre compte est déjà activé, vous pouvez vous connecter",
             },
-            { status: 404 }
+            {
+              status: 404,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         }
       }
@@ -129,7 +200,15 @@ export async function POST(request: NextRequest) {
           status: 404,
           message: "Le token n'est pas valide, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     }
   }

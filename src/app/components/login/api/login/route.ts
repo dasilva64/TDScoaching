@@ -26,7 +26,15 @@ export async function POST(request: NextRequest) {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 400 }
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     }
     let userObject = {
@@ -39,7 +47,15 @@ export async function POST(request: NextRequest) {
         body: userObject,
         message: "Vous êtes déjà connecté",
       },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     const { email, password, pseudo, remember } = (await request.json()) as {
@@ -59,7 +75,15 @@ export async function POST(request: NextRequest) {
           type: "validation",
           message: arrayMessageError,
         },
-        { status: 400 }
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     }
     if (pseudo.trim() !== "") {
@@ -69,7 +93,15 @@ export async function POST(request: NextRequest) {
           type: "error",
           message: "Vous ne pouvez pas vous connecter, veuillez réessayer",
         },
-        { status: 400 }
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     } else {
       const user = await prisma.user.findUnique({
@@ -90,7 +122,16 @@ export async function POST(request: NextRequest) {
               message:
                 "Mauvaise combinaison email/mot de passe, veuillez réessayer",
             },
-            { status: 400 }
+            {
+              status: 400,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         } else {
           if (user.status === false && user.registerToken) {
@@ -106,7 +147,16 @@ export async function POST(request: NextRequest) {
                   message:
                     "Votre compte a été supprimé car vous ne l'avez pas validé à temps, veuillez vous réinscrire",
                 },
-                { status: 400 }
+                {
+                  status: 400,
+                  headers: {
+                    "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                    Vary: "Origin",
+                    "Access-Control-Allow-Methods":
+                      "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Accept",
+                  },
+                }
               );
             }
             return NextResponse.json(
@@ -116,7 +166,16 @@ export async function POST(request: NextRequest) {
                 message:
                   "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail",
               },
-              { status: 400 }
+              {
+                status: 400,
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
             );
           } else {
             /* if (user.twoFactor === true) {
@@ -203,11 +262,22 @@ export async function POST(request: NextRequest) {
               await session.save();
             }
 
-            return NextResponse.json({
-              status: 200,
-              body: userObject,
-              message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
-            });
+            return NextResponse.json(
+              {
+                status: 200,
+                body: userObject,
+                message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
+              },
+              {
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
+            );
             //}
           }
         }
@@ -219,7 +289,15 @@ export async function POST(request: NextRequest) {
             message:
               "Mauvaise combinaison email/mot de passe, veuillez réessayer",
           },
-          { status: 400 }
+          {
+            status: 400,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       }
     }

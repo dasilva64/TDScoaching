@@ -17,7 +17,15 @@ export async function POST(request: NextRequest) {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
       },
-      { status: 401 }
+      {
+        status: 401,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     let user = await prisma.user.findUnique({
@@ -31,7 +39,15 @@ export async function POST(request: NextRequest) {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     } else {
       const { reason, pseudo } = (await request.json()) as {
@@ -47,7 +63,15 @@ export async function POST(request: NextRequest) {
             type: "validation",
             message: arrayMessageError,
           },
-          { status: 400 }
+          {
+            status: 400,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       }
       if (pseudo.trim() !== "") {
@@ -58,7 +82,15 @@ export async function POST(request: NextRequest) {
             message:
               "Vous ne pouvez pas modifier votre email, veuillez réessayer",
           },
-          { status: 400 }
+          {
+            status: 400,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       } else {
         if (user.meetingId === null) {
@@ -87,7 +119,16 @@ export async function POST(request: NextRequest) {
                 message:
                   "Une erreur est survenue lors de la modification de votre compte, veuillez réessayer",
               },
-              { status: 400 }
+              {
+                status: 400,
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
             );
           } else {
             let smtpTransport = nodemailer.createTransport({
@@ -137,11 +178,22 @@ export async function POST(request: NextRequest) {
                               </html>`,
             };
             await smtpTransport.sendMail(mailOptions);
-            return NextResponse.json({
-              status: 200,
-              message:
-                "Un email vous a été envoyer pour supprimer votre compte",
-            });
+            return NextResponse.json(
+              {
+                status: 200,
+                message:
+                  "Un email vous a été envoyer pour supprimer votre compte",
+              },
+              {
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
+            );
           }
         } else {
           return NextResponse.json(
@@ -151,7 +203,16 @@ export async function POST(request: NextRequest) {
               message:
                 "Vous ne pouvez pas supprimer votre compte car vous avez un rendez-vous de prévu",
             },
-            { status: 400 }
+            {
+              status: 400,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         }
       }

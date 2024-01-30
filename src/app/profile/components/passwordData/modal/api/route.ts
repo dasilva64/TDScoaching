@@ -20,7 +20,15 @@ export async function POST(request: NextRequest) {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
       },
-      { status: 401 }
+      {
+        status: 401,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     let user = await prisma.user.findUnique({
@@ -34,7 +42,15 @@ export async function POST(request: NextRequest) {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     } else {
       const { password, passwordComfirm, pseudo } = (await request.json()) as {
@@ -51,7 +67,15 @@ export async function POST(request: NextRequest) {
             type: "validation",
             message: arrayMessageError,
           },
-          { status: 400 }
+          {
+            status: 400,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       }
       if (pseudo.trim() !== "") {
@@ -62,7 +86,15 @@ export async function POST(request: NextRequest) {
             message:
               "Vous ne pouvez pas modifier votre mot de passe, veuillez réessayer",
           },
-          { status: 400 }
+          {
+            status: 400,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       } else {
         if (password.trim() !== passwordComfirm.trim()) {
@@ -72,7 +104,16 @@ export async function POST(request: NextRequest) {
               type: "error",
               message: "Les mots de passe ne sont pas identiques",
             },
-            { status: 400 }
+            {
+              status: 400,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         }
         const saltRounds = 10;
@@ -96,7 +137,16 @@ export async function POST(request: NextRequest) {
               message:
                 "Une erreur est survenue lors de la modification de votre mot de passe, veuillez réessayer",
             },
-            { status: 400 }
+            {
+              status: 400,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         } else {
           let userObject = {
@@ -105,11 +155,22 @@ export async function POST(request: NextRequest) {
             email: editUser.mail,
             twoFactor: editUser.twoFactor,
           };
-          return NextResponse.json({
-            status: 200,
-            message: "Votre mot de passe a été mis à jours avec succès",
-            body: userObject,
-          });
+          return NextResponse.json(
+            {
+              status: 200,
+              message: "Votre mot de passe a été mis à jours avec succès",
+              body: userObject,
+            },
+            {
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
+          );
         }
       }
     }

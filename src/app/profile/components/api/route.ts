@@ -23,7 +23,15 @@ export async function GET() {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     } else {
       let copyEditEmail: any = user.editEmail;
@@ -47,10 +55,20 @@ export async function GET() {
           typeMeeting: user.typeMeeting,
         };
       }
-      return NextResponse.json({
-        status: 200,
-        body: userObject,
-      });
+      return NextResponse.json(
+        {
+          status: 200,
+          body: userObject,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
+      );
     }
   } else {
     return NextResponse.json(
@@ -58,7 +76,15 @@ export async function GET() {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
       },
-      { status: 401 }
+      {
+        status: 401,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   }
 }

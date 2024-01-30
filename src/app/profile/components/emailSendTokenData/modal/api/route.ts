@@ -16,7 +16,15 @@ export async function POST(request: NextRequest) {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
       },
-      { status: 401 }
+      {
+        status: 401,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     let user = await prisma.user.findUnique({
@@ -30,7 +38,15 @@ export async function POST(request: NextRequest) {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     } else {
       const { email, pseudo } = (await request.json()) as {
@@ -46,7 +62,15 @@ export async function POST(request: NextRequest) {
             type: "validation",
             message: arrayMessageError,
           },
-          { status: 400 }
+          {
+            status: 400,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       }
       if (pseudo.trim() !== "") {
@@ -57,7 +81,15 @@ export async function POST(request: NextRequest) {
             message:
               "Vous ne pouvez pas modifier votre email, veuillez réessayer",
           },
-          { status: 400 }
+          {
+            status: 400,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       } else {
         if (user.mail === email.trim()) {
@@ -68,7 +100,16 @@ export async function POST(request: NextRequest) {
               message:
                 "Vous ne pouvez pas utiliser la même adresse email, veuillez réessayer",
             },
-            { status: 400 }
+            {
+              status: 400,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         } else {
           let userExist = await prisma.user.findUnique({
@@ -95,7 +136,16 @@ export async function POST(request: NextRequest) {
                   message:
                     "Une erreur est survenue lors de la modification de votre adresse email, veuillez réessayer",
                 },
-                { status: 400 }
+                {
+                  status: 400,
+                  headers: {
+                    "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                    Vary: "Origin",
+                    "Access-Control-Allow-Methods":
+                      "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Accept",
+                  },
+                }
               );
             } else {
               let smtpTransport = nodemailer.createTransport({
@@ -146,12 +196,23 @@ export async function POST(request: NextRequest) {
                 twoFactor: editUser.twoFactor,
               };
 
-              return NextResponse.json({
-                status: 200,
-                body: userObject,
-                message:
-                  "Un email vous a été envoyer pour valider votre nouvelle adresse email",
-              });
+              return NextResponse.json(
+                {
+                  status: 200,
+                  body: userObject,
+                  message:
+                    "Un email vous a été envoyer pour valider votre nouvelle adresse email",
+                },
+                {
+                  headers: {
+                    "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                    Vary: "Origin",
+                    "Access-Control-Allow-Methods":
+                      "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Accept",
+                  },
+                }
+              );
             }
           } else {
             return NextResponse.json(
@@ -161,7 +222,16 @@ export async function POST(request: NextRequest) {
                 message:
                   "Un utilisateur utilise déjà cette adresse mail, veuillez réessayer",
               },
-              { status: 400 }
+              {
+                status: 400,
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
             );
           }
         }

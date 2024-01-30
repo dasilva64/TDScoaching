@@ -17,7 +17,15 @@ export async function POST(request: NextRequest) {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
       },
-      { status: 401 }
+      {
+        status: 401,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     let user = await prisma.user.findUnique({
@@ -31,7 +39,15 @@ export async function POST(request: NextRequest) {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     } else {
       const { token } = (await request.json()) as {
@@ -52,7 +68,16 @@ export async function POST(request: NextRequest) {
               status: 404,
               message: "Le token n'est pas valide, veuillez réessayer",
             },
-            { status: 404 }
+            {
+              status: 404,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         }
         let user = await prisma.user.findUnique({
@@ -64,7 +89,16 @@ export async function POST(request: NextRequest) {
               status: 404,
               message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
             },
-            { status: 404 }
+            {
+              status: 404,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         } else {
           if (user.deleteToken && user.status === true) {
@@ -81,7 +115,17 @@ export async function POST(request: NextRequest) {
                     message:
                       "Le lien de suppression de votre compte est plus valide, veuillez réessayer",
                   },
-                  { status: 404 }
+                  {
+                    status: 404,
+                    headers: {
+                      "Access-Control-Allow-Origin":
+                        "https://www.tdscoaching.fr",
+                      Vary: "Origin",
+                      "Access-Control-Allow-Methods":
+                        "GET, POST, PUT, DELETE, OPTIONS",
+                      "Access-Control-Allow-Headers": "Content-Type, Accept",
+                    },
+                  }
                 );
               } else {
                 if (user.meetingId !== null) {
@@ -91,7 +135,17 @@ export async function POST(request: NextRequest) {
                       message:
                         "Vous ne pouvez pas supprimer votre compte car vous avez un rendez-vous de prévu",
                     },
-                    { status: 404 }
+                    {
+                      status: 404,
+                      headers: {
+                        "Access-Control-Allow-Origin":
+                          "https://www.tdscoaching.fr",
+                        Vary: "Origin",
+                        "Access-Control-Allow-Methods":
+                          "GET, POST, PUT, DELETE, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Accept",
+                      },
+                    }
                   );
                 } else {
                   let smtpTransport = nodemailer.createTransport({
@@ -144,10 +198,22 @@ export async function POST(request: NextRequest) {
                     where: { id: user.id },
                   });
                   session.destroy();
-                  return NextResponse.json({
-                    status: 200,
-                    message: "Votre compte a bien été supprimé",
-                  });
+                  return NextResponse.json(
+                    {
+                      status: 200,
+                      message: "Votre compte a bien été supprimé",
+                    },
+                    {
+                      headers: {
+                        "Access-Control-Allow-Origin":
+                          "https://www.tdscoaching.fr",
+                        Vary: "Origin",
+                        "Access-Control-Allow-Methods":
+                          "GET, POST, PUT, DELETE, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Accept",
+                      },
+                    }
+                  );
                 }
               }
             } else {
@@ -157,7 +223,16 @@ export async function POST(request: NextRequest) {
                   message: "Le token n'est pas valide, veuillez réessayer",
                   body: user,
                 },
-                { status: 404 }
+                {
+                  status: 404,
+                  headers: {
+                    "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                    Vary: "Origin",
+                    "Access-Control-Allow-Methods":
+                      "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Accept",
+                  },
+                }
               );
             }
           } else {
@@ -167,7 +242,16 @@ export async function POST(request: NextRequest) {
                 message:
                   "Le lien de suppression de votre compte est plus valide, veuillez réessayer",
               },
-              { status: 404 }
+              {
+                status: 404,
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
             );
           }
         }
@@ -177,7 +261,15 @@ export async function POST(request: NextRequest) {
             status: 404,
             message: "Le token n'éxiste pas, veuillez réessayer",
           },
-          { status: 404 }
+          {
+            status: 404,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       }
     }

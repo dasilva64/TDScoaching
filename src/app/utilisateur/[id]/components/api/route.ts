@@ -14,7 +14,15 @@ export async function POST(request: NextRequest) {
         status: 401,
         message: "Vous n'êtes pas connecté, veuillez réessayer",
       },
-      { status: 401 }
+      {
+        status: 401,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     let user = await prisma.user.findUnique({
@@ -27,7 +35,15 @@ export async function POST(request: NextRequest) {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     } else {
       if (user.role !== "ROLE_ADMIN") {
@@ -36,7 +52,15 @@ export async function POST(request: NextRequest) {
             status: 403,
             message: "Vous n'avez pas accès à cette page, veuillez réessayer",
           },
-          { status: 403 }
+          {
+            status: 403,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       } else {
         const { id } = (await request.json()) as {
@@ -48,7 +72,16 @@ export async function POST(request: NextRequest) {
               status: 400,
               message: "L'identifiant de l'utilisateur est invalide",
             },
-            { status: 400 }
+            {
+              status: 400,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         } else {
           const userById = await prisma.user.findUnique({
@@ -60,7 +93,16 @@ export async function POST(request: NextRequest) {
                 status: 404,
                 message: `L'utilisateur avec l'id : ${id} n'a pas été trouvé, veuillez réessayer`,
               },
-              { status: 404 }
+              {
+                status: 404,
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
             );
           } else {
             let meeting;
@@ -102,10 +144,21 @@ export async function POST(request: NextRequest) {
               meeting: meeting,
               typeMeeting: userById.typeMeeting,
             };
-            return NextResponse.json({
-              status: 200,
-              body: userObject,
-            });
+            return NextResponse.json(
+              {
+                status: 200,
+                body: userObject,
+              },
+              {
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
+            );
           }
         }
       }

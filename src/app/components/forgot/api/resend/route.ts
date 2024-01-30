@@ -23,7 +23,15 @@ export async function POST(request: NextRequest) {
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
-        { status: 400 }
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     }
     let userObject = {
@@ -36,7 +44,15 @@ export async function POST(request: NextRequest) {
         body: userObject,
         message: "Vous êtes déjà connecté",
       },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     const { email } = (await request.json()) as {
@@ -53,7 +69,15 @@ export async function POST(request: NextRequest) {
           type: "validation",
           message: arrayMessageError,
         },
-        { status: 400 }
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     }
     const user = await prisma.user.findUnique({
@@ -66,7 +90,15 @@ export async function POST(request: NextRequest) {
           message:
             "Aucun compte n'est associé à cette adresse email, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     } else {
       let token = jwt.sign(
@@ -122,10 +154,20 @@ export async function POST(request: NextRequest) {
                       </html>`,
       };
       smtpTransport.sendMail(mailOptions);
-      return NextResponse.json({
-        status: 200,
-        message: "Un email vous a été envoyer pour récupérer votre compte",
-      });
+      return NextResponse.json(
+        {
+          status: 200,
+          message: "Un email vous a été envoyer pour récupérer votre compte",
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
+      );
     }
   }
 }

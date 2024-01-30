@@ -26,7 +26,15 @@ export async function POST(request: NextRequest) {
         type: "validation",
         message: arrayMessageError,
       },
-      { status: 400 }
+      {
+        status: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   }
   if (pseudo.trim() !== "") {
@@ -36,7 +44,15 @@ export async function POST(request: NextRequest) {
         type: "error",
         message: "Vous ne pouvez pas modifier votre prénom, veuillez réessayer",
       },
-      { status: 400 }
+      {
+        status: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+          Vary: "Origin",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+      }
     );
   } else {
     const { verify } = jwt;
@@ -54,7 +70,15 @@ export async function POST(request: NextRequest) {
             status: 404,
             message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
           },
-          { status: 404 }
+          {
+            status: 404,
+            headers: {
+              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+              Vary: "Origin",
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type, Accept",
+            },
+          }
         );
       } else {
         if (user.resetToken === null) {
@@ -64,7 +88,16 @@ export async function POST(request: NextRequest) {
               message:
                 "Aucune demande de réinitialisation de mot de passe n'a été faite, veuillez réessayer",
             },
-            { status: 404 }
+            {
+              status: 404,
+              headers: {
+                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                Vary: "Origin",
+                "Access-Control-Allow-Methods":
+                  "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Accept",
+              },
+            }
           );
         } else {
           let copyResetToken: any = user.resetToken;
@@ -80,7 +113,16 @@ export async function POST(request: NextRequest) {
                   message:
                     "Le lien de réinitialisation n'est plus valide, veuillez réessayer",
                 },
-                { status: 404 }
+                {
+                  status: 404,
+                  headers: {
+                    "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                    Vary: "Origin",
+                    "Access-Control-Allow-Methods":
+                      "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Accept",
+                  },
+                }
               );
             } else {
               if (password !== passwordConfirm) {
@@ -90,7 +132,17 @@ export async function POST(request: NextRequest) {
                     message:
                       "Les mots de passe ne correspondent pas, veuillez réessayer",
                   },
-                  { status: 400 }
+                  {
+                    status: 400,
+                    headers: {
+                      "Access-Control-Allow-Origin":
+                        "https://www.tdscoaching.fr",
+                      Vary: "Origin",
+                      "Access-Control-Allow-Methods":
+                        "GET, POST, PUT, DELETE, OPTIONS",
+                      "Access-Control-Allow-Headers": "Content-Type, Accept",
+                    },
+                  }
                 );
               }
               let encrypt = await bcrypt.hash(password, 10);
@@ -105,14 +157,36 @@ export async function POST(request: NextRequest) {
                     message:
                       "La modification du mot de passe a échoué, veuillez réessayer",
                   },
-                  { status: 404 }
+                  {
+                    status: 404,
+                    headers: {
+                      "Access-Control-Allow-Origin":
+                        "https://www.tdscoaching.fr",
+                      Vary: "Origin",
+                      "Access-Control-Allow-Methods":
+                        "GET, POST, PUT, DELETE, OPTIONS",
+                      "Access-Control-Allow-Headers": "Content-Type, Accept",
+                    },
+                  }
                 );
               } else {
-                return NextResponse.json({
-                  status: 200,
-                  message:
-                    "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
-                });
+                return NextResponse.json(
+                  {
+                    status: 200,
+                    message:
+                      "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
+                  },
+                  {
+                    headers: {
+                      "Access-Control-Allow-Origin":
+                        "https://www.tdscoaching.fr",
+                      Vary: "Origin",
+                      "Access-Control-Allow-Methods":
+                        "GET, POST, PUT, DELETE, OPTIONS",
+                      "Access-Control-Allow-Headers": "Content-Type, Accept",
+                    },
+                  }
+                );
               }
             }
           } else {
@@ -122,7 +196,16 @@ export async function POST(request: NextRequest) {
                 message:
                   "Le lien de réinitialisation n'est pas valide, veuillez réessayer",
               },
-              { status: 404 }
+              {
+                status: 404,
+                headers: {
+                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+                  Vary: "Origin",
+                  "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, OPTIONS",
+                  "Access-Control-Allow-Headers": "Content-Type, Accept",
+                },
+              }
             );
           }
         }
@@ -134,7 +217,15 @@ export async function POST(request: NextRequest) {
           message:
             "Le lien de réinitialisation n'est pas valide, veuillez réessayer",
         },
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+            Vary: "Origin",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+          },
+        }
       );
     }
   }

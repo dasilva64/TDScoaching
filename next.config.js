@@ -29,16 +29,20 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: cspHeader.replace(/\n/g, ''),
           },
+          { key: "Access-Control-Allow-Origin", value: "https://www.tdscoaching.fr" },
+          { key: "Vary", value: "Origin" },
+          { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
+          { key: "Access-Control-Allow-Headers", value: "Accept, Content-Type" },
         ],
       },
-      {
+      /* {
         // matching all API routes
         source: "/",
         headers: [
           { key: "Access-Control-Allow-Origin", value: "https://www.tdscoaching.fr" },
           { key: "Vary", value: "Origin" },
           { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-          { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
+          { key: "Access-Control-Allow-Headers", value: "Accept, Content-Type" },
         ]
       }, {
         source: "/qui-suis-je",
@@ -46,10 +50,10 @@ const nextConfig = {
           { key: "Access-Control-Allow-Origin", value: "https://www.tdscoaching.fr" },
           { key: "Vary", value: "Origin" },
           { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-          { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
+          { key: "Access-Control-Allow-Headers", value: "Accept, Content-Type" },
         ]
 
-      }
+      } */
     ]
   }
     /* externals: {

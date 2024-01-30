@@ -186,7 +186,7 @@ const ContactForm = () => {
       >
         <TextField
           autoFocus
-          className={styles.contact__main__container__form__input__lastname}
+          style={{ margin: "10px 0px" }}
           inputProps={{ className: "modalOpen" }}
           value={inputLastname}
           id={"lastname"}
@@ -212,7 +212,7 @@ const ContactForm = () => {
           inputProps={{ className: "modalOpen" }}
           value={inputFirstname}
           id={"firstname"}
-          className={styles.contact__main__container__form__input__firstname}
+          style={{ margin: "10px 0px" }}
           label={"Prénom"}
           variant="standard"
           type={"text"}
@@ -235,7 +235,7 @@ const ContactForm = () => {
           inputProps={{ className: "modalOpen" }}
           value={inputEmail}
           id={"email"}
-          className={styles.contact__main__container__form__input__email}
+          style={{ margin: "10px 0px" }}
           label={"Email"}
           variant="standard"
           type={"email"}
@@ -258,7 +258,7 @@ const ContactForm = () => {
           inputProps={{ className: "modalOpen" }}
           value={inputObject}
           id={"object"}
-          className={styles.contact__main__container__form__input__object}
+          style={{ margin: "10px 0px" }}
           label={"Objet"}
           variant="standard"
           type={"text"}
@@ -299,13 +299,15 @@ const ContactForm = () => {
           placeholder="Entrez votre message"
           minRows={2}
         />
-        <FormHelperText>{messageInputError}</FormHelperText>
+        <FormHelperText style={{ color: "red" }}>
+          {messageInputError}
+        </FormHelperText>
 
         <input
           type="text"
           name="pseudo"
           id="pseudo"
-          className={styles.contact__main__container__form__input__pseudo}
+          style={{ display: "none" }}
           tabIndex={-1}
           autoComplete="off"
           onChange={(e) => {

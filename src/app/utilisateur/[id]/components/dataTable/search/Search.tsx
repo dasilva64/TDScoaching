@@ -69,7 +69,7 @@ const Search = (): JSX.Element => {
   }, [datas]);
   return (
     <div className={styles.search}>
-      <FormControl variant="standard" className={styles.search__form}>
+      <FormControl variant="standard" style={{ width: "100%" }}>
         <InputLabel
           sx={{
             color: "black",

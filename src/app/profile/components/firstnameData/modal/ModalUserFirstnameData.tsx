@@ -272,9 +272,7 @@ const ModalUserFirstnameData = () => {
               >
                 <FormControl
                   variant="standard"
-                  className={
-                    styles.modalEditMainUserData__form__input__firstname__control
-                  }
+                  style={{ margin: "20px 0px 0px 0px" }}
                 >
                   <InputLabel
                     sx={{
@@ -315,11 +313,7 @@ const ModalUserFirstnameData = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText
-                    className={
-                      styles.modalEditMainUserData__form__input__firstname__helperText
-                    }
-                  >
+                  <FormHelperText style={{ color: "red" }}>
                     {errorMessageFirstname}
                   </FormHelperText>
                 </FormControl>
@@ -350,7 +344,7 @@ const ModalUserFirstnameData = () => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  className={styles.modalEditMainUserData__form__input__pseudo}
+                  style={{ display: "none" }}
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

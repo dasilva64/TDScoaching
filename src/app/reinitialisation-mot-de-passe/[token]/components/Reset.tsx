@@ -197,6 +197,7 @@ const Reset = () => {
     >
       <FormControl
         variant="standard"
+        style={{ margin: "10px 0px" }}
         className={styles.reset__form__input__password__control}
       >
         <InputLabel
@@ -237,15 +238,13 @@ const Reset = () => {
           }
         />
         <FormHelperText
+          style={{ color: "red" }}
           className={styles.reset__form__input__password__helperText}
         >
           {passwordInputError}
         </FormHelperText>
       </FormControl>
-      <FormControl
-        variant="standard"
-        className={styles.reset__form__input__comfirm__control}
-      >
+      <FormControl variant="standard" style={{ margin: "10px 0px" }}>
         <InputLabel
           sx={{
             color: "black",
@@ -293,9 +292,7 @@ const Reset = () => {
             </InputAdornment>
           }
         />
-        <FormHelperText
-          className={styles.reset__form__input__comfirm__helperText}
-        >
+        <FormHelperText style={{ color: "red" }}>
           {passwordComfirmInputError}
         </FormHelperText>
       </FormControl>
@@ -304,7 +301,7 @@ const Reset = () => {
         type="text"
         name="pseudo"
         id="pseudo"
-        className={styles.reset__form__input__pseudo}
+        style={{ display: "none" }}
         tabIndex={-1}
         autoComplete="off"
         onChange={(e) => {

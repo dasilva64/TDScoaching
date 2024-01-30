@@ -51,19 +51,6 @@
   &__form {
     display: flex;
     flex-direction: column;
-    &__input {
-      &__lastname {
-        &__control {
-          margin: 20px 0px;
-        }
-        &__helperText {
-          color: red;
-        }
-      }
-      &__pseudo {
-        display: none;
-      }
-    }
     &__group {
       display: flex;
       flex-direction: column;

@@ -638,16 +638,14 @@ const FormLogin = () => {
                         </InputAdornment>
                       }
                     />
-                    <FormHelperText
-                      className={styles.login__form__input__email__helperText}
-                    >
+                    <FormHelperText style={{ color: "red" }}>
                       {errorMessageEmail}
                     </FormHelperText>
                   </FormControl>
 
                   <FormControl
                     variant="standard"
-                    className={styles.login__form__input__password__control}
+                    style={{ margin: "20px 0px" }}
                   >
                     <InputLabel
                       sx={{
@@ -688,17 +686,17 @@ const FormLogin = () => {
                         </InputAdornment>
                       }
                     />
-                    <FormHelperText
-                      className={
-                        styles.login__form__input__password__helperText
-                      }
-                    >
+                    <FormHelperText style={{ color: "red" }}>
                       {errorMessagePassword}
                     </FormHelperText>
                   </FormControl>
 
                   <FormControlLabel
-                    className={`${styles.login__form__checkbox} ${styles.login__form__input__remember__control}`}
+                    style={{
+                      marginTop: "10px",
+                      alignSelf: "start",
+                      marginLeft: "0px",
+                    }}
                     control={
                       <Checkbox
                         onChange={(e) => {
@@ -713,7 +711,7 @@ const FormLogin = () => {
                     type="text"
                     name="pseudo"
                     id="pseudo"
-                    className={styles.login__form__input__pseudo}
+                    style={{ display: "none" }}
                     tabIndex={-1}
                     autoComplete="off"
                     onChange={(e) => {

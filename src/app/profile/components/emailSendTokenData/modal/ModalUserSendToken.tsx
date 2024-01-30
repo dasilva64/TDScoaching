@@ -242,9 +242,7 @@ const ModalUserSendToken = () => {
               >
                 <FormControl
                   variant="standard"
-                  className={
-                    styles.modalEditEmailData__form__input__email__control
-                  }
+                  style={{ margin: "30px 0px 40px 0px" }}
                 >
                   <InputLabel
                     sx={{
@@ -285,11 +283,7 @@ const ModalUserSendToken = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText
-                    className={
-                      styles.modalEditEmailData__form__input__email__helperText
-                    }
-                  >
+                  <FormHelperText style={{ color: "red" }}>
                     {errorMessageEmail}
                   </FormHelperText>
                 </FormControl>
@@ -320,7 +314,7 @@ const ModalUserSendToken = () => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  className={styles.modalEditEmailData__form__input__pseudo}
+                  style={{ display: "none" }}
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

@@ -499,10 +499,7 @@ const FormRegister = () => {
                 /> 
  */}
 
-                <FormControl
-                  variant="standard"
-                  className={styles.register__form__input__firstname__control}
-                >
+                <FormControl variant="standard" style={{ margin: "10px 0px" }}>
                   <InputLabel
                     sx={{
                       color: "black",
@@ -541,11 +538,7 @@ const FormRegister = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText
-                    className={
-                      styles.register__form__input__firstname__helperText
-                    }
-                  >
+                  <FormHelperText style={{ color: "red" }}>
                     {firstnameInputError}
                   </FormHelperText>
                 </FormControl>
@@ -582,6 +575,7 @@ const FormRegister = () => {
 
                 <FormControl
                   variant="standard"
+                  style={{ margin: "10px 0px" }}
                   className={styles.register__form__input__lastname__control}
                 >
                   <InputLabel
@@ -621,16 +615,13 @@ const FormRegister = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText
-                    className={
-                      styles.register__form__input__lastname__helperText
-                    }
-                  >
+                  <FormHelperText style={{ color: "red" }}>
                     {lastnameInputError}
                   </FormHelperText>
                 </FormControl>
 
                 <FormControl
+                  style={{ margin: "10px 0px" }}
                   className={styles.register__form__input__password__control}
                   variant="standard"
                 >
@@ -672,19 +663,12 @@ const FormRegister = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText
-                    className={
-                      styles.register__form__input__password__helperText
-                    }
-                  >
+                  <FormHelperText style={{ color: "red" }}>
                     {passwordInputError}
                   </FormHelperText>
                 </FormControl>
 
-                <FormControl
-                  variant="standard"
-                  className={styles.register__form__input__comfirm__control}
-                >
+                <FormControl variant="standard" style={{ margin: "10px 0px" }}>
                   <InputLabel
                     sx={{
                       color: "black",
@@ -740,11 +724,7 @@ const FormRegister = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText
-                    className={
-                      styles.register__form__input__comfirm__helperText
-                    }
-                  >
+                  <FormHelperText style={{ color: "red" }}>
                     {passwordComfirmInputError}
                   </FormHelperText>
                 </FormControl>
@@ -787,22 +767,21 @@ const FormRegister = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText
-                    className={styles.register__form__input__email__helperText}
-                  >
+                  <FormHelperText style={{ color: "red" }}>
                     {emailInputError}
                   </FormHelperText>
                 </FormControl>
 
                 <FormControl
-                  className={styles.register__form__input__major__control}
+                  style={{
+                    margin: "20px 0px 10px 0px",
+                    alignSelf: "start",
+                    marginLeft: "0px",
+                  }}
                   component="fieldset"
                   variant="standard"
                 >
-                  <FormLabel
-                    className={styles.register__form__input__major__label}
-                    component="legend"
-                  >
+                  <FormLabel style={{ color: "black" }} component="legend">
                     Êtes vous majeur ?
                   </FormLabel>
                   <FormGroup>
@@ -834,7 +813,6 @@ const FormRegister = () => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  className={styles.register__form__input__pseudo}
                   style={{ display: "none" }}
                   tabIndex={-1}
                   autoComplete="off"

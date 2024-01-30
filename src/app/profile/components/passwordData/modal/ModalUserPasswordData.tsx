@@ -334,10 +334,8 @@ const ModalUserPasswordData = () => {
                 }}
               >
                 <FormControl
+                  style={{ margin: "20px 0px 0px 0px" }}
                   variant="standard"
-                  className={
-                    styles.modalEditPasswordData__form__input__password__control
-                  }
                 >
                   <InputLabel
                     sx={{
@@ -378,11 +376,7 @@ const ModalUserPasswordData = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText
-                    className={
-                      styles.modalEditPasswordData__form__input__password__helperText
-                    }
-                  >
+                  <FormHelperText style={{ color: "red" }}>
                     {errorMessagePassword}
                   </FormHelperText>
                 </FormControl>
@@ -409,12 +403,7 @@ const ModalUserPasswordData = () => {
                   }}
                   helperText={errorMessagePassword}
                 /> */}
-                <FormControl
-                  variant="standard"
-                  className={
-                    styles.modalEditPasswordData__form__input__comfirm__control
-                  }
-                >
+                <FormControl variant="standard" style={{ margin: "20px 0px" }}>
                   <InputLabel
                     sx={{
                       color: "black",
@@ -469,11 +458,7 @@ const ModalUserPasswordData = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText
-                    className={
-                      styles.modalEditPasswordData__form__input__comfirm__helperText
-                    }
-                  >
+                  <FormHelperText style={{ color: "red" }}>
                     {errorMessagePasswordComfirm}
                   </FormHelperText>
                 </FormControl>
@@ -515,7 +500,7 @@ const ModalUserPasswordData = () => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  className={styles.modalEditPasswordData__form__input__pseudo}
+                  style={{ display: "none" }}
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

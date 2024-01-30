@@ -254,13 +254,15 @@ const ModalDeleteAccount = () => {
                     </MenuItem>
                     <MenuItem value={"autre"}>Autre</MenuItem>
                   </Select>
-                  <FormHelperText>{reasonErrorMessage}</FormHelperText>
+                  <FormHelperText style={{ color: "red" }}>
+                    {reasonErrorMessage}
+                  </FormHelperText>
                 </FormControl>
                 <input
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  className={styles.modalDeleteAccount__div__input__pseudo}
+                  style={{ display: "none" }}
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

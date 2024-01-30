@@ -25,7 +25,6 @@
     "@types/node": "20.3.3",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
-    "@vercel/analytics": "^1.1.1",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.3.1",
     "eslint": "8.44.0",

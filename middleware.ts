@@ -16,6 +16,12 @@ interface SessionData {
   "/profile": test,
 }; */
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
 export const middleware = async (request: NextRequest) => {
   //const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   /* const session = await getIronSession<SessionData>(
@@ -68,11 +74,15 @@ export const middleware = async (request: NextRequest) => {
   if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
     return NextResponse.redirect(new URL("/", request.url));
   }
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    res.headers.append(key, value);
+  });
   return res;
 };
 
-export const config = {
+/* export const config = {
   matcher: [
+    "/",
     "/profile",
     "/utilisateurs",
     "/meetings",
@@ -81,4 +91,4 @@ export const config = {
     "/utilisateur/:path*",
     "/suppression-compte",
   ],
-};
+}; */

@@ -30,7 +30,6 @@ const nextConfig = {
             value: cspHeader.replace(/\n/g, ''),
           },
           { key: "Access-Control-Allow-Origin", value: "https://www.tdscoaching.fr" },
-          { key: "Vary", value: "Origin" },
           { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
           { key: "Access-Control-Allow-Headers", value: "Accept, Content-Type" },
         ],

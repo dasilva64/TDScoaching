@@ -31,6 +31,7 @@ export const middleware = async (request: NextRequest) => {
     return Response.redirect(`${request.nextUrl.origin}${redirectTo}`, 302);
   } */
   const origin = request.headers.get("origin");
+  console.log(origin);
   if ((origin && !allowOrigin.includes(origin)) || !origin) {
     return new NextResponse(origin, {
       status: 200,

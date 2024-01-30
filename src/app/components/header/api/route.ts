@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
@@ -8,21 +8,9 @@ import {
 } from "../../../../../lib/session";
 import prisma from "../../../../../lib/prisma";
 
-export async function GET(request: NextRequest) {
-  const origin = request.headers.get("origin");
-  console.log(origin);
-
+export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  let objectSession = {
-    session: session,
-    origin: request,
-    test: "test",
-    url: request.url,
-    host: request.headers.get("host"),
-    origin2: request.headers.get("origin"),
-    headers: request.headers,
-  };
-  return NextResponse.json(objectSession);
+
   if (session.isLoggedIn !== true) {
     return NextResponse.json(defaultSession);
   } else {

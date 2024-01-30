@@ -164,6 +164,7 @@ const Content = () => {
   }, [dispatch, pathname, reset, router, dataLogout]);
   const { data, isLoading } = useGet("/components/header/api");
   useEffect(() => {
+    console.log(data);
     if (data) {
       if (data.isLoggedIn === false) {
         if (pathname === "/profile") {

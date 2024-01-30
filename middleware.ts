@@ -120,7 +120,7 @@ export const middleware = async (request: NextRequest) => {
 export const config = {
   matcher: [
     "/",
-    "qui-suis-je",
+    "/qui-suis-je",
     "/coaching-de-vie",
     "/tarif",
     "/contact",

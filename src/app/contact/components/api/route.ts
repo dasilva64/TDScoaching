@@ -3,61 +3,78 @@ import prisma from "../../../../../lib/prisma";
 import { validationBody } from "../../../../../lib/validation";
 import validator from "validator";
 import nodemailer from "nodemailer";
+import { RateLimiter } from "limiter";
+
+const limiter = new RateLimiter({
+  tokensPerInterval: 150,
+  interval: "hour",
+  fireImmediately: true,
+});
 
 export async function POST(request: NextRequest) {
-  const { email, firstname, lastname, object, message, pseudo } =
-    await request.json();
-
-  let arrayMessageError = validationBody({
-    email: email,
-    firstname: firstname,
-    lastname: lastname,
-    object: object,
-    message: message,
-  });
-  if (arrayMessageError.length > 0) {
-    return NextResponse.json(
-      {
-        status: 400,
-        type: "validation",
-        message: arrayMessageError,
+  const remainingRequests = await limiter.removeTokens(1);
+  if (remainingRequests < 0) {
+    return new NextResponse(null, {
+      status: 429,
+      statusText: "Too many requests",
+      headers: {
+        "Content-Type": "text/plain",
       },
-      {
-        status: 400,
-      }
-    );
-  }
-  if (pseudo.trim() !== "") {
-    return NextResponse.json(
-      {
-        status: 400,
-        type: "error",
-        message:
-          "Une erreur est survenue lors de l'envoie du message, veuillez réessayer plus tard",
-      },
-      {
-        status: 400,
-      }
-    );
+    });
   } else {
-    const user = await prisma.user.findUnique({
-      where: { mail: validator.escape(email.trim()), status: true },
+    const { email, firstname, lastname, object, message, pseudo } =
+      await request.json();
+
+    let arrayMessageError = validationBody({
+      email: email,
+      firstname: firstname,
+      lastname: lastname,
+      object: object,
+      message: message,
     });
-    let smtpTransport = nodemailer.createTransport({
-      host: "smtp.ionos.fr",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.SECRET_SMTP_EMAIL,
-        pass: process.env.SECRET_SMTP_PASSWORD,
-      },
-    });
-    if (user === null) {
-      let mailOptions = {
-        from: "contact@tds-coachingdevie.fr",
-        to: "contact@tds-coachingdevie.fr",
-        subject: validator.escape(object.trim()),
-        html: `<!DOCTYPE html>
+    if (arrayMessageError.length > 0) {
+      return NextResponse.json(
+        {
+          status: 400,
+          type: "validation",
+          message: arrayMessageError,
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+    if (pseudo.trim() !== "") {
+      return NextResponse.json(
+        {
+          status: 400,
+          type: "error",
+          message:
+            "Une erreur est survenue lors de l'envoie du message, veuillez réessayer plus tard",
+        },
+        {
+          status: 400,
+        }
+      );
+    } else {
+      const user = await prisma.user.findUnique({
+        where: { mail: validator.escape(email.trim()), status: true },
+      });
+      let smtpTransport = nodemailer.createTransport({
+        host: "smtp.ionos.fr",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.SECRET_SMTP_EMAIL,
+          pass: process.env.SECRET_SMTP_PASSWORD,
+        },
+      });
+      if (user === null) {
+        let mailOptions = {
+          from: "contact@tds-coachingdevie.fr",
+          to: "contact@tds-coachingdevie.fr",
+          subject: validator.escape(object.trim()),
+          html: `<!DOCTYPE html>
                           <html lang="fr">
                             <head>
                               <title>tds coaching</title>
@@ -77,8 +94,8 @@ export async function POST(request: NextRequest) {
                                   <h2 style="text-align: center">${validator.escape(
                                     firstname.trim()
                                   )} ${validator.escape(
-          lastname.trim()
-        )} vous a envoyé un message</h2>
+            lastname.trim()
+          )} vous a envoyé un message</h2>
                                   <p style="text-align: left; margin-left: 20px">Email : ${validator.escape(
                                     email.trim()
                                   )}</p>
@@ -90,14 +107,14 @@ export async function POST(request: NextRequest) {
                               </div>
                             </body>
                           </html>`,
-      };
-      await smtpTransport.sendMail(mailOptions);
-    } else {
-      let mailOptions = {
-        from: "contact@tds-coachingdevie.fr",
-        to: "contact@tds-coachingdevie.fr",
-        subject: validator.escape(object.trim()),
-        html: `<!DOCTYPE html>
+        };
+        await smtpTransport.sendMail(mailOptions);
+      } else {
+        let mailOptions = {
+          from: "contact@tds-coachingdevie.fr",
+          to: "contact@tds-coachingdevie.fr",
+          subject: validator.escape(object.trim()),
+          html: `<!DOCTYPE html>
                           <html lang="fr">
                             <head>
                               <title>tds coaching</title>
@@ -117,8 +134,8 @@ export async function POST(request: NextRequest) {
                                   <h2 style="text-align: center">${validator.escape(
                                     firstname.trim()
                                   )} ${validator.escape(
-          lastname.trim()
-        )} vous a envoyé un message</h2>
+            lastname.trim()
+          )} vous a envoyé un message</h2>
                                   <p style="text-align: left; margin-left: 20px">Email : ${validator.escape(
                                     email.trim()
                                   )}</p>
@@ -130,14 +147,14 @@ export async function POST(request: NextRequest) {
                               </div>
                             </body>
                           </html>`,
-      };
-      await smtpTransport.sendMail(mailOptions);
-    }
-    let mailOptions = {
-      from: "contact@tds-coachingdevie.fr",
-      to: validator.escape(email.trim()),
-      subject: validator.escape(object.trim()),
-      html: `<!DOCTYPE html>
+        };
+        await smtpTransport.sendMail(mailOptions);
+      }
+      let mailOptions = {
+        from: "contact@tds-coachingdevie.fr",
+        to: validator.escape(email.trim()),
+        subject: validator.escape(object.trim()),
+        html: `<!DOCTYPE html>
                         <html lang="fr">
                           <head>
                             <title>tds coaching</title>
@@ -174,13 +191,14 @@ export async function POST(request: NextRequest) {
                             </div>
                           </body>
                         </html>`,
-    };
-    await smtpTransport.sendMail(mailOptions);
-    return NextResponse.json({
-      status: 200,
-      body: user,
-      message:
-        "Merci de nous avoir contacter, nous allons vous répondre le plus vite possible",
-    });
+      };
+      await smtpTransport.sendMail(mailOptions);
+      return NextResponse.json({
+        status: 200,
+        body: user,
+        message:
+          "Merci de nous avoir contacter, nous allons vous répondre le plus vite possible",
+      });
+    }
   }
 }

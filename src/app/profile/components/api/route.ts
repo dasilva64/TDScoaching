@@ -25,12 +25,6 @@ export async function GET() {
         },
         {
           status: 404,
-          headers: {
-            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-            Vary: "Origin",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Accept",
-          },
         }
       );
     } else {
@@ -55,20 +49,10 @@ export async function GET() {
           typeMeeting: user.typeMeeting,
         };
       }
-      return NextResponse.json(
-        {
-          status: 200,
-          body: userObject,
-        },
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-            Vary: "Origin",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Accept",
-          },
-        }
-      );
+      return NextResponse.json({
+        status: 200,
+        body: userObject,
+      });
     }
   } else {
     return NextResponse.json(
@@ -78,12 +62,6 @@ export async function GET() {
       },
       {
         status: 401,
-        headers: {
-          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-          Vary: "Origin",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Accept",
-        },
       }
     );
   }

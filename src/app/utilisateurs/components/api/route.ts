@@ -20,12 +20,6 @@ export async function GET() {
       },
       {
         status: 401,
-        headers: {
-          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-          Vary: "Origin",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Accept",
-        },
       }
     );
   } else {
@@ -41,12 +35,6 @@ export async function GET() {
         },
         {
           status: 404,
-          headers: {
-            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-            Vary: "Origin",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Accept",
-          },
         }
       );
     } else {
@@ -58,12 +46,6 @@ export async function GET() {
           },
           {
             status: 403,
-            headers: {
-              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-              Vary: "Origin",
-              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-              "Access-Control-Allow-Headers": "Content-Type, Accept",
-            },
           }
         );
       } else {
@@ -93,20 +75,10 @@ export async function GET() {
           allUserObject.push(userObject);
         }
 
-        return NextResponse.json(
-          {
-            status: 200,
-            body: allUserObject,
-          },
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-              Vary: "Origin",
-              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-              "Access-Control-Allow-Headers": "Content-Type, Accept",
-            },
-          }
-        );
+        return NextResponse.json({
+          status: 200,
+          body: allUserObject,
+        });
       }
     }
   }

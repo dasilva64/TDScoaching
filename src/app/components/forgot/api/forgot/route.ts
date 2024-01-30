@@ -26,12 +26,6 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 400,
-          headers: {
-            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-            Vary: "Origin",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Accept",
-          },
         }
       );
     }
@@ -47,12 +41,6 @@ export async function POST(request: NextRequest) {
       },
       {
         status: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-          Vary: "Origin",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Accept",
-        },
       }
     );
   } else {
@@ -73,12 +61,6 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 400,
-          headers: {
-            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-            Vary: "Origin",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Accept",
-          },
         }
       );
     }
@@ -92,12 +74,6 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 400,
-          headers: {
-            "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-            Vary: "Origin",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Accept",
-          },
         }
       );
     } else {
@@ -113,12 +89,6 @@ export async function POST(request: NextRequest) {
           },
           {
             status: 404,
-            headers: {
-              "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-              Vary: "Origin",
-              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-              "Access-Control-Allow-Headers": "Content-Type, Accept",
-            },
           }
         );
       } else {
@@ -183,22 +153,11 @@ export async function POST(request: NextRequest) {
                         </html>`,
             };
             await smtpTransport.sendMail(mailOptions);
-            return NextResponse.json(
-              {
-                status: 200,
-                message:
-                  "Un email vous a été envoyer pour récupérer votre compte",
-              },
-              {
-                headers: {
-                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-                  Vary: "Origin",
-                  "Access-Control-Allow-Methods":
-                    "GET, POST, PUT, DELETE, OPTIONS",
-                  "Access-Control-Allow-Headers": "Content-Type, Accept",
-                },
-              }
-            );
+            return NextResponse.json({
+              status: 200,
+              message:
+                "Un email vous a été envoyer pour récupérer votre compte",
+            });
           } else {
             let currentDate = new Date();
             let difference = limitDate.getTime() - currentDate.getTime();
@@ -212,13 +171,6 @@ export async function POST(request: NextRequest) {
               },
               {
                 status: 404,
-                headers: {
-                  "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-                  Vary: "Origin",
-                  "Access-Control-Allow-Methods":
-                    "GET, POST, PUT, DELETE, OPTIONS",
-                  "Access-Control-Allow-Headers": "Content-Type, Accept",
-                },
               }
             );
           }
@@ -276,22 +228,10 @@ export async function POST(request: NextRequest) {
                       </html>`,
           };
           await smtpTransport.sendMail(mailOptions);
-          return NextResponse.json(
-            {
-              status: 200,
-              message:
-                "Un email vous a été envoyer pour récupérer votre compte",
-            },
-            {
-              headers: {
-                "Access-Control-Allow-Origin": "https://www.tdscoaching.fr",
-                Vary: "Origin",
-                "Access-Control-Allow-Methods":
-                  "GET, POST, PUT, DELETE, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type, Accept",
-              },
-            }
-          );
+          return NextResponse.json({
+            status: 200,
+            message: "Un email vous a été envoyer pour récupérer votre compte",
+          });
         }
       }
     }

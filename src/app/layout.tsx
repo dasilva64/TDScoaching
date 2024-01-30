@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import { Providers } from "./redux/provider";
 import Footer from "./components/footer/footer";
 import Header from "./components/header/header";
-import { Analytics } from "@vercel/analytics/react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -30,7 +29,6 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
-          <Analytics />
         </Providers>
       </body>
     </html>

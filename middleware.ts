@@ -61,7 +61,7 @@ export const middleware = async (request: NextRequest) => {
       }
     }
   }
-  if (!session.isLoggedIn) {
+  if (!session.isLoggedIn || Object.keys(session).length === 0) {
     return NextResponse.redirect(new URL("/", request.url));
   }
   if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
@@ -74,7 +74,10 @@ export const config = {
   matcher: [
     "/profile",
     "/utilisateurs",
+    "/meetings",
+    "/meetingAdmin",
+    "/rendez-vous",
     "/utilisateur/:path*",
-    "/suppression-compte/:path*",
+    "/suppression-compte",
   ],
 };

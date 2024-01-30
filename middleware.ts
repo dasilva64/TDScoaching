@@ -47,7 +47,7 @@ export const middleware = async (request: NextRequest) => {
 
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
   let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-  if (session.isLoggedIn) {
+  if (session.isLoggedIn || Object.keys(session).length !== 0) {
     if (
       request.nextUrl.pathname.startsWith("/utilisateurs") ||
       request.nextUrl.pathname.startsWith("/meetings") ||

@@ -10,7 +10,7 @@ const nextConfig = {
     return [
       {
         // matching all API routes
-        source: "/*",
+        source: "/components/login/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Origin", value: "https://www.tdscoaching.fr" },
           { key: "Content-Security-Policy", value: "connect-src 'self'" },

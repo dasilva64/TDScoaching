@@ -38,111 +38,40 @@ export const middleware = async (request: NextRequest) => {
   });
 
   //const { user } = session;
+
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
   let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-  if (
-    request.nextUrl.pathname.startsWith("/utilisateurs") ||
-    request.nextUrl.pathname.startsWith("/meetings") ||
-    request.nextUrl.pathname.startsWith("/meetingAdmin") ||
-    request.nextUrl.pathname.startsWith("/rendez-vous") ||
-    request.nextUrl.pathname.startsWith("/utilisateur") ||
-    regex.test(request.nextUrl.pathname) ||
-    regexTwo.test(request.nextUrl.pathname)
-  ) {
-    if (session.isLoggedIn) {
-      if (
-        request.nextUrl.pathname.startsWith("/utilisateurs") ||
-        request.nextUrl.pathname.startsWith("/meetings") ||
-        request.nextUrl.pathname.startsWith("/meetingAdmin") ||
-        regex.test(request.nextUrl.pathname)
-      ) {
-        if (session.role !== "ROLE_ADMIN") {
-          return NextResponse.redirect(new URL("/", request.url));
-        }
-      }
-      if (
-        request.nextUrl.pathname.startsWith("/rendez-vous") ||
-        regexTwo.test(request.nextUrl.pathname)
-      ) {
-        if (session.role !== "ROLE_USER") {
-          return NextResponse.redirect(new URL("/", request.url));
-        }
+  if (session.isLoggedIn) {
+    if (
+      request.nextUrl.pathname.startsWith("/utilisateurs") ||
+      request.nextUrl.pathname.startsWith("/meetings") ||
+      request.nextUrl.pathname.startsWith("/meetingAdmin") ||
+      regex.test(request.nextUrl.pathname)
+    ) {
+      if (session.role !== "ROLE_ADMIN") {
+        return NextResponse.redirect(new URL("/", request.url));
       }
     }
-    if (!session.isLoggedIn || Object.keys(session).length === 0) {
-      return NextResponse.redirect(new URL("/", request.url));
+    if (
+      request.nextUrl.pathname.startsWith("/rendez-vous") ||
+      regexTwo.test(request.nextUrl.pathname)
+    ) {
+      if (session.role !== "ROLE_USER") {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
     }
-    if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-    return res;
-  } else {
-    const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
-    const cspHeader = `
-    default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-    style-src 'self' 'nonce-${nonce}';
-    img-src 'self' blob: data:;
-    font-src 'self';
-    object-src 'none';
-    base-uri 'self';
-    form-action 'self';
-    frame-ancestors 'none';
-    block-all-mixed-content;
-    upgrade-insecure-requests;
-`;
-    // Replace newline characters and spaces
-    const contentSecurityPolicyHeaderValue = cspHeader
-      .replace(/\s{2,}/g, " ")
-      .trim();
-
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("x-nonce", nonce);
-
-    requestHeaders.set(
-      "Content-Security-Policy",
-      contentSecurityPolicyHeaderValue
-    );
-
-    const response = NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
-    response.headers.set(
-      "Content-Security-Policy",
-      contentSecurityPolicyHeaderValue
-    );
-    return response;
   }
+  if (!session.isLoggedIn || Object.keys(session).length === 0) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+  if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+  return res;
 };
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    {
-      source: "/((?!api|_next/static|_next/image|favicon.ico).*)",
-      missing: [
-        { type: "header", key: "next-router-prefetch" },
-        { type: "header", key: "purpose", value: "prefetch" },
-      ],
-    },
-  ],
-};
-
-/* export const config = {
-  matcher: [
-    "/",
-    "/qui-suis-je",
-    "/coaching-de-vie",
-    "/tarif",
-    "/contact",
     "/profile",
     "/utilisateurs",
     "/meetings",
@@ -151,4 +80,4 @@ export const config = {
     "/utilisateur/:path*",
     "/suppression-compte",
   ],
-}; */
+};

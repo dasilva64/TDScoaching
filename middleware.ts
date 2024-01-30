@@ -32,12 +32,8 @@ export const middleware = async (request: NextRequest) => {
   } */
   const origin = request.headers.get("origin");
   if ((origin && !allowOrigin.includes(origin)) || !origin) {
-    return new NextResponse(null, {
-      status: 400,
-      statusText: "Bad Request",
-      headers: {
-        "Content-Type": "text/plain",
-      },
+    return new NextResponse(origin, {
+      status: 200,
     });
   } else {
     const res = NextResponse.next();

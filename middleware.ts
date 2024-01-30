@@ -16,7 +16,14 @@ interface SessionData {
   "/profile": test,
 }; */
 
-const allowOrigin = ["https://www.tdscoaching.fr", "https://tdscoaching.fr"];
+const allowOrigin = [
+  "https://www.tdscoaching.fr",
+  "https://tdscoaching.fr",
+  "https://td-scoaching.vercel.app",
+  "https://www.td-scoaching.vercel.app",
+  "https://www.tdscoaching.fr/",
+  "https://tdscoaching.fr",
+];
 
 export const middleware = async (request: NextRequest) => {
   //const session = await getIronSession<SessionData>(cookies(), sessionOptions);

@@ -52,6 +52,7 @@ export const middleware = async (request: NextRequest) => {
         return NextResponse.redirect(new URL("/", request.url));
       }
     }
+
     if (
       request.nextUrl.pathname.startsWith("/rendez-vous") ||
       regexTwo.test(request.nextUrl.pathname)

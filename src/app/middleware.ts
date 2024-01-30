@@ -1,9 +1,6 @@
 import { request } from "http";
 import { SessionOptions, getIronSession } from "iron-session";
-import { Bungee_Shade } from "next/font/google";
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { sessionOptions, sessionOptions as test } from "./lib/session";
 
 interface SessionData {
   id: string;

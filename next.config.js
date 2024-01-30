@@ -8,7 +8,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const nextConfig = {
   productionBrowserSourceMaps: true,
-  async headers() {
+  /* async headers() {
     return [
       {
         // matching all API routes
@@ -30,7 +30,7 @@ const nextConfig = {
 
       }
     ]
-  }
+  } */
     /* externals: {
         // only define the dependencies you are NOT using as externals!
         canvg: "canvg",

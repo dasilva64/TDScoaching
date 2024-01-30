@@ -100,6 +100,7 @@ export async function POST(NextRequest) {
         pass: process.env.SECRET_SMTP_PASSWORD,
       },
     });
+    let test;
     if (user === null) {
       let mailOptions = {
         from: "contact@tds-coachingdevie.fr",
@@ -139,7 +140,6 @@ export async function POST(NextRequest) {
                             </body>
                           </html>`,
       };
-      let test;
       await smtpTransport.sendMail(mailOptions).then((res) => {
         test = res;
       }
@@ -185,7 +185,6 @@ export async function POST(NextRequest) {
                             </body>
                           </html>`,
       };
-      let test;
       await smtpTransport.sendMail(mailOptions).then((res) => {
         test = res;
       }

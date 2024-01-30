@@ -15,6 +15,7 @@ export async function GET(request: Request) {
   let objectSession = {
     session: session,
     origin: request,
+    request: Request,
   };
   return NextResponse.json(objectSession);
   if (session.isLoggedIn !== true) {

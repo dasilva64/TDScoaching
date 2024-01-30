@@ -335,7 +335,9 @@ const ModalUserPasswordData = () => {
               >
                 <FormControl
                   variant="standard"
-                  style={{ margin: "20px 0px 0px 0px" }}
+                  className={
+                    styles.modalEditPasswordData__form__input__password__control
+                  }
                 >
                   <InputLabel
                     sx={{
@@ -376,7 +378,11 @@ const ModalUserPasswordData = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText style={{ color: "red" }}>
+                  <FormHelperText
+                    className={
+                      styles.modalEditPasswordData__form__input__password__helperText
+                    }
+                  >
                     {errorMessagePassword}
                   </FormHelperText>
                 </FormControl>
@@ -403,7 +409,12 @@ const ModalUserPasswordData = () => {
                   }}
                   helperText={errorMessagePassword}
                 /> */}
-                <FormControl variant="standard" style={{ margin: "20px 0px" }}>
+                <FormControl
+                  variant="standard"
+                  className={
+                    styles.modalEditPasswordData__form__input__comfirm__control
+                  }
+                >
                   <InputLabel
                     sx={{
                       color: "black",
@@ -458,7 +469,11 @@ const ModalUserPasswordData = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText style={{ color: "red" }}>
+                  <FormHelperText
+                    className={
+                      styles.modalEditPasswordData__form__input__comfirm__helperText
+                    }
+                  >
                     {errorMessagePasswordComfirm}
                   </FormHelperText>
                 </FormControl>
@@ -500,7 +515,7 @@ const ModalUserPasswordData = () => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  style={{ display: "none" }}
+                  className={styles.modalEditPasswordData__form__input__pseudo}
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

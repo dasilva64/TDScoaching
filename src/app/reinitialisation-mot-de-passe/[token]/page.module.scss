@@ -42,6 +42,25 @@
         padding-top: 5px;
         font-size: 21px;
       }
+      &__pseudo {
+        display: none;
+      }
+      &__comfirm {
+        &__control {
+          margin: 10px 0px;
+        }
+        &__helperText {
+          color: red;
+        }
+      }
+      &__password {
+        &__control {
+          margin: 10px 0px;
+        }
+        &__helperText {
+          color: red;
+        }
+      }
     }
     &__submit {
       text-align: center;

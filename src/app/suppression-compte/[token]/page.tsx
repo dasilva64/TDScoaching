@@ -5,6 +5,7 @@ import { getIronSession } from "iron-session";
 import { SessionData, sessionOptions } from "../../../../lib/session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import NoScript from "@/app/components/noscript/NoScript";
 
 async function getSession() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -17,21 +18,7 @@ const page = async () => {
   }
   return (
     <>
-      <noscript
-        style={{
-          width: "100%",
-          padding: "20px 0",
-          background: "red",
-          position: "fixed",
-          bottom: "0",
-          left: "0",
-          zIndex: "999",
-          color: "white",
-          textAlign: "center",
-        }}
-      >
-        Veuillez activer JavaScript pour profiter pleinement de notre site.
-      </noscript>
+      <NoScript />
       <main className={styles.delete}>
         <h1 className={styles.delete__h1}>
           En attente de suppression du compte

@@ -638,14 +638,16 @@ const FormLogin = () => {
                         </InputAdornment>
                       }
                     />
-                    <FormHelperText style={{ color: "red" }}>
+                    <FormHelperText
+                      className={styles.login__form__input__email__helperText}
+                    >
                       {errorMessageEmail}
                     </FormHelperText>
                   </FormControl>
 
                   <FormControl
                     variant="standard"
-                    style={{ margin: "20px 0px" }}
+                    className={styles.login__form__input__password__control}
                   >
                     <InputLabel
                       sx={{
@@ -686,18 +688,17 @@ const FormLogin = () => {
                         </InputAdornment>
                       }
                     />
-                    <FormHelperText style={{ color: "red" }}>
+                    <FormHelperText
+                      className={
+                        styles.login__form__input__password__helperText
+                      }
+                    >
                       {errorMessagePassword}
                     </FormHelperText>
                   </FormControl>
 
                   <FormControlLabel
-                    className={styles.login__form__checkbox}
-                    style={{
-                      marginTop: "10px",
-                      alignSelf: "start",
-                      marginLeft: "0px",
-                    }}
+                    className={`${styles.login__form__checkbox} ${styles.login__form__input__remember__control}`}
                     control={
                       <Checkbox
                         onChange={(e) => {
@@ -712,7 +713,7 @@ const FormLogin = () => {
                     type="text"
                     name="pseudo"
                     id="pseudo"
-                    style={{ display: "none" }}
+                    className={styles.login__form__input__pseudo}
                     tabIndex={-1}
                     autoComplete="off"
                     onChange={(e) => {

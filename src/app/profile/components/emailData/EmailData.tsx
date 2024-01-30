@@ -332,7 +332,9 @@ const EmailCheck = () => {
               >
                 <FormControl
                   variant="standard"
-                  style={{ margin: "20px 0px 30px 0px" }}
+                  className={
+                    styles.modalEditEmailSendData__form__input__code__control
+                  }
                 >
                   <InputLabel
                     sx={{
@@ -373,7 +375,11 @@ const EmailCheck = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText style={{ color: "red" }}>
+                  <FormHelperText
+                    className={
+                      styles.modalEditEmailSendData__form__input__code__helperText
+                    }
+                  >
                     {errorMessageCode}
                   </FormHelperText>
                 </FormControl>
@@ -404,7 +410,7 @@ const EmailCheck = () => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  style={{ display: "none" }}
+                  className={styles.modalEditEmailSendData__form__input__pseudo}
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

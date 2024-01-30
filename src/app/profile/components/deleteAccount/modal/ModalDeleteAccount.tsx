@@ -260,7 +260,7 @@ const ModalDeleteAccount = () => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  style={{ display: "none" }}
+                  className={styles.modalDeleteAccount__div__input__pseudo}
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

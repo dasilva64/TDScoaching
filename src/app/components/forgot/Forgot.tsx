@@ -352,7 +352,9 @@ const Forgot = () => {
                       </InputAdornment>
                     }
                   />
-                  <FormHelperText style={{ color: "red" }}>
+                  <FormHelperText
+                    className={styles.forgot__form__inputEmail__helperText}
+                  >
                     {inputEmailError}
                   </FormHelperText>
                 </FormControl>
@@ -360,7 +362,7 @@ const Forgot = () => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  style={{ display: "none" }}
+                  className={styles.forgot__form__inputPseudo}
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

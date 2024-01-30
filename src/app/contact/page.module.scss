@@ -52,6 +52,23 @@
         margin-top: -10px;
         display: flex;
         flex-direction: column;
+        &__input {
+          &__lastname {
+            margin: 10px 0px;
+          }
+          &__firstname {
+            margin: 10px 0px;
+          }
+          &__email {
+            margin: 10px 0px;
+          }
+          &__object {
+            margin: 10px 0px;
+          }
+          &__pseudo {
+            display: none;
+          }
+        }
         &__submit {
           margin-top: 20px;
           cursor: pointer;

@@ -51,6 +51,11 @@
   &__div {
     display: flex;
     flex-direction: column;
+    &__input {
+      &__pseudo {
+        display: none;
+      }
+    }
   }
   &__btn {
     &__delete {

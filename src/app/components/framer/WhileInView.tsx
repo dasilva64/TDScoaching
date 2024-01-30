@@ -3,11 +3,10 @@
 import React, { useEffect, useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 
-const WhileInView = ({ children, className, style, type }: any) => {
+const WhileInView = ({ children, className, type }: any) => {
   if (type === "x") {
     return (
       <motion.div
-        style={style}
         className={className}
         initial="hidden"
         whileInView="visible"
@@ -24,7 +23,6 @@ const WhileInView = ({ children, className, style, type }: any) => {
   } else if (type === "y") {
     return (
       <motion.div
-        style={style}
         className={className}
         initial="hidden"
         whileInView="visible"

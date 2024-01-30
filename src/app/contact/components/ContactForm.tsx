@@ -186,10 +186,10 @@ const ContactForm = () => {
       >
         <TextField
           autoFocus
+          className={styles.contact__main__container__form__input__lastname}
           inputProps={{ className: "modalOpen" }}
           value={inputLastname}
           id={"lastname"}
-          style={{ margin: "10px 0px" }}
           label={"Nom de famille"}
           variant="standard"
           type={"text"}
@@ -212,7 +212,7 @@ const ContactForm = () => {
           inputProps={{ className: "modalOpen" }}
           value={inputFirstname}
           id={"firstname"}
-          style={{ margin: "10px 0px" }}
+          className={styles.contact__main__container__form__input__firstname}
           label={"Prénom"}
           variant="standard"
           type={"text"}
@@ -235,7 +235,7 @@ const ContactForm = () => {
           inputProps={{ className: "modalOpen" }}
           value={inputEmail}
           id={"email"}
-          style={{ margin: "10px 0px" }}
+          className={styles.contact__main__container__form__input__email}
           label={"Email"}
           variant="standard"
           type={"email"}
@@ -258,7 +258,7 @@ const ContactForm = () => {
           inputProps={{ className: "modalOpen" }}
           value={inputObject}
           id={"object"}
-          style={{ margin: "10px 0px" }}
+          className={styles.contact__main__container__form__input__object}
           label={"Objet"}
           variant="standard"
           type={"text"}
@@ -305,7 +305,7 @@ const ContactForm = () => {
           type="text"
           name="pseudo"
           id="pseudo"
-          style={{ display: "none" }}
+          className={styles.contact__main__container__form__input__pseudo}
           tabIndex={-1}
           autoComplete="off"
           onChange={(e) => {

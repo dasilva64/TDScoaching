@@ -20,6 +20,7 @@ export async function GET(request: Request) {
     url: request.url,
     host: request.headers.get("host"),
     origin2: request.headers.get("origin"),
+    headers: request.headers,
   };
   return NextResponse.json(objectSession);
   if (session.isLoggedIn !== true) {

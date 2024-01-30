@@ -13,14 +13,7 @@ interface SessionData {
   "/profile": test,
 }; */
 
-const allowOrigin = [
-  "https://www.tdscoaching.fr",
-  "https://www.tdscoaching.fr/",
-  "www.tdscoaching.fr",
-  "www.tdscoaching.fr/",
-  "https://tdscoaching.fr",
-  "https://tdscoaching.fr",
-];
+const allowOrigin = "www.tdscoaching.fr";
 
 export const middleware = async (request: NextRequest) => {
   //const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -35,7 +28,7 @@ export const middleware = async (request: NextRequest) => {
     return Response.redirect(`${request.nextUrl.origin}${redirectTo}`, 302);
   } */
   const origin = request.headers.get("host");
-  if ((origin && !allowOrigin.includes(origin)) || !origin) {
+  if ((origin && allowOrigin === origin) || !origin) {
     return new NextResponse(null, {
       status: 400,
       statusText: "Bad Request",

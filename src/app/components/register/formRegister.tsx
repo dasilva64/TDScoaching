@@ -807,7 +807,7 @@ const FormRegister = () => {
                       label={validMajorInput ? "Oui" : "Non"}
                     />
                   </FormGroup>
-                  <FormHelperText>{majorInputError}</FormHelperText>
+                  <FormHelperText style={{color: "red"}}>{majorInputError}</FormHelperText>
                 </FormControl>
                 <input
                   type="text"

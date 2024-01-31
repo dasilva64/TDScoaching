@@ -181,7 +181,7 @@ export default function Home() {
             />
 
             <Card
-              title={"Amélioter sa confiance en soi"}
+              title={"Améliorer sa confiance en soi"}
               content={
                 "Un manque de confiance en soi peut être un frein majeur à la réalisation de vos objectifs. Un coach professionnel peut vous aider à reconnaître et à renforcer vos forces, à vous accepter tel que vous êtes et à développer une confiance en vous solide."
               }

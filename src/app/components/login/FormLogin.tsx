@@ -22,6 +22,11 @@ import InputLabel from "@mui/material/InputLabel";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { mutate } from "swr";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const FormLogin = () => {
   const { displayModalLogin } = useSelector(
@@ -586,7 +591,9 @@ const FormLogin = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={styles.login__h1}>Se connecter</h1>
+              <h2 className={`${styles.login__h1} ${Parisienne.className}`}>
+                Se connecter
+              </h2>
               {displayInput === false && (
                 <form
                   className={styles.login__form}

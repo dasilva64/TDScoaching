@@ -194,7 +194,7 @@ export async function GET(request: NextRequest) {
           });
           let mailOptions = {
             from: "contact@tds-coachingdevie.fr",
-            to: editUser.mail,
+            to: copyEditEmail.newEmail,
             subject: "Validation de votre nouvelle adresse email",
             html: `<!DOCTYPE html>
               <html lang="fr">
@@ -226,7 +226,7 @@ export async function GET(request: NextRequest) {
             status: 200,
             body: userObject,
             message:
-              "Un code vous à été renvoyer pour valider votre adresse email",
+              "Un code vous à été renvoyé pour valider votre adresse email",
           });
         }
       } else {

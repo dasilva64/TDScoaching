@@ -10,7 +10,12 @@ import { getIronSession } from "iron-session";
 import { SessionData, sessionOptions } from "../../../lib/session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import localFont from "next/font/local";
 import NoScript from "../components/noscript/NoScript";
+const Parisienne = localFont({
+  src: "../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 async function getSession() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -28,11 +33,15 @@ const Profile = async () => {
 
       <main className={styles.profile}>
         <section className={styles.profile__main}>
-          <h1 className={styles.profile__main__h1}>Profile</h1>
+          <h1 className={`${styles.profile__main__h1} ${Parisienne.className}`}>
+            Profile
+          </h1>
           <div className={styles.profile__main__container}>
             <WhileInView type="x">
               <div className={styles.profile__main__container__content}>
-                <h3 className={styles.profile__main__container__content__h3}>
+                <h3
+                  className={`${styles.profile__main__container__content__h3} ${Parisienne.className}`}
+                >
                   Identité
                 </h3>
                 <FirstnameData />
@@ -41,7 +50,9 @@ const Profile = async () => {
             </WhileInView>
             <WhileInView type="x">
               <div className={styles.profile__main__container__content}>
-                <h3 className={styles.profile__main__container__content__h3}>
+                <h3
+                  className={`${styles.profile__main__container__content__h3} ${Parisienne.className}`}
+                >
                   Connexion
                 </h3>
                 <PasswordData />
@@ -58,7 +69,9 @@ const Profile = async () => {
             </WhileInView> */}
             <WhileInView type="x">
               <div className={styles.profile__main__container__content}>
-                <h3 className={styles.profile__main__container__content__h3}>
+                <h3
+                  className={`${styles.profile__main__container__content__h3} ${Parisienne.className}`}
+                >
                   Suppression
                 </h3>
                 <DeleteAccount />

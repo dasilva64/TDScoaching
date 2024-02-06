@@ -16,7 +16,7 @@ const Timeline = () => {
           className="vertical-timeline-element--work"
           contentStyle={{
             background: "orange",
-            color: "#fff",
+            color: "black",
           }}
           contentArrowStyle={{
             borderRight: "7px solid  orange",
@@ -34,7 +34,7 @@ const Timeline = () => {
           className="vertical-timeline-element--work"
           contentStyle={{
             background: "aqua",
-            color: "#fff",
+            color: "black",
           }}
           contentArrowStyle={{
             borderRight: "7px solid  aqua",
@@ -51,7 +51,7 @@ const Timeline = () => {
           className="vertical-timeline-element--work"
           contentStyle={{
             background: "orange",
-            color: "#fff",
+            color: "black",
           }}
           contentArrowStyle={{
             borderRight: "7px solid  orange",
@@ -68,7 +68,7 @@ const Timeline = () => {
           className="vertical-timeline-element--work"
           contentStyle={{
             background: "aqua",
-            color: "#fff",
+            color: "black",
           }}
           contentArrowStyle={{
             borderRight: "7px solid  aqua",
@@ -85,7 +85,7 @@ const Timeline = () => {
           className="vertical-timeline-element--work"
           contentStyle={{
             background: "orange",
-            color: "#fff",
+            color: "black",
           }}
           contentArrowStyle={{
             borderRight: "7px solid  orange",
@@ -102,7 +102,7 @@ const Timeline = () => {
           className="vertical-timeline-element--work"
           contentStyle={{
             background: "aqua",
-            color: "#fff",
+            color: "black",
           }}
           contentArrowStyle={{
             borderRight: "7px solid  aqua",
@@ -118,7 +118,7 @@ const Timeline = () => {
           className="vertical-timeline-element--work"
           contentStyle={{
             background: "orange",
-            color: "#fff",
+            color: "black",
           }}
           contentArrowStyle={{
             borderRight: "7px solid  orange",
@@ -135,7 +135,7 @@ const Timeline = () => {
           className="vertical-timeline-element--work"
           contentStyle={{
             background: "aqua",
-            color: "#fff",
+            color: "black",
           }}
           contentArrowStyle={{
             borderRight: "7px solid  aqua",

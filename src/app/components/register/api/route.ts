@@ -97,8 +97,7 @@ export async function POST(request: NextRequest) {
           {
             status: 400,
             type: "error",
-            message:
-              "Vous ne pouvez pas modifier votre prénom, veuillez réessayer",
+            message: "Vous ne pouvez pas vous inscrire, veuillez réessayer",
           },
           {
             status: 400,
@@ -204,7 +203,7 @@ export async function POST(request: NextRequest) {
             await smtpTransport.sendMail(mailOptions);
             return NextResponse.json({
               status: 200,
-              message: "Un mail vous a été envoyer pour activer votre compte",
+              message: "Un mail vous a été envoyé pour activer votre compte",
             });
           }
         } else {
@@ -299,7 +298,7 @@ export async function POST(request: NextRequest) {
                   return NextResponse.json({
                     status: 200,
                     message:
-                      "Un email vous a été envoyer pour activer votre compte",
+                      "Un email vous a été envoyé pour activer votre compte",
                   });
                 }
               } else {

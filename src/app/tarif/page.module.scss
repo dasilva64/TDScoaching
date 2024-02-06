@@ -35,7 +35,6 @@
           text-align: center;
           font-size: 18px;
           background-color: orange;
-          color: white;
           padding: 10px;
           margin-top: 20px;
           border-radius: 10px;
@@ -60,7 +59,6 @@
           line-height: 1.4;
           font-size: 18px;
           text-align: center;
-          color: white;
           padding: 75px 10px 10px 10px;
           z-index: 1;
           width: 250px;
@@ -126,16 +124,16 @@
           }
         }
         &__unique {
-          background-color: rgba(255, 0, 0, 0.339);
+          background-color: rgb(182 0 0);
           border: 3px solid rgba(255, 0, 0, 0.339);
           margin-bottom: 30px;
         }
         &__flash {
-          background-color: rgba(255, 166, 0, 0.556);
+          background-color: rgb(128 50 170);
           border: 3px solid rgba(255, 166, 0, 0.556);
         }
         &__long {
-          background-color: rgba(0, 128, 0, 0.278);
+          background-color: rgb(0 104 0);
           border: 3px solid rgba(0, 128, 0, 0.278);
         }
       }

@@ -23,6 +23,7 @@
     color: black;
     margin: 40px 0px;
     text-align: center;
+    font-size: 48px;
   }
   &__btn {
     cursor: pointer;
@@ -149,6 +150,9 @@
     &__btn {
       right: 20px;
       top: 22px;
+    }
+    &__h1 {
+      font-size: 36px;
     }
   }
 }

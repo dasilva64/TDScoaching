@@ -162,7 +162,7 @@ export async function POST(request: NextRequest) {
                 status: 200,
                 body: userObject,
                 message:
-                  "Un email vous a été envoyer pour valider votre nouvelle adresse email",
+                  "Un email vous a été envoyé pour valider votre nouvelle adresse email",
               });
             }
           } else {

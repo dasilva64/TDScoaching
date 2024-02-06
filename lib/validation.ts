@@ -6,7 +6,10 @@ export const validationBody = (body: any) => {
     if (key === "email") {
       let regex = /^.{5,50}$/;
       if (!validator.isEmail(value.trim(), { ignore_max_length: true })) {
-        arrayMessageError.push(["email", "Email : doit être un format valide"]);
+        arrayMessageError.push([
+          "email",
+          "Email : doit avoir un format valide",
+        ]);
       } else {
         if (!validator.matches(value.trim(), regex)) {
           arrayMessageError.push([
@@ -53,7 +56,7 @@ export const validationBody = (body: any) => {
         if (!validator.matches(value.trim(), regex)) {
           arrayMessageError.push([
             "object",
-            "Objet : doit contenir entre 2 et 50 caractères (lettres, chiffres, ponctuation) et ne peut pas commencer par une ponctuation",
+            "Objet : doit contenir entre 2 et 50 caractères (lettre, chiffre, ponctuation) et ne peut pas commencer par une ponctuation",
           ]);
         }
       }
@@ -66,7 +69,7 @@ export const validationBody = (body: any) => {
         if (!validator.matches(value.trim(), regex)) {
           arrayMessageError.push([
             "message",
-            "Message : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation) et ne peut pas commencer par une ponctuation",
+            "Message : doit contenir au moins 2 caractères (lettre, chiffre, ponctuation) et ne peut pas commencer par une ponctuation",
           ]);
         }
       }

@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
         status: 200,
         body: user,
         message:
-          "Merci de nous avoir contacter, nous allons vous répondre le plus vite possible",
+          "Merci de nous avoir contacteé, nous allons vous répondre le plus vite possible",
       });
     }
   }

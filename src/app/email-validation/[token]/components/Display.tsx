@@ -11,7 +11,11 @@ const Display = () => {
   const { data, isLoading, error } = useUserEmailValidation(token[2]);
   let content;
   if (error) {
-    content = <div className={styles.display__loadData}>{data.message}</div>;
+    content = (
+      <div className={styles.display__loadData}>
+        Erreur lors du chargement des données
+      </div>
+    );
   }
   if (isLoading) {
     content = (

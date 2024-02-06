@@ -79,7 +79,13 @@ const page = () => {
           </div>
         </section>
         <section className={styles.coaching__help}>
-          <p className={`${styles.coaching__help__p} ${Parisienne.className}`}>
+          <h2
+            className={`${styles.coaching__help__h2} ${Parisienne.className}`}
+          >
+            Les objectifs
+            <br /> d&apos;un coaching de vie
+          </h2>
+          <p className={styles.coaching__help__p}>
             Si vous cherchez à renforcer, améliorer et réparer les dynamiques
             opérant au sein de la famille, du couple et sur le plan
             professionnel, le coaching peut vous aider à :

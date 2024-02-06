@@ -18,6 +18,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import { useRouter } from "next/navigation";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const ModalUserPasswordData = () => {
   const { displayModalEditPassword } = useSelector(
@@ -113,7 +118,7 @@ const ModalUserPasswordData = () => {
         setValidPasswordInput(false);
         setValidPasswordComfirmInput(false);
         setErrorMessagePasswordComfirm(
-          "Comfirmation mot de passe : les mots de passe sont identiques"
+          "Confirmation mot de passe : les mots de passe sont identiques"
         );
       }
     } else {
@@ -125,7 +130,7 @@ const ModalUserPasswordData = () => {
       if (validPasswordComfirmInput === false) {
         if (passwordComfirmInput.length === 0) {
           setErrorMessagePasswordComfirm(
-            "Comfirmation mot de passe : ne peut pas être vide"
+            "Confirmation mot de passe : ne peut pas être vide"
           );
         }
       }
@@ -215,7 +220,7 @@ const ModalUserPasswordData = () => {
         setValidInput(true);
         setErrorMessage("");
         setErrorMessagePasswordComfirm(
-          "Comfirmation mot de passe : les mots de passe doivent être identique"
+          "Confirmation mot de passe : les mots de passe doivent être identiques"
         );
         setValidPasswordComfirmInput(false);
       } else if (
@@ -238,7 +243,7 @@ const ModalUserPasswordData = () => {
         setValidInput(false);
         setErrorMessage("");
         setErrorMessagePasswordComfirm(
-          "Comfirmation mot de passe : les mots de passe doivent être identique"
+          "Confirmation mot de passe : les mots de passe doivent être identiques"
         );
         setValidPasswordComfirmInput(false);
       } else {
@@ -255,7 +260,7 @@ const ModalUserPasswordData = () => {
         setValidInput(false);
         setErrorMessage(errorMessage);
         setErrorMessagePasswordComfirm(
-          "Comfirmation mot de passe : les mots de passe doivent être identique"
+          "Confirmation mot de passe : les mots de passe doivent être identiques"
         );
         setValidPasswordComfirmInput(false);
       } else {
@@ -323,9 +328,11 @@ const ModalUserPasswordData = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={styles.modalEditPasswordData__h1}>
-                Modification de votre mot de passe
-              </h1>
+              <h2
+                className={`${styles.modalEditPasswordData__h1} ${Parisienne.className}`}
+              >
+                Modifier votre mot de passe
+              </h2>
               <form
                 className={styles.modalEditPasswordData__form}
                 action=""
@@ -413,12 +420,12 @@ const ModalUserPasswordData = () => {
                     }}
                     htmlFor="standard-adornment-password-comfirm"
                   >
-                    Comfirmation de mot de passe
+                    Confirmation de mot de passe
                   </InputLabel>
                   <Input
                     id="standard-adornment-password-comfirm"
                     value={passwordComfirmInput}
-                    placeholder={"Entrez votre comfirmation de mot de passe"}
+                    placeholder={"Entrez votre confirmation de mot de passe"}
                     type={showPasswordComfirm ? "text" : "password"}
                     onChange={(e) => {
                       let removeSpace = "";
@@ -435,7 +442,7 @@ const ModalUserPasswordData = () => {
                       ) {
                         setValidPasswordComfirmInput(false);
                         setErrorMessagePasswordComfirm(
-                          "Comfirmation mot de passe : les mots de passe doivent être identique"
+                          "Confirmation mot de passe : les mots de passe doivent être identiques"
                         );
                       } else {
                         setValidPasswordComfirmInput(true);

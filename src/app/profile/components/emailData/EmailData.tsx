@@ -22,6 +22,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Visibility from "@mui/icons-material/Visibility";
 import { useRouter } from "next/navigation";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const EmailCheck = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -314,9 +319,11 @@ const EmailCheck = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={styles.modalEditEmailSendData__h1}>
+              <h2
+                className={`${styles.modalEditEmailSendData__h1} ${Parisienne.className}`}
+              >
                 Validation de votre nouvel email {content}
-              </h1>
+              </h2>
               <p>
                 Afin de renforcer la sécurité de vos données et de vos
                 documents, nous devons vérifier votre adresse email. Nous vous

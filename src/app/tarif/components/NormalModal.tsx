@@ -74,9 +74,9 @@ const NormalModal = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={`${styles.login__h1} ${Parisienne.className}`}>
+              <h2 className={`${styles.login__h1} ${Parisienne.className}`}>
                 Séance coaching
-              </h1>
+              </h2>
               <p className={styles.login__p}>
                 <Image
                   className={styles.login__p__icone}
@@ -110,11 +110,10 @@ const NormalModal = () => {
                 />
                 : par carte bancaire
               </p>
-              <p className={styles.tarif__next__container__content__p}>
-                Ensuite, le véritable travail de coaching commence. Les séances
-                de coaching dureront entre 45mn et 1h et seront généralement
-                espacées de 2 semaines. Elles permettront de prendre conscience
-                du fonctionnement actuel et des blocages.
+              <p className={styles.login__content}>
+                Les séances de coaching dureront entre 45mn et 1h et seront
+                généralement espacées de 2 semaines. Elles permettront de
+                prendre conscience du fonctionnement actuel et des blocages.
                 <br />
                 Vous choisirez un objectif (c’est-à-dire ce sur quoi vous
                 souhaitez avancer) qui soit clairement mesurable, contextualisé

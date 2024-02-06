@@ -18,13 +18,13 @@ const Card = ({ title, content }: any) => {
       } else {
         return styles.card__p__hide;
       }
-    } else {
+    } /* else {
       if (show === true) {
         return styles.card__p__about__show;
       } else {
         return styles.card__p__about__hide;
       }
-    }
+    } */
   };
   return (
     <>
@@ -48,7 +48,9 @@ const Card = ({ title, content }: any) => {
             alt="bousole"
           />
         </button>
-        <p className={`${p()} ${styles.card__p}`}>{content}</p>{" "}
+        <div className={`${p()} ${styles.card__p}`}>
+          <p className={styles.card__p__content}>{content}</p>{" "}
+        </div>
       </WhileInView>
     </>
   );

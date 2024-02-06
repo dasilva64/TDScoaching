@@ -94,7 +94,7 @@ const Tarif = () => {
                     src={"/assets/icone/check-solid.svg"}
                     alt="bousole"
                   />
-                  1 séances de coaching (<ButtonOpenNormal />)
+                  1 séance de coaching (<ButtonOpenNormal />)
                 </li>
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image

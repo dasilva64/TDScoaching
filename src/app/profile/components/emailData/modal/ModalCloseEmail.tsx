@@ -9,6 +9,11 @@ import fetchGet from "../../../../../../src/app/components/fetch/fetchGet";
 //import useGet from "../../../../components/hook/useGet";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const ModalCloseEmail = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -87,9 +92,11 @@ const ModalCloseEmail = () => {
                 transition: { duration: 0.3 },
               }}
             >
-              <h1 className={styles.modalCloseEmail__h1}>
+              <h2
+                className={`${styles.modalCloseEmail__h1} ${Parisienne.className}`}
+              >
                 Êtes-vous sûr de vouloir quitter ?
-              </h1>
+              </h2>
               <p>
                 Vous conserverez votre adresse e-mail précédente si vous étiez
                 en train de la modifier.

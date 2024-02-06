@@ -78,9 +78,9 @@ const DiscoveryModal = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={`${styles.login__h1} ${Parisienne.className}`}>
+              <h2 className={`${styles.login__h1} ${Parisienne.className}`}>
                 Séance découverte
-              </h1>
+              </h2>
               <p className={styles.login__p}>
                 <Image
                   className={styles.login__p__icone}
@@ -103,7 +103,7 @@ const DiscoveryModal = () => {
                 />
                 : En distanciel (Visio)
               </p>
-              <p>
+              <p className={styles.login__content}>
                 Le coaching débutera par une première séance dite de «
                 découverte ». Il s’agit d’une séance de rencontre de 30 à 45
                 minutes qui est le point de départ de tout travail en coaching.

@@ -20,6 +20,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import Visibility from "@mui/icons-material/Visibility";
 import { useRouter } from "next/navigation";
 import useGet from "@/app/components/hook/useGet";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const ModalUserLastnameData = () => {
   const { displayModalEditLastname } = useSelector(
@@ -258,9 +263,11 @@ const ModalUserLastnameData = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={styles.modalEditMainUserData__h1}>
+              <h2
+                className={`${styles.modalEditMainUserData__h1} ${Parisienne.className}`}
+              >
                 Modifier votre nom de famille
-              </h1>
+              </h2>
               <form
                 className={styles.modalEditMainUserData__form}
                 action=""

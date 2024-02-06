@@ -24,6 +24,7 @@
     color: black;
     margin: 40px 0px;
     text-align: center;
+    font-size: 48px;
   }
   &__reSend {
     text-align: center;
@@ -93,6 +94,9 @@
 @media screen and (max-width: 768px) {
   .modalCloseEmail {
     width: 80%;
+    &___h1 {
+      font-size: 36px;
+    }
   }
 }
 

@@ -25,6 +25,11 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const FormRegister = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -209,7 +214,7 @@ const FormRegister = () => {
         setValidPasswordInput(false);
         setValidPasswordComfirmInput(false);
         setPasswordComfirmError(
-          "Comfirmation mot de passe : les mots de passe sont identiques"
+          "Confirmation mot de passe : les mots de passe sont identiques"
         );
       }
     } else {
@@ -239,7 +244,7 @@ const FormRegister = () => {
       if (validPasswordComfirmInput === false) {
         if (passwordComfirmInput.length === 0) {
           setPasswordComfirmError(
-            "Comfirmation mot de passe : les mots de passe doivent être identique"
+            "Confirmation mot de passe : les mots de passe doivent être identiques"
           );
         }
       }
@@ -301,7 +306,7 @@ const FormRegister = () => {
         setValidInput(true);
         setErrorMessage("");
         setPasswordComfirmError(
-          "Comfirmation mot de passe : les mots de passe doivent être identique"
+          "Confirmation mot de passe : les mots de passe doivent être identiques"
         );
         setValidPasswordComfirmInput(false);
       } else if (
@@ -324,7 +329,7 @@ const FormRegister = () => {
         setValidInput(false);
         setErrorMessage("");
         setPasswordComfirmError(
-          "Comfirmation mot de passe : les mots de passe doivent être identique"
+          "Confirmation mot de passe : les mots de passe doivent être identiques"
         );
         setValidPasswordComfirmInput(false);
       } else {
@@ -341,7 +346,7 @@ const FormRegister = () => {
         setValidInput(false);
         setErrorMessage(errorMessage);
         setPasswordComfirmError(
-          "Comfirmation mot de passe : les mots de passe doivent être identique"
+          "Confirmation mot de passe : les mots de passe doivent être identiques"
         );
         setValidPasswordComfirmInput(false);
       } else {
@@ -454,7 +459,9 @@ const FormRegister = () => {
                 </button>
               </div>
 
-              <h1 className={styles.register__h1}>Création de compte</h1>
+              <h2 className={`${styles.register__h1} ${Parisienne.className}`}>
+                Création de compte
+              </h2>
               <form
                 className={styles.register__form}
                 action=""
@@ -678,12 +685,12 @@ const FormRegister = () => {
                     }}
                     htmlFor="standard-adornment-password-comfirm"
                   >
-                    Comfirmation mot de passe
+                    Confirmation mot de passe
                   </InputLabel>
                   <Input
                     id="standard-adornment-password-comfirm"
                     value={passwordComfirmInput}
-                    placeholder={"Entrez comfirmation de votre mot de passe"}
+                    placeholder={"Entrez confirmation de votre mot de passe"}
                     type={showPasswordComfirm ? "text" : "password"}
                     onChange={(e) => {
                       let removeSpace = "";
@@ -700,7 +707,7 @@ const FormRegister = () => {
                       ) {
                         setValidPasswordComfirmInput(false);
                         setPasswordComfirmError(
-                          "Comfirmation mot de passe : les mots de passe doivent être identique"
+                          "Confirmation mot de passe : les mots de passe doivent être identique"
                         );
                       } else {
                         setValidPasswordComfirmInput(true);
@@ -807,7 +814,9 @@ const FormRegister = () => {
                       label={validMajorInput ? "Oui" : "Non"}
                     />
                   </FormGroup>
-                  <FormHelperText style={{color: "red"}}>{majorInputError}</FormHelperText>
+                  <FormHelperText style={{ color: "red" }}>
+                    {majorInputError}
+                  </FormHelperText>
                 </FormControl>
                 <input
                   type="text"
@@ -827,9 +836,9 @@ const FormRegister = () => {
                     target="_blank"
                     href={"/conditions-generales-utilisations"}
                   >
-                    conditions générales d&apos;utilisations
+                    conditions générales d&apos;utilisation
                   </Link>{" "}
-                  de notre site
+                  du site
                 </p>
                 <div className={styles.register__form__submit}>
                   {isLoading === false && (

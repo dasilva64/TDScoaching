@@ -70,7 +70,7 @@ const About = () => {
                 ACC délivrée par la fédération internationale de coaching.
                 Aujourd’hui notre société constitue un environnement propice au
                 cumul de situations stressantes auxquelles peuvent être exposées
-                les personnes : inégalités socio- économiques, insécurité,
+                les personnes : inégalités socio-économiques, insécurité,
                 violence, haine, chômage et pauvreté entre autres. Nous ne
                 sommes pas forcément tous concernés par le processus de
                 résilience. En revanche, nous sommes tous concernés par la

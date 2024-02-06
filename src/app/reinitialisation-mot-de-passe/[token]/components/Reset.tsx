@@ -85,7 +85,7 @@ const Reset = () => {
         setValidPasswordInput(false);
         setValidPasswordComfirmInput(false);
         setPasswordComfirmError(
-          "Comfirmation mot de passe : les mots de passe sont identiques"
+          "Confirmation mot de passe : les mots de passe sont identiques"
         );
       }
     } else {
@@ -97,7 +97,7 @@ const Reset = () => {
       if (validPasswordComfirmInput === false) {
         if (passwordComfirmInput.length === 0) {
           setPasswordComfirmError(
-            "Comfirmation mot de passe : les mots de passe doivent être identique"
+            "Confirmation mot de passe : les mots de passe doivent être identiques"
           );
         }
       }
@@ -129,7 +129,7 @@ const Reset = () => {
         setValidInput(true);
         setErrorMessage("");
         setPasswordComfirmError(
-          "Comfirmation mot de passe : les mots de passe doivent être identique"
+          "Confirmation mot de passe : les mots de passe doivent être identiques"
         );
         setValidPasswordComfirmInput(false);
       } else if (
@@ -152,7 +152,7 @@ const Reset = () => {
         setValidInput(false);
         setErrorMessage("");
         setPasswordComfirmError(
-          "Comfirmation mot de passe : les mots de passe doivent être identique"
+          "Confirmation mot de passe : les mots de passe doivent être identiques"
         );
         setValidPasswordComfirmInput(false);
       } else {
@@ -169,7 +169,7 @@ const Reset = () => {
         setValidInput(false);
         setErrorMessage(errorMessage);
         setPasswordComfirmError(
-          "Comfirmation mot de passe : les mots de passe doivent être identique"
+          "Confirmation mot de passe : les mots de passe doivent être identiques"
         );
         setValidPasswordComfirmInput(false);
       } else {
@@ -254,12 +254,12 @@ const Reset = () => {
           }}
           htmlFor="standard-adornment-password-comfirm"
         >
-          Comfirmation de mot de passe
+          Confirmation de mot de passe
         </InputLabel>
         <Input
           id="standard-adornment-password-comfirm"
           value={passwordComfirmInput}
-          placeholder={"Entrez votre comfirmation de mot de passe"}
+          placeholder={"Entrez votre confirmation de mot de passe"}
           type={showPasswordComfirm ? "text" : "password"}
           onChange={(e) => {
             let removeSpace = "";
@@ -273,7 +273,7 @@ const Reset = () => {
             if (passwordInput.length > 0 && removeSpace !== passwordInput) {
               setValidPasswordComfirmInput(false);
               setPasswordComfirmError(
-                "Comfirmation mot de passe : les mots de passe doivent être identique"
+                "Confirmation mot de passe : les mots de passe doivent être identique"
               );
             } else {
               setValidPasswordComfirmInput(true);

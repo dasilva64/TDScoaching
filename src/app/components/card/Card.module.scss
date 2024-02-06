@@ -37,17 +37,16 @@
     top: -5px;
     padding: 20px 10px 10px 10px;
     height: 0;
-    color: white;
     box-shadow: 5px 5px 5px aqua;
     transition: all 400ms ease-in;
     font-size: 16px;
     line-height: 1.4;
     &__show {
       opacity: 1;
-      height: 135px;
+      height: 145px;
       margin-bottom: 20px;
     }
-    &__about {
+    /* &__about {
       &__show {
         opacity: 1;
         height: 195px;
@@ -57,10 +56,30 @@
         opacity: 0;
         height: 0;
       }
-    }
+    } */
     &__hide {
       opacity: 0;
       height: 0;
+    }
+    &__content {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .card {
+    &__p {
+      /* &__about {
+        &__show {
+          height: 100px;
+        }
+      } */
+      &__show {
+        height: 160px;
+      }
     }
   }
 }
@@ -68,13 +87,13 @@
 @media screen and (max-width: 1024px) {
   .card {
     &__p {
-      &__about {
+      /* &__about {
         &__show {
           height: 100px;
         }
-      }
+      } */
       &__show {
-        height: 110px;
+        height: 120px;
       }
     }
   }
@@ -84,6 +103,21 @@
   .card {
     &__h3 {
       font-size: 16px;
+    }
+    &__p {
+      &__show {
+        height: 140px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .card {
+    &__p {
+      &__show {
+        height: 160px;
+      }
     }
   }
 }
@@ -95,13 +129,32 @@
       max-width: 90%;
     }
     &__p {
-      &__about {
+      /* &__about {
         &__show {
           height: 210px;
         }
-      }
+      } */
       &__show {
-        height: 225px;
+        height: 190px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 325px) {
+  .card {
+    padding: 15px;
+    &__h3 {
+      max-width: 90%;
+    }
+    &__p {
+      /* &__about {
+        &__show {
+          height: 210px;
+        }
+      } */
+      &__show {
+        height: 235px;
       }
     }
   }

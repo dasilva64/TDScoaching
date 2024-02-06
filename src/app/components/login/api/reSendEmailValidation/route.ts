@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
             smtpTransport.sendMail(mailOptions);
             return NextResponse.json({
               status: 200,
-              message: "Un email vous a été renvoyer pour activer votre compte",
+              message: "Un email vous a été renvoyé pour activer votre compte",
             });
           }
         }
@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
           {
             status: 400,
             message:
-              "Le token de validation est expiré ou l'utilisateur est déjà validé son compte",
+              "Le token de validation est expiré ou l'utilisateur a déjà validé son compte",
           },
           {
             status: 400,

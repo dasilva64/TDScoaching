@@ -19,6 +19,11 @@ import useGet from "../../../../components/hook/useGet";
 import { AnimatePresence, motion } from "framer-motion";
 import Visibility from "@mui/icons-material/Visibility";
 import { useRouter } from "next/navigation";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const ModalUserSendToken = () => {
   const { displayModalSendTokenEmail } = useSelector(
@@ -230,9 +235,11 @@ const ModalUserSendToken = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={styles.modalEditEmailData__h1}>
+              <h2
+                className={`${styles.modalEditEmailData__h1} ${Parisienne.className}`}
+              >
                 Modifier votre addresse mail
-              </h1>
+              </h2>
               <form
                 className={styles.modalEditEmailData__form}
                 action=""

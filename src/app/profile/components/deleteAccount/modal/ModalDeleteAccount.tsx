@@ -13,6 +13,11 @@ import fetchPost from "../../../../../../src/app/components/fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
 import { RootState } from "@/app/redux/store";
 import Image from "next/image";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../../../../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 const ModalDeleteAccount = () => {
   const { displayModalDeleteAccount } = useSelector(
@@ -199,9 +204,11 @@ const ModalDeleteAccount = () => {
                   height={30}
                 ></Image>
               </button>
-              <h1 className={styles.modalDeleteAccount__h1}>
+              <h2
+                className={`${styles.modalDeleteAccount__h1} ${Parisienne.className}`}
+              >
                 Suppression du compte
-              </h1>
+              </h2>
               <div className={styles.modalDeleteAccount__div}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel id="reasonInput">
@@ -222,7 +229,7 @@ const ModalDeleteAccount = () => {
                     </MenuItem>
                     <MenuItem
                       value={
-                        "Vous avez atteint vos objectifs de coaching de vie et vous avez plus besoin des services offerts par le site"
+                        "Vous avez atteint vos objectifs de coaching de vie et vous n'avez plus besoin des services offerts par le site"
                       }
                     >
                       Vous avez atteint vos objectifs de coaching de vie et vous

@@ -22,6 +22,7 @@
   &__h1 {
     color: black;
     margin: 40px 0px;
+    font-size: 48px;
     text-align: center;
   }
   &__btn {
@@ -51,9 +52,19 @@
   &__p {
     display: flex;
     margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 1.4;
     &__icone {
       margin-right: 7px;
     }
+  }
+  &__content {
+    font-size: 18px;
+    line-height: 1.4;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    word-spacing: -0.05em;
   }
 }
 
@@ -64,6 +75,15 @@
     &__btn {
       right: 20px;
       top: 22px;
+    }
+    &__h1 {
+      font-size: 36px;
+    }
+    &__content {
+      font-size: 16px;
+    }
+    &__p {
+      font-size: 16px;
     }
   }
 }

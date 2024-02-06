@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
             status: 400,
             type: "error",
             message:
-              "Vous ne pouvez pas modifier votre email, veuillez réessayer",
+              "Vous ne pouvez pas supprimer votre compte, veuillez réessayer",
           },
           {
             status: 400,
@@ -149,8 +149,7 @@ export async function POST(request: NextRequest) {
             await smtpTransport.sendMail(mailOptions);
             return NextResponse.json({
               status: 200,
-              message:
-                "Un email vous a été envoyer pour supprimer votre compte",
+              message: "Un email vous a été envoyé pour supprimer votre compte",
             });
           }
         } else {

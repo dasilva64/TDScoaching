@@ -34,10 +34,11 @@ export default function Home() {
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
           />
           <div className={styles.home__bg__container}>
-            <h1 className={styles.home__bg__container__h1}>
-              Thierry <br />
-              Da Silva
-            </h1>
+            <h2
+              className={`${styles.home__bg__container__h1} ${Parisienne.className}`}
+            >
+              Thierry Da Silva
+            </h2>
             <p className={styles.home__bg__container__p}>
               Coach professionnel certifié, je vous accompagne dans votre
             </p>
@@ -50,11 +51,11 @@ export default function Home() {
         </section>
         <section className={styles.home__who}>
           <div className={styles.home__who__container}>
-            <h2
+            <h1
               className={`${styles.home__who__container__h2} ${Parisienne.className}`}
             >
               Vous êtes en quête <br /> de bien-être ?
-            </h2>
+            </h1>
 
             <p className={styles.home__who__container__p}>
               En offrant un espace pour la réflexion, le coaching peut aider à
@@ -188,7 +189,7 @@ export default function Home() {
             />
 
             <Card
-              title={"Gestion du Stress"}
+              title={"Gestion du stress"}
               content={
                 "La vie moderne peut être stressante. Un coach professionnel vous aidera à trouver des techniques de gestion du stress, de relaxation et de prise de recul pour mieux faire face aux défis de la vie quotidienne."
               }

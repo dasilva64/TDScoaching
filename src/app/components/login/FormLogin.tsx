@@ -582,7 +582,11 @@ const FormLogin = () => {
                 transition: { duration: 0.3 },
               }}
             >
-              <button className={styles.login__btn} onClick={() => closeForm()}>
+              <button
+                className={styles.login__btn}
+                type="button"
+                onClick={() => closeForm()}
+              >
                 <Image
                   className={styles.login__btn__img}
                   src="/assets/icone/xmark-solid.svg"
@@ -618,7 +622,7 @@ const FormLogin = () => {
                       Email
                     </InputLabel>
                     <Input
-                      autoFocus
+                      autoFocus={displayModalLogin === true ? true : false}
                       id="standard-adornment-email"
                       value={emailInput}
                       placeholder={"Entrez votre mail"}
@@ -788,6 +792,7 @@ const FormLogin = () => {
                     )}
                     {isMutating === false && (
                       <button
+                        type="button"
                         className={styles.login__forgot__btn}
                         onClick={() => {
                           dispatch({

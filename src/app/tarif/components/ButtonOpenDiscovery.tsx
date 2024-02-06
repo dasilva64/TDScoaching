@@ -14,6 +14,7 @@ const ButtonOpenDiscovery = () => {
   return (
     <button
       className={`${styles.button} modalOpen`}
+      type="button"
       onClick={() => {
         handlerClick();
       }}

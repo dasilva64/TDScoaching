@@ -10,6 +10,7 @@ const GoDown = () => {
       <button
         className={`${styles.btn} modalOpen`}
         tabIndex={0}
+        type="button"
         onClick={() => {
           if (document)
             document

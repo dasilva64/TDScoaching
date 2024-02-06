@@ -439,6 +439,7 @@ const FormRegister = () => {
               <div className={styles.register__top}>
                 <button
                   className={styles.register__top__back}
+                  type="button"
                   onClick={() => {
                     backLogin();
                   }}
@@ -446,6 +447,7 @@ const FormRegister = () => {
                   Retour à la connection
                 </button>
                 <button
+                  type="button"
                   className={styles.register__top__close}
                   onClick={() => closeForm()}
                 >
@@ -519,7 +521,7 @@ const FormRegister = () => {
                     Prénom
                   </InputLabel>
                   <Input
-                    autoFocus
+                    autoFocus={displayModalRegister === true ? true : false}
                     id="standard-adornment-firstname"
                     value={firstnameInput}
                     placeholder={"Entrez votre prénom"}

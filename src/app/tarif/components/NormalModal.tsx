@@ -63,7 +63,7 @@ const NormalModal = () => {
             >
               <button
                 className={styles.login__btn}
-                autoFocus
+                type="button"
                 onClick={() => closeForm()}
               >
                 <Image

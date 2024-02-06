@@ -103,6 +103,7 @@ const ModalCloseEmail = () => {
               </p>
               <div className={styles.modalCloseEmail__reSend}>
                 <button
+                  type="button"
                   className={styles.modalCloseEmail__reSend__btn}
                   onClick={() => {
                     dispatch({
@@ -146,6 +147,7 @@ const ModalCloseEmail = () => {
                 {!isMutating && (
                   <>
                     <button
+                      type="button"
                       className={styles.modalCloseEmail__reSend__btn}
                       onClick={() => {
                         dispatch({

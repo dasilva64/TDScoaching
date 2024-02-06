@@ -224,6 +224,7 @@ const ModalUserSendToken = () => {
               }}
             >
               <button
+                type="button"
                 className={styles.modalEditEmailData__btn}
                 onClick={() => closeForm()}
               >
@@ -263,7 +264,9 @@ const ModalUserSendToken = () => {
                     Email
                   </InputLabel>
                   <Input
-                    autoFocus
+                    autoFocus={
+                      displayModalSendTokenEmail === true ? true : false
+                    }
                     id="standard-adornment-email"
                     value={emailInput}
                     placeholder={"Entrez votre mail"}

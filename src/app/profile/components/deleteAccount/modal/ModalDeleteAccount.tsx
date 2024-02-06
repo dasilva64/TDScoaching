@@ -195,6 +195,7 @@ const ModalDeleteAccount = () => {
               <button
                 className={styles.modalDeleteAccount__btn}
                 onClick={() => closeForm()}
+                type="button"
               >
                 <Image
                   className={styles.modalDeleteAccount__btn__img}

@@ -11,11 +11,11 @@ const Parisienne = localFont({
   display: "swap",
 });
 
-export const metadata = {
+/* export const metadata = {
   title: "Contactez votre coach de vie - tdscoaching",
   description:
     "Vous pouvez me contacter par mail : contact@tds-coachingdevie.fr ou par téléphone : 0781673125",
-};
+}; */
 
 export default function Home() {
   return (

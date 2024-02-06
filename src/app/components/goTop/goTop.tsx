@@ -72,6 +72,7 @@ const GoTop = () => {
               ? styles.top__flash
               : styles.top__noFlash
           } modalOpen`}
+          type="button"
           onClick={() => {
             goTop();
           }}

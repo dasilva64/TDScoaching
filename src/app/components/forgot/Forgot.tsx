@@ -250,6 +250,7 @@ const Forgot = () => {
             >
               <div className={styles.forgot__top}>
                 <button
+                  type="button"
                   className={styles.forgot__top__back}
                   onClick={() => {
                     clearState();
@@ -261,6 +262,7 @@ const Forgot = () => {
                 </button>
                 <button
                   className={styles.forgot__top__close}
+                  type="button"
                   onClick={() => {
                     clearState();
                     dispatch({
@@ -331,7 +333,7 @@ const Forgot = () => {
                     Email
                   </InputLabel>
                   <Input
-                    autoFocus
+                    autoFocus={displayModalForgot === true ? true : false}
                     id="standard-adornment-email"
                     value={inputEmail}
                     placeholder={"Entrez votre mail"}

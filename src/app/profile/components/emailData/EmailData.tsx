@@ -307,6 +307,7 @@ const EmailCheck = () => {
               }}
             >
               <button
+                type="button"
                 className={styles.modalEditEmailSendData__btn}
                 onClick={() => {
                   closeForm();
@@ -354,7 +355,7 @@ const EmailCheck = () => {
                     Code de validation
                   </InputLabel>
                   <Input
-                    autoFocus
+                    autoFocus={displayModalEditEmail === true ? true : false}
                     id="standard-adornment-code"
                     value={codeInput}
                     placeholder={"Entrez votre code"}
@@ -423,6 +424,7 @@ const EmailCheck = () => {
                   {isMutating && (
                     <>
                       <button
+                        disabled
                         className={
                           styles.modalEditEmailSendData__form__submit__btn__load
                         }

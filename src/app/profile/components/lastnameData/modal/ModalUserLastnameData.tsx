@@ -252,6 +252,7 @@ const ModalUserLastnameData = () => {
               }}
             >
               <button
+                type="button"
                 className={styles.modalEditMainUserData__btn}
                 onClick={() => closeForm()}
               >
@@ -288,7 +289,7 @@ const ModalUserLastnameData = () => {
                     Nom de famille
                   </InputLabel>
                   <Input
-                    autoFocus
+                    autoFocus={displayModalEditLastname === true ? true : false}
                     id="standard-adornment-lastname"
                     value={lastnameInput}
                     placeholder={"Entrez votre nom de famille"}

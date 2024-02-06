@@ -220,7 +220,7 @@ export async function POST(request: NextRequest) {
                               <h1 style="text-align: center">tds coaching</h1>
                               <h2 style="text-align: center">Réinitialisation de votre mot de passe</h2>
                               <p style="margin-bottom: 20px">Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous.</p>
-                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="http://https://tdscoaching.fr/reinitialisation-mot-de-passe/${token}" target="_blank">Vérifier mon compte</a>
+                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/reinitialisation-mot-de-passe/${token}" target="_blank">Vérifier mon compte</a>
                               <p style="margin-top: 20px">Ce lien est valide pendant 5 min, au-delà de ce temps il ne sera plus disponible.</p>
                             </div>
                           </div>

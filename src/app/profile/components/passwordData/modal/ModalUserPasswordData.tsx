@@ -317,6 +317,7 @@ const ModalUserPasswordData = () => {
               }}
             >
               <button
+                type="button"
                 className={styles.modalEditPasswordData__btn}
                 onClick={() => closeForm()}
               >
@@ -357,7 +358,7 @@ const ModalUserPasswordData = () => {
                   </InputLabel>
                   <Input
                     id="standard-adornment-password"
-                    autoFocus
+                    autoFocus={displayModalEditPassword === true ? true : false}
                     value={passwordInput}
                     placeholder={"Entrez votre mot de passe"}
                     type={showPassword ? "text" : "password"}

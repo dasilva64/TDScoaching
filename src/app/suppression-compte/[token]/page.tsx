@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import NoScript from "@/app/components/noscript/NoScript";
 import localFont from "next/font/local";
 const Parisienne = localFont({
-  src: "../Parisienne-Regular.ttf",
+  src: "../../Parisienne-Regular.ttf",
   display: "swap",
 });
 

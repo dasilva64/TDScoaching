@@ -6,6 +6,11 @@ import { SessionData, sessionOptions } from "../../../../lib/session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import NoScript from "@/app/components/noscript/NoScript";
+import localFont from "next/font/local";
+const Parisienne = localFont({
+  src: "../Parisienne-Regular.ttf",
+  display: "swap",
+});
 
 async function getSession() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -20,7 +25,7 @@ const page = async () => {
     <>
       <NoScript />
       <main className={styles.delete}>
-        <h1 className={styles.delete__h1}>
+        <h1 className={`${styles.delete__h1} ${Parisienne.className}`}>
           En attente de suppression du compte
         </h1>
         <div className={styles.delete__container}>

@@ -28,7 +28,7 @@ const useDeleteAccount = (token: string) => {
       if (data.status === 200) {
         if (pathname) {
           let split = pathname.split("/");
-          if (split[1] === "utilisateur") {
+          if (split[1] === "utilisateur" || split[1] === "suppression-compte") {
             router.push("/");
           }
           if (pathname === "/profile" || pathname === "/utilisateurs") {
@@ -54,7 +54,6 @@ const useDeleteAccount = (token: string) => {
           },
         });
         router.push("/");
-        //router.push("/");
       }
     }
   }, [data, dispatch, pathname, router]);

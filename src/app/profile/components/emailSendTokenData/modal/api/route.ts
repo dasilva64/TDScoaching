@@ -119,9 +119,17 @@ export async function POST(request: NextRequest) {
                   pass: process.env.SECRET_SMTP_PASSWORD,
                 },
               });
+              /* let smtpTransport = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                  user: process.env.SECRET_SMTP_EMAIL_TEST,
+                  pass: process.env.SECRET_SMTP_PASSWORD_TEST,
+                },
+              }); */
+              let copyEditEmail: any = editUser.editEmail;
               let mailOptions = {
                 from: "contact@tds-coachingdevie.fr",
-                to: editUser.mail,
+                to: copyEditEmail.newEmail,
                 subject: "Validation de votre nouvelle adresse email",
                 html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -149,7 +157,7 @@ export async function POST(request: NextRequest) {
                           </html>`,
               };
               await smtpTransport.sendMail(mailOptions);
-              let copyEditEmail: any = editUser.editEmail;
+
               let userObject = {
                 firstname: editUser.firstname,
                 lastname: editUser.lastname,

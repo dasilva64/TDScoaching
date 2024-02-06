@@ -167,6 +167,7 @@ const EmailCheck = () => {
     isMutating: isMutatingReSendCode,
   } = useSWRMutation("/profile/components/emailData/api", fetchGet);
   useEffect(() => {
+    console.log("dataReSendCode", dataReSendCode);
     if (dataReSendCode) {
       if (dataReSendCode.status === 200) {
         let copyNewEmail = dataReSendCode.body.editEmail;

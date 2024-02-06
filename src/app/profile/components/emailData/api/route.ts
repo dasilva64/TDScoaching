@@ -192,6 +192,13 @@ export async function GET(request: NextRequest) {
               pass: process.env.SECRET_SMTP_PASSWORD,
             },
           });
+          /*l et smtpTransport = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: process.env.SECRET_SMTP_EMAIL_TEST,
+              pass: process.env.SECRET_SMTP_PASSWORD_TEST,
+            },
+          }); */
           let mailOptions = {
             from: "contact@tds-coachingdevie.fr",
             to: copyEditEmail.newEmail,

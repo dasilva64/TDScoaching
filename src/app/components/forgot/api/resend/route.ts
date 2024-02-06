@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
                         </body>
                       </html>`,
       };
-      smtpTransport.sendMail(mailOptions);
+      await smtpTransport.sendMail(mailOptions);
       return NextResponse.json({
         status: 200,
         message: "Un email vous a été envoyer pour récupérer votre compte",

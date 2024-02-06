@@ -453,7 +453,7 @@ const Forgot = () => {
                       fetchApi();
                     }}
                   >
-                    Renvoyer un code à l&apos;addresse {emailUser}
+                    Renvoyer un mail à l&apos;addresse {emailUser}
                   </button>
                 </div>
               )}

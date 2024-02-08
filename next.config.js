@@ -60,6 +60,10 @@ const nextConfig = {
           {
             key: 'Access-Control-Allow-Headers',
             value: "Content-Type, Accept",
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: "max-age=63072000; includeSubDomains; preload",
           }
           
         ],

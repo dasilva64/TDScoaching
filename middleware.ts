@@ -15,20 +15,6 @@ interface SessionData {
   "/profile": test,
 }; */
 
-const cspHeader = `
-    default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline';
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data:;
-    font-src 'self';
-    object-src 'none';
-    base-uri 'self';
-    form-action 'self';
-    frame-ancestors 'none';
-    block-all-mixed-content;
-    upgrade-insecure-requests;
-`;
-
 export const middleware = async (request: NextRequest) => {
   //const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   /* const session = await getIronSession<SessionData>(
@@ -41,42 +27,8 @@ export const middleware = async (request: NextRequest) => {
 
     return Response.redirect(`${request.nextUrl.origin}${redirectTo}`, 302);
   } */
-  let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
-  let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("Content-Security-Policy", cspHeader.replace(/\n/g, ""));
-  requestHeaders.set("X-Content-Type-Options", "nosniff");
-  requestHeaders.set("X-Frame-Options", "DENY");
-  requestHeaders.set("X-XSS-Protection", "1; mode=block");
-  requestHeaders.set("Referrer-Policy", "no-referrer");
-  requestHeaders.set(
-    "Permissions-Policy",
-    "camera=(); geolocation=(); microphone=()"
-  );
-  requestHeaders.set("Access-Control-Allow-Origin", "https://tdscoaching.fr");
-  requestHeaders.set("Vary", "Origin");
-  requestHeaders.set("Access-Control-Allow-Headers", "Content-Type, Accept");
-  requestHeaders.set(
-    "Strict-Transport-Security",
-    "max-age=63072000; includeSubDomains; preload"
-  );
-  const res = NextResponse.next({
-    request: {
-      // New request headers
-      headers: requestHeaders,
-    },
-  });
-  if (
-    request.nextUrl.pathname.startsWith("/utilisateurs") ||
-    request.nextUrl.pathname.startsWith("/profile") ||
-    request.nextUrl.pathname.startsWith("/meetings") ||
-    request.nextUrl.pathname.startsWith("/meetingAdmin") ||
-    request.nextUrl.pathname.startsWith("/rendez-vous") ||
-    request.nextUrl.pathname.startsWith("/utilisateur") ||
-    regex.test(request.nextUrl.pathname) ||
-    regexTwo.test(request.nextUrl.pathname)
-  ) {
-    /* const session = await getIronSession<SessionData>(request, res, {
+  const res = NextResponse.next();
+  /* const session = await getIronSession<SessionData>(request, res, {
     cookieName: "iron-session-cookie-name-connect",
     password: {
       1: process.env.IRON_PASSWORD!,
@@ -86,37 +38,36 @@ export const middleware = async (request: NextRequest) => {
       secure: process.env.NODE_ENV === "production",
     },
   }); */
-    const session = await getIronSession<SessionData>(
-      cookies(),
-      sessionOptions
-    );
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
+  let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
 
-    if (session.isLoggedIn || Object.keys(session).length !== 0) {
-      if (
-        request.nextUrl.pathname.startsWith("/utilisateurs") ||
-        request.nextUrl.pathname.startsWith("/meetings") ||
-        request.nextUrl.pathname.startsWith("/meetingAdmin") ||
-        regex.test(request.nextUrl.pathname)
-      ) {
-        if (session.role !== "ROLE_ADMIN") {
-          return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
-        }
-      }
-
-      if (
-        request.nextUrl.pathname.startsWith("/rendez-vous") ||
-        regexTwo.test(request.nextUrl.pathname)
-      ) {
-        if (session.role !== "ROLE_USER") {
-          return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
-        }
+  if (session.isLoggedIn || Object.keys(session).length !== 0) {
+    if (
+      request.nextUrl.pathname.startsWith("/utilisateurs") ||
+      request.nextUrl.pathname.startsWith("/meetings") ||
+      request.nextUrl.pathname.startsWith("/meetingAdmin") ||
+      regex.test(request.nextUrl.pathname)
+    ) {
+      if (session.role !== "ROLE_ADMIN") {
+        return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
       }
     }
-    /* let regexDelete = /\/suppression-compte\/[0-9A-Za-z-]+/g;
+
+    if (
+      request.nextUrl.pathname.startsWith("/rendez-vous") ||
+      regexTwo.test(request.nextUrl.pathname)
+    ) {
+      if (session.role !== "ROLE_USER") {
+        return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
+      }
+    }
+  }
+  /* let regexDelete = /\/suppression-compte\/[0-9A-Za-z-]+/g;
   let regexValid = /\/email-validation\/[0-9A-Za-z-]+/g;
   let regexReset = /\/reinitialisation-mot-de-passe\/[0-9A-Za-z-]+/g; */
-    if (!session.isLoggedIn || Object.keys(session).length === 0) {
-      /* if (
+  if (!session.isLoggedIn || Object.keys(session).length === 0) {
+    /* if (
       request.nextUrl.pathname.startsWith("/") ||
       request.nextUrl.pathname.startsWith("/coaching-de-vie") ||
       request.nextUrl.pathname.startsWith("/contact") ||
@@ -133,30 +84,29 @@ export const middleware = async (request: NextRequest) => {
     ) {
       return res;
     } */
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-    if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
-      /* if (
-      request.nextUrl.pathname.startsWith("/") ||
-      request.nextUrl.pathname.startsWith("/coaching-de-vie") ||
-      request.nextUrl.pathname.startsWith("/contact") ||
-      request.nextUrl.pathname.startsWith(
-        "/conditions-generales-utilisations"
-      ) ||
-      request.nextUrl.pathname.startsWith("/mentions-legales") ||
-      request.nextUrl.pathname.startsWith("/politique-de-confidentialite") ||
-      request.nextUrl.pathname.startsWith("/qui-suis-je") ||
-      request.nextUrl.pathname.startsWith("/tarif") ||
-      regexDelete.test(request.nextUrl.pathname) ||
-      regexValid.test(request.nextUrl.pathname) ||
-      regexReset.test(request.nextUrl.pathname)
-    ) {
-      return res;
-    } */
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-    return res;
+    return NextResponse.redirect(new URL("/", request.url));
   }
+  if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
+    /* if (
+      request.nextUrl.pathname.startsWith("/") ||
+      request.nextUrl.pathname.startsWith("/coaching-de-vie") ||
+      request.nextUrl.pathname.startsWith("/contact") ||
+      request.nextUrl.pathname.startsWith(
+        "/conditions-generales-utilisations"
+      ) ||
+      request.nextUrl.pathname.startsWith("/mentions-legales") ||
+      request.nextUrl.pathname.startsWith("/politique-de-confidentialite") ||
+      request.nextUrl.pathname.startsWith("/qui-suis-je") ||
+      request.nextUrl.pathname.startsWith("/tarif") ||
+      regexDelete.test(request.nextUrl.pathname) ||
+      regexValid.test(request.nextUrl.pathname) ||
+      regexReset.test(request.nextUrl.pathname)
+    ) {
+      return res;
+    } */
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+  return res;
 
   //const { user } = session;
 
@@ -236,7 +186,7 @@ export const middleware = async (request: NextRequest) => {
   //}
 };
 
-/* export const config = {
+export const config = {
   matcher: [
     "/profile",
     "/utilisateurs",
@@ -244,8 +194,9 @@ export const middleware = async (request: NextRequest) => {
     "/meetingAdmin",
     "/rendez-vous",
     "/utilisateur/:path*",
+    "/suppression-compte/:path*",
   ],
-}; */
+};
 
 /* "/components/forgot/api/:path*",
 "/components/header/api",

@@ -17,7 +17,7 @@ block-all-mixed-content;
 upgrade-insecure-requests; */
 
 const cspHeader = `
-    default-src 'self';
+    default-src 'none';
 `
 
 const nextConfig = {

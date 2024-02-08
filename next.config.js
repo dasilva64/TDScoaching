@@ -6,7 +6,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline';
+    script-src 'self' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data:;
     font-src 'self';
@@ -47,7 +47,7 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: "camera=(); geolocation=(); microphone=()",
+            value: "camera=(), geolocation=(), microphone=()",
           },
           {
             key: 'Access-Control-Allow-Origin',

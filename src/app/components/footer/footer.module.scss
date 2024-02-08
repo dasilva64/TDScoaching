@@ -1,6 +1,8 @@
 .footer {
   padding-bottom: 20px;
   background: aqua;
+  display: flex;
+  justify-content: space-around;
   &__container {
     display: flex;
     justify-content: space-around;

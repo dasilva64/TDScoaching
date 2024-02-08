@@ -21,7 +21,7 @@ const Contact = () => {
       <NoScript />
 
       <main className={styles.contact}>
-        <section className={styles.contact__bg}>
+        <div className={styles.contact__bg}>
           <Image
             className={styles.contact__bg__img}
             width="0"
@@ -31,7 +31,7 @@ const Contact = () => {
             src={"/assets/test/sunlight.jpg"}
             alt="bousole"
           />
-        </section>
+        </div>
         <section className={styles.contact__main}>
           <h1 className={`${styles.contact__main__h1} ${Parisienne.className}`}>
             Contact

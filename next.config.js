@@ -29,10 +29,43 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: cspHeader.replace(/\n/g, ''),
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'no-referrer',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: "camera=(); geolocation=(); microphone=()",
+          },
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: "https://tdscoaching.fr",
+          },
+          {
+            key: 'Vary',
+            value: "Origin",
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: "Content-Type, Accept",
+          }
+          
         ],
       },
     ]
-  }
+  },
    /*  ]
   } */
     /* externals: {

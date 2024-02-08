@@ -29,7 +29,11 @@ const Card = ({ title, content }: any) => {
   return (
     <>
       <WhileInView type="y">
-        <button
+        <details className={`${styles.card} modalOpen`}>
+          <summary>{title}</summary>
+          <p className={styles.card__p}>{content}</p>{" "}
+        </details>
+        {/* <button
           tabIndex={0}
           type="button"
           className={`${styles.card} modalOpen`}
@@ -37,7 +41,7 @@ const Card = ({ title, content }: any) => {
             setShow(!show);
           }}
         >
-          <h3 className={styles.card__h3}>{title}</h3>
+          <p className={styles.card__h3}>{title}</p>
           <Image
             className={`${styles.card__img} ${
               show === true ? styles.card__img__up : styles.card__img__down
@@ -51,7 +55,7 @@ const Card = ({ title, content }: any) => {
         </button>
         <div className={`${p()} ${styles.card__p}`}>
           <p className={styles.card__p__content}>{content}</p>{" "}
-        </div>
+        </div> */}
       </WhileInView>
     </>
   );

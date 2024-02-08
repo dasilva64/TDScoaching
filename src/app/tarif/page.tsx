@@ -23,7 +23,7 @@ const Tarif = () => {
       <NoScript />
 
       <main className={styles.tarif}>
-        <section className={styles.tarif__bg}>
+        <div className={styles.tarif__bg}>
           <Image
             className={styles.tarif__bg__img}
             sizes="100vw"
@@ -33,10 +33,10 @@ const Tarif = () => {
             src={"/assets/test/sunlight2.webp"}
             alt="Avenue dans une forêt"
           />
-        </section>
-        <section className={styles.tarif__packs}>
+        </div>
+        <div className={styles.tarif__packs}>
           <div className={styles.tarif__packs__head}>
-            <div className={styles.tarif__packs__head__left}>
+            <section className={styles.tarif__packs__head__left}>
               <h1
                 className={`${styles.tarif__packs__head__left__h1} ${Parisienne.className}`}
               >
@@ -50,9 +50,9 @@ const Tarif = () => {
               </p>
               <p className={styles.tarif__packs__head__left__offer}>
                 À l&apos;inscription vous aurez un rendez-vous de découverte
-                offert (<ButtonOpenDiscovery />)
+                offert <br />(<ButtonOpenDiscovery />)
               </p>
-            </div>
+            </section>
 
             <div className={styles.tarif__packs__head__right}>
               <Image
@@ -94,7 +94,7 @@ const Tarif = () => {
                     src={"/assets/icone/check-solid.svg"}
                     alt="bousole"
                   />
-                  1 séance de coaching (<ButtonOpenNormal />)
+                  1 séance de coaching <br />(<ButtonOpenNormal />)
                 </li>
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image
@@ -143,7 +143,7 @@ const Tarif = () => {
                     src={"/assets/icone/check-solid.svg"}
                     alt="bousole"
                   />
-                  3 séances de coaching (<ButtonOpenNormal />)
+                  3 séances de coaching <br />(<ButtonOpenNormal />)
                 </li>
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image
@@ -195,7 +195,7 @@ const Tarif = () => {
                     alt="bousole"
                   />
                   Nombre de séances de coaching à définir (selon choix du client
-                  et problématique abordée) (<ButtonOpenNormal />)
+                  et problématique abordée) <br />(<ButtonOpenNormal />)
                 </li>
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image
@@ -243,7 +243,7 @@ const Tarif = () => {
               </div>
             </WhileInView>
           </div>
-        </section>
+        </div>
       </main>
     </>
   );

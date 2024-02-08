@@ -23,7 +23,7 @@ const page = () => {
       <NoScript />
 
       <main className={styles.coaching}>
-        <section className={styles.coaching__bg}>
+        <div className={styles.coaching__bg}>
           <Image
             className={styles.coaching__bg__img}
             width="0"
@@ -33,7 +33,7 @@ const page = () => {
             src={"/assets/test/sunlight2.webp"}
             alt="bousole"
           />
-        </section>
+        </div>
 
         <section className={styles.coaching__type}>
           <h2

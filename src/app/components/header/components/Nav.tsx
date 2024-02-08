@@ -71,8 +71,8 @@ const Nav = () => {
         </Link>
       </div>
       <div className={styles.line}></div>
-      <div className={styles.body}>
-        <div
+      <nav className={styles.body}>
+        <ul
           onMouseLeave={() => {
             setSelectedIndicator(pathname);
           }}
@@ -88,8 +88,8 @@ const Nav = () => {
               ></LinkBurger>
             );
           })}
-        </div>
-      </div>
+        </ul>
+      </nav>
       <div className={styles.line__bottom}></div>
       <button
         onClick={() => {

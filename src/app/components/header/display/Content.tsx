@@ -257,7 +257,7 @@ const Content = () => {
                     </Link>
                   </div>
                   <div className={styles.line}></div>
-                  <div className={styles.div}>
+                  <nav className={styles.div}>
                     <ul
                       className={styles.header__log__ul}
                       onMouseLeave={() => setOnHoverLink(pathname)}
@@ -287,56 +287,6 @@ const Content = () => {
                           Compte
                         </Link>
                       </li>
-                      {/* <li
-                      className={`${styles.header__log__li} ${
-                        styles.header__log__li__2
-                      } ${
-                        displayLogMenu === true
-                          ? styles.header__log__li__show
-                          : styles.header__log__li__hide
-                      }`}
-                      onMouseOver={() => setOnHoverLink("/meetings")}
-                    >
-                      <Link
-                        className={styles.header__log__li__link}
-                        href="/meetings"
-                        onClick={() => setDisplayLogMenu(false)}
-                      >
-                        <div
-                          className={`${styles.header__log__li__point} ${
-                            onHoverLink === "/meetings"
-                              ? styles.header__log__li__point__show
-                              : styles.header__log__li__point__hide
-                          }`}
-                        ></div>
-                        Historique des rendez-vous
-                      </Link>
-                    </li> */}
-                      {/* <li
-                      className={`${styles.header__log__li} ${
-                        styles.header__log__li__3
-                      } ${
-                        displayLogMenu === true
-                          ? styles.header__log__li__show
-                          : styles.header__log__li__hide
-                      }`}
-                      onMouseOver={() => setOnHoverLink("/meetingAdmin")}
-                    >
-                      <Link
-                        className={styles.header__log__li__link}
-                        href="/meetingAdmin"
-                        onClick={() => setDisplayLogMenu(false)}
-                      >
-                        <div
-                          className={`${styles.header__log__li__point} ${
-                            onHoverLink === "/meetingAdmin"
-                              ? styles.header__log__li__point__show
-                              : styles.header__log__li__point__hide
-                          }`}
-                        ></div>
-                        Calendrier
-                      </Link>
-                    </li> */}
                       <li
                         className={`${styles.header__log__li} ${
                           styles.header__log__li__4
@@ -363,7 +313,7 @@ const Content = () => {
                         </Link>
                       </li>
                     </ul>
-                  </div>
+                  </nav>
                   <div className={styles.line__bottom}></div>
                   <button
                     className={styles.header__log__btn}
@@ -437,7 +387,7 @@ const Content = () => {
                     </Link>
                   </div>
                   <div className={styles.line}></div>
-                  <div className={styles.div}>
+                  <nav className={styles.div}>
                     <ul
                       onMouseLeave={() => setOnHoverLink(pathname)}
                       className={`${styles.header__log__ul}`}
@@ -467,127 +417,8 @@ const Content = () => {
                           Compte
                         </Link>
                       </li>
-                      {/* <li
-                      onMouseOver={() => setOnHoverLink("/historique")}
-                      className={`${styles.header__log__li} ${
-                        styles.header__log__li__2
-                      } ${
-                        displayLogMenu === true
-                          ? styles.header__log__li__show
-                          : styles.header__log__li__hide
-                      }`}
-                    >
-                      <Link
-                        className={styles.header__log__li__link}
-                        href="/historique"
-                        onClick={() => setDisplayLogMenu(false)}
-                      >
-                        <div
-                          className={`${styles.header__log__li__point} ${
-                            onHoverLink === "/historique"
-                              ? styles.header__log__li__point__show
-                              : styles.header__log__li__point__hide
-                          }`}
-                        ></div>
-                        Historique des rendez-vous
-                      </Link>
-                    </li> */}
-                      {/* <li
-                      onMouseOver={() => setOnHoverLink("/rendez-vous")}
-                      className={`${styles.header__log__li} ${
-                        styles.header__log__li__3
-                      } ${
-                        displayLogMenu === true
-                          ? styles.header__log__li__show
-                          : styles.header__log__li__hide
-                      }`}
-                    >
-                      <Link
-                        className={styles.header__log__li__link}
-                        href="/rendez-vous"
-                        onClick={() => setDisplayLogMenu(false)}
-                      >
-                        <div
-                          className={`${styles.header__log__li__point} ${
-                            onHoverLink === "/rendez-vous"
-                              ? styles.header__log__li__point__show
-                              : styles.header__log__li__point__hide
-                          }`}
-                        ></div>
-                        Mes rendez-vous
-                      </Link>
-                    </li> */}
-                      {/*<li
-                        onMouseOver={() => setOnHoverLink("/logout")}
-                        className={`${styles.header__log__li} ${
-                          styles.header__log__li__4
-                        } ${
-                          displayLogMenu === true
-                            ? styles.header__log__li__show
-                            : styles.header__log__li__hide
-                        }`}
-                      >
-                        <span
-                          className={styles.header__log__li__link}
-                          onClick={() => {
-                            setDisplayLogMenu(false);
-                            const logout = async () => {
-                              trigger(null, {
-                                optimisticData: defaultSession,
-                              });
-                               let response = await fetch(
-                              "/components/header/api",
-                              {
-                                method: "DELETE",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                },
-                              }
-                            );
-                            let json = await response.json();
-                            if (json.status === 200) {
-                              setTimeout(() => {
-                                dispatch({
-                                  type: "auth/logout",
-                                });
-
-                                mutate("/api/user/check", {
-                                  ...json,
-                                });
-                                cache.delete("/api/user/check");
-                                if (
-                                  pathname === "/rendez-vous" ||
-                                  pathname === "/historique" ||
-                                  pathname === "/profile"
-                                ) {
-                                  router.push("/");
-                                }
-                                dispatch({
-                                  type: "flash/storeFlashMessage",
-                                  payload: {
-                                    type: "error",
-                                    flashMessage: json.message,
-                                  },
-                                });
-                              }, 600);
-                            } 
-                            };
-
-                            logout();
-                          }}
-                        >
-                          <div
-                            className={`${styles.header__log__li__point} ${
-                              onHoverLink === "/logout"
-                                ? styles.header__log__li__point__show
-                                : styles.header__log__li__point__hide
-                            }`}
-                          ></div>
-                          Déconnection
-                        </span>
-                          </li>*/}
                     </ul>
-                  </div>
+                  </nav>
                   <div className={styles.line__bottom}></div>
                   <button
                     className={styles.header__log__btn}
@@ -1046,327 +877,160 @@ const Content = () => {
             </div>
           </>
         )}
-        <div className={styles.header__div}>
-          <figure className={styles.header__figure}>
-            <Link className="link modalOpen" href="/" tabIndex={0}>
-              <Image
-                className={styles.header__logo}
-                width={0}
-                height={0}
-                sizes="100vw"
-                //src="/assets/logo/logo3.png"
-                src="/assets/logo/logo3.webp"
-                alt="logo tdss coaching"
-                priority={true}
-              />
-            </Link>
-            <figcaption className={styles.header__figcaption}>
-              Coach de vie
-            </figcaption>
-          </figure>
-          <nav
+        {/* <div className={styles.header__div}> */}
+        <figure className={styles.header__figure}>
+          <Link className="link modalOpen" href="/" tabIndex={0}>
+            <Image
+              className={styles.header__logo}
+              width={0}
+              height={0}
+              sizes="100vw"
+              src="/assets/logo/logo3.webp"
+              alt="logo tdss coaching"
+              priority={true}
+            />
+          </Link>
+          <figcaption className={styles.header__figcaption}>
+            Coach de vie
+          </figcaption>
+        </figure>
+        <nav
+          className={
+            isClick === false
+              ? `${styles.header__nav}`
+              : `${styles.header__nav__mobile}`
+          }
+        >
+          <ul
             className={
               isClick === false
-                ? `${styles.header__nav}`
-                : `${styles.header__nav__mobile}`
+                ? `${styles.header__ul}`
+                : `${styles.header__ul__mobile}`
             }
           >
-            <ul
-              className={
-                isClick === false
-                  ? `${styles.header__ul}`
-                  : `${styles.header__ul__mobile}`
-              }
-            >
-              <li className={styles.header__li}>
-                <Link
-                  className={
-                    pathname == "/"
-                      ? `${styles.header__a} ${styles.active} modalOpen`
-                      : `${styles.header__a} modalOpen`
-                  }
-                  tabIndex={0}
-                  href="/"
-                  onClick={(e) => {
-                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                  }}
-                >
-                  Accueil
-                </Link>
-              </li>
-              <li className={styles.header__li}>
-                <Link
-                  className={
-                    pathname == "/qui-suis-je"
-                      ? `${styles.header__a} ${styles.active} modalOpen`
-                      : `${styles.header__a} modalOpen`
-                  }
-                  tabIndex={0}
-                  href="/qui-suis-je"
-                  onClick={(e) => {
-                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                  }}
-                >
-                  Qui suis-je ?
-                </Link>
-              </li>
-              <li className={`${styles.header__li}`}>
-                <Link
-                  className={
-                    pathname == "/coaching-de-vie"
-                      ? `${styles.header__a} ${styles.active} modalOpen`
-                      : `${styles.header__a} modalOpen`
-                  }
-                  tabIndex={0}
-                  href="/coaching-de-vie"
-                  onClick={(e) => {
-                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                  }}
-                >
-                  Coaching de vie
-                </Link>
-                {/* <span className={`${styles.header__a}`}>Coaching de vie</span>
-              <span
+            <li className={styles.header__li}>
+              <Link
+                className={
+                  pathname == "/"
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
+                }
                 tabIndex={0}
-                aria-label="sous menu coaching de vie"
-                className={styles.header__span}
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                ❯
-              </span>
-              <ul
-                role="listbox"
-                className={`${styles.header__ul__hidden} ${styles.header__ul__hidden__hover}`}
-                aria-expanded="true"
-                aria-activedescendant="option1"
-              >
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/coaching-de-vie/vie-familiale"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/coaching-de-vie/vie-familiale"
-                    onClick={(e) => {
-                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                    }}
-                  >
-                    Vie familiale
-                  </Link>
-                </li>
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/coaching-de-vie/vie-de-couple"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/coaching-de-vie/vie-de-couple"
-                    onClick={(e) => {
-                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                    }}
-                  >
-                    Vie de couple
-                  </Link>
-                </li>
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/coaching-de-vie/vie-professionnelle"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/coaching-de-vie/vie-professionnelle"
-                    onClick={(e) => {
-                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                    }}
-                  >
-                    Vie professionnelle
-                  </Link>
-                </li>
-              </ul> */}
-              </li>
-              <li className={styles.header__li}>
-                <Link
-                  className={
-                    pathname == "/tarif"
-                      ? `${styles.header__a} ${styles.active} modalOpen`
-                      : `${styles.header__a} modalOpen`
-                  }
-                  tabIndex={0}
-                  href="/tarif"
-                  onClick={(e) => {
-                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                  }}
-                >
-                  Tarifs et modalité
-                </Link>
-              </li>
-              {/* <li className={`${styles.header__li} ${styles.header__li__hover}`}>
-              <span className={`${styles.header__a}`}>Mes prestations</span>
-              <span
-                tabIndex={0}
-                aria-label="sous menu mes prestations"
-                className={styles.header__span}
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                ❯
-              </span>
-              <ul
-                role="listbox"
-                className={`${styles.header__ul__hidden} ${styles.header__ul__hidden__hover}`}
-                aria-expanded="true"
-                aria-activedescendant="option2"
-              >
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/modalite"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/modalite"
-                    onClick={(e) => {
-                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                    }}
-                  >
-                    {" "}
-                    Modalités du coaching
-                  </Link>
-                </li>
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/tarif"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/tarif"
-                    onClick={(e) => {
-                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                    }}
-                  >
-                    Tarif
-                  </Link>
-                </li>
-                <li className={styles.header__li}>
-                  <Link
-                    className={
-                      pathname == "/code-de-deontologie"
-                        ? `${styles.header__a} ${styles.active}`
-                        : `${styles.header__a}`
-                    }
-                    tabIndex={0}
-                    href="/assets/pdf/Code-deontologie-ICF-France.pdf"
-                    target="_blank"
-                    onClick={(e) => {
-                      displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                    }}
-                  >
-                    Code de déontologie
-                  </Link>
-                </li>
-              </ul>
-            </li> */}
-              <li className={styles.header__li}>
-                <Link
-                  className={
-                    pathname == "/contact"
-                      ? `${styles.header__a} ${styles.active} modalOpen`
-                      : `${styles.header__a} modalOpen`
-                  }
-                  href="/contact"
-                  onClick={(e) => {
-                    displayLogMenu === true ? setDisplayLogMenu(false) : null;
-                  }}
-                >
-                  Contact
-                </Link>
-              </li>
-            </ul>
-            {/* //cookieEnabled === true && */}
-            {cookieEnabled === true && content}
-          </nav>
-          <div
-            className={`${
-              cookieEnabled === true
-                ? styles.main
-                : cookieEnabled === false && isActive === false
-                ? styles.main
-                : closeCookieEnabled === true
-                ? styles.main__top__test
-                : styles.main__top
-            } ${styles.main__test}`}
-          >
-            <div className={styles.headerr}>
-              <button
-                tabIndex={0}
-                onClick={() => {
-                  if (displayLogMenu === true) {
-                    setDisplayLogMenu(false);
-                    setTimeout(() => {
-                      dispatch({
-                        type: "menu/toggleMenu",
-                      });
-                    }, 500);
-                  } else {
-                    dispatch({
-                      type: "menu/toggleMenu",
-                    });
-                  }
+                href="/"
+                onClick={(e) => {
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
                 }}
-                className={`${styles.button} modalOpen`}
               >
-                <div
-                  className={`${styles.burger} ${
-                    isActive ? styles.burgerActive : ""
-                  }`}
-                ></div>
-              </button>
-            </div>
-          </div>
-          <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>
+                Accueil
+              </Link>
+            </li>
+            <li className={styles.header__li}>
+              <Link
+                className={
+                  pathname == "/qui-suis-je"
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
+                }
+                tabIndex={0}
+                href="/qui-suis-je"
+                onClick={(e) => {
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                }}
+              >
+                Qui suis-je ?
+              </Link>
+            </li>
+            <li className={`${styles.header__li}`}>
+              <Link
+                className={
+                  pathname == "/coaching-de-vie"
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
+                }
+                tabIndex={0}
+                href="/coaching-de-vie"
+                onClick={(e) => {
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                }}
+              >
+                Coaching de vie
+              </Link>
+            </li>
+            <li className={styles.header__li}>
+              <Link
+                className={
+                  pathname == "/tarif"
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
+                }
+                tabIndex={0}
+                href="/tarif"
+                onClick={(e) => {
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                }}
+              >
+                Tarifs et modalité
+              </Link>
+            </li>
+            <li className={styles.header__li}>
+              <Link
+                className={
+                  pathname == "/contact"
+                    ? `${styles.header__a} ${styles.active} modalOpen`
+                    : `${styles.header__a} modalOpen`
+                }
+                href="/contact"
+                onClick={(e) => {
+                  displayLogMenu === true ? setDisplayLogMenu(false) : null;
+                }}
+              >
+                Contact
+              </Link>
+            </li>
+          </ul>
+          {/* {cookieEnabled === true && content} */}
+        </nav>
+        {/* <div
+          className={`${
+            cookieEnabled === true
+              ? styles.main
+              : cookieEnabled === false && isActive === false
+              ? styles.main
+              : closeCookieEnabled === true
+              ? styles.main__top__test
+              : styles.main__top
+          } ${styles.main__test}`}
+        > */}
+        {cookieEnabled === true && content}
+        <div className={styles.headerr}>
+          <button
+            tabIndex={0}
+            onClick={() => {
+              if (displayLogMenu === true) {
+                setDisplayLogMenu(false);
+                setTimeout(() => {
+                  dispatch({
+                    type: "menu/toggleMenu",
+                  });
+                }, 500);
+              } else {
+                dispatch({
+                  type: "menu/toggleMenu",
+                });
+              }
+            }}
+            className={`${styles.button} modalOpen`}
+          >
+            <span
+              className={`${styles.burger} ${
+                isActive ? styles.burgerActive : ""
+              }`}
+            ></span>
+          </button>
         </div>
-
-        {/* <button
-          className={styles.header__burger__btn}
-          onClick={() => {
-            toggleOpen();
-            //updateUseState();
-          }}
-        >
-          <div className={styles.header__burger__line}>
-            <span
-              className={
-                displayLogMenu
-                  ? `${styles.header__cross} ${styles.header__bar1__rotate}`
-                  : `${styles.header__bar} ${styles.header__bar1}`
-              }
-            ></span>
-            <span
-              className={
-                displayLogMenu
-                  ? ""
-                  : `${styles.header__bar} ${styles.header__bar2}`
-              }
-            ></span>
-            <span
-              className={
-                displayLogMenu
-                  ? `${styles.header__cross} ${styles.header__bar2__rotate}`
-                  : `${styles.header__bar} ${styles.header__bar3}`
-              }
-            ></span>
-          </div>
-        </button> */}
+        {/* </div> */}
+        <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>
+        {/* </div> */}
       </header>
       <div className={classNameLine()}></div>
     </>

@@ -20,7 +20,7 @@ const About = () => {
     <>
       <NoScript />
       <main className={styles.about}>
-        <section className={styles.about__bg}>
+        <div className={styles.about__bg}>
           <Image
             className={styles.about__bg__img}
             width="0"
@@ -30,7 +30,7 @@ const About = () => {
             src={"/assets/test/sunlight2.webp"}
             alt="bousole"
           />
-        </section>
+        </div>
         <section className={styles.about__parcour}>
           <h1
             className={`${styles.about__parcour__h1} ${Parisienne.className}`}
@@ -47,7 +47,7 @@ const About = () => {
               src={"/assets/img/moi21.webp"}
               alt="Thierry DA SILVA coach professionnel certifié"
             />
-            <div>
+            <article>
               <h2
                 className={`${styles.about__parcour__container__h2} ${Parisienne.className}`}
               >
@@ -83,42 +83,38 @@ const About = () => {
                 activités de coaching et leur permettre de reprendre sereinement
                 le cours de leur vie en réalisant leurs rêves.
               </p>
-            </div>
+            </article>
           </div>
         </section>
         <section className={styles.about__vision}>
-          <div className={styles.about__vision__container}>
-            <h2
-              className={`${styles.about__vision__container__h2} ${Parisienne.className}`}
-            >
-              Ma vision du coaching
-            </h2>
-            <div className={styles.about__vision__container__content}>
-              <p className={styles.about__vision__container__content__p}>
-                Chaque individu dispose au plus profond de lui des ressources
-                nécessaires pour réussir à atteindre ses objectifs.
-                <br />
-                Un coach ne donne pas de conseils ni de solutions clef en main à
-                son client. Il agit comme un révélateur des capacités et du
-                potentiel latent chez le coaché.
-                <br />
-                Mon objectif est d’aider d’autres personnes à accéder à leur
-                plein potentiel. Il s’agit de les encourager à accepter leurs
-                responsabilités, à faire des choix qui mèneront à de plus hauts
-                niveaux de réalisation personnelle. Mon travail d’accompagnement
-                consiste à aider mes clients, de les encourager à atteindre
-                leurs objectifs et vivre la vie qu’ils désirent.
-                <br />
-                J’aide mon client à analyser sa situation actuelle, à établir
-                l’itinéraire des différentes étapes nécessaires à l’atteinte de
-                ses objectifs, en tenant compte de ses obstacles.
-                <br />
-                Le coaching est pour moi une véritable activité humaine
-                passionnante où je mets tout mon savoir-faire dans un
-                accompagnement sans jugements ni critiques.
-              </p>
-            </div>
-          </div>
+          <h2
+            className={`${styles.about__vision__container__h2} ${Parisienne.className}`}
+          >
+            Ma vision du coaching
+          </h2>
+          <p className={styles.about__vision__container__content__p}>
+            Chaque individu dispose au plus profond de lui des ressources
+            nécessaires pour réussir à atteindre ses objectifs.
+            <br />
+            Un coach ne donne pas de conseils ni de solutions clef en main à son
+            client. Il agit comme un révélateur des capacités et du potentiel
+            latent chez le coaché.
+            <br />
+            Mon objectif est d’aider d’autres personnes à accéder à leur plein
+            potentiel. Il s’agit de les encourager à accepter leurs
+            responsabilités, à faire des choix qui mèneront à de plus hauts
+            niveaux de réalisation personnelle. Mon travail d’accompagnement
+            consiste à aider mes clients, de les encourager à atteindre leurs
+            objectifs et vivre la vie qu’ils désirent.
+            <br />
+            J’aide mon client à analyser sa situation actuelle, à établir
+            l’itinéraire des différentes étapes nécessaires à l’atteinte de ses
+            objectifs, en tenant compte de ses obstacles.
+            <br />
+            Le coaching est pour moi une véritable activité humaine passionnante
+            où je mets tout mon savoir-faire dans un accompagnement sans
+            jugements ni critiques.
+          </p>
         </section>
 
         <section className={styles.about__certificate}>
@@ -131,35 +127,6 @@ const About = () => {
             <Timeline />
           </div>
         </section>
-        {/*  <section className={styles.about__speciality}>
-          <div className={styles.about__speciality__container}>
-            <h2 className={styles.about__speciality__container__h2}>
-              Mes spécialitées :
-            </h2>
-            <div className={styles.about__speciality__container__content}>
-              <Card
-                title={"Clarté et Objectifs"}
-                content={
-                  "Un coach de vie peut vous aider à définir des objectifs clairs et significatifs dans les domaines qui comptent le plus pour vous. Il vous guidera à travers un processus de réflexion approfondie pour définir ce que vous voulez vraiment et élaborer un plan pour y parvenir."
-                }
-              />
-
-              <Card
-                title={"Surmonter les Obstacles"}
-                content={
-                  "Les défis et les obstacles peuvent parfois sembler insurmontables. Un coach de vie peut vous aider à identifier les schémas négatifs de pensée et de comportement qui entravent votre progression, et vous fournir des stratégies pour les surmonter."
-                }
-              />
-
-              <Card
-                title={"Améliorer les Relations"}
-                content={
-                  "Si vous avez des difficultés dans vos relations de couple, votre famille ou vos relations professionnelles, un coach de vie peut vous aider à améliorer la communication, à développer des compétences en résolution de conflits et à renforcer les liens."
-                }
-              />
-            </div>
-          </div>
-        </section> */}
       </main>
     </>
   );

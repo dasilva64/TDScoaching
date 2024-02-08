@@ -14,7 +14,7 @@ export default function Index({
   const { title, href, type, index } = data;
   const dispatch = useDispatch();
   return (
-    <motion.div
+    <motion.li
       className={styles.link}
       onMouseEnter={() => {
         setSelectedIndicator(href);
@@ -39,6 +39,6 @@ export default function Index({
       >
         {title}
       </Link>
-    </motion.div>
+    </motion.li>
   );
 }

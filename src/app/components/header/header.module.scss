@@ -46,6 +46,7 @@
   z-index: 699;
   background-color: white;
   top: 0;
+  display: flex;
   &__nocookie {
     width: 100%;
     background: red;
@@ -229,7 +230,7 @@
   }
 
   &__log {
-    margin-left: 30px;
+    margin: auto 20px auto 10px;
     &__container {
       background-color: rgb(41, 41, 41);
       color: black;
@@ -436,13 +437,12 @@
 }
 
 .headerr {
+  position: relative;
+  z-index: 999;
+  top: 0px;
+  right: 0px;
   display: none;
   padding: 17px;
-  //position: fixed;
-  right: 126px;
-  top: 0;
-  z-index: 1;
-  z-index: 100;
 
   .button {
     width: 50px;
@@ -482,7 +482,7 @@
   .burgerActive {
     &::after {
       transform: rotate(45deg);
-      top: -1px;
+      top: -2px;
       width: 60%;
       right: 0px;
     }
@@ -711,6 +711,14 @@
       height: 45px;
     }
   }
+  .logo {
+    &__link {
+      &__img {
+        width: 65px;
+        height: 65px;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 425px) {
@@ -748,6 +756,17 @@
     .button {
       width: 40px;
       height: 40px;
+    }
+  }
+  .logo {
+    margin: unset;
+    &__link {
+      position: unset;
+      margin-left: 20px;
+      &__img {
+        width: 55px;
+        height: 55px;
+      }
     }
   }
 }

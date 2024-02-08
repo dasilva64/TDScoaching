@@ -9,6 +9,37 @@
   margin: 0;
 }
 
+details summary {
+  padding: 20px 20px 30px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: -10px; /* for more prominent move */
+  transition: margin 450ms ease-out;
+}
+
+details[open] summary {
+  padding: 20px 20px 10px 20px;
+  margin-bottom: 10px;
+}
+
+details > summary::-webkit-details-marker,
+details > summary::marker {
+  display: none;
+  content: "";
+}
+
+details summary:after {
+  position: absolute;
+  right: 30px;
+  content: "▶";
+}
+
+details[open] summary:after {
+  position: absolute;
+  right: 30px;
+  content: "▼";
+}
+
 .vertical-timeline-element-date {
   color: black;
   font-size: 16px;

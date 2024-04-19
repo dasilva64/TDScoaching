@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-/* const cspHeader = `
+const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
@@ -12,11 +12,11 @@
     frame-ancestors 'none';
     block-all-mixed-content;
     upgrade-insecure-requests;
-` */
+`
 
 const nextConfig = {
-  //productionBrowserSourceMaps: true,
-  /*async headers() {
+  productionBrowserSourceMaps: true,
+  async headers() {
     return [
       {
         source: '/(.*)',
@@ -65,7 +65,7 @@ const nextConfig = {
         ],
       },
     ]
-  },*/
+  },
    /*  ]
   } */
     /* externals: {

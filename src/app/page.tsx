@@ -8,7 +8,6 @@ import WhileInView from "./components/framer/WhileInView";
 import localFont from "next/font/local";
 import NoScript from "./components/noscript/NoScript";
 import About from "./components/about/About";
-import Link from "next/link";
 const Parisienne = localFont({
   src: "./Parisienne-Regular.ttf",
   display: "swap",

@@ -3,6 +3,20 @@ import styles from "./page.module.scss";
 import NoScript from "../components/noscript/NoScript";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Conditions générales d'utilisations - tdscoaching",
+  description:
+    "Consultez les conditions générales d'utilisations du site tdscoaching.fr.",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  author: "Thierry Da Silva",
+  robots: "noindex, nofollow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
+};
+
 export default function CGU() {
   return (
     <>

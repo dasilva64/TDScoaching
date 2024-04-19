@@ -2,22 +2,14 @@ import React, { useEffect, useState } from "react";
 import styles from "./Forgot.module.scss";
 import { AppDispatch, RootState } from "../../../../src/app/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  FormControl,
-  FormHelperText,
-  Input,
-  InputAdornment,
-  InputLabel,
-  TextField,
-} from "@mui/material";
 import validator from "validator";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import Visibility from "@mui/icons-material/Visibility";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
 import localFont from "next/font/local";
+import Input from "../input/Input";
+import TabIndex from "../tabIndex/TabIndex";
 const Parisienne = localFont({
   src: "../../Parisienne-Regular.ttf",
   display: "swap",
@@ -29,26 +21,10 @@ const Forgot = () => {
   const [validInputEmail, setValidInputEmail] = useState<boolean>(false);
   const [inputEmailError, setInputEmailError] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
-  const [displayReSendEmail, setDisplayReSendEmail] = useState<boolean>(false);
-  const [emailUser, setEmailUser] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isLoadingReset, setIsLoadingReset] = useState<boolean>(false);
   const { displayModalForgot } = useSelector(
     (state: RootState) => state.ModalForgot
   );
-  useEffect(() => {
-    if (displayModalForgot === true) {
-      let test = document.querySelectorAll(".modalOpen");
-      test.forEach((tab) => {
-        tab.setAttribute("tabindex", "-1");
-      });
-    } else {
-      let test = document.querySelectorAll(".modalOpen");
-      test.forEach((tab) => {
-        tab.setAttribute("tabindex", "0");
-      });
-    }
-  }, [displayModalForgot]);
   const { data, trigger, reset } = useSWRMutation(
     "/components/forgot/api/forgot",
     fetchPost
@@ -77,10 +53,6 @@ const Forgot = () => {
         }, 2000);
       } else {
         setTimeout(() => {
-          if (data.type === "reset") {
-            setDisplayReSendEmail(true);
-            setEmailUser(data.email);
-          }
           setIsLoading(false);
           dispatch({
             type: "flash/storeFlashMessage",
@@ -91,45 +63,12 @@ const Forgot = () => {
       }
     }
   }, [data, dispatch, reset]);
-  const {
-    data: dataResend,
-    trigger: triggerResend,
-    reset: resetResend,
-  } = useSWRMutation("/components/forgot/api/resend", fetchPost);
-  useEffect(() => {
-    if (dataResend) {
-      if (dataResend.status === 200) {
-        dispatch({ type: "ModalForgot/close" });
-        clearState();
-
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { flashMessage: dataResend.message, type: "success" },
-        });
-        resetResend();
-      } else {
-        setTimeout(() => {
-          setDisplayReSendEmail(false);
-          setEmailUser("");
-          setIsLoadingReset(false);
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: dataResend.message },
-          });
-          resetResend();
-        }, 2000);
-      }
-    }
-  });
   const clearState = () => {
     setInputPseudo("");
     setInputEmail("");
     setValidInputEmail(false);
     setInputEmailError("");
-    setDisplayReSendEmail(false);
-    setEmailUser("");
     setIsLoading(false);
-    setIsLoadingReset(false);
   };
 
   const handlerSubmit = (e: React.FormEvent) => {
@@ -145,46 +84,6 @@ const Forgot = () => {
             email: validator.escape(inputEmail.trim()),
             pseudo: validator.escape(inputPseudo.trim()),
           });
-          /* let response = await fetch("/components/forgot/api", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: validator.escape(inputEmail.trim()),
-              pseudo: validator.escape(inputPseudo.trim()),
-            }),
-          });
-          let json = await response.json();
-          if (json.status === 200) {
-            dispatch({ type: "ModalForgot/close" });
-            clearState();
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { flashMessage: json.message, type: "success" },
-            });
-          } else if (json.status === 400) {
-            setTimeout(() => {
-              setIsLoading(false);
-              json.message.forEach((element: string) => {
-                if (element[0] === "email") {
-                  setInputEmailError(element[1]);
-                }
-              });
-            }, 2000);
-          } else {
-            setTimeout(() => {
-              if (json.type === "reset") {
-                setDisplayReSendEmail(true);
-                setEmailUser(json.email);
-              }
-              setIsLoading(false);
-              dispatch({
-                type: "flash/storeFlashMessage",
-                payload: { type: "error", flashMessage: json.message },
-              });
-            }, 2000);
-          } */
         };
         fetchApi();
       }
@@ -217,6 +116,7 @@ const Forgot = () => {
   };
   return (
     <>
+      <TabIndex displayModal={displayModalForgot} />
       <AnimatePresence>
         {displayModalForgot && (
           <>
@@ -273,7 +173,7 @@ const Forgot = () => {
                   <Image
                     className={styles.forgot__top__close__img}
                     src="/assets/icone/xmark-solid.svg"
-                    alt="arrow-left"
+                    alt="icone fermer modal"
                     width={30}
                     height={30}
                   ></Image>
@@ -289,80 +189,30 @@ const Forgot = () => {
                 }}
                 className={styles.forgot__form}
               >
-                {" "}
-                {/* <TextField
-                  autoFocus
-                  value={inputEmail}
-                  style={{ margin: "10px 0px" }}
-                  id={"email"}
+                <Input
                   label={"Email"}
-                  variant="standard"
-                  type={"email"}
-                  sx={{
-                    "& label": {
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    },
-                  }}
-                  placeholder={"Entrez votre email"}
-                  FormHelperTextProps={{ style: { color: "red" } }}
-                  onChange={(e) => {
+                  value={inputEmail}
+                  id={"email"}
+                  type={"text"}
+                  placeholder={"Entrez votre mail"}
+                  regex={/^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/}
+                  onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handlerInput(
                       e,
                       /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
                       setValidInputEmail,
                       setInputEmailError,
                       setInputEmail,
-                      "Email : doit être un email valide"
+                      "Email : ne peut pas être vide"
                     );
                   }}
-                  helperText={inputEmailError}
-                /> */}
-                <FormControl variant="standard">
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-email"
-                  >
-                    Email
-                  </InputLabel>
-                  <Input
-                    autoFocus={displayModalForgot === true ? true : false}
-                    id="standard-adornment-email"
-                    value={inputEmail}
-                    placeholder={"Entrez votre mail"}
-                    type={"text"}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
-                        setValidInputEmail,
-                        setInputEmailError,
-                        setInputEmail,
-                        "Email : doit être un email valide"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <AlternateEmailIcon
-                          sx={{ color: "black" }}
-                          aria-label="toggle email visibility"
-                        >
-                          <Visibility />
-                        </AlternateEmailIcon>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {inputEmailError}
-                  </FormHelperText>
-                </FormControl>
+                  validInput={validInputEmail}
+                  errorMessage={inputEmailError}
+                  image={"at-solid"}
+                  alt={"icone email"}
+                  position={"first"}
+                  tab={true}
+                />
                 <input
                   type="text"
                   name="pseudo"
@@ -407,84 +257,6 @@ const Forgot = () => {
                   )}
                 </div>
               </form>
-              {displayReSendEmail && isLoadingReset === false && (
-                <div className={styles.forgot__form__submit__resend}>
-                  <button
-                    className={styles.forgot__form__submit__resend__btn}
-                    onClick={() => {
-                      const fetchApi = async () => {
-                        setIsLoadingReset(true);
-                        triggerResend({
-                          email: validator.escape(emailUser.trim()),
-                        });
-                        /* let response = await fetch("/api/user/login", {
-                          method: "POST",
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                          body: JSON.stringify({
-                            email: validator.escape(emailUser.trim()),
-                          }),
-                        });
-                        let json = await response.json();
-                        if (json.status === 200) {
-                          dispatch({ type: "ModalForgot/close" });
-                          dispatch({
-                            type: "flash/storeFlashMessage",
-                            payload: {
-                              flashMessage: json.message,
-                              type: "success",
-                            },
-                          });
-                        } else {
-                          if (json.type === "reset") {
-                            setDisplayReSendEmail(true);
-                            setEmailUser(json.email);
-                          }
-                          dispatch({
-                            type: "flash/storeFlashMessage",
-                            payload: {
-                              flashMessage: json.message,
-                              type: "error",
-                            },
-                          });
-                        } */
-                      };
-                      fetchApi();
-                    }}
-                  >
-                    Renvoyer un mail à l&apos;addresse {emailUser}
-                  </button>
-                </div>
-              )}
-              {displayReSendEmail && isLoadingReset === true && (
-                <div className={styles.forgot__form__submit__resend}>
-                  <button
-                    disabled
-                    className={styles.forgot__form__submit__resend__btn__load}
-                  >
-                    <span
-                      className={
-                        styles.forgot__form__submit__resend__btn__load__span
-                      }
-                    >
-                      Chargement
-                    </span>
-
-                    <div
-                      className={
-                        styles.forgot__form__submit__resend__btn__load__arc
-                      }
-                    >
-                      <div
-                        className={
-                          styles.forgot__form__submit__resend__btn__load__arc__circle
-                        }
-                      ></div>
-                    </div>
-                  </button>
-                </div>
-              )}
             </motion.div>
           </>
         )}

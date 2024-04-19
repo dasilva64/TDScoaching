@@ -102,6 +102,7 @@ export async function POST(request: NextRequest) {
                 typeMeeting: true,
               },
             });
+
             let userObject = {
               id: userById.id,
               firstname: userById.firstname,

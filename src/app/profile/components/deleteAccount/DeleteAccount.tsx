@@ -9,8 +9,9 @@ const DeleteAccount = () => {
   const dispatch = useDispatch();
   return (
     <>
-      <div
-        className={styles.card}
+      <button
+        className={`${styles.card} modalOpen`}
+        tabIndex={0}
         onClick={() => {
           dispatch({
             type: "ModalDeleteAccount/open",
@@ -40,7 +41,7 @@ const DeleteAccount = () => {
             alt="bousole"
           />
         </>
-      </div>
+      </button>
     </>
   );
 };

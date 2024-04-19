@@ -2,45 +2,36 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./EmailData.module.scss";
-import { AppDispatch, RootState } from "../../../../../src/app/redux/store";
+import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
-import {
-  FormControl,
-  FormHelperText,
-  Input,
-  InputAdornment,
-  InputLabel,
-  TextField,
-} from "@mui/material";
-import fetchPost from "../../../../../src/app/components/fetch/FetchPost";
-import fetchGet from "../../../../../src/app/components/fetch/fetchGet";
-import KeyIcon from "@mui/icons-material/Key";
+import fetchPost from "../../../components/fetch/FetchPost";
 import useGet from "../../../components/hook/useGet";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import Visibility from "@mui/icons-material/Visibility";
 import { useRouter } from "next/navigation";
 import localFont from "next/font/local";
+import Input from "@/app/components/input/Input";
+import TabIndex from "@/app/components/tabIndex/TabIndex";
 const Parisienne = localFont({
   src: "../../../Parisienne-Regular.ttf",
   display: "swap",
 });
 
-const EmailCheck = () => {
+const EmailCheck = ({ data: userData, mutate }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const { displayModalEditEmail } = useSelector(
     (state: RootState) => state.ModalEditEmail
   );
-  const {
+  /* const {
     data: userData,
     isLoading,
     mutate,
-  } = useGet("/profile/components/api");
-  let content;
+  } = useGet("/profile/components/api"); */
+
+  /* let content;
   if (isLoading) {
     content = <></>;
   } else {
@@ -67,7 +58,7 @@ const EmailCheck = () => {
         router.push("/");
       }
     }
-  }
+  } */
 
   const [codeInput, setCodeInput] = useState<string>("");
   const [validCodeInput, setValidCodeInput] = useState<boolean>(false);
@@ -160,85 +151,6 @@ const EmailCheck = () => {
       type: "ModalCancelEmail/open",
     });
   };
-  const {
-    trigger: triggerReSendCode,
-    data: dataReSendCode,
-    reset: resetReSendCode,
-    isMutating: isMutatingReSendCode,
-  } = useSWRMutation("/profile/components/emailData/api", fetchGet);
-  useEffect(() => {
-    console.log("dataReSendCode", dataReSendCode);
-    if (dataReSendCode) {
-      if (dataReSendCode.status === 200) {
-        let copyNewEmail = dataReSendCode.body.editEmail;
-        mutate(
-          {
-            ...dataReSendCode,
-            body: {
-              ...dataReSendCode.body,
-              editEmail: copyNewEmail,
-            },
-          },
-          { revalidate: false }
-        );
-        resetReSendCode();
-        if (isMutatingReSendCode === false) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "success", flashMessage: dataReSendCode.message },
-          });
-        }
-      } else if (dataReSendCode.status === 401) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: dataReSendCode.message },
-          });
-          resetReSendCode();
-        }, 2000);
-        router.push("/");
-      } else if (dataReSendCode.status === 400) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: dataReSendCode.message },
-        });
-        resetReSendCode();
-      } else {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: dataReSendCode.message },
-        });
-        resetReSendCode();
-        router.push("/");
-      }
-    }
-  }, [
-    dataReSendCode,
-    dispatch,
-    isMutatingReSendCode,
-    mutate,
-    resetReSendCode,
-    router,
-  ]);
-  /* useEffect(() => {
-    const mutateMaindataReSendCode = async () => {
-      let copyNewEmail = dataReSendCode.body.editEmail;
-      mutate(
-        {
-          ...dataReSendCode,
-          body: {
-            ...dataReSendCode.body,
-            editEmail: copyNewEmail,
-          },
-        },
-        { revalidate: false }
-      );
-      resetReSendCode();
-    };
-    if (dataReSendCode && dataReSendCode.status === 200) {
-      mutateMaindataReSendCode();
-    }
-  }, [dataReSendCode, mutate, resetReSendCode]); */
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({
@@ -280,6 +192,7 @@ const EmailCheck = () => {
   };
   return (
     <>
+      <TabIndex displayModal={displayModalEditEmail} />
       <AnimatePresence>
         {displayModalEditEmail === true && (
           <>
@@ -316,7 +229,7 @@ const EmailCheck = () => {
                 <Image
                   className={styles.modalEditEmailSendData__btn__img}
                   src="/assets/icone/xmark-solid.svg"
-                  alt="arrow-left"
+                  alt="icone fermer modal"
                   width={30}
                   height={30}
                 ></Image>
@@ -324,7 +237,7 @@ const EmailCheck = () => {
               <h2
                 className={`${styles.modalEditEmailSendData__h1} ${Parisienne.className}`}
               >
-                Validation de votre nouvel email {content}
+                Validation de votre nouvel email {userData.body.newEmail}
               </h2>
               <p>
                 Afin de renforcer la sécurité de vos données et de vos
@@ -339,64 +252,13 @@ const EmailCheck = () => {
                   handlerSubmit(e);
                 }}
               >
-                <FormControl
-                  variant="standard"
-                  style={{ margin: "20px 0px 30px 0px" }}
-                >
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-code"
-                  >
-                    Code de validation
-                  </InputLabel>
-                  <Input
-                    autoFocus={displayModalEditEmail === true ? true : false}
-                    id="standard-adornment-code"
-                    value={codeInput}
-                    placeholder={"Entrez votre code"}
-                    type={"text"}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        "firstname",
-                        /^[0-9]{8,8}$/,
-                        setValidCodeInput,
-                        setErrorMessageCode,
-                        setCodeInput,
-                        "Code : doit contenir 8 chiffres"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <KeyIcon
-                          aria-label="toggle code visibility"
-                          sx={{ padding: "0px", color: "black" }}
-                        >
-                          <Visibility />
-                        </KeyIcon>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {errorMessageCode}
-                  </FormHelperText>
-                </FormControl>
-                {/* <TextField
-                  autoFocus
-                  value={codeInput}
-                  style={{ margin: "20px 0px 30px 0px" }}
-                  id={"code"}
+                <Input
                   label={"Code de validation"}
-                  variant="standard"
-                  type={"number"}
-                  placeholder={"Entrez votre code"}
-                  FormHelperTextProps={{ style: { color: "red" } }}
-                  onChange={(e) => {
+                  value={codeInput}
+                  id={"code"}
+                  type={"text"}
+                  placeholder={"Entrez votre code de validation"}
+                  onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handlerInput(
                       e,
                       "firstname",
@@ -407,8 +269,14 @@ const EmailCheck = () => {
                       "Code : doit contenir 8 chiffres"
                     );
                   }}
-                  helperText={errorMessageCode}
-                /> */}
+                  validInput={validCodeInput}
+                  errorMessage={errorMessageCode}
+                  image={"lock-solid"}
+                  alt={"icone code"}
+                  position={"first"}
+                  tab={true}
+                />
+
                 <input
                   type="text"
                   name="pseudo"
@@ -464,54 +332,6 @@ const EmailCheck = () => {
                   )}
                 </div>
               </form>
-              <div className={styles.modalEditEmailSendData__reSend}>
-                {isMutatingReSendCode && (
-                  <>
-                    <button
-                      disabled
-                      className={
-                        styles.modalEditEmailSendData__reSend__btn__load
-                      }
-                    >
-                      <span
-                        className={
-                          styles.modalEditEmailSendData__reSend__btn__load__span
-                        }
-                      >
-                        Chargement
-                      </span>
-
-                      <div
-                        className={
-                          styles.modalEditEmailSendData__reSend__btn__load__arc
-                        }
-                      >
-                        <div
-                          className={
-                            styles.modalEditEmailSendData__reSend__btn__load__arc__circle
-                          }
-                        ></div>
-                      </div>
-                    </button>
-                  </>
-                )}
-                {isMutatingReSendCode === false && (
-                  <>
-                    <button
-                      className={styles.modalEditEmailSendData__reSend__btn}
-                      onClick={() => {
-                        dispatch({
-                          type: "flash/clearFlashMessage",
-                        });
-                        clearState();
-                        triggerReSendCode();
-                      }}
-                    >
-                      Renvoyer un code
-                    </button>
-                  </>
-                )}
-              </div>
             </motion.div>
           </>
         )}

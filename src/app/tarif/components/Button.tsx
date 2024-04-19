@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import styles from "./Button.module.scss";
 import Link from "next/link";
+import DiscoveryModal from "./DiscoveryModal";
+import NormalModal from "./NormalModal";
 
 const Button = () => {
   //const { trigger, data, reset } = useSWRMutation("/api/user/check", fetchGet);
@@ -55,15 +57,17 @@ const Button = () => {
     });
   };
   return (
-    <Link
-      href="/contact"
-      className={`${styles.button} modalOpen`}
-      onClick={() => {
-        handleClick();
-      }}
-    >
-      Réserver une séance
-    </Link>
+    <>
+      <Link
+        href="/contact"
+        className={`${styles.button} modalOpen`}
+        onClick={() => {
+          handleClick();
+        }}
+      >
+        Réserver une séance
+      </Link>
+    </>
   );
 };
 

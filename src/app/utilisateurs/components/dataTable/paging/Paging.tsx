@@ -280,7 +280,7 @@ const Paging = () => {
           </div>
         </>
       )}
-      {datas && datas.length === 0 && (
+      {/* {datas && datas.length === 0 && (
         <>
           <p className={styles.paging__p}>
             Affichage de 0 à{" "}
@@ -290,7 +290,7 @@ const Paging = () => {
             sur {datas?.length} entrées
           </p>
         </>
-      )}
+      )} */}
     </div>
   );
 };

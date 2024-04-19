@@ -19,6 +19,8 @@ const Display = () => {
   useEffect(() => {
     if (datas && datas.length > 0) {
       setKeyAr(Object.keys(datas[0]));
+    } else {
+      setKeyAr(["Id", "Prénom", "Nom", "Mail", "RendezVous"]);
     }
   }, [datas]);
   /* useEffect(() => {
@@ -79,26 +81,28 @@ const Display = () => {
   }, [currentPage, datas, dispatch, keyAr, nbShow, sortBy]);
 
   const handlerSortBy = (e: any) => {
-    if (e.target.textContent === sortBy[0]) {
-      if (sortBy[1] === "DESC") {
+    if (datas && datas.length > 0) {
+      if (e.target.textContent === sortBy[0]) {
+        if (sortBy[1] === "DESC") {
+          dispatch({
+            type: "Array/changeSortBy",
+            payload: { sortBy: [e.target.textContent, "ASC"] },
+          });
+          sortByF(e.target.textContent, "ASC");
+        } else {
+          dispatch({
+            type: "Array/changeSortBy",
+            payload: { sortBy: [e.target.textContent, "DESC"] },
+          });
+          sortByF(e.target.textContent, "DESC");
+        }
+      } else {
         dispatch({
           type: "Array/changeSortBy",
           payload: { sortBy: [e.target.textContent, "ASC"] },
         });
         sortByF(e.target.textContent, "ASC");
-      } else {
-        dispatch({
-          type: "Array/changeSortBy",
-          payload: { sortBy: [e.target.textContent, "DESC"] },
-        });
-        sortByF(e.target.textContent, "DESC");
       }
-    } else {
-      dispatch({
-        type: "Array/changeSortBy",
-        payload: { sortBy: [e.target.textContent, "ASC"] },
-      });
-      sortByF(e.target.textContent, "ASC");
     }
   };
 

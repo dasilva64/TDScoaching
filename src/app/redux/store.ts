@@ -42,6 +42,11 @@ import ModalSurMesure from "./feature/modal/ModalSurMesure";
 import ModalContract from "./feature/modal/ModalContract";
 import ModalComfirmDeleteContrat from "./feature/modal/ModalComfirmDeleteContrat";
 import ModalComfirmEditContrat from "./feature/modal/ModalComfirmEditContrat";
+import article from "./feature/article";
+import ModalNavAdmin from "./feature/modal/ModalNavAdmin";
+import ModalNav from "./feature/modal/ModalNav";
+import ModalElement from "./feature/modal/ModalElement";
+import ModalNavUser from "./feature/modal/ModalNavUser";
 
 export const store = configureStore({
   reducer: {
@@ -67,6 +72,11 @@ export const store = configureStore({
     ModalDeleteAccount: ModalDeleteAccount.reducer,
     ModalDiscovery: ModalDiscovery.reducer,
     ModalNormal: ModalNormal.reducer,
+    article: article.reducer,
+    ModalNavAdmin: ModalNavAdmin.reducer,
+    ModalNavUser: ModalNavUser.reducer,
+    ModalNav: ModalNav.reducer,
+    ModalElement: ModalElement.reducer,
     /*ModalEditFormule: ModalEditFormule.reducer,
     
     ModalEditTwoFactor: ModalEditTwoFactor.reducer,

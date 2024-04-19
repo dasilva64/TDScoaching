@@ -12,19 +12,20 @@ const Parisienne = localFont({
   display: "swap",
 });
 
-async function getSession() {
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  return session;
-}
+export const metadata = {
+  title: "Donnée d'un utilisateur - tdscoaching",
+  description:
+    "Consultez les données d'un utilisateur inscrit sur le site tdscoaching.",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  author: "Thierry Da Silva",
+  robots: "noindex, nofollow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
+};
 const page = async () => {
-  const session = await getSession();
-  if (!session.isLoggedIn) {
-    redirect("/");
-  } else {
-    if (session.role !== "ROLE_ADMIN") {
-      redirect("/");
-    }
-  }
   return (
     <>
       <NoScript />

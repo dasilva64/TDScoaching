@@ -4,10 +4,22 @@ import Image from "next/image";
 import Button from "./components/Button";
 import ButtonOpenDiscovery from "./components/ButtonOpenDiscovery";
 import ButtonOpenNormal from "./components/ButtonOpenNormal";
+
 export const metadata = {
   title: "Coach de vie tarif - tdscoaching",
   description:
     "Explorez mes trois packs de coaching sur mesure pour les couples, les familles et les professionnels : pack unique, pack flash et pack sur mesure.",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+
+  keywords:
+    "Développement personnel, Coaching professionnel, Relation de couple, Communication, Équilibre vie professionnelle-vie personnelle, Confiance en soi, Gestion du stress",
+  author: "Thierry Da Silva",
+  robots: "index, follow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
 };
 
 import localFont from "next/font/local";
@@ -21,7 +33,6 @@ const Tarif = () => {
   return (
     <>
       <NoScript />
-
       <main className={styles.tarif}>
         <div className={styles.tarif__bg}>
           <Image

@@ -2,7 +2,6 @@
 
 import React from "react";
 import styles from "./Display.module.scss";
-import useUserEmailValidation from "../../../components/hook/user/useUserEmailValidation";
 import { usePathname } from "next/navigation";
 import useDeleteAccount from "../../../components/hook/user/useDeleteAccount";
 

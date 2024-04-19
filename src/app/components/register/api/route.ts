@@ -19,13 +19,16 @@ const limiter = new RateLimiter({
 export async function POST(request: NextRequest) {
   const remainingRequests = await limiter.removeTokens(1);
   if (remainingRequests < 0) {
-    return new NextResponse(null, {
-      status: 429,
-      statusText: "Too many requests",
-      headers: {
-        "Content-Type": "text/plain",
+    return NextResponse.json(
+      {
+        status: 429,
+        type: "error",
+        message: "Trop de requêtes successives, veuillez réessayer plus tard",
       },
-    });
+      {
+        status: 429,
+      }
+    );
   } else {
     const session = await getIronSession<SessionData>(
       cookies(),
@@ -127,12 +130,13 @@ export async function POST(request: NextRequest) {
           );
           let token = jwt.sign(
             { user: validator.escape(email.trim()) },
-            process.env.SECRET_TOKEN_REGISTER as string
+            process.env.SECRET_TOKEN_REGISTER as string,
+            { expiresIn: "30m" }
           );
           let currentDate = new Date();
           let registerTokenObject = {
             token: token,
-            limitDate: currentDate.setDate(currentDate.getDate() + 1),
+            limitDate: currentDate.setMinutes(currentDate.getMinutes() + 30),
           };
           let UserCreate = await prisma.user.create({
             data: {
@@ -194,7 +198,7 @@ export async function POST(request: NextRequest) {
                                 <h2 style="text-align: center">Validation de votre compte</h2>
                                 <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
                                 <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${token}" target="_blank">Vérifier mon compte</a>
-                                <p style="margin-top: 20px">Ce lien est valide pendant 24h, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé</p>
+                                <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé</p>
                               </div>
                             </div>
                           </body>
@@ -221,12 +225,15 @@ export async function POST(request: NextRequest) {
                 );
                 let token = jwt.sign(
                   { user: validator.escape(email.trim()) },
-                  process.env.SECRET_TOKEN_REGISTER as string
+                  process.env.SECRET_TOKEN_REGISTER as string,
+                  { expiresIn: "30m" }
                 );
                 let currentDate = new Date();
                 let registerTokenObject = {
                   token: token,
-                  limitDate: currentDate.setDate(currentDate.getDate() + 1),
+                  limitDate: currentDate.setMinutes(
+                    currentDate.getMinutes() + 30
+                  ),
                 };
                 let UserCreate = await prisma.user.create({
                   data: {
@@ -288,7 +295,7 @@ export async function POST(request: NextRequest) {
                                       <h2 style="text-align: center">Validation de votre compte</h2>
                                       <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
                                       <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${token}" target="_blank">Vérifier mon compte</a>
-                                      <p style="margin-top: 20px">Ce lien est valide pendant 24h, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé.</p>
+                                      <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé.</p>
                                     </div>
                                   </div>
                                 </body>
@@ -342,3 +349,5 @@ export async function POST(request: NextRequest) {
     }
   }
 }
+
+//123,8	58,6

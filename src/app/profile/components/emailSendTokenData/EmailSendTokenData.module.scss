@@ -1,11 +1,16 @@
 .card {
+  width: 100%;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
+  border-left: 1px solid #eaeaea;
+  border-right: 1px solid #eaeaea;
   padding: 10px 0px 10px 10px;
   position: relative;
   display: flex;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.04);
+  color: inherit;
+  font: inherit;
   cursor: pointer;
   transition: all 400ms;
   &:hover {
@@ -38,6 +43,9 @@
       transform: translateY(-50%);
       transition: all 400ms;
     }
+    &__name {
+      text-align: left;
+    }
     &__p {
       word-wrap: break-word;
       word-break: break-word;
@@ -46,10 +54,15 @@
   }
 
   &__load {
+    width: 100%;
     border-top: 1px solid #eaeaea;
     border-bottom: 1px solid #eaeaea;
     padding: 10px 0px 10px 10px;
+    border-left: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
     position: relative;
+    color: inherit;
+    font: inherit;
     display: flex;
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.04);

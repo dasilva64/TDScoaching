@@ -1,6 +1,6 @@
 "use client";
 
-import { AppDispatch } from "../../../../../src/app/redux/store";
+import { AppDispatch } from "../../../redux/store";
 import React from "react";
 import { useDispatch } from "react-redux";
 import styles from "./PasswordData.module.scss";
@@ -11,8 +11,9 @@ const PasswordData = () => {
 
   return (
     <>
-      <div
-        className={styles.card}
+      <button
+        className={`${styles.card} modalOpen`}
+        tabIndex={0}
         onClick={() => {
           dispatch({
             type: "ModalEditPassword/open",
@@ -28,10 +29,10 @@ const PasswordData = () => {
           alt="bousole"
         />
         <div className={styles.card__info}>
-          <p>
+          <p className={styles.card__info__p}>
             <strong>Mot de passe</strong>
           </p>
-          <p>{"*".toString().repeat(6)}</p>
+          <p className={styles.card__info__p}>{"*".toString().repeat(6)}</p>
         </div>
         <Image
           className={styles.card__info__icone}
@@ -41,7 +42,7 @@ const PasswordData = () => {
           src={"/assets/icone/chevron-right-solid.svg"}
           alt="bousole"
         />
-      </div>
+      </button>
     </>
   );
 };

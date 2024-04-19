@@ -6,19 +6,91 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { SmtpClient } from "https://deno.land/x/denomailer@0.12.0/mod.ts";
 
-const supUrl = Deno.env.get("_SUPABASE_URL");
-const supKey = Deno.env.get("_SUPABASE_SERVICE_KEY");
+const supUrl = Deno.env.get("_SUPABASE_URL") as string;
+const supKey = Deno.env.get("_SUPABASE_SERVICE_KEY") as string;
 const supabase = createClient(supUrl, supKey);
-const client = new SmtpClient({
+/* const client = new SmtpClient({
   content_encoding: "quoted-printable", // 7bit, 8bit, base64, binary, quoted-printable
-});
+}); */
 
 serve(async (req) => {
-  const { name } = await req.json();
-  const data = {
-    message: `Hello ${name}!`,
-  };
-  let { data: Meeting, error: errorMeet } = await supabase
+  let { data: user, error: errorMeet } = await supabase.from("User").select(`
+    id,
+    role,
+    resettoken:  resetToken->token,
+    registertoken:        registerToken->token,
+    resetlimite:      resetToken->limitDate,
+    registerlimite:     registerToken->limitDate,
+    editemailToken: editEmail->token,
+    editemaillimite: editEmail->limitDate,
+    deleteToken: deleteToken->token,
+    deletelimit: deleteToken->limitDate
+  `);
+  for (let i = 0; i < user.length; i++) {
+    if (user[i].registertoken !== null) {
+      if (new Date().getTime() > new Date(user[i].registerlimite).getTime()) {
+        await supabase.from("User").delete().eq("id", user[i].id);
+      }
+    }
+
+    if (user[i].resettoken !== null) {
+      if (new Date().getTime() > new Date(user[i].resetlimite).getTime()) {
+        await supabase
+          .from("User")
+          .update({ resetToken: null })
+          .eq("id", user[i].id)
+          .select();
+      }
+    }
+    if (user[i].editemailToken !== null) {
+      if (new Date().getTime() > new Date(user[i].editemaillimite).getTime()) {
+        await supabase
+          .from("User")
+          .update({ editEmail: null })
+          .eq("id", user[i].id)
+          .select();
+      }
+    }
+    if (user[i].deleteToken !== null) {
+      if (new Date().getTime() > new Date(user[i].deletelimit).getTime()) {
+        await supabase
+          .from("User")
+          .update({ deleteToken: null, deleteReason: null })
+          .eq("id", user[i].id)
+          .select();
+      }
+    }
+  }
+
+  /* await client.connectTLS({
+    hostname: "smtp.gmail.com",
+    port: 465,
+    username: "thomasdasilva010@gmail.com",
+    password: "zcijrlsalibfiytj",
+  });
+  try {
+    await client.send({
+      from: "thomasdasilva010@gmail.com",
+      to: "thomasdasilva010@gmail.com",
+      subject: "Lien d'accès à la réunion",
+      html: ` <div style="width: 100%">
+                <div style="text-align: center">
+                  <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
+                </div>
+                <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
+                  <h1 style="text-align: center">tds coaching</h1>
+                  <h2 style="text-align: center">Vous pouvez maintenant accèder à votre rendez-vous</h2>
+                  <p style="margin-bottom: 20px">Pour y accèder, veuillez cliquer sur le lien ci-dessous.</p>
+                  <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="http://localhost:3000" target="_blank">Mon rendez-vous</a>
+                </div>
+              </div>`,
+    });
+  } catch (error) {
+    return new Response("erreur", { status: 500 });
+  }
+
+  await client.close(); */
+  /* let { data: Meeting, error: errorMeet } = await supabase
     .from("Meeting")
     .select("*");
   let current = new Date();
@@ -70,9 +142,10 @@ serve(async (req) => {
         updateMeeting();
       }
     }
-  });
-
-  return new Response(JSON.stringify(ar), {
+  }); */
+  const { name } = await req.json();
+  let data = { message: `Hello good` };
+  return new Response(JSON.stringify(data), {
     headers: { "Content-Type": "application/json" },
   });
 });

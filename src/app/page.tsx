@@ -1,23 +1,36 @@
+import "server-only";
+
 import styles from "./page.module.scss";
 import Image from "next/image";
 import GoDown from "./components/goDown/goDown";
 import Card from "./components/card/Card";
 import WhileInView from "./components/framer/WhileInView";
-import GoTarif from "./components/goTarif/goTarif";
 import localFont from "next/font/local";
 import NoScript from "./components/noscript/NoScript";
+import About from "./components/about/About";
+import Link from "next/link";
 const Parisienne = localFont({
   src: "./Parisienne-Regular.ttf",
   display: "swap",
 });
 
-/* export const metadata = {
-  title: "Contactez votre coach de vie - tdscoaching",
+export const metadata = {
+  title: "Coach de vie c'est quoi ? - tdscoaching",
   description:
-    "Vous pouvez me contacter par mail : contact@tds-coachingdevie.fr ou par téléphone : 0781673125",
-}; */
+    "Le coaching de vie, c’est quoi ? Vous êtes en quête de bien-être ? Etes-vous prêt à libérer tout votre potentiel ? Comment puis-je vous aider ?",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  keywords:
+    "Développement personnel, Coaching professionnel, Relation de couple, Communication, Équilibre vie professionnelle-vie personnelle, Confiance en soi, Gestion du stress",
+  author: "Thierry Da Silva",
+  robots: "index, follow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
+};
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <NoScript />
@@ -33,73 +46,54 @@ export default function Home() {
             src={"/assets/img/moi8.webp"}
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
           />
-          <div className={styles.home__bg__container}>
-            <h2
-              className={`${styles.home__bg__container__h1} ${Parisienne.className}`}
-            >
-              Thierry Da Silva
-            </h2>
-            <p className={styles.home__bg__container__p}>
-              Coach professionnel certifié, je vous accompagne dans votre
-            </p>
-            <p className={styles.home__bg__container__p}>
-              développement personnel et professionnel.
-            </p>
-            <GoTarif />
-          </div>
+          <About />
+
           <GoDown />
         </section>
         <section className={styles.home__who}>
-          <div className={styles.home__who__container}>
-            <h1
-              className={`${styles.home__who__container__h2} ${Parisienne.className}`}
-            >
-              Vous êtes en quête <br /> de bien-être ?
-            </h1>
+          <h1 className={`${styles.home__who__h2} ${Parisienne.className}`}>
+            Vous êtes en quête <br /> de bien-être ?
+          </h1>
 
-            <p className={styles.home__who__container__p}>
-              En offrant un espace pour la réflexion, le coaching peut aider à
-              améliorer la qualité de vie et favoriser la croissance
-              personnelle. Comment ? En encourageant l&apos;autoréflexion et la
-              prise de conscience de ses propres pensées, comportements et
-              motivations.
-            </p>
+          <p className={styles.home__who__p}>
+            En offrant un espace pour la réflexion, le coaching peut aider à
+            améliorer la qualité de vie et favoriser la croissance personnelle.
+            Comment ? En encourageant l&apos;autoréflexion et la prise de
+            conscience de ses propres pensées, comportements et motivations.
+          </p>
 
-            <div className={styles.home__who__container__content}>
-              <div className={styles.home__who__container__content__div}>
-                <h2
-                  className={`${styles.home__who__container__content__div__h3} ${Parisienne.className}`}
-                >
-                  Coacher une personne, c’est quoi ?
-                </h2>
-
-                <p className={styles.home__who__container__content__div__p}>
-                  Coacher une personne, c&apos;est lui fournir un accompagnement
-                  personnalisé dans le but de l&apos;aider à atteindre des
-                  objectifs spécifiques, à développer ses compétences, à
-                  résoudre des problèmes ou à réaliser des changements positifs
-                  dans sa vie personnelle ou professionnelle. Le coach agit
-                  comme un facilitateur. Il va permettre à une personne de
-                  libérer son potentiel pour maximiser ses performances.
-                </p>
-              </div>
-              <WhileInView
-                type="y"
-                className={styles.home__who__container__content__div__card}
+          <div className={styles.home__who__content}>
+            <div className={styles.home__who__content__div}>
+              <h2
+                className={`${styles.home__who__content__div__h3} ${Parisienne.className}`}
               >
-                <Image
-                  className={
-                    styles.home__who__container__content__div__card__img
-                  }
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  priority={true}
-                  src={"/assets/test/sunset.jpg"}
-                  alt="Coucher de soleil sur la plage avec deux personnes qui sautent"
-                />
-              </WhileInView>
+                Coacher une personne, c’est quoi ?
+              </h2>
+
+              <p className={styles.home__who__content__div__p}>
+                Coacher une personne, c&apos;est lui fournir un accompagnement
+                personnalisé dans le but de l&apos;aider à atteindre des
+                objectifs spécifiques, à développer ses compétences, à résoudre
+                des problèmes ou à réaliser des changements positifs dans sa vie
+                personnelle ou professionnelle. Le coach agit comme un
+                facilitateur. Il va permettre à une personne de libérer son
+                potentiel pour maximiser ses performances.
+              </p>
             </div>
+            <WhileInView
+              type="y"
+              className={styles.home__who__content__div__card}
+            >
+              <Image
+                className={styles.home__who__content__div__card__img}
+                width="0"
+                height="0"
+                sizes="100vw"
+                priority={true}
+                src={"/assets/test/sunset.jpg"}
+                alt="Coucher de soleil sur la plage avec deux personnes qui sautent"
+              />
+            </WhileInView>
           </div>
         </section>
         <section className={styles.home__what}>

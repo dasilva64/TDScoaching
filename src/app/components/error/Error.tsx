@@ -16,13 +16,6 @@ const Error = () => {
       <div className={styles.notfound__container__article__box}>
         <Link
           className={styles.notfound__container__article__box__link}
-          href={""}
-          onClick={() => router.back()}
-        >
-          Revenir sur la page précèdente
-        </Link>
-        <Link
-          className={styles.notfound__container__article__box__link}
           href={"/"}
         >
           Revenir sur la page d&apos;accueil

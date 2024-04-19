@@ -1,0 +1,41 @@
+.area {
+  position: relative;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  &__label {
+    color: black;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+    padding: 0;
+    position: relative;
+    margin-bottom: 5px;
+  }
+  &__textarea {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    border-radius: 6px;
+    border-color: rgb(205, 215, 225);
+    background-color: rgb(251, 252, 254);
+    padding: 10px 12px 5px 12px;
+    height: 48px;
+    outline: none;
+    font-size: 16px;
+    &:hover {
+      outline: 2px solid black;
+    }
+    &:focus {
+      outline: 2px solid #1976d2;
+    }
+  }
+  &__error {
+    color: red;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.66;
+    letter-spacing: 0.03333em;
+    margin-top: 3px;
+  }
+}

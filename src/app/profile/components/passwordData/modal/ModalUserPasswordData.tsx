@@ -1,24 +1,15 @@
-import { AppDispatch, RootState } from "../../../../../../src/app/redux/store";
+import { AppDispatch, RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserPasswordData.module.scss";
 import useSWRMutation from "swr/mutation";
-import {
-  FormControl,
-  FormHelperText,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
-  TextField,
-} from "@mui/material";
-import fetchPost from "../../../../../../src/app/components/fetch/FetchPost";
+import fetchPost from "../../../../components/fetch/FetchPost";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
 import { useRouter } from "next/navigation";
 import localFont from "next/font/local";
+import Input from "@/app/components/input/Input";
+import TabIndex from "@/app/components/tabIndex/TabIndex";
 const Parisienne = localFont({
   src: "../../../../Parisienne-Regular.ttf",
   display: "swap",
@@ -290,6 +281,7 @@ const ModalUserPasswordData = () => {
 
   return (
     <>
+      <TabIndex displayModal={displayModalEditPassword} />
       <AnimatePresence>
         {displayModalEditPassword === true && (
           <>
@@ -324,7 +316,7 @@ const ModalUserPasswordData = () => {
                 <Image
                   className={styles.modalEditPasswordData__btn__img}
                   src="/assets/icone/xmark-solid.svg"
-                  alt="arrow-left"
+                  alt="icone fermer modal"
                   width={30}
                   height={30}
                 ></Image>
@@ -341,145 +333,41 @@ const ModalUserPasswordData = () => {
                   handlerSubmit(e);
                 }}
               >
-                <FormControl
-                  style={{ margin: "20px 0px 0px 0px" }}
-                  variant="standard"
-                >
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-password"
-                  >
-                    Mot de passe
-                  </InputLabel>
-                  <Input
-                    id="standard-adornment-password"
-                    autoFocus={displayModalEditPassword === true ? true : false}
-                    value={passwordInput}
-                    placeholder={"Entrez votre mot de passe"}
-                    type={showPassword ? "text" : "password"}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        "password",
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
-                        setValidPasswordInput,
-                        setErrorMessagePassword,
-                        setPasswordInput,
-                        "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {errorMessagePassword}
-                  </FormHelperText>
-                </FormControl>
-                {/* <TextField
-                  autoFocus
-                  value={passwordInput}
-                  style={{ margin: "20px 0px 0px 0px" }}
-                  id={"password"}
+                <Input
                   label={"Mot de passe"}
-                  variant="standard"
+                  value={passwordInput}
+                  id={"password"}
                   type={"password"}
                   placeholder={"Entrez votre mot de passe"}
-                  FormHelperTextProps={{ style: { color: "red" } }}
-                  onChange={(e) => {
+                  onchange={(
+                    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                  ) => {
                     handlerInput(
                       e,
                       "password",
-                      /^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{2,}$/,
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
                       setValidPasswordInput,
                       setErrorMessagePassword,
                       setPasswordInput,
-                      "Mot de passe : doit avoir une lettre en minuscule, un nombre et 8 caractères minimum"
+                      "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
                     );
                   }}
-                  helperText={errorMessagePassword}
-                /> */}
-                <FormControl variant="standard" style={{ margin: "20px 0px" }}>
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-password-comfirm"
-                  >
-                    Confirmation de mot de passe
-                  </InputLabel>
-                  <Input
-                    id="standard-adornment-password-comfirm"
-                    value={passwordComfirmInput}
-                    placeholder={"Entrez votre confirmation de mot de passe"}
-                    type={showPasswordComfirm ? "text" : "password"}
-                    onChange={(e) => {
-                      let removeSpace = "";
-                      if (e.target.value.charAt(0) === " ") {
-                        removeSpace = e.target.value.replace(/\s/, "");
-                        setPasswordComfirmInput(removeSpace);
-                      } else {
-                        removeSpace = e.target.value.replace(/\s+/g, "");
-                        setPasswordComfirmInput(removeSpace);
-                      }
-                      if (
-                        passwordInput.length > 0 &&
-                        removeSpace !== passwordInput
-                      ) {
-                        setValidPasswordComfirmInput(false);
-                        setErrorMessagePasswordComfirm(
-                          "Confirmation mot de passe : les mots de passe doivent être identiques"
-                        );
-                      } else {
-                        setValidPasswordComfirmInput(true);
-
-                        setErrorMessagePasswordComfirm("");
-                      }
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPasswordComfirm}
-                        >
-                          {showPasswordComfirm ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {errorMessagePasswordComfirm}
-                  </FormHelperText>
-                </FormControl>
-                {/* <TextField
+                  validInput={validPasswordInput}
+                  errorMessage={errorMessagePassword}
+                  image={"eye-solid"}
+                  alt={"icone afficher mot de passe"}
+                  position={"first"}
+                  tab={true}
+                />
+                <Input
+                  label={"Confirmation de mot de passe"}
                   value={passwordComfirmInput}
-                  style={{ margin: "20px 0px" }}
                   id={"comfirmPassword"}
-                  label={"Comfirmation mot de passe"}
-                  variant="standard"
                   type={"password"}
-                  placeholder={"Entrez votre comfirmation mot de passe"}
-                  FormHelperTextProps={{ style: { color: "red" } }}
-                  onChange={(e) => {
+                  placeholder={"Entrez votre confirmation de mot de passe"}
+                  onchange={(
+                    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                  ) => {
                     let removeSpace = "";
                     if (e.target.value.charAt(0) === " ") {
                       removeSpace = e.target.value.replace(/\s/, "");
@@ -494,7 +382,7 @@ const ModalUserPasswordData = () => {
                     ) {
                       setValidPasswordComfirmInput(false);
                       setErrorMessagePasswordComfirm(
-                        "Comfirmation mot de passe : les mots de passe doivent être identique"
+                        "Confirmation mot de passe : les mots de passe doivent être identiques"
                       );
                     } else {
                       setValidPasswordComfirmInput(true);
@@ -502,8 +390,13 @@ const ModalUserPasswordData = () => {
                       setErrorMessagePasswordComfirm("");
                     }
                   }}
-                  helperText={errorMessagePasswordComfirm}
-                /> */}
+                  validInput={validPasswordComfirmInput}
+                  errorMessage={errorMessagePasswordComfirm}
+                  image={"eye-solid"}
+                  alt={"icone afficher mot de passe"}
+                  tab={true}
+                />
+
                 <input
                   type="text"
                   name="pseudo"

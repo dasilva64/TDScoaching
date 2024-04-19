@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "pages/page.tsxx", "src/app/contact/loading.js", "test/app/rendez-vous/components/formule/Formule.tsx", "supabase/functions/test/index.js", "src/app/contact/components/api/route.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "pages/page.tsxx", "src/app/contact/loading.js", "test/app/rendez-vous/components/formule/Formule.tsx", "supabase/functions/test/index.js", "src/app/contact/components/api/route.ts", "supabase/functions/send/index.ts"],
   "exclude": ["node_modules"]
 }

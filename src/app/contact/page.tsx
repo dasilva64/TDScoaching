@@ -6,6 +6,16 @@ export const metadata = {
   title: "Contactez votre coach de vie - tdscoaching",
   description:
     "Vous pouvez me contacter par mail : contact@tds-coachingdevie.fr ou par téléphone : 0781673125",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  keywords:
+    "Développement personnel, Coaching professionnel, Relation de couple, Communication, Équilibre vie professionnelle-vie personnelle, Confiance en soi, Gestion du stress",
+  author: "Thierry Da Silva",
+  robots: "index, follow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
 };
 
 import localFont from "next/font/local";

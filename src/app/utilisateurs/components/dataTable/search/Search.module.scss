@@ -1,12 +1,81 @@
 .search {
-  &__cancel {
-    background-color: gray;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    padding: 0px 4px;
+  width: 250px;
+}
+.div {
+  position: relative;
+  &:focus-within .div__label {
+    transform: translateY(-13px) scale(0.75);
+    transform-origin: top left;
+    color: #1976d2;
+  }
+  &:focus-within .div__label__value {
+    transform: translateY(-13px) scale(0.75);
+    transform-origin: top left;
+    color: #1976d2;
+  }
+  &:not(:focus-within) .div__label__value {
+    transform: translateY(-13px) scale(0.75);
+    transform-origin: top left;
+    color: black;
+  }
+  &__label {
+    color: black;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    position: absolute;
+    z-index: 0;
+    transform: translateY(6px) scale(1);
+    transition: all 0.3s;
+    &__value {
+      color: #1976d2;
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      position: absolute;
+      z-index: 0;
+      transform: translateY(-13px) scale(0.75);
+      transform-origin: top left;
+      transition: all 0.3s;
+    }
+  }
+  &__div {
     position: relative;
-    right: 20px;
+    width: 100%;
+    &__input {
+      position: relative;
+      z-index: 2;
+      background-color: transparent;
+      outline: none;
+      outline-width: 0;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.42);
+      font: inherit;
+      padding: 4px 0 5px;
+      box-sizing: content-box;
+      height: 1.4375em;
+      width: 100%;
+      transition: all 0.3s;
+      &:focus {
+        border-bottom: 2px solid #1976d2;
+      }
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.42);
+        opacity: 0;
+      }
+      &:focus::placeholder {
+        opacity: 1;
+      }
+      &:hover:not(:focus) {
+        border-bottom: 2px solid black;
+      }
+    }
+    &__img {
+      cursor: pointer;
+      position: absolute;
+      z-index: 3;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+    }
   }
 }
 

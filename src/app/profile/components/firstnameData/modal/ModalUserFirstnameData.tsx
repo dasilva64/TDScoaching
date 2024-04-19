@@ -1,73 +1,37 @@
-import { AppDispatch, RootState } from "../../../../../../src/app/redux/store";
+"use client";
+
+import { AppDispatch, RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserFirstnameData.module.scss";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
-import PersonIcon from "@mui/icons-material/Person";
-import {
-  FormControl,
-  FormHelperText,
-  Input,
-  InputAdornment,
-  InputLabel,
-  TextField,
-} from "@mui/material";
-import fetchPost from "../../../../../../src/app/components/fetch/FetchPost";
+import fetchPost from "../../../../components/fetch/FetchPost";
 import useGet from "../../../../components/hook/useGet";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import Visibility from "@mui/icons-material/Visibility";
 import localFont from "next/font/local";
+import Input from "@/app/components/input/Input";
+import TabIndex from "@/app/components/tabIndex/TabIndex";
+import { set } from "zod";
 const Parisienne = localFont({
   src: "../../../../Parisienne-Regular.ttf",
   display: "swap",
 });
 
-const ModalUserFirstnameData = () => {
+const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
   const router = useRouter();
   const { displayModalEditFirstname } = useSelector(
     (state: RootState) => state.ModalEditFirstname
   );
-  const {
-    data: userData,
-    isLoading,
-    mutate,
-  } = useGet("/profile/components/api");
   const dispatch = useDispatch<AppDispatch>();
 
   const [inputPseudo, setInputPseudo] = useState<string>("");
-  const [firstnameInput, setFirstnameInput] = useState<string>("");
-  useEffect(() => {
-    if (isLoading) {
-      setFirstnameInput("");
-    } else {
-      if (userData) {
-        if (userData.status === 200) {
-          setFirstnameInput(userData.body.firstname);
-        } else if (userData.status === 401) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: userData.message,
-            },
-          });
-          router.push("/");
-        } else {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: userData.message,
-            },
-          });
-          router.push("/");
-        }
-      }
-    }
-  }, [dispatch, isLoading, router, userData]);
+  const [firstnameInput, setFirstnameInput] = useState<string>(
+    userData.body.firstname
+  );
+
   const [validFirstnameInput, setValidFirstnameInput] = useState<boolean>(true);
   const [errorMessageFirstname, setErrorMessageFirstname] =
     useState<string>("");
@@ -80,11 +44,6 @@ const ModalUserFirstnameData = () => {
     const clearState = () => {
       setErrorMessageFirstname("");
       setValidFirstnameInput(true);
-      if (userData) {
-        if (userData.body) {
-          setFirstnameInput(userData.body.firstname);
-        }
-      }
     };
     if (data) {
       if (data.status === 200) {
@@ -188,13 +147,9 @@ const ModalUserFirstnameData = () => {
     }
   };
   const clearState = () => {
+    setFirstnameInput(userData.body.firstname);
     setErrorMessageFirstname("");
     setValidFirstnameInput(true);
-    if (userData) {
-      if (userData.body) {
-        setFirstnameInput(userData.body.firstname);
-      }
-    }
   };
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -227,6 +182,7 @@ const ModalUserFirstnameData = () => {
   };
   return (
     <>
+      <TabIndex displayModal={displayModalEditFirstname} />
       <AnimatePresence>
         {displayModalEditFirstname === true && (
           <>
@@ -261,7 +217,7 @@ const ModalUserFirstnameData = () => {
                 <Image
                   className={styles.modalEditMainUserData__btn__img}
                   src="/assets/icone/xmark-solid.svg"
-                  alt="arrow-left"
+                  alt="icone fermer modal"
                   width={30}
                   height={30}
                 ></Image>
@@ -273,83 +229,36 @@ const ModalUserFirstnameData = () => {
               </h2>
               <form
                 className={styles.modalEditMainUserData__form}
-                action=""
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}
               >
-                <FormControl
-                  variant="standard"
-                  style={{ margin: "20px 0px 0px 0px" }}
-                >
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-firstname"
-                  >
-                    Prénom
-                  </InputLabel>
-                  <Input
-                    autoFocus={
-                      displayModalEditFirstname === true ? true : false
-                    }
-                    id="standard-adornment-firstname"
-                    value={firstnameInput}
-                    placeholder={"Entrez votre prénom"}
-                    type={"text"}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        "firstname",
-                        /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
-                        setValidFirstnameInput,
-                        setErrorMessageFirstname,
-                        setFirstnameInput,
-                        "Prénom : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <PersonIcon
-                          aria-label="toggle firstname visibility"
-                          sx={{ padding: "0px", color: "black" }}
-                        >
-                          <Visibility />
-                        </PersonIcon>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {errorMessageFirstname}
-                  </FormHelperText>
-                </FormControl>
-                {/* <TextField
-                  autoFocus
-                  value={firstnameInput}
-                  style={{ margin: "20px 0px 0px 0px" }}
-                  id={"firstname"}
-                  label={"Prénom"}
-                  variant="standard"
-                  type={"text"}
-                  placeholder={"Entrez votre prénom"}
-                  FormHelperTextProps={{ style: { color: "red" } }}
-                  onChange={(e) => {
+                <Input
+                  label="Prénom"
+                  value={firstnameInput ? firstnameInput : ""}
+                  id="firstname"
+                  type="text"
+                  placeholder="Entrez votre prénom"
+                  onchange={(
+                    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                  ) => {
                     handlerInput(
                       e,
                       "firstname",
-                      /^[A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{3,}$/,
+                      /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
                       setValidFirstnameInput,
                       setErrorMessageFirstname,
                       setFirstnameInput,
-                      "Prénom : 3 lettres minimum"
+                      "Prénom : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
                     );
                   }}
-                  helperText={errorMessageFirstname}
-                /> */}
+                  validInput={validFirstnameInput}
+                  errorMessage={errorMessageFirstname}
+                  image="user-solid"
+                  alt="icone utilisateur"
+                  position="first"
+                  tab={true}
+                />
                 <input
                   type="text"
                   name="pseudo"

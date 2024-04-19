@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./CardHelp.module.scss";
 import Image from "next/image";
 import WhileInView from "@/app/components/framer/WhileInView";
-import Tilt from "react-parallax-tilt";
 
 const CardHelp = ({ title }: { title: string }) => {
   return (

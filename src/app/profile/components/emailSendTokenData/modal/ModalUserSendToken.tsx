@@ -1,73 +1,32 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ModalUserSendToken.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../../../src/app/redux/store";
+import { AppDispatch, RootState } from "../../../../redux/store";
 import useSWRMutation from "swr/mutation";
-import {
-  FormControl,
-  FormHelperText,
-  Input,
-  InputAdornment,
-  InputLabel,
-  TextField,
-} from "@mui/material";
 import validator from "validator";
-import fetchPost from "../../../../../../src/app/components/fetch/FetchPost";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import fetchPost from "../../../../components/fetch/FetchPost";
 import Image from "next/image";
-import useGet from "../../../../components/hook/useGet";
 import { AnimatePresence, motion } from "framer-motion";
-import Visibility from "@mui/icons-material/Visibility";
 import { useRouter } from "next/navigation";
 import localFont from "next/font/local";
+import Input from "@/app/components/input/Input";
+import TabIndex from "@/app/components/tabIndex/TabIndex";
 const Parisienne = localFont({
   src: "../../../../Parisienne-Regular.ttf",
   display: "swap",
 });
 
-const ModalUserSendToken = () => {
+const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const { displayModalSendTokenEmail } = useSelector(
     (state: RootState) => state.ModalSendTokenEmail
   );
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const router = useRouter();
-  const {
-    data: userData,
-    isLoading,
-    mutate,
-  } = useGet("/profile/components/api");
+
   const dispatch = useDispatch<AppDispatch>();
-  const [emailInput, setEmailInput] = useState<string>("");
-  useEffect(() => {
-    if (isLoading) {
-      setEmailInput("");
-    } else {
-      if (userData) {
-        if (userData.status === 200) {
-          setEmailInput(userData.body.email);
-        } else if (userData.status === 401) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: userData.message,
-            },
-          });
-          router.push("/");
-        } else {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: userData.message,
-            },
-          });
-          router.push("/");
-        }
-      }
-    }
-  }, [dispatch, isLoading, router, userData]);
-  const [validEmailInput, setValidEmailInput] = useState<boolean>(false);
+  const [emailInput, setEmailInput] = useState<string>(userData?.body.email);
+
+  const [validEmailInput, setValidEmailInput] = useState<boolean>(true);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
 
   const { trigger, data, reset, isMutating } = useSWRMutation(
@@ -131,11 +90,11 @@ const ModalUserSendToken = () => {
       type: "ModalSendTokenEmail/close",
     });
   };
-  useEffect(() => {
+  /*   useEffect(() => {
     if (emailInput && emailInput?.length > 0) {
       setValidEmailInput(true);
     }
-  }, [emailInput, emailInput?.length]);
+  }, [emailInput, emailInput?.length]); */
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({
@@ -188,7 +147,6 @@ const ModalUserSendToken = () => {
 
   const clearState = () => {
     setErrorMessageEmail("");
-    setValidEmailInput(false);
     /* if (userData) {
       if (userData.body) {
         setEmailInput(userData.body.email);
@@ -197,6 +155,7 @@ const ModalUserSendToken = () => {
   };
   return (
     <>
+      <TabIndex displayModal={displayModalSendTokenEmail} />
       <AnimatePresence>
         {displayModalSendTokenEmail === true && (
           <>
@@ -231,7 +190,7 @@ const ModalUserSendToken = () => {
                 <Image
                   className={styles.modalEditEmailData__btn__img}
                   src="/assets/icone/xmark-solid.svg"
-                  alt="arrow-left"
+                  alt="icone fermer modal"
                   width={30}
                   height={30}
                 ></Image>
@@ -248,69 +207,16 @@ const ModalUserSendToken = () => {
                   handlerSubmit(e);
                 }}
               >
-                <FormControl
-                  variant="standard"
-                  style={{ margin: "30px 0px 40px 0px" }}
-                >
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-email"
-                  >
-                    Email
-                  </InputLabel>
-                  <Input
-                    autoFocus={
-                      displayModalSendTokenEmail === true ? true : false
-                    }
-                    id="standard-adornment-email"
-                    value={emailInput}
-                    placeholder={"Entrez votre mail"}
-                    type={"text"}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        "email",
-                        /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
-                        setValidEmailInput,
-                        setErrorMessageEmail,
-                        setEmailInput,
-                        "Email : doit avoir un format valide"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <AlternateEmailIcon
-                          sx={{ color: "black" }}
-                          aria-label="toggle email visibility"
-                        >
-                          <Visibility />
-                        </AlternateEmailIcon>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {errorMessageEmail}
-                  </FormHelperText>
-                </FormControl>
-                {/* <TextField
-                  autoFocus
-                  value={emailInput}
-                  style={{ margin: "30px 0px 40px 0px" }}
-                  id={"email"}
+                <Input
                   label={"Email"}
-                  variant="standard"
+                  value={emailInput}
+                  id={"email"}
                   type={"text"}
                   placeholder={"Entrez votre email"}
-                  FormHelperTextProps={{ style: { color: "red" } }}
-                  onChange={(e) => {
+                  onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handlerInput(
                       e,
-                      "firstname",
+                      "email",
                       /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
                       setValidEmailInput,
                       setErrorMessageEmail,
@@ -318,8 +224,13 @@ const ModalUserSendToken = () => {
                       "Email : doit avoir un format valide"
                     );
                   }}
-                  helperText={errorMessageEmail}
-                /> */}
+                  validInput={validEmailInput}
+                  errorMessage={errorMessageEmail}
+                  image={"at-solid"}
+                  alt={"icone email"}
+                  position={"first"}
+                  tab={true}
+                />
                 <input
                   type="text"
                   name="pseudo"

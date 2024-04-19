@@ -1,14 +1,14 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../page.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
-import { FormHelperText, FormLabel, TextField } from "@mui/material";
 import useSWRMutation from "swr/mutation";
-import Textarea from "@mui/joy/Textarea";
 import validator from "validator";
 import fetchPost from "../../components/fetch/FetchPost";
+import stylesForm from "./ContactForm.module.scss";
+import Input from "@/app/components/input/Input";
 
 const ContactForm = () => {
   const [inputFirstname, setInputFirstname] = useState<string>("");
@@ -184,18 +184,14 @@ const ContactForm = () => {
           handlerSubmit(e);
         }}
       >
-        <TextField
-          autoFocus
-          style={{ margin: "10px 0px" }}
-          inputProps={{ className: "modalOpen" }}
+        <Input
+          label={"Nom de famille"}
           value={inputLastname}
           id={"lastname"}
-          label={"Nom de famille"}
-          variant="standard"
           type={"text"}
           placeholder={"Entrez votre nom de famille"}
-          FormHelperTextProps={{ style: { color: "red" } }}
-          onChange={(e) => {
+          regex={/^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ ]{3,40}$/}
+          onchange={(e: any) => {
             handlerInput(
               e,
               "lastname",
@@ -206,19 +202,18 @@ const ContactForm = () => {
               "Nom de famille : 3 lettres minimum"
             );
           }}
-          helperText={lastnameInputError}
+          validInput={validinputLastname}
+          errorMessage={lastnameInputError}
+          tab={false}
         />
-        <TextField
-          inputProps={{ className: "modalOpen" }}
+        <Input
+          label={"Prénom"}
           value={inputFirstname}
           id={"firstname"}
-          style={{ margin: "10px 0px" }}
-          label={"Prénom"}
-          variant="standard"
           type={"text"}
           placeholder={"Entrez votre prénom"}
-          FormHelperTextProps={{ style: { color: "red" } }}
-          onChange={(e) => {
+          regex={/^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ ]{3,40}$/}
+          onchange={(e: any) => {
             handlerInput(
               e,
               "firstname",
@@ -229,19 +224,19 @@ const ContactForm = () => {
               "Prénom : 3 lettres minimum"
             );
           }}
-          helperText={firstnameInputError}
+          validInput={validinputFirstname}
+          errorMessage={firstnameInputError}
+          tab={false}
         />
-        <TextField
-          inputProps={{ className: "modalOpen" }}
+
+        <Input
+          label={"Email"}
           value={inputEmail}
           id={"email"}
-          style={{ margin: "10px 0px" }}
-          label={"Email"}
-          variant="standard"
           type={"email"}
           placeholder={"Entrez votre mail"}
-          FormHelperTextProps={{ style: { color: "red" } }}
-          onChange={(e) => {
+          regex={/^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/}
+          onchange={(e: any) => {
             handlerInput(
               e,
               "email",
@@ -252,19 +247,19 @@ const ContactForm = () => {
               "Email : doit avoir un format valide et contenir entre 5 et 50 caractères"
             );
           }}
-          helperText={emailInputError}
+          validInput={validinputEmail}
+          errorMessage={emailInputError}
+          tab={false}
         />
-        <TextField
-          inputProps={{ className: "modalOpen" }}
+
+        <Input
+          label={"Objet"}
           value={inputObject}
           id={"object"}
-          style={{ margin: "10px 0px" }}
-          label={"Objet"}
-          variant="standard"
           type={"text"}
           placeholder={"Entrez l'objet de votre message"}
-          FormHelperTextProps={{ style: { color: "red" } }}
-          onChange={(e) => {
+          regex={/^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'#@_. -]{1,50}$/}
+          onchange={(e: any) => {
             handlerInput(
               e,
               "object",
@@ -275,34 +270,40 @@ const ContactForm = () => {
               "Objet : doit contenir entre 2 et 50 caractères (lettres, chiffres, ponctuation) et ne peut pas commencer par une ponctuation"
             );
           }}
-          helperText={objectInputError}
+          validInput={validinputObject}
+          errorMessage={objectInputError}
+          tab={false}
         />
-        <FormLabel sx={{ marginTop: "20px" }}>Message</FormLabel>
-        <Textarea
-          value={inputMessage}
-          slotProps={{
-            textarea: {
-              className: "modalOpen",
-            },
-          }}
-          onChange={(e) => {
-            handlerInput(
-              e,
-              "message",
-              /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'#@_. -]{1,}$/,
-              setValidInputMessage,
-              setMessageInputError,
-              setInputMessage,
-              "Message : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation) et ne peut pas commencer par une ponctuation"
-            );
-          }}
-          placeholder="Entrez votre message"
-          minRows={2}
-        />
-        <FormHelperText style={{ color: "red" }}>
-          {messageInputError}
-        </FormHelperText>
+        <div className={stylesForm.area}>
+          <label className={stylesForm.area__label} htmlFor="message">
+            Message
+          </label>
+          <textarea
+            rows={2}
+            value={inputMessage}
+            className={`${stylesForm.area__textarea} modalOpen`}
+            id="message"
+            onChange={(e) => {
+              handlerInput(
+                e,
+                "message",
+                /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'#@_. -]{1,}$/,
+                setValidInputMessage,
+                setMessageInputError,
+                setInputMessage,
+                "Message : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation) et ne peut pas commencer par une ponctuation"
+              );
+            }}
+            placeholder="Entrez votre message"
+          ></textarea>
+          {validinputMessage === false && (
+            <div className={stylesForm.area__error}>{messageInputError}</div>
+          )}
+        </div>
 
+        <label htmlFor="pseudo" style={{ display: "none" }}>
+          Pseudo
+        </label>
         <input
           type="text"
           name="pseudo"

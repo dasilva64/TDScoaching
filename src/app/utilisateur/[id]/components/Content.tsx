@@ -565,7 +565,6 @@ const Content = () => {
   useEffect(() => {
     if (data && data.status === 200) {
       let copyOfItems = [...data.body.allMeetings];
-
       copyOfItems.map((p: any, index: any) => {
         if (
           p.typeMeeting.type === "unique" ||

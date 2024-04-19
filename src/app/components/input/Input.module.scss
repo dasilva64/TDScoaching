@@ -1,0 +1,112 @@
+.div {
+  position: relative;
+  margin-top: 30px;
+  &__div__img__password__btn:focus .div__label__value {
+    transform: translateY(-13px) scale(0.75);
+    transform-origin: top left;
+    color: red;
+  }
+  &:focus-within .div__label {
+    transform: translateY(-13px) scale(0.75);
+    transform-origin: top left;
+    color: #1976d2;
+  }
+  &:focus-within .div__label__value {
+    transform: translateY(-13px) scale(0.75);
+    transform-origin: top left;
+    color: #1976d2;
+  }
+  &__div__img__password__btn:focus .div__label__value {
+    transform: translateY(-13px) scale(0.75);
+    transform-origin: top left;
+    color: red;
+  }
+  &:not(:focus-within) .div__label__value {
+    transform: translateY(-13px) scale(0.75);
+    transform-origin: top left;
+    color: black;
+  }
+  &__label {
+    color: black;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    position: absolute;
+    z-index: 0;
+    transform: translateY(6px) scale(1);
+    transition: all 0.3s;
+    &__value {
+      color: #1976d2;
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      position: absolute;
+      z-index: 0;
+      transform: translateY(-13px) scale(0.75);
+      transform-origin: top left;
+      transition: all 0.3s;
+    }
+  }
+  &__div {
+    position: relative;
+    width: 100%;
+    &__input {
+      position: relative;
+      z-index: 2;
+      background-color: transparent;
+      outline: none;
+      outline-width: 0;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.42);
+      font: inherit;
+      padding: 4px 0 5px;
+      box-sizing: content-box;
+      height: 1.4375em;
+      width: 100%;
+      transition: all 0.3s;
+      &:focus {
+        border-bottom: 2px solid #1976d2;
+      }
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.42);
+        opacity: 0;
+      }
+      &:focus::placeholder {
+        opacity: 1;
+      }
+      &:hover:not(:focus) {
+        border-bottom: 2px solid black;
+      }
+    }
+    &__img {
+      position: absolute;
+      z-index: 3;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      &__password {
+        transition: filter 0.3s;
+        cursor: pointer;
+        &:hover {
+          filter: drop-shadow(0px 0px 10px #1976d2);
+        }
+        &__btn {
+          background-color: transparent;
+          border: none;
+          outline: none;
+          cursor: pointer;
+          padding: 0;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  &__error {
+    color: red;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.66;
+    letter-spacing: 0.03333em;
+    margin-top: 3px;
+    margin-bottom: -3px;
+  }
+}

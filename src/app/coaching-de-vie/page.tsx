@@ -8,6 +8,16 @@ export const metadata = {
   title: "Coaching familial, professionnel et de couple - tdscoaching",
   description:
     "Découvrez les différents types de coaching que je propose pour vous aidez à surmonter vos difficultés et à vous accomplir dans la durée : coaching familial, coaching professionnel et coaching de couple",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  keywords:
+    "Développement personnel, Coaching professionnel, Relation de couple, Communication, Équilibre vie professionnelle-vie personnelle, Confiance en soi, Gestion du stress",
+  author: "Thierry Da Silva",
+  robots: "index, follow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
 };
 
 import localFont from "next/font/local";

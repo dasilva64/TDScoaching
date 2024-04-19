@@ -1,11 +1,16 @@
 .card {
+  width: 100%;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
+  border-left: 1px solid #eaeaea;
+  border-right: 1px solid #eaeaea;
   padding: 10px 0px 10px 10px;
   position: relative;
   display: flex;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.04);
+  color: inherit;
+  font: inherit;
   cursor: pointer;
   transition: all 400ms;
   &:hover {
@@ -22,6 +27,20 @@
     filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(300deg)
       brightness(105%) contrast(101%);
   }
+  &__load {
+    width: 100%;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    padding: 10px 0px 10px 10px;
+    border-left: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
+    position: relative;
+    color: inherit;
+    font: inherit;
+    display: flex;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
   &__icone {
     position: absolute;
     top: 50%;
@@ -30,6 +49,9 @@
   }
   &__info {
     margin-left: 60px;
+    &__name {
+      text-align: left;
+    }
     &__icone {
       position: absolute;
       right: 10px;
@@ -41,6 +63,7 @@
       word-wrap: break-word;
       word-break: break-word;
       margin-right: 60px;
+      text-align: left;
     }
   }
   &__arc {
@@ -63,30 +86,6 @@
     }
   }
   &__load {
-    border-top: 1px solid #eaeaea;
-    border-bottom: 1px solid #eaeaea;
-    padding: 10px 0px 10px 10px;
-    position: relative;
-    display: flex;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.04);
-    &__icone {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      transition: all 400ms;
-    }
-    &__info {
-      margin-left: 60px;
-      transition: all 400ms;
-      &__icone {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: all 400ms;
-      }
-    }
     &__arc {
       margin: 18px 10px 0px 10px;
       width: 20px;

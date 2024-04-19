@@ -13,6 +13,16 @@ export const metadata = {
   title: "Thierry DA SILVA coach professionnel certifié - tdscoaching",
   description:
     "Thierry DA SILVA coach professionnel certifié, vous accompagne pour surmonter vos difficultés et vous accomplir dans la durée",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  keywords:
+    "Développement personnel, Coaching professionnel, Relation de couple, Communication, Équilibre vie professionnelle-vie personnelle, Confiance en soi, Gestion du stress",
+  author: "Thierry Da Silva",
+  robots: "index, follow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
 };
 
 const About = () => {
@@ -124,7 +134,103 @@ const About = () => {
             Mes formations
           </h2>
           <div className={styles.about__certificate__container}>
-            <Timeline />
+            <div className={styles.timeline}>
+              <div className={styles.timeline__left}>
+                <span className={styles.timeline__left__span}></span>
+                <div lang="en" className={styles.timeline__left__div}>
+                  <div className={styles.timeline__left__div__div}></div>
+                  <h3 className={styles.timeline__left__div__h3}>
+                    MasterCoach professionnel certifié - Institut de Coaching
+                    International de Genève (ICI) - Accréditation ICF
+                    (International Coach Federation)
+                  </h3>
+                  <span className={styles.timeline__left__div__span}>2023</span>
+                </div>
+              </div>
+              <div className={styles.timeline__right}>
+                <span className={styles.timeline__right__span}></span>
+                <div lang="en" className={styles.timeline__right__div}>
+                  <div className={styles.timeline__right__div__div}></div>
+                  <h3 className={styles.timeline__right__div__h3}>
+                    Certificat de formation en reconversion professionnelle -
+                    Formalis – Accréditation IPHM et Qualiopi
+                  </h3>
+                  <span className={styles.timeline__right__div__span}>
+                    2022
+                  </span>
+                </div>
+              </div>
+              <div className={styles.timeline__left}>
+                <span className={styles.timeline__left__span}></span>
+                <div lang="en" className={styles.timeline__left__div}>
+                  <div className={styles.timeline__left__div__div}></div>
+                  <h3 className={styles.timeline__left__div__h3}>
+                    Certificat de formation en coaching de vie - Formalis –
+                    Accréditation IPHM et Qualiopi
+                  </h3>
+                  <span className={styles.timeline__left__div__span}>2022</span>
+                </div>
+              </div>
+              <div className={styles.timeline__right}>
+                <span className={styles.timeline__right__span}></span>
+                <div lang="en" className={styles.timeline__right__div}>
+                  <div className={styles.timeline__right__div__div}></div>
+                  <h3 className={styles.timeline__right__div__h3}>
+                    Certificat de formation en coaching parental - Formalis –
+                    Accréditation IPHM et Qualiopi
+                  </h3>
+                  <span className={styles.timeline__right__div__span}>
+                    2022
+                  </span>
+                </div>
+              </div>
+              <div className={styles.timeline__left}>
+                <span className={styles.timeline__left__span}></span>
+                <div lang="en" className={styles.timeline__left__div}>
+                  <div className={styles.timeline__left__div__div}></div>
+                  <h3 className={styles.timeline__left__div__h3}>
+                    Certificat de formation en coaching conjugal - Formalis –
+                    Accréditation IPHM et Qualiopi
+                  </h3>
+                  <span className={styles.timeline__left__div__span}>2022</span>
+                </div>
+              </div>
+              <div className={styles.timeline__right}>
+                <span className={styles.timeline__right__span}></span>
+                <div lang="en" className={styles.timeline__right__div}>
+                  <div className={styles.timeline__right__div__div}></div>
+                  <h3 className={styles.timeline__right__div__h3}>
+                    Certificat de formation en mémoire, concentration et
+                    créativité – Formalis – Accréditation IPHM et Qualiopi
+                  </h3>
+                  {/* <span className={styles.timeline__right__div__span}>2022</span> */}
+                </div>
+              </div>
+              <div className={styles.timeline__left}>
+                <span className={styles.timeline__left__span}></span>
+                <div lang="en" className={styles.timeline__left__div}>
+                  <div className={styles.timeline__left__div__div}></div>
+                  <h3 className={styles.timeline__left__div__h3}>
+                    DESS Certificat d’aptitude à l’administration des
+                    entreprises – Université Paris 1- Panthéon Sorbonne
+                  </h3>
+                  <span className={styles.timeline__left__div__span}>2004</span>
+                </div>
+              </div>
+              <div className={styles.timeline__right}>
+                <span className={styles.timeline__right__span}></span>
+                <div lang="en" className={styles.timeline__right__div}>
+                  <div className={styles.timeline__right__div__div}></div>
+                  <h3 className={styles.timeline__right__div__h3}>
+                    Master of Business Administration (MBA) – IAE Paris -
+                    Université Paris 1-Panthéon Sorbonne
+                  </h3>
+                  <span className={styles.timeline__right__div__span}>
+                    2004
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </main>

@@ -1,73 +1,35 @@
-import { AppDispatch, RootState } from "../../../../../../src/app/redux/store";
+"use client";
+
+import { AppDispatch, RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserLastnameData.module.scss";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
-import {
-  FormControl,
-  FormHelperText,
-  Input,
-  InputAdornment,
-  InputLabel,
-  TextField,
-} from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import fetchPost from "../../../../../../src/app/components/fetch/FetchPost";
-//import useGet from "../../../../components/hook/useGet";
+import fetchPost from "../../../../components/fetch/FetchPost";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import Visibility from "@mui/icons-material/Visibility";
 import { useRouter } from "next/navigation";
-import useGet from "@/app/components/hook/useGet";
 import localFont from "next/font/local";
+import Input from "@/app/components/input/Input";
+import TabIndex from "@/app/components/tabIndex/TabIndex";
+import { set } from "zod";
 const Parisienne = localFont({
   src: "../../../../Parisienne-Regular.ttf",
   display: "swap",
 });
 
-const ModalUserLastnameData = () => {
+const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
   const { displayModalEditLastname } = useSelector(
     (state: RootState) => state.ModalEditLastname
   );
-  const {
-    data: userData,
-    isLoading,
-    mutate,
-  } = useGet("/profile/components/api");
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const [lastnameInput, setLastnameInput] = useState<string>("");
-  useEffect(() => {
-    if (isLoading) {
-      setLastnameInput("");
-    } else {
-      if (userData) {
-        if (userData.status === 200) {
-          setLastnameInput(userData.body.lastname);
-        } else if (userData.status === 401) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: userData.message,
-            },
-          });
-          router.push("/");
-        } else {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: userData.message,
-            },
-          });
-          router.push("/");
-        }
-      }
-    }
-  }, [dispatch, isLoading, router, userData]);
+  const [lastnameInput, setLastnameInput] = useState<string>(
+    userData.body.lastname
+  );
+
   const [validLastnameInput, setValidLastnameInput] = useState<boolean>(true);
   const [errorMessageLastname, setErrorMessageLastname] = useState<string>("");
 
@@ -80,11 +42,6 @@ const ModalUserLastnameData = () => {
     const clearState = () => {
       setErrorMessageLastname("");
       setValidLastnameInput(true);
-      if (userData) {
-        if (userData.body) {
-          setLastnameInput(userData.body.lastname);
-        }
-      }
     };
     if (data) {
       if (data.status === 200) {
@@ -186,13 +143,9 @@ const ModalUserLastnameData = () => {
     }
   };
   const clearState = () => {
+    setLastnameInput(userData.body.lastname);
     setErrorMessageLastname("");
     setValidLastnameInput(true);
-    if (userData) {
-      if (userData.body) {
-        setLastnameInput(userData.body.lastname);
-      }
-    }
   };
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -225,6 +178,7 @@ const ModalUserLastnameData = () => {
   };
   return (
     <>
+      <TabIndex displayModal={displayModalEditLastname} />
       <AnimatePresence>
         {displayModalEditLastname === true && (
           <>
@@ -259,7 +213,7 @@ const ModalUserLastnameData = () => {
                 <Image
                   className={styles.modalEditMainUserData__btn__img}
                   src="/assets/icone/xmark-solid.svg"
-                  alt="arrow-left"
+                  alt="icone fermer modal"
                   width={30}
                   height={30}
                 ></Image>
@@ -276,50 +230,32 @@ const ModalUserLastnameData = () => {
                   handlerSubmit(e);
                 }}
               >
-                <FormControl style={{ margin: "20px 0px" }} variant="standard">
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-lastname"
-                  >
-                    Nom de famille
-                  </InputLabel>
-                  <Input
-                    autoFocus={displayModalEditLastname === true ? true : false}
-                    id="standard-adornment-lastname"
-                    value={lastnameInput}
-                    placeholder={"Entrez votre nom de famille"}
-                    type={"text"}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        "lastname",
-                        /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
-                        setValidLastnameInput,
-                        setErrorMessageLastname,
-                        setLastnameInput,
-                        "Nom de famille : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <PersonIcon
-                          aria-label="toggle lastname visibility"
-                          sx={{ padding: "0px", color: "black" }}
-                        >
-                          <Visibility />
-                        </PersonIcon>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {errorMessageLastname}
-                  </FormHelperText>
-                </FormControl>
+                <Input
+                  label="Nom de famille"
+                  value={lastnameInput}
+                  id="lastname"
+                  type="text"
+                  placeholder="Entrez votre nom de famille"
+                  onchange={(
+                    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                  ) => {
+                    handlerInput(
+                      e,
+                      "lastname",
+                      /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
+                      setValidLastnameInput,
+                      setErrorMessageLastname,
+                      setLastnameInput,
+                      "Nom de famille : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
+                    );
+                  }}
+                  validInput={validLastnameInput}
+                  errorMessage={errorMessageLastname}
+                  image="user-solid"
+                  alt="icone utilisateur"
+                  position="first"
+                  tab={true}
+                />
 
                 <input
                   type="text"

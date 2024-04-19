@@ -8,6 +8,20 @@ const Parisienne = localFont({
   display: "swap",
 });
 
+export const metadata = {
+  title: "Réinitialisation du mot de passe - tdscoaching",
+  description:
+    "Réinitialisation du mot de passe pour accéder à votre compte tdscoaching.",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  author: "Thierry Da Silva",
+  robots: "noindex, nofollow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
+};
+
 const ResetPassword = () => {
   return (
     <>

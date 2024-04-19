@@ -19,6 +19,8 @@ const Display = () => {
   useEffect(() => {
     if (datas && datas.length > 0) {
       setKeyAr(Object.keys(datas[0]));
+    } else {
+      setKeyAr(["Id", "Prénom", "Nom", "Mail", "RendezVous"]);
     }
   }, [datas]);
   /* useEffect(() => {

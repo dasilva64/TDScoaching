@@ -13,7 +13,7 @@ import prisma from "../../../../../../lib/prisma";
 import { RateLimiter } from "limiter";
 
 const limiter = new RateLimiter({
-  tokensPerInterval: 150,
+  tokensPerInterval: 600,
   interval: "hour",
   fireImmediately: true,
 });
@@ -21,13 +21,16 @@ const limiter = new RateLimiter({
 export async function POST(request: NextRequest) {
   const remainingRequests = await limiter.removeTokens(1);
   if (remainingRequests < 0) {
-    return new NextResponse(null, {
-      status: 429,
-      statusText: "Too many requests",
-      headers: {
-        "Content-Type": "text/plain",
+    return NextResponse.json(
+      {
+        status: 429,
+        type: "error",
+        message: "Trop de requêtes successives, veuillez réessayer plus tard",
       },
-    });
+      {
+        status: 429,
+      }
+    );
   } else {
     const session = await getIronSession<SessionData>(
       cookies(),

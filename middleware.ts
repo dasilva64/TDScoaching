@@ -1,5 +1,4 @@
-import { request } from "http";
-import { SessionOptions, getIronSession } from "iron-session";
+import { getIronSession } from "iron-session";
 import { NextRequest, NextResponse } from "next/server";
 import { sessionOptions } from "./lib/session";
 import { cookies } from "next/headers";
@@ -11,33 +10,8 @@ interface SessionData {
   role: string;
 }
 
-/* const sessionOptions: Record<string, SessionOptions> = {
-  "/profile": test,
-}; */
-
-export const middleware = async (request: NextRequest) => {
-  //const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  /* const session = await getIronSession<SessionData>(
-    cookies(),
-    sessionOptions[request.nextUrl.pathname]
-  );
-
-  if (!session.isLoggedIn) {
-    const redirectTo = request.nextUrl.pathname.split("/profile")[0];
-
-    return Response.redirect(`${request.nextUrl.origin}${redirectTo}`, 302);
-  } */
+export async function middleware(request: NextRequest) {
   const res = NextResponse.next();
-  /* const session = await getIronSession<SessionData>(request, res, {
-    cookieName: "iron-session-cookie-name-connect",
-    password: {
-      1: process.env.IRON_PASSWORD!,
-      2: process.env.IRON_PASSWORD_TWO!,
-    },
-    cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
-    },
-  }); */
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
   let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
@@ -50,7 +24,7 @@ export const middleware = async (request: NextRequest) => {
       regex.test(request.nextUrl.pathname)
     ) {
       if (session.role !== "ROLE_ADMIN") {
-        return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
+        return NextResponse.redirect(new URL("/", request.url));
       }
     }
 
@@ -59,13 +33,10 @@ export const middleware = async (request: NextRequest) => {
       regexTwo.test(request.nextUrl.pathname)
     ) {
       if (session.role !== "ROLE_USER") {
-        return NextResponse.redirect(new URL("/", request.nextUrl.pathname));
+        return NextResponse.redirect(new URL("/", request.url));
       }
     }
   }
-  /* let regexDelete = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-  let regexValid = /\/email-validation\/[0-9A-Za-z-]+/g;
-  let regexReset = /\/reinitialisation-mot-de-passe\/[0-9A-Za-z-]+/g; */
   if (!session.isLoggedIn || Object.keys(session).length === 0) {
     /* if (
       request.nextUrl.pathname.startsWith("/") ||
@@ -184,7 +155,7 @@ export const middleware = async (request: NextRequest) => {
   } */
 
   //}
-};
+}
 
 export const config = {
   matcher: [

@@ -1,149 +1,59 @@
 "use client";
 
-import { AppDispatch } from "../../../../../src/app/redux/store";
+import { AppDispatch } from "../../../redux/store";
 import React from "react";
 import { useDispatch } from "react-redux";
 import styles from "./EmailSendTokenData.module.scss";
 import Image from "next/image";
-import useGet from "../../../components/hook/useGet";
-import { useRouter } from "next/navigation";
 
-const EmailData = () => {
+const EmailData = ({ isLoading, data }: any) => {
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
-  const {
-    data: userData,
-    isLoading,
-    isError,
-  } = useGet("/profile/components/api");
-
-  let content;
-  if (isError) {
-    dispatch({
-      type: "flash/storeFlashMessage",
-      payload: {
-        type: "error",
-        flashMessage: "Erreur lors du chargement, veuillez réessayer",
-      },
-    });
-    content = (
-      <>
-        <div className={styles.card__load}>
-          <Image
-            className={styles.card__load__icone}
-            width="20"
-            height="20"
-            priority={true}
-            src={"/assets/icone/user-solid.svg"}
-            alt="bousole"
-          />
-          <div className={styles.card__load__info}>
-            <p>
-              <strong>Email</strong>
-            </p>
-            <p className={styles.card__load__info__p__error}>
-              Erreur de chargement
-            </p>
-          </div>
-          <Image
-            className={styles.card__load__info__icone}
-            width="20"
-            height="20"
-            priority={true}
-            src={"/assets/icone/chevron-right-solid.svg"}
-            alt="bousole"
-          />
-        </div>
-      </>
-    );
-  } else if (isLoading) {
-    content = (
-      <div className={styles.card__load}>
+  return (
+    <>
+      <button
+        className={`${styles.card} modalOpen`}
+        tabIndex={0}
+        disabled={isLoading}
+        onClick={() => {
+          if (data) {
+            dispatch({
+              type: "ModalSendTokenEmail/open",
+            });
+          }
+        }}
+      >
         <Image
-          className={styles.card__load__icone}
+          className={styles.card__icone}
           width="20"
           height="20"
           priority={true}
-          src={"/assets/icone/envelope-solid.svg"}
+          src={"/assets/icone/user-solid.svg"}
           alt="bousole"
         />
-        <div className={styles.card__load__info}>
-          <p>
-            <strong>Email</strong>
+        <div className={styles.card__info}>
+          <p className={styles.card__info__name}>
+            <strong>Adresse email</strong>
           </p>
-          <p className={styles.card__load__info__p}>Chargement des données</p>
+          <p className={styles.card__info__p}>
+            {isLoading ? "Chargement des données" : data.body.email}
+          </p>
         </div>
         <Image
-          className={styles.card__load__info__icone}
+          className={styles.card__info__icone}
           width="20"
           height="20"
           priority={true}
           src={"/assets/icone/chevron-right-solid.svg"}
           alt="bousole"
         />
-        <div className={styles.card__load__arc}>
-          <div className={styles.card__load__arc__circle}></div>
-        </div>
-      </div>
-    );
-  } else {
-    if (userData.status === 200) {
-      content = (
-        <>
-          <div
-            className={styles.card}
-            onClick={() => {
-              dispatch({
-                type: "ModalSendTokenEmail/open",
-              });
-            }}
-          >
-            <Image
-              className={styles.card__icone}
-              width="20"
-              height="20"
-              priority={true}
-              src={"/assets/icone/envelope-solid.svg"}
-              alt="bousole"
-            />
-            <div className={styles.card__info}>
-              <p>
-                <strong>Email</strong>
-              </p>
-              <p className={styles.card__info__p}>{userData?.body.email}</p>
-            </div>
-            <Image
-              className={styles.card__info__icone}
-              width="20"
-              height="20"
-              priority={true}
-              src={"/assets/icone/chevron-right-solid.svg"}
-              alt="bousole"
-            />
+        {isLoading && (
+          <div className={styles.card__load__arc}>
+            <div className={styles.card__load__arc__circle}></div>
           </div>
-        </>
-      );
-    } else if (userData.status === 401) {
-      dispatch({
-        type: "flash/storeFlashMessage",
-        payload: {
-          type: "error",
-          flashMessage: userData.message,
-        },
-      });
-      router.push("/");
-    } else {
-      dispatch({
-        type: "flash/storeFlashMessage",
-        payload: {
-          type: "error",
-          flashMessage: userData.message,
-        },
-      });
-      router.push("/");
-    }
-  }
-  return <>{content}</>;
+        )}
+      </button>
+    </>
+  );
 };
 
 export default EmailData;

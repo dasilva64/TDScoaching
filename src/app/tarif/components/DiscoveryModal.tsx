@@ -1,11 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./DiscoveryModal.module.scss";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
 
 import localFont from "next/font/local";
+import TabIndex from "@/app/components/tabIndex/TabIndex";
 const Parisienne = localFont({
   src: "../../Parisienne-Regular.ttf",
   display: "swap",
@@ -21,23 +22,9 @@ const DiscoveryModal = () => {
   const { displayModalDiscovery } = useSelector(
     (state: RootState) => state.ModalDiscovery
   );
-  useEffect(() => {
-    if (displayModalDiscovery === true) {
-      let test = document.querySelectorAll(".modalOpen");
-      test.forEach((tab) => {
-        tab.removeAttribute("tabindex");
-        tab.setAttribute("tabindex", "-1");
-      });
-    } else {
-      let test = document.querySelectorAll(".modalOpen");
-      test.forEach((tab) => {
-        tab.removeAttribute("tabindex");
-        tab.setAttribute("tabindex", "0");
-      });
-    }
-  }, [displayModalDiscovery]);
   return (
     <>
+      <TabIndex displayModal={displayModalDiscovery} />
       <AnimatePresence>
         {displayModalDiscovery === true && (
           <>
@@ -73,7 +60,7 @@ const DiscoveryModal = () => {
                 <Image
                   className={styles.login__btn__img}
                   src="/assets/icone/xmark-solid.svg"
-                  alt="arrow-left"
+                  alt="icone fermer modal"
                   width={30}
                   height={30}
                 ></Image>

@@ -2,18 +2,14 @@ import React, { useEffect, useState } from "react";
 import styles from "./ModalDeleteAccount.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
-import Textarea from "@mui/joy/Textarea";
-import { FormHelperText, FormLabel, TextField } from "@mui/material";
-import fetchPost from "../../../../../../src/app/components/fetch/FetchPost";
+import fetchPost from "../../../../components/fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
 import { RootState } from "@/app/redux/store";
 import Image from "next/image";
 import localFont from "next/font/local";
+import Input from "@/app/components/input/Input";
+import TabIndex from "@/app/components/tabIndex/TabIndex";
 const Parisienne = localFont({
   src: "../../../../Parisienne-Regular.ttf",
   display: "swap",
@@ -29,7 +25,6 @@ const ModalDeleteAccount = () => {
   const [reason, setReason] = useState<string>("");
   const [reasonErrorMessage, setReasonErrorMessage] = useState<string>("");
   const [reasonValid, setReasonValid] = useState<boolean>(false);
-  const [displayInput, setDisplayInput] = useState<boolean>(false);
   const [inputMessage, setInputMessage] = useState<string>("");
   const [messageInputError, setMessageInputError] = useState<string>("");
   const [validinputMessage, setValidInputMessage] = useState<boolean>(false);
@@ -62,8 +57,18 @@ const ModalDeleteAccount = () => {
         if (data.type === "validation") {
           data.message.forEach((element: string) => {
             if (element[0] === "reason") {
-              setMessageInputError(element[1]);
+              setReasonErrorMessage(element[1]);
             }
+          });
+          reset();
+        } else if (data.type === "already") {
+          setReason("");
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          dispatch({
+            type: "ModalDeleteAccount/close",
           });
           reset();
         } else {
@@ -113,22 +118,14 @@ const ModalDeleteAccount = () => {
     });
   };
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event: any) => {
     setReason(event.target.value);
     if (event.target.value === "") {
       setReasonErrorMessage("Veuillez selectionner une raison");
       setReasonValid(false);
     } else {
-      if (event.target.value === "autre") {
-        setDisplayInput(true);
-        setReasonValid(false);
-        setReasonErrorMessage("");
-        setMessageInputError("");
-      } else {
-        setDisplayInput(false);
-        setReasonErrorMessage("");
-        setReasonValid(true);
-      }
+      setReasonErrorMessage("");
+      setReasonValid(true);
     }
   };
 
@@ -166,6 +163,7 @@ const ModalDeleteAccount = () => {
   };
   return (
     <>
+      <TabIndex displayModal={displayModalDeleteAccount} />
       <AnimatePresence>
         {displayModalDeleteAccount === true && (
           <>
@@ -200,7 +198,7 @@ const ModalDeleteAccount = () => {
                 <Image
                   className={styles.modalDeleteAccount__btn__img}
                   src="/assets/icone/xmark-solid.svg"
-                  alt="arrow-left"
+                  alt="icone fermer modal"
                   width={30}
                   height={30}
                 ></Image>
@@ -211,155 +209,153 @@ const ModalDeleteAccount = () => {
                 Suppression du compte
               </h2>
               <div className={styles.modalDeleteAccount__div}>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                  <InputLabel id="reasonInput">
-                    Selectionnez une raison de la suppression de votre compte
-                  </InputLabel>
-                  <Select
-                    labelId="Selectionnez une raison de la suppression de votre compte"
-                    id="reasonSelect"
-                    value={reason}
-                    onChange={handleChange}
-                    label="Age"
-                  >
-                    <MenuItem value="">
-                      <em>
-                        Selectionnez une raison de la suppression de votre
-                        compte
-                      </em>
-                    </MenuItem>
-                    <MenuItem
-                      value={
-                        "Vous avez atteint vos objectifs de coaching de vie et vous n'avez plus besoin des services offerts par le site"
+                <form
+                  className={styles.modalDeleteAccount__div__form}
+                  onSubmit={(e) => {
+                    if (reasonValid) {
+                      if (inputPseudo.length === 0) {
+                        trigger({
+                          reason: reason,
+                          pseudo: inputPseudo,
+                        });
                       }
-                    >
-                      Vous avez atteint vos objectifs de coaching de vie et vous
-                      avez plus besoin des services offerts par le site
-                    </MenuItem>
-                    <MenuItem
-                      value={
-                        "Vous n&apos;êtes plus satisfait des services ou du coaching fourni par le site"
-                      }
-                    >
-                      Vous n&apos;êtes plus satisfait des services ou du
-                      coaching fourni par le site
-                    </MenuItem>
-                    <MenuItem
-                      value={
-                        "Des problèmes techniques récurrents ou persistants sur le site"
-                      }
-                    >
-                      Des problèmes techniques récurrents ou persistants sur le
-                      site
-                    </MenuItem>
-                    <MenuItem
-                      value={
-                        "Supprimer les données de mon compte pour protéger ma vie privée en ligne"
-                      }
-                    >
-                      Supprimer les données de mon compte pour protéger ma vie
-                      privée en ligne
-                    </MenuItem>
-                    <MenuItem value={"autre"}>Autre</MenuItem>
-                  </Select>
-                  <FormHelperText style={{ color: "red" }}>
-                    {reasonErrorMessage}
-                  </FormHelperText>
-                </FormControl>
-                <input
-                  type="text"
-                  name="pseudo"
-                  id="pseudo"
-                  style={{ display: "none" }}
-                  tabIndex={-1}
-                  autoComplete="off"
-                  onChange={(e) => {
-                    setInputPseudo(e.target.value);
-                  }}
-                />
-                {displayInput && (
-                  <>
-                    <FormLabel>Raison</FormLabel>
-                    <Textarea
-                      autoFocus
-                      value={inputMessage}
-                      onChange={(e) => {
-                        handlerInput(
-                          e,
-                          "message",
-                          /^[A-Za-z][A-Za-z0-9,?;.:!() ]{1,}$/,
-                          setValidInputMessage,
-                          setMessageInputError,
-                          setInputMessage,
-                          "Raison : doit contenir au moins 2 caractères (lettres, chiffres, ponctuation) et doit commencer par une lettre"
+                      e.preventDefault();
+                    } else {
+                      e.preventDefault();
+                      if (validinputMessage === true) {
+                        setMessageInputError("");
+                      } else if (
+                        validinputMessage === false &&
+                        reasonValid === false
+                      ) {
+                        setReasonErrorMessage(
+                          "Veuillez selectionner une raison"
                         );
-                      }}
-                      placeholder="Entrez votre message"
-                      minRows={2}
-                    />
-                    <FormHelperText>{messageInputError}</FormHelperText>
-                  </>
-                )}
-                {isMutating && (
-                  <>
-                    <button
-                      disabled
-                      className={styles.modalDeleteAccount__btn__delete__load}
+                      } else {
+                        setMessageInputError(
+                          "Veuillez selectionner une raison"
+                        );
+                      }
+                    }
+                  }}
+                >
+                  <div className={styles.modalDeleteAccount__div__form__div}>
+                    <label
+                      className={`${
+                        reason.length > 0
+                          ? styles.modalDeleteAccount__div__form__div__label__value
+                          : styles.modalDeleteAccount__div__form__div__label
+                      }`}
+                      htmlFor=""
                     >
-                      <span
+                      Selectionnez une raison de la suppression de votre compte
+                    </label>
+                    <div
+                      className={styles.modalDeleteAccount__div__form__div__div}
+                    >
+                      <select
                         className={
-                          styles.modalDeleteAccount__btn__delete__load__span
+                          styles.modalDeleteAccount__div__form__div__div__select
                         }
+                        name="reason"
+                        id="reason"
+                        value={reason}
+                        onChange={handleChange}
                       >
-                        Chargement
-                      </span>
+                        <option disabled value=""></option>
+                        <option value="Vous avez atteint vos objectifs de coaching de vie et vous n'avez plus besoin des services offerts par le site">
+                          Vous avez atteint vos objectifs de coaching de vie et
+                          vous n&apos;avez plus besoin des services offerts par
+                          le site
+                        </option>
+                        <option value="Vous n'êtes plus satisfait des services ou du coaching fourni par le site">
+                          Vous n&apos;êtes plus satisfait des services ou du
+                          coaching fourni par le site
+                        </option>
+                        <option value="Des problèmes techniques récurrents ou persistants sur le site">
+                          Des problèmes techniques récurrents ou persistants sur
+                          le site
+                        </option>
+                        <option value="Supprimer les données de mon compte pour protéger ma vie privée en ligne">
+                          Supprimer les données de mon compte pour protéger ma
+                          vie privée en ligne
+                        </option>
+                        <option value="autre">
+                          Vous n&apos;avez pas de raison précise
+                        </option>
+                      </select>
+                    </div>
+                    <div
+                      className={
+                        styles.modalDeleteAccount__div__form__div__error
+                      }
+                    >
+                      {reasonErrorMessage}
+                    </div>
+                  </div>
 
-                      <div
-                        className={
-                          styles.modalDeleteAccount__btn__delete__load__arc
-                        }
-                      >
-                        <div
+                  <input
+                    type="text"
+                    name="pseudo"
+                    id="pseudo"
+                    style={{ display: "none" }}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      setInputPseudo(e.target.value);
+                    }}
+                  />
+                  <p className={styles.modalDeleteAccount__p}>
+                    Veuillez noter que la suppression de votre compte est
+                    irréversible. Toutes vos données seront effacées et vous ne
+                    pourrez plus accéder à votre compte. Si vous êtes sûr de
+                    vouloir supprimer votre compte, veuillez cliquer sur le
+                    bouton ci-dessous.
+                  </p>
+                  <div
+                    className={styles.modalDeleteAccount__div__form__div__btn}
+                  >
+                    {isMutating && (
+                      <>
+                        <button
+                          disabled
                           className={
-                            styles.modalDeleteAccount__btn__delete__load__arc__circle
+                            styles.modalDeleteAccount__btn__delete__load
                           }
-                        ></div>
-                      </div>
-                    </button>
-                  </>
-                )}
-                {isMutating === false && (
-                  <>
-                    <button
-                      onClick={() => {
-                        if (reasonValid) {
-                          if (inputPseudo.length === 0) {
-                            trigger({ reason: reason, pseudo: inputPseudo });
-                          }
-                        } else {
-                          if (validinputMessage === true) {
-                            setMessageInputError("");
-                          } else if (
-                            validinputMessage === false &&
-                            reasonValid === false &&
-                            displayInput === false
-                          ) {
-                            setReasonErrorMessage(
-                              "Veuillez selectionner une raison"
-                            );
-                          } else {
-                            setMessageInputError(
-                              "Veuillez selectionner une raison"
-                            );
-                          }
-                        }
-                      }}
-                      className={styles.modalDeleteAccount__btn__delete}
-                    >
-                      Supprimer
-                    </button>
-                  </>
-                )}
+                        >
+                          <span
+                            className={
+                              styles.modalDeleteAccount__btn__delete__load__span
+                            }
+                          >
+                            Chargement
+                          </span>
+
+                          <div
+                            className={
+                              styles.modalDeleteAccount__btn__delete__load__arc
+                            }
+                          >
+                            <div
+                              className={
+                                styles.modalDeleteAccount__btn__delete__load__arc__circle
+                              }
+                            ></div>
+                          </div>
+                        </button>
+                      </>
+                    )}
+                    {isMutating === false && (
+                      <>
+                        <button
+                          className={styles.modalDeleteAccount__btn__delete}
+                        >
+                          Supprimer
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </form>
               </div>
             </motion.div>
           </>

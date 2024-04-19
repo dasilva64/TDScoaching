@@ -2,13 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Search.module.scss";
 import { RootState } from "../../../../redux/store";
-import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import FormControl from "@mui/material/FormControl";
-
+import Image from "next/image";
 /**
  * React component - Component for display search bar and search element
  * @return {JSX.Element}
@@ -16,12 +10,14 @@ import FormControl from "@mui/material/FormControl";
 const Search = (): JSX.Element => {
   const [keyAr, setKeyAr] = useState<string[]>([]);
   const [displayCancel, setDisplayCancel] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>("");
   const { onSearch, datas, initialDatas } = useSelector(
     (state: RootState) => state.Array
   );
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const handlerInputSearch = (e: any) => {
+    setInputValue(e.target.value);
     if (e.target.value.length === 0) {
       setDisplayCancel(false);
       if (onSearch === true) {
@@ -66,7 +62,46 @@ const Search = (): JSX.Element => {
   }, [datas]);
   return (
     <div className={styles.search}>
-      <FormControl
+      <div className={styles.div}>
+        <label className={`${styles.div__label}`} htmlFor={"id"}>
+          Rechercher
+        </label>
+        <div className={styles.div__div}>
+          <input
+            ref={inputRef}
+            value={inputValue}
+            className={styles.div__div__input}
+            type={"text"}
+            name={"id"}
+            id={"id"}
+            placeholder={"Rechercher un utilisateur"}
+            onChange={(e) => {
+              handlerInputSearch(e);
+              //onchange(e);
+            }}
+          />
+          {inputValue.length > 0 && (
+            <Image
+              className={`${styles.div__div__img}`}
+              src={`${`/assets/icone/trash-can-solid.svg`}`}
+              alt={"icone supprimer recherche"}
+              width={20}
+              height={20}
+              onClick={() => {
+                if (inputRef.current) inputRef.current.value = "";
+                setInputValue("");
+                if (onSearch === true) {
+                  dispatch({
+                    type: "Array/storeDataSearchInv",
+                    payload: { datas: initialDatas },
+                  });
+                }
+              }}
+            />
+          )}
+        </div>
+      </div>
+      {/* <FormControl
         variant="standard"
         style={{ width: "100%", minWidth: "200px" }}
       >
@@ -116,7 +151,7 @@ const Search = (): JSX.Element => {
             </InputAdornment>
           }
         />
-      </FormControl>
+      </FormControl> */}
       {/* <label className={styles.search__label} htmlFor="search">
         Rechercher :{" "}
       </label>

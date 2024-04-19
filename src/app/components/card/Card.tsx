@@ -29,8 +29,8 @@ const Card = ({ title, content }: any) => {
   return (
     <>
       <WhileInView type="y">
-        <details className={`${styles.card} modalOpen`}>
-          <summary>{title}</summary>
+        <details className={`${styles.card}`}>
+          <summary className="modalOpen">{title}</summary>
           <p className={styles.card__p}>{content}</p>{" "}
         </details>
         {/* <button

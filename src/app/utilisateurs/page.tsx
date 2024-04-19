@@ -1,10 +1,6 @@
 import React from "react";
 import styles from "./page.module.scss";
 import AllUser from "./components/AllUser";
-import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { SessionData, sessionOptions } from "../../../lib/session";
 import NoScript from "../components/noscript/NoScript";
 import localFont from "next/font/local";
 const Parisienne = localFont({
@@ -12,20 +8,21 @@ const Parisienne = localFont({
   display: "swap",
 });
 
-async function getSession() {
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  return session;
-}
+export const metadata = {
+  title: "Tous les utilisateurs - tdscoaching",
+  description:
+    "Consultez la liste de tous les utilisateurs inscrits sur le site tdscoaching.",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  author: "Thierry Da Silva",
+  robots: "noindex, nofollow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
+};
 
 const page = async () => {
-  const session = await getSession();
-  if (!session.isLoggedIn) {
-    redirect("/");
-  } else {
-    if (session.role !== "ROLE_ADMIN") {
-      redirect("/");
-    }
-  }
   return (
     <>
       <NoScript />

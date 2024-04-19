@@ -1,28 +1,16 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./FormLogin.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../src/app/redux/store";
 import validator from "validator";
-import {
-  Checkbox,
-  FormControlLabel,
-  FormHelperText,
-  TextField,
-} from "@mui/material";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { mutate } from "swr";
 import localFont from "next/font/local";
+import Input from "../input/Input";
+import TabIndex from "../tabIndex/TabIndex";
 const Parisienne = localFont({
   src: "../../Parisienne-Regular.ttf",
   display: "swap",
@@ -32,17 +20,17 @@ const FormLogin = () => {
   const { displayModalLogin } = useSelector(
     (state: RootState) => state.ModalLogin
   );
+  const inputRef: any = React.useRef();
   useEffect(() => {
     if (displayModalLogin === true) {
-      let test = document.querySelectorAll(".modalOpen");
-      test.forEach((tab) => {
-        tab.setAttribute("tabindex", "-1");
-      });
-    } else {
-      let test = document.querySelectorAll(".modalOpen");
-      test.forEach((tab) => {
-        tab.setAttribute("tabindex", "0");
-      });
+      if (inputRef && inputRef.current) {
+        inputRef.current.addEventListener("keydown", (e: any) => {
+          if (e.key === "Enter") {
+            e.srcElement.click();
+            e.preventDefault();
+          }
+        });
+      }
     }
   }, [displayModalLogin]);
   const dispatch = useDispatch<AppDispatch>();
@@ -54,78 +42,14 @@ const FormLogin = () => {
   const [validPasswordInput, setValidPasswordInput] = useState<boolean>(false);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
   const [errorMessagePassword, setErrorMessagePassword] = useState<string>("");
-  const [reSendEmail, setReSendEmail] = useState<boolean>(false);
-  const [otherEmail, setOtherEmail] = useState<string>("");
   const [displayInput, setDisplayInput] = useState(false);
-  const [codeInput, setCodeInput] = useState<string>("");
-  const [validCodeInput, setValidCodeInput] = useState<boolean>(false);
-  const [errorMessageCode, setErrorMessageCode] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [reSendCode, setReSendCode] = useState<boolean>(false);
 
   const handlerInputRememberMe = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRememberMeInput(e.target.checked);
   };
 
-  const { data, trigger, reset, isMutating } = useSWRMutation(
-    "/components/login/api/reSendEmailValidation",
-    fetchPost
-  );
-  useEffect(() => {
-    if (data) {
-      if (data.status === 200) {
-        reset();
-        if (isMutating === false) {
-          dispatch({ type: "ModalLogin/close" });
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "success", flashMessage: data.message },
-          });
-          setReSendEmail(false);
-        }
-      } else if (data.status === 400) {
-        if (data.type === "validation") {
-          reset();
-          clearState();
-          data.message.forEach((element: string) => {
-            if (element[0] === "email") {
-              dispatch({
-                type: "flash/storeFlashMessage",
-                payload: {
-                  type: "success",
-                  flashMessage: "L'addresse email doit être un format valide",
-                },
-              });
-            }
-          });
-        } else {
-          reset();
-          clearState();
-          if (isMutating === false) {
-            dispatch({ type: "ModalLogin/close" });
-            dispatch({ type: "ModalRegister/open" });
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "error", flashMessage: data.message },
-            });
-          }
-        }
-      } else {
-        reset();
-        clearState();
-        if (isMutating === false) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: data.message },
-          });
-        }
-      }
-    }
-  }, [data, dispatch, isMutating, reset]);
-
   const clearState = () => {
-    setCodeInput("");
-    setValidCodeInput(false);
     setDisplayInput(false);
     setInputPseudo("");
     setEmailInput("");
@@ -134,11 +58,8 @@ const FormLogin = () => {
     setRememberMeInput(false);
     setValidEmailInput(false);
     setValidPasswordInput(false);
-    setErrorMessageCode("");
     setErrorMessageEmail("");
     setErrorMessagePassword("");
-    setReSendEmail(false);
-    setOtherEmail("");
   };
 
   /* const {
@@ -241,7 +162,7 @@ const FormLogin = () => {
               dispatch({ type: "ModalRegister/open" });
               resetLogin();
             }, 1000);
-          } else if (
+          } /* else if (
             loginData.message ===
             "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
           ) {
@@ -257,7 +178,7 @@ const FormLogin = () => {
               });
               resetLogin();
             }, 1000);
-          } else {
+          } */ else {
             setTimeout(() => {
               setIsLoading(false);
               setPasswordInput("");
@@ -288,103 +209,6 @@ const FormLogin = () => {
             remember: rememberMeInput,
             pseudo: validator.escape(inputPseudo.trim()),
           });
-
-          /* let response = await fetch("/components/login/api", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: validator.escape(emailInput.trim()),
-              password: validator.escape(passwordInput.trim()),
-              remember: rememberMeInput,
-              pseudo: validator.escape(inputPseudo.trim()),
-            }),
-          });
-          let json = await response.json();
-          console.log("json", json);
-          if (json) {
-            if (json.status === 200) {
-              if (json.body === null) {
-                setDisplayInput(true);
-                setIsLoading(false);
-                dispatch({
-                  type: "flash/storeFlashMessage",
-                  payload: { type: "success", flashMessage: json.message },
-                });
-              } else {
-                dispatch({
-                  type: "flash/storeFlashMessage",
-                  payload: { type: "success", flashMessage: json.message },
-                });
-                setTimeout(() => {
-                  window.location.reload();
-                }, 2000);
-              }
-            } else if (json.status === 400) {
-              if (json.type === "validation") {
-                setTimeout(() => {
-                  setIsLoading(false);
-                  json.message.forEach((element: string) => {
-                    if (element[0] === "email") {
-                      setErrorMessageEmail(element[1]);
-                    }
-                    if (element[0] === "password") {
-                      setErrorMessagePassword(element[1]);
-                    }
-                  });
-                }, 1000);
-              } else {
-                if (
-                  json.message ===
-                  "Votre compte a été supprimé car vous ne l'avez pas validé à temps, veuillez vous réinscrire"
-                ) {
-                  dispatch({
-                    type: "flash/storeFlashMessage",
-                    payload: { type: "error", flashMessage: json.message },
-                  });
-                  setTimeout(() => {
-                    setIsLoading(false);
-                    clearState();
-                    dispatch({
-                      type: "auth/clearFlash",
-                    });
-                    dispatch({ type: "ModalRegister/open" });
-                    dispatch({ type: "ModalLogin/close" });
-                  }, 1000);
-                } else if (
-                  json.message ===
-                  "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
-                ) {
-                  setTimeout(() => {
-                    setIsLoading(false);
-                    setReSendEmail(true);
-                    setOtherEmail(emailInput);
-                    dispatch({
-                      type: "flash/storeFlashMessage",
-                      payload: { type: "error", flashMessage: json.message },
-                    });
-                  }, 1000);
-                } else {
-                  setTimeout(() => {
-                    setIsLoading(false);
-                    dispatch({
-                      type: "flash/storeFlashMessage",
-                      payload: { type: "error", flashMessage: json.message },
-                    });
-                  }, 1000);
-                }
-              }
-            } else {
-              setTimeout(() => {
-                setIsLoading(false);
-                dispatch({
-                  type: "flash/storeFlashMessage",
-                  payload: { type: "error", flashMessage: json.message },
-                });
-              }, 1000);
-            }
-          } */
         };
         if (inputPseudo.length === 0) {
           fetchLogin();
@@ -544,18 +368,9 @@ const FormLogin = () => {
       }
     }
   }; */
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => {
-    setShowPassword((show) => !show);
-  };
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
   return (
     <>
+      <TabIndex displayModal={displayModalLogin} />
       <AnimatePresence>
         {displayModalLogin === true && (
           <>
@@ -586,11 +401,12 @@ const FormLogin = () => {
                 className={styles.login__btn}
                 type="button"
                 onClick={() => closeForm()}
+                aria-label="button pour fermer la modal de connexion"
               >
                 <Image
                   className={styles.login__btn__img}
                   src="/assets/icone/xmark-solid.svg"
-                  alt="arrow-left"
+                  alt="icone fermer modal"
                   width={30}
                   height={30}
                 ></Image>
@@ -609,115 +425,77 @@ const FormLogin = () => {
                     }
                   }}
                 >
-                  <FormControl variant="standard">
-                    <InputLabel
-                      sx={{
-                        color: "black",
-                        "&.Mui-focused": {
-                          color: "#1976d2",
-                        },
-                      }}
-                      htmlFor="standard-adornment-email"
-                    >
-                      Email
-                    </InputLabel>
-                    <Input
-                      autoFocus={displayModalLogin === true ? true : false}
-                      id="standard-adornment-email"
-                      value={emailInput}
-                      placeholder={"Entrez votre mail"}
-                      type={"text"}
-                      onChange={(e) => {
-                        handlerInput(
-                          e,
-                          "email",
-                          /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
-                          setValidEmailInput,
-                          setErrorMessageEmail,
-                          setEmailInput,
-                          "Email : doit avoir un format valide"
-                        );
-                      }}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <AlternateEmailIcon
-                            sx={{ color: "black" }}
-                            aria-label="toggle email visibility"
-                          >
-                            <Visibility />
-                          </AlternateEmailIcon>
-                        </InputAdornment>
-                      }
-                    />
-                    <FormHelperText style={{ color: "red" }}>
-                      {errorMessageEmail}
-                    </FormHelperText>
-                  </FormControl>
-
-                  <FormControl
-                    variant="standard"
-                    style={{ margin: "20px 0px" }}
-                  >
-                    <InputLabel
-                      sx={{
-                        color: "black",
-                        "&.Mui-focused": {
-                          color: "#1976d2",
-                        },
-                      }}
-                      htmlFor="standard-adornment-password"
-                    >
-                      Mot de passe
-                    </InputLabel>
-                    <Input
-                      id="standard-adornment-password"
-                      value={passwordInput}
-                      placeholder={"Entrez votre mot de passe"}
-                      type={showPassword ? "text" : "password"}
-                      onChange={(e) => {
-                        handlerInput(
-                          e,
-                          "password",
-                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
-                          setValidPasswordInput,
-                          setErrorMessagePassword,
-                          setPasswordInput,
-                          "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#=&,_) et 8 caractères minimum"
-                        );
-                      }}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            sx={{ padding: "0px", color: "black" }}
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                    <FormHelperText style={{ color: "red" }}>
-                      {errorMessagePassword}
-                    </FormHelperText>
-                  </FormControl>
-
-                  <FormControlLabel
-                    style={{
-                      marginTop: "10px",
-                      alignSelf: "start",
-                      marginLeft: "0px",
+                  <Input
+                    label={"Email"}
+                    value={emailInput}
+                    id={"email"}
+                    type={"text"}
+                    placeholder={"Entrez votre mail"}
+                    regex={/^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/}
+                    onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handlerInput(
+                        e,
+                        "firstname",
+                        /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                        setValidEmailInput,
+                        setErrorMessageEmail,
+                        setEmailInput,
+                        "Email : ne peut pas être vide"
+                      );
                     }}
-                    control={
-                      <Checkbox
-                        onChange={(e) => {
-                          handlerInputRememberMe(e);
-                        }}
-                      />
-                    }
-                    label="Se souvenir de moi"
-                    labelPlacement="start"
+                    validInput={validEmailInput}
+                    errorMessage={errorMessageEmail}
+                    image={"at-solid"}
+                    alt={"icone utilisateur"}
+                    position={"first"}
+                    tab={true}
                   />
+                  <Input
+                    label={"Mot de passe"}
+                    value={passwordInput}
+                    id={"password"}
+                    type={"password"}
+                    placeholder={"Entrez votre mot de passe"}
+                    regex={
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/
+                    }
+                    onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      handlerInput(
+                        e,
+                        "password",
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
+                        setValidPasswordInput,
+                        setErrorMessagePassword,
+                        setPasswordInput,
+                        "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#=&,_) et 8 caractères minimum"
+                      );
+                    }}
+                    validInput={validPasswordInput}
+                    errorMessage={errorMessagePassword}
+                    image={"eye-solid"}
+                    alt={"icone afficher mot de passe"}
+                    tab={true}
+                  />
+
+                  <div className={styles.login__form__div}>
+                    <label
+                      className={styles.login__form__div__label}
+                      htmlFor="remenber"
+                    >
+                      Se souvenir de moi
+                    </label>
+                    <input
+                      ref={inputRef}
+                      tabIndex={0}
+                      className={styles.login__form__div__checkbox}
+                      type="checkbox"
+                      name="remenber"
+                      id="remenber"
+                      onChange={(e) => {
+                        handlerInputRememberMe(e);
+                      }}
+                    />
+                  </div>
                   <input
                     type="text"
                     name="pseudo"
@@ -763,49 +541,6 @@ const FormLogin = () => {
                     )}
                   </div>
                 </form>
-              )}
-
-              {reSendEmail === true && displayInput === false && (
-                <>
-                  <div className={styles.login__forgot}>
-                    {isMutating && (
-                      <>
-                        <button
-                          disabled
-                          className={styles.login__forgot__btn__load}
-                        >
-                          <span
-                            className={styles.login__forgot__btn__load__span}
-                          >
-                            Chargement
-                          </span>
-
-                          <div className={styles.login__forgot__btn__load__arc}>
-                            <div
-                              className={
-                                styles.login__forgot__btn__load__arc__circle
-                              }
-                            ></div>
-                          </div>
-                        </button>
-                      </>
-                    )}
-                    {isMutating === false && (
-                      <button
-                        type="button"
-                        className={styles.login__forgot__btn}
-                        onClick={() => {
-                          dispatch({
-                            type: "flash/clearFlashMessage",
-                          });
-                          trigger({ email: otherEmail });
-                        }}
-                      >
-                        Renvoyer un mail de validation à {otherEmail}
-                      </button>
-                    )}
-                  </div>
-                </>
               )}
               {/* {displayInput === false && ( */}
               <>

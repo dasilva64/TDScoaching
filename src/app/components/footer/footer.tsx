@@ -5,7 +5,6 @@ import GoTop from "../goTop/goTop";
 const Footer = () => {
   return (
     <footer className={styles.footer}>
-      {/* <div className={styles.footer__container}> */}
       <section>
         <h2 className={styles.footer__h2}>Plan du site</h2>
         <ul
@@ -116,7 +115,6 @@ const Footer = () => {
         </ul>
         <GoTop />
       </section>
-      {/* </div> */}
     </footer>
   );
 };

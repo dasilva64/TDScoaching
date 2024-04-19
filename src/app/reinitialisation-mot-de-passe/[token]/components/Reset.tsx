@@ -1,29 +1,72 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import styles from "../page.module.scss";
 import { useDispatch } from "react-redux";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { AppDispatch } from "@/app/redux/store";
-import { FormHelperText } from "@mui/material";
+import Input from "@/app/components/input/Input";
+import useGet from "@/app/components/hook/useGet";
+import useGetTest from "@/app/components/hook/useGetWithParam";
+import useGetWithParam from "@/app/components/hook/useGetWithParam";
+import useUserResetPassword from "@/app/components/hook/user/useUserRestPassword";
 
 const Reset = () => {
   const queryParam: any = usePathname();
   let token = queryParam.toString().split("/");
+  const { data: dataLoad, isLoading } = useUserResetPassword(token[2]);
+  const [timer, setTimer] = useState<number>(0);
   const dispatch = useDispatch<AppDispatch>();
+  const { push } = useRouter();
+  const [minutes, setMinutes] = useState<number>(0);
+  const [seconds, setSeconds] = useState<number>(0);
+  useEffect(() => {
+    if (dataLoad) {
+      if (dataLoad.status === 400 || dataLoad.status === 404) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { flashMessage: dataLoad.message, type: "error" },
+        });
+        push("/");
+      } else {
+        let copyDate = dataLoad.body;
+        let now = new Date();
+        let limite = new Date(copyDate.limitDate);
+        let diff = limite.getTime() - now.getTime();
+        setMinutes(Math.floor(diff / 1000 / 60));
+        setSeconds(Math.floor((diff / 1000) % 60));
+        setTimer(diff);
+      }
+    }
+  }, [dataLoad, dispatch, push]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMinutes(Math.floor(timer / 1000 / 60));
+      setSeconds(Math.floor((timer / 1000) % 60));
+      setTimer((prev) => prev - 1000);
+    }, 1000);
+    if (timer < 0) {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: {
+          flashMessage:
+            " Le temps est écoulé, pour réinitailiser votre mot de passe, veuillez recommencer la procédure",
+          type: "error",
+        },
+      });
+      clearInterval(interval);
+      push("/");
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [dispatch, push, timer]);
 
   const [inputPseudo, setInputPseudo] = useState<string>("");
-  const { push } = useRouter();
+
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>("");
   const [validPasswordInput, setValidPasswordInput] = useState<boolean>(false);
@@ -180,43 +223,31 @@ const Reset = () => {
       }
     }
   };
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showPasswordComfirm, setShowPasswordComfirm] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleClickShowPasswordComfirm = () =>
-    setShowPasswordComfirm((show) => !show);
 
   return (
-    <form
-      className={styles.reset__form}
-      id="form"
-      onSubmit={(e) => {
-        handlerSubmit(e);
-      }}
-    >
-      <FormControl
-        variant="standard"
-        style={{ margin: "10px 0px" }}
-        className={styles.reset__form__input__password__control}
+    <>
+      {timer <= 0 ? null : (
+        <span className={styles.reset__timer__span}>
+          Temps restant pour la réinitialisation : {minutes} minutes {seconds}{" "}
+          secondes
+        </span>
+      )}
+      <form
+        className={styles.reset__form}
+        id="form"
+        onSubmit={(e) => {
+          handlerSubmit(e);
+        }}
       >
-        <InputLabel
-          sx={{
-            color: "black",
-            "&.Mui-focused": {
-              color: "#1976d2",
-            },
-          }}
-          htmlFor="standard-adornment-password"
-        >
-          Mot de passe
-        </InputLabel>
         <Input
-          id="standard-adornment-password"
+          label="Mot de passe"
           value={passwordInput}
-          placeholder={"Entrez votre mot de passe"}
-          type={showPassword ? "text" : "password"}
-          onChange={(e) => {
+          id="password"
+          type="password"
+          placeholder="Entrez votre mot de passe"
+          onchange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => {
             handlerInput(
               e,
               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
@@ -226,42 +257,22 @@ const Reset = () => {
               "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#=&,_) et 8 caractères minimum"
             );
           }}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
+          validInput={validPasswordInput}
+          errorMessage={passwordInputError}
+          image="eye-solid"
+          alt="icone afficher mot de passe"
+          position="first"
+          tab={false}
         />
-        <FormHelperText
-          style={{ color: "red" }}
-          className={styles.reset__form__input__password__helperText}
-        >
-          {passwordInputError}
-        </FormHelperText>
-      </FormControl>
-      <FormControl variant="standard" style={{ margin: "10px 0px" }}>
-        <InputLabel
-          sx={{
-            color: "black",
-            "&.Mui-focused": {
-              color: "#1976d2",
-            },
-          }}
-          htmlFor="standard-adornment-password-comfirm"
-        >
-          Confirmation de mot de passe
-        </InputLabel>
         <Input
-          id="standard-adornment-password-comfirm"
+          label="Confirmation de mot de passe"
           value={passwordComfirmInput}
-          placeholder={"Entrez votre confirmation de mot de passe"}
-          type={showPasswordComfirm ? "text" : "password"}
-          onChange={(e) => {
+          id="passwordComfirm"
+          type="password"
+          placeholder="Entrez votre confirmation de mot de passe"
+          onchange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => {
             let removeSpace = "";
             if (e.target.value.charAt(0) === " ") {
               removeSpace = e.target.value.replace(/\s/, "");
@@ -281,56 +292,54 @@ const Reset = () => {
               setPasswordComfirmError("");
             }
           }}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPasswordComfirm}
-              >
-                {showPasswordComfirm ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
+          validInput={validPasswordComfirmInput}
+          errorMessage={passwordComfirmInputError}
+          image="eye-solid"
+          alt="icone afficher mot de passe"
+          tab={false}
         />
-        <FormHelperText style={{ color: "red" }}>
-          {passwordComfirmInputError}
-        </FormHelperText>
-      </FormControl>
+        <input
+          type="text"
+          name="pseudo"
+          id="pseudo"
+          style={{ display: "none" }}
+          tabIndex={-1}
+          autoComplete="off"
+          onChange={(e) => {
+            setInputPseudo(e.target.value);
+          }}
+        />
+        <div className={styles.reset__form__submit}>
+          {isMutating ||
+            (isLoading && (
+              <button
+                disabled
+                className={styles.reset__form__submit__btn__load}
+              >
+                <span className={styles.reset__form__submit__btn__load__span}>
+                  Chargement
+                </span>
 
-      <input
-        type="text"
-        name="pseudo"
-        id="pseudo"
-        style={{ display: "none" }}
-        tabIndex={-1}
-        autoComplete="off"
-        onChange={(e) => {
-          setInputPseudo(e.target.value);
-        }}
-      />
-      <div className={styles.reset__form__submit}>
-        {isMutating && (
-          <button disabled className={styles.reset__form__submit__btn__load}>
-            <span className={styles.reset__form__submit__btn__load__span}>
-              Chargement
-            </span>
-
-            <div className={styles.reset__form__submit__btn__load__arc}>
-              <div
-                className={styles.reset__form__submit__btn__load__arc__circle}
-              ></div>
-            </div>
-          </button>
-        )}
-        {!isMutating && (
-          <input
-            className={styles.reset__form__submit__btn}
-            type="submit"
-            value="Réinitialiser"
-          />
-        )}
-      </div>
-    </form>
+                <div className={styles.reset__form__submit__btn__load__arc}>
+                  <div
+                    className={
+                      styles.reset__form__submit__btn__load__arc__circle
+                    }
+                  ></div>
+                </div>
+              </button>
+            ))}
+          {!isMutating ||
+            (isLoading === false && (
+              <input
+                className={styles.reset__form__submit__btn}
+                type="submit"
+                value="Réinitialiser"
+              />
+            ))}
+        </div>
+      </form>
+    </>
   );
 };
 

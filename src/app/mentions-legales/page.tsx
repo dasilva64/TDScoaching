@@ -1,6 +1,20 @@
 import React from "react";
 import styles from "./page.module.scss";
 
+export const metadata = {
+  title: "Mentions légales - tdscoaching",
+  description:
+    "Mentions légales du site tdscoaching.fr pour informer les utilisateurs sur les intervenants de sa réalisation et de son suivi.",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  author: "Thierry Da Silva",
+  robots: "noindex, nofollow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
+};
+
 const page = () => {
   return (
     <>

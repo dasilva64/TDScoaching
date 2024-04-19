@@ -2,30 +2,15 @@ import React, { useEffect, useState } from "react";
 import styles from "./formRegister.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../src/app/redux/store";
-import {
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-  FormLabel,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
-  TextField,
-} from "@mui/material";
 import validator from "validator";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import PersonIcon from "@mui/icons-material/Person";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
 import localFont from "next/font/local";
+import Input from "../input/Input";
+import TabIndex from "../tabIndex/TabIndex";
 const Parisienne = localFont({
   src: "../../Parisienne-Regular.ttf",
   display: "swap",
@@ -58,20 +43,6 @@ const FormRegister = () => {
   const { displayModalRegister } = useSelector(
     (state: RootState) => state.ModalRegister
   );
-
-  useEffect(() => {
-    if (displayModalRegister === true) {
-      let test = document.querySelectorAll(".modalOpen");
-      test.forEach((tab) => {
-        tab.setAttribute("tabindex", "-1");
-      });
-    } else {
-      let test = document.querySelectorAll(".modalOpen");
-      test.forEach((tab) => {
-        tab.setAttribute("tabindex", "0");
-      });
-    }
-  }, [displayModalRegister]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { data, trigger, reset } = useSWRMutation(
@@ -156,57 +127,6 @@ const FormRegister = () => {
               lastname: validator.escape(lastnameInput.trim()),
               pseudo: validator.escape(inputPseudo.trim()),
             });
-
-            /* let response = await fetch("/components/register/api", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({
-              email: validator.escape(emailInput.trim()),
-              password: validator.escape(passwordInput.trim()),
-              firstname: validator.escape(firstnameInput.trim()),
-              lastname: validator.escape(lastnameInput.trim()),
-              pseudo: validator.escape(inputPseudo.trim()),
-            }),
-          });
-          let json = await response.json();
-          console.log(json);
-          if (json.status === 200) {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { flashMessage: json.message, type: "success" },
-            });
-            clearState();
-            dispatch({ type: "ModalRegister/close" });
-          } else if (json.status === 400) {
-            setTimeout(() => {
-              setIsLoading(false);
-              json.message.forEach((element: string) => {
-                if (element[0] === "email") {
-                  setEmailInputError(element[1]);
-                }
-                if (element[0] === "password") {
-                  setPasswordInputError(element[1]);
-                }
-                if (element[0] === "firstname") {
-                  setFirstnameInputError(element[1]);
-                }
-                if (element[0] === "lastname") {
-                  setLastnameInputError(element[1]);
-                }
-              });
-            }, 2000);
-          } else {
-            setTimeout(() => {
-              setIsLoading(false);
-              dispatch({
-                type: "flash/storeFlashMessage",
-                payload: { flashMessage: json.message, type: "error" },
-              });
-            }, 2000);
-          } */
           };
           fetchRegister();
         }
@@ -357,7 +277,19 @@ const FormRegister = () => {
       }
     }
   };
-
+  const inputRef: any = React.useRef();
+  useEffect(() => {
+    if (displayModalRegister === true) {
+      if (inputRef && inputRef.current) {
+        inputRef.current.addEventListener("keydown", (e: any) => {
+          if (e.key === "Enter") {
+            e.srcElement.click();
+            e.preventDefault();
+          }
+        });
+      }
+    }
+  }, [displayModalRegister]);
   const clearState = () => {
     setValidEmailInput(false);
     setValidFirstnameInput(false);
@@ -373,8 +305,6 @@ const FormRegister = () => {
     setMajorInput("");
     setEmailInputError("");
     setFirstnameInputError("");
-    setShowPassword(false);
-    setShowPasswordComfirm(false);
     setLastnameInputError("");
     setIsLoading(false);
     setPasswordInputError("");
@@ -391,25 +321,9 @@ const FormRegister = () => {
     clearState();
     dispatch({ type: "ModalRegister/close" });
   };
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showPasswordComfirm, setShowPasswordComfirm] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
-  const handleClickShowPasswordComfirm = () =>
-    setShowPasswordComfirm((show) => !show);
-
-  const handleMouseDownPasswordComfirm = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
   return (
     <>
+      <TabIndex displayModal={displayModalRegister} />
       <AnimatePresence>
         {displayModalRegister && (
           <>
@@ -454,7 +368,7 @@ const FormRegister = () => {
                   <Image
                     className={styles.register__top__close__img}
                     src="/assets/icone/xmark-solid.svg"
-                    alt="arrow-left"
+                    alt="icone fermer modal"
                     width={30}
                     height={30}
                   ></Image>
@@ -475,351 +389,162 @@ const FormRegister = () => {
                   }
                 }}
               >
-                {/* 
- <TextField
-                  autoFocus
-                  value={firstnameInput}
-                  style={{ margin: "10px 0px" }}
-                  id={"firstname"}
-                  label={"Prénom"}
-                  variant="standard"
+                <Input
                   type={"text"}
-                  sx={{
-                    "& label": {
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    },
-                  }}
+                  value={firstnameInput}
+                  id={"firstname"}
                   placeholder={"Entrez votre prénom"}
-                  FormHelperTextProps={{ style: { color: "red" } }}
-                  onChange={(e) => {
+                  onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handlerInput(
                       e,
-                      /^[A-Za-z][A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{2,}$/,
+                      /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
                       setValidFirstnameInput,
                       setFirstnameInputError,
                       setFirstnameInput,
-                      "Prénom : 3 lettres minimum"
+                      "Prénom : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
                     );
                   }}
-                  helperText={firstnameInputError}
-                /> 
- */}
-
-                <FormControl variant="standard" style={{ margin: "10px 0px" }}>
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-firstname"
-                  >
-                    Prénom
-                  </InputLabel>
-                  <Input
-                    autoFocus={displayModalRegister === true ? true : false}
-                    id="standard-adornment-firstname"
-                    value={firstnameInput}
-                    placeholder={"Entrez votre prénom"}
-                    type={"text"}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
-                        setValidFirstnameInput,
-                        setFirstnameInputError,
-                        setFirstnameInput,
-                        "Prénom : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <PersonIcon
-                          aria-label="toggle firstname visibility"
-                          sx={{ padding: "0px", color: "black" }}
-                        >
-                          <Visibility />
-                        </PersonIcon>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {firstnameInputError}
-                  </FormHelperText>
-                </FormControl>
-
-                {/*  <TextField
-                  value={lastnameInput}
-                  style={{ margin: "10px 0px" }}
-                  id={"lastname"}
-                  label={"Nom de famille"}
-                  variant="standard"
+                  validInput={validFirstnameInput}
+                  errorMessage={firstnameInputError}
+                  label={"Prénom"}
+                  image={"user-solid"}
+                  alt={"icone utilisateur"}
+                  position={"first"}
+                  tab={true}
+                />
+                <Input
                   type={"text"}
-                  sx={{
-                    "& label": {
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    },
-                  }}
+                  value={lastnameInput}
+                  id={"lastname"}
                   placeholder={"Entrez votre nom de famille"}
-                  FormHelperTextProps={{ style: { color: "red" } }}
-                  onChange={(e) => {
+                  onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handlerInput(
                       e,
-                      /^[A-Za-z][A-Za-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi ]{2,}$/,
+                      /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
                       setValidLastnameInput,
                       setLastnameInputError,
                       setLastnameInput,
-                      "Nom de famille : 3 lettres minimum"
+                      "Nom de famille : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
                     );
                   }}
-                  helperText={lastnameInputError}
-                />  */}
-
-                <FormControl
-                  variant="standard"
-                  style={{ margin: "10px 0px" }}
-                  className={styles.register__form__input__lastname__control}
-                >
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-lastname"
-                  >
-                    Nom de famille
-                  </InputLabel>
-                  <Input
-                    id="standard-adornment-lastname"
-                    value={lastnameInput}
-                    placeholder={"Entrez votre nom de famille"}
-                    type={"text"}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
-                        setValidLastnameInput,
-                        setLastnameInputError,
-                        setLastnameInput,
-                        "Nom de famille : ne peut contenir que des lettres et doit contenir entre 3 et 40 caractères"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <PersonIcon
-                          aria-label="toggle lastname visibility"
-                          sx={{ padding: "0px", color: "black" }}
-                        >
-                          <Visibility />
-                        </PersonIcon>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {lastnameInputError}
-                  </FormHelperText>
-                </FormControl>
-
-                <FormControl
-                  style={{ margin: "10px 0px" }}
-                  className={styles.register__form__input__password__control}
-                  variant="standard"
-                >
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-password"
-                  >
-                    Mot de passe
-                  </InputLabel>
-                  <Input
-                    id="standard-adornment-password"
-                    value={passwordInput}
-                    placeholder={"Entrez votre mot de passe"}
-                    type={showPassword ? "text" : "password"}
-                    onChange={(e) => {
-                      handlerInputPassword(
-                        e,
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
-                        setValidPasswordInput,
-                        setPasswordInputError,
-                        setPasswordInput,
-                        "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          sx={{ padding: "0px", color: "black" }}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {passwordInputError}
-                  </FormHelperText>
-                </FormControl>
-
-                <FormControl variant="standard" style={{ margin: "10px 0px" }}>
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-password-comfirm"
-                  >
-                    Confirmation mot de passe
-                  </InputLabel>
-                  <Input
-                    id="standard-adornment-password-comfirm"
-                    value={passwordComfirmInput}
-                    placeholder={"Entrez confirmation de votre mot de passe"}
-                    type={showPasswordComfirm ? "text" : "password"}
-                    onChange={(e) => {
-                      let removeSpace = "";
-                      if (e.target.value.charAt(0) === " ") {
-                        removeSpace = e.target.value.replace(/\s/, "");
-                        setPasswordComfirmInput(removeSpace);
-                      } else {
-                        removeSpace = e.target.value.replace(/\s+/g, "");
-                        setPasswordComfirmInput(removeSpace);
-                      }
-                      if (
-                        passwordInput.length > 0 &&
-                        removeSpace !== passwordInput
-                      ) {
-                        setValidPasswordComfirmInput(false);
-                        setPasswordComfirmError(
-                          "Confirmation mot de passe : les mots de passe doivent être identique"
-                        );
-                      } else {
-                        setValidPasswordComfirmInput(true);
-
-                        setPasswordComfirmError("");
-                      }
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPasswordComfirm}
-                          sx={{ padding: "0px", color: "black" }}
-                        >
-                          {showPasswordComfirm ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {passwordComfirmInputError}
-                  </FormHelperText>
-                </FormControl>
-
-                <FormControl variant="standard">
-                  <InputLabel
-                    sx={{
-                      color: "black",
-                      "&.Mui-focused": {
-                        color: "#1976d2",
-                      },
-                    }}
-                    htmlFor="standard-adornment-email"
-                  >
-                    Email
-                  </InputLabel>
-                  <Input
-                    id="standard-adornment-email"
-                    value={emailInput}
-                    placeholder={"Entrez votre mail"}
-                    type={"text"}
-                    onChange={(e) => {
-                      handlerInput(
-                        e,
-                        /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
-                        setValidEmailInput,
-                        setEmailInputError,
-                        setEmailInput,
-                        "Email : doit être un email valide"
-                      );
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <AlternateEmailIcon
-                          sx={{ color: "black" }}
-                          aria-label="toggle email visibility"
-                        >
-                          <Visibility />
-                        </AlternateEmailIcon>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText style={{ color: "red" }}>
-                    {emailInputError}
-                  </FormHelperText>
-                </FormControl>
-
-                <FormControl
-                  style={{
-                    margin: "20px 0px 10px 0px",
-                    alignSelf: "start",
-                    marginLeft: "0px",
+                  validInput={validLastnameInput}
+                  errorMessage={lastnameInputError}
+                  label={"Nom de famille"}
+                  image={"user-solid"}
+                  alt={"icone utilisateur"}
+                  tab={true}
+                />
+                <Input
+                  type={"password"}
+                  value={passwordInput}
+                  id={"password"}
+                  placeholder={"Entrez votre mot de passe"}
+                  onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    handlerInputPassword(
+                      e,
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
+                      setValidPasswordInput,
+                      setPasswordInputError,
+                      setPasswordInput,
+                      "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
+                    );
                   }}
-                  component="fieldset"
-                  variant="standard"
-                >
-                  <FormLabel style={{ color: "black" }} component="legend">
-                    Êtes vous majeur ?
-                  </FormLabel>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          onChange={(e) => {
-                            if (e.target.checked === true) {
-                              setMajorInput("true");
-                              setValidMajorInput(true);
-                              setMajorInputError("");
-                            } else {
-                              setMajorInput("false");
-                              setValidMajorInput(false);
-                              setMajorInputError(
-                                "Vous devez être majeur pour vous inscrire"
-                              );
-                            }
-                          }}
-                          name="gilad"
-                        />
-                      }
-                      label={validMajorInput ? "Oui" : "Non"}
+                  validInput={validPasswordInput}
+                  errorMessage={passwordInputError}
+                  label={"Mot de passe"}
+                  image={"eye-solid"}
+                  alt={"icone afficher mot de passe"}
+                  tab={true}
+                />
+                <Input
+                  type={"password"}
+                  value={passwordComfirmInput}
+                  id={"passwordComfirm"}
+                  placeholder={"Entrez confirmation de votre mot de passe"}
+                  onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    let removeSpace = "";
+                    if (e.target.value.charAt(0) === " ") {
+                      removeSpace = e.target.value.replace(/\s/, "");
+                      setPasswordComfirmInput(removeSpace);
+                    } else {
+                      removeSpace = e.target.value.replace(/\s+/g, "");
+                      setPasswordComfirmInput(removeSpace);
+                    }
+                    if (
+                      passwordInput.length > 0 &&
+                      removeSpace !== passwordInput
+                    ) {
+                      setValidPasswordComfirmInput(false);
+                      setPasswordComfirmError(
+                        "Confirmation mot de passe : les mots de passe doivent être identique"
+                      );
+                    } else {
+                      setValidPasswordComfirmInput(true);
+                      setPasswordComfirmError("");
+                    }
+                  }}
+                  validInput={validPasswordComfirmInput}
+                  errorMessage={passwordComfirmInputError}
+                  label={"Confirmation mot de passe"}
+                  image={"eye-solid"}
+                  alt={"icone afficher mot de passe"}
+                  tab={true}
+                />
+                <Input
+                  type={"text"}
+                  value={emailInput}
+                  id={"email"}
+                  placeholder={"Entrez votre mail"}
+                  onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    handlerInput(
+                      e,
+                      /^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/,
+                      setValidEmailInput,
+                      setEmailInputError,
+                      setEmailInput,
+                      "Email : doit être un email valide"
+                    );
+                  }}
+                  validInput={validEmailInput}
+                  errorMessage={emailInputError}
+                  label={"Email"}
+                  image={"at-solid"}
+                  alt={"icone email"}
+                  tab={true}
+                />
+                <div style={{ marginBottom: "10px" }}>
+                  <div className={styles.register__form__div}>
+                    <label
+                      className={styles.register__form__div__label}
+                      htmlFor="remenber"
+                    >
+                      Êtes vous majeur ?
+                    </label>
+                    <input
+                      ref={inputRef}
+                      className={styles.register__form__div__checkbox}
+                      type="checkbox"
+                      name="legal"
+                      id="legal"
+                      onChange={(e) => {
+                        if (e.target.checked === true) {
+                          setMajorInput("true");
+                          setValidMajorInput(true);
+                          setMajorInputError("");
+                        } else {
+                          setMajorInput("false");
+                          setValidMajorInput(false);
+                          setMajorInputError(
+                            "Vous devez être majeur pour vous inscrire"
+                          );
+                        }
+                      }}
                     />
-                  </FormGroup>
-                  <FormHelperText style={{ color: "red" }}>
+                  </div>
+                  <div className={styles.register__form__div__error}>
                     {majorInputError}
-                  </FormHelperText>
-                </FormControl>
+                  </div>
+                </div>
                 <input
                   type="text"
                   name="pseudo"

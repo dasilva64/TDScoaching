@@ -1,7 +1,10 @@
 .card {
+  width: 100%;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
   padding: 10px 0px 10px 10px;
+  border-left: 1px solid #eaeaea;
+  border-right: 1px solid #eaeaea;
   position: relative;
   display: flex;
   background-color: rgba(0, 0, 0, 0.04);
@@ -9,6 +12,8 @@
   border-radius: 5px;
   cursor: pointer;
   transition: all 400ms;
+  color: inherit;
+  font: inherit;
   &:hover {
     background-color: orange;
   }

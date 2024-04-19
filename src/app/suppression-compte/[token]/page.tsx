@@ -12,15 +12,19 @@ const Parisienne = localFont({
   display: "swap",
 });
 
-async function getSession() {
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  return session;
-}
+export const metadata = {
+  title: "Suppression du compte - tdscoaching",
+  description: "Suppression du compte tdscoaching.",
+  icons: {
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+  },
+  author: "Thierry Da Silva",
+  robots: "index, follow",
+  other: {
+    "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
+  },
+};
 const page = async () => {
-  const session = await getSession();
-  if (!session.isLoggedIn) {
-    redirect("/");
-  }
   return (
     <>
       <NoScript />

@@ -146,7 +146,7 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "reason") {
-      let regex = /^[A-Za-z0-9,()?!;:"'@#-_\. ]+$/;
+      let regex = /^[A-Za-z0-9À-ÿ,()?!;:"'@#-_\. ]+$/;
       if (validator.isEmpty(value)) {
         arrayMessageError.push(["reason", "Raison : ne peut pas être vide"]);
       } else {

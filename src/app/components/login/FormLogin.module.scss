@@ -3,7 +3,7 @@
   height: 100vh;
   background-color: rgba($color: #000000, $alpha: 0.9);
   position: fixed;
-  z-index: 700;
+  z-index: 998;
   top: 0;
 }
 
@@ -53,6 +53,29 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    &__div {
+      display: flex;
+      margin-top: 25px;
+      &__label {
+        color: black;
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.4375em;
+        letter-spacing: 0.00938em;
+        padding: 0;
+        position: relative;
+      }
+      &__checkbox[type="checkbox"] {
+        margin-left: 20px;
+        cursor: pointer;
+        transform: scale(1.5);
+        transition: transform 0.3s;
+        &:hover {
+          transform: scale(1.6);
+        }
+      }
+    }
     &__submit {
       text-align: center;
       margin: 0px auto;

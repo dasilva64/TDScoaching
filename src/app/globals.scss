@@ -16,10 +16,23 @@ details summary {
   margin-bottom: -10px; /* for more prominent move */
   transition: margin 450ms ease-out;
 }
+@media screen and (max-width: 500px) {
+  details summary {
+    padding: 15px 50px 50px 15px;
+    margin-bottom: -35px;
+  }
+}
 
 details[open] summary {
   padding: 20px 20px 10px 20px;
   margin-bottom: 10px;
+}
+
+@media screen and (max-width: 500px) {
+  details[open] summary {
+    padding: 15px 50px 27px 15px;
+    margin-bottom: -10px;
+  }
 }
 
 details > summary::-webkit-details-marker,
@@ -31,28 +44,17 @@ details > summary::marker {
 details summary:after {
   position: absolute;
   right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
   content: "▶";
 }
 
 details[open] summary:after {
   position: absolute;
   right: 30px;
+  top: unset;
+  transform: unset;
   content: "▼";
-}
-
-.vertical-timeline-element-date {
-  color: black;
-  font-size: 16px;
-}
-
-.vertical-timeline-element-title {
-  font-size: 18px;
-}
-
-@media screen and (max-width: 1169px) {
-  .vertical-timeline-element-date {
-    color: white;
-  }
 }
 
 @media screen and (max-width: 769px) {

@@ -1,4 +1,3 @@
-import Timeline from "./components/Timeline";
 import styles from "./page.module.scss";
 import Image from "next/image";
 import "react-vertical-timeline-component/style.min.css";

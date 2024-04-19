@@ -4,7 +4,6 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { SmtpClient } from "https://deno.land/x/denomailer@0.12.0/mod.ts";
 
 const supUrl = Deno.env.get("_SUPABASE_URL") as string;
 const supKey = Deno.env.get("_SUPABASE_SERVICE_KEY") as string;

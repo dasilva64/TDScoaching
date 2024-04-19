@@ -140,13 +140,20 @@ export async function POST(request: NextRequest) {
                 where: { mail: validator.escape(email.trim()) },
                 data: { resetToken: resetTokenObject },
               });
-              let smtpTransport = nodemailer.createTransport({
+              /* let smtpTransport = nodemailer.createTransport({
                 host: "smtp.ionos.fr",
                 port: 465,
                 secure: true,
                 auth: {
                   user: process.env.SECRET_SMTP_EMAIL,
                   pass: process.env.SECRET_SMTP_PASSWORD,
+                },
+              }); */
+              let smtpTransport = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                  user: process.env.SECRET_SMTP_EMAIL_TEST,
+                  pass: process.env.SECRET_SMTP_PASSWORD_TEST,
                 },
               });
               let mailOptions = {
@@ -173,7 +180,7 @@ export async function POST(request: NextRequest) {
                                   <h2 style="text-align: center">Réinitialisation de votre mot de passe</h2>
                                   <p style="margin-bottom: 20px">Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous.</p>
                                   <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/reinitialisation-mot-de-passe/${token}" target="_blank">Vérifier mon compte</a>
-                                  <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible.</p>
+                                  <p style="margin-top: 20px">Ce lien est valide pendant 5 min, au-delà de ce temps il ne sera plus disponible.</p>
                                 </div>
                               </div>
                             </body>
@@ -215,7 +222,7 @@ export async function POST(request: NextRequest) {
               where: { mail: validator.escape(email.trim()) },
               data: { resetToken: resetTokenObject },
             });
-            let smtpTransport = nodemailer.createTransport({
+            /* let smtpTransport = nodemailer.createTransport({
               host: "smtp.ionos.fr",
               port: 465,
               secure: true,
@@ -223,10 +230,17 @@ export async function POST(request: NextRequest) {
                 user: process.env.SECRET_SMTP_EMAIL,
                 pass: process.env.SECRET_SMTP_PASSWORD,
               },
+            }); */
+            let smtpTransport = nodemailer.createTransport({
+              service: "gmail",
+              auth: {
+                user: process.env.SECRET_SMTP_EMAIL_TEST,
+                pass: process.env.SECRET_SMTP_PASSWORD_TEST,
+              },
             });
             let mailOptions = {
-              from: "contact@tds-coachingdevie.fr",
-              to: editUser.mail,
+              from: "thomasdasilva010@gmail.com",
+              to: "thomasdasilva010@gmail.com",
               subject: "Réinitialisation du mot de passe",
               html: `<!DOCTYPE html>
                         <html lang="fr">
@@ -248,7 +262,7 @@ export async function POST(request: NextRequest) {
                                 <h2 style="text-align: center">Réinitialisation de votre mot de passe</h2>
                                 <p style="margin-bottom: 20px">Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous.</p>
                                 <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/reinitialisation-mot-de-passe/${token}" target="_blank">Vérifier mon compte</a>
-                                <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible.</p>
+                                <p style="margin-top: 20px">Ce lien est valide pendant 5 min, au-delà de ce temps il ne sera plus disponible.</p>
                               </div>
                             </div>
                           </body>

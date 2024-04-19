@@ -9,20 +9,14 @@ import validator from "validator";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { AppDispatch } from "@/app/redux/store";
 import Input from "@/app/components/input/Input";
-import useGet from "@/app/components/hook/useGet";
-import useGetTest from "@/app/components/hook/useGetWithParam";
-import useGetWithParam from "@/app/components/hook/useGetWithParam";
 import useUserResetPassword from "@/app/components/hook/user/useUserRestPassword";
 
 const Reset = () => {
   const queryParam: any = usePathname();
   let token = queryParam.toString().split("/");
   const { data: dataLoad, isLoading } = useUserResetPassword(token[2]);
-  const [timer, setTimer] = useState<number>(0);
   const dispatch = useDispatch<AppDispatch>();
   const { push } = useRouter();
-  const [minutes, setMinutes] = useState<number>(0);
-  const [seconds, setSeconds] = useState<number>(0);
   useEffect(() => {
     if (dataLoad) {
       if (dataLoad.status === 400 || dataLoad.status === 404) {
@@ -31,39 +25,9 @@ const Reset = () => {
           payload: { flashMessage: dataLoad.message, type: "error" },
         });
         push("/");
-      } else {
-        let copyDate = dataLoad.body;
-        let now = new Date();
-        let limite = new Date(copyDate.limitDate);
-        let diff = limite.getTime() - now.getTime();
-        setMinutes(Math.floor(diff / 1000 / 60));
-        setSeconds(Math.floor((diff / 1000) % 60));
-        setTimer(diff);
       }
     }
   }, [dataLoad, dispatch, push]);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMinutes(Math.floor(timer / 1000 / 60));
-      setSeconds(Math.floor((timer / 1000) % 60));
-      setTimer((prev) => prev - 1000);
-    }, 1000);
-    if (timer < 0) {
-      dispatch({
-        type: "flash/storeFlashMessage",
-        payload: {
-          flashMessage:
-            " Le temps est écoulé, pour réinitailiser votre mot de passe, veuillez recommencer la procédure",
-          type: "error",
-        },
-      });
-      clearInterval(interval);
-      push("/");
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [dispatch, push, timer]);
 
   const [inputPseudo, setInputPseudo] = useState<string>("");
 
@@ -226,12 +190,12 @@ const Reset = () => {
 
   return (
     <>
-      {timer <= 0 ? null : (
+      {/* {timer <= 0 ? null : (
         <span className={styles.reset__timer__span}>
           Temps restant pour la réinitialisation : {minutes} minutes {seconds}{" "}
           secondes
         </span>
-      )}
+      )} */}
       <form
         className={styles.reset__form}
         id="form"
@@ -310,33 +274,26 @@ const Reset = () => {
           }}
         />
         <div className={styles.reset__form__submit}>
-          {isMutating ||
-            (isLoading && (
-              <button
-                disabled
-                className={styles.reset__form__submit__btn__load}
-              >
-                <span className={styles.reset__form__submit__btn__load__span}>
-                  Chargement
-                </span>
+          {isMutating && (
+            <button disabled className={styles.reset__form__submit__btn__load}>
+              <span className={styles.reset__form__submit__btn__load__span}>
+                Chargement
+              </span>
 
-                <div className={styles.reset__form__submit__btn__load__arc}>
-                  <div
-                    className={
-                      styles.reset__form__submit__btn__load__arc__circle
-                    }
-                  ></div>
-                </div>
-              </button>
-            ))}
-          {!isMutating ||
-            (isLoading === false && (
-              <input
-                className={styles.reset__form__submit__btn}
-                type="submit"
-                value="Réinitialiser"
-              />
-            ))}
+              <div className={styles.reset__form__submit__btn__load__arc}>
+                <div
+                  className={styles.reset__form__submit__btn__load__arc__circle}
+                ></div>
+              </div>
+            </button>
+          )}
+          {!isMutating && (
+            <input
+              className={styles.reset__form__submit__btn}
+              type="submit"
+              value="Réinitialiser"
+            />
+          )}
         </div>
       </form>
     </>

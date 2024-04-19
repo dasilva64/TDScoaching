@@ -19,6 +19,7 @@ import ModalUserPasswordData from "../passwordData/modal/ModalUserPasswordData";
 import ModalUserSendToken from "../emailSendTokenData/modal/ModalUserSendToken";
 import EmailCheck from "../emailData/EmailData";
 import ModalCloseEmail from "../emailData/modal/ModalCloseEmail";
+import ModalDeleteAccount from "../deleteAccount/modal/ModalDeleteAccount";
 const Parisienne = localFont({
   src: "../../../Parisienne-Regular.ttf",
   display: "swap",
@@ -69,6 +70,7 @@ const Content = () => {
           <ModalUserLastnameData data={data} mutate={mutate} />
           <ModalUserPasswordData />
           <ModalUserSendToken data={data} mutate={mutate} />
+          <ModalDeleteAccount />
           {data.body.newEmail && (
             <>
               <EmailCheck data={data} mutate={mutate} />

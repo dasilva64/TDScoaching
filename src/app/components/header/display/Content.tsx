@@ -141,8 +141,8 @@ const Content = () => {
         window.location.pathname === "/profile" && (
           <>
             {/* <EmailCheck /> */}
-            <ModalCloseEmail />
-            <ModalDeleteAccount />
+            {/* <ModalCloseEmail />
+            <ModalDeleteAccount /> */}
             {/* <ModalTwoFactor /> 
             <ModalCloseTwoFactor />*/}
             {/* <ModalUserLastnameData />

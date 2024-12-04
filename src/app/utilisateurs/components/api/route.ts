@@ -5,8 +5,8 @@ import {
   SessionData,
   defaultSession,
   sessionOptions,
-} from "../../../../../lib/session";
-import prisma from "../../../../../lib/prisma";
+} from "../../../lib/session";
+import prisma from "../../../lib/prisma";
 import validator from "validator";
 
 export async function GET() {
@@ -24,7 +24,7 @@ export async function GET() {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: session.id },
+      where: { id: validator.escape(session.id) },
     });
     if (user === null) {
       return NextResponse.json(
@@ -64,13 +64,12 @@ export async function GET() {
         let allUserObject = [];
         for (let i = 0; i < copyAllUser.length; i++) {
           let userObject = {
-            id: copyAllUser[i].id,
-            mail: copyAllUser[i].mail,
-            firstName: copyAllUser[i].firstname,
-            lastName: copyAllUser[i].lastname,
-            phone: copyAllUser[i].phone,
-            allMeeting: copyAllUser[i].Meeting,
-            idMeeting: copyAllUser[i].meetingId,
+            id: validator.escape(copyAllUser[i].id),
+            mail: validator.escape(copyAllUser[i].mail),
+            firstName: validator.escape(copyAllUser[i].firstname),
+            lastName: validator.escape(copyAllUser[i].lastname),
+            allMeeting: validator.escape(copyAllUser[i].Meeting),
+            idMeeting: validator.escape(copyAllUser[i].meetingId),
           };
           allUserObject.push(userObject);
         }

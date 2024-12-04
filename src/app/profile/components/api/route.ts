@@ -5,15 +5,16 @@ import {
   SessionData,
   defaultSession,
   sessionOptions,
-} from "../../../../../lib/session";
-import prisma from "../../../../../lib/prisma";
+} from "../../../lib/session";
+import prisma from "../../../lib/prisma";
+import validator from "validator";
 
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn === true) {
     const user = await prisma.user.findUnique({
-      where: { id: session.id },
+      where: { id: validator.escape(session.id) },
     });
     if (user === null) {
       session.destroy();
@@ -32,21 +33,17 @@ export async function GET() {
       let userObject;
       if (copyEditEmail === null) {
         userObject = {
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.mail,
-          twoFactor: user.twoFactor,
+          firstname: validator.escape(user.firstname),
+          lastname: validator.escape(user.lastname),
+          email: validator.escape(user.mail),
           newEmail: "",
-          typeMeeting: user.typeMeeting,
         };
       } else {
         userObject = {
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.mail,
-          twoFactor: user.twoFactor,
-          newEmail: copyEditEmail.newEmail,
-          typeMeeting: user.typeMeeting,
+          firstname: validator.escape(user.firstname),
+          lastname: validator.escape(user.lastname),
+          email: validator.escape(user.mail),
+          newEmail: validator.escape(copyEditEmail.newEmail),
         };
       }
       return NextResponse.json({

@@ -1,12 +1,6 @@
 import styles from "./page.module.scss";
 import Image from "next/image";
-import "react-vertical-timeline-component/style.min.css";
-import localFont from "next/font/local";
 import NoScript from "../components/noscript/NoScript";
-const Parisienne = localFont({
-  src: "../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 export const metadata = {
   title: "Thierry DA SILVA coach professionnel certifié - tdscoaching",
@@ -41,11 +35,7 @@ const About = () => {
           />
         </div>
         <section className={styles.about__parcour}>
-          <h1
-            className={`${styles.about__parcour__h1} ${Parisienne.className}`}
-          >
-            Thierry Da Silva
-          </h1>
+          <h1 className={`${styles.about__parcour__h1}`}>Thierry Da Silva</h1>
           <div className={styles.about__parcour__container}>
             <Image
               className={styles.about__parcour__container__img}
@@ -57,9 +47,7 @@ const About = () => {
               alt="Thierry DA SILVA coach professionnel certifié"
             />
             <article>
-              <h2
-                className={`${styles.about__parcour__container__h2} ${Parisienne.className}`}
-              >
+              <h2 className={`${styles.about__parcour__container__h2}`}>
                 Mon parcours professionnel
               </h2>
               <p className={styles.about__parcour__container__p}>
@@ -96,9 +84,7 @@ const About = () => {
           </div>
         </section>
         <section className={styles.about__vision}>
-          <h2
-            className={`${styles.about__vision__container__h2} ${Parisienne.className}`}
-          >
+          <h2 className={`${styles.about__vision__container__h2}`}>
             Ma vision du coaching
           </h2>
           <p className={styles.about__vision__container__content__p}>
@@ -127,11 +113,7 @@ const About = () => {
         </section>
 
         <section className={styles.about__certificate}>
-          <h2
-            className={`${styles.about__certificate__h2} ${Parisienne.className}`}
-          >
-            Mes formations
-          </h2>
+          <h2 className={`${styles.about__certificate__h2}`}>Mes formations</h2>
           <div className={styles.about__certificate__container}>
             <div className={styles.timeline}>
               <div className={styles.timeline__left}>

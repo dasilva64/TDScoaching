@@ -12,7 +12,7 @@ const CardType = ({ title, content, type }: any) => {
           : styles.card__container
       } ${styles.card__margin}`}
     >
-      <h3 className={styles.card__h3}>{title}</h3>
+      <h2 className={styles.card__h3}>{title}</h2>
       <div className={styles.card__card}>
         <div
           className={`${styles.card__front} ${

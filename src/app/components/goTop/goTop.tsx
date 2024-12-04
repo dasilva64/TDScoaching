@@ -52,6 +52,42 @@ const GoTop = () => {
   const { displayModalDeleteAccount } = useSelector(
     (state: RootState) => state.ModalDeleteAccount
   );
+  const { displayModalCalendarDiscovery } = useSelector(
+    (state: RootState) => state.ModalCalendarDiscovery
+  );
+  const { displayModalAddDiscovery } = useSelector(
+    (state: RootState) => state.ModalAddDiscovery
+  );
+  const { displayModalEditDiscoveryMeeting } = useSelector(
+    (state: RootState) => state.ModalEditDiscoveryMeeting
+  );
+  const { displayModalCalendarEditDiscovery } = useSelector(
+    (state: RootState) => state.ModalCalendarEditDiscovery
+  );
+
+  //header/modal/discovery
+  const { displayModalAddDiscoveryMeetingTest } = useSelector(
+    (state: RootState) => state.ModalAddDiscoveryMeetingTest
+  );
+  const { displayModalDiscoveryMeetingTest } = useSelector(
+    (state: RootState) => state.ModalDiscoveryMeetingTest
+  );
+  const { displayModalRecapDiscoveryMeeting } = useSelector(
+    (state: RootState) => state.ModalRecapDiscoveryMeeting
+  );
+
+  //rendez-vous/token
+  const { displayModalConfirmDiscoveryMeetingRendezVousToken } = useSelector(
+    (state: RootState) => state.ModalConfirmDiscoveryMeetingRendezVousToken
+  );
+  const { displayModalDeleteDiscoveryMeetingRendezVousToken } = useSelector(
+    (state: RootState) => state.ModalDeleteDiscoveryMeetingRendezVousToken
+  );
+  const { displayModalCalendarEditDiscoveryMeetingRendezVousToken } =
+    useSelector(
+      (state: RootState) =>
+        state.ModalCalendarEditDiscoveryMeetingRendezVousToken
+    );
   const DisplayDiv = () => {
     if (
       displayModalLogin === true ||
@@ -61,7 +97,17 @@ const GoTop = () => {
       displayModalEditPassword === true ||
       displayModalSendTokenEmail === true ||
       displayModalEditEmail === true ||
-      displayModalDeleteAccount === true
+      displayModalDeleteAccount === true ||
+      displayModalCalendarDiscovery === true ||
+      displayModalAddDiscovery === true ||
+      displayModalEditDiscoveryMeeting === true ||
+      displayModalCalendarEditDiscovery === true ||
+      displayModalCalendarEditDiscoveryMeetingRendezVousToken === true ||
+      displayModalDeleteDiscoveryMeetingRendezVousToken === true ||
+      displayModalConfirmDiscoveryMeetingRendezVousToken === true ||
+      displayModalAddDiscoveryMeetingTest === true ||
+      displayModalDiscoveryMeetingTest === true ||
+      displayModalRecapDiscoveryMeeting === true
     ) {
       return <></>;
     } else {

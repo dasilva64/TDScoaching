@@ -5,20 +5,16 @@ import Image from "next/image";
 import GoDown from "./components/goDown/goDown";
 import Card from "./components/card/Card";
 import WhileInView from "./components/framer/WhileInView";
-import localFont from "next/font/local";
 import NoScript from "./components/noscript/NoScript";
 import About from "./components/about/About";
-const Parisienne = localFont({
-  src: "./Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 export const metadata = {
   title: "Coach de vie c'est quoi ? - tdscoaching",
   description:
     "Le coaching de vie, c’est quoi ? Vous êtes en quête de bien-être ? Etes-vous prêt à libérer tout votre potentiel ? Comment puis-je vous aider ?",
   icons: {
-    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+    //icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+    icon: "http://localhost:3000/assets/logo/logo3.webp",
   },
   keywords:
     "Développement personnel, Coaching professionnel, Relation de couple, Communication, Équilibre vie professionnelle-vie personnelle, Confiance en soi, Gestion du stress",
@@ -50,7 +46,7 @@ export default async function Home() {
           <GoDown />
         </section>
         <section className={styles.home__who}>
-          <h1 className={`${styles.home__who__h2} ${Parisienne.className}`}>
+          <h1 className={`${styles.home__who__h2}`}>
             Vous êtes en quête <br /> de bien-être ?
           </h1>
 
@@ -63,9 +59,7 @@ export default async function Home() {
 
           <div className={styles.home__who__content}>
             <div className={styles.home__who__content__div}>
-              <h2
-                className={`${styles.home__who__content__div__h3} ${Parisienne.className}`}
-              >
+              <h2 className={`${styles.home__who__content__div__h3}`}>
                 Coacher une personne, c’est quoi ?
               </h2>
 
@@ -97,9 +91,7 @@ export default async function Home() {
         </section>
         <section className={styles.home__what}>
           <div className={styles.home__what__container}>
-            <h2
-              className={`${styles.home__what__container__h2} ${Parisienne.className}`}
-            >
+            <h2 className={`${styles.home__what__container__h2}`}>
               Le coaching de vie, <br /> c’est quoi ?
             </h2>
 
@@ -148,7 +140,7 @@ export default async function Home() {
           </div>
         </section>
         <section className={styles.home__goal}>
-          <h2 className={`${styles.home__goal__h2} ${Parisienne.className}`}>
+          <h2 className={`${styles.home__goal__h2}`}>
             Développons votre potentiel
           </h2>
 

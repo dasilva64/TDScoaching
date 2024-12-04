@@ -19,21 +19,17 @@
       &__left {
         &__h1 {
           color: black;
-          border-bottom: 1px solid orange;
           width: 200px;
-          font-size: 48px;
           margin: 0px 0px 30px 0px;
         }
         &__p {
           width: 70%;
           line-height: 1.4;
-          font-size: 18px;
         }
         &__offer {
           width: 90%;
           line-height: 1.4;
           text-align: center;
-          font-size: 18px;
           background-color: orange;
           padding: 10px;
           margin-top: 20px;
@@ -57,7 +53,6 @@
           position: relative;
           top: -75px;
           line-height: 1.4;
-          font-size: 18px;
           text-align: center;
           padding: 75px 10px 10px 10px;
           z-index: 1;
@@ -82,11 +77,9 @@
         &__h3 {
           line-height: 36px;
           text-align: center;
-          font-size: 48px;
           width: fit-content;
           color: white;
           padding: 10px 20px;
-          border-radius: 10px;
           margin: 0px auto 30px auto;
         }
         &__ul {
@@ -96,7 +89,6 @@
           &__li {
             position: relative;
             color: white;
-            font-size: 18px;
             padding-left: 30px;
             margin-bottom: 5px;
             &__icone {
@@ -214,34 +206,16 @@
       &__head {
         margin: 0px 5% 0px 5%;
         padding-top: 40px;
-        &__left {
-          &__h1 {
-            font-size: 36px;
-          }
-          &__p {
-            font-size: 16px;
-          }
-          &__offer {
-            font-size: 16px;
-          }
-        }
-        &__right {
-          &__p {
-            font-size: 16px;
-          }
-        }
       }
       &__container {
         margin: 0px 5%;
         &__card {
           &__h3 {
-            font-size: 36px;
             padding: 10px 0px;
           }
           &__ul {
             padding-left: 10px;
             &__li {
-              font-size: 16px;
               position: relative;
               &__icone {
                 position: absolute;

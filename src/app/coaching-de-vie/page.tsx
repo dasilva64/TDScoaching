@@ -3,6 +3,7 @@ import styles from "./page.module.scss";
 import Image from "next/image";
 import CardType from "./components/CardType";
 import CardHelp from "./components/CardHelp";
+import NoScript from "../components/noscript/NoScript";
 
 export const metadata = {
   title: "Coaching familial, professionnel et de couple - tdscoaching",
@@ -19,13 +20,6 @@ export const metadata = {
     "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
   },
 };
-
-import localFont from "next/font/local";
-import NoScript from "../components/noscript/NoScript";
-const Parisienne = localFont({
-  src: "../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const page = () => {
   return (
@@ -46,11 +40,9 @@ const page = () => {
         </div>
 
         <section className={styles.coaching__type}>
-          <h2
-            className={`${styles.coaching__type__h2} ${Parisienne.className}`}
-          >
+          <h1 className={`${styles.coaching__type__h2}`}>
             Les différents types de coaching
-          </h2>
+          </h1>
           <div className={styles.coaching__type__content}>
             <div>
               <CardType
@@ -89,9 +81,7 @@ const page = () => {
           </div>
         </section>
         <section className={styles.coaching__help}>
-          <h2
-            className={`${styles.coaching__help__h2} ${Parisienne.className}`}
-          >
+          <h2 className={`${styles.coaching__help__h2}`}>
             Les objectifs
             <br /> d&apos;un coaching de vie
           </h2>
@@ -117,62 +107,6 @@ const page = () => {
             <CardHelp title="Piloter son évolution de carrière et sa reconversion" />
           </div>
         </section>
-        {/* <section className={styles.coaching__delivery}>
-          <div className={styles.coaching__delivery__container}>
-            <WhileInView
-              type="y"
-              className={styles.coaching__delivery__container__card}
-            >
-              <h3 className={styles.coaching__delivery__container__card__h3}>
-                Mes prestations
-              </h3>
-              <Image
-                className={styles.coaching__delivery__container__card__img}
-                width="30"
-                height="30"
-                priority={true}
-                src={"/assets/icone/goal.png"}
-                alt="bousole"
-              />
-              <p className={styles.coaching__delivery__container__card__p}>
-                Si vous souhaitez en savoir plus sur la tarification, cliquez
-                sur le bouton ci-dessous.
-              </p>
-              <Link
-                className={styles.coaching__delivery__container__card__btn}
-                href="/tarif"
-              >
-                Mes prestations
-              </Link>
-            </WhileInView>
-            <WhileInView
-              type="y"
-              className={styles.coaching__delivery__container__card}
-            >
-              <h3 className={styles.coaching__delivery__container__card__h3}>
-                Rendez-vous
-              </h3>
-              <Image
-                className={styles.coaching__delivery__container__card__img}
-                width="30"
-                height="30"
-                priority={true}
-                src={"/assets/icone/goal.png"}
-                alt="bousole"
-              />
-              <p className={styles.coaching__delivery__container__card__p}>
-                Si vous souhaitez me contacter ou prendre rendez-vous, cliquez
-                sur le bouton ci-dessous.
-              </p>
-              <Link
-                className={styles.coaching__delivery__container__card__btn}
-                href="/contact"
-              >
-                Prendre rendez-vous
-              </Link>
-            </WhileInView>
-          </div>
-        </section> */}
       </main>
     </>
   );

@@ -1,0 +1,24 @@
+.meet {
+  &__h1 {
+    padding-top: 160px;
+    width: 350px;
+    margin: 0px auto 30px auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .meet {
+    &__h1 {
+      width: 300px;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .meet {
+    &__h1 {
+      padding-top: 140px;
+      width: 280px;
+    }
+  }
+}

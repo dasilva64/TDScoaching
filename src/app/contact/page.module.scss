@@ -12,17 +12,13 @@
   &__main {
     margin: 0px 10%;
     &__h1 {
-      text-align: center;
       color: black;
       padding-top: 80px;
-      border-bottom: 1px solid orange;
       width: 223px;
-      font-size: 48px;
       margin: 0px auto 40px auto;
     }
     &__p {
       margin-bottom: 30px;
-      font-size: 18px;
       line-height: 1.4;
     }
     &__container {
@@ -143,11 +139,7 @@
       margin: 0px 5%;
       &__h1 {
         padding-top: 40px;
-        font-size: 40px;
         width: 180px;
-      }
-      &__p {
-        font-size: 16px;
       }
       &__container {
         &__content {

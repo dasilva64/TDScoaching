@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
+/* import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
   SessionData,
   sessionOptions,
   sessionOptionsRemeber,
-} from "../../../../../../lib/session";
-import { validationBody } from "../../../../../../lib/validation";
+} from "../../../../lib/session";
+import { validationBody } from "../../../../lib/validation";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-import prisma from "../../../../../../lib/prisma";
+import prisma from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
             } else {
               let editUser = await prisma.user.update({
                 where: {
-                  id: user.id,
+                  id: validator.escape(user.id),
                 },
                 data: {
                   twoFactorCode: Prisma.JsonNull,
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json({
                   status: 200,
                   body: userObject,
-                  message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
+                  message: `Bonjour, ${validator.escape(user.firstname)} vous êtes maintenant connecté`,
                 });
               }
             }
@@ -155,7 +155,5 @@ export async function POST(request: NextRequest) {
       );
     }
   }
-
-  // simulate looking up the user in db
-  //await sleep(250);
 }
+ */

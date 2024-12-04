@@ -5,7 +5,8 @@ import LinkNav from "./ui/LinkNav";
 import Image from "next/image";
 import Link from "next/link";
 import Content from "./display/Content";
-import FlashMessage from "./ui/FlashMessage";
+import FlashMessage from "./ui/flashMessage/FlashMessage";
+import BtnNav from "./ui/BtnNav";
 
 const Header = async () => {
   return (
@@ -44,6 +45,12 @@ const Header = async () => {
             <li className={styles.header__li}>
               <LinkNav name="Contact" path="/contact" />
             </li>
+            <li className={styles.header__li}>
+              <LinkNav name="Blog" path="/blog" />
+            </li>
+            {/* <li className={styles.header__li}>
+              <BtnNav name="RDV gratuit" />
+            </li> */}
           </ul>
         </nav>
         <Content />

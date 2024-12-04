@@ -18,17 +18,14 @@
   }
 
   &__h1 {
-    width: 85%;
+    display: inline-block;
     text-align: left;
-    font-size: 48px;
     margin-bottom: 20px;
   }
   &__p {
-    font-size: 18px;
     line-height: 1.4;
   }
   &__btn {
-    font-size: 18px;
     position: relative;
     cursor: pointer;
     padding: 10px;
@@ -104,14 +101,12 @@
       text-align: center;
     }
     &__h1 {
-      width: 100%;
-      text-align: left;
-      font-size: 40px;
-      margin-bottom: 20px;
+      display: block;
+      margin-bottom: 40px;
+      width: 228px;
     }
     &__p {
       margin-right: 30px;
-      font-size: 16px;
     }
     &__plus {
       position: absolute;

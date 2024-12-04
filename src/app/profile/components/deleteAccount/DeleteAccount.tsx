@@ -28,7 +28,7 @@ const DeleteAccount = () => {
             alt="bousole"
           />
           <div className={styles.card__info}>
-            <p>
+            <p className={styles.card__info__name}>
               <strong>Suppression du compte</strong>
             </p>
           </div>

@@ -8,13 +8,8 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
-import localFont from "next/font/local";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
-const Parisienne = localFont({
-  src: "../../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const FormRegister = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -375,9 +370,7 @@ const FormRegister = () => {
                 </button>
               </div>
 
-              <h2 className={`${styles.register__h1} ${Parisienne.className}`}>
-                Création de compte
-              </h2>
+              <h2 className={`${styles.register__h1}`}>Création de compte</h2>
               <form
                 className={styles.register__form}
                 action=""

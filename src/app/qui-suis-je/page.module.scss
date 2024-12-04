@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Parisienne;
+  src: url("/assets/font/Parisienne/Parisienne-Regular.ttf");
+}
+
 .about {
   &__bg {
     position: relative;
@@ -12,12 +17,9 @@
   &__certificate {
     padding: 0 0 50px 0;
     &__h2 {
-      text-align: center;
       color: black;
       padding-top: 80px;
-      border-bottom: 1px solid orange;
       width: 323px;
-      font-size: 48px;
       margin: 0px auto 30px auto;
     }
     &__container {
@@ -30,12 +32,9 @@
   &__parcour {
     margin: 0px 10% 50px 10%;
     &__h1 {
-      text-align: center;
       color: black;
       padding-top: 80px;
-      border-bottom: 1px solid orange;
       width: 353px;
-      font-size: 48px;
       margin: 0px auto 30px auto;
     }
     &__container {
@@ -54,13 +53,10 @@
       }
       &__h2 {
         color: black;
-        border-bottom: 1px solid orange;
-        width: 345px;
-        font-size: 32px;
+        width: 410px;
         margin: 0px 0px 30px 290px;
       }
       &__p {
-        font-size: 18px;
         line-height: 1.4;
       }
     }
@@ -70,13 +66,9 @@
     background-color: rgba(0, 0, 0, 0.03);
     &__container {
       &__h2 {
-        text-align: center;
         color: black;
         padding-top: 80px;
-        font-size: 48px;
-        border-bottom: 1px solid orange;
         width: 400px;
-        font-size: 48px;
         margin: 0px auto 30px auto;
       }
       &__content {
@@ -85,14 +77,23 @@
         justify-content: space-between;
         &__p {
           margin-top: 40px;
-          font-size: 18px;
           line-height: 1.4;
         }
       }
     }
   }
 }
-
+@media screen and (max-width: 1024px) {
+  .about {
+    &__parcour {
+      &__container {
+        &__h2 {
+          width: 55%;
+        }
+      }
+    }
+  }
+}
 @media screen and (max-width: 768px) {
   .about {
     &__bg {
@@ -104,19 +105,12 @@
       &__container {
         margin: 0 5% 0 5%;
         &__h2 {
-          font-size: 36px;
           width: 330px;
-        }
-        &__content {
-          &__p {
-            font-size: 16px;
-          }
         }
       }
     }
     &__certificate {
       &__h2 {
-        font-size: 36px;
         width: 240px;
       }
       &__container {
@@ -126,7 +120,6 @@
     &__parcour {
       margin: 0px 5% 50px 5%;
       &__h1 {
-        font-size: 36px;
         width: 300px;
       }
       &__container {
@@ -135,17 +128,13 @@
         display: flex;
         flex-direction: column;
         &__h2 {
-          font-size: 24px;
-          width: 270px;
+          width: 300px;
           margin: 0px auto 30px auto;
         }
         &__img {
           margin: auto;
           float: unset;
           margin-bottom: 30px;
-        }
-        &__p {
-          font-size: 16px;
         }
       }
     }
@@ -164,23 +153,23 @@
       &__container {
         margin: 0 5% 0 5%;
         &__h2 {
-          width: 80%;
+          width: 260px;
         }
       }
     }
     &__certificate {
       &__h2 {
-        width: 80%;
+        width: 190px;
       }
     }
     &__parcour {
       margin: 0px 5% 50px 5%;
       &__h1 {
-        width: 100%;
+        width: 260px;
       }
       &__container {
         &__h2 {
-          width: 100%;
+          width: 78%;
         }
         &__img {
           width: 200px;
@@ -236,8 +225,10 @@
       border-radius: 0.25em;
       box-shadow: 0 3px 0 #ddd;
       &__h3 {
-        font-size: 16px;
-        font-weight: 600;
+        font-weight: 600 !important;
+        font-size: clamp(15px, 17px, 2vw) !important;
+        text-decoration: none !important;
+        font-family: Raleway, sans-serif !important;
       }
       &__div {
         content: "";
@@ -301,8 +292,10 @@
       border-radius: 0.25em;
       box-shadow: 0 3px 0 #ddd;
       &__h3 {
-        font-size: 16px;
-        font-weight: 600;
+        font-size: clamp(15px, 17px, 2vw) !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+        font-family: Raleway, sans-serif !important;
       }
       &__div {
         content: "";
@@ -384,9 +377,6 @@
         width: unset;
         border-radius: 0.25em;
         box-shadow: 0 3px 0 #ddd;
-        &__h3 {
-          font-size: 16px;
-        }
         &__div {
           content: "";
           position: absolute;
@@ -450,9 +440,6 @@
         width: unset;
         border-radius: 0.25em;
         box-shadow: 0 3px 0 #ddd;
-        &__h3 {
-          font-size: 16px;
-        }
         &__div {
           content: "";
           position: absolute;
@@ -523,14 +510,14 @@
     &__left {
       &__div {
         &__h3 {
-          text-align: left;
+          text-align: left !important;
         }
       }
     }
     &__right {
       &__div {
         &__h3 {
-          text-align: left;
+          text-align: left !important;
         }
       }
     }

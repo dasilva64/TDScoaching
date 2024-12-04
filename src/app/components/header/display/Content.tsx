@@ -6,14 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
 import useGet from "../../hook/useGet";
 import FormLogin from "../../login/FormLogin";
 import FormRegister from "../../register/formRegister";
 import Forgot from "../../forgot/Forgot";
-import EmailCheck from "@/app/profile/components/emailData/EmailData";
-import ModalCloseEmail from "@/app/profile/components/emailData/modal/ModalCloseEmail";
-import ModalDeleteAccount from "@/app/profile/components/deleteAccount/modal/ModalDeleteAccount";
 import NavAdmin from "../modal/NavAdmin";
 import Nav from "../modal/Nav";
 import DiscoveryModal from "@/app/tarif/components/DiscoveryModal";
@@ -32,10 +28,13 @@ const Content = () => {
   useEffect(() => {
     if (data) {
       if (data.isLoggedIn === false) {
+        let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
+        let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
         if (
           pathname === "/profile" ||
           pathname === "/utilisateurs" ||
-          pathname === "/utilisateur/[id]"
+          regex.test(pathname) ||
+          regexTwo.test(pathname)
         ) {
           router.push("/");
         }
@@ -137,22 +136,21 @@ const Content = () => {
       <DiscoveryModal />
       <NormalModal />
       <FormLogin />
+      {/* <ModalDiscoveryMeetingTest />
+      <ModalAddDiscoveryMeeting />
+      <ModalRecapDiscoveryMeeting /> */}
       {typeof window !== "undefined" &&
         window.location.pathname === "/profile" && (
           <>
             {/* <EmailCheck /> */}
             {/* <ModalCloseEmail />
             <ModalDeleteAccount /> */}
-            {/* <ModalTwoFactor /> 
-            <ModalCloseTwoFactor />*/}
             {/* <ModalUserLastnameData />
             
             
             <EmailCheck />
             <ModalCloseEmail />
-            <ModalTwoFactor />
             <ModalDeleteAccount />
-            <ModalCloseTwoFactor />
              */}
           </>
         )}

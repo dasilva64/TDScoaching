@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL_CONNECT")
 }
 
 model Article {
@@ -30,23 +29,52 @@ model Meeting {
   User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "meeting_userid_fkey")
 }
 
+model MeetingDiscovery {
+  id       String   @id(map: "meetingdiscovery_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  startAt  DateTime @db.Timestamp(6)
+  userMail String   @unique @db.VarChar
+  token    String   @unique
+  type     String
+  confirm  Boolean
+  statut   String
+  coaching String
+  User     User     @relation(fields: [userMail], references: [mail], onDelete: Cascade, onUpdate: NoAction, map: "meeting_usermail_fkey")
+}
+
 model User {
-  id            String    @id(map: "user_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  mail          String    @unique @db.VarChar
-  firstname     String    @db.VarChar
-  lastname      String    @db.VarChar
-  password      String    @db.VarChar
-  registerToken Json?     @db.Json
-  resetToken    Json?     @db.Json
-  editEmail     Json?     @db.Json
-  role          String    @db.VarChar
-  twoFactor     Boolean
-  status        Boolean
-  twoFactorCode Json?     @db.Json
-  meetingId     String?   @db.Uuid
-  deleteToken   Json?     @db.Json
-  discovery     Boolean
-  typeMeeting   Json      @db.Json
-  deleteReason  String?
-  Meeting       Meeting[]
+  id               String            @id(map: "user_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  mail             String            @unique @db.VarChar
+  firstname        String            @db.VarChar
+  lastname         String            @db.VarChar
+  password         String            @db.VarChar
+  registerToken    Json?             @db.Json
+  resetToken       Json?             @db.Json
+  editEmail        Json?             @db.Json
+  role             String            @db.VarChar
+  status           Boolean
+  deleteToken      Json?             @db.Json
+  discovery        Boolean
+  deleteReason     String?
+  Meeting          Meeting[]
+  MeetingDiscovery MeetingDiscovery?
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model meeting_test {
+  id       BigInt   @id @default(autoincrement())
+  startAt  DateTime @db.Timestamp(6)
+  coaching String
+  confirm  Boolean
+  status   String
+  token    String
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model offre_test {
+  id                     BigInt       @id @default(autoincrement())
+  type                   String
+  currentNumberOfMeeting Int?         @db.SmallInt
+  meetingId              BigInt?
+  offre_test             offre_test?  @relation("offre_testTooffre_test", fields: [meetingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  other_offre_test       offre_test[] @relation("offre_testTooffre_test")
 }

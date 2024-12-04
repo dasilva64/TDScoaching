@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
+/* import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
   SessionData,
   sessionOptions,
   sessionOptionsRemeber,
-} from "../../../../../../lib/session";
-import { validationBody } from "../../../../../../lib/validation";
+} from "../../../../lib/session";
+import { validationBody } from "../../../../lib/validation";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-import prisma from "../../../../../../lib/prisma";
+import prisma from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
           let current = new Date();
           let editUser = await prisma.user.update({
             where: {
-              mail: email,
+              mail: validator.escape(email),
             },
             data: {
               twoFactorCode: {
@@ -142,7 +142,5 @@ export async function POST(request: NextRequest) {
       );
     }
   }
-
-  // simulate looking up the user in db
-  //await sleep(250);
 }
+ */

@@ -1,6 +1,6 @@
 "use client";
 
-import { AppDispatch, RootState } from "../../../../redux/store";
+import { AppDispatch, RootState } from "@/app/profile/redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserLastnameData.module.scss";
@@ -10,14 +10,8 @@ import fetchPost from "../../../../components/fetch/FetchPost";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import localFont from "next/font/local";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { set } from "zod";
-const Parisienne = localFont({
-  src: "../../../../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
   const { displayModalEditLastname } = useSelector(
@@ -218,9 +212,7 @@ const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
                   height={30}
                 ></Image>
               </button>
-              <h2
-                className={`${styles.modalEditMainUserData__h1} ${Parisienne.className}`}
-              >
+              <h2 className={`${styles.modalEditMainUserData__h1}`}>
                 Modifier votre nom de famille
               </h2>
               <form

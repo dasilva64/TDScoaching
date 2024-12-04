@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect } from "react";
+import React, { use, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from "./Content.module.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,6 +26,7 @@ const Content = () => {
   const router = useRouter();
   const { datas } = useSelector((state: RootState) => state.ArrayMeetingByUser);
   const queryParam: any = usePathname();
+  const [content, setContent] = useState<null | any>(null);
   let id = queryParam.toString().split("/");
   const { data, isLoading, isError, mutate } = useGetById(id[2]);
   useEffect(() => {
@@ -185,213 +186,261 @@ const Content = () => {
     }
   }, [dataFinishMeeting, mutate, resetFinisMeeting]);
 
-  let content;
-  if (isError) {
-    content = (
-      <div className={styles.content__flex}>
-        <div className={styles.content__flex__div__left}>
-          <h2 className={styles.content__flex__div__left__h2}>
-            Information de l&apos;utilisateur
-          </h2>
-          <ul className={styles.content__flex__div__left__ul}>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Prénom</strong>&nbsp;: Erreur de chargement des données
-            </li>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Nom de famille</strong>&nbsp;: Erreur de chargement des
-              données
-            </li>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Mail</strong>&nbsp;: Erreur de chargement des données
-            </li>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Formule</strong>&nbsp;: Erreur de chargement des données
-            </li>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Rendez-vous en cours</strong>&nbsp;: Erreur de chargement
-              des
-            </li>
-          </ul>
+  useEffect(() => {
+    if (isError) {
+      setContent(
+        <div className={styles.content__flex}>
+          <div className={styles.content__flex__div__left}>
+            <h2 className={styles.content__flex__div__left__h2}>
+              Information de l&apos;utilisateur
+            </h2>
+            <ul className={styles.content__flex__div__left__ul}>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Prénom</strong>&nbsp;: Erreur de chargement des données
+              </li>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Nom de famille</strong>&nbsp;: Erreur de chargement des
+                données
+              </li>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Mail</strong>&nbsp;: Erreur de chargement des données
+              </li>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Formule</strong>&nbsp;: Erreur de chargement des données
+              </li>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Rendez-vous en cours</strong>&nbsp;: Erreur de
+                chargement des
+              </li>
+            </ul>
+          </div>
+          <div className={styles.content__flex__div__right}>
+            <h2 className={styles.content__flex__div__right__h2}>
+              historique rendez-vous
+            </h2>
+            <>
+              <div>
+                <div className={styles.datatable__container__div}>
+                  <NbShow />
+                  <Search />
+                </div>
+              </div>
+              <DisplayError />
+              <Paging />
+            </>
+          </div>
         </div>
-        <div className={styles.content__flex__div__right}>
-          <h2 className={styles.content__flex__div__right__h2}>
-            historique rendez-vous
-          </h2>
+      );
+    } else if (isLoading) {
+      setContent(
+        <div className={styles.content__flex}>
+          <div className={styles.content__flex__div__left}>
+            <h2 className={styles.content__flex__div__left__h2}>
+              Information de l&apos;utilisateur
+            </h2>
+            <ul className={styles.content__flex__div__left__ul}>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Prénom </strong>&nbsp;: Chargement
+                <div className={styles.arc}>
+                  <div className={styles.arc__circle}></div>
+                </div>
+              </li>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Nom de famille</strong>&nbsp;: Chargement
+                <div className={styles.arc}>
+                  <div className={styles.arc__circle}></div>
+                </div>
+              </li>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Mail</strong>&nbsp;: Chargement
+                <div className={styles.arc}>
+                  <div className={styles.arc__circle}></div>
+                </div>
+              </li>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Formule</strong>&nbsp;: Chargement
+                <div className={styles.arc}>
+                  <div className={styles.arc__circle}></div>
+                </div>
+              </li>
+              <li
+                className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
+              >
+                <strong>Rendez-vous en cours</strong>&nbsp;: Chargement
+                <div className={styles.arc}>
+                  <div className={styles.arc__circle}></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div className={styles.content__flex__div__right}>
+            <h2 className={styles.content__flex__div__right__h2}>
+              historique rendez-vous
+            </h2>
+            <>
+              <div>
+                <div className={styles.datatable__container__div}>
+                  <NbShow />
+                  <Search />
+                </div>
+              </div>
+              <DisplayLoad />
+              <Paging />
+            </>
+          </div>
+        </div>
+      );
+    } else {
+      if (data.status === 200) {
+        let copyTypeMeeting = { ...data.body.typeMeeting };
+        setContent(
           <>
-            <div>
-              <div className={styles.datatable__container__div}>
-                <NbShow />
-                <Search />
-              </div>
-            </div>
-            <DisplayError />
-            <Paging />
-          </>
-        </div>
-      </div>
-    );
-  } else if (isLoading) {
-    content = (
-      <div className={styles.content__flex}>
-        <div className={styles.content__flex__div__left}>
-          <h2 className={styles.content__flex__div__left__h2}>
-            Information de l&apos;utilisateur
-          </h2>
-          <ul className={styles.content__flex__div__left__ul}>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Prénom </strong>&nbsp;: Chargement
-              <div className={styles.arc}>
-                <div className={styles.arc__circle}></div>
-              </div>
-            </li>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Nom de famille</strong>&nbsp;: Chargement
-              <div className={styles.arc}>
-                <div className={styles.arc__circle}></div>
-              </div>
-            </li>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Mail</strong>&nbsp;: Chargement
-              <div className={styles.arc}>
-                <div className={styles.arc__circle}></div>
-              </div>
-            </li>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Formule</strong>&nbsp;: Chargement
-              <div className={styles.arc}>
-                <div className={styles.arc__circle}></div>
-              </div>
-            </li>
-            <li
-              className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
-            >
-              <strong>Rendez-vous en cours</strong>&nbsp;: Chargement
-              <div className={styles.arc}>
-                <div className={styles.arc__circle}></div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div className={styles.content__flex__div__right}>
-          <h2 className={styles.content__flex__div__right__h2}>
-            historique rendez-vous
-          </h2>
-          <>
-            <div>
-              <div className={styles.datatable__container__div}>
-                <NbShow />
-                <Search />
-              </div>
-            </div>
-            <DisplayLoad />
-            <Paging />
-          </>
-        </div>
-      </div>
-    );
-  } else {
-    if (data.status === 200) {
-      let copyTypeMeeting = { ...data.body.typeMeeting };
-      content = (
-        <>
-          <div className={styles.content__flex}>
-            <div className={styles.content__flex__div__left}>
-              <h2 className={styles.content__flex__div__left__h2}>
-                Information de l&apos;utilisateur
-              </h2>
-              <ul className={styles.content__flex__div__left__ul}>
-                <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Prénom</strong> : {data.body.firstname}
-                </li>
-                <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Nom de famille</strong> : {data.body.lastname}
-                </li>
-                <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Mail</strong> : {data.body.mail}
-                </li>
-                <li className={styles.content__flex__div__left__ul__li}>
-                  <strong>Formule</strong> : {copyTypeMeeting.type}
-                </li>
-                {copyTypeMeeting.type === "flash" && (
+            <div className={styles.content__flex}>
+              <div className={styles.content__flex__div__left}>
+                <h2 className={styles.content__flex__div__left__h2}>
+                  Information de l&apos;utilisateur
+                </h2>
+                <ul className={styles.content__flex__div__left__ul}>
                   <li className={styles.content__flex__div__left__ul__li}>
-                    <strong>Nombre de rendez-vous restant</strong> :{" "}
-                    {copyTypeMeeting.number}
+                    <strong>Prénom</strong> : {data.body.firstname}
                   </li>
-                )}
-                {copyTypeMeeting.type === "longue" && (
                   <li className={styles.content__flex__div__left__ul__li}>
-                    <strong>Nombre de rendez-vous restant</strong> :{" "}
-                    {copyTypeMeeting.number}
+                    <strong>Nom de famille</strong> : {data.body.lastname}
                   </li>
-                )}
-                {data.body.meeting === null && (
                   <li className={styles.content__flex__div__left__ul__li}>
-                    <strong>Rendez-vous en cours</strong> : aucun
+                    <strong>Mail</strong> : {data.body.mail}
                   </li>
-                )}
-                {data.body.meeting !== null && (
-                  <>
-                    <ul className={styles.content__flex__div__left__ul__ul}>
-                      <strong>Rendez-vous en cours</strong> :
-                      <li
-                        className={styles.content__flex__div__left__ul__ul__li}
-                      >
-                        <strong>Type</strong> : {copyTypeMeeting.coaching}
-                      </li>
-                      <li
-                        className={styles.content__flex__div__left__ul__ul__li}
-                      >
-                        <strong>Start</strong> :{" "}
-                        {new Date(data.body.meeting.startAt).toLocaleString(
-                          "fr-FR"
-                        )}
-                      </li>
-                    </ul>
-                    {!data.body.discovery === false && (
-                      <div className={styles.content__flex__div__left__ul__div}>
-                        {data.body.typeMeeting.type !== "unique" &&
-                          data.body.typeMeeting.number === 1 && (
+                  <li className={styles.content__flex__div__left__ul__li}>
+                    <strong>Formule</strong> : {copyTypeMeeting.type}
+                  </li>
+                  {copyTypeMeeting.type === "flash" && (
+                    <li className={styles.content__flex__div__left__ul__li}>
+                      <strong>Nombre de rendez-vous restant</strong> :{" "}
+                      {copyTypeMeeting.number}
+                    </li>
+                  )}
+                  {copyTypeMeeting.type === "longue" && (
+                    <li className={styles.content__flex__div__left__ul__li}>
+                      <strong>Nombre de rendez-vous restant</strong> :{" "}
+                      {copyTypeMeeting.number}
+                    </li>
+                  )}
+                  {data.body.meeting === null && (
+                    <li className={styles.content__flex__div__left__ul__li}>
+                      <strong>Rendez-vous en cours</strong> : aucun
+                    </li>
+                  )}
+                  {data.body.meeting !== null && (
+                    <>
+                      <ul className={styles.content__flex__div__left__ul__ul}>
+                        <strong>Rendez-vous en cours</strong> :
+                        <li
+                          className={
+                            styles.content__flex__div__left__ul__ul__li
+                          }
+                        >
+                          <strong>Type</strong> : {copyTypeMeeting.coaching}
+                        </li>
+                        <li
+                          className={
+                            styles.content__flex__div__left__ul__ul__li
+                          }
+                        >
+                          <strong>Start</strong> :{" "}
+                          {new Date(data.body.meeting.startAt).toLocaleString(
+                            "fr-FR"
+                          )}
+                        </li>
+                      </ul>
+                      {!data.body.discovery === false && (
+                        <div
+                          className={styles.content__flex__div__left__ul__div}
+                        >
+                          {data.body.typeMeeting.type !== "unique" &&
+                            data.body.typeMeeting.number === 1 && (
+                              <button
+                                onClick={() => {
+                                  if (
+                                    (data.body.typeMeeting.type === "flash" &&
+                                      data.body.typeMeeting.number === 1) ||
+                                    (data.body.typeMeeting.type === "longue" &&
+                                      data.body.typeMeeting.number === 1) ||
+                                    data.body.typeMeeting.type === "unique"
+                                  ) {
+                                    if (data.body.typeMeeting.number === 1) {
+                                      triggerAccept({
+                                        meetingId: data.body.meeting.id,
+                                        userId: data.body.id,
+                                      });
+                                    }
+                                  } else {
+                                    dispatch({
+                                      type: "flash/storeFlashMessage",
+                                      payload: {
+                                        type: "error",
+                                        flashMessage:
+                                          "Vous ne pouvez pas accepter ce rendez-vous",
+                                      },
+                                    });
+                                  }
+                                }}
+                              >
+                                Accepter
+                              </button>
+                            )}
+                          {data.body.typeMeeting.type === "unique" && (
                             <button
+                              className={
+                                styles.content__flex__div__left__ul__div__btn
+                              }
                               onClick={() => {
-                                if (
-                                  (data.body.typeMeeting.type === "flash" &&
-                                    data.body.typeMeeting.number === 1) ||
-                                  (data.body.typeMeeting.type === "longue" &&
-                                    data.body.typeMeeting.number === 1) ||
-                                  data.body.typeMeeting.type === "unique"
-                                ) {
-                                  if (data.body.typeMeeting.number === 1) {
+                                if (data.body.typeMeeting.type === "flash") {
+                                  if (data.body.typeMeeting.number === 3) {
                                     triggerAccept({
+                                      meetingId: data.body.meeting.id,
+                                      userId: data.body.id,
+                                    });
+                                  } else {
+                                    triggerAcceptOther({
+                                      meetingId: data.body.meeting.id,
+                                      userId: data.body.id,
+                                    });
+                                  }
+                                } else if (
+                                  data.body.typeMeeting.type === "longue"
+                                ) {
+                                  if (data.body.typeMeeting.number === 10) {
+                                    triggerAccept({
+                                      meetingId: data.body.meeting.id,
+                                      userId: data.body.id,
+                                    });
+                                  } else {
+                                    triggerAcceptOther({
                                       meetingId: data.body.meeting.id,
                                       userId: data.body.id,
                                     });
                                   }
                                 } else {
-                                  dispatch({
-                                    type: "flash/storeFlashMessage",
-                                    payload: {
-                                      type: "error",
-                                      flashMessage:
-                                        "Vous ne pouvez pas accepter ce rendez-vous",
-                                    },
+                                  triggerAccept({
+                                    userId: data.body.id,
                                   });
                                 }
                               }}
@@ -399,169 +448,116 @@ const Content = () => {
                               Accepter
                             </button>
                           )}
-                        {data.body.typeMeeting.type === "unique" && (
-                          <button
-                            className={
-                              styles.content__flex__div__left__ul__div__btn
-                            }
-                            onClick={() => {
-                              if (data.body.typeMeeting.type === "flash") {
-                                if (data.body.typeMeeting.number === 3) {
-                                  triggerAccept({
-                                    meetingId: data.body.meeting.id,
-                                    userId: data.body.id,
-                                  });
-                                } else {
-                                  triggerAcceptOther({
-                                    meetingId: data.body.meeting.id,
-                                    userId: data.body.id,
-                                  });
-                                }
-                              } else if (
-                                data.body.typeMeeting.type === "longue"
-                              ) {
-                                if (data.body.typeMeeting.number === 10) {
-                                  triggerAccept({
-                                    meetingId: data.body.meeting.id,
-                                    userId: data.body.id,
-                                  });
-                                } else {
-                                  triggerAcceptOther({
-                                    meetingId: data.body.meeting.id,
-                                    userId: data.body.id,
-                                  });
-                                }
-                              } else {
-                                triggerAccept({
-                                  userId: data.body.id,
-                                });
-                              }
-                            }}
-                          >
-                            Accepter
-                          </button>
-                        )}
-                      </div>
-                    )}
-                    {data.body.discovery === false && (
-                      <div className={styles.content__flex__div__left__ul__div}>
-                        {isMutatingFinishMeeting === false && (
-                          <button
-                            className={
-                              styles.content__flex__div__left__ul__div__btn
-                            }
-                            onClick={() => {
-                              dispatch({
-                                type: "flash/clearFlashMessage",
-                              });
-                              triggerFinishMeeting({
-                                id: data.body.id,
-                              });
-                            }}
-                          >
-                            Terminer
-                          </button>
-                        )}
-                        {isMutatingFinishMeeting === true && (
-                          <>
+                        </div>
+                      )}
+                      {data.body.discovery === false && (
+                        <div
+                          className={styles.content__flex__div__left__ul__div}
+                        >
+                          {isMutatingFinishMeeting === false && (
                             <button
-                              disabled
                               className={
-                                styles.content__flex__div__left__ul__div__btn__load
+                                styles.content__flex__div__left__ul__div__btn
                               }
+                              onClick={() => {
+                                dispatch({
+                                  type: "flash/clearFlashMessage",
+                                });
+                                triggerFinishMeeting({
+                                  id: data.body.id,
+                                });
+                              }}
                             >
-                              <span
+                              Terminer
+                            </button>
+                          )}
+                          {isMutatingFinishMeeting === true && (
+                            <>
+                              <button
+                                disabled
                                 className={
-                                  styles.content__flex__div__left__ul__div__btn__load__span
+                                  styles.content__flex__div__left__ul__div__btn__load
                                 }
                               >
-                                Chargement
-                              </span>
+                                <span
+                                  className={
+                                    styles.content__flex__div__left__ul__div__btn__load__span
+                                  }
+                                >
+                                  Chargement
+                                </span>
 
-                              <div
-                                className={
-                                  styles.content__flex__div__left__ul__div__btn__load__arc
-                                }
-                              >
                                 <div
                                   className={
-                                    styles.content__flex__div__left__ul__div__btn__load__arc__circle
+                                    styles.content__flex__div__left__ul__div__btn__load__arc
                                   }
-                                ></div>
-                              </div>
-                            </button>
-                          </>
-                        )}
+                                >
+                                  <div
+                                    className={
+                                      styles.content__flex__div__left__ul__div__btn__load__arc__circle
+                                    }
+                                  ></div>
+                                </div>
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </ul>
+              </div>
+              <div className={styles.content__flex__div__right}>
+                <h2
+                  className={`${styles.content__flex__div__right__h2} ${Parisienne.className}`}
+                >
+                  historique rendez-vous
+                </h2>
+                {data.body.allMeetings.length === 0 && (
+                  <>
+                    <>
+                      <div>
+                        <div className={styles.datatable__container__div}>
+                          <NbShow />
+                          <Search />
+                        </div>
                       </div>
-                    )}
+                      <Display />
+                      <Paging />
+                    </>
                   </>
                 )}
-              </ul>
-            </div>
-            <div className={styles.content__flex__div__right}>
-              <h2
-                className={`${styles.content__flex__div__right__h2} ${Parisienne.className}`}
-              >
-                historique rendez-vous
-              </h2>
-              {data.body.allMeetings.length === 0 && <p>Aucun rendez-vous</p>}
-              {data.body.allMeetings.length > 0 && datas !== null && (
-                <>
-                  <div>
-                    <div className={styles.datatable__container__div}>
-                      <NbShow />
-                      <Search />
+                {data.body.allMeetings.length > 0 && datas !== null && (
+                  <>
+                    <div>
+                      <div className={styles.datatable__container__div}>
+                        <NbShow />
+                        <Search />
+                      </div>
                     </div>
-                  </div>
-                  <Display />
-                  <Paging />
-                </>
-              )}
+                    <Display />
+                    <Paging />
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        </>
-      );
-    } else if (data.status === 401 || data.status === 403) {
-      dispatch({
-        type: "flash/storeFlashMessage",
-        payload: {
-          type: "error",
-          flashMessage: data.message,
-        },
-      });
-      router.push("/");
-    } else if (data.status === 404) {
-      dispatch({
-        type: "flash/storeFlashMessage",
-        payload: {
-          type: "error",
-          flashMessage: data.message,
-        },
-      });
-      router.push("/utilisateurs");
-    } else if (data.status === 400) {
-      data.message.forEach((element: string) => {
-        if (element[0] === "id") {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: "L'id de l'utilisateur n'as pas un format valide",
-            },
-          });
-        }
-      });
-      router.push("/utilisateurs");
-    } else if (data.status === 405) {
-      dispatch({
-        type: "flash/storeFlashMessage",
-        payload: {
-          type: "error",
-          flashMessage: data.message,
-        },
-      });
+          </>
+        );
+      }
     }
-  }
+  }, [
+    data,
+    datas,
+    dispatch,
+    isError,
+    isLoading,
+    isMutatingFinishMeeting,
+    router,
+    triggerAccept,
+    triggerAcceptOther,
+    triggerFinishMeeting,
+  ]);
+
   useEffect(() => {
     if (data && data.status === 200) {
       let copyOfItems = [...data.body.allMeetings];

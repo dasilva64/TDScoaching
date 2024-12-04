@@ -13,12 +13,9 @@
   &__type {
     padding: 0px 0 50px 0;
     &__h2 {
-      text-align: center;
       color: black;
       padding-top: 80px;
-      border-bottom: 1px solid orange;
       width: 550px;
-      font-size: 48px;
       margin: 0px auto 30px auto;
     }
     &__content {
@@ -31,18 +28,14 @@
   &__help {
     padding: 0px 0 50px 0;
     &__h2 {
-      text-align: center;
       color: black;
       padding-top: 80px;
-      border-bottom: 1px solid orange;
-      width: 400px;
-      font-size: 48px;
+      width: 300px;
       margin: 0px auto 30px auto;
     }
     &__p {
       padding: 30px 10% 50px 10%;
       text-align: center;
-      font-size: 18px;
       line-height: 1.4;
     }
     background-color: rgba(0, 0, 0, 0.03);
@@ -99,41 +92,10 @@
 }
 
 @media screen and (max-width: 1024px) {
-  .about {
-    &__certificate {
-      &__container {
-        &__line {
-          left: 30%;
-        }
-        &__card {
-          &__left {
-            position: unset;
-            margin: 10px 0px 10px 250px;
-            &__triangle {
-              left: -10px;
-              border-right: 10px solid #1dd6fc;
-              border-left: unset;
-            }
-            &__cercle {
-              top: 15px;
-              left: -62px;
-              width: 30px;
-              height: 30px;
-            }
-            &__date {
-              left: -140px;
-              width: 40px;
-            }
-          }
-        }
-      }
-    }
-    &__speciality {
-      &__container {
-        &__content {
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
-        }
+  .coaching {
+    &__help {
+      &__h2 {
+        width: 300px;
       }
     }
   }
@@ -148,7 +110,6 @@
     }
     &__type {
       &__h2 {
-        font-size: 36px;
         margin: 0px 5% 30px 5%;
         width: 90%;
       }
@@ -161,17 +122,13 @@
             font-size: 18px;
           }
         }
-        &__p {
-          font-size: 16px;
-        }
       }
     }
     &__help {
       padding: 0px 0 50px 0;
       &__h2 {
-        font-size: 36px;
-        margin: 0px 5% 30px 5%;
-        width: 90%;
+        margin: 0px auto 30px auto;
+        width: 280px;
       }
       &__container {
         grid-template-columns: 1fr;
@@ -179,7 +136,6 @@
       }
       &__p {
         padding: 30px 5% 50px 5%;
-        font-size: 16px;
       }
     }
     &__delivery {

@@ -15,7 +15,7 @@ export default function robots(): MetadataRoute.Robots {
         "/utilisateurs",
         "/reinitialisation-mot-de-passe/*",
       ],
-      allow: ["/", "/contact", "/tarif", "/qui-suis-je", "/coaching-de-vie"],
+      allow: ["/", "/contact", "/tarif", "/qui-suis-je", "/coaching-de-vie", "/blog"],
     },
     sitemap: "https://www.tdscoaching.fr/sitemap.xml",
   };

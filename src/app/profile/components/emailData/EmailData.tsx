@@ -2,21 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./EmailData.module.scss";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { AppDispatch, RootState } from "@/app/profile/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../../../components/fetch/FetchPost";
-import useGet from "../../../components/hook/useGet";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import localFont from "next/font/local";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-const Parisienne = localFont({
-  src: "../../../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const EmailCheck = ({ data: userData, mutate }: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -234,9 +228,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
                   height={30}
                 ></Image>
               </button>
-              <h2
-                className={`${styles.modalEditEmailSendData__h1} ${Parisienne.className}`}
-              >
+              <h2 className={`${styles.modalEditEmailSendData__h1}`}>
                 Validation de votre nouvel email {userData.body.newEmail}
               </h2>
               <p>

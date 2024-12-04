@@ -11,6 +11,7 @@
     background-color: orange;
     border-radius: 20px;
     z-index: 100;
+    font-size: clamp(20px, 26px, 4vw) !important;
   }
   &__container {
     width: 100%;
@@ -18,7 +19,7 @@
     perspective: 2000px;
     &__couple {
       width: 100%;
-      height: 430px;
+      height: 450px;
       perspective: 2000px;
     }
   }
@@ -87,11 +88,10 @@
     justify-content: space-around;
   }
   &__p {
-    font-size: 18px;
     line-height: 1.4;
   }
   &__margin {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
   }
 }
 
@@ -99,9 +99,6 @@
   .card {
     &__back {
       padding: 10px 20px;
-    }
-    &__p {
-      font-size: 16px;
     }
   }
 }

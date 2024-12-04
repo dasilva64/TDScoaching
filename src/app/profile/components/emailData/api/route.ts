@@ -3,9 +3,9 @@ import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import validator from "validator";
 import nodemailer from "nodemailer";
-import prisma from "../../../../../../lib/prisma";
-import { SessionData, sessionOptions } from "../../../../../../lib/session";
-import { validationBody } from "../../../../../../lib/validation";
+import prisma from "../../../../lib/prisma";
+import { SessionData, sessionOptions } from "../../../../lib/session";
+import { validationBody } from "../../../../lib/validation";
 import { Prisma } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: session.id },
+      where: { id: validator.escape(session.id) },
     });
     if (user === null) {
       session.destroy();
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
             } else {
               if (copyEditEmail.limitDate > new Date()) {
                 let removeEditEmail = await prisma.user.update({
-                  where: { id: user.id },
+                  where: { id: validator.escape(user.id) },
                   data: {
                     editEmail: Prisma.JsonNull,
                   },
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
                 );
               }
               let editUser = await prisma.user.update({
-                where: { id: user.id },
+                where: { id: validator.escape(user.id) },
                 data: {
                   mail: validator.escape(copyEditEmail.newEmail),
                   editEmail: Prisma.JsonNull,
@@ -162,10 +162,9 @@ export async function POST(request: NextRequest) {
                 );
               } else {
                 let userObject = {
-                  firstname: editUser.firstname,
-                  lastname: editUser.lastname,
-                  email: editUser.mail,
-                  twoFactor: editUser.twoFactor,
+                  firstname: validator.escape(editUser.firstname),
+                  lastname: validator.escape(editUser.lastname),
+                  email: validator.escape(editUser.mail),
                 };
                 return NextResponse.json({
                   status: 200,

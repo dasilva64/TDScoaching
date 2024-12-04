@@ -1,0 +1,53 @@
+.card {
+  min-height: 100%;
+  border-radius: 10px;
+  box-shadow: 0px 0px 7px 4px aqua;
+  display: block;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  &__div {
+    padding: 10px;
+    &__btn {
+      display: inline-block;
+      margin: 20px auto 0px auto;
+      cursor: pointer;
+      border: 2px solid orange;
+      padding: 10px 20px;
+      background-color: white;
+      color: black;
+      text-decoration: none;
+      border-radius: 10px;
+      position: relative;
+      left: 50%;
+      transform: translate(-50%);
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        background-color: orange;
+        transform: translate(-50%) scale(1.05);
+        color: black;
+      }
+    }
+  }
+
+  &__img {
+    min-height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    transform: scale3d(1, 1, 1);
+    transition: transform 400ms ease-in-out;
+    object-fit: cover;
+    height: auto;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    min-width: 400px;
+    &:hover {
+      transform: scale(1.1);
+      transition: transform 400ms ease-in-out;
+    }
+  }
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 14px 8px aqua;
+  }
+}

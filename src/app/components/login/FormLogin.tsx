@@ -8,13 +8,8 @@ import fetchPost from "../fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { mutate } from "swr";
-import localFont from "next/font/local";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
-const Parisienne = localFont({
-  src: "../../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const FormLogin = () => {
   const { displayModalLogin } = useSelector(
@@ -62,36 +57,6 @@ const FormLogin = () => {
     setErrorMessagePassword("");
   };
 
-  /* const {
-    data: dataReSendCode,
-    trigger: triggerReSendCode,
-    reset: resetReSendCode,
-    isMutating: isMutatingReSendCode,
-  } = useSWRMutation("/components/login/api/sendTwoFactorCode", fetchPost);
-  useEffect(() => {
-    if (dataReSendCode) {
-      if (dataReSendCode.status === 200) {
-        if (isMutatingReSendCode === false) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "success", flashMessage: dataReSendCode.message },
-          });
-          setReSendCode(false);
-          setValidCodeInput(false);
-          setCodeInput("");
-          resetReSendCode();
-        }
-      } else {
-        if (isMutatingReSendCode === false) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: dataReSendCode.message },
-          });
-        }
-      }
-    }
-  }, [dataReSendCode, dispatch, isMutatingReSendCode, resetReSendCode]); */
-
   const closeForm = () => {
     clearState();
     dispatch({
@@ -107,15 +72,6 @@ const FormLogin = () => {
   useEffect(() => {
     if (loginData) {
       if (loginData.status === 200) {
-        /* if (loginData.body === null) {
-          setDisplayInput(true);
-          setIsLoading(false);
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "success", flashMessage: loginData.message },
-          });
-          resetLogin();
-        } else { */
         mutate("/components/header/api");
         clearState();
         dispatch({
@@ -126,7 +82,6 @@ const FormLogin = () => {
           payload: { type: "success", flashMessage: loginData.message },
         });
         resetLogin();
-        // }
       } else if (loginData.status === 400) {
         if (loginData.type === "validation") {
           setTimeout(() => {
@@ -162,23 +117,7 @@ const FormLogin = () => {
               dispatch({ type: "ModalRegister/open" });
               resetLogin();
             }, 1000);
-          } /* else if (
-            loginData.message ===
-            "Votre compte n'est pas encore validé, veuillez vérifier votre boite mail"
-          ) {
-            setTimeout(() => {
-              setPasswordInput("");
-              setValidPasswordInput(false);
-              setIsLoading(false);
-              setReSendEmail(true);
-              setOtherEmail(emailInput);
-              dispatch({
-                type: "flash/storeFlashMessage",
-                payload: { type: "error", flashMessage: loginData.message },
-              });
-              resetLogin();
-            }, 1000);
-          } */ else {
+          } else {
             setTimeout(() => {
               setIsLoading(false);
               setPasswordInput("");
@@ -215,11 +154,12 @@ const FormLogin = () => {
         }
       }
     } else {
-      if (validEmailInput === false) {
-        if (emailInput.length === 0) {
-          setErrorMessageEmail("Email : ne peut pas être vide");
-        }
+      if (emailInput.length === 0) {
+        setErrorMessageEmail("Email : ne peut pas être vide");
+      } else {
+        setErrorMessageEmail("");
       }
+
       if (validPasswordInput === false) {
         if (passwordInput.length === 0) {
           setErrorMessagePassword("Mot de passe : ne peut pas être vide");
@@ -257,117 +197,6 @@ const FormLogin = () => {
       setErrorMessage(errorMessage);
     }
   };
-
-  /* const {
-    data: dataTwoFactor,
-    trigger: triggerTwoFactor,
-    reset: resetTwoFactor,
-  } = useSWRMutation("/components/login/api/loginTwoFactor", fetchPost);
-  useEffect(() => {
-    if (dataTwoFactor) {
-      if (dataTwoFactor.status === 200) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: dataTwoFactor.message },
-        });
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      } else {
-        if (
-          dataTwoFactor.message ===
-          "Le code n'est plus valide, veuillez réessayer"
-        ) {
-          setTimeout(() => {
-            setIsLoading(false);
-            setReSendCode(true);
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "error", flashMessage: dataTwoFactor.message },
-            });
-          }, 2000);
-        } else {
-          setTimeout(() => {
-            setIsLoading(false);
-            setReSendCode(true);
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "error", flashMessage: dataTwoFactor.message },
-            });
-          }, 2000);
-        }
-      }
-    }
-  }, [dataTwoFactor, dispatch]); */
-  /* const handlerSubmitCode = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validCodeInput === true) {
-      if (inputPseudo.length === 0) {
-        setIsLoading(true);
-        const fetchLogin = async () => {
-          triggerTwoFactor({
-            email: validator.escape(emailInput.trim()),
-            password: validator.escape(passwordInput.trim()),
-            remember: rememberMeInput,
-            pseudo: validator.escape(inputPseudo.trim()),
-            code: codeInput,
-          }); */
-  /* let response = await fetch("/components/login/api/loginTwoFactor", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: validator.escape(emailInput.trim()),
-              password: validator.escape(passwordInput.trim()),
-              remember: rememberMeInput,
-              pseudo: validator.escape(inputPseudo.trim()),
-              code: codeInput,
-            }),
-          });
-          let json = await response.json();
-          if (json) {
-            if (json.status === 200) {
-              dispatch({
-                type: "flash/storeFlashMessage",
-                payload: { type: "success", flashMessage: json.message },
-              });
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
-            } else {
-              if (
-                json.message === "Le code n'est plus valide, veuillez réessayer"
-              ) {
-                setTimeout(() => {
-                  setIsLoading(false);
-                  setReSendCode(true);
-                  dispatch({
-                    type: "flash/storeFlashMessage",
-                    payload: { type: "error", flashMessage: json.message },
-                  });
-                }, 2000);
-              } else {
-                setTimeout(() => {
-                  setIsLoading(false);
-                  setReSendCode(true);
-                  dispatch({
-                    type: "flash/storeFlashMessage",
-                    payload: { type: "error", flashMessage: json.message },
-                  });
-                }, 2000);
-              }
-            }
-          } */
-  /* };
-        fetchLogin();
-      }
-    } else {
-      if (validCodeInput === false) {
-        setErrorMessageCode("Code : ne doit pas être vide");
-      }
-    }
-  }; */
   return (
     <>
       <TabIndex displayModal={displayModalLogin} />
@@ -411,9 +240,7 @@ const FormLogin = () => {
                   height={30}
                 ></Image>
               </button>
-              <h2 className={`${styles.login__h1} ${Parisienne.className}`}>
-                Se connecter
-              </h2>
+              <h2 className={`${styles.login__h1}`}>Se connecter</h2>
               {displayInput === false && (
                 <form
                   className={styles.login__form}
@@ -440,7 +267,7 @@ const FormLogin = () => {
                         setValidEmailInput,
                         setErrorMessageEmail,
                         setEmailInput,
-                        "Email : ne peut pas être vide"
+                        "Email : doit avoir le format email@mail.com"
                       );
                     }}
                     validInput={validEmailInput}
@@ -542,7 +369,6 @@ const FormLogin = () => {
                   </div>
                 </form>
               )}
-              {/* {displayInput === false && ( */}
               <>
                 <div className={styles.login__forgot}>
                   <button
@@ -575,119 +401,6 @@ const FormLogin = () => {
                   </button>
                 </div>
               </>
-              {/*  )} */}
-              {/* {displayInput === true && (
-                <>
-                  <p>
-                    L&apos;authentification à deux facteur est activé pour votre
-                    compte
-                  </p>
-                  <form
-                    className={styles.login__form}
-                    onSubmit={(e) => {
-                      handlerSubmitCode(e);
-                    }}
-                  >
-                    <TextField
-                      autoFocus
-                      value={codeInput}
-                      style={{ margin: "20px 0px 0px 0px" }}
-                      id={"code"}
-                      label={"Code"}
-                      variant="standard"
-                      type={"text"}
-                      placeholder={"Entrez votre code"}
-                      FormHelperTextProps={{ style: { color: "red" } }}
-                      onChange={(e) => {
-                        handlerInput(
-                          e,
-                          "firstname",
-                          /^[0-9]{8,8}$/,
-                          setValidCodeInput,
-                          setErrorMessageCode,
-                          setCodeInput,
-                          "Code : 8 chiffres"
-                        );
-                      }}
-                      helperText={errorMessageCode}
-                    />
-                    <div className={styles.login__form__submit}>
-                      {isLoading === false && (
-                        <input
-                          className={styles.login__form__submit__btn}
-                          type="submit"
-                          value="Vérifier le code"
-                        />
-                      )}
-                      {isLoading === true && (
-                        <button
-                          disabled
-                          className={styles.login__form__submit__btn__load}
-                        >
-                          <span
-                            className={
-                              styles.login__form__submit__btn__load__span
-                            }
-                          >
-                            Chargement
-                          </span>
-
-                          <div
-                            className={
-                              styles.login__form__submit__btn__load__arc
-                            }
-                          >
-                            <div
-                              className={
-                                styles.login__form__submit__btn__load__arc__circle
-                              }
-                            ></div>
-                          </div>
-                        </button>
-                      )}
-                    </div>
-                  </form>
-                  {reSendCode === true && (
-                    <div className={styles.login__forgot}>
-                      {isMutatingReSendCode === false && (
-                        <button
-                          className={styles.login__forgot__btn}
-                          onClick={() => {
-                            triggerReSendCode({
-                              email: validator.escape(emailInput.trim()),
-                              password: validator.escape(passwordInput.trim()),
-                              pseudo: validator.escape(inputPseudo.trim()),
-                            });
-                          }}
-                        >
-                          Renvoyer un code
-                        </button>
-                      )}
-
-                      {isMutatingReSendCode === true && (
-                        <button
-                          disabled
-                          className={styles.login__forgot__btn__load}
-                        >
-                          <span
-                            className={styles.login__forgot__btn__load__span}
-                          >
-                            Chargement
-                          </span>
-
-                          <div className={styles.login__forgot__btn__load__arc}>
-                            <div
-                              className={
-                                styles.login__forgot__btn__load__arc__circle
-                              }
-                            ></div>
-                          </div>
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </>
-              )} */}
             </motion.div>
           </>
         )}
@@ -697,7 +410,3 @@ const FormLogin = () => {
 };
 
 export default FormLogin;
-
-///^(?=.*[a-zéèàùâûîiïüäÀÂÆÁÄÃÅĀÉÈÊËĘĖĒÎÏÌÍĮĪÔŒºÖÒÓÕØŌŸÿªæáãåāëęėēúūīįíìi]).{1,}$/,
-///^[a-zA-ZÀ-ÿ0-9-?!*:@~%)(.;+{"|$#}=['&,_]{1,}$/,
-///^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{1,}$/,

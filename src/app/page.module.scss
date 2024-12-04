@@ -16,12 +16,9 @@
     padding-bottom: 40px;
     margin: 0px 10% 50px 10%;
     &__h2 {
-      text-align: center;
       color: black;
       padding-top: 80px;
-      border-bottom: 1px solid orange;
       width: 431px;
-      font-size: 48px;
       margin: 0px auto 30px auto;
     }
     &__container {
@@ -37,12 +34,9 @@
     &__container {
       margin: 0 10% 0 10%;
       &__h2 {
-        text-align: center;
         color: black;
         padding-top: 80px;
-        border-bottom: 1px solid orange;
         width: 353px;
-        font-size: 48px;
         margin: 0px auto 30px auto;
       }
       &__content {
@@ -83,11 +77,9 @@
           justify-content: space-around;
           flex: 1;
           &__p {
-            font-size: 18px;
             line-height: 1.4;
           }
           &__ul {
-            font-size: 18px;
             padding: 21px 0px 21px 40px;
           }
         }
@@ -98,16 +90,12 @@
     padding: 0px 0 50px 0;
     margin: 0 10% 0 10%;
     &__h2 {
-      text-align: center;
       color: black;
       padding-top: 80px;
-      border-bottom: 1px solid orange;
       width: 353px;
-      font-size: 48px;
       margin: 0px auto 30px auto;
     }
     &__p {
-      font-size: 18px;
       line-height: 1.4;
       margin-bottom: 30px;
     }
@@ -146,79 +134,10 @@
           }
         }
         &__h3 {
-          font-size: 32px;
           margin-bottom: 20px;
         }
         &__p {
-          font-size: 18px;
           line-height: 1.4;
-        }
-      }
-    }
-  }
-  &__article {
-    background-color: rgba(0, 0, 0, 0.04);
-    padding: 0px 0 50px 0;
-    &__container {
-      margin: 0 10% 0 10%;
-      &__div {
-        margin-top: 40px;
-        text-align: center;
-        &__btn {
-          padding: 10px;
-          background-color: orange;
-          cursor: pointer;
-          border-radius: 10px;
-          color: black;
-          &:hover {
-            transform: scale(1.05);
-          }
-        }
-      }
-      &__h2 {
-        text-align: center;
-        color: black;
-        padding-top: 80px;
-        border-bottom: 1px solid orange;
-        width: 353px;
-        font-size: 48px;
-        margin: 0px auto 30px auto;
-      }
-      &__content {
-        margin-top: 40px;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        column-gap: 40px;
-        &__card {
-          min-height: 100%;
-          border-radius: 10px;
-          box-shadow: 0px 0px 14px 5px aqua;
-          display: block;
-          overflow: hidden;
-          &__div {
-            padding: 10px;
-            &__h2 {
-              font-size: 32px;
-            }
-          }
-
-          &__img {
-            min-height: 100%;
-            display: inline-block;
-            vertical-align: middle;
-            transform: scale3d(1, 1, 1);
-            transition: transform 400ms ease-in-out;
-            object-fit: cover;
-            height: auto;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            min-width: 400px;
-            &:hover {
-              transform: scale(1.1);
-              transition: transform 400ms ease-in-out;
-            }
-          }
         }
       }
     }
@@ -235,10 +154,8 @@
     margin: 200px 10% 50px 10%;
     &__h1 {
       padding-top: 20px;
-      font-size: 48px;
     }
     &__h2 {
-      font-size: 48px;
       margin-bottom: 20px;
     }
     &__article {
@@ -248,7 +165,6 @@
         transform: translateX(-50%);
       }
       &__p {
-        font-size: 20px;
         text-align: center;
         margin-top: 30px;
       }
@@ -263,6 +179,8 @@
           cursor: pointer;
           border-radius: 10px;
           color: white;
+          transform: scale(1);
+          transition: all 0.3s;
           &:hover {
             transform: scale(1.05);
           }
@@ -315,6 +233,10 @@
           margin-bottom: 30px;
           &__h3 {
             margin-bottom: 20px;
+            width: 500px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
           }
         }
       }
@@ -330,18 +252,15 @@
         }
       }
     }
-    &__article {
-      &__container {
-        &__content {
-          grid-template-columns: repeat(1, 1fr);
-          gap: 40px;
-        }
-      }
-    }
   }
 }
 
 @media screen and (max-width: 768px) {
+  .notfound {
+    &__container {
+      margin: 160px 10% 50px 10%;
+    }
+  }
   .home {
     &__bg {
       height: 400px;
@@ -351,104 +270,27 @@
       }
       &__container {
         padding: 40px 0 40px 40px;
-        &__h1 {
-          font-size: 36px;
-        }
-        &__p {
-          font-size: 16px;
-        }
-        &__btn {
-          font-size: 16px;
-        }
-      }
-      &__test {
-        position: absolute;
-        top: 50%;
-        left: -100px;
-        transform: translate(0px, -50%);
-        &__btn {
-          position: relative;
-          font-size: 18px;
-          right: -50px;
-          cursor: pointer;
-          padding: 10px;
-          border: 2px solid aqua;
-          color: black;
-          border-radius: 10px;
-          background-color: white;
-          transform: rotate(90deg) translateY(0px);
-          transition: transition 400ms;
-        }
-        &:hover {
-          width: 100%;
-        }
-        &:hover .home__bg__container {
-          transform: translate(100px, -50%);
-          height: 400px;
-          width: 100%;
-        }
       }
     }
     &__what {
       &__container {
         margin: 0 5% 0 5%;
-        &__h2 {
-          font-size: 36px;
-        }
-        &__content {
-          &__div {
-            &__p {
-              font-size: 16px;
-            }
-            &__ul {
-              font-size: 16px;
-            }
-          }
-        }
       }
     }
     &__who {
       margin: 0 5% 0 5%;
-      &__h2 {
-        font-size: 36px;
-      }
-      &__p {
-        font-size: 16px;
-      }
       &__content {
         &__div {
           &__h3 {
-            font-size: 26px;
-          }
-          &__p {
-            font-size: 16px;
+            width: 390px;
           }
         }
       }
     }
     &__goal {
       margin: 0 5% 0 5%;
-      &__h2 {
-        font-size: 36px;
-      }
       &__container {
         grid-template-columns: 1fr;
-      }
-    }
-    &__article {
-      &__container {
-        &__h2 {
-          font-size: 36px;
-        }
-        &__content {
-          &__card {
-            &__div {
-              &__h2 {
-                font-size: 26px;
-              }
-            }
-          }
-        }
       }
     }
   }
@@ -459,13 +301,6 @@
     &__goal {
       &__h2 {
         width: 100%;
-      }
-    }
-    &__article {
-      &__container {
-        &__h2 {
-          width: 100%;
-        }
       }
     }
   }
@@ -485,6 +320,13 @@
         padding-top: 80px;
         margin-bottom: 30px;
         width: 280px;
+      }
+      &__content {
+        &__div {
+          &__h3 {
+            width: 280px;
+          }
+        }
       }
     }
     &__what {

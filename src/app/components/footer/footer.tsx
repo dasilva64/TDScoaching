@@ -86,16 +86,17 @@ const Footer = () => {
         <h2 className={styles.footer__h2}>Nous retrouver</h2>
         <ul className={`${styles.footer__ul} ${styles.footer__ul__lineHeight}`}>
           <li className={styles.footer__li}>
-            Mail :{" "}
+            Mail :&nbsp;
             <Link
               className={`${styles.footer__a} modalOpen`}
               href="mailto:contact@tds-coachingdevie.fr"
             >
+              {" "}
               contact@tds-coachingdevie.fr
             </Link>
           </li>
           <li className={styles.footer__li}>
-            Tel :{" "}
+            Tel :&nbsp;
             <Link
               className={`${styles.footer__a} modalOpen`}
               href="tel:+33781673125"
@@ -108,9 +109,9 @@ const Footer = () => {
             Horaire : 8h - 20h du lundi au vendredi
           </li>
           <li className={styles.footer__li}>
-            <strong className={styles.footer__strong}>Bordeaux</strong>,{" "}
-            <strong className={styles.footer__strong}>Chambery</strong>,{" "}
-            <strong className={styles.footer__strong}>Lyon</strong>
+            <p className={styles.footer__strong}>Bordeaux</p>,&nbsp;
+            <p className={styles.footer__strong}>Chambery</p>,&nbsp;
+            <p className={styles.footer__strong}>Lyon</p>
           </li>
         </ul>
         <GoTop />

@@ -14,8 +14,12 @@ export const metadata = {
   },
 };
 
-const Profile = async () => {
-  return <Content />;
+const Profile = () => {
+  return (
+    <>
+      <Content />
+    </>
+  );
 };
 
 export default Profile;

@@ -4,11 +4,6 @@ import React, { useState } from "react";
 import styles from "./About.module.scss";
 import Link from "next/link";
 import Image from "next/image";
-import localFont from "next/font/local";
-const Parisienne = localFont({
-  src: "../../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const About = () => {
   const [open, setOpen] = useState(false);
@@ -18,9 +13,7 @@ const About = () => {
         styles.about
       }`}
     >
-      <h2 className={`${styles.about__h1} ${Parisienne.className}`}>
-        Thierry Da Silva
-      </h2>
+      <h2 className={`${styles.about__h1}`}>Thierry Da Silva</h2>
       <p className={styles.about__p}>
         Coach professionnel certifié, je vous accompagne dans votre
       </p>

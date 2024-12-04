@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
-import prisma from "../../../../../../../lib/prisma";
-import { SessionData, sessionOptions } from "../../../../../../../lib/session";
+import prisma from "../../../../../lib/prisma";
+import { SessionData, sessionOptions } from "../../../../../lib/session";
 import validator from "validator";
 import nodemailer from "nodemailer";
-import { validationBody } from "../../../../../../../lib/validation";
+import { validationBody } from "../../../../../lib/validation";
 import { Prisma } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: session.id },
+      where: { id: validator.escape(session.id) },
     });
     if (user === null) {
       session.destroy();
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
           let copyEditEmail: any = user.editEmail;
           let now = new Date();
           let editUser = await prisma.user.update({
-            where: { mail: user.mail },
+            where: { mail: validator.escape(user.mail) },
             data: {
               editEmail: Prisma.JsonNull,
             },
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
               let max = 99999999;
               let random = Math.floor(Math.random() * (max - min)) + min;
               let editUser = await prisma.user.update({
-                where: { mail: user.mail },
+                where: { mail: validator.escape(user.mail) },
                 data: {
                   editEmail: {
                     limitDate: now.setMinutes(now.getMinutes() + 30),
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
                 let copyEditEmail: any = editUser.editEmail;
                 let mailOptions = {
                   from: "contact@tds-coachingdevie.fr",
-                  to: copyEditEmail.newEmail,
+                  to: validator.escape(copyEditEmail.newEmail),
                   subject: "Validation de votre nouvelle adresse email",
                   html: `<!DOCTYPE html>
                               <html lang="fr">
@@ -167,11 +167,10 @@ export async function POST(request: NextRequest) {
                 await smtpTransport.sendMail(mailOptions);
 
                 let userObject = {
-                  firstname: editUser.firstname,
-                  lastname: editUser.lastname,
-                  email: editUser.mail,
-                  newEmail: copyEditEmail.newEmail,
-                  twoFactor: editUser.twoFactor,
+                  firstname: validator.escape(editUser.firstname),
+                  lastname: validator.escape(editUser.lastname),
+                  email: validator.escape(editUser.mail),
+                  newEmail: validator.escape(copyEditEmail.newEmail),
                 };
 
                 return NextResponse.json({
@@ -219,7 +218,7 @@ export async function POST(request: NextRequest) {
             let max = 99999999;
             let random = Math.floor(Math.random() * (max - min)) + min;
             let editUser = await prisma.user.update({
-              where: { mail: user.mail },
+              where: { mail: validator.escape(user.mail) },
               data: {
                 editEmail: {
                   limitDate: now.setMinutes(now.getMinutes() + 30),
@@ -253,7 +252,7 @@ export async function POST(request: NextRequest) {
               let copyEditEmail: any = editUser.editEmail;
               let mailOptions = {
                 from: "contact@tds-coachingdevie.fr",
-                to: copyEditEmail.newEmail,
+                to: validator.escape(copyEditEmail.newEmail),
                 subject: "Validation de votre nouvelle adresse email",
                 html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -285,11 +284,10 @@ export async function POST(request: NextRequest) {
               await smtpTransport.sendMail(mailOptions);
 
               let userObject = {
-                firstname: editUser.firstname,
-                lastname: editUser.lastname,
-                email: editUser.mail,
-                newEmail: copyEditEmail.newEmail,
-                twoFactor: editUser.twoFactor,
+                firstname: validator.escape(editUser.firstname),
+                lastname: validator.escape(editUser.lastname),
+                email: validator.escape(editUser.mail),
+                newEmail: validator.escape(copyEditEmail.newEmail),
               };
 
               return NextResponse.json({

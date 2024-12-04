@@ -1,67 +1,50 @@
 "use client";
 
 import { configureStore } from "@reduxjs/toolkit";
-import form from "./feature/form";
-import flash from "./feature/flash";
+import flash from "./feature/global/flash";
 import Array from "./feature/Array";
 import ArrayMeeting from "./feature/ArrayMeeting";
 import ArrayMeetingByUser from "./feature/ArrayMeetingByUser";
-import ArrayHistorique from "./feature/ArrayHistorique";
-import menu from "./feature/menu";
 import ModalLogin from "./feature/modal/ModalLogin";
 import ModalRegister from "./feature/modal/ModalRegister";
 import ModalForgot from "./feature/modal/ModalForgot";
-import ModalEditFirstname from "./feature/modal/ModalEditFirstname";
-import ModalEditLastname from "./feature/modal/ModalEditLastname";
-import ModalEditPassword from "./feature/modal/ModalEditPassword";
-import ModalSendTokenEmail from "./feature/modal/ModalSendTokenEmail";
-import ModalEditEmail from "./feature/modal/ModalEditEmail";
-import ModalCancelEmail from "./feature/modal/ModalCancelEmail";
-import ModalEditTwoFactor from "./feature/modal/ModalEditTwoFactor";
-import ModalDeleteAccount from "./feature/modal/ModalDeleteAccount";
-import ModalAddDiscoveryMeeting from "./feature/modal/ModalAddDiscoveryMeeting";
 import ModalDeleteDiscoveryMeeting from "./feature/modal/ModalDeleteDiscoveryMeeting";
 import ModalEditDiscoveryMeeting from "./feature/modal/ModalEditDiscoveryMeeting";
-import Mobile from "./feature/Mobile";
-import ModalEditFormule from "./feature/modal/ModalEditFormule";
-import ModalDatePicker from "./feature/modal/ModalDatePicker";
-import ModalAddMeeting from "./feature/modal/ModalAddMeeting";
-import ModalCancelMeeting from "./feature/modal/ModalCancelMeeting";
-import ModalEditMeeting from "./feature/modal/ModalEditMeeting";
-import ModalDatePickerDiscovery from "./feature/modal/ModalDatePickerDiscovery";
-import ModalDatePickerEditDiscovery from "./feature/modal/ModalDatePickerEditDiscovery";
-import ModalDatePickerEdit from "./feature/modal/ModalDatePickerEdit";
-import ModalDeleteMeeting from "./feature/modal/ModalDeleteMeeting";
-import ModalAddMeetingAdmin from "./feature/modal/ModalAddMeetingAdmin";
-import ModalCancelTwoFactor from "./feature/modal/ModalCancelTwoFactor";
-import ModalSendTokenTwoFactor from "./feature/modal/ModalSendTokenTwoFactor";
-import ModalComfirmDisableTwoFactor from "./feature/modal/ModalComfirmDisableTwoFactor";
-import ModalDiscovery from "./feature/modal/ModalDiscovery";
-import ModalNormal from "./feature/modal/ModalNormal";
-import ModalSurMesure from "./feature/modal/ModalSurMesure";
-import ModalContract from "./feature/modal/ModalContract";
-import ModalComfirmDeleteContrat from "./feature/modal/ModalComfirmDeleteContrat";
-import ModalComfirmEditContrat from "./feature/modal/ModalComfirmEditContrat";
-import article from "./feature/article";
+import ModalDiscovery from "./feature/tarif/ModalDiscovery";
+import ModalNormal from "./feature/tarif/ModalNormal";
 import ModalNavAdmin from "./feature/modal/ModalNavAdmin";
 import ModalNav from "./feature/modal/ModalNav";
 import ModalElement from "./feature/modal/ModalElement";
 import ModalNavUser from "./feature/modal/ModalNavUser";
+import ModalCalendarDiscovery from "./feature/modal/ModalCalendarDiscovery";
+import ModalAddDiscovery from "./feature/modal/ModalAddDiscovery";
+import ModalCalendarEditDiscovery from "./feature/modal/ModalCalendarEditDiscovery";
+import ModalEditTypeDiscovery from "./feature/modal/ModalEditTypeDiscovery";
+import ModalDiscoveryMeetingTest from "./feature/modal/meeting/discovery/ModalDiscoveryMeetingTest";
+import ModalAddDiscoveryMeetingTest from "./feature/modal/meeting/discovery/ModalAddDiscoveryMeetingTest";
+import ModalEditDiscoveryMeetingTest from "./feature/modal/meeting/discovery/ModalEditCalendarDiscoveryMeetingTest";
+import ModalRecapDiscoveryMeeting from "./feature/modal/meeting/discovery/ModalRecapDiscoveryMeeting";
+import ModalCalendarEditDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalCalendarEditDiscoveryMeetingRendezVousToken";
+import ModalConfirmDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalConfirmDiscoveryMeetingRendezVousToken";
+import ModalDeleteDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalDeleteDiscoveryMeetingRendezVousToken";
+import ModalEditDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalEditDiscoveryMeetingRendezVousToken";
+import ModalEditFirstname from "./feature/profile/ModalEditFirstname";
+import ModalEditLastname from "./feature/profile/ModalEditLastname";
+import ModalCancelEmail from "./feature/profile/ModalCancelEmail";
+import ModalDeleteAccount from "./feature/profile/ModalDeleteAccount";
+import ModalEditEmail from "./feature/profile/ModalEditEmail";
+import ModalEditPassword from "./feature/profile/ModalEditPassword";
+import ModalSendTokenEmail from "./feature/profile/ModalSendTokenEmail";
+import menu from "./feature/header/menu";
 
 export const store = configureStore({
   reducer: {
-    //auth: auth.reducer,
-    /*
-    
-    ArrayMeeting: ArrayMeeting.reducer,
-    ArrayHistorique: ArrayHistorique.reducer,*/
     flash: flash.reducer,
     ArrayMeetingByUser: ArrayMeetingByUser.reducer,
     Array: Array.reducer,
-    menu: menu.reducer,
-    Mobile: Mobile.reducer,
     ModalLogin: ModalLogin.reducer,
     ModalRegister: ModalRegister.reducer,
+    ArrayMeeting: ArrayMeeting.reducer,
     ModalForgot: ModalForgot.reducer,
     ModalEditFirstname: ModalEditFirstname.reducer,
     ModalEditLastname: ModalEditLastname.reducer,
@@ -72,39 +55,27 @@ export const store = configureStore({
     ModalDeleteAccount: ModalDeleteAccount.reducer,
     ModalDiscovery: ModalDiscovery.reducer,
     ModalNormal: ModalNormal.reducer,
-    article: article.reducer,
     ModalNavAdmin: ModalNavAdmin.reducer,
     ModalNavUser: ModalNavUser.reducer,
     ModalNav: ModalNav.reducer,
     ModalElement: ModalElement.reducer,
-    /*ModalEditFormule: ModalEditFormule.reducer,
-    
-    ModalEditTwoFactor: ModalEditTwoFactor.reducer,
-    ModalCancelMeeting: ModalCancelMeeting.reducer,
-    
-    
-    ModalCancelTwoFactor: ModalCancelTwoFactor.reducer,
-    
-    
-    ModalDatePickerDiscovery: ModalDatePickerDiscovery.reducer,
-    ModalAddMeetingAdmin: ModalAddMeetingAdmin.reducer,
-    ModalAddDiscoveryMeeting: ModalAddDiscoveryMeeting.reducer,
-    ModalAddMeeting: ModalAddMeeting.reducer,
-    ModalDatePicker: ModalDatePicker.reducer,
+    ModalCalendarDiscovery: ModalCalendarDiscovery.reducer,
+    ModalCalendarEditDiscovery: ModalCalendarEditDiscovery.reducer,
+    ModalAddDiscovery: ModalAddDiscovery.reducer,
     ModalDeleteDiscoveryMeeting: ModalDeleteDiscoveryMeeting.reducer,
-    ModalDeleteMeeting: ModalDeleteMeeting.reducer,
     ModalEditDiscoveryMeeting: ModalEditDiscoveryMeeting.reducer,
-    ModalEditMeeting: ModalEditMeeting.reducer,
-    ModalDatePickerEditDiscovery: ModalDatePickerEditDiscovery.reducer,
-    ModalDatePickerEdit: ModalDatePickerEdit.reducer,
-    ModalSendTokenTwoFactor: ModalSendTokenTwoFactor.reducer,
-    ModalComfirmDisableTwoFactor: ModalComfirmDisableTwoFactor.reducer,
-    
-    
-    ModalSurMesure: ModalSurMesure.reducer,
-    ModalContract: ModalContract.reducer,
-    ModalComfirmDeleteContrat: ModalComfirmDeleteContrat.reducer,
-    ModalComfirmEditContrat: ModalComfirmEditContrat.reducer, */
+    ModalEditTypeDiscovery: ModalEditTypeDiscovery.reducer,
+    ModalDiscoveryMeetingTest: ModalDiscoveryMeetingTest.reducer,
+    ModalAddDiscoveryMeetingTest: ModalAddDiscoveryMeetingTest.reducer,
+    ModalEditDiscoveryMeetingTest: ModalEditDiscoveryMeetingTest.reducer,
+    ModalRecapDiscoveryMeeting: ModalRecapDiscoveryMeeting.reducer,
+    //header
+    menu: menu.reducer,
+    // Rendez-vous/token
+    ModalCalendarEditDiscoveryMeetingRendezVousToken: ModalCalendarEditDiscoveryMeetingRendezVousToken.reducer,
+    ModalConfirmDiscoveryMeetingRendezVousToken: ModalConfirmDiscoveryMeetingRendezVousToken.reducer,
+    ModalDeleteDiscoveryMeetingRendezVousToken: ModalDeleteDiscoveryMeetingRendezVousToken.reducer,
+    ModalEditDiscoveryMeetingRendezVousToken: ModalEditDiscoveryMeetingRendezVousToken.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

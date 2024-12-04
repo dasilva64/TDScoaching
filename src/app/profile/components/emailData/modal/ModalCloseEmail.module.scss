@@ -23,8 +23,10 @@
   &__h1 {
     color: black;
     margin: 40px 0px;
-    text-align: center;
-    font-size: 48px;
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
   }
   &__reSend {
     text-align: center;
@@ -85,18 +87,12 @@
     padding: 40px 20px;
     width: 300px;
     box-shadow: 2px 2px 2px 2px black;
-    &__h1 {
-      font-size: 26px;
-    }
   }
 }
 
 @media screen and (max-width: 768px) {
   .modalCloseEmail {
     width: 80%;
-    &___h1 {
-      font-size: 36px;
-    }
   }
 }
 

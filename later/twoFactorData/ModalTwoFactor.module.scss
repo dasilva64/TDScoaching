@@ -22,7 +22,10 @@
   &__h1 {
     color: black;
     margin: 40px 0px;
-    text-align: center;
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
   }
   &__btn {
     cursor: pointer;

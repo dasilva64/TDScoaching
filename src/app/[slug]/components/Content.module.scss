@@ -1,0 +1,35 @@
+.div {
+  &__h2 {
+    text-align: left;
+    padding-bottom: 5px;
+    display: inline-block;
+    font-size: clamp(30px, 4vw, 48px);
+    margin: 60px 0px 30px 0px;
+  }
+  &__h3 {
+    margin: 40px 0px 10px 0px;
+    text-align: left;
+    font-size: clamp(26px, 32px, 4vw);
+  }
+  &__p {
+    line-height: 1.4;
+  }
+  &__ul {
+    line-height: 1.4;
+    padding: 10px 0px 10px 40px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .div {
+    &__h2 {
+      margin: 40px 0px 20px 0px;
+    }
+    &__h3 {
+      margin: 30px 0px 10px 0px;
+    }
+    &__ul {
+      padding: 10px 0px 10px 20px;
+    }
+  }
+}

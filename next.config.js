@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const cspHeader = `
+/* const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
@@ -11,69 +11,67 @@ const cspHeader = `
     frame-ancestors 'none';
     block-all-mixed-content;
     upgrade-insecure-requests;
-`
+`; */
 
 const nextConfig = {
-  productionBrowserSourceMaps: true,
+  /* productionBrowserSourceMaps: true,
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
-           {
-            key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\n/g, ''),
+          {
+            key: "Content-Security-Policy",
+            value: cspHeader.replace(/\n/g, ""),
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
           },
           {
-            key: 'Referrer-Policy',
-            value: 'no-referrer',
+            key: "Referrer-Policy",
+            value: "no-referrer",
           },
           {
-            key: 'Permissions-Policy',
+            key: "Permissions-Policy",
             value: "camera=(), geolocation=(), microphone=()",
           },
           {
-            key: 'Access-Control-Allow-Origin',
+            key: "Access-Control-Allow-Origin",
             value: "https://tdscoaching.fr",
           },
           {
-            key: 'Vary',
+            key: "Vary",
             value: "Origin",
           },
           {
-            key: 'Access-Control-Allow-Headers',
+            key: "Access-Control-Allow-Headers",
             value: "Content-Type, Accept",
           },
           {
-            key: 'Strict-Transport-Security',
+            key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
-          }
-          
+          },
         ],
       },
-    ]
-  },
-   /*  ]
+    ];
+  }, */
+  /*  ]
   } */
-    /* externals: {
+  /* externals: {
         // only define the dependencies you are NOT using as externals!
         canvg: "canvg",
         html2canvas: "html2canvas",
         dompurify: "dompurify"
       } */
-      
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

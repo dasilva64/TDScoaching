@@ -5,8 +5,8 @@ import validator from "validator";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { Prisma } from "@prisma/client";
-import prisma from "../../../../../../lib/prisma";
-import { SessionData, sessionOptions } from "../../../../../../lib/session";
+import prisma from "../../../../lib/prisma";
+import { SessionData, sessionOptions } from "../../../../lib/session";
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: session.id },
+      where: { id: validator.escape(session.id) },
     });
     if (user === null) {
       session.destroy();
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
             );
           }
           let user = await prisma.user.findUnique({
-            where: { mail: decodeToken.user },
+            where: { mail: validator.escape(decodeToken.user) },
           });
           if (user === null) {
             return NextResponse.json(
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
               if (validator.escape(token.trim()) === copyDeleteToken.token) {
                 if (new Date().getTime() > copyDeleteToken.limitDate) {
                   const deleteToken = await prisma.user.update({
-                    where: { id: user.id },
+                    where: { id: validator.escape(user.id) },
                     data: { deleteToken: Prisma.JsonNull },
                   });
                   return NextResponse.json(
@@ -172,9 +172,9 @@ export async function POST(request: NextRequest) {
                                         </div>
                                         <h2 style="text-align: center">Suppression d'un compte</h2>
                                         <ul style="list-style: none; padding: 0px">
-                                          <li style="margin: 0px 0px 10px 0px">Prénom : ${user.firstname}</li>
-                                          <li style="margin: 0px 0px 10px 0px">Nom de famille : ${user.lastname}</li>
-                                          <li style="margin: 0px 0px 10px 0px">Email : ${user.mail}</li>
+                                          <li style="margin: 0px 0px 10px 0px">Prénom : ${validator.escape(user.firstname)}</li>
+                                          <li style="margin: 0px 0px 10px 0px">Nom de famille : ${validator.escape(user.lastname)}</li>
+                                          <li style="margin: 0px 0px 10px 0px">Email : ${validator.escape(user.mail)}</li>
                                           <li style="margin: 0px 0px 10px 0px">Raison : ${user.deleteReason}</li>
                                         </ul>
                                       </div>
@@ -184,7 +184,7 @@ export async function POST(request: NextRequest) {
                     };
                     await smtpTransport.sendMail(mailOptions);
                     const deleteUser = await prisma.user.delete({
-                      where: { id: user.id },
+                      where: { id: validator.escape(user.id) },
                     });
                     session.destroy();
                     return NextResponse.json({

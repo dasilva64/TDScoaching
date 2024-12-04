@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import router from "next/router";
 import useSWRMutation from "swr/mutation";
-import { defaultSession } from "../../../../../lib/session";
+import { defaultSession } from "../../../lib/session";
 import fetchDelete from "../../fetch/FetchDelete";
 import TabIndex from "../../tabIndex/TabIndex";
 
@@ -167,6 +167,21 @@ const Nav = () => {
                       onClick={() => closeForm()}
                     >
                       Contact
+                    </Link>
+                  </li>
+                  <li
+                    className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
+                  >
+                    <Link
+                      className={`${
+                        pathname === "/contact"
+                          ? styles.nav__nav__ul__li__link__active
+                          : null
+                      } ${styles.nav__nav__ul__li__link}`}
+                      href="/blog"
+                      onClick={() => closeForm()}
+                    >
+                      Blog
                     </Link>
                   </li>
                 </ul>

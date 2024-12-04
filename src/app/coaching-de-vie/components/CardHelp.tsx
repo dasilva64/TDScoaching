@@ -6,7 +6,7 @@ import WhileInView from "@/app/components/framer/WhileInView";
 const CardHelp = ({ title }: { title: string }) => {
   return (
     <WhileInView type="y" className={styles.card}>
-      <h4 className={styles.card__h4}>
+      <h3 className={styles.card__h4}>
         <Image
           className={styles.card__h4__icone}
           width="20"
@@ -16,7 +16,7 @@ const CardHelp = ({ title }: { title: string }) => {
           alt="bousole"
         />
         {title}
-      </h4>
+      </h3>
     </WhileInView>
   );
 };

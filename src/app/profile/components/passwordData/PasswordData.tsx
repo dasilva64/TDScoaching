@@ -29,7 +29,7 @@ const PasswordData = () => {
           alt="bousole"
         />
         <div className={styles.card__info}>
-          <p className={styles.card__info__p}>
+          <p className={styles.card__info__password}>
             <strong>Mot de passe</strong>
           </p>
           <p className={styles.card__info__p}>{"*".toString().repeat(6)}</p>

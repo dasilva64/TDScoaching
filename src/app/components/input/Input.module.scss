@@ -11,6 +11,12 @@
     transform-origin: top left;
     color: #1976d2;
   }
+  &:focus-within .div__div {
+    border-bottom: 2px solid #1976d2;
+  }
+  &:not(:focus-within) .div__div:hover {
+    border-bottom: 2px solid black;
+  }
   &:focus-within .div__label__value {
     transform: translateY(-13px) scale(0.75);
     transform-origin: top left;
@@ -46,6 +52,8 @@
   &__div {
     position: relative;
     width: 100%;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.42);
+    transition: all 0.3s;
     &__input {
       position: relative;
       z-index: 2;
@@ -55,16 +63,17 @@
       border-top: none;
       border-left: none;
       border-right: none;
-      border-bottom: 2px solid rgba(0, 0, 0, 0.42);
+      border-bottom: none;
+      /* border-bottom: 2px solid rgba(0, 0, 0, 0.42); */
       font: inherit;
       padding: 4px 0 5px;
       box-sizing: content-box;
       height: 1.4375em;
-      width: 100%;
+      width: calc(100% - 30px);
       transition: all 0.3s;
-      &:focus {
+      /* &:focus {
         border-bottom: 2px solid #1976d2;
-      }
+      } */
       &::placeholder {
         color: rgba(0, 0, 0, 0.42);
         opacity: 0;
@@ -72,9 +81,9 @@
       &:focus::placeholder {
         opacity: 1;
       }
-      &:hover:not(:focus) {
+      /* &:hover:not(:focus) {
         border-bottom: 2px solid black;
-      }
+      } */
     }
     &__img {
       position: absolute;

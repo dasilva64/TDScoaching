@@ -1,24 +1,17 @@
 "use client";
 
-import { AppDispatch, RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserFirstnameData.module.scss";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
 import fetchPost from "../../../../components/fetch/FetchPost";
-import useGet from "../../../../components/hook/useGet";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import localFont from "next/font/local";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { set } from "zod";
-const Parisienne = localFont({
-  src: "../../../../Parisienne-Regular.ttf",
-  display: "swap",
-});
+import { AppDispatch, RootState } from "@/app/redux/store";
 
 const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
   const router = useRouter();
@@ -222,9 +215,7 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
                   height={30}
                 ></Image>
               </button>
-              <h2
-                className={`${styles.modalEditMainUserData__h1} ${Parisienne.className}`}
-              >
+              <h2 className={`${styles.modalEditMainUserData__h1}`}>
                 Modifier votre prénom
               </h2>
               <form

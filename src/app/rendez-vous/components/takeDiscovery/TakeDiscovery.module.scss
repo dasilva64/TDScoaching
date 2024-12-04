@@ -1,0 +1,157 @@
+.TakeDiscovery {
+  width: 55%;
+  background-color: rgba(0, 0, 0, 0.04);
+  padding: 50px 30px 30px 30px;
+  box-shadow: 0px 0px 15px 3px aqua;
+  border-radius: 20px;
+  position: relative;
+  &__h2 {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: orange;
+    padding: 10px;
+    font-size: 32px;
+    width: 500px;
+    border-radius: 30px;
+    margin: 20px auto 30px auto;
+    color: white;
+  }
+  &__container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    &__offre {
+      background-color: aqua;
+      padding: 10px 30px;
+      border-radius: 20px;
+      &__content {
+        &__h3 {
+          text-align: center;
+          margin: 20px 0px;
+        }
+        &__p {
+          font-size: 18px;
+          text-align: justify;
+          margin-bottom: 20px;
+        }
+        &__div {
+          display: flex;
+          margin-bottom: 20px;
+          text-align: center;
+          &__btn {
+            font-size: 18px;
+            cursor: pointer;
+            text-align: center;
+            background-color: white;
+            padding: 10px 20px;
+            border: 1px solid orange;
+            box-shadow: 5px 5px orange;
+            border-radius: 20px;
+            margin: auto;
+          }
+        }
+      }
+    }
+    &__info {
+      margin-top: 30px;
+      &__p {
+        font-size: 18px;
+        margin-bottom: 15px;
+        margin-top: 15px;
+      }
+      &__div {
+        display: flex;
+        &__p {
+          font-size: 18px;
+          margin-left: 5px;
+        }
+      }
+      &__content {
+        text-align: center;
+        margin-top: 30px;
+        &__btn {
+          font-size: 18px;
+          cursor: pointer;
+          text-align: center;
+          background-color: white;
+          padding: 10px 20px;
+          border: 1px solid orange;
+          box-shadow: 5px 5px orange;
+          border-radius: 20px;
+          margin: auto;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .TakeDiscovery {
+    width: 100%;
+    margin-top: 40px;
+    &__h2 {
+      width: 400px;
+    }
+    &__about {
+      width: 100%;
+    }
+    &__meeting {
+      &__detail {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .TakeDiscovery {
+    flex-direction: column;
+    padding: 50px 10px 30px 10px;
+    &__h2 {
+      font-size: 26px;
+      width: 95%;
+    }
+    &__container {
+      &__offre {
+        padding: 10px 15px;
+        &__content {
+          &__p {
+            font-size: 16px;
+          }
+          &__div {
+            &__btn {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+      &__info {
+        &__p {
+          font-size: 16px;
+        }
+        &__div {
+          display: flex;
+          &__p {
+            font-size: 16px;
+          }
+        }
+        &__content {
+          &__btn {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 371px) {
+  .TakeDiscovery {
+    &__h2 {
+      top: -60px;
+    }
+  }
+}

@@ -5,22 +5,16 @@ import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import fetchPost from "../../../../components/fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
-import { RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/profile/redux/store";
 import Image from "next/image";
-import localFont from "next/font/local";
-import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-const Parisienne = localFont({
-  src: "../../../../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const ModalDeleteAccount = () => {
   const { displayModalDeleteAccount } = useSelector(
     (state: RootState) => state.ModalDeleteAccount
   );
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const [reason, setReason] = useState<string>("");
   const [reasonErrorMessage, setReasonErrorMessage] = useState<string>("");
@@ -203,9 +197,7 @@ const ModalDeleteAccount = () => {
                   height={30}
                 ></Image>
               </button>
-              <h2
-                className={`${styles.modalDeleteAccount__h1} ${Parisienne.className}`}
-              >
+              <h2 className={`${styles.modalDeleteAccount__h1}`}>
                 Suppression du compte
               </h2>
               <div className={styles.modalDeleteAccount__div}>

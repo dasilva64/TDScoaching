@@ -1,19 +1,18 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./FirstnameData.module.scss";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 import { AppDispatch } from "@/app/redux/store";
 
-const FirstnameData = ({ isLoading, data }: any) => {
+const FirstnameData = ({ data }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   return (
     <>
       <button
-        className={`${isLoading ? styles.card__load : styles.card} modalOpen`}
+        className={`${styles.card} modalOpen`}
         tabIndex={0}
-        disabled={isLoading}
         onClick={() => {
           if (data) {
             dispatch({
@@ -34,8 +33,8 @@ const FirstnameData = ({ isLoading, data }: any) => {
           <p className={styles.card__info__name}>
             <strong>Prénom</strong>
           </p>
-          <p className={styles.card__info__p}>
-            {isLoading ? "Chargement des données" : data.body.firstname}
+          <p data-text={data.body.firstname} className={styles.card__info__p}>
+            {data.body.firstname}
           </p>
         </div>
         <Image
@@ -46,11 +45,6 @@ const FirstnameData = ({ isLoading, data }: any) => {
           src={"/assets/icone/chevron-right-solid.svg"}
           alt="bousole"
         />
-        {isLoading && (
-          <div className={styles.card__load__arc}>
-            <div className={styles.card__load__arc__circle}></div>
-          </div>
-        )}
       </button>
     </>
   );

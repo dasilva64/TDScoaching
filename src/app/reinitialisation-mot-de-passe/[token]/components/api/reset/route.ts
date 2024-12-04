@@ -1,17 +1,17 @@
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import validator from "validator";
-import prisma from "../../../../../../../lib/prisma";
+import prisma from "../../../../../lib/prisma";
 import jwt from "jsonwebtoken";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { SessionData, sessionOptions } from "../../../../../../../lib/session";
+import { SessionData, sessionOptions } from "../../../../../lib/session";
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
-      where: { id: session.id },
+      where: { id: validator.escape(session.id) },
     });
     if (user === null) {
       session.destroy();
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
             process.env.SECRET_TOKEN_RESET as string
           );
           let user = await prisma.user.findUnique({
-            where: { mail: decodeToken.user },
+            where: { mail: validator.escape(decodeToken.user) },
           });
           if (user === null) {
             return NextResponse.json(
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
               if (token === copyResetToken.token) {
                 if (new Date().getTime() > copyResetToken.limitDate) {
                   const deleteResetToken = await prisma.user.update({
-                    where: { mail: user.mail },
+                    where: { mail: validator.escape(user.mail) },
                     data: { resetToken: Prisma.JsonNull },
                   });
                   return NextResponse.json(

@@ -6,7 +6,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import localFont from "next/font/local";
-import { SessionData, sessionOptions } from "../../../../lib/session";
+import { SessionData, sessionOptions } from "../../lib/session";
 const Parisienne = localFont({
   src: "../../Parisienne-Regular.ttf",
   display: "swap",

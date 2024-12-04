@@ -49,6 +49,8 @@
   }
   &__info {
     margin-left: 60px;
+    transition: all 400ms;
+    width: 100%;
     &__name {
       text-align: left;
     }
@@ -62,11 +64,40 @@
     &__p {
       word-wrap: break-word;
       word-break: break-word;
-      margin-right: 60px;
+      width: calc(100% - 70px);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
       text-align: left;
     }
+    &__p:focus,
+    &__:hover {
+      color: black;
+    }
+    &__p:focus:after,
+    &__p:hover:after {
+      content: attr(data-text);
+      overflow: visible;
+      text-overflow: initial;
+      background: #fff;
+      position: absolute;
+      left: auto;
+      top: auto;
+      z-index: 999;
+      border-radius: 5px;
+      width: auto;
+      max-width: 20rem;
+      border: 1px solid #eaebec;
+      padding: 0 0.5rem;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.28);
+      white-space: normal;
+      word-wrap: break-word;
+      display: block;
+      color: black;
+      margin-top: -1.25rem;
+    }
   }
-  &__arc {
+  /* &__arc {
     margin: 18px 10px 0px 10px;
     width: 20px;
     height: 20px;
@@ -84,9 +115,12 @@
       background-color: black;
       border-radius: 50%;
     }
-  }
+  } */
   &__load {
     &__arc {
+      position: absolute;
+      right: 50px;
+      top: 5px;
       margin: 18px 10px 0px 10px;
       width: 20px;
       height: 20px;
@@ -119,12 +153,19 @@
 
 @media screen and (max-width: 425px) {
   .card {
-    min-height: 60px;
+    /* min-height: 60px; */
+    height: 60px;
     &__info {
       margin-left: 40px;
       align-self: center;
       &__p {
         margin-right: 40px;
+        word-wrap: break-word;
+        text-align: left;
+        overflow: hidden;
+        width: 180px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
     &__arc {
@@ -142,6 +183,7 @@
         }
       }
       &__arc {
+        display: none;
         position: absolute;
         right: 50px;
         bottom: 18px;

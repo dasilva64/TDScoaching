@@ -1,7 +1,7 @@
 "use client";
 
 import { RootState } from "../../redux/store";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NbShow from "./dataTable/nbShow/NbShow";
 import Paging from "./dataTable/paging/Paging";
@@ -17,100 +17,103 @@ const AllUser = () => {
   const { datas } = useSelector((state: RootState) => state.Array);
   const dispatch = useDispatch();
   const router = useRouter();
+  const [content, setContent] = useState<any>(null);
 
   const { data, isLoading, isError } = useGet("/utilisateurs/components/api");
-  let content;
-  if (isError) {
-    dispatch({
-      type: "flash/storeFlashMessage",
-      payload: {
-        type: "error",
-        flashMessage: "Erreur lors du chargement, veuillez réessayer",
-      },
-    });
-    content = (
-      <>
-        <div className={styles.datatable}>
-          <div className={styles.datatable__container}>
-            <>
-              <div>
-                <div className={styles.datatable__container__div}>
-                  <NbShow />
-                  <Search />
-                </div>
-              </div>
-              <DisplayError />
-              <Paging />
-            </>
-          </div>
-        </div>
-      </>
-    );
-  } else if (isLoading) {
-    content = (
-      <>
-        <div className={styles.datatable}>
-          <div className={styles.datatable__container}>
-            <>
-              <div>
-                <div className={styles.datatable__container__div}>
-                  <NbShow />
-                  <Search />
-                </div>
-              </div>
-              <DisplayLoad />
-              <Paging />
-            </>
-          </div>
-        </div>
-      </>
-    );
-  } else {
-    if (data.status === 200) {
-      content = (
+  useEffect(() => {
+    if (isError) {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: {
+          type: "error",
+          flashMessage: "Erreur lors du chargement, veuillez réessayer",
+        },
+      });
+      setContent(
         <>
           <div className={styles.datatable}>
             <div className={styles.datatable__container}>
-              {datas && (
-                <>
-                  <div>
-                    <div className={styles.datatable__container__div}>
-                      <NbShow />
-                      <Search />
-                    </div>
+              <>
+                <div>
+                  <div className={styles.datatable__container__div}>
+                    <NbShow />
+                    <Search />
                   </div>
-                  <Display />
-                  <Paging />
-                </>
-              )}
+                </div>
+                <DisplayError />
+                <Paging />
+              </>
             </div>
           </div>
         </>
       );
-    } else if (data.status === 401 || data.status === 403) {
-      setTimeout(() => {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: {
-            type: "error",
-            flashMessage: data.message,
-          },
-        });
-      }, 2000);
-      router.push("/");
+    } else if (isLoading) {
+      setContent(
+        <>
+          <div className={styles.datatable}>
+            <div className={styles.datatable__container}>
+              <>
+                <div>
+                  <div className={styles.datatable__container__div}>
+                    <NbShow />
+                    <Search />
+                  </div>
+                </div>
+                <DisplayLoad />
+                <Paging />
+              </>
+            </div>
+          </div>
+        </>
+      );
     } else {
-      setTimeout(() => {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: {
-            type: "error",
-            flashMessage: data.message,
-          },
-        });
-      }, 2000);
-      router.refresh();
+      if (data.status === 200) {
+        setContent(
+          <>
+            <div className={styles.datatable}>
+              <div className={styles.datatable__container}>
+                {datas && (
+                  <>
+                    <div>
+                      <div className={styles.datatable__container__div}>
+                        <NbShow />
+                        <Search />
+                      </div>
+                    </div>
+                    <Display />
+                    <Paging />
+                  </>
+                )}
+              </div>
+            </div>
+          </>
+        );
+      } else if (data.status === 401 || data.status === 403) {
+        setTimeout(() => {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: data.message,
+            },
+          });
+        }, 2000);
+        router.push("/");
+      } else {
+        setTimeout(() => {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: data.message,
+            },
+          });
+        }, 2000);
+        router.refresh();
+      }
     }
-  }
+  }, [data, datas, dispatch, isError, isLoading, router]);
+
   useEffect(() => {
     if (data && data.status === 200) {
       let copyOfItems = [...data.body];

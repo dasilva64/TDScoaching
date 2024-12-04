@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
-import prisma from "../../../../../../../lib/prisma";
+import prisma from "../../../../../lib/prisma";
 import {
   SessionData,
   sessionOptions,
   defaultSession,
-} from "../../../../../../../lib/session";
+} from "../../../../../lib/session";
 import validator from "validator";
-import { validationBody } from "../../../../../../../lib/validation";
+import { validationBody } from "../../../../../lib/validation";
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: session.id },
+      where: { id: validator.escape(session.id) },
     });
     if (user === null) {
       session.destroy();
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       } else {
         let editUser = await prisma.user.update({
           where: {
-            id: user.id,
+            id: validator.escape(user.id),
           },
           data: {
             lastname: validator.escape(lastname.trim()),
@@ -93,10 +93,9 @@ export async function POST(request: NextRequest) {
           );
         } else {
           let userObject = {
-            firstname: editUser.firstname,
-            lastname: editUser.lastname,
-            email: editUser.mail,
-            twoFactor: editUser.twoFactor,
+            firstname: validator.escape(editUser.firstname),
+            lastname: validator.escape(editUser.lastname),
+            email: validator.escape(editUser.mail),
           };
           return NextResponse.json({
             status: 200,

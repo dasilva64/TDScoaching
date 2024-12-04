@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from "@/app/redux/store";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
-import { defaultSession } from "../../../../../lib/session";
+import { defaultSession } from "../../../lib/session";
 import fetchDelete from "../../fetch/FetchDelete";
 import TabIndex from "../../tabIndex/TabIndex";
 

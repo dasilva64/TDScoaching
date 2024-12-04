@@ -11,6 +11,7 @@ const Display = () => {
   const { datas, currentPage, nbShow, sortBy } = useSelector(
     (state: RootState) => state.ArrayMeetingByUser
   );
+
   /* useEffect(() => {
     dispatch({
       type: "ArrayMeetingByUser/resetData",
@@ -78,7 +79,7 @@ const Display = () => {
               colSpan={keyAr.length}
               className={`${styles.table__body__tr__td__odd__first} ${styles.table__body__tr__td__odd__first__center}`}
             >
-              Aucun utilisateur n&apos;a été trouvé
+              Aucun rendez-vous n&apos;a été trouvé pour cet utilisateur
             </td>
           </tr>
         );

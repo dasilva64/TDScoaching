@@ -7,13 +7,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
-import localFont from "next/font/local";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
-const Parisienne = localFont({
-  src: "../../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const Forgot = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -179,7 +174,7 @@ const Forgot = () => {
                   ></Image>
                 </button>
               </div>
-              <h2 className={`${styles.forgot__h1} ${Parisienne.className}`}>
+              <h2 className={`${styles.forgot__h1}`}>
                 Réinitialisation du mot de passe
               </h2>
 

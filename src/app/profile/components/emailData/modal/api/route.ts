@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
-import prisma from "../../../../../../../lib/prisma";
-import { SessionData, sessionOptions } from "../../../../../../../lib/session";
+import prisma from "../../../../../lib/prisma";
+import { SessionData, sessionOptions } from "../../../../../lib/session";
 import { Prisma } from "@prisma/client";
+import validator from "validator";
 
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -20,7 +21,7 @@ export async function GET() {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: session.id },
+      where: { id: validator.escape(session.id) },
     });
     if (user === null) {
       session.destroy();
@@ -36,7 +37,7 @@ export async function GET() {
       );
     } else {
       const updateUser = await prisma.user.update({
-        where: { mail: user.mail },
+        where: { mail: validator.escape(user.mail) },
         data: {
           editEmail: Prisma.JsonNull,
         },
@@ -54,11 +55,11 @@ export async function GET() {
         );
       } else {
         let userObject = {
-          id: updateUser.id,
-          role: updateUser.role,
-          firstname: updateUser.firstname,
-          lastname: updateUser.lastname,
-          email: updateUser.mail,
+          id: validator.escape(updateUser.id),
+          role: validator.escape(updateUser.role),
+          firstname: validator.escape(updateUser.firstname),
+          lastname: validator.escape(updateUser.lastname),
+          email: validator.escape(updateUser.mail),
           editEmail: updateUser.editEmail,
         };
         return NextResponse.json({

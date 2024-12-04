@@ -103,9 +103,9 @@ const Input = ({
         )}
       </div>
 
-      {validInput === false && (
-        <div className={stylesForm.div__error}>{errorMessage}</div>
-      )}
+      {/* {validInput === false && ( */}
+      <div className={stylesForm.div__error}>{errorMessage}</div>
+      {/* )} */}
     </div>
   );
 };

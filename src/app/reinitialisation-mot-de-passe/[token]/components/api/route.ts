@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import prisma from "../../../../../../lib/prisma";
-import { validationBody } from "../../../../../../lib/validation";
+import prisma from "../../../../lib/prisma";
+import { validationBody } from "../../../../lib/validation";
 import { Prisma } from "@prisma/client";
-import exp from "constants";
 import { RateLimiter } from "limiter";
 
 const limiter = new RateLimiter({
@@ -58,7 +57,7 @@ export async function POST(request: NextRequest) {
           status: 400,
           type: "error",
           message:
-            "Vous ne pouvez pas modifier votre prénom, veuillez réessayer",
+            "Vous ne pouvez pas modifier votre mot de passe, veuillez réessayer",
         },
         {
           status: 400,
@@ -97,7 +96,7 @@ export async function POST(request: NextRequest) {
             process.env.SECRET_TOKEN_RESET as string
           );
           let user = await prisma.user.findUnique({
-            where: { mail: decodeToken.user },
+            where: { mail: validator.escape(decodeToken.user) },
           });
           if (user === null) {
             return NextResponse.json(
@@ -126,7 +125,7 @@ export async function POST(request: NextRequest) {
               if (token === copyResetToken.token) {
                 if (new Date().getTime() > copyResetToken.limitDate) {
                   const deleteResetToken = await prisma.user.update({
-                    where: { mail: user.mail },
+                    where: { mail: validator.escape(user.mail) },
                     data: { resetToken: Prisma.JsonNull },
                   });
                   return NextResponse.json(
@@ -154,8 +153,8 @@ export async function POST(request: NextRequest) {
                   }
                   let encrypt = await bcrypt.hash(password, 10);
                   let editUser = await prisma.user.update({
-                    where: { mail: user.mail },
-                    data: { resetToken: Prisma.JsonNull, password: encrypt },
+                    where: { mail: validator.escape(user.mail) },
+                    data: { resetToken: Prisma.JsonNull, password: validator.escape(encrypt) },
                   });
                   if (editUser === null) {
                     return NextResponse.json(

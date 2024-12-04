@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import validator from "validator";
-import prisma from "../../../../../../lib/prisma";
-import { SessionData, sessionOptions } from "../../../../../../lib/session";
+import prisma from "../../../../lib/prisma";
+import { SessionData, sessionOptions } from "../../../../lib/session";
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: session.id },
+      where: { id: validator.escape(session.id) },
     });
     if (user === null) {
       return NextResponse.json(
@@ -78,12 +78,12 @@ export async function POST(request: NextRequest) {
               meeting = null;
             } else {
               let meetingByUser = await prisma.meeting.findUnique({
-                where: { id: userById.meetingId },
+                where: { id: validator.escape(userById.meetingId) },
               });
               if (meetingByUser === null) {
                 let editUser = await prisma.user.update({
                   where: {
-                    id: userById.id,
+                    id: validator.escape(userById.id),
                     status: true,
                   },
                   data: {
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
               }
             }
             const meetingByUser = await prisma.meeting.findMany({
-              where: { userId: userById.id },
+              where: { userId: validator.escape(userById.id) },
               select: {
                 startAt: true,
                 typeMeeting: true,
@@ -104,10 +104,10 @@ export async function POST(request: NextRequest) {
             });
 
             let userObject = {
-              id: userById.id,
-              firstname: userById.firstname,
-              lastname: userById.lastname,
-              mail: userById.mail,
+              id: validator.escape(userById.id),
+              firstname: validator.escape(userById.firstname),
+              lastname: validator.escape(userById.lastname),
+              mail: validator.escape(userById.mail),
               discovery: userById.discovery,
               allMeetings: meetingByUser,
               meeting: meeting,

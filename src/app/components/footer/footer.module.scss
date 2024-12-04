@@ -9,6 +9,7 @@
   }
   &__li {
     list-style-type: none;
+    display: flex;
   }
   &__ul {
     font-size: 16px;
@@ -24,16 +25,18 @@
     color: black;
     font-size: 16px;
     text-decoration: none;
+    text-decoration-color: orange;
     transition: all 400ms;
     &:hover {
-      color: orange;
+      text-decoration: underline;
+      text-decoration-color: orange;
     }
   }
   &__h2 {
+    border-bottom: none;
     color: black;
     padding-top: 80px;
     margin-bottom: 40px;
-    font-size: 30px;
   }
   &__a__color {
     color: black;
@@ -60,7 +63,6 @@
       }
     }
     &__h2 {
-      font-size: 32px;
       padding-top: 40px;
       margin-bottom: 30px;
     }

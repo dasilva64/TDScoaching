@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../../../../lib/prisma";
-import { validationBody } from "../../../../../lib/validation";
+import prisma from "../../../lib/prisma";
+import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 import nodemailer from "nodemailer";
 import { RateLimiter } from "limiter";

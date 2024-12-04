@@ -1,0 +1,25 @@
+.meet {
+  position: relative;
+  z-index: 690;
+  min-height: calc(100vh - 435px);
+  margin-top: 84px;
+  &__section {
+    margin: 0px 10%;
+    &__h1 {
+      padding-top: 80px;
+      font-size: 48px;
+      padding-bottom: 30px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .meet {
+    &__section {
+      margin: 0px 5% 0px 5%;
+      &__h1 {
+        font-size: 36px;
+      }
+    }
+  }
+}

@@ -5,12 +5,7 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
 
-import localFont from "next/font/local";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-const Parisienne = localFont({
-  src: "../../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const DiscoveryModal = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -65,9 +60,7 @@ const DiscoveryModal = () => {
                   height={30}
                 ></Image>
               </button>
-              <h2 className={`${styles.login__h1} ${Parisienne.className}`}>
-                Séance découverte
-              </h2>
+              <h2 className={`${styles.login__h1}`}>Séance découverte</h2>
               <p className={styles.login__p}>
                 <Image
                   className={styles.login__p__icone}

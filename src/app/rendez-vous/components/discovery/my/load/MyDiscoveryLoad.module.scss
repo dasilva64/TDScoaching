@@ -1,0 +1,329 @@
+.takeDiscovery {
+  /*   margin: 0px 10% 0px 10%;
+     */ /* padding-bottom: 100px; */
+  position: relative;
+  margin-top: 50px;
+  height: calc(100% - 259.5px);
+  /*  top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); */
+
+  &__test {
+    height: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0px 0px 7px 4px aqua;
+  }
+  &__test2 {
+    height: 264px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 130px;
+    box-shadow: 0px 0px 7px 4px aqua;
+  }
+  &__test3 {
+    height: 164px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 130px;
+    box-shadow: 0px 0px 7px 4px aqua;
+  }
+  &__take {
+    margin-bottom: 80px;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.04);
+    padding: 20px 30px;
+    box-shadow: 0px 0px 15px 3px orange;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 30px;
+    text-align: center;
+    &__p {
+      font-size: 18px;
+      width: 60%;
+    }
+    &__btn {
+      font-size: 18px;
+      width: 25%;
+      padding: 15px 30px;
+      cursor: pointer;
+      text-align: center;
+      color: white;
+      background-color: orange;
+      border: 2px solid orange;
+      border-radius: 30px;
+      transition: all 0.3s ease-in-out;
+      animation: test 1s infinite;
+      &:hover {
+        background-color: white;
+        color: orange;
+      }
+    }
+  }
+  &__container {
+    /* display: flex; */
+    justify-content: space-between;
+    flex-direction: row;
+    &__how {
+      /* width: 35%; */
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      background-color: rgba(0, 0, 0, 0.04);
+      box-shadow: 0px 0px 15px 3px aqua;
+      padding: 50px 30px 30px 30px;
+      border-radius: 20px;
+      position: relative;
+      &__h2 {
+        position: absolute;
+        top: -0px;
+        left: 50%;
+        font-size: 32px;
+        transform: translateX(-50%);
+        /* background-color: orange; */
+        padding: 10px;
+        width: 250px;
+        border-radius: 30px;
+        margin: 20px auto 30px auto;
+        /* color: white; */
+      }
+      &__container {
+        height: 100%;
+        display: flex;
+        /* flex-direction: column; */
+        justify-content: space-around;
+        margin-top: 30px;
+      }
+    }
+    &__desc {
+      /* width: 55%; */
+      /* padding: 50px 30px 30px 30px; */
+      box-shadow: 0px 0px 15px 3px aqua;
+      border-radius: 20px;
+      position: relative;
+      &__h2 {
+        /*  position: absolute;
+            left: 50%;
+            transform: translateX(-50%); */
+        /* background-color: orange; */
+        padding: 10px;
+        font-size: 32px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        text-align: start;
+        width: 500px;
+        margin: 20px 0px 30px 0px;
+      }
+      &__container {
+        background-color: rgba(0, 0, 0, 0.04);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 50px 30px 30px 30px;
+        &__offre {
+          background-color: aqua;
+          padding: 10px 30px;
+          border-radius: 20px;
+          &__content {
+            &__h3 {
+              text-align: center;
+              margin: 20px 0px;
+            }
+            &__p {
+              font-size: 18px;
+              text-align: justify;
+              margin-bottom: 20px;
+            }
+            &__div {
+              display: flex;
+              margin-bottom: 20px;
+              text-align: center;
+              &__btn {
+                font-size: 18px;
+                cursor: pointer;
+                text-align: center;
+                background-color: white;
+                padding: 10px 20px;
+                border: 1px solid orange;
+                box-shadow: 5px 5px orange;
+                border-radius: 20px;
+                margin: auto;
+              }
+            }
+          }
+        }
+        &__info {
+          margin-top: 30px;
+          &__p {
+            font-size: 18px;
+            margin-bottom: 15px;
+            margin-top: 15px;
+          }
+          &__div {
+            display: flex;
+            &__p {
+              font-size: 18px;
+              margin-left: 5px;
+            }
+          }
+          &__content {
+            text-align: center;
+            margin-top: 30px;
+            &__btn {
+              font-size: 18px;
+              cursor: pointer;
+              text-align: center;
+              background-color: white;
+              padding: 10px 20px;
+              border: 1px solid orange;
+              box-shadow: 5px 5px orange;
+              border-radius: 20px;
+              margin: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .takeDiscovery {
+    /* margin: 10px 5% 0px 5%; */
+    &__container {
+      &___how {
+        width: 40%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .takeDiscovery {
+    /* display: flex;
+    flex-direction: column-reverse;
+    justify-content: unset; */
+    &__take {
+      flex-direction: column;
+      &__p {
+        width: 100%;
+        margin: 20px 20px;
+      }
+      &__btn {
+        width: 100%;
+      }
+    }
+    &__container {
+      flex-direction: column;
+
+      &__how {
+        width: 100%;
+        padding: 50px 30px 10px 30px;
+        margin-bottom: 40px;
+      }
+      &__desc {
+        width: 100%;
+        margin-top: 40px;
+        &__h2 {
+          width: 400px;
+        }
+        &__about {
+          width: 100%;
+        }
+        &__meeting {
+          &__detail {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .takeDiscovery {
+    margin: 0px 5% 0px 5%;
+    &__take {
+      &__p {
+        font-size: 16px;
+        margin: 20px 0px;
+      }
+      &__btn {
+        font-size: 16px;
+      }
+    }
+    &__container {
+      &__how {
+        padding: 50px 10px 10px 10px;
+        flex-direction: column;
+        &__h2 {
+          font-size: 26px;
+        }
+      }
+      &__desc {
+        flex-direction: column;
+        padding: 50px 10px 30px 10px;
+        &__h2 {
+          font-size: 26px;
+          width: 95%;
+        }
+        &__container {
+          &__offre {
+            padding: 10px 15px;
+            &__content {
+              &__p {
+                font-size: 16px;
+              }
+              &__div {
+                &__btn {
+                  font-size: 16px;
+                }
+              }
+            }
+          }
+          &__info {
+            &__p {
+              font-size: 16px;
+            }
+            &__div {
+              display: flex;
+              &__p {
+                font-size: 16px;
+              }
+            }
+            &__content {
+              &__btn {
+                font-size: 16px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 371px) {
+  .takeDiscovery {
+    &__container {
+      &__desc {
+        &__h2 {
+          top: -60px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes test {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -649,7 +649,7 @@ export default function CGU() {
           réduire ou empêcher l’accessibilité à tout ou partie des Services
           proposés par le site.
         </p>
-        <h3 className={styles.cgu__h3}>9.1. « COOKIES »</h3>
+        <h3 className={styles.cgu__h3}>9.1. « Cookie »</h3>
         <p className={styles.cgu__p}>
           Un « cookie » est un petit fichier d’information envoyé sur le
           navigateur de l’Utilisateur et enregistré au sein du terminal de
@@ -766,9 +766,7 @@ export default function CGU() {
           </Link>{" "}
           dépose ce type de cookies.
         </p>
-        <h3 className={styles.cgu__h3}>
-          Article 9.2. BALISES (“TAGS”) INTERNET
-        </h3>
+        <h3 className={styles.cgu__h3}>9.2. Balises (“Tags”) Internet</h3>
         <p className={styles.cgu__p}>
           <Link className={styles.cgu__link} href="https://tdscoaching.fr/">
             https://tdscoaching.fr/

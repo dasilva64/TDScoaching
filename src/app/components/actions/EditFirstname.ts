@@ -1,6 +1,5 @@
-"use server";
+/* "use server";
 
-import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import z from "zod";
 import { getIronSession } from "iron-session";
@@ -8,11 +7,8 @@ import prisma from "../../../../lib/prisma";
 import {
   SessionData,
   sessionOptions,
-  defaultSession,
 } from "../../../../lib/session";
 import validator from "validator";
-import { validationBody } from "../../../../lib/validation";
-import form from "@/app/redux/feature/form";
 import { revalidatePath } from "next/cache";
 
 const schema = z.object({
@@ -47,7 +43,7 @@ export async function EditFirstname(prevState: any, formData: FormData) {
         };
       } else {
         let user = await prisma.user.findUnique({
-          where: { id: session.id },
+          where: { id: validator.escape(session.id) },
         });
         if (user === null) {
           session.destroy();
@@ -59,7 +55,7 @@ export async function EditFirstname(prevState: any, formData: FormData) {
         } else {
           let editUser = await prisma.user.update({
             where: {
-              id: user.id,
+              id: validator.escape(user.id),
             },
             data: {
               firstname: validator.escape(firstname as string),
@@ -72,25 +68,26 @@ export async function EditFirstname(prevState: any, formData: FormData) {
                 "Une erreur est survenue lors de la modification de votre prénom, veuillez réessayer",
             };
           } else {
-            /* let userObject = {
+            let userObject = {
               firstname: editUser.firstname,
               lastname: editUser.lastname,
               email: editUser.mail,
               twoFactor: editUser.twoFactor,
-            }; */
+            };
             revalidatePath("/profile");
             return {
               status: 200,
               message: "Votre prénom a été mis à jours avec succès",
             };
-            /* return NextResponse.json({
+            return NextResponse.json({
               status: 200,
               message: "Votre prénom a été mis à jours avec succès",
               body: userObject,
-            }); */
+            });
           }
         }
       }
     }
   }
 }
+ */

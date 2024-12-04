@@ -1,0 +1,116 @@
+.blog {
+  position: relative;
+  z-index: 690;
+
+  &__article {
+    background-color: rgba(0, 0, 0, 0.04);
+    padding: 0px 0 50px 0;
+    &__h2 {
+      text-align: center;
+      color: black;
+      padding-top: 160px;
+      width: 353px;
+      margin: 0px auto 30px auto;
+    }
+    &__container {
+      padding: 0px 10% 0px 10%;
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 40px;
+      row-gap: 40px;
+      &__card {
+        min-height: 100%;
+        border-radius: 10px;
+        box-shadow: 0px 0px 7px 4px aqua;
+        display: block;
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+        &__div {
+          padding: 10px;
+          &__h2 {
+            font-size: clamp(26px, 32px, 4vw) !important;
+          }
+          &__date {
+            font-style: italic;
+            margin-top: 10px;
+          }
+          &__btn {
+            display: inline-block;
+            margin: 20px auto 0px auto;
+            cursor: pointer;
+            border: 2px solid orange;
+            padding: 10px 20px;
+            background-color: white;
+            color: black;
+            text-decoration: none;
+            border-radius: 10px;
+            position: relative;
+            left: 50%;
+            transform: translate(-50%);
+            transition: all 0.3s ease-in-out;
+            &:hover {
+              background-color: orange;
+              transform: translate(-50%) scale(1.05);
+              color: black;
+            }
+          }
+        }
+
+        &__img {
+          min-height: 100%;
+          display: inline-block;
+          vertical-align: middle;
+          transform: scale3d(1, 1, 1);
+          transition: transform 400ms ease-in-out;
+          object-fit: cover;
+          height: auto;
+          border-radius: 10px;
+          cursor: pointer;
+          width: 100%;
+          min-width: 400px;
+          &:hover {
+            transform: scale(1.1);
+            transition: transform 400ms ease-in-out;
+          }
+        }
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0px 0px 14px 8px aqua;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1224px) {
+  .blog {
+    &__article {
+      &__container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .blog {
+    &__article {
+      &__container {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 40px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 429px) {
+  .blog {
+    &__article {
+      &__h2 {
+        width: 280px;
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 
 const WhileInView = ({ children, className, type }: any) => {
   if (type === "x") {

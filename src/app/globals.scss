@@ -1,7 +1,7 @@
-/* @font-face {
+@font-face {
   font-family: Parisienne;
   src: url("/assets/font/Parisienne/Parisienne-Regular.ttf");
-} */
+}
 
 * {
   box-sizing: border-box;
@@ -9,10 +9,126 @@
   margin: 0;
 }
 
+#lesStratégiesDeGestionDuStress,
+#lesEffetsDuStressSurLeCorpsEtLEsprit,
+#lesOriginesDuStress,
+#conclusion {
+  scroll-margin-top: 60px;
+}
+#techniquesDeRelaxationEtDeMéditation,
+#changerDePerspective,
+#demanderDeLAide,
+#adopterUneApprochePréventive {
+  scroll-margin-top: 100px;
+}
+
+p,
+li,
+ul,
+a,
+figcaption,
+summary,
+label,
+input,
+span {
+  font-family: Raleway, sans-serif;
+}
+h1,
+h2,
+h3 {
+  font-family: Parisienne;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-color: orange;
+  text-decoration-thickness: 2px;
+  text-align: center;
+}
+summary {
+  font-size: clamp(15px, 17px, 2vw);
+}
+p,
+label,
+input,
+button,
+ul {
+  font-size: clamp(15px, 17px, 2vw);
+}
+h1 {
+  font-size: clamp(36px, 48px, 5vw);
+}
+h2 {
+  font-size: clamp(30px, 38px, 4vw);
+}
+h3 {
+  font-size: clamp(26px, 32px, 4vw);
+}
+.slot-cell {
+  flex: 1;
+  text-align: center;
+  opacity: 0;
+
+  &:hover {
+    background: rgba(0, 255, 0, 0.2);
+    cursor: pointer;
+    opacity: 1;
+  }
+}
+button,
+input[type="button"] {
+  outline: none;
+  box-shadow: none !important;
+}
+button::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner {
+  border: 0;
+  box-shadow: none !important;
+}
+
+/*
+  Accessibility (A11Y)
+  Don't forget! User accessibility is important
+*/
+button:focus,
+input[type="button"]:focus {
+  border: none;
+  outline: none;
+  box-shadow: none !important;
+}
+.fc .fc-toolbar-title {
+  font-size: 1.3em;
+  text-decoration: none;
+  font-family: "__Inter_d65c78", "__Inter_Fallback_d65c78";
+}
+.fc .fc-button {
+  background-color: white !important;
+  color: black;
+}
+.fc .fc-button:hover {
+  background-color: aqua !important;
+  color: black;
+}
+.fc .fc-button-primary:disabled {
+  background-color: gray !important;
+}
+.fc .fc-button-primary:disabled:hover {
+  color: white;
+}
+.fc .fc-bg-event {
+  opacity: 0;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.fc .fc-bg-event:hover,
+.fc .fc-bg-event:hover * {
+  opacity: 1;
+  cursor: pointer;
+}
+
 details summary {
   padding: 20px 20px 30px 20px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: -10px; /* for more prominent move */
   transition: margin 450ms ease-out;
 }
@@ -22,6 +138,31 @@ details summary {
     margin-bottom: -35px;
   }
 }
+
+@media screen and (max-width: 1100px) {
+  .fc .fc-toolbar {
+    display: unset;
+  }
+  .fc-toolbar-title {
+    margin-bottom: 10px !important;
+  }
+  .fc-toolbar-chunk {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .fc-toolbar-title {
+    margin-bottom: 20px !important;
+  }
+}
+.fc-timegrid-slot {
+  cursor: pointer;
+}
+/* 
+.fc-timegrid-slot:hover {
+  background: black;
+} */
 
 details[open] summary {
   padding: 20px 20px 10px 20px;
@@ -154,4 +295,48 @@ h2 {
       }
     }
   }
+}
+
+.fc-header-toolbar {
+  display: inline-block;
+  padding: 4px 4px;
+}
+
+.fc-scrollgrid-sync-table {
+  width: 100%;
+}
+
+.fc-view {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.fc-h-event {
+  background-color: violet;
+  border-color: violet;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: violet;
+}
+
+.fc .fc-button {
+  background-color: violet;
+}
+
+.fc .fc-button:hover {
+  background-color: blue;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: violet;
+}
+
+.fc .fc-button-primary:disabled {
+  background-color: violet;
+}
+.fc-v-event {
+  background-color: violet;
+  border-color: violet;
 }

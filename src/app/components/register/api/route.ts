@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { validationBody } from "../../../../../lib/validation";
+import { validationBody } from "../../../lib/validation";
 import validator from "validator";
-import prisma from "../../../../../lib/prisma";
+import prisma from "../../../lib/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { SessionData, sessionOptions } from "../../../../../lib/session";
+import { SessionData, sessionOptions } from "../../../lib/session";
 import { RateLimiter } from "limiter";
 
 const limiter = new RateLimiter({
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     if (session.isLoggedIn === true) {
       let user = await prisma.user.findUnique({
-        where: { id: session.id },
+        where: { id: validator.escape(session.id) },
       });
       if (user === null) {
         session.destroy();
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
           );
           let currentDate = new Date();
           let registerTokenObject = {
-            token: token,
+            token: validator.escape(token),
             limitDate: currentDate.setMinutes(currentDate.getMinutes() + 30),
           };
           let UserCreate = await prisma.user.create({
@@ -146,10 +146,8 @@ export async function POST(request: NextRequest) {
               password: encrypt,
               status: false,
               registerToken: registerTokenObject,
-              twoFactor: false,
               role: "ROLE_USER",
               discovery: false,
-              typeMeeting: { type: "découverte" },
             },
           });
 
@@ -197,7 +195,7 @@ export async function POST(request: NextRequest) {
                                 <h1 style="text-align: center">tds coaching</h1>
                                 <h2 style="text-align: center">Validation de votre compte</h2>
                                 <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
-                                <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${token}" target="_blank">Vérifier mon compte</a>
+                                <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${validator.escape(token)}" target="_blank">Vérifier mon compte</a>
                                 <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé</p>
                               </div>
                             </div>
@@ -216,7 +214,7 @@ export async function POST(request: NextRequest) {
               let copyRegisterToken: any = userEmail?.registerToken;
               if (new Date().getTime() > copyRegisterToken.limitDate) {
                 const deleteUser = await prisma.user.delete({
-                  where: { mail: userEmail.mail },
+                  where: { mail: validator.escape(userEmail.mail) },
                 });
                 const saltRounds = 10;
                 let encrypt = await bcrypt.hash(
@@ -230,7 +228,7 @@ export async function POST(request: NextRequest) {
                 );
                 let currentDate = new Date();
                 let registerTokenObject = {
-                  token: token,
+                  token: validator.escape(token),
                   limitDate: currentDate.setMinutes(
                     currentDate.getMinutes() + 30
                   ),
@@ -243,10 +241,8 @@ export async function POST(request: NextRequest) {
                     password: encrypt,
                     status: false,
                     registerToken: registerTokenObject,
-                    twoFactor: false,
                     role: "ROLE_USER",
                     discovery: false,
-                    typeMeeting: { type: "découverte" },
                   },
                 });
 
@@ -294,7 +290,7 @@ export async function POST(request: NextRequest) {
                                       <h1 style="text-align: center">tds coaching</h1>
                                       <h2 style="text-align: center">Validation de votre compte</h2>
                                       <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
-                                      <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${token}" target="_blank">Vérifier mon compte</a>
+                                      <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${validator.escape(token)}" target="_blank">Vérifier mon compte</a>
                                       <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé.</p>
                                     </div>
                                   </div>

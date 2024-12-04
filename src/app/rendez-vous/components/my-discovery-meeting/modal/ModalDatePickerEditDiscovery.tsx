@@ -9,17 +9,17 @@ import { AnimatePresence, motion } from "framer-motion";
 import useGet from "../../../../components/hook/useGet";
 
 const ModalDatePickerEditDiscovery = () => {
-  const {
+  /* const {
     displayModalDatePickerEditDiscovery,
     reloadModalDatePickerEditDiscovery,
-  } = useSelector((state: RootState) => state.ModalDatePickerEditDiscovery);
-  const { id } = useSelector((state: RootState) => state.auth);
+  } = useSelector((state: RootState) => state.ModalDatePickerEditDiscovery); */
+  /* const { id } = useSelector((state: RootState) => state.auth); */
   const {
     data: userData,
     isLoading,
     isError,
   } = useGet("/api/user/getUserMeeting");
-  const { isMobile } = useSelector((state: RootState) => state.Mobile);
+  /* const { isMobile } = useSelector((state: RootState) => state.Mobile); */
 
   const [userClickSelectMonth, setUserClickSelectMonth] =
     useState<boolean>(false);
@@ -86,7 +86,7 @@ const ModalDatePickerEditDiscovery = () => {
     4: "Jeudi",
     5: "vendredi",
   };
-  useEffect(() => {
+  /* useEffect(() => {
     if (reloadModalDatePickerEditDiscovery === true) {
       clearState();
       dispatch({
@@ -94,7 +94,7 @@ const ModalDatePickerEditDiscovery = () => {
       });
     }
   }, [dispatch, reloadModalDatePickerEditDiscovery]);
-
+ */
   useEffect(() => {
     const getMeetingByWeek = (newar: any) => {
       let ar = [];
@@ -169,7 +169,7 @@ const ModalDatePickerEditDiscovery = () => {
       return week;
     }
     if (
-      isMobile === false &&
+      // isMobile === false &&
       userData &&
       userData.body &&
       userData.status === 200 &&
@@ -200,7 +200,7 @@ const ModalDatePickerEditDiscovery = () => {
         getMeetingByWeek(ar);
       }
     } else if (
-      isMobile === true &&
+      // isMobile === true &&
       choiceDate === null &&
       userData &&
       userData.status === 200 &&
@@ -304,7 +304,7 @@ const ModalDatePickerEditDiscovery = () => {
       }
       setArMeeting(ar);
     }
-  }, [arDateWeek, choiceDate, isMobile, startDateWeek, userData]);
+  }, [arDateWeek, choiceDate, startDateWeek, userData]);
   const changeDate = (wowtets: any) => {
     const getMeetingByWeek = (newar: any) => {
       let ar = [];
@@ -801,7 +801,7 @@ const ModalDatePickerEditDiscovery = () => {
   return (
     <>
       <AnimatePresence>
-        {displayModalDatePickerEditDiscovery === true && (
+        {/* {displayModalDatePickerEditDiscovery === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -1450,12 +1450,6 @@ const ModalDatePickerEditDiscovery = () => {
                                       onClick={() => {
                                         handlerClick(p[0][3], p);
 
-                                        /* handlerClick(
-                                choiceDate.getFullYear(),
-                                choiceDate.getMonth(),
-                                choiceDate.getDate(),
-                                h[1]
-                              ); */
                                       }}
                                     >
                                       <p
@@ -1478,7 +1472,7 @@ const ModalDatePickerEditDiscovery = () => {
               )}
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );

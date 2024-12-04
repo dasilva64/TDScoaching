@@ -79,11 +79,11 @@ const ModalAddDiscoveryMeeting = () => {
     }
   };
 
-  const { trigger, data, reset, isMutating } = useSWRMutation(
+  /* const { trigger, data, reset, isMutating } = useSWRMutation(
     "/components/header/modal/discovery/api",
     fetchPost
-  );
-  useEffect(() => {
+  ); */
+  /* useEffect(() => {
     if (data) {
       if (data.status === 400) {
         if (data.type === "validation") {
@@ -152,13 +152,9 @@ const ModalAddDiscoveryMeeting = () => {
         });
         reset();
       }
-      /* dispatch({
-        type: "flash/storeFlashMessage",
-        payload: { type: "success", flashMessage: data.message },
-      }); */
     }
-  }, [data, dispatch, reset]);
-
+  }, [data, dataModalAddDiscoveryMeetingTest, dispatch, emailInput, reset]);
+ */
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     regex: RegExp,
@@ -200,13 +196,13 @@ const ModalAddDiscoveryMeeting = () => {
       typeCoachingValid === true
     ) {
       if (pseudo.length === 0) {
-        trigger({
+        /* trigger({
           typeCoaching: typeCoaching,
           start: dataModalAddDiscoveryMeetingTest,
           firstname: firstnameInput,
           lastname: lastnameInput,
           email: emailInput,
-        });
+        }); */
       }
     } else {
       if (validEmailInput === false) {
@@ -435,7 +431,7 @@ const ModalAddDiscoveryMeeting = () => {
                     setPseudo(e.target.value);
                   }}
                 />
-                <div className={styles.modal__form__submit}>
+                {/* <div className={styles.modal__form__submit}>
                   {isMutating && (
                     <>
                       <button
@@ -469,7 +465,7 @@ const ModalAddDiscoveryMeeting = () => {
                       </button>
                     </>
                   )}
-                </div>
+                </div> */}
               </form>
             </motion.div>
           </>

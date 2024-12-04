@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "./NotComfirm.module.scss";
 import useGet from "../../../components/hook/useGet";
-import meeting from "../../../../api/fixtures/meeting";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/redux/store";
 import fetchGet from "../../../../../src/app/components/fetch/fetchGet";

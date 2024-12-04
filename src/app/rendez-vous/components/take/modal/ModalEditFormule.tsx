@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ModalEditFormule.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { FormControl } from "@mui/base";
 import {
   FormLabel,
   RadioGroup,
@@ -18,9 +17,9 @@ import { RootState } from "@/app/redux/store";
 import Image from "next/image";
 
 const ModalEditFormuleUser = () => {
-  const { displayModalEditFormule } = useSelector(
+  /* const { displayModalEditFormule } = useSelector(
     (state: RootState) => state.ModalEditFormule
-  );
+  ); */
   const {
     data: userData,
     mutate,
@@ -130,7 +129,7 @@ const ModalEditFormuleUser = () => {
   return (
     <>
       <AnimatePresence>
-        {displayModalEditFormule === true && (
+        {/* {displayModalEditFormule === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -247,7 +246,7 @@ const ModalEditFormuleUser = () => {
               </form>
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );

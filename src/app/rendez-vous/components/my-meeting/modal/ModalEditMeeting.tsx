@@ -10,9 +10,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const ModalEditMeeting = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { displayModalEditMeeting, dataModalEditMeeting } = useSelector(
+  /* const { displayModalEditMeeting, dataModalEditMeeting } = useSelector(
     (state: RootState) => state.ModalEditMeeting
-  );
+  ); */
   const { data, trigger, reset } = useSWRMutation(
     "/api/meeting/edit",
     fetchPost
@@ -72,16 +72,16 @@ const ModalEditMeeting = () => {
   }, [data, reset]);
   const handlerClick = () => {
     const fetchEditMeeting = async () => {
-      trigger({
+      /* trigger({
         start: new Date(dataModalEditMeeting).toLocaleString("en-US"),
-      });
+      }); */
     };
     fetchEditMeeting();
   };
   return (
     <>
       <AnimatePresence>
-        {displayModalEditMeeting === true && (
+        {/* {displayModalEditMeeting === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -148,7 +148,7 @@ const ModalEditMeeting = () => {
               </div>
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );

@@ -1,13 +1,7 @@
 import React from "react";
 import styles from "./page.module.scss";
 import NoScript from "@/app/components/noscript/NoScript";
-import localFont from "next/font/local";
 import Content from "./components/Content";
-import { Providers } from "./redux/provider";
-const Parisienne = localFont({
-  src: "../../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 export const metadata = {
   title: "Votre rendez-vous - tdscoaching",
@@ -27,9 +21,7 @@ const page = () => {
     <>
       <NoScript />
       <main className={styles.meet}>
-        <h1 className={`${styles.meet__h1} ${Parisienne.className}`}>
-          Votre rendez-vous
-        </h1>
+        <h1 className={`${styles.meet__h1}`}>Votre rendez-vous</h1>
         <Content />
       </main>
     </>

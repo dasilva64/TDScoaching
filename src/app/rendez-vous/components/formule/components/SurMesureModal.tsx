@@ -14,9 +14,9 @@ const SurMesureModal = () => {
   const [number, setNumber] = React.useState("");
   const [total, setTotal] = React.useState<null | string>(null);
 
-  const { displayModalSurMesure } = useSelector(
+  /* const { displayModalSurMesure } = useSelector(
     (state: RootState) => state.ModalSurMesure
-  );
+  ); */
   const closeForm = () => {
     dispatch({
       type: "ModalSurMesure/close",
@@ -30,7 +30,7 @@ const SurMesureModal = () => {
   return (
     <>
       <AnimatePresence>
-        {displayModalSurMesure === true && (
+        {/* {displayModalSurMesure === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -99,7 +99,7 @@ const SurMesureModal = () => {
               {total !== null && <p>Le prix sera de de : {total}</p>}
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );

@@ -1,5 +1,4 @@
 import fetchPost from "../../../../../src/app/components/fetch/FetchPost";
-import { FormControl } from "@mui/base";
 import Image from "next/image";
 import { useCanvas } from "./CanvasContext";
 import styles from "./Formule.module.scss";
@@ -131,12 +130,15 @@ const Formule = () => {
           width={20}
           height={20}
         />
-        <p>Vous n'avez aucun rendez-vous à venir</p>
+        <p>Vous n&apos;avez aucun rendez-vous à venir</p>
       </div>
       <div className={styles.formule__offre}>
-        <h3 className={styles.formule__offre__title}>Selection d'une offre</h3>
+        <h3 className={styles.formule__offre__title}>
+          Selection d&apos;une offre
+        </h3>
         <p className={styles.formule__offre__description}>
-          Vous pouvez sélectionner une offre pour prendre d'autre rendez-vous.
+          Vous pouvez sélectionner une offre pour prendre d&apos;autre
+          rendez-vous.
         </p>
         <div className={styles.formule__offre__content}>
           <div

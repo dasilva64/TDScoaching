@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import styles from "./ModalComfirmDeleteContrat.module.scss";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
+//import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { RootState } from "@/app/redux/store";
 import useGet from "../../../../components/hook/useGet";
 import useSWRMutation from "swr/mutation";
@@ -17,10 +17,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import Visibility from "@mui/icons-material/Visibility";
 import Link from "next/link";
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+//import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import { google } from "googleapis";
-import {
+/* import {
   Combobox,
   ComboboxInput,
   ComboboxList,
@@ -30,15 +30,15 @@ import {
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
-} from "use-places-autocomplete";
+} from "use-places-autocomplete"; */
 import {
   Checkbox,
   FormControlLabel,
   FormGroup,
   FormHelperText,
 } from "@mui/material";
-import { useDraw } from "../../../../components/hook/canva/useDraw";
-import add from "../../../../../api/meeting/add";
+/* import { useDraw } from "../../../../components/hook/canva/useDraw";
+import add from "../../../../../api/meeting/add"; */
 const lib: any = ["places"];
 const ModalComfirmDeleteContrat = () => {
   const [allowContract, setAllowContract] = useState(false);
@@ -91,10 +91,10 @@ const ModalComfirmDeleteContrat = () => {
       reset();
     }
   }, [data, reset, userData]);
-  const { displayModalComfirmDeleteContrat } = useSelector(
+  /* const { displayModalComfirmDeleteContrat } = useSelector(
     (state: RootState) => state.ModalComfirmDeleteContrat
-  );
-  useEffect(() => {
+  ); */
+  /* useEffect(() => {
     const test = async () => {
       trigger({
         firstname: userData.body.firstname,
@@ -106,14 +106,14 @@ const ModalComfirmDeleteContrat = () => {
         test();
       }
     }
-  }, [displayModalComfirmDeleteContrat, trigger, userData]);
+  }, [displayModalComfirmDeleteContrat, trigger, userData]); */
   const dispatch = useDispatch();
   const closeForm = () => {
     dispatch({
       type: "ModalComfirmDeleteContrat/close",
     });
   };
-  const { canvasRef, onMouseDown, signatureRef, clear } = useDraw(
+  /*  const { canvasRef, onMouseDown, signatureRef, clear } = useDraw(
     drawLine,
     setSignatureRefContent,
     setSignatureError
@@ -130,7 +130,7 @@ const ModalComfirmDeleteContrat = () => {
     ctx.moveTo(startPoint.x, startPoint.y);
     ctx.lineTo(currX, currY);
     ctx.stroke();
-  }
+  } */
   let content;
   if (isError) {
     content = <p>error</p>;
@@ -315,14 +315,14 @@ const ModalComfirmDeleteContrat = () => {
                       width: "300px",
                       height: "100px",
                     }}
-                    ref={canvasRef}
-                    onMouseDown={onMouseDown}
+                    /* ref={canvasRef}
+                    onMouseDown={onMouseDown} */
                     width={300}
                     height={100}
                     className={styles.contratModal__content__canvas}
                   />
                   <div>
-                    <input type="hidden" name="signature" ref={signatureRef} />
+                    {/* <input type="hidden" name="signature" ref={signatureRef} /> */}
                   </div>
                   {signatureRefContent !== "" &&
                     signatureRefContent !== undefined && (
@@ -333,7 +333,7 @@ const ModalComfirmDeleteContrat = () => {
                               styles.contratModal__content__canvas__btnClearSignature
                             }
                             onClick={() => {
-                              clear();
+                              // clear();
                             }}
                           >
                             Supprimer la signature
@@ -383,10 +383,10 @@ const ModalComfirmDeleteContrat = () => {
                             signatureRefContent !== "") ||
                           (signatureRefContent !== undefined && city.length > 0)
                         ) {
-                          let data = signatureRef.current.value.replace(
+                          /*  let data = signatureRef.current.value.replace(
                             /^data:image\/\w+;base64,/,
                             ""
-                          );
+                          ); */
 
                           const test = async () => {
                             let response = await fetch("/api/contract/edit", {
@@ -447,7 +447,7 @@ const ModalComfirmDeleteContrat = () => {
   return (
     <>
       <AnimatePresence>
-        {displayModalComfirmDeleteContrat === true && (
+        {/* {displayModalComfirmDeleteContrat === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -487,14 +487,14 @@ const ModalComfirmDeleteContrat = () => {
               <h1 className={styles.contratModal__h1}>
                 Comfirmation de changement d&apos;offre
               </h1>
-              {/*  <input
+               <input
                 type="text"
                 name=""
                 id=""
                 onChange={(e) => {
                   setInput(e.target.value);
                 }}
-              /> */}
+              />
               <p>Offre actuelle : {userData.body.typeMeeting.type} </p>
               <p>
                 Votre offre actuelle sera supprimée et remplacée par
@@ -507,7 +507,7 @@ const ModalComfirmDeleteContrat = () => {
               {content}
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );
@@ -538,7 +538,7 @@ export function Map() {
 }
 
 export const PlacesAutocomplete = ({ setSelected }: any) => {
-  const {
+  /* const {
     ready,
     value,
     suggestions: { status, data },
@@ -558,12 +558,12 @@ export const PlacesAutocomplete = ({ setSelected }: any) => {
   };
   if (data.length > 0) {
     //console.log(data[0].terms[data[0].terms.length - 1]);
-  }
+  } */
   //
   return (
     <>
       <div>
-        <input
+        {/*  <input
           type="text"
           value={value}
           onChange={(e) => {
@@ -580,7 +580,7 @@ export const PlacesAutocomplete = ({ setSelected }: any) => {
                   <p key={place_id}>{description}</p>
                 )
             )}
-        </div>
+        </div> */}
       </div>
       {/* <Combobox style={{ position: "absolute", zIndex: "999" }}>
         <ComboboxInput

@@ -31,9 +31,9 @@ const ModalDeleteMeeting = () => {
     "/api/paiement/cancel",
     fetchGet
   );
-  const { displayModalDeleteMeeting } = useSelector(
+  /* const { displayModalDeleteMeeting } = useSelector(
     (state: RootState) => state.ModalDeleteMeeting
-  );
+  ); */
   useEffect(() => {
     if (data && data.status === 200) {
       if (data.status === 200) {
@@ -70,7 +70,7 @@ const ModalDeleteMeeting = () => {
   return (
     <>
       <AnimatePresence>
-        {displayModalDeleteMeeting && (
+        {/* {displayModalDeleteMeeting && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -229,7 +229,7 @@ const ModalDeleteMeeting = () => {
               )}
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );

@@ -14,10 +14,10 @@ const ModalDatePicker = () => {
     isLoading,
     isError,
   } = useGet("/api/user/getUserMeeting");
-  const { isMobile } = useSelector((state: RootState) => state.Mobile);
+  /*  const { isMobile } = useSelector((state: RootState) => state.Mobile);
   const { displayModalDatePicker, reloadModalDatePicker } = useSelector(
     (state: RootState) => state.ModalDatePicker
-  );
+  ); */
   const [userClickSelectMonth, setUserClickSelectMonth] =
     useState<boolean>(false);
   const [userClickSelectYear, setUserClickSelectYear] =
@@ -40,14 +40,14 @@ const ModalDatePicker = () => {
     setUserClickSelectYear(false);
     setUserClickSelectMonth(false);
   };
-  useEffect(() => {
+  /* useEffect(() => {
     if (reloadModalDatePicker === true) {
       clearState();
       dispatch({
         type: "ModalDatePicker/reload",
       });
     }
-  }, [dispatch, reloadModalDatePicker]);
+  }, [dispatch, reloadModalDatePicker]); */
   const yearar: any = {
     0: 2023,
     1: 2024,
@@ -178,7 +178,7 @@ const ModalDatePicker = () => {
       return week;
     }
     if (
-      isMobile === false &&
+      // isMobile === false &&
       userData &&
       userData.body &&
       userData.body.meetings &&
@@ -209,7 +209,7 @@ const ModalDatePicker = () => {
         getMeetingByWeek(ar);
       }
     } else if (
-      isMobile === true &&
+      //isMobile === true &&
       choiceDate === null &&
       userData &&
       userData.status === 200 &&
@@ -313,7 +313,7 @@ const ModalDatePicker = () => {
       }
       setArMeeting(ar);
     }
-  }, [arDateWeek, choiceDate, isMobile, startDateWeek, userData]);
+  }, [arDateWeek, choiceDate, startDateWeek, userData]);
   const changeDate = (wowtets: any) => {
     const getMeetingByWeek = (newar: any) => {
       let ar = [];
@@ -823,7 +823,7 @@ const ModalDatePicker = () => {
   return (
     <>
       <AnimatePresence>
-        {displayModalDatePicker === true && (
+        {/* {displayModalDatePicker === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -1418,12 +1418,12 @@ const ModalDatePicker = () => {
                                       }
                                       onClick={() => {
                                         handlerClick(p[0][3], p);
-                                        /* handlerClick(
+                                         handlerClick(
                                     choiceDate.getFullYear(),
                                     choiceDate.getMonth(),
                                     choiceDate.getDate(),
                                     h[1]
-                                  ); */
+                                  ); 
                                       }}
                                     >
                                       <p
@@ -1446,7 +1446,7 @@ const ModalDatePicker = () => {
               )}
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );

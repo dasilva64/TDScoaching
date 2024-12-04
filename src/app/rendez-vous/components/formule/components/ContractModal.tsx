@@ -11,10 +11,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Link from "next/link";
 import useGet from "../../../../components/hook/useGet";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
+//import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../../../../../../src/app/components/fetch/FetchPost";
-import { useDraw } from "../../../../components/hook/canva/useDraw";
+//import { useDraw } from "../../../../components/hook/canva/useDraw";
 import Input from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
@@ -27,7 +27,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { mutate } from "swr";
-import Places from "../../../../components/google/Places";
+//import Places from "../../../../components/google/Places";
 import { translate } from "googleapis/build/src/apis/translate";
 
 const variants = {
@@ -113,9 +113,9 @@ const ContractModal = () => {
   const [number, setNumber] = React.useState("");
   const [total, setTotal] = React.useState<null | string>(null);
 
-  const { displayModalContract, type } = useSelector(
+  /*  const { displayModalContract, type } = useSelector(
     (state: RootState) => state.ModalContract
-  );
+  ); */
   const clearState = () => {
     setAllCity(null);
     setAdresse("");
@@ -142,12 +142,12 @@ const ContractModal = () => {
     let price: number = Number(event.target.value) * 100;
     setTotal(price.toString());
   };
-  const { canvasRef, onMouseDown, signatureRef, clear } = useDraw(
+  /* const { canvasRef, onMouseDown, signatureRef, clear } = useDraw(
     drawLine,
     setSignatureRefContent,
     setSignatureError
-  );
-  function drawLine({ prevPoint, currentPoint, ctx }: any) {
+  ); */
+  /* function drawLine({ prevPoint, currentPoint, ctx }: any) {
     const { x: currX, y: currY } = currentPoint;
     const lineColor = rgb(0, 0, 0);
     const lineWidth = 2;
@@ -159,21 +159,21 @@ const ContractModal = () => {
     ctx.moveTo(startPoint.x, startPoint.y);
     ctx.lineTo(currX, currY);
     ctx.stroke();
-  }
+  } */
   useEffect(() => {
     const test = async () => {
-      trigger({
+      /* trigger({
         firstname: userData.body.firstname,
         lastname: userData.body.lastname,
         type: type,
-      });
+      }); */
     };
-    if (userData && displayModalContract === true) {
+    /* if (userData && displayModalContract === true) {
       if (userData.status === 200) {
         test();
       }
-    }
-  }, [displayModalContract, trigger, type, userData]);
+    } */
+  }, [trigger, userData]);
   let content;
   if (isError) {
     content = <p>error</p>;
@@ -210,7 +210,7 @@ const ContractModal = () => {
                             "Content-Type": "application/json",
                           },
                           body: JSON.stringify({
-                            type: type,
+                            //type: type,
                           }),
                         });
                         let dataResponse = await response.json();
@@ -240,7 +240,7 @@ const ContractModal = () => {
                     className={styles.contratModal__content__btnEdit}
                     onClick={() => {
                       const fetchEdit = async () => {
-                        if (type === "flash") {
+                        /*  if (type === "flash") {
                           triggerEdit({
                             formule: type,
                           });
@@ -249,7 +249,7 @@ const ContractModal = () => {
                             formule: type,
                             nbSeance: nbSeance,
                           });
-                        }
+                        } */
                       };
                       fetchEdit();
                     }}
@@ -258,7 +258,7 @@ const ContractModal = () => {
                   </button>
                 </>
               )}
-              {sign === false && type === "flash" && (
+              {/* {sign === false && type === "flash" && (
                 <>
                   <div className={styles.contratModal__content__cities}>
                     <Places
@@ -806,7 +806,7 @@ const ContractModal = () => {
                     </button>
                   </div>
                 </>
-              )}
+              )} */}
             </div>
           );
         }
@@ -816,7 +816,7 @@ const ContractModal = () => {
   return (
     <>
       <AnimatePresence>
-        {displayModalContract === true && (
+        {/* {displayModalContract === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -862,7 +862,7 @@ const ContractModal = () => {
               {content}
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );

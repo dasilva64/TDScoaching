@@ -15,9 +15,9 @@ const ModalDatePickerDiscovery = () => {
     isError,
   } = useGet("/api/user/getUserMeeting");
 
-  const { isMobile } = useSelector((state: RootState) => state.Mobile);
+  /* const { isMobile } = useSelector((state: RootState) => state.Mobile);
   const { displayModalDatePickerDiscovery, reloadModalDatePickerDiscovery } =
-    useSelector((state: RootState) => state.ModalDatePickerDiscovery);
+    useSelector((state: RootState) => state.ModalDatePickerDiscovery); */
   const [userClickSelectMonth, setUserClickSelectMonth] =
     useState<boolean>(false);
   const [userClickSelectYear, setUserClickSelectYear] =
@@ -99,7 +99,7 @@ const ModalDatePickerDiscovery = () => {
     setUserClickSelectYear(false);
     setUserClickSelectMonth(false);
   };
-  useEffect(() => {
+  /* useEffect(() => {
     if (reloadModalDatePickerDiscovery === true) {
       clearState();
       dispatch({
@@ -107,7 +107,7 @@ const ModalDatePickerDiscovery = () => {
       });
     }
   }, [dispatch, reloadModalDatePickerDiscovery]);
-
+ */
   useEffect(() => {
     const getMeetingByWeek = (newar: any) => {
       let ar = [];
@@ -181,7 +181,7 @@ const ModalDatePickerDiscovery = () => {
       return week;
     }
     if (
-      isMobile === false &&
+      //isMobile === false &&
       userData &&
       userData.body &&
       userData.status === 200 &&
@@ -212,7 +212,7 @@ const ModalDatePickerDiscovery = () => {
         getMeetingByWeek(ar);
       }
     } else if (
-      isMobile === true &&
+      //isMobile === true &&
       choiceDate === null &&
       userData &&
       userData.status === 200 &&
@@ -316,7 +316,7 @@ const ModalDatePickerDiscovery = () => {
       }
       setArMeeting(ar);
     }
-  }, [arDateWeek, choiceDate, isMobile, startDateWeek, userData]);
+  }, [arDateWeek, choiceDate, startDateWeek, userData]);
   const changeDate = (wowtets: any) => {
     const getMeetingByWeek = (newar: any) => {
       let ar = [];
@@ -819,7 +819,7 @@ const ModalDatePickerDiscovery = () => {
   return (
     <>
       <AnimatePresence>
-        {displayModalDatePickerDiscovery === true && (
+        {/* {displayModalDatePickerDiscovery === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -1410,12 +1410,12 @@ const ModalDatePickerDiscovery = () => {
                                       }
                                       onClick={() => {
                                         handlerClick(p[0][3], p);
-                                        /* handlerClick(
+                                         handlerClick(
                                 choiceDate.getFullYear(),
                                 choiceDate.getMonth(),
                                 choiceDate.getDate(),
                                 h[1]
-                              ); */
+                              ); 
                                       }}
                                     >
                                       <p
@@ -1438,7 +1438,7 @@ const ModalDatePickerDiscovery = () => {
               )}
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );

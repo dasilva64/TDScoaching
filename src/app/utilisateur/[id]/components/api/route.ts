@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
             );
           } else {
             let meeting;
-            if (userById.meetingId === null) {
+            /* if (userById.meetingId === null) {
               meeting = null;
             } else {
               let meetingByUser = await prisma.meeting.findUnique({
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
               } else {
                 meeting = meetingByUser;
               }
-            }
+            } */
             const meetingByUser = await prisma.meeting.findMany({
               where: { userId: validator.escape(userById.id) },
               select: {
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
               discovery: userById.discovery,
               allMeetings: meetingByUser,
               meeting: meeting,
-              typeMeeting: userById.typeMeeting,
+              //typeMeeting: userById.typeMeeting,
             };
             return NextResponse.json({
               status: 200,

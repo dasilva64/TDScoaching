@@ -108,7 +108,7 @@ const Content = () => {
                 {data.body.meet.confirm === false && (
                   <>
                     <p>
-                      Attention ce rendez-vous n'est pas encore confirmé,
+                      Attention ce rendez-vous n&apos;est pas encore confirmé,
                       veuillez le confimer 24h avant la date du rendez-vous
                       sinon il sera automatiquement supprimé.
                     </p>
@@ -154,7 +154,7 @@ const Content = () => {
                   </button>
                 </div>
                 <p>
-                  Si le rendez n'est pas comfirmer 24h avant alors il sera
+                  Si le rendez n&apos;est pas comfirmer 24h avant alors il sera
                   automatiquement supprimer.
                 </p>
                 <p>

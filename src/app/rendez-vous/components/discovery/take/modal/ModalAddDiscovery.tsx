@@ -195,7 +195,7 @@ const ModalAddDiscovery = ({ mutate }: any) => {
               </p> */}
               <p className={styles.modalAddDiscovery__payment}>
                 Pour comfirmer le rendez-vous de découverte aucune autorisation
-                bancaire n'est nécessaire.
+                bancaire n&apos;est nécessaire.
               </p>
               <p className={styles.modalAddDiscovery__choose}>
                 Veuillez choissir un type de coaching pour ce rendez-vous

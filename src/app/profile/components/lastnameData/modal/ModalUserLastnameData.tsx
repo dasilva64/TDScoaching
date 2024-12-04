@@ -1,6 +1,5 @@
 "use client";
 
-import { AppDispatch, RootState } from "@/app/profile/redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserLastnameData.module.scss";
@@ -12,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
+import { RootState, AppDispatch } from "@/app/redux/store";
 
 const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
   const { displayModalEditLastname } = useSelector(

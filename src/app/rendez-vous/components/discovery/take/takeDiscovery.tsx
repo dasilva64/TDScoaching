@@ -19,7 +19,7 @@ const TakeDiscovery = () => {
           width={20}
           height={20}
         />
-        <p>Vous n'avez aucun rendez-vous à venir</p>
+        <p>Vous n&apos;avez aucun rendez-vous à venir</p>
       </div>
       <div className={styles.takeDiscovery__info}>
         <h3 className={styles.takeDiscovery__info__title}>

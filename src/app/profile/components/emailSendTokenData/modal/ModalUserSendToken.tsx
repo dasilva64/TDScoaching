@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ModalUserSendToken.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/profile/redux/store";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
 import fetchPost from "../../../../components/fetch/FetchPost";
@@ -10,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
+import { RootState, AppDispatch } from "@/app/redux/store";
 
 const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const { displayModalSendTokenEmail } = useSelector(

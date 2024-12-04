@@ -20,9 +20,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const ModalAddMeeting = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { dataModalAddMeeting, displayModalAddMeeting } = useSelector(
+  /* const { dataModalAddMeeting, displayModalAddMeeting } = useSelector(
     (state: RootState) => state.ModalAddMeeting
-  );
+  ); */
   const [validCGVInput, setValidCGVInput] = useState<boolean>(false);
   const [CGVInputError, setCGVInputError] = useState<string>("");
   const [errorMessageTypeMeeting, setErrorMessageTypeMeeting] =
@@ -67,27 +67,27 @@ const ModalAddMeeting = () => {
 
   const handlerPayment = () => {
     const fetchAddMeeting = async () => {
-      trigger({
+      /* trigger({
         start: new Date(dataModalAddMeeting).toLocaleString("en-US"),
         typeCoaching: typeMeetingInput,
-      });
+      }); */
     };
     fetchAddMeeting();
   };
 
   const handlerPaymentSeveral = () => {
     const fetchAddMeeting = async () => {
-      triggerSeveral({
+      /* triggerSeveral({
         start: new Date(dataModalAddMeeting).toLocaleString("en-US"),
         typeCoaching: typeMeetingInput,
-      });
+      }); */
     };
     fetchAddMeeting();
   };
   return (
     <>
       <AnimatePresence>
-        {displayModalAddMeeting === true && (
+        {/* {displayModalAddMeeting === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -248,7 +248,7 @@ const ModalAddMeeting = () => {
               </div>
             </motion.div>
           </>
-        )}
+        )} */}
       </AnimatePresence>
     </>
   );

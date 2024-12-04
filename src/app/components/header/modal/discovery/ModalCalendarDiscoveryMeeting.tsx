@@ -17,7 +17,7 @@ const ModalDiscoveryMeetingTest = () => {
   const [allData, setAllData] = useState<any[] | null>(null);
 
   const dispatch = useDispatch();
-  const {
+  /* const {
     data: userData,
     isLoading,
     isError,
@@ -34,8 +34,8 @@ const ModalDiscoveryMeetingTest = () => {
     dispatch({
       type: "ModalDiscoveryMeetingTest/close",
     });
-  }
-  useEffect(() => {
+  } */
+  /* useEffect(() => {
     if (userData) {
       if (userData.status === 200) {
         let array = [];
@@ -75,7 +75,7 @@ const ModalDiscoveryMeetingTest = () => {
         setAllData(array);
       }
     }
-  }, [userData]);
+  }, [userData]); */
 
   const calendarRef: any = useRef(null);
 

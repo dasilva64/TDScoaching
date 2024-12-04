@@ -5,9 +5,9 @@ import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import fetchPost from "../../../../components/fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
-import { AppDispatch, RootState } from "@/app/profile/redux/store";
 import Image from "next/image";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
+import { AppDispatch, RootState } from "@/app/redux/store";
 
 const ModalDeleteAccount = () => {
   const { displayModalDeleteAccount } = useSelector(

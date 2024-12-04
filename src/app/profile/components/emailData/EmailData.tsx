@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./EmailData.module.scss";
-import { AppDispatch, RootState } from "@/app/profile/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../../../components/fetch/FetchPost";
@@ -11,6 +10,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
+import { AppDispatch, RootState } from "@/app/redux/store";
 
 const EmailCheck = ({ data: userData, mutate }: any) => {
   const dispatch = useDispatch<AppDispatch>();

@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
                     }
                   );
                 } else {
-                  if (user.meetingId !== null) {
+                  /* if (user.meetingId !== null) {
                     return NextResponse.json(
                       {
                         status: 404,
@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
                       status: 200,
                       message: "Votre compte a bien été supprimé",
                     });
-                  }
+                  } */
                 }
               } else {
                 return NextResponse.json(

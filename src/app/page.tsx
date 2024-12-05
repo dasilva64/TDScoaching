@@ -13,8 +13,8 @@ export const metadata = {
   description:
     "Le coaching de vie, c’est quoi ? Vous êtes en quête de bien-être ? Etes-vous prêt à libérer tout votre potentiel ? Comment puis-je vous aider ?",
   icons: {
-    //icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
-    icon: "http://localhost:3000/assets/logo/logo3.webp",
+    icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
+    /* icon: "http://localhost:3000/assets/logo/logo3.webp", */
   },
   keywords:
     "Développement personnel, Coaching professionnel, Relation de couple, Communication, Équilibre vie professionnelle-vie personnelle, Confiance en soi, Gestion du stress",

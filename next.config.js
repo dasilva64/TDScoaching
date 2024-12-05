@@ -13,8 +13,20 @@
     upgrade-insecure-requests;
 `; */
 
+const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' blob: data:;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    block-all-mixed-content;
+    upgrade-insecure-requests;
+`;
 const nextConfig = {
-  /* productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: true,
   async headers() {
     return [
       {
@@ -63,7 +75,7 @@ const nextConfig = {
         ],
       },
     ];
-  }, */
+  },
   /*  ]
   } */
   /* externals: {

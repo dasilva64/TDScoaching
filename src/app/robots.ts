@@ -15,7 +15,7 @@ export default function robots(): MetadataRoute.Robots {
         "/utilisateurs",
         "/reinitialisation-mot-de-passe/*",
       ],
-      allow: ["/", "/contact", "/tarif", "/qui-suis-je", "/coaching-de-vie", "/blog"],
+      allow: ["/", "/contact", "/tarif", "/qui-suis-je", "/coaching-de-vie", "/blog", "/comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques"],
     },
     sitemap: "https://www.tdscoaching.fr/sitemap.xml",
   };

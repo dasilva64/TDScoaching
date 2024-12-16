@@ -24,22 +24,6 @@ export const metadata = {
   },
 };
 
-/* const getData = unstable_cache(async () => {
-  const getArticleData = await prisma.article.findMany({
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      description: true,
-      image: true,
-      created_at: true,
-    },
-  });
-
-  if (!getArticleData) notFound();
-  return getArticleData;
-}); */
-
 const getData = unstable_cache(
   async () => {
     const getArticleData = await prisma.article.findMany({
@@ -56,8 +40,8 @@ const getData = unstable_cache(
     if (!getArticleData) notFound();
     return getArticleData;
   },
-  ["posts"],
-  { revalidate: 3600, tags: ["posts"] }
+  ["articles"],
+  { revalidate: 3600, tags: ["articles"] }
 );
 
 const page = async () => {

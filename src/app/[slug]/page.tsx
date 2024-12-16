@@ -3,6 +3,7 @@ import prisma from "../lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { unstable_cache } from "next/cache";
 import validator from "validator";
 import styles from "./page.module.scss";
 import CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiquesSomaire from "./components/comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques/comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques-somaire";
@@ -31,43 +32,51 @@ export async function generateMetadata({
   };
 }
 
-const getOne = cache(async ({ slug }: { slug: string }) => {
-  const article = await prisma.article.findUnique({
-    where: { slug: validator.escape(slug) },
-    select: {
-      title: true,
-      image: true,
-      created_at: true,
-      description: true,
-      slug: true,
-    },
-  });
-
-  if (!article) notFound();
-  return article;
-});
-
-const getLast = cache(async () => {
-  const lastArticles = await prisma.article.findMany({
-    where: {
-      slug: {
-        not: "comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques",
+const getOne = unstable_cache(
+  async ({ slug }: { slug: string }) => {
+    const article = await prisma.article.findUnique({
+      where: { slug: validator.escape(slug) },
+      select: {
+        title: true,
+        image: true,
+        created_at: true,
+        description: true,
+        slug: true,
       },
-    },
-    select: {
-      title: true,
-      image: true,
-      created_at: true,
-      description: true,
-      slug: true,
-    },
-    orderBy: { created_at: "desc" },
-    take: 10,
-  });
+    });
 
-  if (!lastArticles) notFound();
-  return lastArticles;
-});
+    if (!article) notFound();
+    return article;
+  },
+  ["article"],
+  { revalidate: 3600, tags: ["article"] }
+);
+
+const getLast = unstable_cache(
+  async () => {
+    const lastArticles = await prisma.article.findMany({
+      where: {
+        slug: {
+          not: "comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques",
+        },
+      },
+      select: {
+        title: true,
+        image: true,
+        created_at: true,
+        description: true,
+        slug: true,
+      },
+      orderBy: { created_at: "desc" },
+      take: 10,
+    });
+
+    if (!lastArticles) notFound();
+    return lastArticles;
+  },
+  ["lastArticle"],
+  { revalidate: 3600, tags: ["lastArticle"] }
+);
 
 const page = async ({ params }: { params: { slug: string } }) => {
   const oneData: any = await getOne({ slug: params.slug });

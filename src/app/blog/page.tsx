@@ -4,7 +4,7 @@ import styles from "./page.module.scss";
 import prisma from "../lib/prisma";
 import Image from "next/image";
 import Paragraph from "./components/Paragraph";
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
@@ -24,7 +24,7 @@ export const metadata = {
   },
 };
 
-const getData = cache(async () => {
+/* const getData = unstable_cache(async () => {
   const getArticleData = await prisma.article.findMany({
     select: {
       id: true,
@@ -38,7 +38,27 @@ const getData = cache(async () => {
 
   if (!getArticleData) notFound();
   return getArticleData;
-});
+}); */
+
+const getData = unstable_cache(
+  async () => {
+    const getArticleData = await prisma.article.findMany({
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        description: true,
+        image: true,
+        created_at: true,
+      },
+    });
+
+    if (!getArticleData) notFound();
+    return getArticleData;
+  },
+  ["posts"],
+  { revalidate: 3600, tags: ["posts"] }
+);
 
 const page = async () => {
   const data = await getData();

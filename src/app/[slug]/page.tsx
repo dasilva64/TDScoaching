@@ -34,6 +34,13 @@ export async function generateMetadata({
 const getOne = cache(async ({ slug }: { slug: string }) => {
   const article = await prisma.article.findUnique({
     where: { slug: validator.escape(slug) },
+    select: {
+      title: true,
+      image: true,
+      created_at: true,
+      description: true,
+      slug: true,
+    },
   });
 
   if (!article) notFound();
@@ -46,6 +53,13 @@ const getLast = cache(async () => {
       slug: {
         not: "comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques",
       },
+    },
+    select: {
+      title: true,
+      image: true,
+      created_at: true,
+      description: true,
+      slug: true,
     },
     orderBy: { created_at: "desc" },
     take: 10,

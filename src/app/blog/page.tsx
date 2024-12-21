@@ -41,7 +41,7 @@ const getData = unstable_cache(
     return getArticleData;
   },
   ["articles"],
-  { revalidate: 1, tags: ["articles"] }
+  { revalidate: 3600, tags: ["articles"] }
 );
 
 const page = async () => {

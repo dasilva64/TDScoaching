@@ -49,7 +49,7 @@ const getOne = unstable_cache(
     return article;
   },
   ["article"],
-  { revalidate: 3600, tags: ["article"] }
+  { revalidate: 3, tags: ["article"] }
 );
 
 const getLast = unstable_cache(
@@ -75,7 +75,7 @@ const getLast = unstable_cache(
     return lastArticles;
   },
   ["lastArticle"],
-  { revalidate: 3600, tags: ["lastArticle"] }
+  { revalidate: 3, tags: ["lastArticle"] }
 );
 
 const page = async ({ params }: { params: { slug: string } }) => {

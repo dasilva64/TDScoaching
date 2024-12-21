@@ -15,6 +15,7 @@ import Nav from "../modal/Nav";
 import DiscoveryModal from "@/app/tarif/components/DiscoveryModal";
 import NormalModal from "@/app/tarif/components/NormalModal";
 import NavUser from "../modal/NavUser";
+import ModalCalendarDiscoveryMeeting from "../modal/discovery/ModalCalendarDiscoveryMeeting";
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
@@ -133,9 +134,10 @@ const Content = () => {
   };
   return (
     <>
-      <DiscoveryModal />
-      <NormalModal />
+      {/* <DiscoveryModal />
+      <NormalModal /> */}
       <FormLogin />
+      {/* <ModalCalendarDiscoveryMeeting /> */}
       {/* <ModalDiscoveryMeetingTest />
       <ModalAddDiscoveryMeeting />
       <ModalRecapDiscoveryMeeting /> */}

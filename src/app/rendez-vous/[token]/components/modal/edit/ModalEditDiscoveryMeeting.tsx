@@ -36,15 +36,15 @@ const ModalEditDiscoveryMeeting = ({ mutate, token }: any) => {
       }
     }
   }, [data, dispatch, mutate, reset]);
-  const {
+  /* const {
     displayModalEditDiscoveryMeetingRendezVousToken,
     dataModalEditDiscoveryMeetingRendezVousToken,
   } = useSelector(
     (state: RootState) => state.ModalEditDiscoveryMeetingRendezVousToken
-  );
+  ); */
   return (
     <>
-      <TabIndex
+      {/* <TabIndex
         displayModal={displayModalEditDiscoveryMeetingRendezVousToken}
       />
       <AnimatePresence>
@@ -143,7 +143,7 @@ const ModalEditDiscoveryMeeting = ({ mutate, token }: any) => {
                     dataModalEditDiscoveryMeetingRendezVousToken
                   ).toLocaleTimeString("fr-FR")}
                 </p>
-                {/* <p className={styles.modalAddDiscovery__rappel__p}>
+                <p className={styles.modalAddDiscovery__rappel__p}>
                   <Image
                     className={styles.modalAddDiscovery__rappel__p__img}
                     src="/assets/icone/coach.png"
@@ -153,7 +153,7 @@ const ModalEditDiscoveryMeeting = ({ mutate, token }: any) => {
                   />
                   {" : "}
                   {typeCoaching}
-                </p> */}
+                </p>
               </div>
               <div className={styles.modalAddDiscovery__edit}>
                 {isMutating === false && (
@@ -201,7 +201,7 @@ const ModalEditDiscoveryMeeting = ({ mutate, token }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

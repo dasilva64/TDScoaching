@@ -31,9 +31,9 @@ const ModalAddDiscovery = ({ mutate }: any) => {
     dispatch({ type: "ModalAddDiscovery/close" });
     dispatch({ type: "ModalCalendarDiscovery/open" });
   };
-  const { displayModalAddDiscovery, dataModalAddDiscovery } = useSelector(
+  /* const { displayModalAddDiscovery, dataModalAddDiscovery } = useSelector(
     (state: RootState) => state.ModalAddDiscovery
-  );
+  ); */
 
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
@@ -102,7 +102,7 @@ const ModalAddDiscovery = ({ mutate }: any) => {
 
   return (
     <>
-      <TabIndex displayModal={displayModalAddDiscovery} />
+      {/* <TabIndex displayModal={displayModalAddDiscovery} />
       <AnimatePresence>
         {displayModalAddDiscovery === true && (
           <>
@@ -182,7 +182,7 @@ const ModalAddDiscovery = ({ mutate }: any) => {
                 </p>
               </div>
 
-              {/* <p>
+              <p>
                 Rappel du rendez-vous :{" "}
                 {new Date(dataModalAddDiscovery).toLocaleString("fr-FR", {
                   weekday: "long",
@@ -192,7 +192,7 @@ const ModalAddDiscovery = ({ mutate }: any) => {
                   hour: "numeric",
                   minute: "numeric",
                 })}
-              </p> */}
+              </p>
               <p className={styles.modalAddDiscovery__payment}>
                 Pour comfirmer le rendez-vous de découverte aucune autorisation
                 bancaire n&apos;est nécessaire.
@@ -218,7 +218,7 @@ const ModalAddDiscovery = ({ mutate }: any) => {
                         "Veuillez selectionner un type de coaching"
                       );
                     }
-                    /* if (typeCoachingValid === true) {
+                    if (typeCoachingValid === true) {
                         setTypeCoachingErrorMessage("");
                     } else if (
                         typeCoachingValid === false &&
@@ -227,7 +227,7 @@ const ModalAddDiscovery = ({ mutate }: any) => {
                         setTypeCoachingErrorMessage("Veuillez selectionner un type de coaching");
                     } else {
                         setTypeCoachingErrorMessage("Veuillez selectionner une raison");
-                    } */
+                    }
                   }
                 }}
               >
@@ -321,7 +321,7 @@ const ModalAddDiscovery = ({ mutate }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

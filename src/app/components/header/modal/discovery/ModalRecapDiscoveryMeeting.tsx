@@ -13,14 +13,14 @@ const ModalRecapDiscoveryMeeting = () => {
       type: "ModalRecapDiscoveryMeeting/close",
     });
   };
-  const {
+  /* const {
     displayModalRecapDiscoveryMeeting,
     emailModalRecapDiscoveryMeeting,
     dateModalRecapDiscoveryMeeting,
-  } = useSelector((state: RootState) => state.ModalRecapDiscoveryMeeting);
+  } = useSelector((state: RootState) => state.ModalRecapDiscoveryMeeting); */
   return (
     <>
-      <TabIndex displayModal={displayModalRecapDiscoveryMeeting} />
+      {/* <TabIndex displayModal={displayModalRecapDiscoveryMeeting} />
       <AnimatePresence>
         {displayModalRecapDiscoveryMeeting === true && (
           <>
@@ -117,7 +117,7 @@ const ModalRecapDiscoveryMeeting = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence>*/}
     </>
   );
 };

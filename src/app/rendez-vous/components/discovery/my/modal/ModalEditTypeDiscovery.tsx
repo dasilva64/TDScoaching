@@ -19,9 +19,9 @@ const ModalEditTypeDiscovery = ({
     "couple",
     "professionnel",
   ]);
-  const { displayModalEditTypeDiscovery } = useSelector(
+  /* const { displayModalEditTypeDiscovery } = useSelector(
     (state: RootState) => state.ModalEditTypeDiscovery
-  );
+  ); */
   const [typeCoaching, setTypeCoaching] = useState<string>(currentTypeCoaching);
   const [pseudo, setPseudo] = useState<string>("");
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
@@ -90,7 +90,7 @@ const ModalEditTypeDiscovery = ({
   }, [data, dispatch, mutate, reset, router]);
   return (
     <>
-      <TabIndex displayModal={displayModalEditTypeDiscovery} />
+      {/* <TabIndex displayModal={displayModalEditTypeDiscovery} />
       <AnimatePresence>
         {displayModalEditTypeDiscovery === true && (
           <>
@@ -121,7 +121,7 @@ const ModalEditTypeDiscovery = ({
                 transition: { duration: 0.3 },
               }}
             >
-              {/* <button
+              <button
                 type="button"
                 className={styles.modalAddDiscovery__return}
                 onClick={() => {
@@ -132,7 +132,7 @@ const ModalEditTypeDiscovery = ({
                 }}
               >
                 Retour au calendrier
-              </button> */}
+              </button>
               <button
                 type="button"
                 className={styles.modalAddDiscovery__btn}
@@ -229,11 +229,11 @@ const ModalEditTypeDiscovery = ({
                           )}
                         </React.Fragment>
                       ))}
-                      {/* <option value="familial">Coaching familial</option>
+                      <option value="familial">Coaching familial</option>
                       <option value="couple">Coaching de couple</option>
                       <option value="professionnel">
                         Coaching professionnel
-                      </option> */}
+                      </option>
                     </select>
                   </div>
                   <div className={styles.modalAddDiscovery__form__div__error}>
@@ -297,7 +297,7 @@ const ModalEditTypeDiscovery = ({
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

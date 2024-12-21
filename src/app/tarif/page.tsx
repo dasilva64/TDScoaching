@@ -24,6 +24,7 @@ export const metadata = {
 
 import localFont from "next/font/local";
 import NoScript from "../components/noscript/NoScript";
+import Modal from "./components/modal/Modal";
 const Parisienne = localFont({
   src: "../Parisienne-Regular.ttf",
   display: "swap",
@@ -33,6 +34,7 @@ const Tarif = () => {
   return (
     <>
       <NoScript />
+      <Modal />
       <main className={styles.tarif}>
         <div className={styles.tarif__bg}>
           <Image
@@ -83,7 +85,6 @@ const Tarif = () => {
           </div>
 
           <div className={styles.tarif__packs__container}>
-            {/* <div> */}
             <WhileInView
               type="y"
               className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__unique}`}
@@ -182,8 +183,6 @@ const Tarif = () => {
                 <Button />
               </div>
             </WhileInView>
-            {/* </div> */}
-
             <WhileInView
               type="y"
               className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__long}`}

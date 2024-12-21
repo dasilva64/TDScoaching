@@ -20,14 +20,14 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 const Search = (): JSX.Element => {
   const [keyAr, setKeyAr] = useState<string[]>([]);
   const [displayCancel, setDisplayCancel] = useState<boolean>(false);
-  const { onSearch, datas, initialDatas } = useSelector(
+  /* const { onSearch, datas, initialDatas } = useSelector(
     (state: RootState) => state.ArrayMeeting
-  );
+  ); */
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const handlerInputSearch = (e: any) => {
-    setSearchValue(e.target.value);
+    /* setSearchValue(e.target.value);
     if (e.target.value.length === 0) {
       setDisplayCancel(false);
       if (onSearch === true) {
@@ -63,13 +63,13 @@ const Search = (): JSX.Element => {
         type: "ArrayMeeting/storeDataSearch",
         payload: { datas: newar },
       });
-    }
+    } */
   };
-  useEffect(() => {
+  /* useEffect(() => {
     if (datas && datas.length > 0) {
       setKeyAr(Object.keys(datas[0]));
     }
-  }, [datas]);
+  }, [datas]); */
 
   return (
     <div
@@ -133,12 +133,12 @@ const Search = (): JSX.Element => {
                 onClick={() => {
                   if (inputRef.current) inputRef.current.value = "";
                   setDisplayCancel(false);
-                  if (onSearch === true) {
+                  /* if (onSearch === true) {
                     dispatch({
                       type: "ArrayMeeting/storeDataSearchInv",
                       payload: { datas: initialDatas },
                     });
-                  }
+                  } */
                 }}
               >
                 {displayCancel ? <DeleteForeverIcon /> : ""}

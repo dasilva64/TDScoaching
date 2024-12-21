@@ -174,7 +174,7 @@ const Nav = () => {
                   >
                     <Link
                       className={`${
-                        pathname === "/contact"
+                        pathname === "/blog"
                           ? styles.nav__nav__ul__li__link__active
                           : null
                       } ${styles.nav__nav__ul__li__link}`}

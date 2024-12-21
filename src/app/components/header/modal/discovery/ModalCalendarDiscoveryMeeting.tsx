@@ -1,23 +1,21 @@
-"use client";
-
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AnimatePresence, motion } from "framer-motion";
-import React, { useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import FullCalendar from "@fullcalendar/react";
-import frLocale from "@fullcalendar/core/locales/fr";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import styles from "./ModalCalendarDiscoveryMeeting.module.scss";
-import interactionPlugin from "@fullcalendar/interaction";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import FullCalendar from "@fullcalendar/react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Image from "next/image";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import frLocale from "@fullcalendar/core/locales/fr";
+import styles from "./ModalCalendarDiscoveryMeeting.module.scss";
 import useGet from "@/app/components/hook/useGet";
 
-const ModalDiscoveryMeetingTest = () => {
+const ModalCalendarDiscoveryMeeting = () => {
   const [allData, setAllData] = useState<any[] | null>(null);
 
   const dispatch = useDispatch();
-  /* const {
+  const {
     data: userData,
     isLoading,
     isError,
@@ -34,8 +32,8 @@ const ModalDiscoveryMeetingTest = () => {
     dispatch({
       type: "ModalDiscoveryMeetingTest/close",
     });
-  } */
-  /* useEffect(() => {
+  }
+  useEffect(() => {
     if (userData) {
       if (userData.status === 200) {
         let array = [];
@@ -75,7 +73,7 @@ const ModalDiscoveryMeetingTest = () => {
         setAllData(array);
       }
     }
-  }, [userData]); */
+  }, [userData]);
 
   const calendarRef: any = useRef(null);
 
@@ -83,12 +81,12 @@ const ModalDiscoveryMeetingTest = () => {
 
   const closeModal = () => {
     dispatch({
-      type: "ModalDiscoveryMeetingTest/close",
+      type: "ModalCalendarDiscoveryMeetingHeader/close",
     });
   };
-  const { displayModalDiscoveryMeetingTest } = useSelector(
-    (state: RootState) => state.ModalDiscoveryMeetingTest
-  );
+  /* const { displayModalCalendarDiscoveryMeetingHeader } = useSelector(
+    (state: RootState) => state.ModalCalendarDiscoveryMeetingHeader
+  ); */
   const handleDateClick = (arg: any) => {
     if (allData && allData.length > 0) {
       for (let i = 0; i < allData.length; i++) {
@@ -144,10 +142,10 @@ const ModalDiscoveryMeetingTest = () => {
     }
 
     /* dispatch({
-      type: "ModalAddDiscovery/open",
-      payload: { date: arg.dateStr },
-    });
-    dispatch({ type: "ModalCalendarDiscovery/close" }); */
+        type: "ModalAddDiscovery/open",
+        payload: { date: arg.dateStr },
+      });
+      dispatch({ type: "ModalCalendarDiscovery/close" }); */
   };
   useEffect(() => {
     if (window.innerWidth < 768) {
@@ -170,9 +168,9 @@ const ModalDiscoveryMeetingTest = () => {
   }, []);
   return (
     <>
-      <TabIndex displayModal={displayModalDiscoveryMeetingTest} />
+      {/* <TabIndex displayModal={displayModalCalendarDiscoveryMeetingHeader} />
       <AnimatePresence>
-        {displayModalDiscoveryMeetingTest === true && (
+        {displayModalCalendarDiscoveryMeetingHeader === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -368,9 +366,9 @@ const ModalDiscoveryMeetingTest = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };
 
-export default ModalDiscoveryMeetingTest;
+export default ModalCalendarDiscoveryMeeting;

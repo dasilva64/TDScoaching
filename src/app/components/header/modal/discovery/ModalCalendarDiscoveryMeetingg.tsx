@@ -1,29 +1,96 @@
+"use client";
+
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { use, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import interactionPlugin from "@fullcalendar/interaction";
-import frLocale from "@fullcalendar/core/locales/fr";
-
 import FullCalendar from "@fullcalendar/react";
+import frLocale from "@fullcalendar/core/locales/fr";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import styles from "./ModalCalendarEditDiscovery.module.scss";
+import styles from "./ModalCalendarDiscoveryMeeting.module.scss";
+import interactionPlugin from "@fullcalendar/interaction";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import useGet from "@/app/components/hook/useGet";
 
-const ModalCalendarEditDiscovery = ({ allData }: any) => {
+const ModalDiscoveryMeetingTest = () => {
+  const [allData, setAllData] = useState<any[] | null>(null);
+
+  const dispatch = useDispatch();
+  /* const {
+    data: userData,
+    isLoading,
+    isError,
+    mutate,
+  } = useGet("/components/header/modal/discovery/api");
+  if (isError) {
+    dispatch({
+      type: "flash/storeFlashMessage",
+      payload: {
+        type: "error",
+        flashMessage: "Erreur lors du chargement, veuillez réessayer",
+      },
+    });
+    dispatch({
+      type: "ModalDiscoveryMeetingTest/close",
+    });
+  } */
+  /* useEffect(() => {
+    if (userData) {
+      if (userData.status === 200) {
+        let array = [];
+
+        for (let i = 0; i < userData.body.meetings.length; i++) {
+          if (userData.body.meeting === null) {
+            array.push({
+              start: userData.body.meetings[i].startAt,
+              editable: true,
+              backgroundColor: "red",
+              textColor: "red",
+              id: userData.body.meetings[i].userId,
+            });
+          } else {
+            if (
+              userData.body.meeting.userId === userData.body.meetings[i].userId
+            ) {
+              array.push({
+                start: userData.body.meetings[i].startAt,
+                editable: true,
+                backgroundColor: "green",
+                textColor: "white",
+                title: "Mon rendez-vous",
+                id: userData.body.meetings[i].userId,
+              });
+            } else {
+              array.push({
+                start: userData.body.meetings[i].startAt,
+                editable: false,
+                backgroundColor: "red",
+                textColor: "red",
+                id: userData.body.meetings[i].userId,
+              });
+            }
+          }
+        }
+        setAllData(array);
+      }
+    }
+  }, [userData]); */
+
+  const calendarRef: any = useRef(null);
+
   const [isMobile, setIsMobile] = useState<null | boolean>(null);
 
-  const dispatch = useDispatch<AppDispatch>();
   const closeModal = () => {
-    dispatch({ type: "ModalCalendarEditDiscovery/close" });
+    dispatch({
+      type: "ModalDiscoveryMeetingTest/close",
+    });
   };
-  /* const { displayModalCalendarEditDiscovery } = useSelector(
-    (state: RootState) => state.ModalCalendarEditDiscovery
+  /* const { displayModalDiscoveryMeetingTest } = useSelector(
+    (state: RootState) => state.ModalDiscoveryMeetingTest
   ); */
-  const [meetingDate, setMeetingDate] = useState<any>(null);
   const handleDateClick = (arg: any) => {
-    if (allData.length > 0) {
+    if (allData && allData.length > 0) {
       for (let i = 0; i < allData.length; i++) {
         var date = new Date(allData[i].start);
         var now_utc = Date.UTC(
@@ -59,10 +126,10 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
             type: "flash/clearFlashMessage",
           });
           dispatch({
-            type: "ModalEditDiscoveryMeeting/open",
+            type: "ModalAddDiscoveryMeetingTest/open",
             payload: { date: arg.dateStr },
           });
-          dispatch({ type: "ModalCalendarEditDiscovery/close" });
+          dispatch({ type: "ModalDiscoveryMeetingTest/close" });
         }
       }
     } else {
@@ -70,34 +137,18 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
         type: "flash/clearFlashMessage",
       });
       dispatch({
-        type: "ModalAddDiscovery/open",
+        type: "ModalAddDiscoveryMeetingTest/open",
         payload: { date: arg.dateStr },
       });
-      dispatch({ type: "ModalCalendarDiscovery/close" });
+      dispatch({ type: "ModalDiscoveryMeetingTest/close" });
     }
-    //arg.dayEl.style.backgroundColor = "red";
-    //console.log(arg);
+
     /* dispatch({
       type: "ModalAddDiscovery/open",
       payload: { date: arg.dateStr },
-    }); 
-    dispatch({
-      type: "ModalEditDiscoveryMeeting/open",
-      payload: { date: arg.dateStr },
     });
-    dispatch({ type: "ModalCalendarEditDiscovery/close" });
-
-    */
+    dispatch({ type: "ModalCalendarDiscovery/close" }); */
   };
-  /* useEffect(() => {
-    if (displayModalCalendarEditDiscovery === true) {
-      for (let i = 0; i < allData.length; i++) {
-        if (allData[i].backgroundColor === "green") {
-          setMeetingDate(allData[i].start);
-        }
-      }
-    }
-  }, [allData, displayModalCalendarEditDiscovery]); */
   useEffect(() => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
@@ -117,12 +168,11 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const calendarRef: any = useRef(null);
   return (
     <>
-      {/* <TabIndex displayModal={displayModalCalendarEditDiscovery} />
+      {/* <TabIndex displayModal={displayModalDiscoveryMeetingTest} />
       <AnimatePresence>
-        {displayModalCalendarEditDiscovery === true && (
+        {displayModalDiscoveryMeetingTest === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -132,7 +182,7 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
               onClick={() => closeModal()}
             />
             <motion.div
-              className={styles.modalCalendarEditDiscovery}
+              className={styles.modal}
               initial={{ y: 200, x: "-50%", opacity: 0 }}
               animate={{
                 y: "-50%",
@@ -149,22 +199,45 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
             >
               <button
                 type="button"
-                className={styles.modalCalendarEditDiscovery__btn}
+                className={styles.modal__btn}
                 onClick={() => closeModal()}
               >
                 <Image
-                  className={styles.modalCalendarEditDiscovery__btn__img}
+                  className={styles.modal__btn__img}
                   src="/assets/icone/xmark-solid.svg"
                   alt="icone fermer modal"
                   width={30}
                   height={30}
                 ></Image>
               </button>
-              <h2 className={`${styles.modalCalendarEditDiscovery__h1}`}>
+              <h2 className={`${styles.modal__h1}`}>
                 Rendez-vous de découverte
               </h2>
-              <p>Selectionnez une date pour modifier votre rendez-vous</p>
-              {isMobile === false && (
+              <div className={styles.modal__rappel}>
+                <p className={styles.modal__rappel__p}>
+                  <Image
+                    className={styles.modal__rappel__p__img}
+                    src="/assets/icone/clock-solid.svg"
+                    alt="clock"
+                    width={25}
+                    height={25}
+                  />
+                  {" : "}
+                  45 min
+                </p>
+                <p className={styles.modal__rappel__p}>
+                  <Image
+                    className={styles.modal__rappel__p__img}
+                    src="/assets/icone/dollar-sign-solid.svg"
+                    alt="clock"
+                    width={25}
+                    height={25}
+                  />
+                  {" : "}
+                  Gratuit
+                </p>
+              </div>
+              {isMobile === false && allData && (
                 <>
                   <FullCalendar
                     ref={calendarRef}
@@ -178,11 +251,14 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
                     }}
                     customButtons={{
                       myCustomButton: {
-                        text: "Mon rendez-vous",
+                        text: "Aujourd'hui",
                         click: function () {
                           if (calendarRef.current === null) return;
                           const calendarApi = calendarRef.current.getApi();
-                          calendarApi.gotoDate(meetingDate);
+                          let currentDate = new Date();
+                          calendarApi.gotoDate(
+                            currentDate.setDate(currentDate.getDate() + 2)
+                          );
                         },
                       },
                     }}
@@ -190,6 +266,11 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
                       left: "title",
                       center: "",
                       right: "myCustomButton prev next",
+                    }}
+                    titleFormat={{
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
                     }}
                     events={allData}
                     weekends={false}
@@ -201,7 +282,6 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
                     height={"auto"}
                     dateClick={(e) => {
                       handleDateClick(e);
-                      //console.log("dateClick");
                     }}
                     validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
@@ -221,7 +301,7 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
                   />
                 </>
               )}
-              {isMobile === true && (
+              {isMobile === true && allData && (
                 <>
                   <FullCalendar
                     ref={calendarRef}
@@ -293,4 +373,4 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
   );
 };
 
-export default ModalCalendarEditDiscovery;
+export default ModalDiscoveryMeetingTest;

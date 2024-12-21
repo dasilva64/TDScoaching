@@ -18,7 +18,6 @@ const AllUser = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [content, setContent] = useState<any>(null);
-
   const { data, isLoading, isError } = useGet("/utilisateurs/components/api");
   useEffect(() => {
     if (isError) {
@@ -138,18 +137,18 @@ const AllUser = () => {
           }
         } else if (p.idMeeting !== null) {
           let date = null;
-          for (let i = 0; i < p.allMeeting.length; i++) {
+          /* for (let i = 0; i < p.allMeeting.length; i++) {
             if (p.allMeeting[i].id === p.idMeeting) {
               date = p.allMeeting[i].startAt;
             }
-          }
+          } */
           copyOfItems[index] = {
             ...p,
             Id: p.id,
             Prénom: p.firstName,
             Nom: p.lastName,
             Mail: p.mail,
-            RendezVous: new Date(date).toLocaleString("fr-FR"),
+            //RendezVous: new Date(date).toLocaleString("fr-FR"),
           };
           delete copyOfItems[index].id;
           delete copyOfItems[index].allMeeting;

@@ -6,8 +6,8 @@ import Image from "next/image";
 import { unstable_cache } from "next/cache";
 import validator from "validator";
 import styles from "./page.module.scss";
-import CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiquesSomaire from "./components/comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques/comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques-somaire";
-import CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiques from "./components/comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques/comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques";
+import CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiquesSomaire from "./components/comment-gerer-le-stress-et-l-anxiete-au-quotidien/comment-gerer-le-stress-et-l-anxiete-au-quotidien-somaire";
+import CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiques from "./components/comment-gerer-le-stress-et-l-anxiete-au-quotidien/comment-gerer-le-stress-et-l-anxiete-au-quotidien";
 import Carrousel from "./components/carrousel/Carrousel";
 
 export async function generateMetadata({
@@ -57,7 +57,7 @@ const getLast = unstable_cache(
     const lastArticles = await prisma.article.findMany({
       where: {
         slug: {
-          not: "comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques",
+          not: "comment-gerer-le-stress-et-l-anxiete-au-quotidien",
         },
       },
       select: {
@@ -105,8 +105,14 @@ const page = async ({ params }: { params: { slug: string } }) => {
             </Link>
             <p className={styles.article__container__left__author}>
               Ecrit par Thierry DA SILVA le{" "}
-              <time title="August 28th, 2011">
-                {oneData?.created_at.toLocaleString("FR-fr", {
+              <time
+                title={new Date(oneData?.created_at).toLocaleString("FR-fr", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              >
+                {new Date(oneData?.created_at).toLocaleString("FR-fr", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
@@ -123,17 +129,16 @@ const page = async ({ params }: { params: { slug: string } }) => {
             <details className={`${styles.article__container__left__sommaire}`}>
               <summary className="modalOpen">Sommaire</summary>
               {oneData?.slug ===
-                "comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques" && (
+                "comment-gerer-le-stress-et-l-anxiete-au-quotidien" && (
                 <CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiquesSomaire
                   slug={oneData?.slug}
                 />
               )}
             </details>
             {oneData?.slug ===
-              "comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques" && (
+              "comment-gerer-le-stress-et-l-anxiete-au-quotidien" && (
               <CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiques />
             )}
-            {/* <div className={styles.article__container__left__line}></div> */}
           </div>
           <div className={styles.article__container__left__footer}>
             <Image
@@ -158,44 +163,10 @@ const page = async ({ params }: { params: { slug: string } }) => {
                 </h2>
                 <div className={styles.article__last__container}>
                   <Carrousel data={lastData} />
-                  {/* {lastData.map((e, index) => {
-                    return (
-                      <div key={index} className={styles.article__last__card}>
-                        <Image
-                          style={{
-                            width: "100%",
-                            height: "200px",
-                            objectFit: "cover",
-                          }}
-                          src={`/assets/blog/${e.image}`}
-                          width="0"
-                          height="0"
-                          sizes="100vw"
-                          alt="Description of my image"
-                        />
-                        <div className={styles.article__last__card__div}>
-                          <h3
-                            className={`${styles.article__last__card__div__h2}`}
-                          >
-                            {e.title}
-                          </h3>
-                          <Paragraph content={e.description} />
-                          <Link
-                            className={`modalOpen ${styles.article__last__card__div__btn}`}
-                            href={`/${e.slug}`}
-                          >
-                            Lire la suite
-                          </Link>
-                        </div>
-                      </div>
-                    );
-                  })} */}
                 </div>
               </div>
             </>
           )}
-
-          {/* <div className={styles.article__container__right}></div> */}
         </div>
       </main>
     </>

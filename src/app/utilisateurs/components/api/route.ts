@@ -51,14 +51,14 @@ export async function GET() {
       } else {
         let allUser = await prisma.user.findMany({
           where: { role: "ROLE_USER" },
-          include: {
+          /* include: {
             Meeting: {
               select: {
                 id: true,
                 startAt: true,
               },
             },
-          },
+          }, */
         });
         let copyAllUser: any = allUser;
         let allUserObject = [];
@@ -68,8 +68,8 @@ export async function GET() {
             mail: validator.escape(copyAllUser[i].mail),
             firstName: validator.escape(copyAllUser[i].firstname),
             lastName: validator.escape(copyAllUser[i].lastname),
-            allMeeting: validator.escape(copyAllUser[i].Meeting),
-            idMeeting: validator.escape(copyAllUser[i].meetingId),
+            /* allMeeting: validator.escape(copyAllUser[i].Meeting),
+            idMeeting: validator.escape(copyAllUser[i].meetingId), */
           };
           allUserObject.push(userObject);
         }

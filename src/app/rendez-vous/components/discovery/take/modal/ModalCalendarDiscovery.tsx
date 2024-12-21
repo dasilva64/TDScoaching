@@ -38,9 +38,9 @@ const ModalCalendarDiscovery = ({ allData }: { allData: any }) => {
   const closeModal = () => {
     dispatch({ type: "ModalCalendarDiscovery/close" });
   };
-  const { displayModalCalendarDiscovery } = useSelector(
+  /* const { displayModalCalendarDiscovery } = useSelector(
     (state: RootState) => state.ModalCalendarDiscovery
-  );
+  ); */
   const handleDateClick = (arg: any) => {
     if (allData.length > 0) {
       for (let i = 0; i < allData.length; i++) {
@@ -123,7 +123,7 @@ const ModalCalendarDiscovery = ({ allData }: { allData: any }) => {
   const calendarRef: any = useRef(null);
   return (
     <>
-      <TabIndex displayModal={displayModalCalendarDiscovery} />
+      {/* <TabIndex displayModal={displayModalCalendarDiscovery} />
       <AnimatePresence>
         {displayModalCalendarDiscovery === true && (
           <>
@@ -300,7 +300,7 @@ const ModalCalendarDiscovery = ({ allData }: { allData: any }) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

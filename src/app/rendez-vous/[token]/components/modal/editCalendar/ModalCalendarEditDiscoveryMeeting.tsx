@@ -41,11 +41,11 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
     });
   };
   const calendarRef: any = useRef(null);
-  const { displayModalCalendarEditDiscoveryMeetingRendezVousToken } =
+  /* const { displayModalCalendarEditDiscoveryMeetingRendezVousToken } =
     useSelector(
       (state: RootState) =>
         state.ModalCalendarEditDiscoveryMeetingRendezVousToken
-    );
+    ); */
   const handleDateClick = (arg: any) => {
     if (allMeeting.length > 0) {
       for (let i = 0; i < allMeeting.length; i++) {
@@ -104,7 +104,7 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
   };
   return (
     <>
-      <TabIndex
+      {/* <TabIndex
         displayModal={displayModalCalendarEditDiscoveryMeetingRendezVousToken}
       />
       <AnimatePresence>
@@ -252,7 +252,6 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
                     selectable={false}
                     height={"auto"}
                     dateClick={(e) => {
-                      /* handleDateClick(e); */
                     }}
                     validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
@@ -275,7 +274,7 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

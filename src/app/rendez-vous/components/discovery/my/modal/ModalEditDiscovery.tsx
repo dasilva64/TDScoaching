@@ -11,8 +11,8 @@ import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 
 const ModalEditDiscovery = ({ currentTypeCoaching, mutate }: any) => {
-  const { displayModalEditDiscoveryMeeting, dataModalEditDiscoveryMeeting } =
-    useSelector((state: RootState) => state.ModalEditDiscoveryMeeting);
+  /* const { displayModalEditDiscoveryMeeting, dataModalEditDiscoveryMeeting } =
+    useSelector((state: RootState) => state.ModalEditDiscoveryMeeting); */
   const [typeCoaching, setTypeCoaching] = useState<string>(currentTypeCoaching);
   const [pseudo, setPseudo] = useState<string>("");
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
@@ -82,7 +82,7 @@ const ModalEditDiscovery = ({ currentTypeCoaching, mutate }: any) => {
 
   return (
     <>
-      <TabIndex displayModal={displayModalEditDiscoveryMeeting} />
+      {/* <TabIndex displayModal={displayModalEditDiscoveryMeeting} />
       <AnimatePresence>
         {displayModalEditDiscoveryMeeting === true && (
           <>
@@ -190,13 +190,13 @@ const ModalEditDiscovery = ({ currentTypeCoaching, mutate }: any) => {
                   {typeCoaching}
                 </p>
               </div>
-              {/* <p>
+              <p>
                 Rappel du rendez-vous :{" "}
                 {new Date(dataModalEditDiscoveryMeeting).toLocaleString(
                   "fr-FR"
                 )}
-              </p> */}
-              {/* <form
+              </p>
+              <form
                 className={styles.modalAddDiscovery__form}
                 onSubmit={(e) => {
                   if (typeCoachingValid) {
@@ -303,7 +303,7 @@ const ModalEditDiscovery = ({ currentTypeCoaching, mutate }: any) => {
                     </>
                   )}
                 </div>
-              </form> */}
+              </form>
               <div className={styles.modalAddDiscovery__edit}>
                 {isMutating === false && (
                   <button
@@ -350,7 +350,7 @@ const ModalEditDiscovery = ({ currentTypeCoaching, mutate }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

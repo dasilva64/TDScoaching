@@ -338,11 +338,11 @@ const ModalUserPasswordData = () => {
                     handlerInput(
                       e,
                       "password",
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{12,}$/,
                       setValidPasswordInput,
                       setErrorMessagePassword,
                       setPasswordInput,
-                      "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
+                      "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 12 caractères minimum"
                     );
                   }}
                   validInput={validPasswordInput}

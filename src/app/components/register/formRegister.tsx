@@ -307,10 +307,10 @@ const FormRegister = () => {
     setMajorInputError("");
     setInputPseudo("");
   };
-  const backLogin = () => {
+  const backLogin = async () => {
     clearState();
-    dispatch({ type: "ModalRegister/close" });
-    dispatch({ type: "ModalLogin/open" });
+    await dispatch({ type: "ModalRegister/close" });
+    await dispatch({ type: "ModalLogin/open" });
   };
   const closeForm = () => {
     clearState();
@@ -435,11 +435,11 @@ const FormRegister = () => {
                   onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handlerInputPassword(
                       e,
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{12,}$/,
                       setValidPasswordInput,
                       setPasswordInputError,
                       setPasswordInput,
-                      "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 8 caractères minimum"
+                      "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 12 caractères minimum"
                     );
                   }}
                   validInput={validPasswordInput}

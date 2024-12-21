@@ -10,9 +10,9 @@ import Image from "next/image";
 
 const ModalDeleteDiscoverytMeeting = () => {
   const dispatch = useDispatch();
-  const { displayModalDeleteDiscoveryMeeting } = useSelector(
+  /* const { displayModalDeleteDiscoveryMeeting } = useSelector(
     (state: RootState) => state.ModalDeleteDiscoveryMeeting
-  );
+  ); */
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/api/meeting/deleteMeeting",
     fetchGet
@@ -53,7 +53,7 @@ const ModalDeleteDiscoverytMeeting = () => {
   };
   return (
     <>
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {displayModalDeleteDiscoveryMeeting === true && (
           <>
             <motion.div
@@ -137,7 +137,7 @@ const ModalDeleteDiscoverytMeeting = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

@@ -30,6 +30,15 @@ const GoTop = () => {
   const { displayModalLogin } = useSelector(
     (state: RootState) => state.ModalLogin
   );
+  const { displayModalForgot } = useSelector(
+    (state: RootState) => state.ModalForgot
+  );
+  const { displayModalDiscovery } = useSelector(
+    (state: RootState) => state.ModalDiscovery
+  );
+  const { displayModalNormal } = useSelector(
+    (state: RootState) => state.ModalNormal
+  );
   const { displayModalRegister } = useSelector(
     (state: RootState) => state.ModalRegister
   );
@@ -49,35 +58,23 @@ const GoTop = () => {
   const { displayModalEditEmail } = useSelector(
     (state: RootState) => state.ModalEditEmail
   );
+  const { displayModalNav } = useSelector((state: RootState) => state.ModalNav);
+  const { displayModalNavAdmin } = useSelector(
+    (state: RootState) => state.ModalNavAdmin
+  );
+  const { displayModalNavUser } = useSelector(
+    (state: RootState) => state.ModalNavUser
+  );
   const { displayModalDeleteAccount } = useSelector(
     (state: RootState) => state.ModalDeleteAccount
   );
-  const { displayModalCalendarDiscovery } = useSelector(
-    (state: RootState) => state.ModalCalendarDiscovery
+  const { displayModalCancelEmail } = useSelector(
+    (state: RootState) => state.ModalCancelEmail
   );
-  const { displayModalAddDiscovery } = useSelector(
-    (state: RootState) => state.ModalAddDiscovery
-  );
-  const { displayModalEditDiscoveryMeeting } = useSelector(
-    (state: RootState) => state.ModalEditDiscoveryMeeting
-  );
-  const { displayModalCalendarEditDiscovery } = useSelector(
-    (state: RootState) => state.ModalCalendarEditDiscovery
-  );
-
-  //header/modal/discovery
-  const { displayModalAddDiscoveryMeetingTest } = useSelector(
-    (state: RootState) => state.ModalAddDiscoveryMeetingTest
-  );
-  const { displayModalDiscoveryMeetingTest } = useSelector(
-    (state: RootState) => state.ModalDiscoveryMeetingTest
-  );
-  const { displayModalRecapDiscoveryMeeting } = useSelector(
-    (state: RootState) => state.ModalRecapDiscoveryMeeting
-  );
+  const { isActive } = useSelector((state: RootState) => state.menu);
 
   //rendez-vous/token
-  const { displayModalConfirmDiscoveryMeetingRendezVousToken } = useSelector(
+  /* const { displayModalConfirmDiscoveryMeetingRendezVousToken } = useSelector(
     (state: RootState) => state.ModalConfirmDiscoveryMeetingRendezVousToken
   );
   const { displayModalDeleteDiscoveryMeetingRendezVousToken } = useSelector(
@@ -87,7 +84,7 @@ const GoTop = () => {
     useSelector(
       (state: RootState) =>
         state.ModalCalendarEditDiscoveryMeetingRendezVousToken
-    );
+    ); */
   const DisplayDiv = () => {
     if (
       displayModalLogin === true ||
@@ -98,16 +95,14 @@ const GoTop = () => {
       displayModalSendTokenEmail === true ||
       displayModalEditEmail === true ||
       displayModalDeleteAccount === true ||
-      displayModalCalendarDiscovery === true ||
-      displayModalAddDiscovery === true ||
-      displayModalEditDiscoveryMeeting === true ||
-      displayModalCalendarEditDiscovery === true ||
-      displayModalCalendarEditDiscoveryMeetingRendezVousToken === true ||
-      displayModalDeleteDiscoveryMeetingRendezVousToken === true ||
-      displayModalConfirmDiscoveryMeetingRendezVousToken === true ||
-      displayModalAddDiscoveryMeetingTest === true ||
-      displayModalDiscoveryMeetingTest === true ||
-      displayModalRecapDiscoveryMeeting === true
+      displayModalForgot === true ||
+      displayModalNormal === true ||
+      displayModalDiscovery === true ||
+      displayModalNavAdmin === true ||
+      displayModalNav === true ||
+      displayModalNavUser === true ||
+      displayModalCancelEmail === true ||
+      isActive === true
     ) {
       return <></>;
     } else {

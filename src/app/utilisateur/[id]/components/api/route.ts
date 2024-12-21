@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
               mail: validator.escape(userById.mail),
               discovery: userById.discovery,
               allMeetings: meetingByUser,
-              meeting: meeting,
+              //meeting: meeting,
               //typeMeeting: userById.typeMeeting,
             };
             return NextResponse.json({

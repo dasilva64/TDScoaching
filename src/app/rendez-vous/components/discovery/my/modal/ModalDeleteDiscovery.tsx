@@ -9,9 +9,9 @@ import { RootState } from "@/app/redux/store";
 import fetchDelete from "@/app/components/fetch/FetchDelete";
 
 const ModalDeleteDiscovery = ({ mutate }: any) => {
-  const { displayModalDeleteDiscoveryMeeting } = useSelector(
+  /* const { displayModalDeleteDiscoveryMeeting } = useSelector(
     (state: RootState) => state.ModalDeleteDiscoveryMeeting
-  );
+  ); */
   const dispatch = useDispatch();
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/rendez-vous/components/discovery/my/api/",
@@ -38,7 +38,7 @@ const ModalDeleteDiscovery = ({ mutate }: any) => {
   };
   return (
     <>
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {displayModalDeleteDiscoveryMeeting === true && (
           <>
             <motion.div
@@ -123,7 +123,7 @@ const ModalDeleteDiscovery = ({ mutate }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

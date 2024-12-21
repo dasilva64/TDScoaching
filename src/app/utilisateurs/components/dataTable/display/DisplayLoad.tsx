@@ -7,11 +7,15 @@ const DisplayLoad = () => {
       <table className={styles.table}>
         <thead className={styles.table__head}>
           <tr className={styles.table__head__tr}>
-            <th className={`${styles.table__head__tr__th}`}>Id</th>
+            <th
+              className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__id}`}
+            >
+              Id
+            </th>
             <th className={`${styles.table__head__tr__th}`}>Prénom</th>
             <th className={`${styles.table__head__tr__th}`}>Nom</th>
             <th className={`${styles.table__head__tr__th}`}>Mail</th>
-            <th className={`${styles.table__head__tr__th}`}>RendezVous</th>
+            {/* <th className={`${styles.table__head__tr__th}`}>RendezVous</th> */}
           </tr>
         </thead>
         <tbody className={styles.table__body}>

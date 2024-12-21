@@ -20,7 +20,7 @@ const Display = () => {
     if (datas && datas.length > 0) {
       setKeyAr(Object.keys(datas[0]));
     } else {
-      setKeyAr(["Id", "Prénom", "Nom", "Mail", "RendezVous"]);
+      setKeyAr(["Id", "Prénom", "Nom", "Mail"]);
     }
   }, [datas]);
   /* useEffect(() => {
@@ -143,7 +143,7 @@ const Display = () => {
               keyAr.map((key: any, index: any) => {
                 if (key === sortBy[0]) {
                   if (sortBy[1] === "ASC") {
-                    if (key === "id") {
+                    if (key === "Id") {
                       return (
                         <th
                           className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__asc__little}`}
@@ -153,7 +153,7 @@ const Display = () => {
                           {key}
                         </th>
                       );
-                    } else if (key === "RendezVous") {
+                    } /* else if (key === "RendezVous") {
                       return (
                         <th
                           className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__min} ${styles.table__head__tr__th__asc}`}
@@ -163,7 +163,7 @@ const Display = () => {
                           {key}
                         </th>
                       );
-                    }
+                    } */
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__asc}`}
@@ -174,7 +174,7 @@ const Display = () => {
                       </th>
                     );
                   } else {
-                    if (key === "id") {
+                    if (key === "Id") {
                       return (
                         <th
                           className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__desc__little}`}
@@ -184,7 +184,7 @@ const Display = () => {
                           {key}
                         </th>
                       );
-                    } else if (key === "RendezVous") {
+                    } /* else if (key === "RendezVous") {
                       return (
                         <th
                           className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__min} ${styles.table__head__tr__th__desc}`}
@@ -194,7 +194,7 @@ const Display = () => {
                           {key}
                         </th>
                       );
-                    }
+                    } */
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__desc}`}
@@ -206,7 +206,7 @@ const Display = () => {
                     );
                   }
                 } else {
-                  if (key === "id") {
+                  if (key === "Id") {
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__both__little}`}
@@ -216,7 +216,7 @@ const Display = () => {
                         {key}
                       </th>
                     );
-                  } else if (key === "RendezVous") {
+                  } /* else if (key === "RendezVous") {
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__min} ${styles.table__head__tr__th__both}`}
@@ -226,7 +226,7 @@ const Display = () => {
                         {key}
                       </th>
                     );
-                  }
+                  } */
                   return (
                     <th
                       className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__both}`}

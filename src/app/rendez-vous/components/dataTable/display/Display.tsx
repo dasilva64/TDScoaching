@@ -8,10 +8,10 @@ const Display = () => {
   const [keyAr, setKeyAr] = useState<string[]>([]);
   const [see, setSee] = useState<any[] | null>(null);
   const dispatch = useDispatch();
-  const { datas, currentPage, nbShow, sortBy } = useSelector(
+  /* const { datas, currentPage, nbShow, sortBy } = useSelector(
     (state: RootState) => state.ArrayMeeting
-  );
-  useEffect(() => {
+  ); */
+  /* useEffect(() => {
     if (datas && datas.length > 0) {
       setKeyAr(Object.keys(datas[0]));
     }
@@ -25,8 +25,8 @@ const Display = () => {
         });
       }
     }
-  }, [dispatch, keyAr, sortBy]);
-  useEffect(() => {
+  }, [dispatch, keyAr, sortBy]); */
+  /* useEffect(() => {
     if (sortBy[0] === "" && sortBy[1] === "" && keyAr[0]) {
       dispatch({
         type: "ArrayMeeting/changeSortBy",
@@ -71,9 +71,9 @@ const Display = () => {
     }
 
     setSee(ar);
-  }, [currentPage, datas, dispatch, keyAr, nbShow, sortBy]);
+  }, [currentPage, datas, dispatch, keyAr, nbShow, sortBy]); */
 
-  const handlerSortBy = (e: any) => {
+  /* const handlerSortBy = (e: any) => {
     if (e.target.textContent === sortBy[0]) {
       if (sortBy[1] === "DESC") {
         dispatch({
@@ -95,9 +95,9 @@ const Display = () => {
       });
       sortByF(e.target.textContent, "ASC");
     }
-  };
+  }; */
 
-  const sortByF = (element: any, sort: any) => {
+  /* const sortByF = (element: any, sort: any) => {
     if (sortBy[0] !== "" && sortBy[1] !== "" && keyAr[0]) {
       if (element === "Date") {
         let arMonth = [
@@ -135,7 +135,6 @@ const Display = () => {
               splitB[4]
             ).getTime();
             return createA > createB ? 1 : -1;
-            //return createA - createB;
           } else {
             let splitA = a[1][element].split(" ");
             let createA: any = new Date(
@@ -152,7 +151,6 @@ const Display = () => {
               splitB[4]
             ).getTime();
             return createB > createA ? 1 : -1;
-            //return createB - createA;
           }
         });
         let test: any = [];
@@ -190,9 +188,9 @@ const Display = () => {
         dispatch({ type: "ArrayMeeting/storeData", payload: { datas: test } });
       }
     }
-  };
-  return (
-    <div className={styles.container}>
+  }; */
+  return {
+    /* <div className={styles.container}>
       <table className={styles.table}>
         <thead className={styles.table__head}>
           <tr className={styles.table__head__tr}>
@@ -299,8 +297,8 @@ const Display = () => {
         </thead>
         <tbody className={styles.table__body}>{see}</tbody>
       </table>
-    </div>
-  );
+    </div> */
+  };
 };
 
 export default Display;

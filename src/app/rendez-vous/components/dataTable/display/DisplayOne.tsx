@@ -5,20 +5,20 @@ import styles from "./Display.module.scss";
 import { useRouter } from "next/navigation";
 
 const DisplayOne = ({ i }: any) => {
-  const { datas, sortBy } = useSelector(
+  /* const { datas, sortBy } = useSelector(
     (state: RootState) => state.ArrayMeeting
-  );
+  ); */
   const router = useRouter();
   const [keyAr, setKeyAr] = useState<any>([]);
-  useEffect(() => {
+  /* useEffect(() => {
     if (datas && datas.length > 0) {
       setKeyAr(Object.keys(datas[0]));
     }
-  }, [datas]);
+  }, [datas]); */
 
   return (
     <>
-      {datas && datas.length > 0 && (
+      {/* {datas && datas.length > 0 && (
         <tr
           className={styles.table__body__tr}
           onClick={() => {
@@ -95,7 +95,7 @@ const DisplayOne = ({ i }: any) => {
               }
             })}
         </tr>
-      )}
+      )} */}
     </>
   );
 };

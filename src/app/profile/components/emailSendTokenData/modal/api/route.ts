@@ -96,16 +96,20 @@ export async function POST(request: NextRequest) {
             });
             if (userExist === null) {
               let now = new Date();
-
-              let min = 10000000;
+              let token = ""
+              let characters = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890?.@&#$,;:!"
+              for(let i = 0; i<14; i++) {
+                token += characters.charAt(Math.floor(Math.random() * characters.length))
+              }
+              /* let min = 10000000;
               let max = 99999999;
-              let random = Math.floor(Math.random() * (max - min)) + min;
+              let random = Math.floor(Math.random() * (max - min)) + min; */
               let editUser = await prisma.user.update({
                 where: { mail: validator.escape(user.mail) },
                 data: {
                   editEmail: {
                     limitDate: now.setMinutes(now.getMinutes() + 30),
-                    token: random,
+                    token: token,
                     newEmail: validator.escape(email.trim()),
                   },
                 },
@@ -156,7 +160,7 @@ export async function POST(request: NextRequest) {
                                       <h1 style="text-align: center">tds coaching</h1>
                                       <h2 style="text-align: center">Validation de votre adresse email</h2>
                                       <p style="margin-bottom: 20px">Pour activer cette addresse email, veuillez entrer le code ci-dessous.</p>
-                                      <p style="width: 100px; margin: auto; padding: 20px; background: white; border-radius: 10px">${random}</p>
+                                      <p style="width: 100px; margin: auto; padding: 20px; background: white; border-radius: 10px">${token}</p>
                                       <p style="margin-top: 20px">Le code est valide pendant 1 heure.</p>
                                       
                                     </div>
@@ -214,15 +218,20 @@ export async function POST(request: NextRequest) {
           if (userExist === null) {
             let now = new Date();
 
-            let min = 10000000;
+            /* let min = 10000000;
             let max = 99999999;
-            let random = Math.floor(Math.random() * (max - min)) + min;
+            let random = Math.floor(Math.random() * (max - min)) + min; */
+            let token = ""
+              let characters = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890?.@&#$,;:!"
+              for(let i = 0; i<14; i++) {
+                token += characters.charAt(Math.floor(Math.random() * characters.length))
+              }
             let editUser = await prisma.user.update({
               where: { mail: validator.escape(user.mail) },
               data: {
                 editEmail: {
                   limitDate: now.setMinutes(now.getMinutes() + 30),
-                  token: random,
+                  token: token,
                   newEmail: validator.escape(email.trim()),
                 },
               },
@@ -273,7 +282,7 @@ export async function POST(request: NextRequest) {
                                   <h1 style="text-align: center">tds coaching</h1>
                                   <h2 style="text-align: center">Validation de votre adresse email</h2>
                                   <p style="margin-bottom: 20px">Pour activer cette addresse email, veuillez entrer le code ci-dessous.</p>
-                                  <p style="width: 100px; margin: auto; padding: 20px; background: white; border-radius: 10px">${random}</p>
+                                  <p style="width: 100px; margin: auto; padding: 20px; background: white; border-radius: 10px">${token}</p>
                                   <p style="margin-top: 20px">Le code est valide pendant 1 heure.</p>
                                   
                                 </div>

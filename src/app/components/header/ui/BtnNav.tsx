@@ -11,7 +11,7 @@ const BtnNav = ({ name }: any) => {
       <p
         className={`${styles.header__a} ${styles.header__free} modalOpen`}
         onClick={() => {
-          dispatch({ type: "ModalDiscoveryMeetingTest/open" });
+          dispatch({ type: "ModalCalendarDiscoveryMeetingHeader/open" });
         }}
       >
         {name}

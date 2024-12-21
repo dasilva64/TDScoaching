@@ -13,9 +13,9 @@ import { useRouter } from "next/navigation";
 const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const { displayModalDeleteDiscoveryMeetingRendezVousToken } = useSelector(
+  /* const { displayModalDeleteDiscoveryMeetingRendezVousToken } = useSelector(
     (state: RootState) => state.ModalDeleteDiscoveryMeetingRendezVousToken
-  );
+  ); */
   const closeModal = () => {
     dispatch({
       type: "ModalDeleteDiscoveryMeetingRendezVousToken/close",
@@ -55,7 +55,7 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
   };
   return (
     <>
-      <TabIndex
+      {/* <TabIndex
         displayModal={displayModalDeleteDiscoveryMeetingRendezVousToken}
       />
       <AnimatePresence>
@@ -151,7 +151,7 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

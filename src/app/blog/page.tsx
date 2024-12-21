@@ -85,13 +85,16 @@ const page = async () => {
                         }
                       >
                         <time
-                          title={e.created_at.toLocaleString("FR-fr", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
+                          title={new Date(e.created_at).toLocaleString(
+                            "FR-fr",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
                         >
-                          {e.created_at.toLocaleString("FR-fr", {
+                          {new Date(e.created_at).toLocaleString("FR-fr", {
                             year: "numeric",
                             month: "long",
                             day: "numeric",

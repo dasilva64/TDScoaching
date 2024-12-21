@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import styles from "./comment-gerer-le-stress-et-l-anxiete-au-quotidien-conseils-pratiques-somaire.module.scss";
+import styles from "./comment-gerer-le-stress-et-l-anxiete-au-quotidien-somaire.module.scss";
 
 const CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiquesSomaire = ({
   slug,

@@ -11,9 +11,9 @@ import { RootState } from "@/app/redux/store";
 import { mutate } from "swr";
 
 const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
-  const { displayModalConfirmDiscoveryMeetingRendezVousToken } = useSelector(
+  /* const { displayModalConfirmDiscoveryMeetingRendezVousToken } = useSelector(
     (state: RootState) => state.ModalConfirmDiscoveryMeetingRendezVousToken
-  );
+  ); */
   const dispatch = useDispatch();
   const closeModal = () => {
     dispatch({
@@ -54,7 +54,7 @@ const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
   };
   return (
     <>
-      <TabIndex
+      {/* <TabIndex
         displayModal={displayModalConfirmDiscoveryMeetingRendezVousToken}
       />
       <AnimatePresence>
@@ -149,7 +149,7 @@ const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

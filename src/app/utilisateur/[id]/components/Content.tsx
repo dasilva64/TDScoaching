@@ -365,9 +365,9 @@ const Content = () => {
                           }
                         >
                           <strong>Start</strong> :{" "}
-                          {new Date(data.body.meeting.startAt).toLocaleString(
+                          {/* {new Date(data.body.meeting.startAt).toLocaleString(
                             "fr-FR"
-                          )}
+                          )} */}
                         </li>
                       </ul>
                       {!data.body.discovery === false && (

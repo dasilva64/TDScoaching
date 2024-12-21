@@ -109,6 +109,11 @@ const Forgot = () => {
       setErrorMessage(errorMessage);
     }
   };
+  const backLogin = async () => {
+    clearState();
+    await dispatch({ type: "ModalForgot/close" });
+    await dispatch({ type: "ModalLogin/open" });
+  };
   return (
     <>
       <TabIndex displayModal={displayModalForgot} />
@@ -148,9 +153,7 @@ const Forgot = () => {
                   type="button"
                   className={styles.forgot__top__back}
                   onClick={() => {
-                    clearState();
-                    dispatch({ type: "ModalForgot/close" });
-                    dispatch({ type: "ModalLogin/open" });
+                    backLogin();
                   }}
                 >
                   Retour à la connection
@@ -187,7 +190,7 @@ const Forgot = () => {
                 <Input
                   label={"Email"}
                   value={inputEmail}
-                  id={"email"}
+                  id={"emailForgot"}
                   type={"text"}
                   placeholder={"Entrez votre mail"}
                   regex={/^([\w.-]+)@([\w-]+)((\.(\w){2,})+)$/}
@@ -212,7 +215,7 @@ const Forgot = () => {
                   type="text"
                   name="pseudo"
                   style={{ display: "none" }}
-                  id="pseudo"
+                  id="pseudoForgot"
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

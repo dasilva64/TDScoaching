@@ -10,8 +10,8 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const ModalEditDiscoveryMeeting = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { dataModalEditDiscoveryMeeting, displayModalEditDiscoveryMeeting } =
-    useSelector((state: RootState) => state.ModalEditDiscoveryMeeting);
+  /* const { dataModalEditDiscoveryMeeting, displayModalEditDiscoveryMeeting } =
+    useSelector((state: RootState) => state.ModalEditDiscoveryMeeting); */
   const { data, trigger, reset, isMutating } = useSWRMutation(
     "/api/meeting/edit",
     fetchPost
@@ -69,17 +69,17 @@ const ModalEditDiscoveryMeeting = () => {
       mutateMeetingData();
     }
   }, [data, reset]);
-  const handlerClick = () => {
+  /* const handlerClick = () => {
     const fetchEditMeeting = async () => {
       trigger({
         start: new Date(dataModalEditDiscoveryMeeting).toLocaleString("en-US"),
       });
     };
     fetchEditMeeting();
-  };
+  }; */
   return (
     <>
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {displayModalEditDiscoveryMeeting === true && (
           <>
             <motion.div
@@ -162,7 +162,7 @@ const ModalEditDiscoveryMeeting = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

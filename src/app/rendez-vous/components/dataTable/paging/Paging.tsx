@@ -6,10 +6,10 @@ import { RootState } from "@/app/redux/store";
 const Paging = () => {
   const dispatch = useDispatch();
   const [see, setSee] = useState([]);
-  const { datas, currentPage, nbShow } = useSelector(
+  /* const { datas, currentPage, nbShow } = useSelector(
     (state: RootState) => state.ArrayMeeting
-  );
-  let countPage = datas ? Math.ceil(datas.length / nbShow) : 0;
+  ); */
+  /* let countPage = datas ? Math.ceil(datas.length / nbShow) : 0;
 
   useEffect(() => {
     const push = (
@@ -102,9 +102,9 @@ const Paging = () => {
     }
 
     setSee(ar);
-  }, [countPage, currentPage, dispatch]);
-  return (
-    <div className={styles.paging}>
+  }, [countPage, currentPage, dispatch]); */
+  return {
+    /* <div className={styles.paging}>
       {datas && datas.length === 0 && <p>Affichage de 0 à 0 sur 0 entrées </p>}
       {datas && datas.length > 0 && (
         <>
@@ -149,8 +149,8 @@ const Paging = () => {
           </p>
         </>
       )}
-    </div>
-  );
+    </div> */
+  };
 };
 
 export default Paging;

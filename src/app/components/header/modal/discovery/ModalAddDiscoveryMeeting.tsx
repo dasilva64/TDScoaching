@@ -64,10 +64,10 @@ const ModalAddDiscoveryMeeting = () => {
   };
   const [pseudo, setPseudo] = useState<string>("");
 
-  const {
+  /* const {
     displayModalAddDiscoveryMeetingTest,
     dataModalAddDiscoveryMeetingTest,
-  } = useSelector((state: RootState) => state.ModalAddDiscoveryMeetingTest);
+  } = useSelector((state: RootState) => state.ModalAddDiscoveryMeetingTest); */
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
     if (e.target.value.length > 0) {
@@ -231,7 +231,7 @@ const ModalAddDiscoveryMeeting = () => {
   };
   return (
     <>
-      <TabIndex displayModal={displayModalAddDiscoveryMeetingTest} />
+      {/* <TabIndex displayModal={displayModalAddDiscoveryMeetingTest} />
       <AnimatePresence>
         {displayModalAddDiscoveryMeetingTest === true && (
           <>
@@ -431,7 +431,7 @@ const ModalAddDiscoveryMeeting = () => {
                     setPseudo(e.target.value);
                   }}
                 />
-                {/* <div className={styles.modal__form__submit}>
+                <div className={styles.modal__form__submit}>
                   {isMutating && (
                     <>
                       <button
@@ -465,12 +465,12 @@ const ModalAddDiscoveryMeeting = () => {
                       </button>
                     </>
                   )}
-                </div> */}
+                </div>
               </form>
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 };

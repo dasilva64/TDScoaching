@@ -21,6 +21,9 @@ export const sessionOptions: SessionOptions = {
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
     maxAge: undefined,
+    httpOnly: true,
+    path: "/",
+    sameSite: "strict"
   },
 };
 export const sessionOptionsRemeber: SessionOptions = {
@@ -32,6 +35,9 @@ export const sessionOptionsRemeber: SessionOptions = {
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 30,
+    httpOnly: true,
+    path: "/",
+    sameSite: "strict"
   },
 };
 

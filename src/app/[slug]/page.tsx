@@ -32,7 +32,7 @@ export async function generateMetadata({
   };
 }
 
-const getOne = unstable_cache(
+/* const getOne = unstable_cache(
   async ({ slug }: { slug: string }) => {
     const article = await prisma.article.findUnique({
       where: { slug: validator.escape(slug) },
@@ -50,9 +50,25 @@ const getOne = unstable_cache(
   },
   ["article"],
   { revalidate: 3600, tags: ["article"] }
-);
+); */
 
-const getLast = unstable_cache(
+const getOne = async ({ slug }: { slug: string }) => {
+  const article = await prisma.article.findUnique({
+    where: { slug: validator.escape(slug) },
+    select: {
+      title: true,
+      image: true,
+      created_at: true,
+      description: true,
+      slug: true,
+    },
+  });
+
+  if (!article) notFound();
+  return article;
+};
+
+/* const getLast = unstable_cache(
   async () => {
     const lastArticles = await prisma.article.findMany({
       where: {
@@ -76,7 +92,29 @@ const getLast = unstable_cache(
   },
   ["lastArticle"],
   { revalidate: 3600, tags: ["lastArticle"] }
-);
+); */
+
+const getLast = async () => {
+  const lastArticles = await prisma.article.findMany({
+    where: {
+      slug: {
+        not: "comment-gerer-le-stress-et-l-anxiete-au-quotidien",
+      },
+    },
+    select: {
+      title: true,
+      image: true,
+      created_at: true,
+      description: true,
+      slug: true,
+    },
+    orderBy: { created_at: "desc" },
+    take: 10,
+  });
+
+  if (!lastArticles) notFound();
+  return lastArticles;
+};
 
 const page = async ({ params }: { params: { slug: string } }) => {
   const oneData: any = await getOne({ slug: params.slug });

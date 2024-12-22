@@ -24,7 +24,7 @@ export const metadata = {
   },
 };
 
-const getData = unstable_cache(
+/* const getData = unstable_cache(
   async () => {
     const getArticleData = await prisma.article.findMany({
       select: {
@@ -42,7 +42,22 @@ const getData = unstable_cache(
   },
   ["articles"],
   { revalidate: 3600, tags: ["articles"] }
-);
+); */
+const getData = async () => {
+  const getArticleData = await prisma.article.findMany({
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      description: true,
+      image: true,
+      created_at: true,
+    },
+  });
+
+  if (!getArticleData) notFound();
+  return getArticleData;
+};
 
 const page = async () => {
   const data = await getData();

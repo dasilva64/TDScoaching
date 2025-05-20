@@ -143,6 +143,7 @@ const Formule = () => {
         <div className={styles.formule__offre__content}>
           <div
             className={`${styles.formule__offre__content__card} ${styles.formule__offre__content__card__unique}`}
+            onClick={() => {}}
           >
             <p>Pack unique</p>
             <ul className={styles.formule__offre__content__card__ul}>

@@ -7,6 +7,7 @@ import Card from "./components/card/Card";
 import WhileInView from "./components/framer/WhileInView";
 import NoScript from "./components/noscript/NoScript";
 import About from "./components/about/About";
+import Footer from "./components/footer/footer";
 
 export const metadata = {
   title: "Coach de vie c'est quoi ? - tdscoaching",
@@ -188,6 +189,7 @@ export default async function Home() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

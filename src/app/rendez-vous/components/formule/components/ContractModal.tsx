@@ -254,7 +254,7 @@ const ContractModal = () => {
                       fetchEdit();
                     }}
                   >
-                    Comfirmer le choix
+                    Confirmer le choix
                   </button>
                 </>
               )}
@@ -844,6 +844,7 @@ const ContractModal = () => {
               <button
                 className={styles.contratModal__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.contratModal__btn__img}

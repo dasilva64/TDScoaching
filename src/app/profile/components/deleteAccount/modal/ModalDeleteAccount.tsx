@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./ModalDeleteAccount.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
@@ -93,7 +93,6 @@ const ModalDeleteAccount = () => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
-        router.push("/");
       }
     }
   }, [data, dispatch, isMutating, reset, router]);
@@ -187,6 +186,7 @@ const ModalDeleteAccount = () => {
               <button
                 className={styles.modalDeleteAccount__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
                 type="button"
               >
                 <Image
@@ -200,6 +200,7 @@ const ModalDeleteAccount = () => {
               <h2 className={`${styles.modalDeleteAccount__h1}`}>
                 Suppression du compte
               </h2>
+
               <div className={styles.modalDeleteAccount__div}>
                 <form
                   className={styles.modalDeleteAccount__div__form}
@@ -246,13 +247,14 @@ const ModalDeleteAccount = () => {
                       className={styles.modalDeleteAccount__div__form__div__div}
                     >
                       <select
-                        className={
+                        className={`${
                           styles.modalDeleteAccount__div__form__div__div__select
-                        }
+                        }`}
                         name="reason"
                         id="reason"
                         value={reason}
                         onChange={handleChange}
+                        tabIndex={0}
                       >
                         <option disabled value=""></option>
                         <option value="Vous avez atteint vos objectifs de coaching de vie et vous n'avez plus besoin des services offerts par le site">

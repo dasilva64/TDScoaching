@@ -1,3 +1,19 @@
+.test {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  &__text {
+    margin: 20px 0px;
+  }
+  &__discovery {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid red;
+  }
+}
+
 .takeDiscovery {
   &__infoo {
     padding: 10px;
@@ -61,12 +77,12 @@
     }
     &__time,
     &__payment {
-      display: flex;
+      display: inline-flex;
       margin-bottom: 20px;
       text-align: center;
-      &__p {
+      /* &__p {
         margin-left: 5px;
-      }
+      } */
     }
   }
 }

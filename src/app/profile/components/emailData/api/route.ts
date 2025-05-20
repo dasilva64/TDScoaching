@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
                 let removeEditEmail = await prisma.user.update({
                   where: { id: validator.escape(user.id) },
                   data: {
-                    editEmail: Prisma.JsonNull,
+                    editEmail: Prisma.DbNull,
                   },
                 });
                 if (removeEditEmail === null) {
@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
                 where: { id: validator.escape(user.id) },
                 data: {
                   mail: validator.escape(copyEditEmail.newEmail),
-                  editEmail: Prisma.JsonNull,
+                  editEmail: Prisma.DbNull,
                 },
               });
               if (editUser === null) {

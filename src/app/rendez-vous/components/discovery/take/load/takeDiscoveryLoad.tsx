@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import styles from "./takeDiscoveryLoad.module.scss";
 
 export const TakeDiscoveryLoad = () => {
@@ -11,3 +11,4 @@ export const TakeDiscoveryLoad = () => {
     </>
   );
 };
+ */

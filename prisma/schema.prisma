@@ -42,39 +42,57 @@ model MeetingDiscovery {
 }
 
 model User {
-  id               String            @id(map: "user_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  mail             String            @unique @db.VarChar
-  firstname        String            @db.VarChar
-  lastname         String            @db.VarChar
-  password         String            @db.VarChar
-  registerToken    Json?             @db.Json
-  resetToken       Json?             @db.Json
-  editEmail        Json?             @db.Json
-  role             String            @db.VarChar
-  status           Boolean
-  deleteToken      Json?             @db.Json
-  discovery        Boolean
-  deleteReason     String?
-  Meeting          Meeting[]
-  MeetingDiscovery MeetingDiscovery?
-}
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model meeting_test {
-  id       BigInt   @id @default(autoincrement())
-  startAt  DateTime @db.Timestamp(6)
-  coaching String
-  confirm  Boolean
-  status   String
-  token    String
+  id                                       String            @id(map: "user_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  mail                                     String            @unique @db.VarChar
+  firstname                                String            @db.VarChar
+  lastname                                 String            @db.VarChar
+  password                                 String?           @db.VarChar
+  registerToken                            Json?             @db.Json
+  resetToken                               Json?             @db.Json
+  editEmail                                Json?             @db.Json
+  role                                     String?           @db.VarChar
+  status                                   Boolean?
+  deleteToken                              Json?             @db.Json
+  discovery                                Boolean?          @default(true)
+  deleteReason                             String?
+  meetingId                                String?           @unique @db.Uuid
+  offreId                                  String?           @db.Uuid
+  Meeting                                  Meeting[]
+  MeetingDiscovery                         MeetingDiscovery?
+  meeting_test                             meeting_test?     @relation(fields: [meetingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  offre_test                               offre_test?       @relation(fields: [offreId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User_offreMeeting_fkey")
+  meeting_test_meeting_test_userMailToUser meeting_test[]    @relation("meeting_test_userMailToUser")
+  offre_test_offre_test_userIdToUser       offre_test[]      @relation("offre_test_userIdToUser")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model offre_test {
-  id                     BigInt       @id @default(autoincrement())
-  type                   String
-  currentNumberOfMeeting Int?         @db.SmallInt
-  meetingId              BigInt?
-  offre_test             offre_test?  @relation("offre_testTooffre_test", fields: [meetingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  other_offre_test       offre_test[] @relation("offre_testTooffre_test")
+  type                                                   String
+  currentNumberOfMeeting                                 Int?           @db.SmallInt
+  currentMeetingId                                       String?        @db.Uuid
+  id                                                     String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                                                 String         @db.Uuid
+  sessionId                                              String?        @unique
+  User                                                   User[]
+  meeting_test_meeting_test_offreIdTooffre_test          meeting_test[] @relation("meeting_test_offreIdTooffre_test")
+  meeting_test_offre_test_currentMeetingIdTomeeting_test meeting_test?  @relation("offre_test_currentMeetingIdTomeeting_test", fields: [currentMeetingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_offre_test_userIdToUser                           User           @relation("offre_test_userIdToUser", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model meeting_test {
+  id                                                   String       @id(map: "meeting_test_pkey1") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  startAt                                              DateTime     @db.Timestamp(6)
+  coaching                                             String
+  confirm                                              Boolean
+  status                                               String
+  token                                                String?
+  userMail                                             String
+  type                                                 String
+  createdAt                                            DateTime     @default(now()) @db.Timestamp(6)
+  offreId                                              String?      @db.Uuid
+  User                                                 User?
+  offre_test_meeting_test_offreIdTooffre_test          offre_test?  @relation("meeting_test_offreIdTooffre_test", fields: [offreId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User_meeting_test_userMailToUser                     User         @relation("meeting_test_userMailToUser", fields: [userMail], references: [mail], onDelete: NoAction, onUpdate: NoAction)
+  offre_test_offre_test_currentMeetingIdTomeeting_test offre_test[] @relation("offre_test_currentMeetingIdTomeeting_test")
 }

@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
                   if (user.status === false) {
                     let editUser = await prisma.user.update({
                       where: { id: validator.escape(user.id) },
-                      data: { status: true, registerToken: Prisma.JsonNull },
+                      data: { status: true, registerToken: Prisma.DbNull },
                     });
                     return NextResponse.json({
                       status: 200,

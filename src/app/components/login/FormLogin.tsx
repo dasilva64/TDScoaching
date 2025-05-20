@@ -73,6 +73,7 @@ const FormLogin = () => {
     if (loginData) {
       if (loginData.status === 200) {
         mutate("/components/header/api");
+        mutate("/components/header/ui/api");
         clearState();
         dispatch({
           type: "ModalLogin/close",
@@ -230,6 +231,7 @@ const FormLogin = () => {
                 className={styles.login__btn}
                 type="button"
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
                 aria-label="button pour fermer la modal de connexion"
               >
                 <Image

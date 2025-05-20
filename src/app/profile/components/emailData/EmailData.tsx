@@ -216,6 +216,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
               <button
                 type="button"
                 className={styles.modalEditEmailSendData__btn}
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
                   closeForm();
                 }}

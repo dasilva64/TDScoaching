@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
             if (new Date() > limitDate) {
               let editUserReset = await prisma.user.update({
                 where: { mail: validator.escape(email.trim()) },
-                data: { resetToken: Prisma.JsonNull },
+                data: { resetToken: Prisma.DbNull },
               });
               let token = jwt.sign(
                 { user: user.mail },

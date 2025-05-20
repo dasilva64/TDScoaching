@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import styles from "./HowDoDiscovery.module.scss";
 
 const HowDoDiscovery = () => {
@@ -56,3 +56,4 @@ const HowDoDiscovery = () => {
 };
 
 export default HowDoDiscovery;
+ */

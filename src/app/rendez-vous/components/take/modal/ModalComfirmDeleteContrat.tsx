@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useMemo, useState } from "react";
@@ -20,7 +20,7 @@ import Link from "next/link";
 //import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import { google } from "googleapis";
-/* import {
+ import {
   Combobox,
   ComboboxInput,
   ComboboxList,
@@ -30,15 +30,15 @@ import { google } from "googleapis";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
-} from "use-places-autocomplete"; */
+} from "use-places-autocomplete"; 
 import {
   Checkbox,
   FormControlLabel,
   FormGroup,
   FormHelperText,
 } from "@mui/material";
-/* import { useDraw } from "../../../../components/hook/canva/useDraw";
-import add from "../../../../../api/meeting/add"; */
+ import { useDraw } from "../../../../components/hook/canva/useDraw";
+import add from "../../../../../api/meeting/add"; 
 const lib: any = ["places"];
 const ModalComfirmDeleteContrat = () => {
   const [allowContract, setAllowContract] = useState(false);
@@ -60,8 +60,8 @@ const ModalComfirmDeleteContrat = () => {
       fields: ["formatted_address", "geometry", "name"],
       strictBounds: false,
     };
-    /* const autoComplete = new google.maps.places.autoComplete(input, options);
-    console.log(autoComplete); */
+     const autoComplete = new google.maps.places.autoComplete(input, options);
+    console.log(autoComplete); 
   }, [input]);
 
   const [signatureRefContent, setSignatureRefContent] = useState("");
@@ -91,10 +91,10 @@ const ModalComfirmDeleteContrat = () => {
       reset();
     }
   }, [data, reset, userData]);
-  /* const { displayModalComfirmDeleteContrat } = useSelector(
+   const { displayModalComfirmDeleteContrat } = useSelector(
     (state: RootState) => state.ModalComfirmDeleteContrat
-  ); */
-  /* useEffect(() => {
+  ); 
+   useEffect(() => {
     const test = async () => {
       trigger({
         firstname: userData.body.firstname,
@@ -106,14 +106,14 @@ const ModalComfirmDeleteContrat = () => {
         test();
       }
     }
-  }, [displayModalComfirmDeleteContrat, trigger, userData]); */
+  }, [displayModalComfirmDeleteContrat, trigger, userData]); 
   const dispatch = useDispatch();
   const closeForm = () => {
     dispatch({
       type: "ModalComfirmDeleteContrat/close",
     });
   };
-  /*  const { canvasRef, onMouseDown, signatureRef, clear } = useDraw(
+    const { canvasRef, onMouseDown, signatureRef, clear } = useDraw(
     drawLine,
     setSignatureRefContent,
     setSignatureError
@@ -130,7 +130,7 @@ const ModalComfirmDeleteContrat = () => {
     ctx.moveTo(startPoint.x, startPoint.y);
     ctx.lineTo(currX, currY);
     ctx.stroke();
-  } */
+  } 
   let content;
   if (isError) {
     content = <p>error</p>;
@@ -194,14 +194,14 @@ const ModalComfirmDeleteContrat = () => {
                     className={styles.contratModal__content__btnEdit}
                     onClick={() => {
                       const fetchEdit = async () => {
-                        /* triggerEdit({
+                         triggerEdit({
                           formule: type,
-                        }); */
+                        }); 
                       };
                       fetchEdit();
                     }}
                   >
-                    Comfirmer le choix
+                    Confirmer le choix
                   </button>
                 </>
               )}
@@ -231,7 +231,7 @@ const ModalComfirmDeleteContrat = () => {
                           //handlerInput(e);
                           setCity(e.target.value);
                           const fetchMethod = async () => {
-                            /* const options = {
+                             const options = {
                               fields: ["formatted_address", "geometry", "name"],
                               strictBounds: false,
                             };
@@ -242,11 +242,11 @@ const ModalComfirmDeleteContrat = () => {
                               );
                             const infoWindow = new google.maps.InfoWindow();
                             const infowindowContent =
-                              document.getElementById("infowindow-content"); */
-                            /*infoWindow.setContent(infowindowContent); */
-                            /* let string = e.target.value
+                              document.getElementById("infowindow-content"); 
+                            infoWindow.setContent(infowindowContent); 
+                             let string = e.target.value
                                 .split(" ")
-                                .join("%20"); */
+                                .join("%20"); 
                           };
                           fetchMethod();
                         }}
@@ -270,7 +270,7 @@ const ModalComfirmDeleteContrat = () => {
                       <br />
                       <span id="place-address"></span>
                     </div>
-                    {/* {allCity !== null && (
+                    { {allCity !== null && (
                       <>
                         {allCity.length > 0 && (
                           <div
@@ -305,7 +305,7 @@ const ModalComfirmDeleteContrat = () => {
                           </div>
                         )}
                       </>
-                    )} */}
+                    )} }
                   </div>
 
                   <p>Vous pouvez signer contrat dans la parti ci-dessous</p>
@@ -315,14 +315,14 @@ const ModalComfirmDeleteContrat = () => {
                       width: "300px",
                       height: "100px",
                     }}
-                    /* ref={canvasRef}
-                    onMouseDown={onMouseDown} */
+                     ref={canvasRef}
+                    onMouseDown={onMouseDown} 
                     width={300}
                     height={100}
                     className={styles.contratModal__content__canvas}
                   />
                   <div>
-                    {/* <input type="hidden" name="signature" ref={signatureRef} /> */}
+                    { <input type="hidden" name="signature" ref={signatureRef} /> }
                   </div>
                   {signatureRefContent !== "" &&
                     signatureRefContent !== undefined && (
@@ -383,10 +383,10 @@ const ModalComfirmDeleteContrat = () => {
                             signatureRefContent !== "") ||
                           (signatureRefContent !== undefined && city.length > 0)
                         ) {
-                          /*  let data = signatureRef.current.value.replace(
+                            let data = signatureRef.current.value.replace(
                             /^data:image\/\w+;base64,/,
                             ""
-                          ); */
+                          ); 
 
                           const test = async () => {
                             let response = await fetch("/api/contract/edit", {
@@ -447,7 +447,7 @@ const ModalComfirmDeleteContrat = () => {
   return (
     <>
       <AnimatePresence>
-        {/* {displayModalComfirmDeleteContrat === true && (
+        { {displayModalComfirmDeleteContrat === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -475,6 +475,7 @@ const ModalComfirmDeleteContrat = () => {
               <button
                 className={styles.contratModal__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.contratModal__btn__img}
@@ -507,7 +508,7 @@ const ModalComfirmDeleteContrat = () => {
               {content}
             </motion.div>
           </>
-        )} */}
+        )} }
       </AnimatePresence>
     </>
   );
@@ -527,18 +528,18 @@ export function Map() {
           setSelected={setSelected}
           searchOptions={searchOptions}
         />
-        {/* <GooglePlacesAutocomplete
+        { <GooglePlacesAutocomplete
           autocompletionRequest={{
             componentRestrictions: { country: ["fr"] },
           }}
-        /> */}
+        /> }
       </div>
     </>
   );
 }
 
 export const PlacesAutocomplete = ({ setSelected }: any) => {
-  /* const {
+   const {
     ready,
     value,
     suggestions: { status, data },
@@ -558,12 +559,12 @@ export const PlacesAutocomplete = ({ setSelected }: any) => {
   };
   if (data.length > 0) {
     //console.log(data[0].terms[data[0].terms.length - 1]);
-  } */
+  } 
   //
   return (
     <>
       <div>
-        {/*  <input
+        {  <input
           type="text"
           value={value}
           onChange={(e) => {
@@ -580,9 +581,9 @@ export const PlacesAutocomplete = ({ setSelected }: any) => {
                   <p key={place_id}>{description}</p>
                 )
             )}
-        </div> */}
+        </div> }
       </div>
-      {/* <Combobox style={{ position: "absolute", zIndex: "999" }}>
+      { <Combobox style={{ position: "absolute", zIndex: "999" }}>
         <ComboboxInput
           value={value}
           onChange={(e) => {
@@ -599,9 +600,10 @@ export const PlacesAutocomplete = ({ setSelected }: any) => {
               ))}
           </ComboboxList>
         </ComboboxPopover>
-      </Combobox> */}
+      </Combobox> }
     </>
   );
 };
 
 export default ModalComfirmDeleteContrat;
+ */

@@ -13,8 +13,14 @@ const cspHeader = `
     upgrade-insecure-requests;
 `;
 const nextConfig = {
+  /* webpack: (config) => {
+    config.resolve.alias.canvas = false;
+
+    return config;
+  }, */
+  swcMinify: true,
   productionBrowserSourceMaps: true,
-  async headers() {
+   async headers() {
     return [
       {
         source: "/(.*)",

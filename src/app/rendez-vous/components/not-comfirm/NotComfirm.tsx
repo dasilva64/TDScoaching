@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+/* import React, { useEffect } from "react";
 import styles from "./NotComfirm.module.scss";
 import useGet from "../../../components/hook/useGet";
 import { useDispatch } from "react-redux";
@@ -39,7 +39,7 @@ const NotComfirm = () => {
           </p>
           <p>
             Il vous reste {Number(restDate?.getUTCMinutes()) + 1} min pour le
-            comfirmer
+            confirmer
           </p>
           <div className={styles.notcomfirm__text__div}>
             <button
@@ -51,7 +51,7 @@ const NotComfirm = () => {
                 fetchAddMeeting();
               }}
             >
-              Comfirmer ce rendez-vous
+              Confirmer ce rendez-vous
             </button>
             <button
               className={styles.notcomfirm__text__div__btn}
@@ -78,3 +78,4 @@ const NotComfirm = () => {
 };
 
 export default NotComfirm;
+ */

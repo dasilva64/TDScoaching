@@ -1,17 +1,13 @@
-/* import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
-import {
-  SessionData,
-  sessionOptions,
-  sessionOptionsRemeber,
-} from "../../../../../../../lib/session";
-import { validationBody } from "../../../../../../../lib/validation";
 import validator, { isDate } from "validator";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-import prisma from "../../../../../../../lib/prisma";
 import { RateLimiter } from "limiter";
+import prisma from "@/app/lib/prisma";
+import { SessionData, sessionOptions } from "@/app/lib/session";
+import { validationBody } from "@/app/lib/validation";
 
 const limiter = new RateLimiter({
   tokensPerInterval: 600,
@@ -129,7 +125,7 @@ export async function DELETE(request: NextRequest) {
           }
         );
       } else {
-        let meeting = await prisma.meeting.findUnique({
+        let meeting = await prisma.meeting_test.findUnique({
           where: { id: user.meetingId },
         });
         if (meeting === null) {
@@ -317,4 +313,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
- */

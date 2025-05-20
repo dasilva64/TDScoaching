@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import styles from "./Take.module.scss";
 import { AppDispatch } from "@/app/redux/store";
 import { useDispatch } from "react-redux";
@@ -246,3 +246,4 @@ const Take = () => {
 };
 
 export default Take;
+ */

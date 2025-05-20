@@ -91,7 +91,6 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
-        router.push("/");
       }
     }
   }, [
@@ -206,6 +205,7 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
                 type="button"
                 className={styles.modalEditMainUserData__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.modalEditMainUserData__btn__img}

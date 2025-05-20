@@ -25,6 +25,7 @@ export const metadata = {
 import localFont from "next/font/local";
 import NoScript from "../components/noscript/NoScript";
 import Modal from "./components/modal/Modal";
+import Footer from "../components/footer/footer";
 const Parisienne = localFont({
   src: "../Parisienne-Regular.ttf",
   display: "swap",
@@ -255,6 +256,7 @@ const Tarif = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 };

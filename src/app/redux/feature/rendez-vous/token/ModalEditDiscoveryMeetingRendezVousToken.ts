@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   displayModalEditDiscoveryMeetingRendezVousToken: false,
-  dataModalEditDiscoveryMeetingRendezVousToken: "",
+  dateModalEditDiscoveryMeetingRendezVousToken: "",
 };
 
 const ModalEditDiscoveryMeetingRendezVousToken = createSlice({
@@ -11,10 +11,11 @@ const ModalEditDiscoveryMeetingRendezVousToken = createSlice({
   reducers: {
     open: (state, action) => {
       state.displayModalEditDiscoveryMeetingRendezVousToken = true;
-      state.dataModalEditDiscoveryMeetingRendezVousToken = action.payload.date;
+      state.dateModalEditDiscoveryMeetingRendezVousToken = action.payload.date;
     },
     close: (state) => {
       state.displayModalEditDiscoveryMeetingRendezVousToken = false;
+      state.dateModalEditDiscoveryMeetingRendezVousToken = "";
     },
   },
 });

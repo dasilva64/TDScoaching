@@ -1,8 +1,13 @@
 .meet {
   position: relative;
   z-index: 690;
-  min-height: calc(100vh - 435px);
-  margin-top: 84px;
+  height: calc(100%);
+  padding-top: 84px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.04);
   &__section {
     margin: 0px 10%;
     &__h1 {

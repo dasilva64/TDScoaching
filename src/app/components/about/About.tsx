@@ -1,12 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./About.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 
 const About = () => {
   const [open, setOpen] = useState(false);
+  const ref: any = useRef(null);
+  useEffect(() => {
+    if (open === true) {
+      ref.current?.setAttribute("tabindex", "0");
+    } else {
+      ref.current?.setAttribute("tabindex", "-1");
+    }
+  }, [open]);
   return (
     <div
       className={`${open ? styles.about__open : styles.about__close} ${
@@ -21,10 +29,11 @@ const About = () => {
         développement personnel et professionnel.
       </p>
       <Link
+        ref={ref}
+        tabIndex={open ? 0 : -1}
         prefetch={false}
         href="/tarif"
         className={`${styles.about__btn} modalOpen`}
-        tabIndex={0}
       >
         Voir les offres
       </Link>
@@ -33,6 +42,7 @@ const About = () => {
           open ? styles.about__plus__open : styles.about__plus__close
         }`}
         aria-label="button pour ouvrir ou fermer le texte de présentation"
+        onMouseDown={(e) => e.preventDefault()}
         onClick={() => {
           setOpen(!open);
         }}

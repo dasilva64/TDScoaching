@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+/* import React, { useEffect } from "react";
 import useSWRMutation from "swr/mutation";
 import { useDispatch, useSelector } from "react-redux";
 import { mutate } from "swr";
@@ -14,9 +14,9 @@ const ModalCancelMeeting = () => {
     "/api/meeting/deleteMeeting",
     fetchGet
   );
-  /* const { displayModalCancelMeeting } = useSelector(
+   const { displayModalCancelMeeting } = useSelector(
     (state: RootState) => state.ModalCancelMeeting
-  ); */
+  ); 
   useEffect(() => {
     if (data && data.status === 200) {
       if (data.status === 200) {
@@ -50,7 +50,7 @@ const ModalCancelMeeting = () => {
   return (
     <>
       <AnimatePresence>
-        {/* {displayModalCancelMeeting === true && (
+        { {displayModalCancelMeeting === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -77,6 +77,7 @@ const ModalCancelMeeting = () => {
               <button
                 className={styles.cancelModal__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.cancelModal__btn__img}
@@ -104,10 +105,11 @@ const ModalCancelMeeting = () => {
               </div>
             </motion.div>
           </>
-        )} */}
+        )} }
       </AnimatePresence>
     </>
   );
 };
 
 export default ModalCancelMeeting;
+ */

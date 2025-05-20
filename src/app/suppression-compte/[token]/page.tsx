@@ -19,7 +19,7 @@ export const metadata = {
     icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
   },
   author: "Thierry Da Silva",
-  robots: "index, follow",
+  robots: "noindex, nofollow",
   other: {
     "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
   },

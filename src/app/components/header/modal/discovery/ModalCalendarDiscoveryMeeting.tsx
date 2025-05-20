@@ -13,7 +13,8 @@ import useGet from "@/app/components/hook/useGet";
 
 const ModalCalendarDiscoveryMeeting = () => {
   const [allData, setAllData] = useState<any[] | null>(null);
-
+  const [error, setError] = useState<number>(0);
+  const [dateStr, setDateStr] = useState<any>("")
   const dispatch = useDispatch();
   const {
     data: userData,
@@ -21,7 +22,7 @@ const ModalCalendarDiscoveryMeeting = () => {
     isError,
     mutate,
   } = useGet("/components/header/modal/discovery/api");
-  if (isError) {
+  /* if (isError) {
     dispatch({
       type: "flash/storeFlashMessage",
       payload: {
@@ -32,48 +33,25 @@ const ModalCalendarDiscoveryMeeting = () => {
     dispatch({
       type: "ModalDiscoveryMeetingTest/close",
     });
-  }
+  } */
+
   useEffect(() => {
     if (userData) {
       if (userData.status === 200) {
         let array = [];
 
         for (let i = 0; i < userData.body.meetings.length; i++) {
-          if (userData.body.meeting === null) {
-            array.push({
-              start: userData.body.meetings[i].startAt,
-              editable: true,
-              backgroundColor: "red",
-              textColor: "red",
-              id: userData.body.meetings[i].userId,
-            });
-          } else {
-            if (
-              userData.body.meeting.userId === userData.body.meetings[i].userId
-            ) {
-              array.push({
-                start: userData.body.meetings[i].startAt,
-                editable: true,
-                backgroundColor: "green",
-                textColor: "white",
-                title: "Mon rendez-vous",
-                id: userData.body.meetings[i].userId,
-              });
-            } else {
-              array.push({
-                start: userData.body.meetings[i].startAt,
-                editable: false,
-                backgroundColor: "red",
-                textColor: "red",
-                id: userData.body.meetings[i].userId,
-              });
-            }
-          }
+          array.push({
+            start: userData.body.meetings[i].startAt,
+            editable: false,
+            backgroundColor: "red",
+            textColor: "red",
+          });
         }
         setAllData(array);
       }
     }
-  }, [userData]);
+  }, [isLoading, userData]);
 
   const calendarRef: any = useRef(null);
 
@@ -84,10 +62,38 @@ const ModalCalendarDiscoveryMeeting = () => {
       type: "ModalCalendarDiscoveryMeetingHeader/close",
     });
   };
-  /* const { displayModalCalendarDiscoveryMeetingHeader } = useSelector(
+  const { displayModalCalendarDiscoveryMeetingHeader } = useSelector(
     (state: RootState) => state.ModalCalendarDiscoveryMeetingHeader
-  ); */
+  );
+
+  useEffect(() => {
+    if (dateStr) {
+
+      if (error > 0) {
+      dispatch({
+        type: "flash/storeFlashMessage",
+        payload: {
+          type: "error",
+          flashMessage:
+            "Ce rendez-vous est déjà prit, veuillez en selectionner un autre",
+        },
+      });
+    } else  {
+      dispatch({
+        type: "flash/clearFlashMessage",
+      });
+      dispatch({
+        type: "ModalAddDiscoveryMeetingHeader/open",
+        payload: { date: dateStr },
+      });
+      dispatch({ type: "ModalCalendarDiscoveryMeetingHeader/close" });
+    }
+    }
+    
+  }, [error, dateStr])
   const handleDateClick = (arg: any) => {
+    setError(0)
+    setDateStr(arg.dateStr)
     if (allData && allData.length > 0) {
       for (let i = 0; i < allData.length; i++) {
         var date = new Date(allData[i].start);
@@ -110,24 +116,7 @@ const ModalCalendarDiscoveryMeeting = () => {
           date.getUTCSeconds()
         );
         if (new Date(date).getTime() === new Date(date2).getTime()) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage:
-                "Ce rendez-vous est déjà prit, veuillez en selectionner un autre",
-            },
-          });
-          break;
-        } else {
-          dispatch({
-            type: "flash/clearFlashMessage",
-          });
-          dispatch({
-            type: "ModalAddDiscoveryMeetingTest/open",
-            payload: { date: arg.dateStr },
-          });
-          dispatch({ type: "ModalDiscoveryMeetingTest/close" });
+          setError(prev => prev + 1)
         }
       }
     } else {
@@ -135,17 +124,11 @@ const ModalCalendarDiscoveryMeeting = () => {
         type: "flash/clearFlashMessage",
       });
       dispatch({
-        type: "ModalAddDiscoveryMeetingTest/open",
+        type: "ModalAddDiscoveryMeetingHeader/open",
         payload: { date: arg.dateStr },
       });
-      dispatch({ type: "ModalDiscoveryMeetingTest/close" });
+      dispatch({ type: "ModalCalendarDiscoveryMeetingHeader/close" });
     }
-
-    /* dispatch({
-        type: "ModalAddDiscovery/open",
-        payload: { date: arg.dateStr },
-      });
-      dispatch({ type: "ModalCalendarDiscovery/close" }); */
   };
   useEffect(() => {
     if (window.innerWidth < 768) {
@@ -168,7 +151,7 @@ const ModalCalendarDiscoveryMeeting = () => {
   }, []);
   return (
     <>
-      {/* <TabIndex displayModal={displayModalCalendarDiscoveryMeetingHeader} />
+      <TabIndex displayModal={displayModalCalendarDiscoveryMeetingHeader} />
       <AnimatePresence>
         {displayModalCalendarDiscoveryMeetingHeader === true && (
           <>
@@ -366,7 +349,7 @@ const ModalCalendarDiscoveryMeeting = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
     </>
   );
 };

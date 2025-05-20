@@ -5,6 +5,7 @@ import WhileInView from "@/app/components/framer/WhileInView";
 const CardType = ({ title, content, type }: any) => {
   return (
     <WhileInView
+      tab={true}
       type="y"
       className={`${
         type === "couple"

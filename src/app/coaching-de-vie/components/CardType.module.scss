@@ -28,6 +28,14 @@
     cursor: pointer;
     transform: rotateY(180deg);
   }
+  &__container:focus > &__card {
+    cursor: pointer;
+    transform: rotateY(180deg);
+  }
+  &__container__couple:focus > &__card {
+    cursor: pointer;
+    transform: rotateY(180deg);
+  }
   &__container__couple:hover > &__card {
     cursor: pointer;
     transform: rotateY(180deg);

@@ -93,9 +93,9 @@
           border-radius: 10px;
         }
         &__ul {
+          line-height: 1.4;
           list-style-type: none;
           &__li {
-            margin-bottom: 5px;
             &__flex {
               display: flex;
             }
@@ -105,9 +105,9 @@
           }
 
           &__ul {
+            margin-bottom: 20px;
             list-style-type: none;
             &__li {
-              margin-bottom: 5px;
               margin-left: 20px;
             }
           }

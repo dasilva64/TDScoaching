@@ -1,0 +1,188 @@
+.test {
+  overflow-y: scroll;
+  padding-bottom: max(16px, 2vw);
+  padding-top: max(36px, 2vw);
+  &__card {
+    margin-top: 30px;
+    background-color: white;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    border-left: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
+    border-radius: 5px;
+    &__p {
+      display: flex;
+      padding-left: 30px;
+      margin-top: 10px;
+      align-content: center;
+      &__align {
+        line-height: 1;
+      }
+      &__img {
+        margin-right: 15px;
+        vertical-align: middle;
+      }
+    }
+    &__title {
+      padding: 5px 0px 5px 10px;
+      display: flex;
+      background-color: aqua;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      &__p {
+        align-items: center;
+        margin: 5px 0;
+        display: flex;
+        justify-content: center;
+        &__img {
+          margin-right: 5px;
+        }
+        &__space {
+          margin-left: 30px;
+        }
+      }
+    }
+    &__confirm {
+      text-align: center;
+      &__text {
+        margin: 0px 0px 20px 20px;
+        text-align: left;
+      }
+      &__btn {
+        padding: 5px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        background-color: white;
+        border: 2px solid green;
+        transition: all 400ms;
+        animation: test 1s infinite;
+        &:hover {
+          transform: scale(1.05);
+          background-color: green;
+          color: green;
+          color: white;
+        }
+      }
+    }
+    &__action {
+      display: flex;
+      justify-content: space-around;
+      &__btn {
+        padding: 5px 10px;
+        border-radius: 10px;
+
+        cursor: pointer;
+        &__delete {
+          background-color: white;
+          border: 2px solid red;
+          transition: all 400ms;
+          &:hover {
+            transform: scale(1.05);
+            background-color: red;
+            color: red;
+            color: white;
+          }
+        }
+        &__edit {
+          background-color: white;
+          border: 2px solid green;
+          transition: all 400ms;
+          &:hover {
+            transform: scale(1.05);
+            background-color: green;
+            color: green;
+            color: white;
+          }
+        }
+      }
+    }
+    &__line {
+      width: 90%;
+      height: 1px;
+      background-color: #eaeaea;
+      border-radius: 10px;
+      margin: 20px auto;
+    }
+    &__contact {
+      padding: 0px 20px 30px 20px;
+      &__ul {
+        margin-left: 15px;
+
+        &__li {
+          list-style-type: none;
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          &__a {
+            display: inline-block;
+            margin-left: 15px;
+            &::after {
+              content: "";
+              width: 0px;
+              height: 2px;
+              display: block;
+              background: orange;
+              transition: 400ms;
+            }
+            &:hover::after {
+              width: 100%;
+            }
+            &:hover {
+              color: black;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  .test {
+    &__card {
+      &__action {
+        flex-wrap: wrap;
+        row-gap: 20px;
+        column-gap: 10px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .test {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .test {
+    &__card {
+      &__title {
+        &__p {
+          &__space {
+            margin-left: 10px;
+          }
+        }
+      }
+      &__contact {
+      &__ul {
+        margin-left: 13px;
+      }
+    }
+    }
+    
+  }
+}
+
+@keyframes test {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

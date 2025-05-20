@@ -7,22 +7,25 @@ import Image from "next/image";
 import { RootState } from "@/app/redux/store";
 
 const ModalRecapDiscoveryMeeting = () => {
+
   const dispatch = useDispatch();
   const closeModal = () => {
     dispatch({
-      type: "ModalRecapDiscoveryMeeting/close",
+      type: "ModalRecapDiscoveryMeetingHeader/close",
     });
   };
-  /* const {
-    displayModalRecapDiscoveryMeeting,
-    emailModalRecapDiscoveryMeeting,
-    dateModalRecapDiscoveryMeeting,
-  } = useSelector((state: RootState) => state.ModalRecapDiscoveryMeeting); */
+  
+  const {
+    displayModalRecapDiscoveryMeetingHeader,
+    emailModalRecapDiscoveryMeetingHeader,
+    dateModalRecapDiscoveryMeetingHeader,
+    typeModalRecapDiscoveryMeetingHeader,
+  } = useSelector((state: RootState) => state.ModalRecapDiscoveryMeetingHeader);
   return (
     <>
-      {/* <TabIndex displayModal={displayModalRecapDiscoveryMeeting} />
+      <TabIndex displayModal={displayModalRecapDiscoveryMeetingHeader} />
       <AnimatePresence>
-        {displayModalRecapDiscoveryMeeting === true && (
+        {displayModalRecapDiscoveryMeetingHeader === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -64,7 +67,13 @@ const ModalRecapDiscoveryMeeting = () => {
                 Récapitulatif de votre rendez-vous de découverte
               </h2>
               <p className={styles.modal__email}>
-                {emailModalRecapDiscoveryMeeting}
+              <Image
+                    className={styles.modal__rappel__p__img}
+                    src="/assets/icone/envelope-at-fill.svg"
+                    alt="clock"
+                    width={25}
+                    height={25}
+                  /> : {emailModalRecapDiscoveryMeetingHeader}
               </p>
               <div className={styles.modal__rappel}>
                 <p className={styles.modal__rappel__p}>
@@ -76,15 +85,14 @@ const ModalRecapDiscoveryMeeting = () => {
                     height={25}
                   />
                   {" : "}
-                  {new Date(dateModalRecapDiscoveryMeeting).toLocaleDateString(
-                    "fr-FR",
-                    {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    }
-                  )}
+                  {new Date(
+                    dateModalRecapDiscoveryMeetingHeader
+                  ).toLocaleDateString("fr-FR", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                 </p>
                 <p className={styles.modal__rappel__p}>
                   <Image
@@ -95,29 +103,37 @@ const ModalRecapDiscoveryMeeting = () => {
                     height={25}
                   />
                   {" : "}
-                  {new Date(dateModalRecapDiscoveryMeeting).toLocaleTimeString(
-                    "fr-FR"
-                  )}
+                  {new Date(
+                    dateModalRecapDiscoveryMeetingHeader
+                  ).toLocaleTimeString("fr-FR")}
+                </p>
+                <p className={styles.modal__rappel__p}>
+                  <Image
+                    className={styles.modal__rappel__p__img}
+                    src="/assets/icone/coach.png"
+                    alt="clock"
+                    width={25}
+                    height={25}
+                  />
+                  {" : "}
+                  {typeModalRecapDiscoveryMeetingHeader}
                 </p>
               </div>
-              <p>
+              <p className={styles.modal__info}>
                 Veuillez confirmer votre rendez-vous 24h avant la date du
                 rendez-vous, sinon celui ci sera supprimé automatiquement.
               </p>
-              <div className={styles.modal__submit}>
-                <button className={styles.modal__submit__btn}>
-                  Comfirmer votre rendez-vous
-                </button>
-              </div>
+              
+
               <p>
                 Un mail vous a été envoyé avec les informations du rendez-vous
                 et la posibilité de le modifier ou le supprimer et également de
-                confirmation.
+                le confirmer.
               </p>
             </motion.div>
           </>
         )}
-      </AnimatePresence>*/}
+      </AnimatePresence>
     </>
   );
 };

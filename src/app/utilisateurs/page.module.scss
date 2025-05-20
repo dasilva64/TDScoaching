@@ -23,3 +23,11 @@
     }
   }
 }
+
+@media screen and (max-width: 768px) {
+    .allUser {
+      &__article {
+        margin: 0px 5%;
+      }
+    }
+}

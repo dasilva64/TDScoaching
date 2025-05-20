@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import styles from "./MyMeeting.module.scss";
 import useGet from "../../../components/hook/useGet";
 import { useDispatch } from "react-redux";
@@ -177,3 +177,4 @@ const MyMeeting = () => {
 };
 
 export default MyMeeting;
+ */

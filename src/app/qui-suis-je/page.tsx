@@ -1,6 +1,7 @@
 import styles from "./page.module.scss";
 import Image from "next/image";
 import NoScript from "../components/noscript/NoScript";
+import Footer from "../components/footer/footer";
 
 export const metadata = {
   title: "Thierry DA SILVA coach professionnel certifié - tdscoaching",
@@ -215,6 +216,7 @@ const About = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };

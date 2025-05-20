@@ -9,6 +9,7 @@ import styles from "./page.module.scss";
 import CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiquesSomaire from "./components/comment-gerer-le-stress-et-l-anxiete-au-quotidien/comment-gerer-le-stress-et-l-anxiete-au-quotidien-somaire";
 import CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiques from "./components/comment-gerer-le-stress-et-l-anxiete-au-quotidien/comment-gerer-le-stress-et-l-anxiete-au-quotidien";
 import Carrousel from "./components/carrousel/Carrousel";
+import Footer from "../components/footer/footer";
 
 export async function generateMetadata({
   params,
@@ -32,26 +33,6 @@ export async function generateMetadata({
   };
 }
 
-/* const getOne = unstable_cache(
-  async ({ slug }: { slug: string }) => {
-    const article = await prisma.article.findUnique({
-      where: { slug: validator.escape(slug) },
-      select: {
-        title: true,
-        image: true,
-        created_at: true,
-        description: true,
-        slug: true,
-      },
-    });
-
-    if (!article) notFound();
-    return article;
-  },
-  ["article"],
-  { revalidate: 3600, tags: ["article"] }
-); */
-
 const getOne = async ({ slug }: { slug: string }) => {
   const article = await prisma.article.findUnique({
     where: { slug: validator.escape(slug) },
@@ -67,32 +48,6 @@ const getOne = async ({ slug }: { slug: string }) => {
   if (!article) notFound();
   return article;
 };
-
-/* const getLast = unstable_cache(
-  async () => {
-    const lastArticles = await prisma.article.findMany({
-      where: {
-        slug: {
-          not: "comment-gerer-le-stress-et-l-anxiete-au-quotidien",
-        },
-      },
-      select: {
-        title: true,
-        image: true,
-        created_at: true,
-        description: true,
-        slug: true,
-      },
-      orderBy: { created_at: "desc" },
-      take: 10,
-    });
-
-    if (!lastArticles) notFound();
-    return lastArticles;
-  },
-  ["lastArticle"],
-  { revalidate: 3600, tags: ["lastArticle"] }
-); */
 
 const getLast = async () => {
   const lastArticles = await prisma.article.findMany({
@@ -207,6 +162,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
           )}
         </div>
       </main>
+      <Footer />
     </>
   );
 };

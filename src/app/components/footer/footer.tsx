@@ -10,12 +10,12 @@ const Footer = () => {
         <ul
           className={`${styles.footer__ul} ${styles.footer__ul__lineHeightMin}`}
         >
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link className={`${styles.footer__a} modalOpen`} href="/">
               Accueil
             </Link>
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link
               className={`${styles.footer__a} modalOpen`}
               href="/qui-suis-je"
@@ -23,7 +23,7 @@ const Footer = () => {
               Qui suis-je ?
             </Link>
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link
               className={`${styles.footer__a} modalOpen`}
               href="/coaching-de-vie"
@@ -31,12 +31,12 @@ const Footer = () => {
               Coaching de vie
             </Link>
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link className={`${styles.footer__a} modalOpen`} href="/tarif">
               Tarifs et modalité
             </Link>
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link
               className={`${styles.footer__a} modalOpen`}
               href="/assets/pdf/Code-deontologie-ICF-France.pdf"
@@ -46,12 +46,12 @@ const Footer = () => {
             </Link>
           </li>
 
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link className={`${styles.footer__a} modalOpen`} href="/contact">
               Contact
             </Link>
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link
               className={`${styles.footer__a} modalOpen`}
               href="/politique-de-confidentialite"
@@ -59,7 +59,7 @@ const Footer = () => {
               Politique de confidentialité
             </Link>
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link
               className={`${styles.footer__a} modalOpen`}
               href="/conditions-generales-utilisations"
@@ -67,7 +67,7 @@ const Footer = () => {
               Conditions générales d&apos;utilisations
             </Link>
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link
               className={`${styles.footer__a} modalOpen`}
               href="/mentions-legales"
@@ -75,17 +75,12 @@ const Footer = () => {
               Mentions légales
             </Link>
           </li>
-          {/* <li className={styles.footer__li}>
-              <Link className={styles.footer__a} href="/">
-                Politique de confidentialité
-              </Link>
-            </li> */}
         </ul>
       </section>
       <section>
         <h2 className={styles.footer__h2}>Nous retrouver</h2>
-        <ul className={`${styles.footer__ul} ${styles.footer__ul__lineHeight}`}>
-          <li className={styles.footer__li}>
+        <ul className={`${styles.footer__ul}`}>
+          <li className={`${styles.footer__li} ${styles.footer__li__contact}`}>
             Mail :&nbsp;
             <Link
               className={`${styles.footer__a} modalOpen`}
@@ -95,7 +90,7 @@ const Footer = () => {
               contact@tds-coachingdevie.fr
             </Link>
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__contact}`}>
             Tel :&nbsp;
             <Link
               className={`${styles.footer__a} modalOpen`}
@@ -105,10 +100,10 @@ const Footer = () => {
               07 81 67 31 25
             </Link>
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__contact}`}>
             Horaire : 8h - 20h du lundi au vendredi
           </li>
-          <li className={styles.footer__li}>
+          <li className={`${styles.footer__li} ${styles.footer__li__contact}`}>
             <p className={styles.footer__strong}>Bordeaux</p>,&nbsp;
             <p className={styles.footer__strong}>Chambery</p>,&nbsp;
             <p className={styles.footer__strong}>Lyon</p>

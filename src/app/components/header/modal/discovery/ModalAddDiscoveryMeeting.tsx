@@ -8,6 +8,7 @@ import { RootState } from "@/app/redux/store";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import Input from "@/app/components/input/Input";
+import { s } from "@fullcalendar/core/internal-common";
 
 const ModalAddDiscoveryMeeting = () => {
   const [emailInput, setEmailInput] = useState<string>("");
@@ -39,10 +40,10 @@ const ModalAddDiscoveryMeeting = () => {
     setLastnameInput("");
     setTypeCoaching("");
     dispatch({
-      type: "ModalAddDiscoveryMeetingTest/close",
+      type: "ModalAddDiscoveryMeetingHeader/close",
     });
   };
-  const openCalendar = () => {
+  const openCalendar = async () => {
     setEmailInputError("");
     setFirstnameInputError("");
     setLastnameInputError("");
@@ -55,19 +56,19 @@ const ModalAddDiscoveryMeeting = () => {
     setFirstnameInput("");
     setLastnameInput("");
     setTypeCoaching("");
-    dispatch({
-      type: "ModalDiscoveryMeetingTest/open",
+    await dispatch({
+      type: "ModalAddDiscoveryMeetingHeader/close",
     });
-    dispatch({
-      type: "ModalAddDiscoveryMeetingTest/close",
+    await dispatch({
+      type: "ModalCalendarDiscoveryMeetingHeader/open",
     });
   };
   const [pseudo, setPseudo] = useState<string>("");
 
-  /* const {
-    displayModalAddDiscoveryMeetingTest,
-    dataModalAddDiscoveryMeetingTest,
-  } = useSelector((state: RootState) => state.ModalAddDiscoveryMeetingTest); */
+  const {
+    displayModalAddDiscoveryMeetingHeader,
+    dataModalAddDiscoveryMeetingHeader,
+  } = useSelector((state: RootState) => state.ModalAddDiscoveryMeetingHeader);
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
     if (e.target.value.length > 0) {
@@ -79,11 +80,11 @@ const ModalAddDiscoveryMeeting = () => {
     }
   };
 
-  /* const { trigger, data, reset, isMutating } = useSWRMutation(
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/components/header/modal/discovery/api",
     fetchPost
-  ); */
-  /* useEffect(() => {
+  );
+  useEffect(() => {
     if (data) {
       if (data.status === 400) {
         if (data.type === "validation") {
@@ -113,6 +114,9 @@ const ModalAddDiscoveryMeeting = () => {
             type: "flash/storeFlashMessage",
             payload: { type: "error", flashMessage: data.message },
           });
+          setEmailInputError("");
+        setEmailInput('')
+        setValidEmailInput(false);
           reset();
         }
       } else if (data.status === 200) {
@@ -128,20 +132,21 @@ const ModalAddDiscoveryMeeting = () => {
         setValidEmailInput(false);
         setValidFirstnameInput(false);
         setTypeCoachingValid(false);
-
+        setEmailInput('')
         setFirstnameInput("");
         setLastnameInput("");
         setTypeCoaching("");
         dispatch({
-          type: "ModalRecapDiscoveryMeeting/open",
+          type: "ModalRecapDiscoveryMeetingHeader/open",
           payload: {
-            date: dataModalAddDiscoveryMeetingTest,
+            date: dataModalAddDiscoveryMeetingHeader,
             email: emailInput,
+            type: typeCoaching,
           },
         });
         setEmailInput("");
         dispatch({
-          type: "ModalAddDiscoveryMeetingTest/close",
+          type: "ModalAddDiscoveryMeetingHeader/close",
         });
 
         reset();
@@ -150,11 +155,21 @@ const ModalAddDiscoveryMeeting = () => {
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
+        setEmailInputError("");
+        setEmailInput('')
+        setValidEmailInput(false);
         reset();
       }
     }
-  }, [data, dataModalAddDiscoveryMeetingTest, dispatch, emailInput, reset]);
- */
+  }, [
+    data,
+    dataModalAddDiscoveryMeetingHeader,
+    dispatch,
+    emailInput,
+    reset,
+    typeCoaching,
+  ]);
+
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     regex: RegExp,
@@ -196,13 +211,13 @@ const ModalAddDiscoveryMeeting = () => {
       typeCoachingValid === true
     ) {
       if (pseudo.length === 0) {
-        /* trigger({
+        trigger({
           typeCoaching: typeCoaching,
-          start: dataModalAddDiscoveryMeetingTest,
+          start: dataModalAddDiscoveryMeetingHeader,
           firstname: firstnameInput,
           lastname: lastnameInput,
           email: emailInput,
-        }); */
+        });
       }
     } else {
       if (validEmailInput === false) {
@@ -231,9 +246,9 @@ const ModalAddDiscoveryMeeting = () => {
   };
   return (
     <>
-      {/* <TabIndex displayModal={displayModalAddDiscoveryMeetingTest} />
+      <TabIndex displayModal={displayModalAddDiscoveryMeetingHeader} />
       <AnimatePresence>
-        {displayModalAddDiscoveryMeetingTest === true && (
+        {displayModalAddDiscoveryMeetingHeader === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -292,7 +307,7 @@ const ModalAddDiscoveryMeeting = () => {
                   />
                   {" : "}
                   {new Date(
-                    dataModalAddDiscoveryMeetingTest
+                    dataModalAddDiscoveryMeetingHeader
                   ).toLocaleDateString("fr-FR", {
                     weekday: "long",
                     year: "numeric",
@@ -310,7 +325,7 @@ const ModalAddDiscoveryMeeting = () => {
                   />
                   {" : "}
                   {new Date(
-                    dataModalAddDiscoveryMeetingTest
+                    dataModalAddDiscoveryMeetingHeader
                   ).toLocaleTimeString("fr-FR")}
                 </p>
               </div>
@@ -400,6 +415,7 @@ const ModalAddDiscoveryMeeting = () => {
                   </label>
                   <div className={styles.modal__form__div__div}>
                     <select
+                      tabIndex={0}
                       className={styles.modal__form__div__div__select}
                       name="typeCoaching"
                       id="typeCoaching"
@@ -412,8 +428,14 @@ const ModalAddDiscoveryMeeting = () => {
                       <option value="professionnel">
                         Coaching professionnel
                       </option>
-                      <option value="autre">Autre</option>
                     </select>
+                    <Image
+                      className={`${styles.modal__form__div__div__img}`}
+                      src={`${`/assets/icone/handshake.png`}`}
+                      alt={"icone coaching"}
+                      width={20}
+                      height={20}
+                    />
                   </div>
                   <div className={styles.modal__form__div__error}>
                     {typeCoachingErrorMessage}
@@ -470,7 +492,7 @@ const ModalAddDiscoveryMeeting = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
     </>
   );
 };

@@ -4,6 +4,7 @@ import React from "react";
 import styles from "./Display.module.scss";
 import useUserEmailValidation from "../../../components/hook/user/useUserEmailValidation";
 import { usePathname } from "next/navigation";
+import Load from "./load/Load";
 
 const Display = () => {
   const queryParam: any = usePathname();
@@ -19,12 +20,7 @@ const Display = () => {
   }
   if (isLoading) {
     content = (
-      <div className={styles.display__loadData}>
-        Chargement des données
-        <div className={styles.display__loadData__arc}>
-          <div className={styles.display__loadData__arc__circle}></div>
-        </div>
-      </div>
+      <Load />
     );
   } else {
     content = <div className={styles.display__loadData}>{data.message}</div>;

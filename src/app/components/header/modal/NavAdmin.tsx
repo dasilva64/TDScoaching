@@ -37,7 +37,7 @@ const NavAdmin = () => {
         if (split[1] === "utilisateur") {
           router.push("/");
         }
-        if (pathname === "/profile" || pathname === "/utilisateurs") {
+        if (pathname === "/profile" || pathname === "/utilisateurs" || pathname === "/meetings") {
           router.push("/");
         }
       }
@@ -85,6 +85,7 @@ const NavAdmin = () => {
                 className={styles.navAdmin__btn}
                 type="button"
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
                 aria-label="button pour fermer la modal de navigation"
               >
                 <Image
@@ -102,11 +103,10 @@ const NavAdmin = () => {
                     onMouseOver={() => setOnHoverLink("/profile")}
                   >
                     <Link
-                      className={`${
-                        pathname === "/profile"
+                      className={`${pathname === "/profile"
                           ? styles.navAdmin__nav__ul__li__link__active
                           : null
-                      } ${styles.navAdmin__nav__ul__li__link}`}
+                        } ${styles.navAdmin__nav__ul__li__link}`}
                       href="/profile"
                       onClick={() => closeForm()}
                     >
@@ -117,15 +117,28 @@ const NavAdmin = () => {
                     className={`${styles.navAdmin__nav__ul__li} ${styles.navAdmin__nav__ul__li__border}`}
                   >
                     <Link
-                      className={`${
-                        pathname === "/utilisateurs"
+                      className={`${pathname === "/utilisateurs"
                           ? styles.navAdmin__nav__ul__li__link__active
                           : null
-                      } ${styles.navAdmin__nav__ul__li__link}`}
+                        } ${styles.navAdmin__nav__ul__li__link}`}
                       href="/utilisateurs"
                       onClick={() => closeForm()}
                     >
                       Tous les utilisateurs
+                    </Link>
+                  </li>
+                  <li
+                    className={`${styles.navAdmin__nav__ul__li} ${styles.navAdmin__nav__ul__li__border}`}
+                  >
+                    <Link
+                      className={`${pathname === "/meetings"
+                          ? styles.navAdmin__nav__ul__li__link__active
+                          : null
+                        } ${styles.navAdmin__nav__ul__li__link}`}
+                      href="/meetings"
+                      onClick={() => closeForm()}
+                    >
+                      Tous les rendez-vous
                     </Link>
                   </li>
                 </ul>

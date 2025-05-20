@@ -10,6 +10,7 @@ import fetchPost from "@/app/components/fetch/FetchPost";
 import { AppDispatch } from "@/app/redux/store";
 import Input from "@/app/components/input/Input";
 import useUserResetPassword from "@/app/components/hook/user/useUserRestPassword";
+import Load from "./load/Load";
 
 const Reset = () => {
   const queryParam: any = usePathname();
@@ -196,7 +197,14 @@ const Reset = () => {
           secondes
         </span>
       )} */}
-      <form
+      {!isLoading && dataLoad && (
+        <>
+        <p className={styles.reset__article__p}>
+              Vous pouvez réinitialiser votre mot de passe en remplissant le
+              formulaire ci-dessous.
+            </p>
+
+<form
         className={styles.reset__form}
         id="form"
         onSubmit={(e) => {
@@ -296,6 +304,12 @@ const Reset = () => {
           )}
         </div>
       </form>
+
+        </>
+      )}
+      {isLoading && (
+        <Load />
+      )}
     </>
   );
 };

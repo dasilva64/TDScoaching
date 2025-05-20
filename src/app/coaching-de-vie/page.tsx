@@ -4,6 +4,7 @@ import Image from "next/image";
 import CardType from "./components/CardType";
 import CardHelp from "./components/CardHelp";
 import NoScript from "../components/noscript/NoScript";
+import Footer from "../components/footer/footer";
 
 export const metadata = {
   title: "Coaching familial, professionnel et de couple - tdscoaching",
@@ -108,6 +109,7 @@ const page = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };

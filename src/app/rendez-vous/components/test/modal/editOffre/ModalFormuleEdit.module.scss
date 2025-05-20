@@ -1,0 +1,144 @@
+.bg {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba($color: #000000, $alpha: 0.9);
+  position: fixed;
+  z-index: 700;
+  top: 0;
+}
+
+.modalAddFormule {
+  background-color: white;
+  box-shadow: 0px 0px 8px 8px aqua;
+  border-radius: 20px;
+  padding: 50px 30px;
+  width: 70%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  max-height: 90%;
+  overflow: scroll;
+  z-index: 998;
+  &__h1 {
+    color: black;
+    margin: 40px 0px;
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &__formule {
+    background-color: #eaeaea;
+    border-radius: 10px;
+    width: 80%;
+    margin: 20px auto;
+    &__title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    &__content {
+      min-height: 150px;
+      position: relative;
+      &__ul {
+        text-align: center;
+
+        list-style-type: none;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-around;
+        height: calc(100% - 200px);
+        &__li {
+          display: flex;
+          align-items: center;
+          &__icone {
+            filter: brightness(0%);
+            margin-right: 10px;
+          }
+        }
+      }
+      &__price {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-weight: 900;
+        font-size: clamp(20px, 26px, 2vw);
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  &__action {
+    text-align: center;
+    &__btn {
+      padding: 10px;
+      border-radius: 10px;
+      background-color: white;
+      border: 1px solid green;
+      cursor: pointer;
+      transition: all 0.3s;
+      &:hover {
+        transform: scale(1.1);
+        color: white;
+        background-color: green;
+      }
+    }
+  }
+  &__btn {
+    cursor: pointer;
+    float: right;
+    position: absolute;
+    right: 28px;
+    top: 25px;
+    border: none;
+    background-color: orange;
+    border-radius: 5px;
+    transition: all 400ms;
+    padding: 5px;
+    &:hover {
+      transform: scale(1.05);
+    }
+    &:hover > &__img {
+      transform: rotate(90deg);
+    }
+    &__img {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 400ms;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .modalAddDiscovery {
+    width: 80%;
+    padding: 40px 20px;
+    &__btn {
+      right: 20px;
+      top: 22px;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .modalAddDiscovery {
+    width: 95%;
+    padding: 40px 10px;
+    &__btn {
+      right: 14px;
+      top: 18px;
+    }
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(680deg);
+  }
+}

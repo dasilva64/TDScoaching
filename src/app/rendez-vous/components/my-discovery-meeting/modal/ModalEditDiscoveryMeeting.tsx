@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+/* import React, { useEffect } from "react";
 import styles from "./ModalEditDiscoveryMeeting.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
@@ -10,8 +10,8 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const ModalEditDiscoveryMeeting = () => {
   const dispatch = useDispatch<AppDispatch>();
-  /* const { dataModalEditDiscoveryMeeting, displayModalEditDiscoveryMeeting } =
-    useSelector((state: RootState) => state.ModalEditDiscoveryMeeting); */
+  const { dataModalEditDiscoveryMeeting, displayModalEditDiscoveryMeeting } =
+    useSelector((state: RootState) => state.ModalEditDiscoveryMeeting);
   const { data, trigger, reset, isMutating } = useSWRMutation(
     "/api/meeting/edit",
     fetchPost
@@ -69,17 +69,17 @@ const ModalEditDiscoveryMeeting = () => {
       mutateMeetingData();
     }
   }, [data, reset]);
-  /* const handlerClick = () => {
+  const handlerClick = () => {
     const fetchEditMeeting = async () => {
       trigger({
         start: new Date(dataModalEditDiscoveryMeeting).toLocaleString("en-US"),
       });
     };
     fetchEditMeeting();
-  }; */
+  };
   return (
     <>
-      {/* <AnimatePresence>
+      <AnimatePresence>
         {displayModalEditDiscoveryMeeting === true && (
           <>
             <motion.div
@@ -107,6 +107,7 @@ const ModalEditDiscoveryMeeting = () => {
               <button
                 className={styles.modalComfirm__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.modalComfirm__btn__img}
@@ -162,9 +163,9 @@ const ModalEditDiscoveryMeeting = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
     </>
   );
 };
 
-export default ModalEditDiscoveryMeeting;
+export default ModalEditDiscoveryMeeting; */

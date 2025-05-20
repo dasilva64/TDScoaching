@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import React, { useEffect, useState } from "react";
 import styles from "./ModalDatePickerDiscovery.module.scss";
@@ -15,9 +15,9 @@ const ModalDatePickerDiscovery = () => {
     isError,
   } = useGet("/api/user/getUserMeeting");
 
-  /* const { isMobile } = useSelector((state: RootState) => state.Mobile);
+   const { isMobile } = useSelector((state: RootState) => state.Mobile);
   const { displayModalDatePickerDiscovery, reloadModalDatePickerDiscovery } =
-    useSelector((state: RootState) => state.ModalDatePickerDiscovery); */
+    useSelector((state: RootState) => state.ModalDatePickerDiscovery); 
   const [userClickSelectMonth, setUserClickSelectMonth] =
     useState<boolean>(false);
   const [userClickSelectYear, setUserClickSelectYear] =
@@ -99,7 +99,7 @@ const ModalDatePickerDiscovery = () => {
     setUserClickSelectYear(false);
     setUserClickSelectMonth(false);
   };
-  /* useEffect(() => {
+   useEffect(() => {
     if (reloadModalDatePickerDiscovery === true) {
       clearState();
       dispatch({
@@ -107,7 +107,7 @@ const ModalDatePickerDiscovery = () => {
       });
     }
   }, [dispatch, reloadModalDatePickerDiscovery]);
- */
+ 
   useEffect(() => {
     const getMeetingByWeek = (newar: any) => {
       let ar = [];
@@ -191,8 +191,8 @@ const ModalDatePickerDiscovery = () => {
       if (startDateWeek === "") {
         let current = new Date();
         current.setDate(current.getDate() + 3);
-        /* let ar = getAllDayInWeek(new Date());
-            getMeetingByWeek(ar); */
+         let ar = getAllDayInWeek(new Date());
+            getMeetingByWeek(ar); 
         if (current.getDay() === 6) {
           current.setDate(current.getDate() + 2);
           let ar = getAllDayInWeek(new Date(current));
@@ -235,8 +235,8 @@ const ModalDatePickerDiscovery = () => {
       };
       let current = new Date();
       current.setDate(current.getDate() + 3);
-      /* let ar = getAllDayInWeek(new Date());
-            getMeetingByWeek(ar); */
+       let ar = getAllDayInWeek(new Date());
+            getMeetingByWeek(ar); 
       if (current.getDay() === 6) {
         current.setDate(current.getDate() + 2);
         setChoiceDate(current);
@@ -278,8 +278,8 @@ const ModalDatePickerDiscovery = () => {
               date.toString() === current.getDate().toString() &&
               hour.toString() === hourtext[y + 1].toString()
             ) {
-              /* if (month.toString() === current.getMonth().toString()) {
-                if (date.toString() === current.getDate().toString()) { */
+               if (month.toString() === current.getMonth().toString()) {
+                if (date.toString() === current.getDate().toString()) { 
               ar.push([
                 [
                   current.getFullYear(),
@@ -290,8 +290,8 @@ const ModalDatePickerDiscovery = () => {
                 copyEvents[i],
               ]);
               break;
-              /*  }
-              } */
+                }
+              } 
             } else {
               if (i === copyEvents.length - 1) {
                 ar.push([
@@ -407,8 +407,8 @@ const ModalDatePickerDiscovery = () => {
   const previous = () => {
     let start = new Date(startDateWeek);
 
-    /* let end = new Date(startDateWeek);
-    end.setDate(end.getDate() + 5); */
+     let end = new Date(startDateWeek);
+    end.setDate(end.getDate() + 5); 
     let current = new Date();
     let startPrevious = new Date(start);
     startPrevious.setDate(startPrevious.getDate() - 7);
@@ -532,9 +532,9 @@ const ModalDatePickerDiscovery = () => {
     dispatch({
       type: "ModalDatePickerDiscovery/close",
     });
-    /* dispatch({
+     dispatch({
       type: "ModalDatePickerDiscoveryMobile/close",
-    }); */
+    }); 
   };
   const getDate = (date: any) => {
     let aa = new Date(date);
@@ -586,8 +586,8 @@ const ModalDatePickerDiscovery = () => {
             date.toString() === aa.getDate().toString() &&
             hour.toString() === hourtext[y + 1].toString()
           ) {
-            /* if (month.toString() === current.getMonth().toString()) {
-              if (date.toString() === current.getDate().toString()) { */
+             if (month.toString() === current.getMonth().toString()) {
+              if (date.toString() === current.getDate().toString()) { 
             ar.push([
               [
                 aa.getFullYear(),
@@ -598,8 +598,8 @@ const ModalDatePickerDiscovery = () => {
               copyEvents[i],
             ]);
             break;
-            /*  }
-            } */
+              }
+            } 
           } else {
             if (i === copyEvents.length - 1) {
               ar.push([
@@ -819,7 +819,7 @@ const ModalDatePickerDiscovery = () => {
   return (
     <>
       <AnimatePresence>
-        {/* {displayModalDatePickerDiscovery === true && (
+        { {displayModalDatePickerDiscovery === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -855,7 +855,7 @@ const ModalDatePickerDiscovery = () => {
               <h1 style={{ marginBottom: "50px", marginTop: "50px" }}>
                 Sélectionnez un date pour votre rendez-vous de découverte
               </h1>
-              <button className={styles.btn} onClick={() => closeForm()}>
+              <button className={styles.btn} onClick={() => closeForm()} onMouseDown={(e) => e.preventDefault()}>
                 <Image
                   className={styles.btn__img}
                   src="/assets/icone/xmark-solid.svg"
@@ -1438,10 +1438,11 @@ const ModalDatePickerDiscovery = () => {
               )}
             </motion.div>
           </>
-        )} */}
+        )} }
       </AnimatePresence>
     </>
   );
 };
 
 export default ModalDatePickerDiscovery;
+ */

@@ -153,7 +153,7 @@ const Content = () => {
     trigger: triggerFinishMeeting,
     reset: resetFinisMeeting,
     isMutating: isMutatingFinishMeeting,
-  } = useSWRMutation("/api/meeting/finish", fetchPost);
+  } = useSWRMutation("/utilisateur/[id]/components/api/finish", fetchPost);
 
   useEffect(() => {
     if (dataFinishMeeting) {
@@ -163,6 +163,13 @@ const Content = () => {
           payload: { type: "error", flashMessage: dataFinishMeeting.message },
         });
       } else {
+        mutate(
+          {
+            ...dataFinishMeeting,
+          },
+          { revalidate: false }
+        );
+        resetFinisMeeting();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: dataFinishMeeting.message },
@@ -171,7 +178,7 @@ const Content = () => {
     }
   }, [dataFinishMeeting, dispatch, mutate]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     const mutateFinishMeeting = () => {
       mutate(
         {
@@ -184,7 +191,7 @@ const Content = () => {
     if (dataFinishMeeting && dataFinishMeeting.body) {
       mutateFinishMeeting();
     }
-  }, [dataFinishMeeting, mutate, resetFinisMeeting]);
+  }, [dataFinishMeeting, mutate, resetFinisMeeting]); */
 
   useEffect(() => {
     if (isError) {
@@ -276,7 +283,7 @@ const Content = () => {
               <li
                 className={`${styles.content__flex__div__left__ul__li} ${styles.content__flex__div__left__ul__li__flex}`}
               >
-                <strong>Formule</strong>&nbsp;: Chargement
+                <strong>Offre en cours</strong>&nbsp;: Chargement
                 <div className={styles.arc}>
                   <div className={styles.arc__circle}></div>
                 </div>
@@ -310,7 +317,6 @@ const Content = () => {
       );
     } else {
       if (data.status === 200) {
-        let copyTypeMeeting = { ...data.body.typeMeeting };
         setContent(
           <>
             <div className={styles.content__flex}>
@@ -328,21 +334,53 @@ const Content = () => {
                   <li className={styles.content__flex__div__left__ul__li}>
                     <strong>Mail</strong> : {data.body.mail}
                   </li>
-                  <li className={styles.content__flex__div__left__ul__li}>
-                    <strong>Formule</strong> : {copyTypeMeeting.type}
-                  </li>
-                  {copyTypeMeeting.type === "flash" && (
+                  {data.body.offre === null && data.body.discovery === true && (
                     <li className={styles.content__flex__div__left__ul__li}>
-                      <strong>Nombre de rendez-vous restant</strong> :{" "}
-                      {copyTypeMeeting.number}
+                      <strong>Offre en cours</strong> : découverte
                     </li>
                   )}
-                  {copyTypeMeeting.type === "longue" && (
-                    <li className={styles.content__flex__div__left__ul__li}>
-                      <strong>Nombre de rendez-vous restant</strong> :{" "}
-                      {copyTypeMeeting.number}
+                  {data.body.meeting === null &&
+              data.body.discovery === false &&
+              data.body.offre === null && (
+                <li className={styles.content__flex__div__left__ul__li}>
+                      <strong>Offre en cours</strong> : choix en cours
                     </li>
+              )}
+                  {data.body.offre !== null && (
+                    <>
+                      <ul className={styles.content__flex__div__left__ul__ul}>
+                        <strong>Offre en cours</strong> :
+                        <li
+                          className={
+                            styles.content__flex__div__left__ul__ul__li
+                          }
+                        >
+                          <strong>Type</strong> : {data.body.offre.type}
+                        </li>
+                        <li
+                          className={
+                            styles.content__flex__div__left__ul__ul__li
+                          }
+                        >
+                          <strong>Nombre actuel de rendez-vous</strong> :{" "}
+                          {data.body.offre.currentNumberOfMeeting === null
+                            ? 0
+                            : data.body.offre.currentNumberOfMeeting}
+                        </li>
+                        <li
+                          className={
+                            styles.content__flex__div__left__ul__ul__li
+                          }
+                        >
+                          <strong>Date</strong> :{" "}
+                          {new Date(data.body.meeting.startAt).toLocaleString(
+                            "fr-FR"
+                          )}
+                        </li>
+                      </ul>
+                    </>
                   )}
+
                   {data.body.meeting === null && (
                     <li className={styles.content__flex__div__left__ul__li}>
                       <strong>Rendez-vous en cours</strong> : aucun
@@ -357,20 +395,29 @@ const Content = () => {
                             styles.content__flex__div__left__ul__ul__li
                           }
                         >
-                          <strong>Type</strong> : {copyTypeMeeting.coaching}
+                          <strong>Coaching</strong> :{" "}
+                          {data.body.meeting.coaching}
                         </li>
                         <li
                           className={
                             styles.content__flex__div__left__ul__ul__li
                           }
                         >
-                          <strong>Start</strong> :{" "}
-                          {/* {new Date(data.body.meeting.startAt).toLocaleString(
+                          <strong>Confirmé</strong> :{" "}
+                          {data.body.meeting.confirm ? "oui" : "non"}
+                        </li>
+                        <li
+                          className={
+                            styles.content__flex__div__left__ul__ul__li
+                          }
+                        >
+                          <strong>Date</strong> :{" "}
+                          {new Date(data.body.meeting.startAt).toLocaleString(
                             "fr-FR"
-                          )} */}
+                          )}
                         </li>
                       </ul>
-                      {!data.body.discovery === false && (
+                      {/* {!data.body.discovery === false && (
                         <div
                           className={styles.content__flex__div__left__ul__div}
                         >
@@ -449,8 +496,8 @@ const Content = () => {
                             </button>
                           )}
                         </div>
-                      )}
-                      {data.body.discovery === false && (
+                      )} */}
+                      {data.body.discovery === true && (
                         <div
                           className={styles.content__flex__div__left__ul__div}
                         >
@@ -562,28 +609,23 @@ const Content = () => {
     if (data && data.status === 200) {
       let copyOfItems = [...data.body.allMeetings];
       copyOfItems.map((p: any, index: any) => {
-        if (
-          p.typeMeeting.type === "unique" ||
-          p.typeMeeting.type === "découverte"
-        ) {
+        if (p.type === "unique" || p.type === "discovery") {
           copyOfItems[index] = {
             ...p,
             Début: new Date(p.startAt).toLocaleString(),
-            Coaching: p.typeMeeting.coaching,
-            Offre: p.typeMeeting.type,
+            Coaching: p.coaching,
           };
         } else {
           copyOfItems[index] = {
             ...p,
             Début: new Date(p.startAt).toLocaleString(),
-            Coaching: p.typeMeeting.coaching,
-            Offre: p.typeMeeting.type,
-            Restant: p.typeMeeting.number,
+            Coaching: p.coaching,
           };
         }
 
         delete copyOfItems[index].startAt;
         delete copyOfItems[index].typeMeeting;
+        delete copyOfItems[index].coaching;
       });
       dispatch({
         type: "ArrayMeetingByUser/storeData",

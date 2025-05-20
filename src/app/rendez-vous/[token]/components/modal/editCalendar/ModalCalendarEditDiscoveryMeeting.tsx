@@ -15,6 +15,8 @@ import useGet from "@/app/components/hook/useGet";
 const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
   const [meetingDate, setMeetingDate] = useState<any>(null);
   const dispatch = useDispatch();
+  const [error, setError] = useState<number>(0);
+  const [dateStr, setDateStr] = useState<any>("")
   const [isMobile, setIsMobile] = useState<null | boolean>(null);
   useEffect(() => {
     if (window.innerWidth < 768) {
@@ -41,12 +43,40 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
     });
   };
   const calendarRef: any = useRef(null);
-  /* const { displayModalCalendarEditDiscoveryMeetingRendezVousToken } =
+  const { displayModalCalendarEditDiscoveryMeetingRendezVousToken } =
     useSelector(
       (state: RootState) =>
         state.ModalCalendarEditDiscoveryMeetingRendezVousToken
-    ); */
-  const handleDateClick = (arg: any) => {
+    );
+
+    useEffect(() => {
+      if (dateStr) {
+  
+        if (error > 0) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage:
+              "Ce rendez-vous est déjà prit, veuillez en selectionner un autre",
+          },
+        });
+      } else  {
+        dispatch({
+          type: "flash/clearFlashMessage",
+        });
+        dispatch({
+          type: "ModalEditDiscoveryMeetingRendezVousToken/open",
+          payload: { date: dateStr },
+        });
+        dispatch({ type: "ModalCalendarEditDiscoveryMeetingRendezVousToken/close" });
+      }
+      }
+      
+    }, [error, dateStr])
+  const handleDateClick = (dateCalendar: any) => {
+    setError(0)
+    setDateStr(dateCalendar)
     if (allMeeting.length > 0) {
       for (let i = 0; i < allMeeting.length; i++) {
         var date = new Date(allMeeting[i].start);
@@ -59,7 +89,7 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
           date.getUTCSeconds()
         );
 
-        var date2 = new Date(arg.dateStr);
+        var date2 = new Date(dateCalendar);
         var now_utc2 = Date.UTC(
           date.getUTCFullYear(),
           date.getUTCMonth(),
@@ -69,42 +99,28 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
           date.getUTCSeconds()
         );
         if (new Date(date).getTime() === new Date(date2).getTime()) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage:
-                "Ce rendez-vous est déjà prit, veuillez en selectionner un autre",
-            },
-          });
-          break;
-        } else {
-          dispatch({
-            type: "flash/clearFlashMessage",
-          });
-          dispatch({
-            type: "ModalEditDiscoveryMeetingRendezVousToken/open",
-            payload: { date: arg.dateStr },
-          });
-          dispatch({
-            type: "ModalCalendarEditDiscoveryMeetingRendezVousToken/close",
-          });
+          setError(prev => prev + 1)
         }
+        
+        
       }
     } else {
-      dispatch({
-        type: "flash/clearFlashMessage",
-      });
-      dispatch({
-        type: "ModalAddDiscovery/open",
-        payload: { date: arg.dateStr },
-      });
-      dispatch({ type: "ModalCalendarDiscovery/close" });
+        dispatch({
+          type: "flash/clearFlashMessage",
+        });
+        dispatch({
+          type: "ModalEditDiscoveryMeetingRendezVousToken/open",
+          payload: { date: dateCalendar },
+        });
+        dispatch({
+          type: "ModalCalendarEditDiscoveryMeetingRendezVousToken/close",
+        });
+      
     }
   };
   return (
     <>
-      {/* <TabIndex
+      <TabIndex
         displayModal={displayModalCalendarEditDiscoveryMeetingRendezVousToken}
       />
       <AnimatePresence>
@@ -188,7 +204,10 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
                     eventStartEditable={false}
                     height={"auto"}
                     dateClick={(e) => {
-                      handleDateClick(e);
+                      handleDateClick(e.dateStr);
+                    }}
+                    eventDrop={(e) => {
+                      handleDateClick(e.event.start);
                     }}
                     validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
@@ -252,6 +271,10 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
                     selectable={false}
                     height={"auto"}
                     dateClick={(e) => {
+                      handleDateClick(e.dateStr);
+                    }}
+                    eventDrop={(e) => {
+                      handleDateClick(e.event.start);
                     }}
                     validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
@@ -274,7 +297,7 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
     </>
   );
 };

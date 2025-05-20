@@ -1,0 +1,71 @@
+.test {
+  overflow-y: scroll;
+  padding-bottom: max(16px, 2vw);
+  padding-top: max(36px, 2vw);
+  /* position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);*/
+  text-align: center; 
+  &__text {
+    margin: 20px 0px;
+  }
+  &__discovery {
+    margin-bottom: 20px;
+  }
+  &__offre {
+    border-radius: 5px;
+    padding: 10px 30px;
+    border: 1px solid aqua;
+    background-color: white;
+    margin-bottom: 30px;
+    &__title {
+      font-weight: 900;
+      text-align: center;
+      margin: 10px 0px 15px 0px;
+    }
+    &__container {
+      &__content {
+        display: flex;
+        justify-content: center;
+        margin-top: 5px;
+        &__img {
+          margin-right: 10px;
+          margin-left: -10px;
+        }
+      }
+      &__action {
+        text-align: center;
+        margin-top: 15px;
+        &__btn {
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+          border: 1px solid green;
+          transition: all 0.3s;
+          &:hover {
+            background-color: green;
+            color: white;
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+  }
+  &__action {
+    text-align: center;
+    &__btn {
+      cursor: pointer;
+      padding: 10px;
+      background-color: white;
+      border: 1px solid green;
+      border-radius: 10px;
+      transition: all 300ms;
+      animation: test 1.5s infinite;
+      &:hover {
+        background-color: green;
+        color: white;
+      }
+    }
+  }
+}

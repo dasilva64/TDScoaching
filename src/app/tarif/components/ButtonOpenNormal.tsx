@@ -15,6 +15,7 @@ const ButtonOpenNormal = () => {
     <button
       className={`${styles.button} modalOpen`}
       type="button"
+      onMouseDown={(e) => e.preventDefault()}
       onClick={() => {
         handlerClick();
       }}

@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
                 if (new Date().getTime() > copyResetToken.limitDate) {
                   const deleteResetToken = await prisma.user.update({
                     where: { mail: validator.escape(user.mail) },
-                    data: { resetToken: Prisma.JsonNull },
+                    data: { resetToken: Prisma.DbNull },
                   });
                   return NextResponse.json(
                     {
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
                   let encrypt = await bcrypt.hash(password, 10);
                   let editUser = await prisma.user.update({
                     where: { mail: validator.escape(user.mail) },
-                    data: { resetToken: Prisma.JsonNull, password: validator.escape(encrypt) },
+                    data: { resetToken: Prisma.DbNull, password: validator.escape(encrypt) },
                   });
                   if (editUser === null) {
                     return NextResponse.json(

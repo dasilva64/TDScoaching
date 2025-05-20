@@ -16,7 +16,7 @@
       transform: translateY(6px) scale(1);
       transition: all 0.3s;
       &__value {
-        color: black;
+        color: #1976d2;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         position: absolute;
         z-index: 0;
@@ -29,10 +29,10 @@
       width: 100%;
       position: relative;
       &__select {
-        /* -webkit-appearance: none;
+        -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        padding: 5px;*/
+        border-radius: 0px;
         font: inherit;
         position: relative;
         z-index: 2;
@@ -49,6 +49,9 @@
         &:hover {
           border-bottom: 2px solid black;
         }
+        &:focus-visible {
+          border-color: #007bff; /* Change la couleur de la bordure */
+        }
       }
       &__img {
         position: absolute;
@@ -56,7 +59,7 @@
         top: 50%;
         right: 0;
         transform: translateY(-50%);
-        transition: all 4000ms;
+        /* transition: all 4000ms; */
       }
     }
     &__error {

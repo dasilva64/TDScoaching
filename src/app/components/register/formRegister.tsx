@@ -358,6 +358,7 @@ const FormRegister = () => {
                 <button
                   type="button"
                   className={styles.register__top__close}
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => closeForm()}
                 >
                   <Image

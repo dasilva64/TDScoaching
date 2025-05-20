@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
           let editUser = await prisma.user.update({
             where: { mail: validator.escape(user.mail) },
             data: {
-              editEmail: Prisma.JsonNull,
+              editEmail: Prisma.DbNull,
             },
           });
           if (user.mail === email.trim()) {

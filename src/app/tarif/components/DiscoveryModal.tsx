@@ -51,6 +51,7 @@ const DiscoveryModal = () => {
                 className={styles.login__btn}
                 type="button"
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.login__btn__img}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+/* import React, { useEffect } from "react";
 import styles from "./ModalEditMeeting.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
@@ -10,9 +10,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const ModalEditMeeting = () => {
   const dispatch = useDispatch<AppDispatch>();
-  /* const { displayModalEditMeeting, dataModalEditMeeting } = useSelector(
+   const { displayModalEditMeeting, dataModalEditMeeting } = useSelector(
     (state: RootState) => state.ModalEditMeeting
-  ); */
+  ); 
   const { data, trigger, reset } = useSWRMutation(
     "/api/meeting/edit",
     fetchPost
@@ -72,16 +72,16 @@ const ModalEditMeeting = () => {
   }, [data, reset]);
   const handlerClick = () => {
     const fetchEditMeeting = async () => {
-      /* trigger({
+       trigger({
         start: new Date(dataModalEditMeeting).toLocaleString("en-US"),
-      }); */
+      }); 
     };
     fetchEditMeeting();
   };
   return (
     <>
       <AnimatePresence>
-        {/* {displayModalEditMeeting === true && (
+        { {displayModalEditMeeting === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -108,6 +108,7 @@ const ModalEditMeeting = () => {
               <button
                 className={styles.modalComfirm__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.modalComfirm__btn__img}
@@ -148,10 +149,11 @@ const ModalEditMeeting = () => {
               </div>
             </motion.div>
           </>
-        )} */}
+        )} }
       </AnimatePresence>
     </>
   );
 };
 
 export default ModalEditMeeting;
+ */

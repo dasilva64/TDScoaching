@@ -1,4 +1,7 @@
 {
     "workbench.editor.enablePreviewFromQuickOpen": false,
-    "workbench.editor.openPositioning": "right"
+    "workbench.editor.openPositioning": "right",
+    "json.schemas": [
+        
+    ]
 }

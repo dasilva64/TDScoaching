@@ -1,3 +1,114 @@
+.test {
+  width: 50%;
+  &__card {
+    margin-top: 30px;
+    background-color: white;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    border-left: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
+    border-radius: 5px;
+    &__p {
+      display: flex;
+      padding-left: 30px;
+      margin-top: 10px;
+      &__img {
+        margin-right: 15px;
+      }
+    }
+    &__title {
+      padding-left: 10px;
+      display: flex;
+      background-color: aqua;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      &__p {
+        align-items: center;
+        margin: 5px 0;
+        display: flex;
+        justify-content: center;
+        &__img {
+          margin-right: 5px;
+        }
+        &__space {
+          margin-left: 30px;
+        }
+      }
+    }
+    &__action {
+      display: flex;
+      justify-content: space-around;
+      &__btn {
+        padding: 5px 10px;
+        border-radius: 10px;
+
+        cursor: pointer;
+        &__delete {
+          background-color: white;
+          border: 2px solid red;
+          transition: all 400ms;
+          &:hover {
+            transform: scale(1.05);
+            background-color: red;
+            color: red;
+            color: white;
+          }
+        }
+        &__edit {
+          background-color: white;
+          border: 2px solid green;
+          transition: all 400ms;
+          &:hover {
+            transform: scale(1.05);
+            background-color: green;
+            color: green;
+            color: white;
+          }
+        }
+      }
+    }
+    &__line {
+      width: 90%;
+      height: 1px;
+      background-color: #eaeaea;
+      border-radius: 10px;
+      margin: 20px auto;
+    }
+    &__contact {
+      padding: 0px 20px 30px 20px;
+      &__ul {
+        margin-left: 15px;
+
+        &__li {
+          list-style-type: none;
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          &__a {
+            display: inline-block;
+            margin-left: 15px;
+            transition: color 300ms;
+            &::after {
+              content: "";
+              width: 0px;
+              height: 1px;
+              display: block;
+              background: #00000080;
+              transition: 300ms;
+            }
+            &:hover::after {
+              width: 100%;
+            }
+            &:hover {
+              color: #00000080;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .myDiscovery {
   /* display: flex;
   justify-content: space-between;

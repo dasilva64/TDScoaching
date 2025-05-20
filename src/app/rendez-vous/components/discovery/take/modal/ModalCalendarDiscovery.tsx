@@ -1,4 +1,4 @@
-import TabIndex from "@/app/components/tabIndex/TabIndex";
+/* import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
@@ -14,7 +14,7 @@ import styles from "./ModalCalendarDiscovery.module.scss";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 
-/* const resources = [
+ const resources = [
   {
     id: "a",
     title: "Auditorium A",
@@ -31,16 +31,16 @@ import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
     id: "d",
     title: "Auditorium D",
   },
-]; */
+]; 
 const ModalCalendarDiscovery = ({ allData }: { allData: any }) => {
   const [isMobile, setIsMobile] = useState<null | boolean>(null);
   const dispatch = useDispatch<AppDispatch>();
   const closeModal = () => {
-    dispatch({ type: "ModalCalendarDiscovery/close" });
+    dispatch({ type: "ModalCalendarAddMeetingRendezVous/close" });
   };
-  /* const { displayModalCalendarDiscovery } = useSelector(
-    (state: RootState) => state.ModalCalendarDiscovery
-  ); */
+  const { displayModalCalendarAddMeetingRendezVous } = useSelector(
+    (state: RootState) => state.ModalCalendarAddMeetingRendezVous
+  );
   const handleDateClick = (arg: any) => {
     if (allData.length > 0) {
       for (let i = 0; i < allData.length; i++) {
@@ -78,10 +78,10 @@ const ModalCalendarDiscovery = ({ allData }: { allData: any }) => {
             type: "flash/clearFlashMessage",
           });
           dispatch({
-            type: "ModalAddDiscovery/open",
+            type: "ModalAddMeetingRendezVous/open",
             payload: { date: arg.dateStr },
           });
-          dispatch({ type: "ModalCalendarDiscovery/close" });
+          dispatch({ type: "ModalCalendarAddMeetingRendezVous/close" });
         }
       }
     } else {
@@ -89,17 +89,11 @@ const ModalCalendarDiscovery = ({ allData }: { allData: any }) => {
         type: "flash/clearFlashMessage",
       });
       dispatch({
-        type: "ModalAddDiscovery/open",
+        type: "ModalAddMeetingRendezVous/open",
         payload: { date: arg.dateStr },
       });
-      dispatch({ type: "ModalCalendarDiscovery/close" });
+      dispatch({ type: "ModalCalendarAddMeetingRendezVous/close" });
     }
-
-    /* dispatch({
-      type: "ModalAddDiscovery/open",
-      payload: { date: arg.dateStr },
-    });
-    dispatch({ type: "ModalCalendarDiscovery/close" }); */
   };
   useEffect(() => {
     if (window.innerWidth < 768) {
@@ -123,9 +117,9 @@ const ModalCalendarDiscovery = ({ allData }: { allData: any }) => {
   const calendarRef: any = useRef(null);
   return (
     <>
-      {/* <TabIndex displayModal={displayModalCalendarDiscovery} />
+      <TabIndex displayModal={displayModalCalendarAddMeetingRendezVous} />
       <AnimatePresence>
-        {displayModalCalendarDiscovery === true && (
+        {displayModalCalendarAddMeetingRendezVous === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -300,9 +294,10 @@ const ModalCalendarDiscovery = ({ allData }: { allData: any }) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
     </>
   );
 };
 
 export default ModalCalendarDiscovery;
+ */

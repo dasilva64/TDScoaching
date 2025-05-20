@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+/* import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
@@ -9,9 +9,9 @@ import { RootState } from "@/app/redux/store";
 import fetchDelete from "@/app/components/fetch/FetchDelete";
 
 const ModalDeleteDiscovery = ({ mutate }: any) => {
-  /* const { displayModalDeleteDiscoveryMeeting } = useSelector(
-    (state: RootState) => state.ModalDeleteDiscoveryMeeting
-  ); */
+  const { displayModalDeleteMeetingRendezVous } = useSelector(
+    (state: RootState) => state.ModalDeleteMeetingRendezVous
+  );
   const dispatch = useDispatch();
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/rendez-vous/components/discovery/my/api/",
@@ -24,7 +24,7 @@ const ModalDeleteDiscovery = ({ mutate }: any) => {
         payload: { type: "success", flashMessage: data.message },
       });
       dispatch({
-        type: "ModalDeleteDiscoveryMeeting/close",
+        type: "ModalDeleteMeetingRendezVous/close",
       });
       reset();
       mutate();
@@ -33,13 +33,13 @@ const ModalDeleteDiscovery = ({ mutate }: any) => {
 
   const closeForm = () => {
     dispatch({
-      type: "ModalDeleteDiscoveryMeeting/close",
+      type: "ModalDeleteMeetingRendezVous/close",
     });
   };
   return (
     <>
-      {/* <AnimatePresence>
-        {displayModalDeleteDiscoveryMeeting === true && (
+      <AnimatePresence>
+        {displayModalDeleteMeetingRendezVous === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -67,6 +67,7 @@ const ModalDeleteDiscovery = ({ mutate }: any) => {
               <button
                 className={styles.deleteModal__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.deleteModal__btn__img}
@@ -123,9 +124,10 @@ const ModalDeleteDiscovery = ({ mutate }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
     </>
   );
 };
 
 export default ModalDeleteDiscovery;
+ */

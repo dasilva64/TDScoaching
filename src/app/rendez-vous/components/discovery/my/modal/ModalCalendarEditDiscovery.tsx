@@ -1,4 +1,4 @@
-import TabIndex from "@/app/components/tabIndex/TabIndex";
+/* import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { use, useEffect, useRef, useState } from "react";
@@ -16,11 +16,11 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const closeModal = () => {
-    dispatch({ type: "ModalCalendarEditDiscovery/close" });
+    dispatch({ type: "ModalCalendarEditMeetingRendezVous/close" });
   };
-  /* const { displayModalCalendarEditDiscovery } = useSelector(
-    (state: RootState) => state.ModalCalendarEditDiscovery
-  ); */
+  const { displayModalCalendarEditMeetingRendezVous } = useSelector(
+    (state: RootState) => state.ModalCalendarEditMeetingRendezVous
+  );
   const [meetingDate, setMeetingDate] = useState<any>(null);
   const handleDateClick = (arg: any) => {
     if (allData.length > 0) {
@@ -62,7 +62,7 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
             type: "ModalEditDiscoveryMeeting/open",
             payload: { date: arg.dateStr },
           });
-          dispatch({ type: "ModalCalendarEditDiscovery/close" });
+          dispatch({ type: "ModalCalendarEditMeetingRendezVous/close" });
         }
       }
     } else {
@@ -73,31 +73,18 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
         type: "ModalAddDiscovery/open",
         payload: { date: arg.dateStr },
       });
-      dispatch({ type: "ModalCalendarDiscovery/close" });
+      dispatch({ type: "ModalCalendarEditMeetingRendezVous/close" });
     }
-    //arg.dayEl.style.backgroundColor = "red";
-    //console.log(arg);
-    /* dispatch({
-      type: "ModalAddDiscovery/open",
-      payload: { date: arg.dateStr },
-    }); 
-    dispatch({
-      type: "ModalEditDiscoveryMeeting/open",
-      payload: { date: arg.dateStr },
-    });
-    dispatch({ type: "ModalCalendarEditDiscovery/close" });
-
-    */
   };
-  /* useEffect(() => {
-    if (displayModalCalendarEditDiscovery === true) {
+    useEffect(() => {
+    if (displayModalCalendarEditMeetingRendezVous === true) {
       for (let i = 0; i < allData.length; i++) {
         if (allData[i].backgroundColor === "green") {
           setMeetingDate(allData[i].start);
         }
       }
     }
-  }, [allData, displayModalCalendarEditDiscovery]); */
+  }, [allData, displayModalCalendarEditMeetingRendezVous]); 
   useEffect(() => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
@@ -120,9 +107,9 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
   const calendarRef: any = useRef(null);
   return (
     <>
-      {/* <TabIndex displayModal={displayModalCalendarEditDiscovery} />
+      <TabIndex displayModal={displayModalCalendarEditMeetingRendezVous} />
       <AnimatePresence>
-        {displayModalCalendarEditDiscovery === true && (
+        {displayModalCalendarEditMeetingRendezVous === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -288,9 +275,10 @@ const ModalCalendarEditDiscovery = ({ allData }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
     </>
   );
 };
 
 export default ModalCalendarEditDiscovery;
+ */

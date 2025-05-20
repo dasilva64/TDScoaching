@@ -2,6 +2,14 @@ import React from "react";
 import styles from "./page.module.scss";
 import ContactForm from "./components/ContactForm";
 import Image from "next/image";
+import localFont from "next/font/local";
+import NoScript from "../components/noscript/NoScript";
+import Footer from "../components/footer/footer";
+const Parisienne = localFont({
+  src: "../Parisienne-Regular.ttf",
+  display: "swap",
+});
+
 export const metadata = {
   title: "Contactez votre coach de vie - tdscoaching",
   description:
@@ -17,13 +25,6 @@ export const metadata = {
     "google-site-verification": "F921bU_1dl5iiaUL_B8FTJjSxG5GYYTBOyaGEHp964Q",
   },
 };
-
-import localFont from "next/font/local";
-import NoScript from "../components/noscript/NoScript";
-const Parisienne = localFont({
-  src: "../Parisienne-Regular.ttf",
-  display: "swap",
-});
 
 const Contact = () => {
   return (
@@ -82,6 +83,7 @@ const Contact = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };

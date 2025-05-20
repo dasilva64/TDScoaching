@@ -15,7 +15,6 @@ export async function middleware(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
   let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-
   if (session.isLoggedIn || Object.keys(session).length !== 0) {
     if (
       request.nextUrl.pathname.startsWith("/utilisateurs") ||
@@ -30,7 +29,8 @@ export async function middleware(request: NextRequest) {
 
     if (
       request.nextUrl.pathname.startsWith("/rendez-vous") ||
-      regexTwo.test(request.nextUrl.pathname)
+      regexTwo.test(request.nextUrl.pathname) ||
+      request.nextUrl.pathname.startsWith('/historique-rendez-vous')
     ) {
       if (session.role !== "ROLE_USER") {
         return NextResponse.redirect(new URL("/", request.url));
@@ -163,6 +163,9 @@ export const config = {
     "/utilisateurs",
     "/utilisateur/:path*",
     "/suppression-compte/:path*",
+    "/rendez-vous",
+    "/meetings",
+    "/historique-rendez-vous"
   ],
 };
 

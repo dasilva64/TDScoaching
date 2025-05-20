@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/* import React, { useEffect, useState } from "react";
 import styles from "./ModalEditTypeDiscovery.module.scss";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AnimatePresence, motion } from "framer-motion";
@@ -19,9 +19,9 @@ const ModalEditTypeDiscovery = ({
     "couple",
     "professionnel",
   ]);
-  /* const { displayModalEditTypeDiscovery } = useSelector(
+   const { displayModalEditTypeDiscovery } = useSelector(
     (state: RootState) => state.ModalEditTypeDiscovery
-  ); */
+  ); 
   const [typeCoaching, setTypeCoaching] = useState<string>(currentTypeCoaching);
   const [pseudo, setPseudo] = useState<string>("");
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
@@ -90,7 +90,7 @@ const ModalEditTypeDiscovery = ({
   }, [data, dispatch, mutate, reset, router]);
   return (
     <>
-      {/* <TabIndex displayModal={displayModalEditTypeDiscovery} />
+      { <TabIndex displayModal={displayModalEditTypeDiscovery} />
       <AnimatePresence>
         {displayModalEditTypeDiscovery === true && (
           <>
@@ -297,9 +297,10 @@ const ModalEditTypeDiscovery = ({
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence> }
     </>
   );
 };
 
 export default ModalEditTypeDiscovery;
+ */

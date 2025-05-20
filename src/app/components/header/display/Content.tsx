@@ -16,6 +16,8 @@ import DiscoveryModal from "@/app/tarif/components/DiscoveryModal";
 import NormalModal from "@/app/tarif/components/NormalModal";
 import NavUser from "../modal/NavUser";
 import ModalCalendarDiscoveryMeeting from "../modal/discovery/ModalCalendarDiscoveryMeeting";
+import ModalAddDiscoveryMeeting from "../modal/discovery/ModalAddDiscoveryMeeting";
+import ModalRecapDiscoveryMeeting from "../modal/discovery/ModalRecapDiscoveryMeeting";
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
@@ -61,6 +63,7 @@ const Content = () => {
               onClick={() => {
                 handlerClick();
               }}
+              onMouseDown={(e) => e.preventDefault()}
               aria-label="button pour ouvrir le formulaire de connexion"
             >
               <Image
@@ -84,6 +87,7 @@ const Content = () => {
                 onClick={() => {
                   dispatch({ type: "ModalNavAdmin/open" });
                 }}
+                onMouseDown={(e) => e.preventDefault()}
                 className={`modalOpen ${styles.header__log__div}`}
                 aria-label="button pour ouvrir le menu de l'administrateur"
               >
@@ -137,7 +141,9 @@ const Content = () => {
       {/* <DiscoveryModal />
       <NormalModal /> */}
       <FormLogin />
-      {/* <ModalCalendarDiscoveryMeeting /> */}
+      <ModalCalendarDiscoveryMeeting />
+      <ModalAddDiscoveryMeeting />
+      <ModalRecapDiscoveryMeeting />
       {/* <ModalDiscoveryMeetingTest />
       <ModalAddDiscoveryMeeting />
       <ModalRecapDiscoveryMeeting /> */}
@@ -173,6 +179,7 @@ const Content = () => {
           onClick={() => {
             dispatch({ type: "ModalNav/open" });
           }}
+          onMouseDown={(e) => e.preventDefault()}
           className={`modalOpen ${styles.button}`}
           aria-label="button pour ouvrir le menu"
         >

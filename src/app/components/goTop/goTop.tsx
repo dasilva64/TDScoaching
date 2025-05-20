@@ -114,6 +114,7 @@ const GoTop = () => {
               : styles.top__noFlash
           } modalOpen`}
           type="button"
+          onMouseDown={(e) => e.preventDefault()}
           onClick={() => {
             goTop();
           }}

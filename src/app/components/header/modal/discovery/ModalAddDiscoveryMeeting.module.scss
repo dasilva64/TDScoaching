@@ -150,6 +150,9 @@
           &:hover {
             border-bottom: 2px solid black;
           }
+          &:focus-visible {
+            border-color: #007bff; /* Change la couleur de la bordure */
+          }
         }
         &__img {
           position: absolute;
@@ -157,7 +160,7 @@
           top: 50%;
           right: 0;
           transform: translateY(-50%);
-          transition: all 4000ms;
+          /* transition: all 4000ms; */
         }
       }
       &__error {

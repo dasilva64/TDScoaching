@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import React, { useEffect, useState } from "react";
 import styles from "./ModalDatePicker.module.scss";
@@ -14,10 +14,10 @@ const ModalDatePicker = () => {
     isLoading,
     isError,
   } = useGet("/api/user/getUserMeeting");
-  /*  const { isMobile } = useSelector((state: RootState) => state.Mobile);
+    const { isMobile } = useSelector((state: RootState) => state.Mobile);
   const { displayModalDatePicker, reloadModalDatePicker } = useSelector(
     (state: RootState) => state.ModalDatePicker
-  ); */
+  ); 
   const [userClickSelectMonth, setUserClickSelectMonth] =
     useState<boolean>(false);
   const [userClickSelectYear, setUserClickSelectYear] =
@@ -40,14 +40,14 @@ const ModalDatePicker = () => {
     setUserClickSelectYear(false);
     setUserClickSelectMonth(false);
   };
-  /* useEffect(() => {
+   useEffect(() => {
     if (reloadModalDatePicker === true) {
       clearState();
       dispatch({
         type: "ModalDatePicker/reload",
       });
     }
-  }, [dispatch, reloadModalDatePicker]); */
+  }, [dispatch, reloadModalDatePicker]); 
   const yearar: any = {
     0: 2023,
     1: 2024,
@@ -188,8 +188,8 @@ const ModalDatePicker = () => {
       if (startDateWeek === "") {
         let current = new Date();
         current.setDate(current.getDate() + 3);
-        /* let ar = getAllDayInWeek(new Date());
-                getMeetingByWeek(ar); */
+         let ar = getAllDayInWeek(new Date());
+                getMeetingByWeek(ar); 
         if (current.getDay() === 6) {
           current.setDate(current.getDate() + 2);
           let ar = getAllDayInWeek(new Date(current));
@@ -232,8 +232,8 @@ const ModalDatePicker = () => {
       };
       let current = new Date();
       current.setDate(current.getDate() + 3);
-      /* let ar = getAllDayInWeek(new Date());
-                getMeetingByWeek(ar); */
+       let ar = getAllDayInWeek(new Date());
+                getMeetingByWeek(ar); 
       if (current.getDay() === 6) {
         current.setDate(current.getDate() + 2);
         setChoiceDate(current);
@@ -275,8 +275,8 @@ const ModalDatePicker = () => {
               date.toString() === current.getDate().toString() &&
               hour.toString() === hourtext[y + 1].toString()
             ) {
-              /* if (month.toString() === current.getMonth().toString()) {
-                    if (date.toString() === current.getDate().toString()) { */
+               if (month.toString() === current.getMonth().toString()) {
+                    if (date.toString() === current.getDate().toString()) { 
               ar.push([
                 [
                   current.getFullYear(),
@@ -287,8 +287,8 @@ const ModalDatePicker = () => {
                 copyEvents[i],
               ]);
               break;
-              /*  }
-                  } */
+                }
+                  } 
             } else {
               if (i === copyEvents.length - 1) {
                 ar.push([
@@ -404,8 +404,8 @@ const ModalDatePicker = () => {
   const previous = () => {
     let start = new Date(startDateWeek);
 
-    /* let end = new Date(startDateWeek);
-    end.setDate(end.getDate() + 5); */
+     let end = new Date(startDateWeek);
+    end.setDate(end.getDate() + 5); 
     let current = new Date();
     let startPrevious = new Date(start);
     startPrevious.setDate(startPrevious.getDate() - 7);
@@ -535,9 +535,9 @@ const ModalDatePicker = () => {
     dispatch({
       type: "ModalDatePicker/close",
     });
-    /* dispatch({
+     dispatch({
           type: "ModalDatePickerDiscoveryMobile/close",
-        }); */
+        }); 
   };
   const getDate = (date: any) => {
     let aa = new Date(date);
@@ -589,8 +589,8 @@ const ModalDatePicker = () => {
             date.toString() === aa.getDate().toString() &&
             hour.toString() === hourtext[y + 1].toString()
           ) {
-            /* if (month.toString() === current.getMonth().toString()) {
-              if (date.toString() === current.getDate().toString()) { */
+             if (month.toString() === current.getMonth().toString()) {
+              if (date.toString() === current.getDate().toString()) { 
             ar.push([
               [
                 aa.getFullYear(),
@@ -601,8 +601,8 @@ const ModalDatePicker = () => {
               copyEvents[i],
             ]);
             break;
-            /*  }
-            } */
+              }
+            } 
           } else {
             if (i === copyEvents.length - 1) {
               ar.push([
@@ -823,7 +823,7 @@ const ModalDatePicker = () => {
   return (
     <>
       <AnimatePresence>
-        {/* {displayModalDatePicker === true && (
+        { {displayModalDatePicker === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -863,7 +863,7 @@ const ModalDatePicker = () => {
                 Sélectionner une date pour le premier rendez-vous de
                 l&apos;offre {userData.body.typeMeeting.type}
               </p>
-              <button className={styles.btn} onClick={() => closeForm()}>
+              <button className={styles.btn} onClick={() => closeForm()} onMouseDown={(e) => e.preventDefault()}>
                 <Image
                   className={styles.btn__img}
                   src="/assets/icone/xmark-solid.svg"
@@ -1446,10 +1446,11 @@ const ModalDatePicker = () => {
               )}
             </motion.div>
           </>
-        )} */}
+        )} }
       </AnimatePresence>
     </>
   );
 };
 
 export default ModalDatePicker;
+ */

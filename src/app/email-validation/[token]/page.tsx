@@ -3,6 +3,7 @@ import styles from "./page.module.scss";
 import Display from "./components/Display";
 import NoScript from "@/app/components/noscript/NoScript";
 import localFont from "next/font/local";
+import Footer from "@/app/components/footer/footer";
 const Parisienne = localFont({
   src: "../../Parisienne-Regular.ttf",
   display: "swap",
@@ -37,6 +38,7 @@ const EmailValidation = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 };

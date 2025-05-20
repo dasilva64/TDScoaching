@@ -8,6 +8,7 @@ const Display = () => {
   const [keyAr, setKeyAr] = useState<string[]>([]);
   const [see, setSee] = useState<any[] | null>(null);
   const dispatch = useDispatch();
+  
   const { datas, currentPage, nbShow, sortBy } = useSelector(
     (state: RootState) => state.Array
   );

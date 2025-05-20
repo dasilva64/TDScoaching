@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,9 +12,9 @@ const ModalDatePicker = () => {
     isLoading,
     isError,
   } = useGet("/api/user/getUserMeeting");
-  /* const { displayModalDiscoveryDatePicker } = useSelector(
+  const { displayModalDiscoveryDatePicker } = useSelector(
     (state: RootState) => state.form
-  ); */
+  );
   const dispatch = useDispatch<AppDispatch>();
   const [arDateWeek, setArDateWeek] = useState<any>([]);
 
@@ -129,8 +129,8 @@ const ModalDatePicker = () => {
     ) {
       if (startDateWeek === "") {
         let current = new Date();
-        /* let ar = getAllDayInWeek(new Date());
-        getMeetingByWeek(ar); */
+        let ar = getAllDayInWeek(new Date());
+        getMeetingByWeek(ar);
         if (current.getDay() === 6) {
           current.setDate(current.getDate() + 2);
           let ar = getAllDayInWeek(new Date(current));
@@ -284,7 +284,7 @@ const ModalDatePicker = () => {
           },
         });
       } else {
-        /* if (typeMeeting.type === "flash") {
+        if (typeMeeting.type === "flash") {
           if (typeMeeting.number === 3) {
             dispatch({
               type: "form/openModalMeeting",
@@ -300,7 +300,7 @@ const ModalDatePicker = () => {
               },
             });
           }
-        } else { */
+        } else {
         dispatch({
           type: "form/openModalMeeting",
           payload: {
@@ -325,7 +325,7 @@ const ModalDatePicker = () => {
   return (
     <>
       <AnimatePresence>
-        {/* {displayModalDiscoveryDatePicker === true && (
+        {displayModalDiscoveryDatePicker === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -342,7 +342,7 @@ const ModalDatePicker = () => {
               <h2 style={{ marginBottom: "50px", marginTop: "50px" }}>
                 Sélectionnez un rendez-vous
               </h2>
-              <button className={styles.btn} onClick={() => closeForm()}>
+              <button className={styles.btn} onClick={() => closeForm()} onMouseDown={(e) => e.preventDefault()}>
                 <Image
                   className={styles.btn__img}
                   src="/assets/icone/xmark-solid.svg"
@@ -558,10 +558,10 @@ const ModalDatePicker = () => {
               </div>
             </motion.div>
           </>
-        )} */}
+        )}
       </AnimatePresence>
     </>
   );
 };
 
-export default ModalDatePicker;
+export default ModalDatePicker; */

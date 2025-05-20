@@ -103,13 +103,26 @@ export async function POST(request: NextRequest) {
           }
         );
       } else {
-        const user = await prisma.user.findUnique({
+        const user: any = await prisma.user.findUnique({
           where: {
             mail: validator.escape(email.trim()),
           },
         });
         if (user) {
-          const decode = await bcrypt.compare(
+          if (user.password === null) {
+            return NextResponse.json(
+              {
+                status: 400,
+                type: "error",
+                message:
+                  "Aucun mot de passe existe pour ce compte, veuillez vous inscrire",
+              },
+              {
+                status: 400,
+              }
+            );
+          }
+          const decode: any = await bcrypt.compare(
             validator.escape(password.trim()),
             user.password
           );
@@ -162,7 +175,7 @@ export async function POST(request: NextRequest) {
                 id: user.id,
               };
               if (remember === true) {
-                const session = await getIronSession<SessionData>(
+                const session: any = await getIronSession<SessionData>(
                   cookies(),
                   sessionOptionsRemeber
                 );
@@ -171,7 +184,7 @@ export async function POST(request: NextRequest) {
                 session.role = user.role;
                 await session.save();
               } else {
-                const session = await getIronSession<SessionData>(
+                const session: any = await getIronSession<SessionData>(
                   cookies(),
                   sessionOptions
                 );

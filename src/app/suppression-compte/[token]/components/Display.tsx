@@ -4,6 +4,7 @@ import React from "react";
 import styles from "./Display.module.scss";
 import { usePathname } from "next/navigation";
 import useDeleteAccount from "../../../components/hook/user/useDeleteAccount";
+import Load from "./load/Load";
 
 const Display = () => {
   const queryParam: any = usePathname();
@@ -19,12 +20,7 @@ const Display = () => {
   }
   if (isLoading) {
     content = (
-      <div className={styles.display}>
-        Chargement des données
-        <div className={styles.display__arc}>
-          <div className={styles.display__arc__circle}></div>
-        </div>
-      </div>
+      <Load />
     );
   } else {
     content = (

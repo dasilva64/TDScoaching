@@ -10,6 +10,7 @@ import fetchDelete from "../../fetch/FetchDelete";
 import styles from "./NavAdmin.module.scss";
 import Image from "next/image";
 import TabIndex from "../../tabIndex/TabIndex";
+import { mutate } from "swr";
 
 const NavUser = () => {
   const router = useRouter();
@@ -34,13 +35,14 @@ const NavUser = () => {
     if (dataLogout) {
       if (pathname) {
         let split = pathname.split("/");
-        if (split[1] === "utilisateur") {
+        if (split[1] === "suppression-compte") {
           router.push("/");
         }
-        if (pathname === "/profile" || pathname === "/utilisateurs") {
+        if (pathname === "/profile" || pathname === "/rendez-vous" || pathname === "/historique-rendez-vous") {
           router.push("/");
         }
       }
+      mutate("/components/header/ui/api");
       dispatch({
         type: "flash/storeFlashMessage",
         payload: {
@@ -85,6 +87,7 @@ const NavUser = () => {
                 className={styles.navAdmin__btn}
                 type="button"
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
                 aria-label="button pour fermer la modal de navigation"
               >
                 <Image
@@ -111,6 +114,38 @@ const NavUser = () => {
                       onClick={() => closeForm()}
                     >
                       Compte
+                    </Link>
+                  </li>
+                  <li
+                    className={`${styles.navAdmin__nav__ul__li} ${styles.navAdmin__nav__ul__li__border}`}
+                    onMouseOver={() => setOnHoverLink("/profile")}
+                  >
+                    <Link
+                      className={`${
+                        pathname === "/rendez-vous"
+                          ? styles.navAdmin__nav__ul__li__link__active
+                          : null
+                      } ${styles.navAdmin__nav__ul__li__link}`}
+                      href="/rendez-vous"
+                      onClick={() => closeForm()}
+                    >
+                      rendez-vous
+                    </Link>
+                  </li>
+                  <li
+                    className={`${styles.navAdmin__nav__ul__li} ${styles.navAdmin__nav__ul__li__border}`}
+                    onMouseOver={() => setOnHoverLink("/profile")}
+                  >
+                    <Link
+                      className={`${
+                        pathname === "/historique-rendez-vous"
+                          ? styles.navAdmin__nav__ul__li__link__active
+                          : null
+                      } ${styles.navAdmin__nav__ul__li__link}`}
+                      href="/historique-rendez-vous"
+                      onClick={() => closeForm()}
+                    >
+                      historique rendez vous
                     </Link>
                   </li>
                 </ul>

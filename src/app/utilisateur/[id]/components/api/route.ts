@@ -61,6 +61,10 @@ export async function POST(request: NextRequest) {
         } else {
           const userById = await prisma.user.findUnique({
             where: { id: id },
+            include: {
+              offre_test: true,
+              meeting_test: true
+            }
           });
           if (userById === null) {
             return NextResponse.json(
@@ -73,14 +77,14 @@ export async function POST(request: NextRequest) {
               }
             );
           } else {
-            let meeting;
+            //let meeting;
             /* if (userById.meetingId === null) {
               meeting = null;
-            } else {
-              let meetingByUser = await prisma.meeting.findUnique({
+            } else { */
+              /* let meetingByUser = await prisma.meeting_test.findUnique({
                 where: { id: validator.escape(userById.meetingId) },
-              });
-              if (meetingByUser === null) {
+              }); */
+              /* if (meetingByUser === null) {
                 let editUser = await prisma.user.update({
                   where: {
                     id: validator.escape(userById.id),
@@ -93,13 +97,14 @@ export async function POST(request: NextRequest) {
                 meeting = null;
               } else {
                 meeting = meetingByUser;
-              }
-            } */
-            const meetingByUser = await prisma.meeting.findMany({
-              where: { userId: validator.escape(userById.id) },
+              } */
+            //}
+            const meetingByUser = await prisma.meeting_test.findMany({
+              where: { userMail: validator.escape(userById.mail) },
               select: {
                 startAt: true,
-                typeMeeting: true,
+                coaching: true,
+                type: true
               },
             });
 
@@ -110,8 +115,8 @@ export async function POST(request: NextRequest) {
               mail: validator.escape(userById.mail),
               discovery: userById.discovery,
               allMeetings: meetingByUser,
-              //meeting: meeting,
-              //typeMeeting: userById.typeMeeting,
+              meeting: userById.meeting_test,
+              offre: userById.offre_test
             };
             return NextResponse.json({
               status: 200,

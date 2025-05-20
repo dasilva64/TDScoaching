@@ -1,16 +1,12 @@
-/* import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
-import {
-  SessionData,
-  sessionOptions,
-  sessionOptionsRemeber,
-} from "../../../../../../../lib/session";
-import { validationBody } from "../../../../../../../lib/validation";
 import validator, { isDate } from "validator";
 import bcrypt from "bcrypt";
-import prisma from "../../../../../../../lib/prisma";
 import { RateLimiter } from "limiter";
+import prisma from "@/app/lib/prisma";
+import { SessionData, sessionOptions } from "@/app/lib/session";
+import { validationBody } from "@/app/lib/validation";
 
 const limiter = new RateLimiter({
   tokensPerInterval: 600,
@@ -81,7 +77,7 @@ export async function POST(request: NextRequest) {
             }
           );
         } else {
-          let now = new Date(2024, 4, 1, 0, 0, 0, 0);
+          /* let now = new Date(2024, 4, 1, 0, 0, 0, 0);
           for (let i = 0; i < 1000; i++) {
             let copyTypeMeeting: any = user.typeMeeting;
             let newDate = now.setHours(now.getHours() + i);
@@ -98,29 +94,30 @@ export async function POST(request: NextRequest) {
                 },
               },
             });
-          }
-          let copyTypeMeeting: any = user.typeMeeting;
-          let meeting = await prisma.meeting.create({
+          } */
+          //let copyTypeMeeting: any = user.typeMeeting;
+          let meeting = await prisma.meeting_test.create({
             data: {
               startAt: start,
-              status: true,
-              userId: user.id,
-              limitDate: null,
-              paymentId: null,
-              typeMeeting: {
+              status: validator.escape("pending"),
+              userMail: user.mail,
+              confirm: false,
+              coaching: typeCoaching,
+              type: "discovery"
+              /* typeMeeting: {
                 ...copyTypeMeeting,
                 coaching: typeCoaching,
-              },
+              }, */
             },
           });
           await prisma.user.update({
             where: { id: user.id },
             data: {
               meetingId: meeting.id,
-              typeMeeting: {
+              /* typeMeeting: {
                 ...copyTypeMeeting,
                 coaching: typeCoaching,
-              },
+              }, */
             },
           });
           return NextResponse.json(
@@ -147,4 +144,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
- */

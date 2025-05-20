@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./page.module.scss";
 import NoScript from "../components/noscript/NoScript";
 import Link from "next/link";
+import Footer from "../components/footer/footer";
 
 export const metadata = {
   title: "Conditions générales d'utilisations - tdscoaching",
@@ -817,6 +818,7 @@ export default function CGU() {
           compétents de sfddsf
         </p>
       </main>
+      <Footer />
     </>
   );
 }

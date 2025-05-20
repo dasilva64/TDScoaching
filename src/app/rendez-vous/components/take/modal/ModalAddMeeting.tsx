@@ -1,4 +1,4 @@
-import { AppDispatch, RootState } from "@/app/redux/store";
+/* import { AppDispatch, RootState } from "@/app/redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
@@ -20,9 +20,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const ModalAddMeeting = () => {
   const dispatch = useDispatch<AppDispatch>();
-  /* const { dataModalAddMeeting, displayModalAddMeeting } = useSelector(
+   const { dataModalAddMeeting, displayModalAddMeeting } = useSelector(
     (state: RootState) => state.ModalAddMeeting
-  ); */
+  ); 
   const [validCGVInput, setValidCGVInput] = useState<boolean>(false);
   const [CGVInputError, setCGVInputError] = useState<string>("");
   const [errorMessageTypeMeeting, setErrorMessageTypeMeeting] =
@@ -67,27 +67,27 @@ const ModalAddMeeting = () => {
 
   const handlerPayment = () => {
     const fetchAddMeeting = async () => {
-      /* trigger({
+       trigger({
         start: new Date(dataModalAddMeeting).toLocaleString("en-US"),
         typeCoaching: typeMeetingInput,
-      }); */
+      }); 
     };
     fetchAddMeeting();
   };
 
   const handlerPaymentSeveral = () => {
     const fetchAddMeeting = async () => {
-      /* triggerSeveral({
+       triggerSeveral({
         start: new Date(dataModalAddMeeting).toLocaleString("en-US"),
         typeCoaching: typeMeetingInput,
-      }); */
+      }); 
     };
     fetchAddMeeting();
   };
   return (
     <>
       <AnimatePresence>
-        {/* {displayModalAddMeeting === true && (
+        { {displayModalAddMeeting === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -114,6 +114,7 @@ const ModalAddMeeting = () => {
               <button
                 className={styles.modalComfirm__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.modalComfirm__btn__img}
@@ -248,10 +249,11 @@ const ModalAddMeeting = () => {
               </div>
             </motion.div>
           </>
-        )} */}
+        )} }
       </AnimatePresence>
     </>
   );
 };
 
 export default ModalAddMeeting;
+ */

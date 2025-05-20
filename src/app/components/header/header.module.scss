@@ -125,6 +125,20 @@
     margin-left: 30px;
     transition: all 400ms;
   }
+  &__btn {
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+    background-color: white;
+    border: none;
+    margin-left: 30px;
+    transition: all 400ms;
+    /* &:focus {
+      padding: 1px;
+      outline: 1px dotted #212121;
+      outline: 5px auto -webkit-focus-ring-color;
+    } */
+  }
 
   &__li {
     align-items: center;
@@ -139,6 +153,10 @@
   }
 
   &__li:hover > &__a {
+    color: orange;
+    transform: scale(1.1, 1.1);
+  }
+  &__li:hover > &__btn {
     color: orange;
     transform: scale(1.1, 1.1);
   }
@@ -250,6 +268,10 @@
       border-radius: 50%;
       border: none;
       cursor: pointer;
+      transition: all 0.5s;
+      &:hover {
+        transform: scale(1.1);
+      }
     }
     &__img {
       position: absolute;

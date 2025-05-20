@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import styles from "./TakeDiscovery.module.scss";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -94,3 +94,4 @@ const TakeDiscovery = () => {
 };
 
 export default TakeDiscovery;
+ */

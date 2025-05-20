@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/* import React, { useEffect, useState } from "react";
 import styles from "./ModalAddDiscovery.module.scss";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
@@ -21,19 +21,18 @@ const ModalAddDiscovery = ({ mutate }: any) => {
     setTypeCoachingErrorMessage("");
     setTypeCoachingValid(false);
     setPseudo("");
-    dispatch({ type: "ModalAddDiscovery/close" });
+    dispatch({ type: "ModalAddMeetingRendezVous/close" });
   };
   const openCalendar = () => {
     setTypeCoaching("");
     setTypeCoachingErrorMessage("");
     setTypeCoachingValid(false);
     setPseudo("");
-    dispatch({ type: "ModalAddDiscovery/close" });
-    dispatch({ type: "ModalCalendarDiscovery/open" });
+    dispatch({ type: "ModalAddMeetingRendezVous/close" });
+    dispatch({ type: "ModalCalendarAddMeetingRendezVous/open" });
   };
-  /* const { displayModalAddDiscovery, dataModalAddDiscovery } = useSelector(
-    (state: RootState) => state.ModalAddDiscovery
-  ); */
+  const { displayModalAddMeetingRendezVous, dateModalAddMeetingRendezVous } =
+    useSelector((state: RootState) => state.ModalAddMeetingRendezVous);
 
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
@@ -102,9 +101,9 @@ const ModalAddDiscovery = ({ mutate }: any) => {
 
   return (
     <>
-      {/* <TabIndex displayModal={displayModalAddDiscovery} />
+      <TabIndex displayModal={displayModalAddMeetingRendezVous} />
       <AnimatePresence>
-        {displayModalAddDiscovery === true && (
+        {displayModalAddMeetingRendezVous === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -162,12 +161,15 @@ const ModalAddDiscovery = ({ mutate }: any) => {
                     height={25}
                   />
                   {" : "}
-                  {new Date(dataModalAddDiscovery).toLocaleDateString("fr-FR", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  {new Date(dateModalAddMeetingRendezVous).toLocaleDateString(
+                    "fr-FR",
+                    {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }
+                  )}
                 </p>
                 <p className={styles.modalAddDiscovery__rappel__p}>
                   <Image
@@ -178,23 +180,28 @@ const ModalAddDiscovery = ({ mutate }: any) => {
                     height={25}
                   />
                   {" : "}
-                  {new Date(dataModalAddDiscovery).toLocaleTimeString("fr-FR")}
+                  {new Date(dateModalAddMeetingRendezVous).toLocaleTimeString(
+                    "fr-FR"
+                  )}
                 </p>
               </div>
 
               <p>
                 Rappel du rendez-vous :{" "}
-                {new Date(dataModalAddDiscovery).toLocaleString("fr-FR", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                })}
+                {new Date(dateModalAddMeetingRendezVous).toLocaleString(
+                  "fr-FR",
+                  {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  }
+                )}
               </p>
               <p className={styles.modalAddDiscovery__payment}>
-                Pour comfirmer le rendez-vous de découverte aucune autorisation
+                Pour confirmer le rendez-vous de découverte aucune autorisation
                 bancaire n&apos;est nécessaire.
               </p>
               <p className={styles.modalAddDiscovery__choose}>
@@ -207,7 +214,7 @@ const ModalAddDiscovery = ({ mutate }: any) => {
                     if (pseudo.length === 0) {
                       trigger({
                         typeCoaching: typeCoaching,
-                        start: dataModalAddDiscovery,
+                        start: dateModalAddMeetingRendezVous,
                       });
                     }
                     e.preventDefault();
@@ -321,9 +328,10 @@ const ModalAddDiscovery = ({ mutate }: any) => {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
     </>
   );
 };
 
 export default ModalAddDiscovery;
+ */

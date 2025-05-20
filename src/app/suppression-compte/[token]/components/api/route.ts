@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
                 if (new Date().getTime() > copyDeleteToken.limitDate) {
                   const deleteToken = await prisma.user.update({
                     where: { id: validator.escape(user.id) },
-                    data: { deleteToken: Prisma.JsonNull },
+                    data: { deleteToken: Prisma.DbNull },
                   });
                   return NextResponse.json(
                     {
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
                     }
                   );
                 } else {
-                  /* if (user.meetingId !== null) {
+                  if (user.meetingId !== null) {
                     return NextResponse.json(
                       {
                         status: 404,
@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
                       status: 200,
                       message: "Votre compte a bien été supprimé",
                     });
-                  } */
+                  }
                 }
               } else {
                 return NextResponse.json(

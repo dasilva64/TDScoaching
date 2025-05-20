@@ -48,9 +48,9 @@ const Header = async () => {
             <li className={styles.header__li}>
               <LinkNav name="Blog" path="/blog" />
             </li>
-            {/* <li className={styles.header__li}>
+            <li className={styles.header__li}>
               <BtnNav name="RDV gratuit" />
-            </li> */}
+            </li>
           </ul>
         </nav>
         <Content />

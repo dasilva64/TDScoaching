@@ -73,9 +73,20 @@ h3 {
     opacity: 1;
   }
 }
+/* *:focus-visible {
+  outline: 1px dotted black !important;
+  outline: 1px auto #254deb !important;
+} */
+button:focus {
+  //outline: none;
+  outline: 1px dotted black !important;
+  outline: 1px auto #254deb !important;
+}
 button,
 input[type="button"] {
+  padding: 1px;
   outline: none;
+  box-sizing: border-box; /* S'assure que le padding et les bordures ne dépassent pas la taille de l'élément */
   box-shadow: none !important;
 }
 button::-moz-focus-inner,
@@ -88,7 +99,6 @@ input[type="button"]::-moz-focus-inner {
   Accessibility (A11Y)
   Don't forget! User accessibility is important
 */
-button:focus,
 input[type="button"]:focus {
   border: none;
   outline: none;
@@ -126,10 +136,11 @@ input[type="button"]:focus {
 }
 
 details summary {
-  padding: 20px 20px 30px 20px;
+  //padding: 20px 20px 30px 20px;
+  padding: 20px 20px 20px 20px;
   cursor: pointer;
   font-weight: 700;
-  margin-bottom: -10px; /* for more prominent move */
+  //margin-bottom: -10px; /* for more prominent move */
   transition: margin 450ms ease-out;
 }
 @media screen and (max-width: 500px) {
@@ -165,8 +176,9 @@ details summary {
 } */
 
 details[open] summary {
-  padding: 20px 20px 10px 20px;
-  margin-bottom: 10px;
+  //padding: 20px 20px 10px 20px;
+  padding: 20px 20px 20px 20px;
+  //margin-bottom: 10px;
 }
 
 @media screen and (max-width: 500px) {

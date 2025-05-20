@@ -82,6 +82,7 @@ const Nav = () => {
                 className={styles.nav__btn}
                 type="button"
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
                 aria-label="button pour fermer la modal de navigation"
               >
                 <Image

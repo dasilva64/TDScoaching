@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
                 if (new Date().getTime() > copyResetToken.limitDate) {
                   const deleteResetToken = await prisma.user.update({
                     where: { mail: validator.escape(user.mail) },
-                    data: { resetToken: Prisma.JsonNull },
+                    data: { resetToken: Prisma.DbNull },
                   });
                   return NextResponse.json(
                     {

@@ -11,6 +11,7 @@ const GoDown = () => {
         className={`${styles.btn} modalOpen`}
         tabIndex={0}
         type="button"
+        onMouseDown={(e) => e.preventDefault()}
         onClick={() => {
           if (document)
             document

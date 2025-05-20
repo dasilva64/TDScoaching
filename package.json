@@ -43,13 +43,18 @@
     "next": "latest",
     "node-fetch": "latest",
     "nodemailer": "latest",
+    "pdf-lib": "^1.17.1",
+    "rate-limiter-flexible": "^7.1.0",
     "react": "latest",
     "react-dom": "latest",
+    "react-pdf": "^9.2.1",
     "react-redux": "latest",
     "sass": "latest",
     "server-only": "latest",
+    "stripe": "latest",
     "swr": "latest",
     "typescript": "latest",
+    "use-places-autocomplete": "^4.0.1",
     "validator": "latest"
   },
   "devDependencies": {

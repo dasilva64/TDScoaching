@@ -32,10 +32,6 @@ const ResetPassword = () => {
         </h1>
         <div className={styles.reset__container}>
           <div className={styles.reset__article}>
-            <p className={styles.reset__article__p}>
-              Vous pouvez réinitialiser votre mot de passe en remplissant le
-              formulaire ci-dessous.
-            </p>
             <Reset />
           </div>
         </div>

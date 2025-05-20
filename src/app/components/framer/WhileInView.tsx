@@ -3,7 +3,17 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const WhileInView = ({ children, className, type }: any) => {
+const WhileInView = ({
+  children,
+  className,
+  type,
+  tab = false,
+}: {
+  children: any;
+  className: any;
+  type: any;
+  tab?: any;
+}) => {
   if (type === "x") {
     return (
       <motion.div
@@ -23,6 +33,7 @@ const WhileInView = ({ children, className, type }: any) => {
   } else if (type === "y") {
     return (
       <motion.div
+        tabIndex={tab === true ? 0 : -1}
         className={className}
         initial="hidden"
         whileInView="visible"

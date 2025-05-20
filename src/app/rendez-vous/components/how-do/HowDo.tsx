@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import styles from "./HowDo.module.scss";
 import Image from "next/image";
 
@@ -83,4 +83,4 @@ const HowDo = () => {
   );
 };
 
-export default HowDo;
+export default HowDo; */

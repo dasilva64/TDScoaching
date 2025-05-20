@@ -181,6 +181,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
                 type="button"
                 className={styles.modalEditEmailData__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.modalEditEmailData__btn__img}

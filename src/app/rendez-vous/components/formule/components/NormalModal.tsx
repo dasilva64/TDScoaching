@@ -43,7 +43,7 @@ const NormalModal = () => {
                 transition: { duration: 0.3 },
               }}
             >
-              <button className={styles.login__btn} onClick={() => closeForm()}>
+              <button className={styles.login__btn} onClick={() => closeForm()} onMouseDown={(e) => e.preventDefault()}>
                 <Image
                   className={styles.login__btn__img}
                   src="/assets/icone/xmark-solid.svg"

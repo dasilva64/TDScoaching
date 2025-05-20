@@ -13,7 +13,8 @@ const supabase = createClient(supUrl, supKey);
 }); */
 
 serve(async (req) => {
-  let { data: user, error: errorMeet } = await supabase.from("User").select(`
+  
+   let { data: user, error: errorMeet } = await supabase.from("User").select(`
     id,
     role,
     resettoken:  resetToken->token,
@@ -23,7 +24,10 @@ serve(async (req) => {
     editemailToken: editEmail->token,
     editemaillimite: editEmail->limitDate,
     deleteToken: deleteToken->token,
-    deletelimit: deleteToken->limitDate
+    deletelimit: deleteToken->limitDate,
+    meetingId,
+    meetingconfirm: meetingId(confirm),
+    meetingstart: meetingId(startAt)
   `);
   for (let i = 0; i < user.length; i++) {
     if (user[i].registertoken !== null) {
@@ -57,6 +61,19 @@ serve(async (req) => {
           .update({ deleteToken: null, deleteReason: null })
           .eq("id", user[i].id)
           .select();
+      }
+    }
+    if (user[i].meetingId !== null) {
+      if (user[i].meetingconfirm.confirm === false) {
+        if (new Date(user[i].meetingstart.startAt).getTime() - 24 * 60 * 60 * 1000 < new Date().getTime()) {
+          await supabase
+            .from("User")
+            .update({ meetingId: null})
+            .eq("id", user[i].id)
+            .select();
+            await supabase.from("meeting_test").delete().eq("id", user[i].meetingId);
+
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/* import React, { useEffect, useState } from "react";
 import styles from "./ModalAddDiscoveryMeeting.module.scss";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,8 +19,8 @@ const ModalAddDiscoveryMeeting = () => {
     "/api/meeting/addDiscovery",
     fetchPost
   );
-  /* const { displayModalAddDiscoveryMeeting, dataModalAddDiscoveryMeeting } =
-    useSelector((state: RootState) => state.ModalAddDiscoveryMeeting); */
+   const { displayModalAddDiscoveryMeeting, dataModalAddDiscoveryMeeting } =
+    useSelector((state: RootState) => state.ModalAddDiscoveryMeeting); 
   const closeForm = () => {
     clearState();
     dispatch({
@@ -86,17 +86,17 @@ const ModalAddDiscoveryMeeting = () => {
   }, [data, reset]);
   const handlerClick = () => {
     const fetchAddMeeting = async () => {
-      /* trigger({
+       trigger({
         start: new Date(dataModalAddDiscoveryMeeting).toISOString(),
         typeCoaching: typeCoachingInput,
         timeZone: new Date().getTimezoneOffset() / 60,
-      }); */
+      }); 
     };
     fetchAddMeeting();
   };
   return (
     <>
-      {/*  <AnimatePresence>
+      {  <AnimatePresence>
         {displayModalAddDiscoveryMeeting === true && (
           <>
             <motion.div
@@ -124,6 +124,7 @@ const ModalAddDiscoveryMeeting = () => {
               <button
                 className={styles.modalComfirm__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.modalComfirm__btn__img}
@@ -225,9 +226,10 @@ const ModalAddDiscoveryMeeting = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence> }
     </>
   );
 };
 
 export default ModalAddDiscoveryMeeting;
+ */

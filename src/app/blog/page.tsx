@@ -7,6 +7,7 @@ import Paragraph from "./components/Paragraph";
 import { unstable_cache } from "next/cache";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Footer from "../components/footer/footer";
 
 export const metadata = {
   title: "Tous les articles - tdscoaching",
@@ -24,25 +25,6 @@ export const metadata = {
   },
 };
 
-/* const getData = unstable_cache(
-  async () => {
-    const getArticleData = await prisma.article.findMany({
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        description: true,
-        image: true,
-        created_at: true,
-      },
-    });
-
-    if (!getArticleData) notFound();
-    return getArticleData;
-  },
-  ["articles"],
-  { revalidate: 3600, tags: ["articles"] }
-); */
 const getData = async () => {
   const getArticleData = await prisma.article.findMany({
     select: {
@@ -130,6 +112,7 @@ const page = async () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };

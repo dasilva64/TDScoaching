@@ -10,26 +10,36 @@
   &__li {
     list-style-type: none;
     display: flex;
+    &__plan {
+      margin-bottom: 10px;
+    }
+    &__contact {
+      margin-bottom: 20px;
+    }
   }
   &__ul {
     font-size: 16px;
     padding-left: 40px;
-    &__lineHeight {
-      line-height: 50px;
-    }
-    &__lineHeightMin {
-      line-height: 30px;
-    }
   }
   &__a {
+    display: inline-block;
     color: black;
     font-size: 16px;
     text-decoration: none;
-    text-decoration-color: orange;
-    transition: all 400ms;
+    &::after {
+      content: "";
+      width: 0px;
+      height: 2px;
+      display: block;
+      padding-bottom: -10px;
+      background: orange;
+      transition: 400ms;
+    }
+    &:hover::after {
+      width: 100%;
+    }
     &:hover {
-      text-decoration: underline;
-      text-decoration-color: orange;
+      color: black;
     }
   }
   &__h2 {

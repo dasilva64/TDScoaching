@@ -71,7 +71,6 @@ const ModalUserPasswordData = () => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
-        router.push("/");
       }
     }
   }, [data, dispatch, reset, router]);
@@ -307,6 +306,7 @@ const ModalUserPasswordData = () => {
                 type="button"
                 className={styles.modalEditPasswordData__btn}
                 onClick={() => closeForm()}
+                onMouseDown={(e) => e.preventDefault()}
               >
                 <Image
                   className={styles.modalEditPasswordData__btn__img}

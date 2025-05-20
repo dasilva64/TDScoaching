@@ -20,10 +20,11 @@ export const sessionOptions: SessionOptions = {
   cookieName: "iron-session-cookie-login-user-tds",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
-    maxAge: undefined,
-    httpOnly: true,
+    //secure: process.env.NODE_ENV === "production",
+     maxAge: undefined,
+    /*httpOnly: true,
     path: "/",
-    sameSite: "strict"
+    sameSite: "strict" */
   },
 };
 export const sessionOptionsRemeber: SessionOptions = {
@@ -34,6 +35,7 @@ export const sessionOptionsRemeber: SessionOptions = {
   cookieName: "iron-session-cookie-login-user-tds",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
+    //secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 30,
     httpOnly: true,
     path: "/",

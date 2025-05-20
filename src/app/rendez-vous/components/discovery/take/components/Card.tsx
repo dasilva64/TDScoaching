@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import styles from "./Card.module.scss";
 
 const Card = ({ number, content }: { number: number; content: string }) => {
@@ -17,3 +17,4 @@ const Card = ({ number, content }: { number: number; content: string }) => {
 };
 
 export default Card;
+ */

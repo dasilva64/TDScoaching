@@ -1,8 +1,11 @@
 .meet {
+  overflow-y: scroll;
+padding-top: 300px;
   position: relative;
   z-index: 690;
   min-height: calc(100vh - 435px);
   margin-top: 84px;
+  background-color: rgba(0, 0, 0, 0.04);
   /* height: calc(100vh - 84px); */
   &__h1 {
     padding-top: 80px;

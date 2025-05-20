@@ -2,11 +2,7 @@ import React from "react";
 import Content from "./components/Content";
 import styles from "./page.module.scss";
 import NoScript from "@/app/components/noscript/NoScript";
-import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import localFont from "next/font/local";
-import { SessionData, sessionOptions } from "../../lib/session";
 const Parisienne = localFont({
   src: "../../Parisienne-Regular.ttf",
   display: "swap",

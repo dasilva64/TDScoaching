@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import styles from "./takeDiscovery.module.scss";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/redux/store";
@@ -11,7 +11,57 @@ const TakeDiscovery = () => {
   const router = useRouter();
   return (
     <>
-      <div className={styles.takeDiscovery__infoo}>
+       <div className={styles.test}> 
+      <Image
+        className={styles.takeDiscovery__infoo__img}
+        src="/assets/icone/calendar-page.png"
+        alt=""
+        width={60}
+        height={60}
+      />
+      <p className={styles.test__text}>
+        Vous n&apos;avez aucun rendez-vous à venir
+      </p>
+       <div className={styles.test__discovery}>
+          <h3>Rendez-vous de découverte</h3>
+          <p>Ceci est votre premier rendez-vous</p>
+          <div className={styles.takeDiscovery__info__time}>
+            <Image
+              className={styles.takeDiscovery__info__time__img}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/clock-solid.svg"}
+              alt="bousole"
+            />
+            <p className={styles.takeDiscovery__info__time__p}>: 30 min</p>
+          </div>
+          <div className={styles.takeDiscovery__info__payment}>
+            <Image
+              className={styles.takeDiscovery__info__payment__img}
+              width="20"
+              height="20"
+              priority={true}
+              src={"/assets/icone/euro-sign-solid.svg"}
+              alt="bousole"
+            />
+            <p className={styles.takeDiscovery__info__payment__p}>: Gratuit</p>
+          </div>
+        </div> 
+      <div className={styles.takeDiscovery__info__take}>
+        <button
+          className={styles.takeDiscovery__info__take__btn}
+          onClick={() => {
+            dispatch({
+              type: "ModalCalendarAddMeetingRendezVous/open",
+            });
+          }}
+        >
+          Prendre un rendez-vous
+        </button>
+      </div>
+       </div> 
+       <div className={styles.takeDiscovery__infoo}>
         <Image
           className={styles.takeDiscovery__infoo__img}
           src="/assets/icone/circle-exclamation-solid-black.svg"
@@ -56,8 +106,9 @@ const TakeDiscovery = () => {
           <button
             className={styles.takeDiscovery__info__take__btn}
             onClick={() => {
+              console.log("open");
               dispatch({
-                type: "ModalCalendarDiscovery/open",
+                type: "ModalCalendarAddMeetingRendezVous/open",
               });
             }}
           >
@@ -79,9 +130,10 @@ const TakeDiscovery = () => {
             Me contacter
           </button>
         </div>
-      </div>
+      </div> 
     </>
   );
 };
 
 export default TakeDiscovery;
+ */

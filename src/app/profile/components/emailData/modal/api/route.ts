@@ -39,7 +39,7 @@ export async function GET() {
       const updateUser = await prisma.user.update({
         where: { mail: validator.escape(user.mail) },
         data: {
-          editEmail: Prisma.JsonNull,
+          editEmail: Prisma.DbNull,
         },
       });
       if (updateUser === null) {

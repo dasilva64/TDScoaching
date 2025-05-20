@@ -4,6 +4,7 @@ import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 import nodemailer from "nodemailer";
 import { RateLimiter } from "limiter";
+import RateLimiterMemory from "rate-limiter-flexible/lib/RateLimiterMemory.js";
 
 const limiter = new RateLimiter({
   tokensPerInterval: 150,
@@ -11,20 +12,17 @@ const limiter = new RateLimiter({
   fireImmediately: true,
 });
 
+const rateLimiter = new RateLimiterMemory({
+  keyPrefix: 'contact_fail_ip',
+  points: 1, // nombre de tentatives
+  duration: 60, // par minute
+});
+
 export async function POST(request: NextRequest) {
-  const remainingRequests = await limiter.removeTokens(1);
-  if (remainingRequests < 0) {
-    return NextResponse.json(
-      {
-        status: 429,
-        type: "error",
-        message: "Trop de requêtes successives, veuillez réessayer plus tard",
-      },
-      {
-        status: 429,
-      }
-    );
-  } else {
+  const ip = (request.headers.get('x-forwarded-for') ?? '127.0.0.1').split(',')[0]
+  //const remainingRequests = await limiter.removeTokens(1);
+  try {
+    await rateLimiter.consume(ip)
     const { email, firstname, lastname, object, message, pseudo } =
       await request.json();
 
@@ -63,7 +61,7 @@ export async function POST(request: NextRequest) {
       const user = await prisma.user.findUnique({
         where: { mail: validator.escape(email.trim()), status: true },
       });
-      let smtpTransport = nodemailer.createTransport({
+      /*let smtpTransport = nodemailer.createTransport({
         host: "smtp.ionos.fr",
         port: 465,
         secure: true,
@@ -72,7 +70,7 @@ export async function POST(request: NextRequest) {
           pass: process.env.SECRET_SMTP_PASSWORD,
         },
       });
-      if (user === null) {
+       if (user === null) {
         let mailOptions = {
           from: "contact@tds-coachingdevie.fr",
           to: "contact@tds-coachingdevie.fr",
@@ -195,7 +193,8 @@ export async function POST(request: NextRequest) {
                           </body>
                         </html>`,
       };
-      await smtpTransport.sendMail(mailOptions);
+      await smtpTransport.sendMail(mailOptions); */
+      await rateLimiter.delete(ip);
       return NextResponse.json({
         status: 200,
         body: user,
@@ -203,5 +202,30 @@ export async function POST(request: NextRequest) {
           "Merci de nous avoir contacté, nous allons vous répondre le plus vite possible",
       });
     }
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        type: "error",
+        message: "Trop de requêtes successives, veuillez réessayer plus tard",
+      },
+      {
+        status: 429,
+      }
+    );
   }
+  /* if (remainingRequests < 0) {
+    return NextResponse.json(
+      {
+        status: 429,
+        type: "error",
+        message: "Trop de requêtes successives, veuillez réessayer plus tard",
+      },
+      {
+        status: 429,
+      }
+    );
+  } else { */
+    
+  //}
 }

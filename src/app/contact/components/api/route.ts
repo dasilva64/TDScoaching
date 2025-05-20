@@ -4,7 +4,7 @@ import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 import nodemailer from "nodemailer";
 import { RateLimiter } from "limiter";
-import RateLimiterMemory from "rate-limiter-flexible/lib/RateLimiterMemory.js";
+//import RateLimiterMemory from "rate-limiter-flexible/lib/RateLimiterMemory.js";
 
 const limiter = new RateLimiter({
   tokensPerInterval: 150,
@@ -12,17 +12,17 @@ const limiter = new RateLimiter({
   fireImmediately: true,
 });
 
-const rateLimiter = new RateLimiterMemory({
+/* const rateLimiter = new RateLimiterMemory({
   keyPrefix: 'contact_fail_ip',
   points: 1, // nombre de tentatives
   duration: 60, // par minute
-});
+}); */
 
 export async function POST(request: NextRequest) {
   const ip = (request.headers.get('x-forwarded-for') ?? '127.0.0.1').split(',')[0]
   //const remainingRequests = await limiter.removeTokens(1);
   try {
-    await rateLimiter.consume(ip)
+    //await rateLimiter.consume(ip)
     const { email, firstname, lastname, object, message, pseudo } =
       await request.json();
 
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       const user = await prisma.user.findUnique({
         where: { mail: validator.escape(email.trim()), status: true },
       });
-      /*let smtpTransport = nodemailer.createTransport({
+      let smtpTransport = nodemailer.createTransport({
         host: "smtp.ionos.fr",
         port: 465,
         secure: true,
@@ -193,8 +193,8 @@ export async function POST(request: NextRequest) {
                           </body>
                         </html>`,
       };
-      await smtpTransport.sendMail(mailOptions); */
-      await rateLimiter.delete(ip);
+      await smtpTransport.sendMail(mailOptions);
+     // await rateLimiter.delete(ip);
       return NextResponse.json({
         status: 200,
         body: user,

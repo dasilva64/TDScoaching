@@ -79,7 +79,7 @@ const Take = ({ offre }: { offre: any }) => {
                     });
                   }}
                 >
-                  Changer d'offre
+                  Changer d&apos;offre
                 </button>
               </div>
             </>

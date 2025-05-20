@@ -176,7 +176,7 @@ const Content = () => {
         });
       }
     }
-  }, [dataFinishMeeting, dispatch, mutate]);
+  }, [dataFinishMeeting, dispatch, mutate, resetFinisMeeting]);
 
   /* useEffect(() => {
     const mutateFinishMeeting = () => {

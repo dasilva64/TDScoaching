@@ -10,7 +10,7 @@ const WhileInView = ({
   tab = false,
 }: {
   children: any;
-  className: any;
+  className?: any;
   type: any;
   tab?: any;
 }) => {

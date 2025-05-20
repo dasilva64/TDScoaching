@@ -1,4 +1,4 @@
-import fetchDelete from "@/app/components/fetch/FetchDelete";
+/* import fetchDelete from "@/app/components/fetch/FetchDelete";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
@@ -147,3 +147,4 @@ const ModalCancelMeeting = ({ mutate }: any) => {
 };
 
 export default ModalCancelMeeting;
+ */

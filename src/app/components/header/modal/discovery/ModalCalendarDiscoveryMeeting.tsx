@@ -90,7 +90,7 @@ const ModalCalendarDiscoveryMeeting = () => {
     }
     }
     
-  }, [error, dateStr])
+  }, [error, dateStr, dispatch])
   const handleDateClick = (arg: any) => {
     setError(0)
     setDateStr(arg.dateStr)

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+/* import { useEffect, useRef, useState } from "react";
 
 export const useDraw = (
   onDraw: ({ ctx, currentPoint, prevPoint }: any) => void,
@@ -24,9 +24,9 @@ export const useDraw = (
     signatureRef.current.value = "";
     setSignatureRefContent("");
     setSignatureError("");
-    /* if (canvasRef.current) {
+     if (canvasRef.current) {
       signatureRef.current.value = "";
-    } */
+    } 
   };
 
   useEffect(() => {
@@ -75,3 +75,4 @@ export const useDraw = (
 
   return { canvasRef, signatureRef, onMouseDown, clear };
 };
+ */

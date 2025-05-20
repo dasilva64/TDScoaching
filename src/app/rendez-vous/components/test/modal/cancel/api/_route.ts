@@ -1,4 +1,4 @@
-import prisma from "@/app/lib/prisma";
+/* import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
@@ -102,4 +102,4 @@ export async function DELETE(request: NextRequest) {
         }
       );
     }
-  }
+  } */

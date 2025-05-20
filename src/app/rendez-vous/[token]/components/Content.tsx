@@ -2,10 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./Content.module.scss";
-import useSWRMutation from "swr/mutation";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import fetchGet from "@/app/components/fetch/fetchGet";
 import useGetOneByToken from "@/app/components/hook/meeting/useGetOneByToken";
 import { useDispatch } from "react-redux";
 import ModalCalendarEditDiscoveryMeeting from "./modal/editCalendar/ModalCalendarEditDiscoveryMeeting";
@@ -54,7 +52,7 @@ const Content = () => {
         router.push('/')
       }
     }
-  }, [data]);
+  }, [data, dispatch, router]);
   return (
     <>
       <style>{"body { height: 100%; }"}</style>

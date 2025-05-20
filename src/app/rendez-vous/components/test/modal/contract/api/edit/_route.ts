@@ -1,4 +1,4 @@
-import prisma from "@/app/lib/prisma";
+/* import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { validationBody } from "@/app/lib/validation";
 import { getIronSession } from "iron-session";
@@ -33,33 +33,33 @@ export async function POST(request: NextRequest) {
             city: any;
             adresse: any;
           };
-        /* let arrayMessageError = validationBody({ formule: formule });
+         let arrayMessageError = validationBody({ formule: formule });
 
         if (arrayMessageError.length > 0) {
           return res.status(400).json({
             status: 400,
             type: "validation",
             message: arrayMessageError,
-          });
-        } */
+          })
+        } 
           const bufferSignature = Buffer.from(signature, "base64");
           const outputPath = path.resolve(
             "src/app/pdf",
             `signature-${user.firstname}-${user.lastname}.pdf`
           );
           writeFileSync(outputPath, bufferSignature, "binary");
-          /*const url = `http://localhost:3000/assets/pdf/contrat-${user.firstname}-${user.lastname}.pdf`;
+          const url = `http://localhost:3000/assets/pdf/contrat-${user.firstname}-${user.lastname}.pdf`;
            const signatureUrl = `http://localhost:3000/assets/pdf/signature.png`;
           const jpgImageBytes = await fetch(signatureUrl).then((res) =>
             res.arrayBuffer()
-          ); */
+          ); 
           const existingPdfBytesSignature = readFileSync(outputPath);
 
           const filePath = path.resolve("src/app/pdf", `contrat-${user.firstname}-${user.lastname}.pdf`);
           const existingPdfBytesPdf = readFileSync(filePath);
-          /* const existingPdfBytes = await fetch(url).then((res) =>
+           const existingPdfBytes = await fetch(url).then((res) =>
             res.arrayBuffer()
-          ); */
+          ); 
 
           const pdfDoc = await PDFDocument.load(existingPdfBytesPdf);
           const jpgImage = await pdfDoc.embedPng(existingPdfBytesSignature);
@@ -122,11 +122,11 @@ export async function POST(request: NextRequest) {
     
           // Écrire le fichier dans `src/app/pdf`
           writeFileSync(outputPathFinal, binaryPdf, "binary");
-          /* writeFileSync(
+           writeFileSync(
             `public/assets/pdf/contrat-${user.firstname}-${user.lastname}.pdf`,
             binaryPdf,
             "binary"
-          ); */
+          ); 
           const response = new NextResponse(binaryPdf, {
             status: 200,
             headers: {
@@ -162,4 +162,4 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-  }
+  } */

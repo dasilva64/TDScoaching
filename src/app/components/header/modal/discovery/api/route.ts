@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     orderBy: { startAt: "desc" },
   });
   if (user) {
-    if (user.role !== "ROLE_USER") {
+    if (user.role === "ROLE_ADMIN") {
       return NextResponse.json(
         {
           status: 404,

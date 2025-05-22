@@ -37,9 +37,12 @@ export async function GET() {
       csrfToken: csrfToken,
     });
   } else {
+    const csrfToken = generateCsrfToken()
+    session.csrfToken = csrfToken;
+    await session.save();
     return NextResponse.json({
       status: 200,
-      csrfToken: session.csrfToken,
+      csrfToken: csrfToken,
     });
   }
   

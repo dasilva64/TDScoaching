@@ -120,6 +120,7 @@ const ContactForm = () => {
     ) {
       if (inputPseudo.length === 0) {
         const fetchContact = async () => {
+          if (dataContact.csrfToken) {
             trigger({
             email: validator.escape(inputEmail.trim()),
             firstname: validator.escape(inputFirstname.trim()),
@@ -129,6 +130,16 @@ const ContactForm = () => {
             pseudo: validator.escape(inputPseudo.trim()),
             csrfToken: dataContact.csrfToken
           });
+          } {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: {
+                type: "error",
+                flashMessage: "Une erreur technique est survenue. Merci de recharger la page.",
+              },
+            });
+          }
+            
           
           
         };

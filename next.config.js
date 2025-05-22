@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const cspHeader = `
-    default-src 'self' 'unsafe-inline';
+    default-src 'self';
     script-src 'self' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data:;
@@ -20,7 +20,7 @@ const nextConfig = {
   }, */
   swcMinify: true,
   productionBrowserSourceMaps: true,
-   async headers() {
+   /* async headers() {
     return [
       {
         source: "/(.*)",
@@ -68,7 +68,7 @@ const nextConfig = {
         ],
       },
     ];
-  },
+  }, */
   /*  ]
   } */
   /* externals: {

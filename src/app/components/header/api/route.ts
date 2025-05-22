@@ -13,14 +13,14 @@ export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn !== true) {
-    session.destroy();
+    //session.destroy();
     return NextResponse.json(defaultSession);
   } else {
     const user = await prisma.user.findUnique({
       where: { id: validator.escape(session.id) },
     });
     if (user === null) {
-      session.destroy();
+      //session.destroy();
       return NextResponse.json(defaultSession);
     } else {
       return NextResponse.json(session);

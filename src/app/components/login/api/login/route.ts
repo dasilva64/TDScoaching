@@ -11,6 +11,8 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import prisma from "../../../../lib/prisma";
 import { RateLimiter } from "limiter";
+import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
+import { CSRF_TOKEN_LIFETIME, NOW } from "@/app/components/constance/constance";
 
 const limiter = new RateLimiter({
   tokensPerInterval: 600,
@@ -54,14 +56,9 @@ export async function POST(request: NextRequest) {
           }
         );
       }
-      let userObject = {
-        role: user.role,
-        id: user.id,
-      };
       return NextResponse.json(
         {
           status: 200,
-          body: userObject,
           message: "Vous êtes déjà connecté",
         },
         {
@@ -169,11 +166,7 @@ export async function POST(request: NextRequest) {
                 }
               );
             } else {
-              
-              let userObject = {
-                role: user.role,
-                id: user.id,
-              };
+              const csrfToken = generateCsrfToken();
               if (remember === true) {
                 const session: any = await getIronSession<SessionData>(
                   cookies(),
@@ -182,6 +175,8 @@ export async function POST(request: NextRequest) {
                 session.isLoggedIn = true;
                 session.id = user.id;
                 session.role = user.role;
+                session.csrfToken = csrfToken;
+                session.csrfTokenExpiry = NOW + CSRF_TOKEN_LIFETIME
                 await session.save();
               } else {
                 const session: any = await getIronSession<SessionData>(
@@ -191,12 +186,13 @@ export async function POST(request: NextRequest) {
                 session.isLoggedIn = true;
                 session.id = user.id;
                 session.role = user.role;
+                session.csrfToken = csrfToken;
+                session.csrfTokenExpiry = NOW + CSRF_TOKEN_LIFETIME
                 await session.save();
               }
-
               return NextResponse.json({
                 status: 200,
-                body: userObject,
+                csrfToken: csrfToken,
                 message: `Bonjour, ${validator.escape(user.firstname)} vous êtes maintenant connecté`,
               });
             }

@@ -10,8 +10,11 @@ import useSWRMutation from "swr/mutation";
 import { defaultSession } from "../../../lib/session";
 import fetchDelete from "../../fetch/FetchDelete";
 import TabIndex from "../../tabIndex/TabIndex";
+import fetchLogout from "../../fetch/FetchLogout";
+import FetchLogout from "../../fetch/FetchLogout";
+import { mutate } from "swr";
 
-const NavAdmin = () => {
+const NavAdmin = ({csrfToken}: any) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { displayModalNavAdmin } = useSelector(
@@ -28,7 +31,7 @@ const NavAdmin = () => {
     trigger,
     data: dataLogout,
     reset,
-  } = useSWRMutation("/components/header/api", fetchDelete);
+  } = useSWRMutation("/components/header/api", FetchLogout);
 
   useEffect(() => {
     if (dataLogout) {
@@ -41,6 +44,7 @@ const NavAdmin = () => {
           router.push("/");
         }
       }
+      mutate("/components/header/ui/api");
       dispatch({
         type: "flash/storeFlashMessage",
         payload: {
@@ -148,9 +152,7 @@ const NavAdmin = () => {
                 onClick={() => {
                   closeForm();
                   const logout = async () => {
-                    trigger(null, {
-                      optimisticData: defaultSession,
-                    });
+                    trigger({ csrfToken });
                   };
                   setTimeout(() => {
                     logout();

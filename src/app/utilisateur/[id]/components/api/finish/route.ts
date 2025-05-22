@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import validator from "validator";
 import prisma from "@/app/lib/prisma";
@@ -7,7 +7,14 @@ import { SessionData, sessionOptions } from "@/app/lib/session";
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
 
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
       {

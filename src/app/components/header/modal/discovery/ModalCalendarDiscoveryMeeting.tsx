@@ -10,30 +10,20 @@ import interactionPlugin from "@fullcalendar/interaction";
 import frLocale from "@fullcalendar/core/locales/fr";
 import styles from "./ModalCalendarDiscoveryMeeting.module.scss";
 import useGet from "@/app/components/hook/useGet";
+import Load from "./load/Load";
 
 const ModalCalendarDiscoveryMeeting = () => {
   const [allData, setAllData] = useState<any[] | null>(null);
   const [error, setError] = useState<number>(0);
   const [dateStr, setDateStr] = useState<any>("")
   const dispatch = useDispatch();
+  const { displayModalCalendarDiscoveryMeetingHeader } = useSelector(
+    (state: RootState) => state.ModalCalendarDiscoveryMeetingHeader
+  );
   const {
     data: userData,
     isLoading,
-    isError,
-    mutate,
-  } = useGet("/components/header/modal/discovery/api");
-  /* if (isError) {
-    dispatch({
-      type: "flash/storeFlashMessage",
-      payload: {
-        type: "error",
-        flashMessage: "Erreur lors du chargement, veuillez réessayer",
-      },
-    });
-    dispatch({
-      type: "ModalDiscoveryMeetingTest/close",
-    });
-  } */
+  } = useGet(displayModalCalendarDiscoveryMeetingHeader ? "/components/header/modal/discovery/api/ModalCalendarDiscoveryMeeting" : null);
 
   useEffect(() => {
     if (userData) {
@@ -62,9 +52,7 @@ const ModalCalendarDiscoveryMeeting = () => {
       type: "ModalCalendarDiscoveryMeetingHeader/close",
     });
   };
-  const { displayModalCalendarDiscoveryMeetingHeader } = useSelector(
-    (state: RootState) => state.ModalCalendarDiscoveryMeetingHeader
-  );
+  
 
   useEffect(() => {
     if (dateStr) {
@@ -218,7 +206,14 @@ const ModalCalendarDiscoveryMeeting = () => {
                   Gratuit
                 </p>
               </div>
-              {isMobile === false && allData && (
+              {isLoading && (
+                <>
+                <Load />
+                </>
+              )}
+              {!isLoading && (
+                <>
+                {isMobile === false && allData && (
                 <>
                   <FullCalendar
                     ref={calendarRef}
@@ -344,6 +339,8 @@ const ModalCalendarDiscoveryMeeting = () => {
                     }}
                     slotDuration={"01:00:00"}
                   />
+                </>
+              )}
                 </>
               )}
             </motion.div>

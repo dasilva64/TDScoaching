@@ -116,10 +116,12 @@ export async function POST(request: NextRequest) {
               discovery: userById.discovery,
               allMeetings: meetingByUser,
               meeting: userById.meeting_test,
-              offre: userById.offre_test
+              offre: userById.offre_test,
+              
             };
             return NextResponse.json({
               status: 200,
+              csrfToken: session.csrfToken,
               body: userObject,
             });
           }

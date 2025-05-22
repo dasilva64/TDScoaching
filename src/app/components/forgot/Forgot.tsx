@@ -39,6 +39,7 @@ const Forgot = () => {
       } else if (data.status === 400) {
         setTimeout(() => {
           setIsLoading(false);
+          setInputEmail("")
           data.message.forEach((element: string) => {
             if (element[0] === "email") {
               setInputEmailError(element[1]);
@@ -49,6 +50,7 @@ const Forgot = () => {
       } else {
         setTimeout(() => {
           setIsLoading(false);
+          setInputEmail("")
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "error", flashMessage: data.message },

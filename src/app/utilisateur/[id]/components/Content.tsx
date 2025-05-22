@@ -512,6 +512,7 @@ const Content = () => {
                                 });
                                 triggerFinishMeeting({
                                   id: data.body.id,
+                                  csrfToken: data.csrfToken
                                 });
                               }}
                             >

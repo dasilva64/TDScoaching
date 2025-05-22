@@ -11,8 +11,10 @@ import styles from "./NavAdmin.module.scss";
 import Image from "next/image";
 import TabIndex from "../../tabIndex/TabIndex";
 import { mutate } from "swr";
+import fetchLogout from "../../fetch/FetchLogout";
+import FetchLogout from "../../fetch/FetchLogout";
 
-const NavUser = () => {
+const NavUser = ({csrfToken}: any) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { displayModalNavUser } = useSelector(
@@ -29,7 +31,7 @@ const NavUser = () => {
     trigger,
     data: dataLogout,
     reset,
-  } = useSWRMutation("/components/header/api", fetchDelete);
+  } = useSWRMutation("/components/header/api", FetchLogout);
 
   useEffect(() => {
     if (dataLogout) {
@@ -155,9 +157,7 @@ const NavUser = () => {
                 onClick={() => {
                   closeForm();
                   const logout = async () => {
-                    trigger(null, {
-                      optimisticData: defaultSession,
-                    });
+                    trigger({ csrfToken });
                   };
                   setTimeout(() => {
                     logout();

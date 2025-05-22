@@ -6,6 +6,9 @@ import prisma from "../../../../lib/prisma";
 import { validationBody } from "../../../../lib/validation";
 import { Prisma } from "@prisma/client";
 import { RateLimiter } from "limiter";
+import { SessionData, sessionOptions } from "@/app/lib/session";
+import { getIronSession } from "iron-session";
+import { cookies, headers } from "next/headers";
 
 const limiter = new RateLimiter({
   tokensPerInterval: 1,
@@ -14,6 +17,47 @@ const limiter = new RateLimiter({
 });
 
 export async function POST(request: NextRequest) {
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  if (session.isLoggedIn === true) {
+    let user = await prisma.user.findUnique({
+      where: { id: validator.escape(session.id) },
+    });
+    if (user === null) {
+      session.destroy();
+      return NextResponse.json(
+        {
+          status: 400,
+          message:
+            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+    let userObject = {
+      role: user.role,
+      id: user.id,
+    };
+    return NextResponse.json(
+      {
+        status: 400,
+        body: userObject,
+        message: "Vous êtes déjà connecté",
+      },
+      {
+        status: 400,
+      }
+    );
+  }
+  const csrfToken = headers().get("x-csrf-token");
+
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   const remainingRequests = await limiter.removeTokens(1);
   if (remainingRequests < 0) {
     return NextResponse.json(
@@ -64,35 +108,9 @@ export async function POST(request: NextRequest) {
         }
       );
     } else {
-      token
-        .trim()
-        .split(".")
-        .map((t) => {
-          t.split("").map((r) => {
-            if (r === "<" || r === ">") {
-              return NextResponse.json(
-                {
-                  status: 400,
-                  message: "La requête n'est pas valide, veuillez réessayer",
-                },
-                {
-                  status: 400,
-                }
-              );
-            }
-          });
-        });
-      let split = token.trim().split(".");
-      if (
-        split[0].length === 36 &&
-        split[1].length > 0 &&
-        split[2].length === 43 &&
-        split.length === 3
-      ) {
         const { verify } = jwt;
         try {
-          const decodeToken: any = verify(
-            validator.escape(token.trim()),
+          const decodeToken: any = verify(token.trim(),
             process.env.SECRET_TOKEN_RESET as string
           );
           let user = await prisma.user.findUnique({
@@ -109,6 +127,18 @@ export async function POST(request: NextRequest) {
               }
             );
           } else {
+            if (user.password === null) {
+              return NextResponse.json(
+                {
+                  status: 404,
+                  message:
+                    "Aucun mot de passe existe pour ce compte, veuillez vous inscrire",
+                },
+                {
+                  status: 404,
+                }
+              );
+            }
             if (user.resetToken === null) {
               return NextResponse.json(
                 {
@@ -154,7 +184,7 @@ export async function POST(request: NextRequest) {
                   let encrypt = await bcrypt.hash(password, 10);
                   let editUser = await prisma.user.update({
                     where: { mail: validator.escape(user.mail) },
-                    data: { resetToken: Prisma.DbNull, password: validator.escape(encrypt) },
+                    data: { resetToken: Prisma.DbNull, password: encrypt },
                   });
                   if (editUser === null) {
                     return NextResponse.json(
@@ -168,6 +198,7 @@ export async function POST(request: NextRequest) {
                       }
                     );
                   } else {
+                    session.destroy()
                     return NextResponse.json({
                       status: 200,
                       message:
@@ -189,29 +220,25 @@ export async function POST(request: NextRequest) {
               }
             }
           }
-        } catch (error) {
-          return NextResponse.json(
-            {
-              status: 404,
-              message:
-                "Le lien de réinitialisation n'est pas ou plus valide, veuillez réessayer",
-            },
-            {
-              status: 404,
-            }
-          );
-        }
-      } else {
-        return NextResponse.json(
-          {
-            status: 400,
-            message: "Le token n'est pas valide, veuillez réessayer",
-          },
-          {
-            status: 400,
+        } catch (err: any) {
+          if (err.name === "TokenExpiredError") {
+            return NextResponse.json(
+              { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
+              { status: 400 }
+            );
+          } else if (err.name === "JsonWebTokenError") {
+            return NextResponse.json(
+              { status: 400, message: "Le token est invalide." },
+              { status: 400 }
+            );
+          } else {
+            return NextResponse.json(
+              { status: 400, message: "Une erreur inconnue est survenue." },
+              { status: 400 }
+            );
           }
-        );
-      }
+        }
+      
     }
   }
 }

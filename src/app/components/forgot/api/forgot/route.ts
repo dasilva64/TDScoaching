@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
             status: 404,
             type: "error",
             message:
-              "Vous ne pouvez pas modifier votre prénom, veuillez réessayer",
+              "Vous ne pouvez pas changer votre mot de passe, veuillez réessayer",
           },
           {
             status: 404,
@@ -115,6 +115,18 @@ export async function POST(request: NextRequest) {
             }
           );
         } else {
+          if (user.password === null) {
+            return NextResponse.json(
+              {
+                status: 404,
+                message:
+                  "Aucun mot de passe existe pour ce compte, veuillez vous inscrire",
+              },
+              {
+                status: 404,
+              }
+            );
+          }
           if (user.resetToken) {
             let copyResetToken: any = user.resetToken;
             let limitDate = new Date(copyResetToken.limitDate);

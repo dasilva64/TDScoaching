@@ -1,18 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import prisma from "../../../../../lib/prisma";
 import {
   SessionData,
   sessionOptions,
-  defaultSession,
 } from "../../../../../lib/session";
 import validator from "validator";
 import { validationBody } from "../../../../../lib/validation";
+import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
 
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
       {
@@ -97,8 +104,12 @@ export async function POST(request: NextRequest) {
             lastname: validator.escape(editUser.lastname),
             email: validator.escape(editUser.mail),
           };
+          const csrfToken = generateCsrfToken()
+          session.csrfToken = csrfToken;
+          await session.save();
           return NextResponse.json({
             status: 200,
+            csrfToken: csrfToken,
             message: "Votre prénom a été mis à jours avec succès",
             body: userObject,
           });

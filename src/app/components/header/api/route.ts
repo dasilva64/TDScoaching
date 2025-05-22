@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
   SessionData,
@@ -13,32 +13,7 @@ export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn !== true) {
-    for(let i = 0; i<10; i++) {
-      /* const article = await prisma.article.create({
-        data: {
-          title: 'test' + i,
-          slug: 'test' + i,
-          description: 'description' + i,
-          created_at: new Date(),
-          content: {"d": "d"},
-          image: "meditate.jpg"
-        }
-      }) */
-      /* const user = await prisma.user.create({
-      data: {
-        firstname: 'test' + i,
-        lastname: 'test' + i,
-        mail: i + 'test@gmail.com',
-        password: '$2b$10$t216ouJ5loXBz1nAMnfHhOZxyJHPekrE5QfMLfJFULMFMWL/sEvHm',
-        role: 'ROLE_USER',
-        status: true,
-        discovery: false,
-        typeMeeting: {"type": "découverte",
-  "coaching": "couple"}
-      }
-    }) */
-    }
-    
+    session.destroy();
     return NextResponse.json(defaultSession);
   } else {
     const user = await prisma.user.findUnique({
@@ -54,6 +29,7 @@ export async function GET() {
 }
 
 export async function DELETE() {
+  
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
@@ -63,6 +39,14 @@ export async function DELETE() {
       }
     );
   } else {
+    const csrfToken = headers().get("x-csrf-token");
+
+    if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+      return NextResponse.json(
+        { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+        { status: 403 }
+      );
+    }
     const user = await prisma.user.findUnique({
       where: { id: validator.escape(session.id) },
     });

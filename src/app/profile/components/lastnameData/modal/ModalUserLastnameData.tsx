@@ -13,7 +13,7 @@ import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
 
-const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
+const ModalUserLastnameData = ({ data: userData, mutate, csrfToken }: any) => {
   const { displayModalEditLastname } = useSelector(
     (state: RootState) => state.ModalEditLastname
   );
@@ -23,7 +23,6 @@ const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
   const [lastnameInput, setLastnameInput] = useState<string>(
     userData.body.lastname
   );
-
   const [validLastnameInput, setValidLastnameInput] = useState<boolean>(true);
   const [errorMessageLastname, setErrorMessageLastname] = useState<string>("");
 
@@ -42,6 +41,7 @@ const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
         mutate(
           {
             ...data,
+            csrfToken: data.csrfToken,
             body: {
               ...data.body,
               lastname: lastnameInput,
@@ -119,6 +119,7 @@ const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
           trigger({
             lastname: validator.escape(lastnameInput.trim()),
             pseudo: validator.escape(inputPseudo.trim()),
+            csrfToken: csrfToken
           });
         };
         fetchLogin();

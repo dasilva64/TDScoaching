@@ -4,6 +4,7 @@ const fetchPost = async (url: string, { arg }: { arg: any }) => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      "X-CSRF-Token": arg.csrfToken,
     },
     body: JSON.stringify(arg),
   });

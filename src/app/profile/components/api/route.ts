@@ -49,6 +49,7 @@ export async function GET() {
       return NextResponse.json({
         status: 200,
         body: userObject,
+        csrfToken: session.csrfToken
       });
     }
   } else {

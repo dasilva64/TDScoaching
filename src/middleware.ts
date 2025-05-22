@@ -1,21 +1,14 @@
 import { getIronSession } from "iron-session";
 import { NextRequest, NextResponse } from "next/server";
-import { sessionOptions } from "./app/lib/session";
+import { SessionData, sessionOptions } from "./app/lib/session";
 import { cookies } from "next/headers";
-
-interface SessionData {
-  id: string;
-  username: string;
-  isLoggedIn: boolean;
-  role: string;
-}
 
 export async function middleware(request: NextRequest) {
   const res = NextResponse.next();
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
   let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-  if (session.isLoggedIn || Object.keys(session).length !== 0) {
+  if (session.isLoggedIn) {
     if (
       request.nextUrl.pathname.startsWith("/utilisateurs") ||
       request.nextUrl.pathname.startsWith("/meetings") ||

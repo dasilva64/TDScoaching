@@ -12,7 +12,7 @@ import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 
-const EmailCheck = ({ data: userData, mutate }: any) => {
+const EmailCheck = ({ data: userData, mutate, csrfToken }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -82,6 +82,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
         mutate(
           {
             ...data,
+            csrfToken: data.csrfToken,
           },
           { revalidate: false }
         );
@@ -153,7 +154,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
     if (validCodeInput === true) {
       if (inputPseudo.length === 0) {
         const fetchLogin = async () => {
-          trigger({ code: codeInput, pseudo: inputPseudo });
+          trigger({ code: codeInput, pseudo: inputPseudo, csrfToken: csrfToken });
         };
         fetchLogin();
       }

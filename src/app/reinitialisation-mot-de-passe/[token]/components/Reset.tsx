@@ -85,6 +85,7 @@ const Reset = () => {
               passwordConfirm: validator.escape(passwordComfirmInput.trim()),
               token: validator.escape(token[2].trim()),
               pseudo: validator.escape(inputPseudo.trim()),
+              csrfToken: dataLoad && dataLoad.csrfToken ? dataLoad.csrfToken : null
             });
           };
           fetchReset();

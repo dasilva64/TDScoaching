@@ -12,7 +12,7 @@ import ModalUserLastnameData from "../lastnameData/modal/ModalUserLastnameData";
 import PasswordData from "../passwordData/PasswordData";
 import localFont from "next/font/local";
 import useGet from "@/app/components/hook/useGet";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import ModalUserPasswordData from "../passwordData/modal/ModalUserPasswordData";
 import ModalUserSendToken from "../emailSendTokenData/modal/ModalUserSendToken";
@@ -22,6 +22,7 @@ import ModalDeleteAccount from "../deleteAccount/modal/ModalDeleteAccount";
 import LastnameDataLoad from "../lastnameData/LastnameDataLoad";
 import FirstnameDataLoad from "../firstnameData/FirstnameDataLoad";
 import EmailDataLoad from "../emailSendTokenData/EmailSendTokenDataLoad";
+import { RootState } from "@/app/redux/store";
 const Parisienne = localFont({
   src: "../../../Parisienne-Regular.ttf",
   display: "swap",
@@ -72,14 +73,14 @@ const Content = () => {
       <NoScript />
       {isLoading === false && data && data.body && (
         <>
-          <ModalUserFirstnameData data={data} mutate={mutate} />
-          <ModalUserLastnameData data={data} mutate={mutate} />
-          <ModalUserPasswordData />
-          <ModalUserSendToken data={data} mutate={mutate} />
-          <ModalDeleteAccount />
+          <ModalUserFirstnameData data={data} mutate={mutate} csrfToken={data.csrfToken} />
+          <ModalUserLastnameData data={data} mutate={mutate} csrfToken={data.csrfToken} />
+          <ModalUserPasswordData csrfToken={data.csrfToken} mutate={mutate} />
+          <ModalUserSendToken data={data} mutate={mutate} csrfToken={data.csrfToken} />
+          <ModalDeleteAccount csrfToken={data.csrfToken} mutate={mutate} />
           {data.body.newEmail && (
             <>
-              <EmailCheck data={data} mutate={mutate} />
+              <EmailCheck data={data} mutate={mutate} csrfToken={data.csrfToken} />
               <ModalCloseEmail />
             </>
           )}

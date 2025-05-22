@@ -54,18 +54,6 @@ const BtnNav = ({ name }: any) => {
               <>
               <Link tabIndex={0}
                 className={`${styles.header__btn} ${styles.header__free} modalOpen`} href={"/rendez-vous"}>{name}</Link>
-              {/* <button
-                tabIndex={0}
-                className={`${styles.header__btn} ${styles.header__free} modalOpen`}
-                onClick={() => {
-                  dispatch({
-                    type: "ModalCalendarDiscoveryMeetingHeader/open",
-                  });
-                }}
-              >
-                {name}
-              </button> */}
-              
               </>
               
             );

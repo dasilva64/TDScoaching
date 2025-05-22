@@ -12,8 +12,6 @@ import FormRegister from "../../register/formRegister";
 import Forgot from "../../forgot/Forgot";
 import NavAdmin from "../modal/NavAdmin";
 import Nav from "../modal/Nav";
-import DiscoveryModal from "@/app/tarif/components/DiscoveryModal";
-import NormalModal from "@/app/tarif/components/NormalModal";
 import NavUser from "../modal/NavUser";
 import ModalCalendarDiscoveryMeeting from "../modal/discovery/ModalCalendarDiscoveryMeeting";
 import ModalAddDiscoveryMeeting from "../modal/discovery/ModalAddDiscoveryMeeting";
@@ -26,8 +24,30 @@ const Content = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
-
   const { data, isLoading } = useGet("/components/header/api");
+  useEffect(() => {
+    const fetchCSRFToken = async () => {
+      try {
+        const response = await fetch("/api/refresh-csrf-token", {
+          credentials: "include",
+        });
+        if (!response.ok) {
+          throw new Error("Erreur lors du rafraîchissement du CSRF token");
+        }
+        const data = await response.json();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCSRFToken();
+
+    const interval = setInterval(() => {
+      fetchCSRFToken();
+    }, 15 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
   useEffect(() => {
     if (data) {
       if (data.isLoggedIn === false) {
@@ -164,9 +184,15 @@ const Content = () => {
         )}
       <FormRegister />
       <Forgot />
-      <NavAdmin />
+      {data && data.csrfToken && (
+        <>
+          <NavUser csrfToken={data.csrfToken} />
+          <NavAdmin csrfToken={data.csrfToken} />
+        </>
+      )}
+      
       <Nav />
-      <NavUser />
+      
 
       {content}
       <div

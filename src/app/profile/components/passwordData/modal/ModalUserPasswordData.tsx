@@ -10,7 +10,7 @@ import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
 
-const ModalUserPasswordData = () => {
+const ModalUserPasswordData = ({csrfToken, mutate}: any) => {
   const { displayModalEditPassword } = useSelector(
     (state: RootState) => state.ModalEditPassword
   );
@@ -25,7 +25,6 @@ const ModalUserPasswordData = () => {
   const [errorMessagePasswordComfirm, setErrorMessagePasswordComfirm] =
     useState<string>("");
   const router = useRouter();
-
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/profile/components/passwordData/modal/api",
     fetchPost
@@ -42,6 +41,13 @@ const ModalUserPasswordData = () => {
         dispatch({
           type: "ModalEditPassword/close",
         });
+        mutate(
+          {
+            ...data,
+            csrfToken: data.csrfToken,
+          },
+          { revalidate: false }
+        );
         reset();
       } else if (data.status === 401) {
         dispatch({
@@ -95,6 +101,7 @@ const ModalUserPasswordData = () => {
               password: passwordInput,
               passwordComfirm: passwordComfirmInput,
               pseudo: inputPseudo,
+              csrfToken: csrfToken
             });
           };
           fetchLogin();

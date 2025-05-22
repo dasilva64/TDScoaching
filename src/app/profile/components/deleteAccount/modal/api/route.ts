@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import validator from "validator";
 import jwt from "jsonwebtoken";
@@ -7,11 +7,18 @@ import nodemailer from "nodemailer";
 import prisma from "../../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../../lib/session";
 import { validationBody } from "../../../../../lib/validation";
-import { Prisma } from "@prisma/client";
+import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
 
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
       {
@@ -158,8 +165,12 @@ export async function POST(request: NextRequest) {
                                 </html>`,
               };
               await smtpTransport.sendMail(mailOptions);
+              const csrfToken = generateCsrfToken()
+              session.csrfToken = csrfToken;
+              await session.save();
               return NextResponse.json({
                 status: 200,
+                csrfToken: csrfToken,
                 message:
                   "Un email vous a été envoyé pour supprimer votre compte",
               });
@@ -360,8 +371,12 @@ export async function POST(request: NextRequest) {
                             </html>`,
           };
           await smtpTransport.sendMail(mailOptions);
+          const csrfToken = generateCsrfToken()
+          session.csrfToken = csrfToken;
+          await session.save();
           return NextResponse.json({
             status: 200,
+            csrfToken: csrfToken,
             message: "Un email vous a été envoyé pour supprimer votre compte",
           });
         }

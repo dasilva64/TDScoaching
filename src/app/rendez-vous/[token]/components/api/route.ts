@@ -41,35 +41,9 @@ const limiter = new RateLimiter({
           }
         );
       } else {
-        token
-        .trim()
-        .split(".")
-        .map((t) => {
-          t.split("").map((r) => {
-            if (r === "<" || r === ">") {
-              return NextResponse.json(
-                {
-                  status: 400,
-                  message: "Le token n'est pas valide, veuillez réessayer",
-                },
-                {
-                  status: 400,
-                }
-              );
-            }
-          });
-        });
-      let split = token.trim().split(".");
-      if (
-        split[0].length === 36 &&
-        split[1].length > 0 &&
-        split[2].length === 43 &&
-        split.length === 3
-      ){
         const { verify } = jwt;
         try {
-          const decodeToken: any = verify(
-            validator.escape(token.trim()),
+          const decodeToken: any = verify(token.trim(),
             process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
           );
           const meet = await prisma.meeting_test.findUnique({
@@ -114,49 +88,24 @@ const limiter = new RateLimiter({
             );
           }
 
-        }  catch (error) {
-          return NextResponse.json(
-            {
-              status: 404,
-              message:
-                "Le lien n'est pas ou plus valide, veuillez réessayer",
-            },
-            {
-              status: 404,
-            }
-          );
+        }  catch (err: any) {
+          if (err.name === "TokenExpiredError") {
+            return NextResponse.json(
+              { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
+              { status: 400 }
+            );
+          } else if (err.name === "JsonWebTokenError") {
+            return NextResponse.json(
+              { status: 400, message: "Le token est invalide." },
+              { status: 400 }
+            );
+          } else {
+            return NextResponse.json(
+              { status: 400, message: "Une erreur inconnue est survenue." },
+              { status: 400 }
+            );
+          }
         }
-         
-        } else {
-          return NextResponse.json(
-            {
-              status: 400,
-              message: "Le token n'est pas valide, veuillez réessayer",
-            },
-            {
-              status: 400,
-            }
-          );
-        }
-      }
       
-    }
+    }}
   }
-
-/*   export async function DELETE(request: NextRequest) {
-    const searchParams = request.nextUrl.searchParams;
-      const token: any = searchParams.get('token');
-      const meet = prisma.meetingDiscovery.delete({
-        where: {token: token}
-      })
-      console.log(meet)
-      return NextResponse.json(
-        {
-          status: 200,
-          message: "delete",
-        },
-        {
-          status: 200,
-        }
-      );
-  } */

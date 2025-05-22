@@ -6,11 +6,11 @@ const fetchData = async (url: string) => {
   return json;
 };
 
-function useGet(url: string) {
+function useGet(url: string | null) {
+  
   const { data, error, isLoading, mutate } = useSWR(url, (url) =>
     fetchData(url)
   );
-
   return {
     data,
     isLoading,

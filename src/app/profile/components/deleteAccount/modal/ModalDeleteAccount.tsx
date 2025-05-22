@@ -9,7 +9,7 @@ import Image from "next/image";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 
-const ModalDeleteAccount = () => {
+const ModalDeleteAccount = ({csrfToken, mutate}: any) => {
   const { displayModalDeleteAccount } = useSelector(
     (state: RootState) => state.ModalDeleteAccount
   );
@@ -30,6 +30,13 @@ const ModalDeleteAccount = () => {
     if (data) {
       if (data.status === 200) {
         clearState();
+        mutate(
+          {
+            ...data,
+            csrfToken: data.csrfToken,
+          },
+          { revalidate: false }
+        );
         if (isMutating === false) {
           dispatch({
             type: "ModalDeleteAccount/close",
@@ -210,6 +217,7 @@ const ModalDeleteAccount = () => {
                         trigger({
                           reason: reason,
                           pseudo: inputPseudo,
+                          csrfToken: csrfToken
                         });
                       }
                       e.preventDefault();

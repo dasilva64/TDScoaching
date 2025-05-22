@@ -52,45 +52,29 @@ export async function POST(request: NextRequest) {
           }
         );
       } else {
-        token.split(".").map((t) => {
-          t.split("").map((r) => {
-            if (r === "<" || r === ">") {
-              return NextResponse.json(
-                {
-                  status: 400,
-                  message: "La requête n'est pas valide, veuillez réessayer",
-                },
-                {
-                  status: 400,
-                }
-              );
-            }
-          });
-        });
-        let split = token.split(".");
-        if (
-          split[0].length === 36 &&
-          split[1].length > 0 &&
-          split[2].length === 43 &&
-          split.length === 3
-        ) {
           const { verify } = jwt;
           let decodeToken: any;
           try {
-            decodeToken = verify(
-              validator.escape(token.trim()),
+            decodeToken = verify(token.trim(),
               process.env.SECRET_TOKEN_DELETE as string
             );
-          } catch (err) {
-            return NextResponse.json(
-              {
-                status: 404,
-                message: "Le token n'est pas valide, veuillez réessayer",
-              },
-              {
-                status: 404,
-              }
-            );
+          } catch (err: any) {
+            if (err.name === "TokenExpiredError") {
+              return NextResponse.json(
+                { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
+                { status: 400 }
+              );
+            } else if (err.name === "JsonWebTokenError") {
+              return NextResponse.json(
+                { status: 400, message: "Le token est invalide." },
+                { status: 400 }
+              );
+            } else {
+              return NextResponse.json(
+                { status: 400, message: "Une erreur inconnue est survenue." },
+                { status: 400 }
+              );
+            }
           }
           let user = await prisma.user.findUnique({
             where: { mail: validator.escape(decodeToken.user) },
@@ -218,17 +202,7 @@ export async function POST(request: NextRequest) {
               );
             }
           }
-        } else {
-          return NextResponse.json(
-            {
-              status: 404,
-              message: "Le token n'est pas valide, veuillez réessayer",
-            },
-            {
-              status: 404,
-            }
-          );
-        }
+        
       }
     }
   }

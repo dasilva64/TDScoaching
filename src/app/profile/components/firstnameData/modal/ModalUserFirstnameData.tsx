@@ -13,7 +13,7 @@ import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 
-const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
+const ModalUserFirstnameData = ({ data: userData, mutate, csrfToken }: any) => {
   const router = useRouter();
   const { displayModalEditFirstname } = useSelector(
     (state: RootState) => state.ModalEditFirstname
@@ -43,6 +43,7 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
         mutate(
           {
             ...data,
+            csrfToken: data.csrfToken,
             body: {
               ...data.body,
               firstname: firstnameInput,
@@ -122,6 +123,7 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
           trigger({
             firstname: validator.escape(firstnameInput.trim()),
             pseudo: validator.escape(inputPseudo.trim()),
+            csrfToken: csrfToken
           });
         };
         fetchLogin();

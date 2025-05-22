@@ -79,6 +79,10 @@ const FormLogin = () => {
           type: "ModalLogin/close",
         });
         dispatch({
+          type: "csrfToken/setCsrfToken",
+          payload: {token: loginData.csrfToken}
+        });
+        dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: loginData.message },
         });

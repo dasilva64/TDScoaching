@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import prisma from "../../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../../lib/session";
@@ -7,10 +7,18 @@ import validator from "validator";
 import nodemailer from "nodemailer";
 import { validationBody } from "../../../../../lib/validation";
 import { Prisma } from "@prisma/client";
+import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
 
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
       {
@@ -176,10 +184,13 @@ export async function POST(request: NextRequest) {
                   email: validator.escape(editUser.mail),
                   newEmail: validator.escape(copyEditEmail.newEmail),
                 };
-
+                const csrfToken = generateCsrfToken()
+                session.csrfToken = csrfToken;
+                await session.save();
                 return NextResponse.json({
                   status: 200,
                   body: userObject,
+                  csrfToken: csrfToken,
                   message:
                     "Un email vous a été envoyé pour valider votre nouvelle adresse email",
                 });
@@ -302,6 +313,7 @@ export async function POST(request: NextRequest) {
               return NextResponse.json({
                 status: 200,
                 body: userObject,
+                csrfToken: csrfToken,
                 message:
                   "Un email vous a été envoyé pour valider votre nouvelle adresse email",
               });

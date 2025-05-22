@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "../page.module.scss";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
 import fetchPost from "../../components/fetch/FetchPost";
 import stylesForm from "./ContactForm.module.scss";
 import Input from "@/app/components/input/Input";
+import useGet from "@/app/components/hook/useGet";
 
 const ContactForm = () => {
   const [inputFirstname, setInputFirstname] = useState<string>("");
@@ -31,7 +32,7 @@ const ContactForm = () => {
   const [emailInputError, setEmailInputError] = useState<string>("");
   const [objectInputError, setObjectInputError] = useState<string>("");
   const [messageInputError, setMessageInputError] = useState<string>("");
-
+  const { data: dataContact } = useGet("/contact/components/api");
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/contact/components/api",
     fetchPost
@@ -97,6 +98,13 @@ const ContactForm = () => {
           });
           reset();
         }
+      }else {
+        clearState();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
       }
     }
   }, [data, dispatch, reset]);
@@ -112,14 +120,17 @@ const ContactForm = () => {
     ) {
       if (inputPseudo.length === 0) {
         const fetchContact = async () => {
-          trigger({
+            trigger({
             email: validator.escape(inputEmail.trim()),
             firstname: validator.escape(inputFirstname.trim()),
             lastname: validator.escape(inputLastname.trim()),
             object: validator.escape(inputObject.trim()),
             message: validator.escape(inputMessage.trim()),
             pseudo: validator.escape(inputPseudo.trim()),
+            csrfToken: dataContact.csrfToken
           });
+          
+          
         };
         if (inputPseudo.length === 0) {
           fetchContact();

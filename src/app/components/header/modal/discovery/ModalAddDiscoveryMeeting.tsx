@@ -8,9 +8,10 @@ import { RootState } from "@/app/redux/store";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import Input from "@/app/components/input/Input";
-import { s } from "@fullcalendar/core/internal-common";
+import useGet from "@/app/components/hook/useGet";
 
 const ModalAddDiscoveryMeeting = () => {
+  
   const [emailInput, setEmailInput] = useState<string>("");
   const [firstnameInput, setFirstnameInput] = useState<string>("");
   const [lastnameInput, setLastnameInput] = useState<string>("");
@@ -43,6 +44,7 @@ const ModalAddDiscoveryMeeting = () => {
       type: "ModalAddDiscoveryMeetingHeader/close",
     });
   };
+
   const openCalendar = async () => {
     setEmailInputError("");
     setFirstnameInputError("");
@@ -69,6 +71,9 @@ const ModalAddDiscoveryMeeting = () => {
     displayModalAddDiscoveryMeetingHeader,
     dataModalAddDiscoveryMeetingHeader,
   } = useSelector((state: RootState) => state.ModalAddDiscoveryMeetingHeader);
+  const {
+    data: userData,
+  } = useGet(displayModalAddDiscoveryMeetingHeader ? "/components/header/modal/discovery/api/ModalAddDiscoveryMeeting" : null);
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
     if (e.target.value.length > 0) {
@@ -79,9 +84,8 @@ const ModalAddDiscoveryMeeting = () => {
       setTypeCoachingValid(false);
     }
   };
-
   const { trigger, data, reset, isMutating } = useSWRMutation(
-    "/components/header/modal/discovery/api",
+    "/components/header/modal/discovery/api/ModalAddDiscoveryMeeting",
     fetchPost
   );
   useEffect(() => {
@@ -217,6 +221,7 @@ const ModalAddDiscoveryMeeting = () => {
           firstname: firstnameInput,
           lastname: lastnameInput,
           email: emailInput,
+          csrfToken: userData && userData.csrfToken ? userData.csrfToken : null
         });
       }
     } else {

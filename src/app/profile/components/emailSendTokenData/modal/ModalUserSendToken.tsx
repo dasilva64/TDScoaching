@@ -11,7 +11,7 @@ import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
 
-const ModalUserSendToken = ({ data: userData, mutate }: any) => {
+const ModalUserSendToken = ({ data: userData, mutate, csrfToken }: any) => {
   const { displayModalSendTokenEmail } = useSelector(
     (state: RootState) => state.ModalSendTokenEmail
   );
@@ -23,7 +23,6 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
 
   const [validEmailInput, setValidEmailInput] = useState<boolean>(true);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
-
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/profile/components/emailSendTokenData/modal/api",
     fetchPost
@@ -32,7 +31,13 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        mutate();
+        mutate(
+          {
+            ...data,
+            csrfToken: data.csrfToken,
+          },
+          { revalidate: false }
+        );
         dispatch({
           type: "ModalSendTokenEmail/close",
         });
@@ -101,6 +106,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
           trigger({
             email: validator.escape(emailInput.trim()),
             pseudo: validator.escape(inputPseudo.trim()),
+            csrfToken: csrfToken
           });
         };
         fetchLogin();

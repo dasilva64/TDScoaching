@@ -4,18 +4,21 @@ import React, { useEffect } from "react";
 import styles from "./ModalCloseEmail.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import fetchGet from "../../../../components/fetch/fetchGet";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
+import fetchPost from "@/app/components/fetch/FetchPost";
 
 const ModalCloseEmail = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/profile/components/emailData/modal/api",
-    fetchGet
+    fetchPost
+  );
+  const { csrfToken } = useSelector(
+    (state: RootState) => state.csrfToken
   );
   const { displayModalCancelEmail } = useSelector(
     (state: RootState) => state.ModalCancelEmail
@@ -28,6 +31,10 @@ const ModalCloseEmail = () => {
         });
         dispatch({
           type: "ModalEditEmail/close",
+        });
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
         });
         dispatch({
           type: "flash/storeFlashMessage",
@@ -147,7 +154,7 @@ const ModalCloseEmail = () => {
                         dispatch({
                           type: "flash/clearFlashMessage",
                         });
-                        trigger();
+                        trigger({csrfToken: csrfToken});
                       }}
                     >
                       Quitter

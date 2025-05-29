@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Content.module.scss";
 import Image from "next/image";
+import "../../rendez-vous.scss";
 import { usePathname, useRouter } from "next/navigation";
 import useGetOneByToken from "@/app/components/hook/meeting/useGetOneByToken";
 import { useDispatch } from "react-redux";
@@ -55,8 +56,6 @@ const Content = () => {
   }, [data, dispatch, router]);
   return (
     <>
-      <style>{"body { height: 100%; }"}</style>
-      <style>{"html { height: 100%}"}</style>
       {data && (
         <>
           {data.body && (

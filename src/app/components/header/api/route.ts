@@ -3,7 +3,6 @@ import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
   SessionData,
-  defaultSession,
   sessionOptions,
 } from "../../../lib/session";
 import prisma from "../../../lib/prisma";
@@ -39,6 +38,7 @@ export async function GET() {
       where: { id: session.id },
     });
     if (user === null) {
+      session.destroy();
       await session.save();
       return NextResponse.json(session);
       

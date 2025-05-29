@@ -1,14 +1,22 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import prisma from "../../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../../lib/session";
 import { Prisma } from "@prisma/client";
 import validator from "validator";
+import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 
-export async function GET() {
+export async function POST() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
 
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
       {
@@ -62,6 +70,26 @@ export async function GET() {
           email: validator.escape(updateUser.mail),
           editEmail: updateUser.editEmail,
         };
+        const csrfToken = generateCsrfToken()
+          session.csrfToken = csrfToken;
+          if (session.rememberMe) {
+            session.updateConfig({
+              ...sessionOptions,
+              cookieOptions: {
+                ...sessionOptions.cookieOptions,
+                maxAge: 60 * 60 * 24 * 30,
+              },
+            });
+          } else {
+            session.updateConfig({
+              ...sessionOptions,
+              cookieOptions: {
+                ...sessionOptions.cookieOptions,
+                maxAge: undefined,
+              },
+            });
+          }
+          await session.save();
         return NextResponse.json({
           status: 200,
           message: "Votre demande de modification d'email à été annulé",

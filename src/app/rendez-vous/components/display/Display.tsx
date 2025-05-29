@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import NoScript from "@/app/components/noscript/NoScript";
 import Load from "../load/Load";
 import My from "../test/My";
+import "../../rendez-vous.scss";
 import ModalCalendarEditMeeting from "../test/modal/calendarEdit/ModalCalendarEditMeeting";
 import ModalDeleteMeeting from "../test/modal/Delete/ModalDeleteMeeting";
 import Take from "../test/Take";
@@ -106,8 +107,6 @@ const Display = () => {
   }, [userData]);
   return (
     <>
-      <style>{"body { height: 100%; }"}</style>
-      <style>{"html { height: 100%}"}</style>
       {userData && userData.status === 200 && (
         <>
           {userData.body.meeting !== null && (

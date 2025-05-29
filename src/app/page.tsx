@@ -31,7 +31,7 @@ export default async function Home() {
       <NoScript />
 
       <main className={styles.home}>
-        <section className={styles.home__bg}>
+        {/* <section className={styles.home__bg}>
           <Image
             className={styles.home__bg__img}
             width="0"
@@ -187,7 +187,7 @@ export default async function Home() {
               }
             />
           </div>
-        </section>
+        </section> */}
       </main>
       <Footer />
     </>

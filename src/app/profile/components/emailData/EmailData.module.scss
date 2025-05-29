@@ -54,7 +54,9 @@
   &__form {
     display: flex;
     flex-direction: column;
-
+    &__hidden {
+      display: none;
+    }
     &__group {
       display: flex;
       flex-direction: column;

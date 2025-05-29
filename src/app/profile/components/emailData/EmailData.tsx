@@ -275,7 +275,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  style={{ display: "none" }}
+                  className={styles.modalEditEmailSendData__form__hidden}
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

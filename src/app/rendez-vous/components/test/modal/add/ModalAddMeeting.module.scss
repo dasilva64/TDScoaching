@@ -48,6 +48,9 @@
   }
   &__form {
     margin-top: 30px;
+    &__hidden {
+      display: none;
+    }
     &__submit {
       text-align: center;
       margin: 50px auto 20px auto;

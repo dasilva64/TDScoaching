@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const cspHeader = `
+/* const cspHeader = `
     default-src 'self';
   script-src 'self' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
@@ -12,7 +12,7 @@ const cspHeader = `
   frame-ancestors 'none';
   upgrade-insecure-requests;
   block-all-mixed-content;
-`;
+`; */
 const nextConfig = {
   /* webpack: (config) => {
     config.resolve.alias.canvas = false;
@@ -26,10 +26,10 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [
-          {
+          /* {
             key: "Content-Security-Policy",
             value: cspHeader.replace(/\n/g, ""),
-          },
+          }, */
           {
             key: "X-Content-Type-Options",
             value: "nosniff",

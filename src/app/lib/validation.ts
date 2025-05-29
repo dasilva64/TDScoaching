@@ -1,8 +1,25 @@
 import validator from "validator";
 
+const allowedFields = [
+  "email",
+  "firstname",
+  "lastname",
+  "object",
+  "message",
+  "password",
+  "formule",
+  "typeCoaching",
+  "start",
+  "id",
+  "userId",
+  "code",
+  "reason"
+];
+
 export const validationBody = (body: any) => {
   let arrayMessageError: any = [];
   Object.entries(body).forEach(([key, value]: any) => {
+    if (!allowedFields.includes(key)) return;
     if (key === "email") {
       let regex = /^.{5,50}$/;
       if (!validator.isEmail(value.trim(), { ignore_max_length: true })) {
@@ -118,17 +135,13 @@ export const validationBody = (body: any) => {
       if (validator.isEmpty(value)) {
         arrayMessageError.push(["start", "Date : ne peut pas être vide"]);
       } else {
-        let date = new Date(value);
-        if (date instanceof Date === false) {
+        if (isNaN(Date.parse(value))) {
           arrayMessageError.push(["start", "Date : doit être une date valide"]);
         }
-        /* if (!moment(new Date(value).toISOString()).isValid()) {
-          arrayMessageError.push(["start", "Date : doit être une date valide"]);
-        } */
       }
     }
     if (key === "id" || key === "userId") {
-      let regex = /^[0-9a-fA-F-]{36,36}$/;
+      let regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["id", "Id : ne peut pas être vide"]);
       } else {

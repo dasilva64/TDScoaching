@@ -11,9 +11,12 @@ import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
 
-const ModalUserSendToken = ({ data: userData, mutate, csrfToken }: any) => {
+const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const { displayModalSendTokenEmail } = useSelector(
     (state: RootState) => state.ModalSendTokenEmail
+  );
+  const { csrfToken } = useSelector(
+    (state: RootState) => state.csrfToken
   );
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const router = useRouter();
@@ -31,13 +34,10 @@ const ModalUserSendToken = ({ data: userData, mutate, csrfToken }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        mutate(
-          {
-            ...data,
-            csrfToken: data.csrfToken,
-          },
-          { revalidate: false }
-        );
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
+        });
         dispatch({
           type: "ModalSendTokenEmail/close",
         });

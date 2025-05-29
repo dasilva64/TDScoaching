@@ -26,6 +26,7 @@ const ModalAddDiscoveryMeeting = () => {
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
     useState<string>("");
   const [typeCoachingValid, setTypeCoachingValid] = useState<boolean>(false);
+  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch();
   const closeModal = () => {
     setEmailInputError("");
@@ -71,9 +72,7 @@ const ModalAddDiscoveryMeeting = () => {
     displayModalAddDiscoveryMeetingHeader,
     dataModalAddDiscoveryMeetingHeader,
   } = useSelector((state: RootState) => state.ModalAddDiscoveryMeetingHeader);
-  const {
-    data: userData,
-  } = useGet(displayModalAddDiscoveryMeetingHeader ? "/components/header/modal/discovery/api/ModalAddDiscoveryMeeting" : null);
+
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
     if (e.target.value.length > 0) {
@@ -127,6 +126,10 @@ const ModalAddDiscoveryMeeting = () => {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
+        });
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
         });
         setEmailInputError("");
         setFirstnameInputError("");
@@ -221,7 +224,7 @@ const ModalAddDiscoveryMeeting = () => {
           firstname: firstnameInput,
           lastname: lastnameInput,
           email: emailInput,
-          csrfToken: userData && userData.csrfToken ? userData.csrfToken : null
+          csrfToken: csrfToken
         });
       }
     } else {

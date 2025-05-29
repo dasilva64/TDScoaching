@@ -16,41 +16,33 @@ import NavUser from "../modal/NavUser";
 import ModalCalendarDiscoveryMeeting from "../modal/discovery/ModalCalendarDiscoveryMeeting";
 import ModalAddDiscoveryMeeting from "../modal/discovery/ModalAddDiscoveryMeeting";
 import ModalRecapDiscoveryMeeting from "../modal/discovery/ModalRecapDiscoveryMeeting";
+import { useRefreshCsrfToken } from "../../hook/csrf/useRefreshCsrfToken";
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
+  const csrfRefreshToken = useRefreshCsrfToken();  
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (csrfRefreshToken) {
+      dispatch({
+        type: "csrfToken/store",
+        payload: {csrfToken: csrfRefreshToken}
+      })
+    }
+  }, [csrfRefreshToken, dispatch]);
 
   const { isActive } = useSelector((state: RootState) => state.menu);
-  const dispatch = useDispatch();
+  
   const router = useRouter();
   const pathname = usePathname();
   const { data, isLoading } = useGet("/components/header/api");
   useEffect(() => {
-    const fetchCSRFToken = async () => {
-      try {
-        const response = await fetch("/api/refresh-csrf-token", {
-          credentials: "include",
-        });
-        if (!response.ok) {
-          throw new Error("Erreur lors du rafraîchissement du CSRF token");
-        }
-        const data = await response.json();
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchCSRFToken();
-
-    const interval = setInterval(() => {
-      fetchCSRFToken();
-    }, 15 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-  useEffect(() => {
     if (data) {
-      if (data.isLoggedIn === false) {
+      dispatch({
+        type: "csrfToken/store",
+        payload: {csrfToken: data.csrfToken}
+      })
+      if (typeof data.isLoggedIn !== "undefined" && data.isLoggedIn === false) {
         let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
         let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
         if (
@@ -73,7 +65,7 @@ const Content = () => {
     );
   }
   if (data) {
-    if (data.isLoggedIn === false) {
+    if (typeof data.isLoggedIn === "undefined" || data.isLoggedIn === false) {
       content = (
         <>
           <div className={styles.header__log}>

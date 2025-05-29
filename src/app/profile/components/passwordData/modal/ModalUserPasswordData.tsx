@@ -10,9 +10,12 @@ import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
 
-const ModalUserPasswordData = ({csrfToken, mutate}: any) => {
+const ModalUserPasswordData = ({mutate}: any) => {
   const { displayModalEditPassword } = useSelector(
     (state: RootState) => state.ModalEditPassword
+  );
+  const { csrfToken } = useSelector(
+    (state: RootState) => state.csrfToken
   );
   const dispatch = useDispatch<AppDispatch>();
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -41,13 +44,11 @@ const ModalUserPasswordData = ({csrfToken, mutate}: any) => {
         dispatch({
           type: "ModalEditPassword/close",
         });
-        mutate(
-          {
-            ...data,
-            csrfToken: data.csrfToken,
-          },
-          { revalidate: false }
-        );
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
+        });
+        mutate()
         reset();
       } else if (data.status === 401) {
         dispatch({

@@ -18,7 +18,7 @@ export async function GET() {
         where: { id: validator.escape(session.id) },
       });
       if (user === null) {
-        //session.destroy();
+       // session.destroy();
         return NextResponse.json({
             isLoggedIn: false,
           });

@@ -5,7 +5,6 @@ export interface SessionData {
   isLoggedIn: boolean;
   role: string;
   csrfToken: string;
-  csrfTokenExpiry: number;
 }
 
 export const defaultSession: SessionData = {
@@ -13,7 +12,6 @@ export const defaultSession: SessionData = {
   isLoggedIn: false,
   role: "",
   csrfToken: "",
-  csrfTokenExpiry: 0
 };
 
 export const sessionOptions: SessionOptions = {
@@ -24,49 +22,7 @@ export const sessionOptions: SessionOptions = {
   cookieName: "iron-session-cookie-session-user-tds",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
-     maxAge: undefined,
-    httpOnly: true,
-    path: "/",
-    sameSite: "strict"
-  },
-};
-export const sessionOptionsRemeber: SessionOptions = {
-  password: {
-    1: process.env.IRON_PASSWORD as string,
-    2: process.env.IRON_PASSWORD_TWO as string,
-  },
-  cookieName: "iron-session-cookie-session-user-tds",
-  cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24 * 30,
-    httpOnly: true,
-    path: "/",
-    sameSite: "strict"
-  },
-};
-export const sessionOptionsContact: SessionOptions = {
-  password: {
-    1: process.env.IRON_PASSWORD as string,
-    2: process.env.IRON_PASSWORD_TWO as string,
-  },
-  cookieName: "iron-session-cookie-session-user-tds",
-  cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 10, // 10 minutes
-    httpOnly: true,
-    path: "/",
-    sameSite: "strict"
-  },
-};
-export const sessionOptionsDiscoveryMeeting: SessionOptions = {
-  password: {
-    1: process.env.IRON_PASSWORD as string,
-    2: process.env.IRON_PASSWORD_TWO as string,
-  },
-  cookieName: "iron-session-cookie-session-user-tds",
-  cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 10, // 10 minutes
+    maxAge: undefined,
     httpOnly: true,
     path: "/",
     sameSite: "strict"

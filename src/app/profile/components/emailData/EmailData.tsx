@@ -12,9 +12,12 @@ import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 
-const EmailCheck = ({ data: userData, mutate, csrfToken }: any) => {
+const EmailCheck = ({ data: userData, mutate }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const { csrfToken } = useSelector(
+    (state: RootState) => state.csrfToken
+  );
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const { displayModalEditEmail } = useSelector(
     (state: RootState) => state.ModalEditEmail
@@ -79,13 +82,10 @@ const EmailCheck = ({ data: userData, mutate, csrfToken }: any) => {
           type: "ModalEditEmail/close",
         });
         clearState();
-        mutate(
-          {
-            ...data,
-            csrfToken: data.csrfToken,
-          },
-          { revalidate: false }
-        );
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
+        });
         reset();
         //}
       } else if (data.status === 401) {

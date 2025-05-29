@@ -44,6 +44,7 @@ import ModalCancelMeetingRendezVous from "./feature/rendez-vous/my/ModalCancelMe
 import ModalAddPaidMeetingRendezVous from "./feature/rendez-vous/take/ModalAddPaidMeetingRendezVous";
 import ModalContractRendezVous from "./feature/rendez-vous/formule/ModalContractRendezVous";
 import ModalCalendarEditDiscoveryMeetingHeader from "./feature/header/ModalCalendarEditDiscoveryMeetingHeader";
+import csrfToken from "./feature/csrfToken";
 
 export const store = configureStore({
   reducer: {
@@ -64,6 +65,8 @@ export const store = configureStore({
     ModalEditDiscoveryMeetingTest: ModalEditDiscoveryMeetingTest.reducer,
     ModalRecapDiscoveryMeeting: ModalRecapDiscoveryMeeting.reducer, */
     
+    csrfToken: csrfToken.reducer,
+
     //header
     flash: flash.reducer,
     menu: menu.reducer,

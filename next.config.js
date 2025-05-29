@@ -20,7 +20,7 @@ const nextConfig = {
   }, */
   swcMinify: true,
   productionBrowserSourceMaps: true,
-   /* async headers() {
+   async headers() {
     return [
       {
         source: "/(.*)",
@@ -68,7 +68,7 @@ const nextConfig = {
         ],
       },
     ];
-  }, */
+  },
   /*  ]
   } */
   /* externals: {

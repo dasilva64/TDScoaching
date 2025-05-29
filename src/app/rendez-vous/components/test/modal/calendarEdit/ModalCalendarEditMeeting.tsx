@@ -186,7 +186,6 @@ const ModalCalendarEditMeeting = ({ allData }: any) => {
                     height={"auto"}
                     dateClick={(e) => {
                       handleDateClick(e.dateStr);
-                      //console.log("dateClick");
                     }}
                     eventDrop={(e) => {
                       handleDateClick(e.event.start);

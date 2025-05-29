@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
   SessionData,
   sessionOptions,
-  sessionOptionsRemeber,
 } from "../../../../lib/session";
 import { validationBody } from "../../../../lib/validation";
 import validator from "validator";
@@ -12,7 +11,6 @@ import bcrypt from "bcrypt";
 import prisma from "../../../../lib/prisma";
 import { RateLimiter } from "limiter";
 import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
-import { CSRF_TOKEN_LIFETIME, NOW } from "@/app/components/constance/constance";
 
 const limiter = new RateLimiter({
   tokensPerInterval: 600,
@@ -21,6 +19,14 @@ const limiter = new RateLimiter({
 });
 
 export async function POST(request: NextRequest) {
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   const remainingRequests = await limiter.removeTokens(1);
   if (remainingRequests < 0) {
     return NextResponse.json(
@@ -34,10 +40,6 @@ export async function POST(request: NextRequest) {
       }
     );
   } else {
-    const session = await getIronSession<SessionData>(
-      cookies(),
-      sessionOptions
-    );
 
     if (session.isLoggedIn === true) {
       let user = await prisma.user.findUnique({
@@ -166,35 +168,36 @@ export async function POST(request: NextRequest) {
                 }
               );
             } else {
-              const csrfToken = generateCsrfToken();
-              if (remember === true) {
-                const session: any = await getIronSession<SessionData>(
-                  cookies(),
-                  sessionOptionsRemeber
-                );
-                session.isLoggedIn = true;
-                session.id = user.id;
-                session.role = user.role;
-                session.csrfToken = csrfToken;
-                session.csrfTokenExpiry = NOW + CSRF_TOKEN_LIFETIME
-                await session.save();
-              } else {
-                const session: any = await getIronSession<SessionData>(
-                  cookies(),
-                  sessionOptions
-                );
-                session.isLoggedIn = true;
-                session.id = user.id;
-                session.role = user.role;
-                session.csrfToken = csrfToken;
-                session.csrfTokenExpiry = NOW + CSRF_TOKEN_LIFETIME
-                await session.save();
-              }
-              return NextResponse.json({
-                status: 200,
-                csrfToken: csrfToken,
-                message: `Bonjour, ${validator.escape(user.firstname)} vous êtes maintenant connecté`,
+            const csrfToken = generateCsrfToken();
+
+            session.isLoggedIn = true;
+            session.id = user.id;
+            session.role = user.role;
+            session.csrfToken = csrfToken;
+            if (remember) {
+              session.updateConfig({
+                ...sessionOptions,
+                cookieOptions: {
+                  ...sessionOptions.cookieOptions,
+                  maxAge: 60 * 60 * 24 * 30,
+                },
               });
+            } else {
+              session.updateConfig({
+                ...sessionOptions,
+                cookieOptions: {
+                  ...sessionOptions.cookieOptions,
+                  maxAge: undefined,
+                },
+              });
+            }
+            
+            await session.save();
+            return NextResponse.json({
+              status: 200,
+              csrfToken: csrfToken,
+              message: `Bonjour, ${validator.escape(user.firstname)} vous êtes maintenant connecté`,
+            });
             }
           }
         } else {

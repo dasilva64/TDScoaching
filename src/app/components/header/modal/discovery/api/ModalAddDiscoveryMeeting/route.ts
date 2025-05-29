@@ -1,6 +1,6 @@
 import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 import prisma from "@/app/lib/prisma";
-import { SessionData, sessionOptionsDiscoveryMeeting } from "@/app/lib/session";
+import { SessionData, sessionOptions } from "@/app/lib/session";
 import { validationBody } from "@/app/lib/validation";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
@@ -8,43 +8,9 @@ import { NextRequest, NextResponse } from "next/server";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import nodemailer from 'nodemailer'
-
-export async function GET() {
-    
-    const session: any = await getIronSession<SessionData>(
-      cookies(),
-      sessionOptionsDiscoveryMeeting
-    );
-    if (typeof session.isLoggedIn === "undefined" || session.isLoggedIn === false) {
-        const csrfToken = generateCsrfToken()
-      session.csrfToken = csrfToken;
-      await session.save();
-      return NextResponse.json(
-        {
-          status: 200,
-          csrfToken: csrfToken
-        },
-        {
-          status: 200,
-        }
-      );
-    } else  {
-        return NextResponse.json(
-            {
-              status: 401,
-              message: "Accès non autorisé",
-            },
-            {
-              status: 401,
-            }
-          );
-    }
-    
-  }
-
   
 export async function POST(request: NextRequest) {
-    const session = await getIronSession<SessionData>(cookies(), sessionOptionsDiscoveryMeeting);
+    const session = await getIronSession<SessionData>(cookies(), sessionOptions);
     if (session.isLoggedIn === true) {
         return NextResponse.json(
             {
@@ -286,9 +252,12 @@ export async function POST(request: NextRequest) {
                       </html>`,
           };
           await smtpTransport.sendMail(mailOptions);
-          session.destroy();
+          const csrfToken = generateCsrfToken()
+      session.csrfToken = csrfToken;
+      await session.save();
           return NextResponse.json({
             status: 200,
+            csrfToken: csrfToken,
             message:
               "Le rendez-vous a bien été pris et un mail vous a été envoyé",
           });
@@ -445,9 +414,12 @@ export async function POST(request: NextRequest) {
                       </html>`,
           };
           await smtpTransport.sendMail(mailOptions);
-          session.destroy();
+          const csrfToken = generateCsrfToken()
+      session.csrfToken = csrfToken;
+      await session.save();
           return NextResponse.json({
             status: 200,
+            csrfToken: csrfToken,
             message:
               "Le rendez-vous a bien été pris et un mail vous a été envoyé",
           });

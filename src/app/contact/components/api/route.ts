@@ -4,7 +4,7 @@ import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 import nodemailer from "nodemailer";
 import { RateLimiter } from "limiter";
-import { SessionData, sessionOptions, sessionOptionsContact } from "@/app/lib/session";
+import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import crypto from "crypto"
@@ -17,39 +17,8 @@ const limiter = new RateLimiter({
   fireImmediately: true,
 });
 
-/* const rateLimiter = new RateLimiterMemory({
-  keyPrefix: 'contact_fail_ip',
-  points: 1, // nombre de tentatives
-  duration: 60, // par minute
-}); */
-
-export async function GET() {
-  const session: any = await getIronSession<SessionData>(
-    cookies(),
-    sessionOptionsContact
-  );
-  if (typeof session.isLoggedIn === "undefined" || session.isLoggedIn === false) {
-    const csrfToken = generateCsrfToken()
-    session.csrfToken = csrfToken;
-    await session.save();
-    return NextResponse.json({
-      status: 200,
-      csrfToken: csrfToken,
-    });
-  } else {
-    const csrfToken = generateCsrfToken()
-    session.csrfToken = csrfToken;
-    await session.save();
-    return NextResponse.json({
-      status: 200,
-      csrfToken: csrfToken,
-    });
-  }
-  
-}
-
 export async function POST(request: NextRequest) {
-  const session = await getIronSession<SessionData>(cookies(), sessionOptionsContact);
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   const csrfToken = headers().get("x-csrf-token");
   if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
     return NextResponse.json(
@@ -234,11 +203,12 @@ export async function POST(request: NextRequest) {
       await smtpTransport.sendMail(mailOptions);
      // await rateLimiter.delete(ip);
      const csrfToken = generateCsrfToken()
-          session.csrfToken = csrfToken;
-          await session.save();
+      session.csrfToken = csrfToken;
+      await session.save();
       return NextResponse.json({
         status: 200,
         body: user,
+        csrfToken: csrfToken,
         message:
           "Merci de nous avoir contacté, nous allons vous répondre le plus vite possible",
       });

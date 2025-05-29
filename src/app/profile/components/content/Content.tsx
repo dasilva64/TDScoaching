@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Content.module.scss";
 import NoScript from "@/app/components/noscript/NoScript";
 import DeleteAccount from "../deleteAccount/DeleteAccount";
@@ -22,7 +22,7 @@ import ModalDeleteAccount from "../deleteAccount/modal/ModalDeleteAccount";
 import LastnameDataLoad from "../lastnameData/LastnameDataLoad";
 import FirstnameDataLoad from "../firstnameData/FirstnameDataLoad";
 import EmailDataLoad from "../emailSendTokenData/EmailSendTokenDataLoad";
-import { RootState } from "@/app/redux/store";
+import { useRefreshCsrfToken } from "@/app/components/hook/csrf/useRefreshCsrfToken";
 const Parisienne = localFont({
   src: "../../../Parisienne-Regular.ttf",
   display: "swap",
@@ -73,14 +73,15 @@ const Content = () => {
       <NoScript />
       {isLoading === false && data && data.body && (
         <>
-          <ModalUserFirstnameData data={data} mutate={mutate} csrfToken={data.csrfToken} />
-          <ModalUserLastnameData data={data} mutate={mutate} csrfToken={data.csrfToken} />
-          <ModalUserPasswordData csrfToken={data.csrfToken} mutate={mutate} />
-          <ModalUserSendToken data={data} mutate={mutate} csrfToken={data.csrfToken} />
-          <ModalDeleteAccount csrfToken={data.csrfToken} mutate={mutate} />
+        
+          <ModalUserFirstnameData data={data} mutate={mutate} />
+          <ModalUserLastnameData data={data} mutate={mutate} />
+          <ModalUserPasswordData mutate={mutate} />
+          <ModalUserSendToken data={data} mutate={mutate} />
+          <ModalDeleteAccount mutate={mutate} />
           {data.body.newEmail && (
             <>
-              <EmailCheck data={data} mutate={mutate} csrfToken={data.csrfToken} />
+              <EmailCheck data={data} mutate={mutate} />
               <ModalCloseEmail />
             </>
           )}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import styles from "../page.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
@@ -9,7 +9,6 @@ import validator from "validator";
 import fetchPost from "../../components/fetch/FetchPost";
 import stylesForm from "./ContactForm.module.scss";
 import Input from "@/app/components/input/Input";
-import useGet from "@/app/components/hook/useGet";
 
 const ContactForm = () => {
   const [inputFirstname, setInputFirstname] = useState<string>("");
@@ -32,7 +31,7 @@ const ContactForm = () => {
   const [emailInputError, setEmailInputError] = useState<string>("");
   const [objectInputError, setObjectInputError] = useState<string>("");
   const [messageInputError, setMessageInputError] = useState<string>("");
-  const { data: dataContact } = useGet("/contact/components/api");
+   const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/contact/components/api",
     fetchPost
@@ -60,6 +59,10 @@ const ContactForm = () => {
     if (data) {
       if (data.status === 200) {
         clearState();
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
+        });
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
@@ -120,7 +123,7 @@ const ContactForm = () => {
     ) {
       if (inputPseudo.length === 0) {
         const fetchContact = async () => {
-          if (dataContact.csrfToken) {
+          if (csrfToken) {
             trigger({
             email: validator.escape(inputEmail.trim()),
             firstname: validator.escape(inputFirstname.trim()),
@@ -128,9 +131,9 @@ const ContactForm = () => {
             object: validator.escape(inputObject.trim()),
             message: validator.escape(inputMessage.trim()),
             pseudo: validator.escape(inputPseudo.trim()),
-            csrfToken: dataContact.csrfToken
+            csrfToken: csrfToken
           });
-          } {
+          } else {
             dispatch({
               type: "flash/storeFlashMessage",
               payload: {
@@ -139,9 +142,6 @@ const ContactForm = () => {
               },
             });
           }
-            
-          
-          
         };
         if (inputPseudo.length === 0) {
           fetchContact();

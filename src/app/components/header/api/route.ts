@@ -8,23 +8,46 @@ import {
 } from "../../../lib/session";
 import prisma from "../../../lib/prisma";
 import validator from "validator";
+import { generateCsrfToken } from "../../functions/generateCsrfToken";
 
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-
-  if (session.isLoggedIn !== true) {
-    //session.destroy();
-    return NextResponse.json(defaultSession);
+  session.csrfToken = generateCsrfToken();
+  if (typeof session.isLoggedIn === "undefined") {
+    session.updateConfig({
+      ...sessionOptions,
+      cookieOptions: {
+        ...sessionOptions.cookieOptions,
+        maxAge: 60 * 15,
+      },
+    });
+    await session.save();
+    return NextResponse.json(session);
   } else {
-    const user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+    if (session.isLoggedIn !== true) {
+      session.updateConfig({
+        ...sessionOptions,
+        cookieOptions: {
+          ...sessionOptions.cookieOptions,
+          maxAge: 60 * 15,
+        },
+      });
+      await session.save();
+      return NextResponse.json(session);
+    } else {
+      const user = await prisma.user.findUnique({
+      where: { id: session.id },
     });
     if (user === null) {
-      //session.destroy();
-      return NextResponse.json(defaultSession);
+      await session.save();
+      return NextResponse.json(session);
+      
     } else {
+      await session.save();
       return NextResponse.json(session);
     }
+    }
+    
   }
 }
 
@@ -40,7 +63,6 @@ export async function DELETE() {
     );
   } else {
     const csrfToken = headers().get("x-csrf-token");
-
     if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
       return NextResponse.json(
         { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },

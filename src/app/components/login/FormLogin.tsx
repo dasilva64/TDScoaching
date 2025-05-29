@@ -15,6 +15,7 @@ const FormLogin = () => {
   const { displayModalLogin } = useSelector(
     (state: RootState) => state.ModalLogin
   );
+  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   const inputRef: any = React.useRef();
   useEffect(() => {
     if (displayModalLogin === true) {
@@ -147,12 +148,24 @@ const FormLogin = () => {
       if (inputPseudo.length === 0) {
         setIsLoading(true);
         const fetchLogin = async () => {
-          login({
+          if (csrfToken) {
+            login({
             email: validator.escape(emailInput.trim()),
             password: validator.escape(passwordInput.trim()),
             remember: rememberMeInput,
             pseudo: validator.escape(inputPseudo.trim()),
+            csrfToken: csrfToken
           });
+          } else {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: {
+                type: "error",
+                flashMessage: "Une erreur technique est survenue. Merci de recharger la page.",
+              },
+            });
+          }
+          
         };
         if (inputPseudo.length === 0) {
           fetchLogin();

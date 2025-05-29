@@ -1,6 +1,6 @@
 import WhileInView from "../components/framer/WhileInView";
 import styles from "./page.module.scss";
-import Image from "next/image";
+import Image from "../components/image/Image";
 import Button from "./components/Button";
 import ButtonOpenDiscovery from "./components/ButtonOpenDiscovery";
 import ButtonOpenNormal from "./components/ButtonOpenNormal";

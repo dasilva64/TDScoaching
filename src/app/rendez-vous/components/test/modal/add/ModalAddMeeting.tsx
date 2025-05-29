@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import { mutate as globalMutate } from "swr";
 
 const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {

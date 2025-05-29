@@ -6,7 +6,7 @@ import validator from "validator";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
+import Image from "../image/Image";
 import { mutate } from "swr";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../../../components/fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";

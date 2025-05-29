@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./CardHelp.module.scss";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import WhileInView from "@/app/components/framer/WhileInView";
 
 const CardHelp = ({ title }: { title: string }) => {

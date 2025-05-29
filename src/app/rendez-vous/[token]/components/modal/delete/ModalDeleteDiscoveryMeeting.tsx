@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
 import styles from "./ModalDeleteDiscoveryMeeting.module.scss";

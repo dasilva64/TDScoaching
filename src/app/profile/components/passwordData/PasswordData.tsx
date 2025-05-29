@@ -4,7 +4,7 @@ import { AppDispatch } from "../../../redux/store";
 import React from "react";
 import { useDispatch } from "react-redux";
 import styles from "./PasswordData.module.scss";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 
 const PasswordData = () => {
   const dispatch = useDispatch<AppDispatch>();

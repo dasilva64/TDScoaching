@@ -5,9 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import styles from "./ModalEditMeeting.module.scss";
 
 const ModalEditMeeting = ({ mutate, meeting }: any) => {

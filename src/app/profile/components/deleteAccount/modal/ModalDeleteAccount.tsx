@@ -5,7 +5,7 @@ import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import fetchPost from "../../../../components/fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 

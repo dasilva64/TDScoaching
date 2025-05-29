@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./ModalRecapDiscoveryMeeting.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import { RootState } from "@/app/redux/store";
 
 const ModalRecapDiscoveryMeeting = () => {

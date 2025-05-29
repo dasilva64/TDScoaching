@@ -4,7 +4,7 @@ import fetchDelete from "@/app/components/fetch/FetchDelete";
 import { RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";

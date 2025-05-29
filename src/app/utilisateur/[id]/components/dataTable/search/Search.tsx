@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Search.module.scss";
 import { RootState } from "@/app/redux/store";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 
 /**
  * React component - Component for display search bar and search element

@@ -1,5 +1,5 @@
 import styles from "./page.module.scss";
-import Image from "next/image";
+import Image from "../components/image/Image";
 import NoScript from "../components/noscript/NoScript";
 import Footer from "../components/footer/footer";
 

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../src/app/redux/store";
 import validator from "validator";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "../image/Image";
 import { AnimatePresence, motion } from "framer-motion";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";

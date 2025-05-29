@@ -6,7 +6,7 @@ import styles from "./ModalUserFirstnameData.module.scss";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
 import fetchPost from "../../../../components/fetch/FetchPost";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Input from "@/app/components/input/Input";

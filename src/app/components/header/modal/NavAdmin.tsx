@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./NavAdmin.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
+import Image from "../../image/Image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import Link from "next/link";

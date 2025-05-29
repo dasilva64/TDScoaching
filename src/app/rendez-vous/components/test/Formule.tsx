@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Formule.module.scss";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import ButtonOpenNormal from "../formule/components/ButtonOpenNormal";
 import { useDispatch } from "react-redux";
 import { Router } from "next/router";

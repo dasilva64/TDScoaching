@@ -3,7 +3,7 @@
 import React from "react";
 import styles from "./DeleteAccount.module.scss";
 import { useDispatch } from "react-redux";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 
 const DeleteAccount = () => {
   const dispatch = useDispatch();

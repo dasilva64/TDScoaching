@@ -1,16 +1,14 @@
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import styles from "./ModalCalendarEditDiscoveryMeeting.module.scss";
 import interactionPlugin from "@fullcalendar/interaction";
 import frLocale from "@fullcalendar/core/locales/fr";
-
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
-import useGet from "@/app/components/hook/useGet";
 
 const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
   const [meetingDate, setMeetingDate] = useState<any>(null);

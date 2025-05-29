@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import styles from "./ModalConfirmMeeting.module.scss";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import fetchPost from "@/app/components/fetch/FetchPost";

@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./page.module.scss";
 import Error from "./components/error/Error";
-import Image from "next/image";
+import Image from "./components/image/Image";
 
 const NotFound = () => {
   return (

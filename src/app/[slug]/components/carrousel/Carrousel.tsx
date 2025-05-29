@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./Carrousel.module.scss";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import Link from "next/link";
 import Paragraph from "@/app/blog/components/Paragraph";
 

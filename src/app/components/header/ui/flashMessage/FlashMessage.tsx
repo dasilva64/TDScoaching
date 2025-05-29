@@ -4,7 +4,7 @@ import { RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 
 const FlashMessage = () => {
   const { flashMessage } = useSelector((state: RootState) => state.flash);

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./Content.module.scss";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import "../../rendez-vous.scss";
 import { usePathname, useRouter } from "next/navigation";
 import useGetOneByToken from "@/app/components/hook/meeting/useGetOneByToken";

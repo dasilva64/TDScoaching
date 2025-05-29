@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
+import Image from "../../image/Image";
 import useGet from "../../hook/useGet";
 import FormLogin from "../../login/FormLogin";
 import FormRegister from "../../register/formRegister";

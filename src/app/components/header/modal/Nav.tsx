@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
+import Image from "../../image/Image";
 import { useDispatch, useSelector } from "react-redux";
 import router from "next/router";
 import useSWRMutation from "swr/mutation";

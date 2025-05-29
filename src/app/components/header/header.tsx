@@ -2,7 +2,7 @@ import "server-only";
 
 import styles from "./header.module.scss";
 import LinkNav from "./ui/LinkNav";
-import Image from "next/image";
+import Image from "../image/Image";
 import Link from "next/link";
 import Content from "./display/Content";
 import FlashMessage from "./ui/flashMessage/FlashMessage";

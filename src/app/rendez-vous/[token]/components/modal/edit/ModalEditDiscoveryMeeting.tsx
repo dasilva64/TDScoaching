@@ -1,7 +1,7 @@
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalEditDiscoveryMeeting.module.scss";
 import fetchPost from "@/app/components/fetch/FetchPost";

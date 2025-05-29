@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./My.module.scss";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import { useDispatch } from "react-redux";
 
 const My = ({ meeting }: any) => {

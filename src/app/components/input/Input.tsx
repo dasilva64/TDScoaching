@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import stylesForm from "./Input.module.scss";
-import Image from "next/image";
+import Image from "../image/Image";
 
 const Input = ({
   label,

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./page.module.scss";
-import Image from "next/image";
+import Image from "../components/image/Image";
 import CardType from "./components/CardType";
 import CardHelp from "./components/CardHelp";
 import NoScript from "../components/noscript/NoScript";

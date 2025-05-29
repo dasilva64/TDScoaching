@@ -1,21 +1,10 @@
 import fetchPost from "../../../../../src/app/components/fetch/FetchPost";
-import Image from "next/image";
-import { useCanvas } from "./CanvasContext";
+import Image from "@/app/components/image/Image";
 import styles from "./Formule.module.scss";
-import {
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  FormHelperText,
-} from "@mui/material";
-import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import { mutate } from "swr";
-import WhileInView from "@/app/components/framer/WhileInView";
-import Button from "./components/Button";
 import ButtonOpenNormal from "./components/ButtonOpenNormal";
 /* import { useDraw } from "../../../components/hook/canva/useDraw";
 import { rgb } from "pdf-lib";

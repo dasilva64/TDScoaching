@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import styles from "./NavAdmin.module.scss";
-import Image from "next/image";
+import Image from "../../image/Image";
 import TabIndex from "../../tabIndex/TabIndex";
 import { mutate } from "swr";
 import FetchLogout from "../../fetch/FetchLogout";

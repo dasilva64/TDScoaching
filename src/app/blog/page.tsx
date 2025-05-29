@@ -2,7 +2,7 @@ import React from "react";
 import NoScript from "../components/noscript/NoScript";
 import styles from "./page.module.scss";
 import prisma from "../lib/prisma";
-import Image from "next/image";
+import Image from "../components/image/Image";
 import Paragraph from "./components/Paragraph";
 import { unstable_cache } from "next/cache";
 import { notFound } from "next/navigation";

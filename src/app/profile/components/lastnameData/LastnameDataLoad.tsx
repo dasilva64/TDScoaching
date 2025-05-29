@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./LastnameData.module.scss";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 
 const LastnameDataLoad = () => {
   return (

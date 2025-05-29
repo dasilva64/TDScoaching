@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./FirstnameData.module.scss";
 import { useDispatch } from "react-redux";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import { AppDispatch } from "@/app/redux/store";
 
 const FirstnameData = ({ data }: any) => {

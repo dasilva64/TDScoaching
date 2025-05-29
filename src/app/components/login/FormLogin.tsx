@@ -343,7 +343,8 @@ const FormLogin = () => {
                     type="text"
                     name="pseudo"
                     id="pseudo"
-                    style={{ display: "none" }}
+                    className={styles.login_form__hidden}
+                    /* style={{ display: "none" }} */
                     tabIndex={-1}
                     autoComplete="off"
                     onChange={(e) => {

@@ -94,36 +94,43 @@
     height: calc(100% - 130px);
     flex-direction: column;
     justify-content: space-between;
+    &__hidden {
+      display: none;
+    }
     &__div {
-      display: flex;
-      margin-top: 25px;
-      &__label {
-        color: black;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-weight: 400;
-        font-size: 1rem;
-        line-height: 1.4375em;
-        letter-spacing: 0.00938em;
-        padding: 0;
-        position: relative;
-      }
-      &__checkbox[type="checkbox"] {
-        margin-left: 20px;
-        cursor: pointer;
-        transform: scale(1.5);
-        transition: transform 0.3s;
-        &:hover {
-          transform: scale(1.6);
+      margin-bottom: 10px;
+      &__div {
+        display: flex;
+        margin-top: 25px;
+        &__label {
+          color: black;
+          font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+          font-weight: 400;
+          font-size: 1rem;
+          line-height: 1.4375em;
+          letter-spacing: 0.00938em;
+          padding: 0;
+          position: relative;
+        }
+        &__checkbox[type="checkbox"] {
+          margin-left: 20px;
+          cursor: pointer;
+          transform: scale(1.5);
+          transition: transform 0.3s;
+          &:hover {
+            transform: scale(1.6);
+          }
+        }
+        &__error {
+          color: red;
+          font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+          font-size: 0.75rem;
+          line-height: 1.66;
+          letter-spacing: 0.03333em;
+          margin-top: 3px;
         }
       }
-      &__error {
-        color: red;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-size: 0.75rem;
-        line-height: 1.66;
-        letter-spacing: 0.03333em;
-        margin-top: 3px;
-      }
+      
     }
     &__submit {
       margin: 0px auto;

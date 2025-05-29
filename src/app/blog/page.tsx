@@ -59,11 +59,12 @@ const page = async () => {
                     className={styles.blog__article__container__card}
                   >
                     <Image
-                      style={{
+                    className={styles.blog__article__container__card__img}
+                      /* style={{
                         width: "100%",
                         height: "200px",
                         objectFit: "cover",
-                      }}
+                      }} */
                       src={`/assets/blog/${e.image}`}
                       width="0"
                       height="0"

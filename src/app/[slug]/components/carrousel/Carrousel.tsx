@@ -13,12 +13,13 @@ const Carrousel = ({ data }: any) => {
       {current > 0 && (
         <>
           <Image
+          className={styles.img__right}
             onClick={() => {
               if (current > 0) {
                 setCurrent((prev) => prev - 1);
               }
             }}
-            style={{
+            /* style={{
               width: "30px",
               height: "30px",
               objectFit: "cover",
@@ -27,7 +28,7 @@ const Carrousel = ({ data }: any) => {
               top: "50%",
               left: "5px",
               cursor: "pointer",
-            }}
+            }} */
             src={`/assets/icone/chevron-right-solid.svg`}
             width="0"
             height="0"
@@ -39,11 +40,12 @@ const Carrousel = ({ data }: any) => {
 
       <div className={styles.card}>
         <Image
-          style={{
+        className={styles.card__img}
+         /*  style={{
             width: "100%",
             height: "200px",
             objectFit: "cover",
-          }}
+          }} */
           src={`/assets/blog/${data[current].image}`}
           width="0"
           height="0"
@@ -69,7 +71,8 @@ const Carrousel = ({ data }: any) => {
                 setCurrent((prev) => prev + 1);
               }
             }}
-            style={{
+            className={styles.img__left}
+            /* style={{
               width: "30px",
               height: "30px",
               objectFit: "cover",
@@ -78,7 +81,7 @@ const Carrousel = ({ data }: any) => {
               transform: "translateY(-50%)",
               right: "5px",
               cursor: "pointer",
-            }}
+            }} */
             src={`/assets/icone/chevron-right-solid.svg`}
             width="0"
             height="0"

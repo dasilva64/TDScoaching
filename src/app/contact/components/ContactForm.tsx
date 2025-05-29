@@ -322,15 +322,12 @@ const ContactForm = () => {
             <div className={stylesForm.area__error}>{messageInputError}</div>
           )}
         </div>
-
-        <label htmlFor="pseudo" style={{ display: "none" }}>
-          Pseudo
-        </label>
         <input
           type="text"
           name="pseudo"
           id="pseudo"
-          style={{ display: "none" }}
+          className={stylesForm.hidden}
+          /* style={{ display: "none" }} */
           tabIndex={-1}
           autoComplete="off"
           onChange={(e) => {

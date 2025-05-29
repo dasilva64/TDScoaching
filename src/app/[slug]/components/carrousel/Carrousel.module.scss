@@ -5,6 +5,11 @@
   display: block;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
+  &__img {
+    width: "100%";
+            height: "200px";
+            object-fit: "cover";
+  }
   &__div {
     padding: 10px;
     &__btn {
@@ -50,4 +55,27 @@
     transform: scale(1.05);
     box-shadow: 0px 0px 14px 8px aqua;
   }
+}
+.img {
+  &__right {
+    width: "30px";
+              height: "30px";
+              object-fit: "cover";
+              transform: "translateY(-50%) rotate(180deg)";
+              position: "absolute";
+              top: "50%";
+              left: "5px";
+              cursor: "pointer";
+  }
+  &__left {
+    width: "30px";
+              height: "30px";
+              object-fit: "cover";
+              position: "absolute";
+              top: "50%";
+              transform: "translateY(-50%)";
+              right: "5px";
+              cursor: "pointer";
+  }
+  
 }

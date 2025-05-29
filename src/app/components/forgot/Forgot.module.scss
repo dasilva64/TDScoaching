@@ -68,6 +68,9 @@
   &__form {
     display: flex;
     flex-direction: column;
+    &__hidden {
+      display: none;
+    }
     &__submit {
       margin: 30px auto 20px auto;
       text-align: center;

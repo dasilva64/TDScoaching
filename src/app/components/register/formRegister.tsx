@@ -506,17 +506,17 @@ const FormRegister = () => {
                   alt={"icone email"}
                   tab={true}
                 />
-                <div style={{ marginBottom: "10px" }}>
-                  <div className={styles.register__form__div}>
+                <div className={styles.register__form__div}>
+                  <div className={styles.register__form__div__div}>
                     <label
-                      className={styles.register__form__div__label}
+                      className={styles.register__form__div__div__label}
                       htmlFor="remenber"
                     >
                       Êtes vous majeur ?
                     </label>
                     <input
                       ref={inputRef}
-                      className={styles.register__form__div__checkbox}
+                      className={styles.register__form__div__div__checkbox}
                       type="checkbox"
                       name="legal"
                       id="legal"
@@ -535,7 +535,7 @@ const FormRegister = () => {
                       }}
                     />
                   </div>
-                  <div className={styles.register__form__div__error}>
+                  <div className={styles.register__form__div__div__error}>
                     {majorInputError}
                   </div>
                 </div>
@@ -543,7 +543,8 @@ const FormRegister = () => {
                   type="text"
                   name="pseudo"
                   id="pseudo"
-                  style={{ display: "none" }}
+                  className={styles.register__form__hidden}
+                  /* style={{ display: "none" }} */
                   tabIndex={-1}
                   autoComplete="off"
                   onChange={(e) => {

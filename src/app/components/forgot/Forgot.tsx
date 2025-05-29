@@ -214,9 +214,10 @@ const Forgot = () => {
                   tab={true}
                 />
                 <input
+                className={styles.forgot__form__hidden}
                   type="text"
                   name="pseudo"
-                  style={{ display: "none" }}
+                  /* style={{ display: "none" }} */
                   id="pseudoForgot"
                   tabIndex={-1}
                   autoComplete="off"

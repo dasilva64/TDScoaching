@@ -43,6 +43,15 @@ export async function GET() {
       return NextResponse.json(session);
       
     } else {
+      if (session.rememberMe) {
+        session.updateConfig({
+          ...sessionOptions,
+          cookieOptions: {
+            ...sessionOptions.cookieOptions,
+            maxAge: 60 * 60 * 24 * 30,
+          },
+        });
+      } 
       await session.save();
       return NextResponse.json(session);
     }

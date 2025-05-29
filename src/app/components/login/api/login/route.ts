@@ -174,6 +174,7 @@ export async function POST(request: NextRequest) {
             session.id = user.id;
             session.role = user.role;
             session.csrfToken = csrfToken;
+            session.rememberMe = remember
             if (remember) {
               session.updateConfig({
                 ...sessionOptions,

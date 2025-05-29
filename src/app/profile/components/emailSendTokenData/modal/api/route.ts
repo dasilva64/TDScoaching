@@ -186,6 +186,23 @@ export async function POST(request: NextRequest) {
                 };
                 const csrfToken = generateCsrfToken()
                 session.csrfToken = csrfToken;
+                if (session.rememberMe) {
+                  session.updateConfig({
+                    ...sessionOptions,
+                    cookieOptions: {
+                      ...sessionOptions.cookieOptions,
+                      maxAge: 60 * 60 * 24 * 30,
+                    },
+                  });
+                } else {
+                  session.updateConfig({
+                    ...sessionOptions,
+                    cookieOptions: {
+                      ...sessionOptions.cookieOptions,
+                      maxAge: undefined,
+                    },
+                  });
+                }
                 await session.save();
                 return NextResponse.json({
                   status: 200,
@@ -309,7 +326,26 @@ export async function POST(request: NextRequest) {
                 email: validator.escape(editUser.mail),
                 newEmail: validator.escape(copyEditEmail.newEmail),
               };
-
+              const csrfToken = generateCsrfToken()
+                session.csrfToken = csrfToken;
+                if (session.rememberMe) {
+                  session.updateConfig({
+                    ...sessionOptions,
+                    cookieOptions: {
+                      ...sessionOptions.cookieOptions,
+                      maxAge: 60 * 60 * 24 * 30,
+                    },
+                  });
+                } else {
+                  session.updateConfig({
+                    ...sessionOptions,
+                    cookieOptions: {
+                      ...sessionOptions.cookieOptions,
+                      maxAge: undefined,
+                    },
+                  });
+                }
+                await session.save();
               return NextResponse.json({
                 status: 200,
                 body: userObject,

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Image from "../image/Image";
+import Image from "next/image";
 import styles from "./goDown.module.scss";
 
 const GoDown = () => {

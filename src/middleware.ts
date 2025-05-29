@@ -4,8 +4,8 @@ import { SessionData, sessionOptions } from "./app/lib/session";
 import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
-  //const res = NextResponse.next();
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  const res = NextResponse.next();
+  /* const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
@@ -38,8 +38,8 @@ export async function middleware(request: NextRequest) {
   })
   res.headers.set(
     'Content-Security-Policy',
-    contentSecurityPolicyHeaderValue
-  )
+    contentSecurityPolicyHeaderValue 
+  )*/
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
     let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
   if (request.nextUrl.pathname.startsWith("/utilisateurs") ||

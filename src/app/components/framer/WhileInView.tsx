@@ -14,7 +14,13 @@ const WhileInView = ({
   type: any;
   tab?: any;
 }) => {
-  if (type === "x") {
+  return (
+    <>
+    {children}
+    </>
+  )
+  
+  /* if (type === "x") {
     return (
       <motion.div
         className={className}
@@ -44,7 +50,7 @@ const WhileInView = ({
         {children}
       </motion.div>
     );
-  }
+  } */
 };
 
 export default WhileInView;

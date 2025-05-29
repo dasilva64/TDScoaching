@@ -20,9 +20,13 @@ const Parallax = ({ className, children }: any) => {
   const y = useParallax(scrollYProgress, 100);
 
   return (
-    <motion.div style={{ y }} className={className} ref={ref}>
+    <>
+    {children}
+    {/* <motion.div style={{ y }} className={className} ref={ref}>
       {children}
-    </motion.div>
+    </motion.div> */}
+    </>
+    
   );
 };
 

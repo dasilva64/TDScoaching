@@ -1,6 +1,7 @@
+export const dynamic = "force-dynamic"
+
 import "./globals.scss";
 import { Providers } from "./redux/provider";
-import Footer from "./components/footer/footer";
 import Header from "./components/header/header";
 
 export default function RootLayout({

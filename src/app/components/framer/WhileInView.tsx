@@ -17,7 +17,6 @@ const WhileInView = ({
 }) => {
   const divRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -41,7 +40,7 @@ const WhileInView = ({
   if (type === "x") {
     return (
       <>
-        <div ref={divRef} className={`${className} ${isVisible ? "visible" : "hidden"}`}>
+        <div ref={divRef} className={`${className} ${styles.transition} ${isVisible ? styles.visible : styles.hidden}`}>
         {children}
         </div>
         {/* <motion.div
@@ -63,7 +62,7 @@ const WhileInView = ({
   } else if (type === "y") {
     return (
       <>
-      <div ref={divRef} className={`${styles.transition} ${isVisible ? styles.visible : styles.hidden}`}>
+      <div ref={divRef} className={`${className} ${styles.transition} ${isVisible ? styles.visible : styles.hidden}`}>
       {children}
       </div>
       {/* <motion.div

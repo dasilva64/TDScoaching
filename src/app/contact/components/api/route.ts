@@ -28,10 +28,12 @@ const rateLimiter = new RateLimiterRedis({
 
 export async function POST(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
+  console.log('ip', ip)
   try {
     // Vérification du rate limit
     await rateLimiter.consume(ip);
   } catch (err) {
+    console.error("Rate limiter error:", err);
     return NextResponse.json(
       {
         status: 429,

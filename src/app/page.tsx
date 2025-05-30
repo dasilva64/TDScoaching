@@ -3,7 +3,7 @@ import "server-only";
 import styles from "./page.module.scss";
 import GoDown from "./components/goDown/goDown";
 import Card from "./components/card/Card";
-import Image from "next/image";
+import Image from "./components/image/Image";
 import WhileInView from "./components/framer/WhileInView";
 import NoScript from "./components/noscript/NoScript";
 import About from "./components/about/About";

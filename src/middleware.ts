@@ -4,8 +4,9 @@ import { SessionData, sessionOptions } from "./app/lib/session";
 import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
-  const res = NextResponse.next();
-  /* const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  //const res = NextResponse.next();
+  
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
@@ -36,10 +37,11 @@ export async function middleware(request: NextRequest) {
       headers: requestHeaders,
     },
   })
+  res.headers.set('X-XSS-Protection', '1; mode=block');
   res.headers.set(
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue 
-  )*/
+  )
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
     let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
   if (request.nextUrl.pathname.startsWith("/utilisateurs") ||
@@ -87,7 +89,7 @@ export async function middleware(request: NextRequest) {
   
 }
 
-export const config = {
+/* export const config = {
   matcher: [
     "/profile",
     "/utilisateurs",
@@ -97,16 +99,16 @@ export const config = {
     "/meetings",
     "/historique-rendez-vous"
   ],
-};
+}; */
 
-/* export const config = {
+ export const config = {
   matcher: [
     
-     * Match all request paths except for the ones starting with:
+    /*  * Match all request paths except for the ones starting with:
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * - favicon.ico (favicon file) */
     
     {
       source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
@@ -116,4 +118,4 @@ export const config = {
       ],
     },
   ],
-} */
+}

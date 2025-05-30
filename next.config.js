@@ -12,6 +12,7 @@ const cspHeader = `
   frame-ancestors 'none';
   upgrade-insecure-requests;
   block-all-mixed-content;
+  require-trusted-types-for 'script';
 `;
 const nextConfig = {
   /* webpack: (config) => {
@@ -26,10 +27,10 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [
-          {
+          /* {
             key: "Content-Security-Policy",
             value: cspHeader.replace(/\n/g, ""),
-          },
+          }, */
           {
             key: "X-Content-Type-Options",
             value: "nosniff",

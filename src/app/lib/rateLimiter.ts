@@ -6,7 +6,7 @@ let rateLimiter: RateLimiterRedis | null = null;
 export async function getRateLimiter() {
   if (rateLimiter) return rateLimiter;
 
-  const redisClient = new Redis({
+  const redisClient = new Redis(process.env.REDIS_URL as string, {
     enableOfflineQueue: false,
     lazyConnect: true,
   });

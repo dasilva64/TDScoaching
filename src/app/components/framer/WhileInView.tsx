@@ -63,7 +63,7 @@ const WhileInView = ({
   } else if (type === "y") {
     return (
       <>
-      <div ref={divRef} className={`${className} ${isVisible ? "visible" : "hidden"}`}>
+      <div ref={divRef} className={`${"transition"} ${isVisible ? "visible" : "hidden"}`}>
       {children}
       </div>
       {/* <motion.div

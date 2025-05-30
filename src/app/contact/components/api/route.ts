@@ -3,21 +3,31 @@ import prisma from "../../../lib/prisma";
 import { validationBody } from "../../../lib/validation";
 import validator from "validator";
 import nodemailer from "nodemailer";
-import { RateLimiter } from "limiter";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
-import crypto from "crypto"
 import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
-//import RateLimiterMemory from "rate-limiter-flexible/lib/RateLimiterMemory.js";
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 
-const limiter = new RateLimiter({
-  tokensPerInterval: 150,
-  interval: "hour",
-  fireImmediately: true,
-});
+const rateLimiter = new RateLimiterMemory({
+  points: 1, // Autoriser 5 requêtes
+  duration: 60, // Par période de 60 secondes
+})
 
 export async function POST(request: NextRequest) {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
+  try {
+    // Vérification du rate limit
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   const csrfToken = headers().get("x-csrf-token");
   if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
@@ -26,10 +36,7 @@ export async function POST(request: NextRequest) {
       { status: 403 }
     );
   }
-  const ip = (request.headers.get('x-forwarded-for') ?? '127.0.0.1').split(',')[0]
-  //const remainingRequests = await limiter.removeTokens(1);
   try {
-    //await rateLimiter.consume(ip)
     const { email, firstname, lastname, object, message, pseudo } =
       await request.json();
 
@@ -68,7 +75,7 @@ export async function POST(request: NextRequest) {
       const user = await prisma.user.findUnique({
         where: { mail: validator.escape(email.trim()), status: true },
       });
-      let smtpTransport = nodemailer.createTransport({
+      /* let smtpTransport = nodemailer.createTransport({
         host: "smtp.ionos.fr",
         port: 465,
         secure: true,
@@ -200,8 +207,7 @@ export async function POST(request: NextRequest) {
                           </body>
                         </html>`,
       };
-      await smtpTransport.sendMail(mailOptions);
-     // await rateLimiter.delete(ip);
+      await smtpTransport.sendMail(mailOptions); */
      const csrfToken = generateCsrfToken()
       session.csrfToken = csrfToken;
       await session.save();
@@ -225,18 +231,4 @@ export async function POST(request: NextRequest) {
       }
     );
   }
-  /* if (remainingRequests < 0) {
-    return NextResponse.json(
-      {
-        status: 429,
-        type: "error",
-        message: "Trop de requêtes successives, veuillez réessayer plus tard",
-      },
-      {
-        status: 429,
-      }
-    );
-  } else { */
-    
-  //}
 }

@@ -10,30 +10,13 @@ import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken"
 import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 
-/* const redisClient = new Redis({ enableOfflineQueue: false });
-
-redisClient.on('error', (err) => {
-  console.error("Erreur Redis :", err);
-})
-
-
-const rateLimiter = new RateLimiterRedis({
-  storeClient: redisClient,
-  points: 1, // Autoriser 5 requêtes
-  duration: 60, // Par période de 60 secondes
-  blockDuration: 0,
-  keyPrefix: 'rlflx-contact',
-}) */
-
 export async function POST(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
-  console.log('ip', ip)
   try {
     // Vérification du rate limit
     const rateLimiter = await getRateLimiter();
     await rateLimiter.consume(ip);
   } catch (err) {
-    console.error("Rate limiter error:", err);
     return NextResponse.json(
       {
         status: 429,
@@ -89,7 +72,7 @@ export async function POST(request: NextRequest) {
       const user = await prisma.user.findUnique({
         where: { mail: validator.escape(email.trim()), status: true },
       });
-      /* let smtpTransport = nodemailer.createTransport({
+      let smtpTransport = nodemailer.createTransport({
         host: "smtp.ionos.fr",
         port: 465,
         secure: true,
@@ -221,7 +204,7 @@ export async function POST(request: NextRequest) {
                           </body>
                         </html>`,
       };
-      await smtpTransport.sendMail(mailOptions); */
+      await smtpTransport.sendMail(mailOptions);
      const csrfToken = generateCsrfToken()
       session.csrfToken = csrfToken;
       await session.save();

@@ -1,0 +1,25 @@
+.hidden {
+    transform: translateX(-200px);
+    opacity: 0;
+    transition: transform 0.75s ease-out, opacity 0.75s ease-out;
+  }
+  
+  .visible {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+.test {
+animation: identifier 1s;
+}
+@keyframes identifier {
+    0% {
+        transform:translateY(200px) translateZ(0);
+        opacity: 0;
+    }
+    100% {
+        transform: none;
+        opacity: 1;
+    }
+    
+}

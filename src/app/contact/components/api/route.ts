@@ -7,11 +7,10 @@ import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
-import { RateLimiterRedis } from 'rate-limiter-flexible';
-import Redis from 'ioredis';
+import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 
-const redisClient = new Redis({ enableOfflineQueue: false });
+/* const redisClient = new Redis({ enableOfflineQueue: false });
 
 redisClient.on('error', (err) => {
   console.error("Erreur Redis :", err);
@@ -24,13 +23,14 @@ const rateLimiter = new RateLimiterRedis({
   duration: 60, // Par période de 60 secondes
   blockDuration: 0,
   keyPrefix: 'rlflx-contact',
-})
+}) */
 
 export async function POST(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
   console.log('ip', ip)
   try {
     // Vérification du rate limit
+    const rateLimiter = await getRateLimiter();
     await rateLimiter.consume(ip);
   } catch (err) {
     console.error("Rate limiter error:", err);

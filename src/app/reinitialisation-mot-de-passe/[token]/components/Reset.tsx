@@ -18,7 +18,7 @@ const Reset = () => {
   const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   const { data: dataLoad, isLoading } = useUserResetPassword(token[2], csrfToken);
   const dispatch = useDispatch<AppDispatch>();
-  const { push } = useRouter();
+  const router = useRouter();
 
   const [inputPseudo, setInputPseudo] = useState<string>("");
 
@@ -42,12 +42,12 @@ const Reset = () => {
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
         });
-        dispatch({
+        /* dispatch({
           type: "csrfToken/store",
           payload: { csrfToken: data.csrfToken },
-        });
+        }); */
         reset();
-        push("/");
+        router.push("/");
       } else if (data.status === 400) {
         data.message.forEach((element: string) => {
           if (element[0] === "password") {
@@ -61,10 +61,10 @@ const Reset = () => {
           payload: { flashMessage: data.message, type: "error" },
         });
         reset();
-        push("/");
+        router.push("/");
       }
     }
-  }, [data, dispatch, push, reset]);
+  }, [data, dispatch, router, reset]);
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({

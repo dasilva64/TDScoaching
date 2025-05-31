@@ -201,7 +201,7 @@ export async function POST(request: NextRequest) {
                       }
                     );
                   } else {
-                    const csrfToken = generateCsrfToken()
+                    /* const csrfToken = generateCsrfToken()
                     session.csrfToken = csrfToken;
                     session.updateConfig({
                       ...sessionOptions,
@@ -209,11 +209,11 @@ export async function POST(request: NextRequest) {
                         ...sessionOptions.cookieOptions,
                         maxAge: 60 * 15,
                       },
-                    });
+                    }); */
                     await session.save()
                     return NextResponse.json({
                       status: 200,
-                      csrfToken: csrfToken,
+                      //csrfToken: csrfToken,
                       message:
                         "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
                     });

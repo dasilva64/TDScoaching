@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import validator from "validator";
 import jwt from "jsonwebtoken";
@@ -7,10 +7,32 @@ import nodemailer from "nodemailer";
 import { Prisma } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../lib/session";
+import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 
 export async function POST(request: NextRequest) {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
+  try {
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-delete-account");
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
 
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
       {
@@ -171,6 +193,16 @@ export async function POST(request: NextRequest) {
                       where: { id: validator.escape(user.id) },
                     });
                     session.destroy();
+                    const csrfToken = generateCsrfToken()
+                    session.csrfToken = csrfToken
+                    session.updateConfig({
+                      ...sessionOptions,
+                      cookieOptions: {
+                        ...sessionOptions.cookieOptions,
+                        maxAge: 60 * 15,
+                      },
+                    });
+                    await session.save()
                     return NextResponse.json({
                       status: 200,
                       message: "Votre compte a bien été supprimé",

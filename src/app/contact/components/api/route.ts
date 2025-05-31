@@ -13,8 +13,7 @@ import { getRateLimiter } from "@/app/lib/rateLimiter";
 export async function POST(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
   try {
-    // Vérification du rate limit
-    const rateLimiter = await getRateLimiter();
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-contact");
     await rateLimiter.consume(ip);
   } catch (err) {
     return NextResponse.json(

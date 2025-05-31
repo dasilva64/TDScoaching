@@ -3,24 +3,25 @@ import { useDispatch } from "react-redux";
 import { useRouter, useParams, usePathname } from "next/navigation";
 import useSWR from "swr";
 
-const fetchUserEmailValidation = async (url: string, token: string) => {
+const fetchUserEmailValidation = async (url: string, token: string, csrfToken: any) => {
   let response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
     },
     body: JSON.stringify({ token: token }),
   });
   let json = await response.json();
   return json;
 };
-const useUserEmailValidation = (token: string) => {
+const useUserEmailValidation = (token: string, csrfToken: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
   const { data, isLoading, error } = useSWR(
     [`/email-validation/[token]/components/api`, token],
-    ([url, token]) => fetchUserEmailValidation(url, token)
+    ([url, token]) => fetchUserEmailValidation(url, token, csrfToken)
   );
   useEffect(() => {
     if (data) {

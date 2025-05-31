@@ -11,8 +11,22 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import { validationBody } from "../../../../../lib/validation";
 import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
+import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
+  try {
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-profile-password");
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   const csrfToken = headers().get("x-csrf-token");
 

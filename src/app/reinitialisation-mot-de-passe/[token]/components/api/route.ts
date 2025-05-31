@@ -9,6 +9,8 @@ import { RateLimiter } from "limiter";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
+import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 
 const limiter = new RateLimiter({
   tokensPerInterval: 1,
@@ -17,7 +19,28 @@ const limiter = new RateLimiter({
 });
 
 export async function POST(request: NextRequest) {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
+  try {
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-reset-password-form");
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
+
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
       where: { id: validator.escape(session.id) },
@@ -50,27 +73,7 @@ export async function POST(request: NextRequest) {
       }
     );
   }
-  const csrfToken = headers().get("x-csrf-token");
-
-  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
-    return NextResponse.json(
-      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
-      { status: 403 }
-    );
-  }
-  const remainingRequests = await limiter.removeTokens(1);
-  if (remainingRequests < 0) {
-    return NextResponse.json(
-      {
-        status: 429,
-        type: "error",
-        message: "Trop de requêtes successives, veuillez réessayer plus tard",
-      },
-      {
-        status: 429,
-      }
-    );
-  } else {
+  
     const { token, password, passwordConfirm, pseudo } =
       (await request.json()) as {
         token: string;
@@ -198,9 +201,19 @@ export async function POST(request: NextRequest) {
                       }
                     );
                   } else {
-                    session.destroy()
+                    const csrfToken = generateCsrfToken()
+                    session.csrfToken = csrfToken;
+                    session.updateConfig({
+                      ...sessionOptions,
+                      cookieOptions: {
+                        ...sessionOptions.cookieOptions,
+                        maxAge: 60 * 15,
+                      },
+                    });
+                    await session.save()
                     return NextResponse.json({
                       status: 200,
+                      csrfToken: csrfToken,
                       message:
                         "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
                     });
@@ -240,5 +253,5 @@ export async function POST(request: NextRequest) {
         }
       
     }
-  }
+  
 }

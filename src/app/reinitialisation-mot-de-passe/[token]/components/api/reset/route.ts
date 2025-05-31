@@ -4,12 +4,34 @@ import validator from "validator";
 import prisma from "../../../../../lib/prisma";
 import jwt from "jsonwebtoken";
 import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { SessionData, sessionOptions } from "../../../../../lib/session";
 import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
+import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
+  try {
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-reset-password");
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
+
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
       where: { id: validator.escape(session.id) },
@@ -119,7 +141,13 @@ export async function POST(request: NextRequest) {
                 } else {
                   const csrfToken = generateCsrfToken()
                   session.csrfToken = csrfToken
-
+                  session.updateConfig({
+                    ...sessionOptions,
+                    cookieOptions: {
+                      ...sessionOptions.cookieOptions,
+                      maxAge: 60 * 15,
+                    },
+                  });
                   await session.save()
                   return NextResponse.json({
                     status: 200,

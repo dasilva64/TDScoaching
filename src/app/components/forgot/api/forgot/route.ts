@@ -8,170 +8,164 @@ import { Prisma } from "@prisma/client";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { SessionData, sessionOptions } from "../../../../lib/session";
-import { RateLimiter } from "limiter";
-
-const limiter = new RateLimiter({
-  tokensPerInterval: 600,
-  interval: "hour",
-  fireImmediately: true,
-});
+import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
-  const remainingRequests = await limiter.removeTokens(1);
-  if (remainingRequests < 0) {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip;
+  try {
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-forgot");
+    await rateLimiter.consume(ip);
+  } catch (err) {
     return NextResponse.json(
       {
         status: 429,
-        type: "error",
-        message: "Trop de requêtes successives, veuillez réessayer plus tard",
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
+  const session = await getIronSession<SessionData>(
+    cookies(),
+    sessionOptions
+  );
+
+  if (session.isLoggedIn === true) {
+    let user = await prisma.user.findUnique({
+      where: { id: validator.escape(session.id) },
+    });
+    if (user === null) {
+      session.destroy();
+      return NextResponse.json(
+        {
+          status: 400,
+          message:
+            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+    let userObject = {
+      role: user.role,
+      id: user.id,
+    };
+    return NextResponse.json(
+      {
+        status: 200,
+        body: userObject,
+        message: "Vous êtes déjà connecté",
       },
       {
-        status: 429,
+        status: 200,
       }
     );
   } else {
-    const session = await getIronSession<SessionData>(
-      cookies(),
-      sessionOptions
-    );
+    const { email, pseudo } = (await request.json()) as {
+      email: string;
+      pseudo: string;
+    };
 
-    if (session.isLoggedIn === true) {
-      let user = await prisma.user.findUnique({
-        where: { id: validator.escape(session.id) },
-      });
-      if (user === null) {
-        session.destroy();
-        return NextResponse.json(
-          {
-            status: 400,
-            message:
-              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
-          },
-          {
-            status: 400,
-          }
-        );
-      }
-      let userObject = {
-        role: user.role,
-        id: user.id,
-      };
+    let arrayMessageError = validationBody({
+      email: email,
+    });
+    if (arrayMessageError.length > 0) {
       return NextResponse.json(
         {
-          status: 200,
-          body: userObject,
-          message: "Vous êtes déjà connecté",
+          status: 400,
+          type: "validation",
+          message: arrayMessageError,
         },
         {
-          status: 200,
+          status: 400,
+        }
+      );
+    }
+    if (pseudo.trim() !== "") {
+      return NextResponse.json(
+        {
+          status: 404,
+          type: "error",
+          message:
+            "Vous ne pouvez pas changer votre mot de passe, veuillez réessayer",
+        },
+        {
+          status: 404,
         }
       );
     } else {
-      const { email, pseudo } = (await request.json()) as {
-        email: string;
-        pseudo: string;
-      };
-
-      let arrayMessageError = validationBody({
-        email: email,
+      const user = await prisma.user.findUnique({
+        where: { mail: validator.escape(email.trim()) },
       });
-      if (arrayMessageError.length > 0) {
-        return NextResponse.json(
-          {
-            status: 400,
-            type: "validation",
-            message: arrayMessageError,
-          },
-          {
-            status: 400,
-          }
-        );
-      }
-      if (pseudo.trim() !== "") {
+      if (user === null) {
         return NextResponse.json(
           {
             status: 404,
-            type: "error",
             message:
-              "Vous ne pouvez pas changer votre mot de passe, veuillez réessayer",
+              "Aucun compte n'est associé à cette adresse email, veuillez réessayer",
           },
           {
             status: 404,
           }
         );
       } else {
-        const user = await prisma.user.findUnique({
-          where: { mail: validator.escape(email.trim()) },
-        });
-        if (user === null) {
+        if (user.password === null) {
           return NextResponse.json(
             {
               status: 404,
               message:
-                "Aucun compte n'est associé à cette adresse email, veuillez réessayer",
+                "Aucun mot de passe existe pour ce compte, veuillez vous inscrire",
             },
             {
               status: 404,
             }
           );
-        } else {
-          if (user.password === null) {
-            return NextResponse.json(
-              {
-                status: 404,
-                message:
-                  "Aucun mot de passe existe pour ce compte, veuillez vous inscrire",
-              },
-              {
-                status: 404,
-              }
+        }
+        if (user.resetToken) {
+          let copyResetToken: any = user.resetToken;
+          let limitDate = new Date(copyResetToken.limitDate);
+          if (new Date() > limitDate) {
+            let editUserReset = await prisma.user.update({
+              where: { mail: validator.escape(email.trim()) },
+              data: { resetToken: Prisma.DbNull },
+            });
+            let token = jwt.sign(
+              { user: user.mail },
+              process.env.SECRET_TOKEN_RESET as string,
+              { expiresIn: "30m" }
             );
-          }
-          if (user.resetToken) {
-            let copyResetToken: any = user.resetToken;
-            let limitDate = new Date(copyResetToken.limitDate);
-            if (new Date() > limitDate) {
-              let editUserReset = await prisma.user.update({
-                where: { mail: validator.escape(email.trim()) },
-                data: { resetToken: Prisma.DbNull },
-              });
-              let token = jwt.sign(
-                { user: user.mail },
-                process.env.SECRET_TOKEN_RESET as string,
-                { expiresIn: "30m" }
-              );
-              let currentDate = new Date();
-              let resetTokenObject = {
-                token: validator.escape(token),
-                limitDate: currentDate.setMinutes(
-                  currentDate.getMinutes() + 30
-                ),
-              };
-              let editUser = await prisma.user.update({
-                where: { mail: validator.escape(email.trim()) },
-                data: { resetToken: resetTokenObject },
-              });
-              let smtpTransport = nodemailer.createTransport({
-                host: "smtp.ionos.fr",
-                port: 465,
-                secure: true,
-                auth: {
-                  user: process.env.SECRET_SMTP_EMAIL,
-                  pass: process.env.SECRET_SMTP_PASSWORD,
-                },
-              });
-              /* let smtpTransport = nodemailer.createTransport({
-                service: "gmail",
-                auth: {
-                  user: process.env.SECRET_SMTP_EMAIL_TEST,
-                  pass: process.env.SECRET_SMTP_PASSWORD_TEST,
-                },
-              }); */
-              let mailOptions = {
-                from: "contact@tds-coachingdevie.fr",
-                to: validator.escape(editUser.mail),
-                subject: "Réinitialisation du mot de passe",
-                html: `<!DOCTYPE html>
+            let currentDate = new Date();
+            let resetTokenObject = {
+              token: validator.escape(token),
+              limitDate: currentDate.setMinutes(
+                currentDate.getMinutes() + 30
+              ),
+            };
+            let editUser = await prisma.user.update({
+              where: { mail: validator.escape(email.trim()) },
+              data: { resetToken: resetTokenObject },
+            });
+            let smtpTransport = nodemailer.createTransport({
+              host: "smtp.ionos.fr",
+              port: 465,
+              secure: true,
+              auth: {
+                user: process.env.SECRET_SMTP_EMAIL,
+                pass: process.env.SECRET_SMTP_PASSWORD,
+              },
+            });
+            /* let smtpTransport = nodemailer.createTransport({
+              service: "gmail",
+              auth: {
+                user: process.env.SECRET_SMTP_EMAIL_TEST,
+                pass: process.env.SECRET_SMTP_PASSWORD_TEST,
+              },
+            }); */
+            let mailOptions = {
+              from: "contact@tds-coachingdevie.fr",
+              to: validator.escape(editUser.mail),
+              subject: "Réinitialisation du mot de passe",
+              html: `<!DOCTYPE html>
                           <html lang="fr">
                             <head>
                               <title>tds coaching</title>
@@ -196,64 +190,64 @@ export async function POST(request: NextRequest) {
                               </div>
                             </body>
                           </html>`,
-              };
-              await smtpTransport.sendMail(mailOptions);
-              return NextResponse.json({
-                status: 200,
-                message:
-                  "Un email vous a été envoyer pour récupérer votre compte",
-              });
-            } else {
-              let currentDate = new Date();
-              let difference = limitDate.getTime() - currentDate.getTime();
-              let differenceDate = new Date(difference);
-              return NextResponse.json(
-                {
-                  status: 404,
-                  type: "reset",
-                  message: `Un lien de réinitialisation à déjà été envoyé à cette adresse, veuillez réessayer dans ${differenceDate.getMinutes()} minutes`,
-                },
-                {
-                  status: 404,
-                }
-              );
-            }
-          } else {
-            let token = jwt.sign(
-              { user: user.mail },
-              process.env.SECRET_TOKEN_RESET as string,
-              { expiresIn: "30m" }
-            );
-            let currentDate = new Date();
-            let resetTokenObject = {
-              token: validator.escape(token),
-              limitDate: currentDate.setMinutes(currentDate.getMinutes() + 30),
             };
-            let editUser = await prisma.user.update({
-              where: { mail: validator.escape(email.trim()) },
-              data: { resetToken: resetTokenObject },
+            await smtpTransport.sendMail(mailOptions);
+            return NextResponse.json({
+              status: 200,
+              message:
+                "Un email vous a été envoyer pour récupérer votre compte",
             });
-            let smtpTransport = nodemailer.createTransport({
-              host: "smtp.ionos.fr",
-              port: 465,
-              secure: true,
-              auth: {
-                user: process.env.SECRET_SMTP_EMAIL,
-                pass: process.env.SECRET_SMTP_PASSWORD,
+          } else {
+            let currentDate = new Date();
+            let difference = limitDate.getTime() - currentDate.getTime();
+            let differenceDate = new Date(difference);
+            return NextResponse.json(
+              {
+                status: 404,
+                type: "reset",
+                message: `Un lien de réinitialisation à déjà été envoyé à cette adresse, veuillez réessayer dans ${differenceDate.getMinutes()} minutes`,
               },
-            });
-            /* let smtpTransport = nodemailer.createTransport({
-              service: "gmail",
-              auth: {
-                user: process.env.SECRET_SMTP_EMAIL_TEST,
-                pass: process.env.SECRET_SMTP_PASSWORD_TEST,
-              },
-            }); */
-            let mailOptions = {
-              from: "contact@tds-coachingdevie.fr",
-                to: validator.escape(editUser.mail),
-              subject: "Réinitialisation du mot de passe",
-              html: `<!DOCTYPE html>
+              {
+                status: 404,
+              }
+            );
+          }
+        } else {
+          let token = jwt.sign(
+            { user: user.mail },
+            process.env.SECRET_TOKEN_RESET as string,
+            { expiresIn: "30m" }
+          );
+          let currentDate = new Date();
+          let resetTokenObject = {
+            token: validator.escape(token),
+            limitDate: currentDate.setMinutes(currentDate.getMinutes() + 30),
+          };
+          let editUser = await prisma.user.update({
+            where: { mail: validator.escape(email.trim()) },
+            data: { resetToken: resetTokenObject },
+          });
+          let smtpTransport = nodemailer.createTransport({
+            host: "smtp.ionos.fr",
+            port: 465,
+            secure: true,
+            auth: {
+              user: process.env.SECRET_SMTP_EMAIL,
+              pass: process.env.SECRET_SMTP_PASSWORD,
+            },
+          });
+          /* let smtpTransport = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: process.env.SECRET_SMTP_EMAIL_TEST,
+              pass: process.env.SECRET_SMTP_PASSWORD_TEST,
+            },
+          }); */
+          let mailOptions = {
+            from: "contact@tds-coachingdevie.fr",
+            to: validator.escape(editUser.mail),
+            subject: "Réinitialisation du mot de passe",
+            html: `<!DOCTYPE html>
                         <html lang="fr">
                           <head>
                             <title>tds coaching</title>
@@ -278,16 +272,16 @@ export async function POST(request: NextRequest) {
                             </div>
                           </body>
                         </html>`,
-            };
-            await smtpTransport.sendMail(mailOptions);
-            return NextResponse.json({
-              status: 200,
-              message:
-                "Un email vous a été envoyer pour récupérer votre compte",
-            });
-          }
+          };
+          await smtpTransport.sendMail(mailOptions);
+          return NextResponse.json({
+            status: 200,
+            message:
+              "Un email vous a été envoyer pour récupérer votre compte",
+          });
         }
       }
     }
   }
+
 }

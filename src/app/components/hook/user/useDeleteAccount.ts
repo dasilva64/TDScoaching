@@ -3,24 +3,25 @@ import { useDispatch } from "react-redux";
 import { useRouter, useParams, usePathname } from "next/navigation";
 import useSWR from "swr";
 
-const fetchDeleteAccount = async (url: string, token: string) => {
+const fetchDeleteAccount = async (url: string, token: string, csrfToken: any) => {
   let response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
     },
     body: JSON.stringify({ token: token }),
   });
   let json = await response.json();
   return json;
 };
-const useDeleteAccount = (token: string) => {
+const useDeleteAccount = (token: string, csrfToken: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
   const { data, isLoading, error } = useSWR(
     [`/suppression-compte/[token]/components/api`, token],
-    ([url, token]) => fetchDeleteAccount(url, token)
+    ([url, token]) => fetchDeleteAccount(url, token, csrfToken)
   );
   const pathname = usePathname();
   useEffect(() => {
@@ -35,6 +36,12 @@ const useDeleteAccount = (token: string) => {
             router.push("/");
           }
         }
+        dispatch({
+          type: "csrfToken/store",
+          payload: {
+            csrfToken: data.csrfToken
+          },
+        });
         dispatch({
           type: "auth/logout",
         });

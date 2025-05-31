@@ -8,8 +8,22 @@ import { NextRequest, NextResponse } from "next/server";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import nodemailer from 'nodemailer'
+import { getRateLimiter } from "@/app/lib/rateLimiter";
   
 export async function POST(request: NextRequest) {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
+  try {
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-discovery-meeting");
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
     if (session.isLoggedIn === true) {
         return NextResponse.json(

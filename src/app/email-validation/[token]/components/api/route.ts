@@ -4,11 +4,32 @@ import jwt from "jsonwebtoken";
 import prisma from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { SessionData, sessionOptions } from "../../../../lib/session";
+import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip;
+  try {
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-email-validation");
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
       where: { id: validator.escape(session.id) },

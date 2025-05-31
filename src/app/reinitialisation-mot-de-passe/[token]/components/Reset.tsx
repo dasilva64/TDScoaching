@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "../page.module.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 import validator from "validator";
 import fetchPost from "@/app/components/fetch/FetchPost";
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store";
 import Input from "@/app/components/input/Input";
 import useUserResetPassword from "@/app/components/hook/user/useUserRestPassword";
 import Load from "./load/Load";
@@ -31,7 +31,7 @@ const Reset = () => {
   }, [dataLoad, dispatch, push]);
 
   const [inputPseudo, setInputPseudo] = useState<string>("");
-
+const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>("");
   const [validPasswordInput, setValidPasswordInput] = useState<boolean>(false);
@@ -51,6 +51,10 @@ const Reset = () => {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
+        });
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
         });
         reset();
         push("/");
@@ -85,7 +89,7 @@ const Reset = () => {
               passwordConfirm: validator.escape(passwordComfirmInput.trim()),
               token: validator.escape(token[2].trim()),
               pseudo: validator.escape(inputPseudo.trim()),
-              csrfToken: dataLoad && dataLoad.csrfToken ? dataLoad.csrfToken : null
+              csrfToken: csrfToken
             });
           };
           fetchReset();

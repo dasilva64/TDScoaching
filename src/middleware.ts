@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    script-src 'self' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data:;
     font-src 'self' data:;
@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
   regexTwo.test(request.nextUrl.pathname) ||
   request.nextUrl.pathname.startsWith('/historique-rendez-vous')) {
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-    
+    console.log(session)
     if (session.isLoggedIn) {
       if (
         request.nextUrl.pathname.startsWith("/utilisateurs") ||
@@ -76,7 +76,7 @@ export async function middleware(request: NextRequest) {
       }
     }
     if (!session.isLoggedIn || Object.keys(session).length === 0) {
-      session.destroy()
+
       return NextResponse.redirect(new URL("/", request.url));
     }
     if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {

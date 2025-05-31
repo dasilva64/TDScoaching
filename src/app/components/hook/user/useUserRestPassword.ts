@@ -4,24 +4,25 @@ import { useRouter, useParams, usePathname } from "next/navigation";
 import useSWR from "swr";
 import csrfToken from "@/app/redux/feature/csrfToken";
 
-const fetchUserResetPassword = async (url: string, token: string) => {
+const fetchUserResetPassword = async (url: string, token: string, csrfToken: any) => {
   let response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
     },
     body: JSON.stringify({ token: token }),
   });
   let json = await response.json();
   return json;
 };
-const useUserResetPassword = (token: string) => {
+const useUserResetPassword = (token: string, csrfToken: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { data, isLoading, error } = useSWR(
-    [`/reinitialisation-mot-de-passe/[token]/components/api/reset`, token],
-    ([url, token]) => fetchUserResetPassword(url, token)
+  const { data, isLoading, error } = useSWR(csrfToken ? 
+    [`/reinitialisation-mot-de-passe/[token]/components/api/reset`, token] : null,
+    ([url, token]) => fetchUserResetPassword(url, token, csrfToken)
   );
   useEffect(() => {
     if (data) {

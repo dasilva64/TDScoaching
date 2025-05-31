@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter, useParams, usePathname } from "next/navigation";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 const fetchDeleteAccount = async (url: string, token: string, csrfToken: any) => {
   let response = await fetch(url, {
@@ -19,8 +19,8 @@ const useDeleteAccount = (token: string, csrfToken: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { data, isLoading, error } = useSWR(
-    [`/suppression-compte/[token]/components/api`, token],
+  const { data, isLoading, error } = useSWR(csrfToken ?
+    [`/suppression-compte/[token]/components/api`, token] : null,
     ([url, token]) => fetchDeleteAccount(url, token, csrfToken)
   );
   const pathname = usePathname();
@@ -42,9 +42,11 @@ const useDeleteAccount = (token: string, csrfToken: any) => {
             csrfToken: data.csrfToken
           },
         });
-        dispatch({
+        mutate("/components/header/ui/api");
+        mutate("/components/header/api");
+        /* dispatch({
           type: "auth/logout",
-        });
+        }); */
         dispatch({
           type: "flash/storeFlashMessage",
           payload: {

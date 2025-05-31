@@ -15,23 +15,13 @@ import Load from "./load/Load";
 const Reset = () => {
   const queryParam: any = usePathname();
   let token = queryParam.toString().split("/");
-  const { data: dataLoad, isLoading } = useUserResetPassword(token[2]);
+  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const { data: dataLoad, isLoading } = useUserResetPassword(token[2], csrfToken);
   const dispatch = useDispatch<AppDispatch>();
   const { push } = useRouter();
-  useEffect(() => {
-    if (dataLoad) {
-      if (dataLoad.status === 400 || dataLoad.status === 404) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { flashMessage: dataLoad.message, type: "error" },
-        });
-        push("/");
-      }
-    }
-  }, [dataLoad, dispatch, push]);
 
   const [inputPseudo, setInputPseudo] = useState<string>("");
-const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>("");
   const [validPasswordInput, setValidPasswordInput] = useState<boolean>(false);

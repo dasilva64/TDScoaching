@@ -26,7 +26,7 @@ const Display = () => {
       <Load />
     );
   } else {
-    content = <div className={styles.display__loadData}>{data.message}</div>;
+    content = <div className={styles.display__loadData}>{data && data.message}</div>;
   }
   return (
     <>

@@ -143,7 +143,7 @@ export async function POST(request: NextRequest) {
                       }
                     );
                   } else {
-                    let smtpTransport = nodemailer.createTransport({
+                    /* let smtpTransport = nodemailer.createTransport({
                       host: "smtp.ionos.fr",
                       port: 465,
                       secure: true,
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
                                   </body>
                                 </html>`,
                     };
-                    await smtpTransport.sendMail(mailOptions);
+                    await smtpTransport.sendMail(mailOptions); */
                     const deleteUser = await prisma.user.delete({
                       where: { id: validator.escape(user.id) },
                     });

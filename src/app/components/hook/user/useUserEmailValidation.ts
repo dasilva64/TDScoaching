@@ -4,6 +4,7 @@ import { useRouter, useParams, usePathname } from "next/navigation";
 import useSWR from "swr";
 
 const fetchUserEmailValidation = async (url: string, token: string, csrfToken: any) => {
+  console.log(csrfToken)
   let response = await fetch(url, {
     method: "POST",
     headers: {
@@ -19,8 +20,8 @@ const useUserEmailValidation = (token: string, csrfToken: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { data, isLoading, error } = useSWR(
-    [`/email-validation/[token]/components/api`, token],
+  const { data, isLoading, error } = useSWR(csrfToken ?
+    [`/email-validation/[token]/components/api`, token] : null,
     ([url, token]) => fetchUserEmailValidation(url, token, csrfToken)
   );
   useEffect(() => {

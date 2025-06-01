@@ -229,7 +229,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
               >
                 <Input
                   label={"Email"}
-                  value={emailInput}
+                  value={emailInput ? emailInput : ""}
                   id={"email"}
                   type={"text"}
                   placeholder={"Entrez votre email"}

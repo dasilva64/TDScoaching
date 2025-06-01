@@ -67,6 +67,7 @@ const Content = () => {
         });
         router.push("/");
       } else if (data.status === 200) {
+        console.log('data.body.email', data.body.email)
         dispatch({
           type: "ModalSendTokenEmail/edit",
           payload: {inputEmail: data.body.email}

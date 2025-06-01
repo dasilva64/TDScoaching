@@ -15,6 +15,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const { displayModalSendTokenEmail, inputEmail } = useSelector(
     (state: RootState) => state.ModalSendTokenEmail
   );
+  console.log('inputEmail', inputEmail)
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken
   );

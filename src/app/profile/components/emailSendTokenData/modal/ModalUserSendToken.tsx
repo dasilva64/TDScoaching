@@ -101,7 +101,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
     clearState();
     dispatch({
       type: "ModalSendTokenEmail/close",
-      payload: {inputEmail: data.body.email}
+      payload: {inputEmail: userData.body.email}
     });
   };
   /*   useEffect(() => {

@@ -22,7 +22,6 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
   const { displayModalEditEmail } = useSelector(
     (state: RootState) => state.ModalEditEmail
   );
-  useEffect(() => { void displayModalEditEmail }, [displayModalEditEmail]);
   /* const {
     data: userData,
     isLoading,
@@ -186,6 +185,13 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
       setErrorMessage(errorMessage);
     }
   };
+  const [modalKey, setModalKey] = useState(0);
+
+useEffect(() => {
+  if (displayModalEditEmail) {
+    setModalKey(Date.now());
+  }
+}, [displayModalEditEmail]);
   return (
     <>
       <TabIndex displayModal={displayModalEditEmail} />
@@ -193,6 +199,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
         {displayModalEditEmail === true && (
           <>
             <motion.div
+            key={`bg-${modalKey}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { duration: 0.3 } }}
               exit={{ opacity: 0 }}
@@ -200,6 +207,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
               onClick={() => closeForm()}
             />
             <motion.div
+            key={`modal-${modalKey}`}
               className={styles.modalEditEmailSendData}
               initial={{ y: 200, x: "-50%", opacity: 0 }}
               animate={{

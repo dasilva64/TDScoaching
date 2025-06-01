@@ -291,6 +291,16 @@ export async function POST(request: NextRequest) {
                               </html>`,
                 };
                 await smtpTransport.sendMail(mailOptions);
+                const csrfToken = generateCsrfToken()
+                    session.csrfToken = csrfToken;
+                    session.updateConfig({
+                      ...sessionOptions,
+                      cookieOptions: {
+                        ...sessionOptions.cookieOptions,
+                        maxAge: 60 * 15,
+                      },
+                    }); 
+                    await session.save()
                 return NextResponse.json({
                   status: 200,
                   message:

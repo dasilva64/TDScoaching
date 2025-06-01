@@ -22,6 +22,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
   const { displayModalEditEmail } = useSelector(
     (state: RootState) => state.ModalEditEmail
   );
+  console.log("displayModalEditEmail", displayModalEditEmail)
   /* const {
     data: userData,
     isLoading,

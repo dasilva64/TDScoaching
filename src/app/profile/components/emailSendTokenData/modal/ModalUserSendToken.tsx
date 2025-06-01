@@ -23,7 +23,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
-  const [emailInput, setEmailInput] = useState<string>(inputEmail);
+  const [emailInput, setEmailInput] = useState<string>(userData.body.email);
   console.log("emailInput", emailInput) 
   useEffect(() =>  {
     if (emailInput === "") {

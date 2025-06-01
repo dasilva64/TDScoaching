@@ -52,7 +52,6 @@ export async function middleware(request: NextRequest) {
   regexTwo.test(request.nextUrl.pathname) ||
   request.nextUrl.pathname.startsWith('/historique-rendez-vous')) {
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-    console.log(session)
     if (session.isLoggedIn) {
       if (
         request.nextUrl.pathname.startsWith("/utilisateurs") ||

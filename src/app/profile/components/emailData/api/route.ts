@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
             }
           );
         }
-        if (Number(copyEditEmail.token) === Number(code)) {
+        if (copyEditEmail.token.trim() === code.trim()) {
           if (copyEditEmail.newEmail === null) {
             return NextResponse.json(
               {

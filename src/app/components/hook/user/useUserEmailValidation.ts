@@ -4,7 +4,6 @@ import { useRouter, useParams, usePathname } from "next/navigation";
 import useSWR, { mutate } from "swr";
 
 const fetchUserEmailValidation = async (url: string, token: string, csrfToken: any) => {
-  console.log(csrfToken)
   let response = await fetch(url, {
     method: "POST",
     headers: {

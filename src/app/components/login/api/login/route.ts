@@ -96,7 +96,6 @@ export async function POST(request: NextRequest) {
         }
       );
     } else {
-      console.log("email", email)
       const user: any = await prisma.user.findUnique({
         where: {
           mail: validator.escape(email.trim()),
@@ -116,8 +115,6 @@ export async function POST(request: NextRequest) {
             }
           );
         }
-        console.log("password", password)
-        console.log("user.password", user.password)
         const decode: any = await bcrypt.compare(
           validator.escape(password.trim()),
           user.password

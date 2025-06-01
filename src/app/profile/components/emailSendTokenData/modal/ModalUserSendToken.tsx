@@ -60,7 +60,6 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
-        setEmailInput("");
         reset();
       } else if (data.status === 401) {
         setTimeout(() => {
@@ -160,7 +159,6 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
 
   const clearState = () => {
     setErrorMessageEmail("");
-    setEmailInput("")
     /* if (userData) {
       if (userData.body) {
         setEmailInput(userData.body.email);

@@ -106,6 +106,7 @@ export async function POST(request: NextRequest) {
           await session.save();
         return NextResponse.json({
           status: 200,
+          csrfToken: csrfToken,
           message: "Votre demande de modification d'email à été annulé",
           body: userObject,
         });

@@ -210,7 +210,7 @@ export async function POST(request: NextRequest) {
                         maxAge: 60 * 15,
                       },
                     }); */
-                    await session.save()
+                    
                     return NextResponse.json({
                       status: 200,
                       //csrfToken: csrfToken,

@@ -9,6 +9,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { SessionData, sessionOptions } from "../../../lib/session";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { generateCsrfToken } from "../../functions/generateCsrfToken";
 
 export async function POST(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip;
@@ -389,7 +390,18 @@ export async function POST(request: NextRequest) {
                             </html>`,
               };
               await smtpTransport.sendMail(mailOptions);
+              const csrfToken = generateCsrfToken()
+                    session.csrfToken = csrfToken;
+                    session.updateConfig({
+                      ...sessionOptions,
+                      cookieOptions: {
+                        ...sessionOptions.cookieOptions,
+                        maxAge: 60 * 15,
+                      },
+                    }); 
+                    await session.save()
               return NextResponse.json({
+                csrfToken: csrfToken,
                 status: 200,
                 message:
                   "Un email vous a été envoyé pour activer votre compte",

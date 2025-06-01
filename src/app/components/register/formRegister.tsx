@@ -52,6 +52,10 @@ const FormRegister = () => {
           payload: { flashMessage: data.message, type: "success" },
         });
         clearState();
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
+        });
         dispatch({ type: "ModalRegister/close" });
         reset();
       } else if (data.status === 400 && data.type === "validation") {

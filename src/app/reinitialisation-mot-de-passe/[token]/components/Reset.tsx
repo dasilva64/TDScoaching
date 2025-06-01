@@ -44,7 +44,7 @@ const Reset = () => {
           payload: { flashMessage: data.message, type: "success" },
         });
         reset();
-        mutate("/components/header/api");
+        //mutate("/components/header/api");
         router.push("/");
       } else if (data.status === 400) {
         data.message.forEach((element: string) => {

@@ -257,7 +257,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
                     handlerInput(
                       e,
                       "firstname",
-                      /^[0-9]{8,8}$/,
+                      /^[a-zA-Z0-9?.@&#$,;:!]{14}$/,
                       setValidCodeInput,
                       setErrorMessageCode,
                       setCodeInput,

@@ -154,11 +154,13 @@ export const validationBody = (body: any) => {
       if (validator.isEmpty(value)) {
         arrayMessageError.push(["code", "Code : ne peut pas être vide"]);
       } else {
-        if (!validator.isNumeric(value)) {
-          arrayMessageError.push(["code", "Code : doit être un nombre"]);
-        }
-        if (value.length !== 8) {
-          arrayMessageError.push(["code", "Code : doit contenir 8 chiffres"]);
+        const regex = /^[a-zA-Z0-9?.@&#$,;:!]{14}$/;
+    
+        if (!regex.test(value)) {
+          arrayMessageError.push([
+            "code",
+            "Code : format invalide (14 caractères, lettres, chiffres et certains symboles spéciaux uniquement)",
+          ]);
         }
       }
     }

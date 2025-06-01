@@ -22,7 +22,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
   const { displayModalEditEmail } = useSelector(
     (state: RootState) => state.ModalEditEmail
   );
-  console.log("displayModalEditEmail", displayModalEditEmail)
+  useEffect(() => { void displayModalEditEmail }, [displayModalEditEmail]);
   /* const {
     data: userData,
     isLoading,
@@ -121,7 +121,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
         reset();
       }
     }
-  }, [data, dispatch, isMutating, mutate, reset, router]);
+  }, [data, dispatch, reset, router]);
   /* 
   useEffect(() => {
     const mutateMainData = async () => {

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter, useParams, usePathname } from "next/navigation";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 const fetchUserEmailValidation = async (url: string, token: string, csrfToken: any) => {
   console.log(csrfToken)
@@ -32,6 +32,7 @@ const useUserEmailValidation = (token: string, csrfToken: any) => {
           payload: { flashMessage: data.message, type: "success" },
         });
         router.push("/");
+        mutate("/components/header/api");
       } else {
         dispatch({
           type: "flash/storeFlashMessage",

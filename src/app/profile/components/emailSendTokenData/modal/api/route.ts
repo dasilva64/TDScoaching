@@ -149,6 +149,7 @@ export async function POST(request: NextRequest) {
                   }
                 );
               } else {
+                let copyEditEmail: any = editUser.editEmail;
                 let smtpTransport = nodemailer.createTransport({
                   host: "smtp.ionos.fr",
                   port: 465,
@@ -158,7 +159,7 @@ export async function POST(request: NextRequest) {
                     pass: process.env.SECRET_SMTP_PASSWORD,
                   },
                 });
-                let copyEditEmail: any = editUser.editEmail;
+                
                 let mailOptions = {
                   from: "contact@tds-coachingdevie.fr",
                   to: validator.escape(copyEditEmail.newEmail),
@@ -291,6 +292,7 @@ export async function POST(request: NextRequest) {
                 }
               );
             } else {
+              let copyEditEmail: any = editUser.editEmail;
               let smtpTransport = nodemailer.createTransport({
                 host: "smtp.ionos.fr",
                 port: 465,
@@ -300,7 +302,7 @@ export async function POST(request: NextRequest) {
                   pass: process.env.SECRET_SMTP_PASSWORD,
                 },
               });
-              let copyEditEmail: any = editUser.editEmail;
+              
               let mailOptions = {
                 from: "contact@tds-coachingdevie.fr",
                 to: validator.escape(copyEditEmail.newEmail),

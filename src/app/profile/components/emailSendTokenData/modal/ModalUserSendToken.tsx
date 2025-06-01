@@ -28,7 +28,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   useEffect(() =>  {
       setEmailInput(inputEmail)
     
-  }, [inputEmail])
+  }, [inputEmail, displayModalSendTokenEmail])
   const [validEmailInput, setValidEmailInput] = useState<boolean>(true);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
   const { trigger, data, reset, isMutating } = useSWRMutation(

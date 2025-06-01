@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
                 }
               );
             } else {
-              if (copyEditEmail.limitDate > new Date()) {
+              if (new Date() > copyEditEmail.limitDate) {
                 let removeEditEmail = await prisma.user.update({
                   where: { id: validator.escape(user.id) },
                   data: {

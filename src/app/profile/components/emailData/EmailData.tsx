@@ -270,7 +270,7 @@ useEffect(() => {
                       setValidCodeInput,
                       setErrorMessageCode,
                       setCodeInput,
-                      "Code : doit contenir 8 chiffres"
+                      "Code : doit contenir 14 caractères"
                     );
                   }}
                   validInput={validCodeInput}

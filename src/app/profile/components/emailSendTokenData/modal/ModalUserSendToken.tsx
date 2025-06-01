@@ -167,6 +167,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
 
   const clearState = () => {
     setErrorMessageEmail("");
+    setEmailInput(userData.body.firstemailname);
     /* if (userData) {
       if (userData.body) {
         setEmailInput(userData.body.email);

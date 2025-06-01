@@ -66,6 +66,11 @@ const Content = () => {
           },
         });
         router.push("/");
+      } else if (data.status === 200) {
+        dispatch({
+          type: "ModalSendTokenEmail/edit",
+          payload: {inputEmail: data.body.email}
+        })
       }
     }
   }, [data, dispatch, isError, isLoading, router]);

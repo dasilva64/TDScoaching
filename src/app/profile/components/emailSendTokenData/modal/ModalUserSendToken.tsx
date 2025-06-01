@@ -12,7 +12,7 @@ import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
 
 const ModalUserSendToken = ({ data: userData, mutate }: any) => {
-  const { displayModalSendTokenEmail } = useSelector(
+  const { displayModalSendTokenEmail, inputEmail } = useSelector(
     (state: RootState) => state.ModalSendTokenEmail
   );
   const { csrfToken } = useSelector(
@@ -22,7 +22,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
-  const [emailInput, setEmailInput] = useState<string>(userData?.body.email);
+  const [emailInput, setEmailInput] = useState<string>(inputEmail);
 
   const [validEmailInput, setValidEmailInput] = useState<boolean>(true);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
@@ -52,6 +52,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
         });
         dispatch({
           type: "ModalSendTokenEmail/close",
+          payload: {inputEmail: userData?.body.email}
         });
         dispatch({
           type: "ModalEditEmail/open",
@@ -60,7 +61,6 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
-        setEmailInput(userData?.body.email)
         reset();
       } else if (data.status === 401) {
         setTimeout(() => {

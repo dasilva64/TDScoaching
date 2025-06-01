@@ -88,6 +88,10 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
               revalidate: false,
             }
           );
+          dispatch({
+            type: "ModalSendTokenEmail/edit",
+            payload: {inputEmail: userData.body.newEmail}
+          });
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },

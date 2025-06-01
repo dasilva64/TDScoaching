@@ -81,7 +81,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
               body: {
                 ...data.body,
                 email: userData.body.newEmail,
-                newEmail: ""
+                newEmail: null
               },
             },
             {

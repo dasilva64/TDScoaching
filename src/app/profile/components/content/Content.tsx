@@ -81,12 +81,12 @@ const Content = () => {
           <ModalUserPasswordData mutate={mutate} />
           <ModalUserSendToken data={data} mutate={mutate} />
           <ModalDeleteAccount mutate={mutate} />
-          {/* {data.body.newEmail && (
-            <> */}
+          {data.body.newEmail && (
+            <>
               <EmailCheck data={data} mutate={mutate} />
               <ModalCloseEmail />
-            {/* </>
-          )} */}
+            </>
+          )}
         </>
       )}
       <main className={styles.profile}>

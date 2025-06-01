@@ -36,7 +36,7 @@ export async function GET() {
           firstname: validator.escape(user.firstname),
           lastname: validator.escape(user.lastname),
           email: validator.escape(user.mail),
-          newEmail: "",
+          newEmail: null,
         };
       } else {
         userObject = {

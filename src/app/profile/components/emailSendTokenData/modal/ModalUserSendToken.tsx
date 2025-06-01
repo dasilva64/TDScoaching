@@ -34,6 +34,18 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
+        mutate(
+          {
+            ...data,
+            body: {
+              ...data.body,
+              newEmail: emailInput
+            },
+          },
+          {
+            revalidate: false,
+          }
+        );
         dispatch({
           type: "csrfToken/store",
           payload: { csrfToken: data.csrfToken },

@@ -35,8 +35,6 @@ const Content = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   useEffect(() => {
-    console.log("isLoading", isLoading)
-    console.log("data", data)
     if (isError) {
       dispatch({
         type: "flash/storeFlashMessage",
@@ -67,7 +65,6 @@ const Content = () => {
         });
         router.push("/");
       } else if (data.status === 200) {
-        console.log('data.body.email', data.body.email)
         dispatch({
           type: "ModalSendTokenEmail/edit",
           payload: {inputEmail: data.body.email}

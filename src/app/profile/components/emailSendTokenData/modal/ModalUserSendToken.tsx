@@ -15,7 +15,6 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const { displayModalSendTokenEmail, inputEmail } = useSelector(
     (state: RootState) => state.ModalSendTokenEmail
   );
-  console.log('inputEmail', inputEmail)
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken
   );
@@ -101,6 +100,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
     clearState();
     dispatch({
       type: "ModalSendTokenEmail/close",
+      payload: {inputEmail: data.body.email}
     });
   };
   /*   useEffect(() => {

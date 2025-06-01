@@ -17,6 +17,7 @@ const EmailData = ({ data }: any) => {
           if (data) {
             dispatch({
               type: "ModalSendTokenEmail/open",
+              payload: {inputEmail: data.body.email}
             });
           }
         }}

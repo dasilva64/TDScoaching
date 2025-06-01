@@ -25,11 +25,11 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [emailInput, setEmailInput] = useState<string>(userData.body.email);
   console.log("emailInput", emailInput) 
-  useEffect(() =>  {
+  /* useEffect(() =>  {
     if (emailInput === "") {
       setEmailInput(inputEmail)
     }
-  }, [inputEmail])
+  }, [inputEmail]) */
   const [validEmailInput, setValidEmailInput] = useState<boolean>(true);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
   const { trigger, data, reset, isMutating } = useSWRMutation(
@@ -167,7 +167,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
 
   const clearState = () => {
     setErrorMessageEmail("");
-    setEmailInput(userData.body.firstemailname);
+    setEmailInput(userData.body.email);
     /* if (userData) {
       if (userData.body) {
         setEmailInput(userData.body.email);

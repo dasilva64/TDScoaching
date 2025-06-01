@@ -35,6 +35,10 @@ const Forgot = () => {
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
         });
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
+        });
         reset();
       } else if (data.status === 400) {
         setTimeout(() => {

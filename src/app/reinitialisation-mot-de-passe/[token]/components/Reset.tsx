@@ -11,6 +11,7 @@ import { AppDispatch, RootState } from "@/app/redux/store";
 import Input from "@/app/components/input/Input";
 import useUserResetPassword from "@/app/components/hook/user/useUserRestPassword";
 import Load from "./load/Load";
+import { mutate } from "swr";
 
 const Reset = () => {
   const queryParam: any = usePathname();
@@ -42,11 +43,8 @@ const Reset = () => {
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
         });
-        /* dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        }); */
         reset();
+        mutate("/components/header/api");
         router.push("/");
       } else if (data.status === 400) {
         data.message.forEach((element: string) => {

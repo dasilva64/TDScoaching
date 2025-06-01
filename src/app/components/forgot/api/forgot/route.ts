@@ -9,6 +9,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { SessionData, sessionOptions } from "../../../../lib/session";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 
 export async function POST(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip;
@@ -154,13 +155,6 @@ export async function POST(request: NextRequest) {
                 pass: process.env.SECRET_SMTP_PASSWORD,
               },
             });
-            /* let smtpTransport = nodemailer.createTransport({
-              service: "gmail",
-              auth: {
-                user: process.env.SECRET_SMTP_EMAIL_TEST,
-                pass: process.env.SECRET_SMTP_PASSWORD_TEST,
-              },
-            }); */
             let mailOptions = {
               from: "contact@tds-coachingdevie.fr",
               to: validator.escape(editUser.mail),
@@ -192,7 +186,18 @@ export async function POST(request: NextRequest) {
                           </html>`,
             };
             await smtpTransport.sendMail(mailOptions);
+            const csrfToken = generateCsrfToken();
+            session.csrfToken = csrfToken;
+              session.updateConfig({
+                ...sessionOptions,
+                cookieOptions: {
+                  ...sessionOptions.cookieOptions,
+                  maxAge: 60 * 15,
+                },
+              });
+              await session.save();
             return NextResponse.json({
+              csrfToken: csrfToken,
               status: 200,
               message:
                 "Un email vous a été envoyer pour récupérer votre compte",
@@ -236,13 +241,6 @@ export async function POST(request: NextRequest) {
               pass: process.env.SECRET_SMTP_PASSWORD,
             },
           });
-          /* let smtpTransport = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-              user: process.env.SECRET_SMTP_EMAIL_TEST,
-              pass: process.env.SECRET_SMTP_PASSWORD_TEST,
-            },
-          }); */
           let mailOptions = {
             from: "contact@tds-coachingdevie.fr",
             to: validator.escape(editUser.mail),
@@ -274,7 +272,18 @@ export async function POST(request: NextRequest) {
                         </html>`,
           };
           await smtpTransport.sendMail(mailOptions);
+          const csrfToken = generateCsrfToken();
+            session.csrfToken = csrfToken;
+              session.updateConfig({
+                ...sessionOptions,
+                cookieOptions: {
+                  ...sessionOptions.cookieOptions,
+                  maxAge: 60 * 15,
+                },
+              });
+              await session.save();
           return NextResponse.json({
+            csrfToken: csrfToken,
             status: 200,
             message:
               "Un email vous a été envoyer pour récupérer votre compte",

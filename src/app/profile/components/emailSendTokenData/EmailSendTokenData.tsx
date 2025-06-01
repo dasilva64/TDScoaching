@@ -8,6 +8,7 @@ import Image from "@/app/components/image/Image";
 
 const EmailData = ({ data }: any) => {
   const dispatch = useDispatch<AppDispatch>();
+  console.log(data)
   return (
     <>
       <button

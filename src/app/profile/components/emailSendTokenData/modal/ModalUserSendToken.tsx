@@ -15,7 +15,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const { displayModalSendTokenEmail, inputEmail } = useSelector(
     (state: RootState) => state.ModalSendTokenEmail
   );
-  console.log(inputEmail)
+  console.log(userData.body.email)
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken
   );
@@ -23,7 +23,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
-  const [emailInput, setEmailInput] = useState<string>(inputEmail !== "" ? inputEmail : userData.body.email);
+  const [emailInput, setEmailInput] = useState<string>(userData.body.email);
 
   const [validEmailInput, setValidEmailInput] = useState<boolean>(true);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");

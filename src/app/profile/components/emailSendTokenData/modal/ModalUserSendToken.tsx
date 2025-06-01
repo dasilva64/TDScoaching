@@ -24,7 +24,11 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const [emailInput, setEmailInput] = useState<string>(userData.body.email);
-
+  useEffect(() =>  {
+    if (emailInput === "") {
+      setEmailInput(inputEmail)
+    }
+  })
   const [validEmailInput, setValidEmailInput] = useState<boolean>(true);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
   const { trigger, data, reset, isMutating } = useSWRMutation(
@@ -62,6 +66,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
+        setEmailInput("")
         reset();
       } else if (data.status === 401) {
         setTimeout(() => {

@@ -75,6 +75,19 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         //if (isMutating === false) {
+          mutate(
+            {
+              ...data,
+              body: {
+                ...data.body,
+                email: userData.body.newEmail,
+                newEmail: ""
+              },
+            },
+            {
+              revalidate: false,
+            }
+          );
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },

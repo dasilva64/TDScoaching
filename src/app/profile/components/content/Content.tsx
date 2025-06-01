@@ -35,6 +35,8 @@ const Content = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   useEffect(() => {
+    console.log("isLoading", isLoading)
+    console.log("data", data)
     if (isError) {
       dispatch({
         type: "flash/storeFlashMessage",
@@ -67,7 +69,7 @@ const Content = () => {
       }
     }
   }, [data, dispatch, isError, isLoading, router]);
-
+  
   return (
     <>
       <NoScript />

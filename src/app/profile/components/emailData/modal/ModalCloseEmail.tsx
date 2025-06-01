@@ -10,7 +10,7 @@ import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import fetchPost from "@/app/components/fetch/FetchPost";
 
-const ModalCloseEmail = () => {
+const ModalCloseEmail = ({mutate}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const { trigger, data, reset, isMutating } = useSWRMutation(
@@ -26,6 +26,18 @@ const ModalCloseEmail = () => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
+        mutate(
+          {
+            ...data,
+            body: {
+              ...data.body,
+              newEmail: null
+            },
+          },
+          {
+            revalidate: false,
+          }
+        );
         dispatch({
           type: "ModalCancelEmail/close",
         });

@@ -84,7 +84,7 @@ const Content = () => {
           {data.body.newEmail && (
             <>
               <EmailCheck data={data} mutate={mutate} />
-              <ModalCloseEmail />
+              <ModalCloseEmail mutate={mutate} />
             </>
           )}
         </>

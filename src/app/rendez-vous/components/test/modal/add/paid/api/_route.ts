@@ -3,17 +3,17 @@ import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import validator, { isDate } from "validator";
 import bcrypt from "bcrypt";
-import { RateLimiter } from "limiter";
+/* import { RateLimiter } from "limiter"; */
 import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { validationBody } from "@/app/lib/validation";
 import Stripe from "stripe";
 
-const limiter = new RateLimiter({
+/* const limiter = new RateLimiter({
   tokensPerInterval: 600,
   interval: "hour",
   fireImmediately: true,
-});
+}); */
 
 export async function POST(request: NextRequest) {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);

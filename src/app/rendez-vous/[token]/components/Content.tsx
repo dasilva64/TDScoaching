@@ -6,21 +6,22 @@ import Image from "@/app/components/image/Image";
 import "../../rendez-vous.scss";
 import { usePathname, useRouter } from "next/navigation";
 import useGetOneByToken from "@/app/components/hook/meeting/useGetOneByToken";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalCalendarEditDiscoveryMeeting from "./modal/editCalendar/ModalCalendarEditDiscoveryMeeting";
 import ModalDeleteDiscoveryMeeting from "./modal/delete/ModalDeleteDiscoveryMeeting";
 import ModalComfirmDiscoveryMeeting from "./modal/confirm/ModalComfirmDiscoveryMeeting";
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store";
 import ModalEditDiscoveryMeeting from "./modal/edit/ModalEditDiscoveryMeeting";
 import Load from "./load/Load";
 import NoScript from "@/app/components/noscript/NoScript";
 
 const Content = () => {
   const queryParam: any = usePathname();
+  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   let token = queryParam.toString().split("/");
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter()
-  const { data, isLoading, mutate } = useGetOneByToken(token[2]);
+  const { data, isLoading, mutate } = useGetOneByToken(token[2], csrfToken);
   const [allData, setAllData] = useState<any[]>([]);
   useEffect(() => {
     if (data) {
@@ -45,12 +46,6 @@ const Content = () => {
           }
         }
         setAllData(array);
-      } else {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: data.message },
-        });
-        router.push('/')
       }
     }
   }, [data, dispatch, router]);

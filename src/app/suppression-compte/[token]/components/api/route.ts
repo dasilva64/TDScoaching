@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
-import validator from "validator";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { Prisma } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../lib/session";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 
 export async function POST(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
@@ -45,7 +43,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -99,7 +97,7 @@ export async function POST(request: NextRequest) {
             }
           }
           let user = await prisma.user.findUnique({
-            where: { mail: validator.escape(decodeToken.user) },
+            where: { mail: decodeToken.user },
           });
           if (user === null) {
             return NextResponse.json(
@@ -114,10 +112,10 @@ export async function POST(request: NextRequest) {
           } else {
             if (user.deleteToken && user.status === true) {
               let copyDeleteToken: any = user?.deleteToken;
-              if (validator.escape(token.trim()) === copyDeleteToken.token) {
+              if (token.trim() === copyDeleteToken.token) {
                 if (new Date().getTime() > copyDeleteToken.limitDate) {
                   const deleteToken = await prisma.user.update({
-                    where: { id: validator.escape(user.id) },
+                    where: { id: user.id },
                     data: { deleteToken: Prisma.DbNull },
                   });
                   return NextResponse.json(
@@ -178,9 +176,9 @@ export async function POST(request: NextRequest) {
                                         </div>
                                         <h2 style="text-align: center">Suppression d'un compte</h2>
                                         <ul style="list-style: none; padding: 0px">
-                                          <li style="margin: 0px 0px 10px 0px">Prénom : ${validator.escape(user.firstname)}</li>
-                                          <li style="margin: 0px 0px 10px 0px">Nom de famille : ${validator.escape(user.lastname)}</li>
-                                          <li style="margin: 0px 0px 10px 0px">Email : ${validator.escape(user.mail)}</li>
+                                          <li style="margin: 0px 0px 10px 0px">Prénom : ${user.firstname}</li>
+                                          <li style="margin: 0px 0px 10px 0px">Nom de famille : ${user.lastname}</li>
+                                          <li style="margin: 0px 0px 10px 0px">Email : ${user.mail}</li>
                                           <li style="margin: 0px 0px 10px 0px">Raison : ${user.deleteReason}</li>
                                         </ul>
                                       </div>
@@ -190,19 +188,9 @@ export async function POST(request: NextRequest) {
                     };
                     await smtpTransport.sendMail(mailOptions);
                     const deleteUser = await prisma.user.delete({
-                      where: { id: validator.escape(user.id) },
+                      where: { id: user.id },
                     });
                     session.destroy();
-                    const csrfToken = generateCsrfToken()
-                    session.csrfToken = csrfToken
-                    session.updateConfig({
-                      ...sessionOptions,
-                      cookieOptions: {
-                        ...sessionOptions.cookieOptions,
-                        maxAge: 60 * 15,
-                      },
-                    });
-                    await session.save()
                     return NextResponse.json({
                       status: 200,
                       message: "Votre compte a bien été supprimé",

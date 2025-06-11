@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
-import validator from "validator";
 import prisma from "../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../lib/session";
 import { validationBody } from "../../../../lib/validation";
 import { Prisma } from "@prisma/client";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
@@ -44,7 +42,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -133,7 +131,7 @@ export async function POST(request: NextRequest) {
             } else {
               if (new Date() > copyEditEmail.limitDate) {
                 let removeEditEmail = await prisma.user.update({
-                  where: { id: validator.escape(user.id) },
+                  where: { id: user.id },
                   data: {
                     editEmail: Prisma.DbNull,
                   },
@@ -163,9 +161,9 @@ export async function POST(request: NextRequest) {
                 );
               }
               let editUser = await prisma.user.update({
-                where: { id: validator.escape(user.id) },
+                where: { id: user.id },
                 data: {
-                  mail: validator.escape(copyEditEmail.newEmail),
+                  mail: copyEditEmail.newEmail,
                   editEmail: Prisma.DbNull,
                 },
               });
@@ -183,33 +181,12 @@ export async function POST(request: NextRequest) {
                 );
               } else {
                 let userObject = {
-                  firstname: validator.escape(editUser.firstname),
-                  lastname: validator.escape(editUser.lastname),
-                  email: validator.escape(editUser.mail),
+                  firstname: editUser.firstname,
+                  lastname: editUser.lastname,
+                  email: editUser.mail,
                 };
-                const csrfToken = generateCsrfToken()
-                session.csrfToken = csrfToken;
-                if (session.rememberMe) {
-                  session.updateConfig({
-                    ...sessionOptions,
-                    cookieOptions: {
-                      ...sessionOptions.cookieOptions,
-                      maxAge: 60 * 60 * 24 * 30,
-                    },
-                  });
-                } else {
-                  session.updateConfig({
-                    ...sessionOptions,
-                    cookieOptions: {
-                      ...sessionOptions.cookieOptions,
-                      maxAge: undefined,
-                    },
-                  });
-                }
-                await session.save();
                 return NextResponse.json({
                   status: 200,
-                  csrfToken: csrfToken,
                   message: "Votre nouvel email est maintenant actif",
                   body: userObject,
                 });

@@ -5,7 +5,6 @@ import styles from "../page.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
-import validator from "validator";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import Input from "@/app/components/input/Input";
@@ -73,10 +72,10 @@ const Reset = () => {
         if (inputPseudo.length === 0) {
           const fetchReset = async () => {
             trigger({
-              password: validator.escape(passwordInput.trim()),
-              passwordConfirm: validator.escape(passwordComfirmInput.trim()),
-              token: validator.escape(token[2].trim()),
-              pseudo: validator.escape(inputPseudo.trim()),
+              password: passwordInput.trim(),
+              passwordConfirm: passwordComfirmInput.trim(),
+              token: token[2].trim(),
+              pseudo: inputPseudo.trim(),
               csrfToken: csrfToken
             });
           };

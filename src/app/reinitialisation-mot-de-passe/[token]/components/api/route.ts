@@ -1,22 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../../../../lib/prisma";
 import { validationBody } from "../../../../lib/validation";
 import { Prisma } from "@prisma/client";
-import { RateLimiter } from "limiter";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
-
-const limiter = new RateLimiter({
-  tokensPerInterval: 1,
-  interval: 5000,
-  fireImmediately: true,
-});
 
 export async function POST(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
@@ -43,7 +34,7 @@ export async function POST(request: NextRequest) {
   }
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -111,13 +102,24 @@ export async function POST(request: NextRequest) {
         }
       );
     } else {
+      if (token === null) {
+        return NextResponse.json(
+          {
+            status: 400,
+            message: "La requête n'est pas valide, veuillez réessayer",
+          },
+          {
+            status: 400,
+          }
+        );
+      }
         const { verify } = jwt;
         try {
           const decodeToken: any = verify(token.trim(),
             process.env.SECRET_TOKEN_RESET as string
           );
           let user = await prisma.user.findUnique({
-            where: { mail: validator.escape(decodeToken.user) },
+            where: { mail: decodeToken.user },
           });
           if (user === null) {
             return NextResponse.json(
@@ -158,7 +160,7 @@ export async function POST(request: NextRequest) {
               if (token === copyResetToken.token) {
                 if (new Date().getTime() > copyResetToken.limitDate) {
                   const deleteResetToken = await prisma.user.update({
-                    where: { mail: validator.escape(user.mail) },
+                    where: { mail: user.mail },
                     data: { resetToken: Prisma.DbNull },
                   });
                   return NextResponse.json(
@@ -186,7 +188,7 @@ export async function POST(request: NextRequest) {
                   }
                   let encrypt = await bcrypt.hash(password, 10);
                   let editUser = await prisma.user.update({
-                    where: { mail: validator.escape(user.mail) },
+                    where: { mail: user.mail },
                     data: { resetToken: Prisma.DbNull, password: encrypt },
                   });
                   if (editUser === null) {
@@ -201,19 +203,8 @@ export async function POST(request: NextRequest) {
                       }
                     );
                   } else {
-                    /* const csrfToken = generateCsrfToken()
-                    session.csrfToken = csrfToken;
-                    session.updateConfig({
-                      ...sessionOptions,
-                      cookieOptions: {
-                        ...sessionOptions.cookieOptions,
-                        maxAge: 60 * 15,
-                      },
-                    }); */
-                    
                     return NextResponse.json({
                       status: 200,
-                      //csrfToken: csrfToken,
                       message:
                         "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
                     });

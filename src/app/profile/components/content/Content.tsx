@@ -22,7 +22,6 @@ import ModalDeleteAccount from "../deleteAccount/modal/ModalDeleteAccount";
 import LastnameDataLoad from "../lastnameData/LastnameDataLoad";
 import FirstnameDataLoad from "../firstnameData/FirstnameDataLoad";
 import EmailDataLoad from "../emailSendTokenData/EmailSendTokenDataLoad";
-import { useRefreshCsrfToken } from "@/app/components/hook/csrf/useRefreshCsrfToken";
 const Parisienne = localFont({
   src: "../../../Parisienne-Regular.ttf",
   display: "swap",

@@ -4,8 +4,6 @@ import { getIronSession } from "iron-session";
 import prisma from "../../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../../lib/session";
 import { Prisma } from "@prisma/client";
-import validator from "validator";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
@@ -43,7 +41,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -59,7 +57,7 @@ export async function POST(request: NextRequest) {
       );
     } else {
       const updateUser: any = await prisma.user.update({
-        where: { mail: validator.escape(user.mail) },
+        where: { mail: user.mail },
         data: {
           editEmail: Prisma.DbNull,
         },
@@ -77,36 +75,15 @@ export async function POST(request: NextRequest) {
         );
       } else {
         let userObject = {
-          id: validator.escape(updateUser.id),
-          role: validator.escape(updateUser.role),
-          firstname: validator.escape(updateUser.firstname),
-          lastname: validator.escape(updateUser.lastname),
-          email: validator.escape(updateUser.mail),
+          id: updateUser.id,
+          role: updateUser.role,
+          firstname: updateUser.firstname,
+          lastname: updateUser.lastname,
+          email: updateUser.mail,
           editEmail: updateUser.editEmail,
         };
-        const csrfToken = generateCsrfToken()
-          session.csrfToken = csrfToken;
-          if (session.rememberMe) {
-            session.updateConfig({
-              ...sessionOptions,
-              cookieOptions: {
-                ...sessionOptions.cookieOptions,
-                maxAge: 60 * 60 * 24 * 30,
-              },
-            });
-          } else {
-            session.updateConfig({
-              ...sessionOptions,
-              cookieOptions: {
-                ...sessionOptions.cookieOptions,
-                maxAge: undefined,
-              },
-            });
-          }
-          await session.save();
         return NextResponse.json({
           status: 200,
-          csrfToken: csrfToken,
           message: "Votre demande de modification d'email à été annulé",
           body: userObject,
         });

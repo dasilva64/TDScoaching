@@ -32,6 +32,7 @@ const Content = () => {
   }, [csrfRefreshToken, dispatch]);
 
   const { isActive } = useSelector((state: RootState) => state.menu);
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken);
   
   const router = useRouter();
   const pathname = usePathname();

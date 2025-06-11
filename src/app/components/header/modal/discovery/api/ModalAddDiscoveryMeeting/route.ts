@@ -5,7 +5,6 @@ import { validationBody } from "@/app/lib/validation";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import validator from "validator";
 import jwt from "jsonwebtoken";
 import nodemailer from 'nodemailer'
 import { getRateLimiter } from "@/app/lib/rateLimiter";
@@ -25,6 +24,14 @@ export async function POST(request: NextRequest) {
     );
   }
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+    const csrfToken = headers().get("x-csrf-token");
+  
+    if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+      return NextResponse.json(
+        { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+        { status: 403 }
+      );
+    }
     if (session.isLoggedIn === true) {
         return NextResponse.json(
             {
@@ -36,21 +43,14 @@ export async function POST(request: NextRequest) {
             }
           );
     }
-    const csrfToken = headers().get("x-csrf-token");
-  
-    if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
-      return NextResponse.json(
-        { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
-        { status: 403 }
-      );
-    }
-    const { start, typeCoaching, email, firstname, lastname } =
+    const { start, typeCoaching, email, firstname, lastname, pseudo } =
       (await request.json()) as {
         start: string;
         typeCoaching: string;
         firstname: string;
         lastname: string;
         email: string;
+        pseudo: string;
       };
   
     let arrayMessageError = validationBody({
@@ -72,15 +72,28 @@ export async function POST(request: NextRequest) {
         }
       );
     }
+    if (pseudo.trim() !== "") {
+      return NextResponse.json(
+        {
+          status: 400,
+          type: "error",
+          message:
+            "Vous ne pouvez pas modifier votre prénom, veuillez réessayer",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
     let user = await prisma.user.findUnique({
       where: {
-        mail: validator.escape(email).trim(),
+        mail: email.trim(),
       },
     });
     let lastDiscoveryMeetingByUser = await prisma.meeting_test.findMany({
       take: 1,
       where: {
-        userMail: validator.escape(email).trim(),
+        userMail: email.trim(),
         type: "discovery",
       },
       orderBy: { startAt: "desc" },
@@ -88,7 +101,7 @@ export async function POST(request: NextRequest) {
     let lastNotDiscoveryMeetingByUser = await prisma.meeting_test.findMany({
       take: 1,
       where: {
-        userMail: validator.escape(email).trim(),
+        userMail: email.trim(),
         NOT: {
           type: "discovery",
         },
@@ -175,11 +188,11 @@ export async function POST(request: NextRequest) {
       } else {
         let createMeeting = await prisma.meeting_test.create({
           data: {
-            startAt: validator.escape(start),
+            startAt: start.trim(),
             confirm: false,
-            status: validator.escape("pending"),
-            userMail: validator.escape(email),
-            coaching: validator.escape(typeCoaching),
+            status: "pending",
+            userMail: email.trim(),
+            coaching: typeCoaching.trim(),
             type: "discovery",
           },
         });
@@ -202,8 +215,8 @@ export async function POST(request: NextRequest) {
         } else {
           let token = jwt.sign(
             {
-              user: validator.escape(email.trim()),
-              start: start,
+              user: email.trim(),
+              start: start.trim(),
               id: createMeeting.id,
             },
             process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
@@ -231,8 +244,8 @@ export async function POST(request: NextRequest) {
           });
           let mailOptions = {
             from: "contact@tds-coachingdevie.fr",
-            to: validator.escape(user.mail.trim()),
-            subject: "Rendez-vous du " + new Date(createMeeting.startAt).toLocaleString(),
+            to: user.mail.trim(),
+            subject: "Rendez-vous du " + new Date(createMeeting.startAt).toLocaleString().trim(),
             html: `<!DOCTYPE html>
                       <html lang="fr">
                         <head>
@@ -257,9 +270,9 @@ export async function POST(request: NextRequest) {
                               <li>Coaching: ${createMeeting.coaching}</li>
                               </ul>
                               <p style="margin-bottom: 20px">Vous devez le confirmer 24h avant la date du rendez-vous, sinon il sera automatiquement supprimer
-                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${validator.escape(token)}" target="_blank">Confirmer mon rendez-vous</a>
+                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Confirmer mon rendez-vous</a>
                               <p style="margin-bottom: 20px">Vous pouvez le modifier, supprimer  en cliquant sur le bouton ci dessous</p>
-                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${validator.escape(token)}" target="_blank">Modifier mon rendez-vous</a>
+                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Modifier mon rendez-vous</a>
                             </div>
                           </div>
                         </body>
@@ -336,18 +349,18 @@ export async function POST(request: NextRequest) {
       } else {
         let createUser = await prisma.user.create({
           data: {
-            firstname: validator.escape(firstname),
-            lastname: validator.escape(lastname),
-            mail: validator.escape(email),
+            firstname: firstname,
+            lastname: lastname,
+            mail: email,
           },
         });
         let createMeeting = await prisma.meeting_test.create({
           data: {
-            startAt: validator.escape(start),
+            startAt: start,
             confirm: false,
-            status: validator.escape("pending"),
-            userMail: validator.escape(email),
-            coaching: validator.escape(typeCoaching),
+            status: "pending",
+            userMail: email,
+            coaching: typeCoaching,
             type: "discovery",
           },
         });
@@ -370,7 +383,7 @@ export async function POST(request: NextRequest) {
         } else {
           let token = jwt.sign(
             {
-              user: validator.escape(email.trim()),
+              user: email.trim(),
               start: start,
               id: createMeeting.id,
             },
@@ -393,7 +406,7 @@ export async function POST(request: NextRequest) {
           });
           let mailOptions = {
             from: "contact@tds-coachingdevie.fr",
-            to: validator.escape(createUser.mail.trim()),
+            to: createUser.mail.trim(),
             subject: "Rendez-vous du " + new Date(createMeeting.startAt).toLocaleString(),
             html: `<!DOCTYPE html>
                       <html lang="fr">
@@ -419,9 +432,9 @@ export async function POST(request: NextRequest) {
                               <li>Coaching: ${createMeeting.coaching}</li>
                               </ul>
                               <p style="margin-bottom: 20px">Vous devez le confirmer 24h avant la date du rendez-vous, sinon il sera automatiquement supprimer
-                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${validator.escape(token)}" target="_blank">Confirmer mon rendez-vous</a>
+                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Confirmer mon rendez-vous</a>
                               <p style="margin-bottom: 20px">Vous pouvez le modifier, supprimer  en cliquant sur le bouton ci dessous</p>
-                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${validator.escape(token)}" target="_blank">Modifier mon rendez-vous</a>
+                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Modifier mon rendez-vous</a>
                             </div>
                           </div>
                         </body>

@@ -2,7 +2,6 @@ import { RootState } from "../../../../redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Display.module.scss";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const DisplayOne = ({ i }: any) => {
@@ -25,7 +24,7 @@ const DisplayOne = ({ i }: any) => {
             dispatch({
               type: "flash/clearFlashMessage",
             });
-            router.push(`/utilisateur/${datas[i]["Id"]}`);
+            router.push(`/utilisateur/${encodeURIComponent(datas[i]["Id"])}`);
           }}
         >
           {keyAr &&

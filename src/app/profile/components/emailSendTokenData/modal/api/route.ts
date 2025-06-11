@@ -3,11 +3,9 @@ import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import prisma from "../../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../../lib/session";
-import validator from "validator";
 import nodemailer from "nodemailer";
 import { validationBody } from "../../../../../lib/validation";
 import { Prisma } from "@prisma/client";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
@@ -45,7 +43,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -95,7 +93,7 @@ export async function POST(request: NextRequest) {
           let copyEditEmail: any = user.editEmail;
           let now = new Date();
           let editUser = await prisma.user.update({
-            where: { mail: validator.escape(user.mail) },
+            where: { mail: user.mail },
             data: {
               editEmail: Prisma.DbNull,
             },
@@ -114,7 +112,7 @@ export async function POST(request: NextRequest) {
             );
           } else {
             let userExist = await prisma.user.findUnique({
-              where: { mail: validator.escape(email.trim()) },
+              where: { mail: email.trim() },
             });
             if (userExist === null) {
               let now = new Date();
@@ -127,12 +125,12 @@ export async function POST(request: NextRequest) {
               let max = 99999999;
               let random = Math.floor(Math.random() * (max - min)) + min; */
               let editUser = await prisma.user.update({
-                where: { mail: validator.escape(user.mail) },
+                where: { mail: user.mail },
                 data: {
                   editEmail: {
                     limitDate: now.setMinutes(now.getMinutes() + 30),
                     token: token,
-                    newEmail: validator.escape(email.trim()),
+                    newEmail: email.trim(),
                   },
                 },
               });
@@ -162,7 +160,7 @@ export async function POST(request: NextRequest) {
                 
                 let mailOptions = {
                   from: "contact@tds-coachingdevie.fr",
-                  to: validator.escape(copyEditEmail.newEmail),
+                  to: copyEditEmail.newEmail,
                   subject: "Validation de votre nouvelle adresse email",
                   html: `<!DOCTYPE html>
                               <html lang="fr">
@@ -194,35 +192,14 @@ export async function POST(request: NextRequest) {
                 await smtpTransport.sendMail(mailOptions);
 
                 let userObject = {
-                  firstname: validator.escape(editUser.firstname),
-                  lastname: validator.escape(editUser.lastname),
-                  email: validator.escape(editUser.mail),
-                  newEmail: validator.escape(copyEditEmail.newEmail),
+                  firstname: editUser.firstname,
+                  lastname: editUser.lastname,
+                  email: editUser.mail,
+                  newEmail: copyEditEmail.newEmail,
                 };
-                const csrfToken = generateCsrfToken()
-                session.csrfToken = csrfToken;
-                if (session.rememberMe) {
-                  session.updateConfig({
-                    ...sessionOptions,
-                    cookieOptions: {
-                      ...sessionOptions.cookieOptions,
-                      maxAge: 60 * 60 * 24 * 30,
-                    },
-                  });
-                } else {
-                  session.updateConfig({
-                    ...sessionOptions,
-                    cookieOptions: {
-                      ...sessionOptions.cookieOptions,
-                      maxAge: undefined,
-                    },
-                  });
-                }
-                await session.save();
                 return NextResponse.json({
                   status: 200,
                   body: userObject,
-                  csrfToken: csrfToken,
                   message:
                     "Un email vous a été envoyé pour valider votre nouvelle adresse email",
                 });
@@ -256,7 +233,7 @@ export async function POST(request: NextRequest) {
           );
         } else {
           let userExist = await prisma.user.findUnique({
-            where: { mail: validator.escape(email.trim()) },
+            where: { mail: email.trim()},
           });
           if (userExist === null) {
             let now = new Date();
@@ -270,12 +247,12 @@ export async function POST(request: NextRequest) {
                 token += characters.charAt(Math.floor(Math.random() * characters.length))
               }
             let editUser = await prisma.user.update({
-              where: { mail: validator.escape(user.mail) },
+              where: { mail: user.mail },
               data: {
                 editEmail: {
                   limitDate: now.setMinutes(now.getMinutes() + 30),
                   token: token,
-                  newEmail: validator.escape(email.trim()),
+                  newEmail: email.trim(),
                 },
               },
             });
@@ -305,7 +282,7 @@ export async function POST(request: NextRequest) {
               
               let mailOptions = {
                 from: "contact@tds-coachingdevie.fr",
-                to: validator.escape(copyEditEmail.newEmail),
+                to: copyEditEmail.newEmail,
                 subject: "Validation de votre nouvelle adresse email",
                 html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -326,7 +303,7 @@ export async function POST(request: NextRequest) {
                                   <h1 style="text-align: center">tds coaching</h1>
                                   <h2 style="text-align: center">Validation de votre adresse email</h2>
                                   <p style="margin-bottom: 20px">Pour activer cette addresse email, veuillez entrer le code ci-dessous.</p>
-                                  <p style="width: 100px; margin: auto; padding: 20px; background: white; border-radius: 10px">${token}</p>
+                                  <p style="width: 100px; margin: auto; padding: 20px; background: white; border-radius: 10px">${encodeURIComponent(token)}</p>
                                   <p style="margin-top: 20px">Le code est valide pendant 1 heure.</p>
                                   
                                 </div>
@@ -337,35 +314,14 @@ export async function POST(request: NextRequest) {
               await smtpTransport.sendMail(mailOptions);
 
               let userObject = {
-                firstname: validator.escape(editUser.firstname),
-                lastname: validator.escape(editUser.lastname),
-                email: validator.escape(editUser.mail),
-                newEmail: validator.escape(copyEditEmail.newEmail),
+                firstname: editUser.firstname,
+                lastname: editUser.lastname,
+                email: editUser.mail,
+                newEmail: copyEditEmail.newEmail,
               };
-              const csrfToken = generateCsrfToken()
-                session.csrfToken = csrfToken;
-                if (session.rememberMe) {
-                  session.updateConfig({
-                    ...sessionOptions,
-                    cookieOptions: {
-                      ...sessionOptions.cookieOptions,
-                      maxAge: 60 * 60 * 24 * 30,
-                    },
-                  });
-                } else {
-                  session.updateConfig({
-                    ...sessionOptions,
-                    cookieOptions: {
-                      ...sessionOptions.cookieOptions,
-                      maxAge: undefined,
-                    },
-                  });
-                }
-                await session.save();
               return NextResponse.json({
                 status: 200,
                 body: userObject,
-                csrfToken: csrfToken,
                 message:
                   "Un email vous a été envoyé pour valider votre nouvelle adresse email",
               });

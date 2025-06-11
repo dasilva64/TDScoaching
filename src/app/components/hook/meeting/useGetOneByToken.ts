@@ -3,11 +3,14 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 
-const fetchUser = async (url: string, token: string) => {
+const fetchUser = async (url: string, token: string, csrfToken: any) => {
+  
   let response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Accept: "application/json",
+      "X-CSRF-Token": csrfToken,
     },
     body: JSON.stringify({ token: token }),
   });
@@ -16,13 +19,12 @@ const fetchUser = async (url: string, token: string) => {
   return json;
 };
 
-const useGetOneByToken = (token: string) => {
+const useGetOneByToken = (token: string, csrfToken: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const { data, isLoading, error, mutate } = useSWR(
-    [`/rendez-vous/[token]/components/api`, token],
-    ([url, token]) => fetchUser(url, token)
+  const { data, isLoading, error, mutate } = useSWR(csrfToken ? 
+    [`/rendez-vous/[token]/components/api`, token] : null,
+    ([url, token]) => fetchUser(url, token, csrfToken)
   );
   useEffect(() => {
      if (data) {
@@ -31,7 +33,13 @@ const useGetOneByToken = (token: string) => {
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "error" },
         });
+       
         router.push("/");
+      } else if (data.status === 200) {
+        dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
+        });
       }
     } 
   }, [data, dispatch, router]);

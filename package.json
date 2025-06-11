@@ -40,7 +40,6 @@
     "iron-session": "latest",
     "jsdom": "latest",
     "jsonwebtoken": "latest",
-    "limiter": "latest",
     "next": "latest",
     "node-fetch": "latest",
     "nodemailer": "latest",

@@ -4,11 +4,11 @@ import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "@/app/components/image/Image";
 import useSWRMutation from "swr/mutation";
-import validator from "validator";
 import styles from "./ModalDeleteDiscoveryMeeting.module.scss";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import { useRouter } from "next/navigation";
+import { mutate } from "swr";
 
 const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
   const router = useRouter();
@@ -21,6 +21,9 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
       type: "ModalDeleteDiscoveryMeetingRendezVousToken/close",
     });
   };
+  const { csrfToken } = useSelector(
+    (state: RootState) => state.csrfToken
+  );
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/rendez-vous/[token]/components/modal/delete/api",
     fetchPost
@@ -35,6 +38,11 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
         dispatch({
           type: "ModalDeleteDiscoveryMeetingRendezVousToken/close",
         });
+        mutate("/components/header/api");
+        /* dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
+        }); */
         router.push("/");
         reset();
       } else {
@@ -51,7 +59,7 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
     dispatch({
       type: "flash/clearFlashMessage",
     });
-    trigger({ token: validator.escape(token.trim()) });
+    trigger({ token: token.trim(), csrfToken: csrfToken });
   };
   return (
     <>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./FormLogin.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../src/app/redux/store";
-import validator from "validator";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
@@ -150,10 +149,10 @@ const FormLogin = () => {
         const fetchLogin = async () => {
           if (csrfToken) {
             login({
-            email: validator.escape(emailInput.trim()),
-            password: validator.escape(passwordInput.trim()),
+            email: emailInput.trim(),
+            password: passwordInput.trim(),
             remember: rememberMeInput,
-            pseudo: validator.escape(inputPseudo.trim()),
+            pseudo: inputPseudo.trim(),
             csrfToken: csrfToken
           });
           } else {
@@ -306,11 +305,11 @@ const FormLogin = () => {
                       handlerInput(
                         e,
                         "password",
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{12,}$/,
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{12,}$/,
                         setValidPasswordInput,
                         setErrorMessagePassword,
                         setPasswordInput,
-                        "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#=&,_) et 12 caractères minimum"
+                        "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#,_) et 12 caractères minimum"
                       );
                     }}
                     validInput={validPasswordInput}

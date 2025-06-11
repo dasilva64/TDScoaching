@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./formRegister.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../src/app/redux/store";
-import validator from "validator";
 import Link from "next/link";
 import Image from "../image/Image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -119,12 +118,12 @@ const FormRegister = () => {
           setIsLoading(true);
           const fetchRegister = async () => {
             trigger({
-              email: validator.escape(emailInput.trim()),
-              password: validator.escape(passwordInput.trim()),
-              passwordComfirm: validator.escape(passwordComfirmInput.trim()),
-              firstname: validator.escape(firstnameInput.trim()),
-              lastname: validator.escape(lastnameInput.trim()),
-              pseudo: validator.escape(inputPseudo.trim()),
+              email: emailInput.trim(),
+              password: passwordInput.trim(),
+              passwordComfirm: passwordComfirmInput.trim(),
+              firstname: firstnameInput.trim(),
+              lastname: lastnameInput.trim(),
+              pseudo: inputPseudo.trim(),
             });
           };
           fetchRegister();
@@ -440,11 +439,11 @@ const FormRegister = () => {
                   onchange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handlerInputPassword(
                       e,
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{12,}$/,
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#,_])[A-Za-z\d-?!*:@~%.;+|$#,_]{12,}$/,
                       setValidPasswordInput,
                       setPasswordInputError,
                       setPasswordInput,
-                      "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%)(.;+{\"|$#}=['&,_) et 12 caractères minimum"
+                      "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#,_) et 12 caractères minimum"
                     );
                   }}
                   validInput={validPasswordInput}

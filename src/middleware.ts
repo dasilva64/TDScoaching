@@ -4,7 +4,7 @@ import { SessionData, sessionOptions } from "./app/lib/session";
 import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
- // const res = NextResponse.next();
+  //const res = NextResponse.next();
   
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
@@ -48,7 +48,7 @@ export async function middleware(request: NextRequest) {
   request.nextUrl.pathname.startsWith("/meetings") ||
   request.nextUrl.pathname.startsWith("/meetingAdmin") ||
   regex.test(request.nextUrl.pathname) ||
-  request.nextUrl.pathname.startsWith("/rendez-vous") ||
+  request.nextUrl.pathname === "/rendez-vous" ||
   regexTwo.test(request.nextUrl.pathname) ||
   request.nextUrl.pathname.startsWith('/historique-rendez-vous')) {
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);

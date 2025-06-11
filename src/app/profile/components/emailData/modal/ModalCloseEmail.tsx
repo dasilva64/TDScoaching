@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import fetchPost from "@/app/components/fetch/FetchPost";
@@ -44,10 +45,7 @@ const ModalCloseEmail = ({mutate}: any) => {
         dispatch({
           type: "ModalEditEmail/close",
         });
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        globalMutate("/components/header/api");
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },

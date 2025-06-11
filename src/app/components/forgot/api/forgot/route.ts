@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validationBody } from "../../../../lib/validation";
-import validator from "validator";
 import prisma from "../../../../lib/prisma";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { Prisma } from "@prisma/client";
 import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { SessionData, sessionOptions } from "../../../../lib/session";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
 import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
@@ -29,10 +28,16 @@ export async function POST(request: NextRequest) {
     cookies(),
     sessionOptions
   );
-
+  const csrfToken = headers().get("x-csrf-token");
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -96,7 +101,7 @@ export async function POST(request: NextRequest) {
       );
     } else {
       const user = await prisma.user.findUnique({
-        where: { mail: validator.escape(email.trim()) },
+        where: { mail: email.trim() },
       });
       if (user === null) {
         return NextResponse.json(
@@ -127,7 +132,7 @@ export async function POST(request: NextRequest) {
           let limitDate = new Date(copyResetToken.limitDate);
           if (new Date() > limitDate) {
             let editUserReset = await prisma.user.update({
-              where: { mail: validator.escape(email.trim()) },
+              where: { mail: email.trim() },
               data: { resetToken: Prisma.DbNull },
             });
             let token = jwt.sign(
@@ -137,13 +142,13 @@ export async function POST(request: NextRequest) {
             );
             let currentDate = new Date();
             let resetTokenObject = {
-              token: validator.escape(token),
+              token: token,
               limitDate: currentDate.setMinutes(
                 currentDate.getMinutes() + 30
               ),
             };
             let editUser = await prisma.user.update({
-              where: { mail: validator.escape(email.trim()) },
+              where: { mail: email.trim() },
               data: { resetToken: resetTokenObject },
             });
             let smtpTransport = nodemailer.createTransport({
@@ -157,7 +162,7 @@ export async function POST(request: NextRequest) {
             });
             let mailOptions = {
               from: "contact@tds-coachingdevie.fr",
-              to: validator.escape(editUser.mail),
+              to: editUser.mail,
               subject: "Réinitialisation du mot de passe",
               html: `<!DOCTYPE html>
                           <html lang="fr">
@@ -178,7 +183,7 @@ export async function POST(request: NextRequest) {
                                   <h1 style="text-align: center">tds coaching</h1>
                                   <h2 style="text-align: center">Réinitialisation de votre mot de passe</h2>
                                   <p style="margin-bottom: 20px">Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous.</p>
-                                  <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/reinitialisation-mot-de-passe/${validator.escape(token)}" target="_blank">Vérifier mon compte</a>
+                                  <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/reinitialisation-mot-de-passe/${encodeURIComponent(token)}" target="_blank">Vérifier mon compte</a>
                                   <p style="margin-top: 20px">Ce lien est valide pendant 5 min, au-delà de ce temps il ne sera plus disponible.</p>
                                 </div>
                               </div>
@@ -225,11 +230,11 @@ export async function POST(request: NextRequest) {
           );
           let currentDate = new Date();
           let resetTokenObject = {
-            token: validator.escape(token),
+            token: token,
             limitDate: currentDate.setMinutes(currentDate.getMinutes() + 30),
           };
           let editUser = await prisma.user.update({
-            where: { mail: validator.escape(email.trim()) },
+            where: { mail: email.trim() },
             data: { resetToken: resetTokenObject },
           });
           let smtpTransport = nodemailer.createTransport({
@@ -243,7 +248,7 @@ export async function POST(request: NextRequest) {
           });
           let mailOptions = {
             from: "contact@tds-coachingdevie.fr",
-            to: validator.escape(editUser.mail),
+            to: editUser.mail,
             subject: "Réinitialisation du mot de passe",
             html: `<!DOCTYPE html>
                         <html lang="fr">
@@ -264,7 +269,7 @@ export async function POST(request: NextRequest) {
                                 <h1 style="text-align: center">tds coaching</h1>
                                 <h2 style="text-align: center">Réinitialisation de votre mot de passe</h2>
                                 <p style="margin-bottom: 20px">Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous.</p>
-                                <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/reinitialisation-mot-de-passe/${validator.escape(token)}" target="_blank">Vérifier mon compte</a>
+                                <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/reinitialisation-mot-de-passe/${encodeURIComponent(token)}" target="_blank">Vérifier mon compte</a>
                                 <p style="margin-top: 20px">Ce lien est valide pendant 5 min, au-delà de ce temps il ne sera plus disponible.</p>
                               </div>
                             </div>

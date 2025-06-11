@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AnimatePresence, motion } from "framer-motion";
 import useSWRMutation from "swr/mutation";
-import validator from "validator";
 import styles from "./ModalComfirmDiscoveryMeeting.module.scss";
 import Image from "@/app/components/image/Image";
 import fetchPost from "@/app/components/fetch/FetchPost";
@@ -12,6 +11,9 @@ import { RootState } from "@/app/redux/store";
 const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
   const { displayModalConfirmDiscoveryMeetingRendezVousToken } = useSelector(
     (state: RootState) => state.ModalConfirmDiscoveryMeetingRendezVousToken
+  );
+  const { csrfToken } = useSelector(
+    (state: RootState) => state.csrfToken
   );
   const dispatch = useDispatch();
   const closeModal = () => {
@@ -49,7 +51,7 @@ const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
     dispatch({
       type: "flash/clearFlashMessage",
     });
-    trigger({ token: validator.escape(token.trim()) });
+    trigger({ token: token.trim(), csrfToken: csrfToken });
   };
   return (
     <>

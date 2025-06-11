@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
-import validator from "validator";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import prisma from "../../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../../lib/session";
 import { validationBody } from "../../../../../lib/validation";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
@@ -45,7 +43,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -96,27 +94,27 @@ export async function POST(request: NextRequest) {
           let date = new Date();
           if (copyDeleteToken.limitDate < date) {
             /* let editUser = await prisma.user.update({
-              where: { id: validator.escape(session.id) },
+              where: { id: session.id) },
               data: {
                 deleteToken: Prisma.JsonNull,
                 deleteReason: null,
               },
             }); */
             let token = jwt.sign(
-              { user: validator.escape(user.mail) },
+              { user: user.mail },
               process.env.SECRET_TOKEN_DELETE as string,
               { expiresIn: "30m" }
             );
             let limitDate = new Date();
               limitDate.setMinutes(limitDate.getMinutes() + 30);
             let editUser = await prisma.user.update({
-              where: { id: validator.escape(session.id) },
+              where: { id: session.id },
               data: {
                 deleteToken: {
-                  token: validator.escape(token),
+                  token: encodeURIComponent(token),
                   limitDate: limitDate.getTime(),
                 },
-                deleteReason: validator.escape(reason.trim()),
+                deleteReason: reason.trim(),
               },
             });
             if (editUser === null) {
@@ -143,7 +141,7 @@ export async function POST(request: NextRequest) {
               });
               let mailOptions = {
                 from: "contact@tds-coachingdevie.fr",
-                to: validator.escape(editUser.mail),
+                to: editUser.mail,
                 subject: "Suppression de compte",
                 html: `<!DOCTYPE html>
                                 <html lang="fr">
@@ -171,7 +169,7 @@ export async function POST(request: NextRequest) {
                                           <p style="display: flex"><img style="margin-right: 5px" src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Ficone%2Ftriangle.png&w=750&q=75" width="20px" height="20px" />Attention vous ne pourrez plus revenir en arrière après cette action.</p>
                                         </div>
                                         <p style="margin: 0px 0px 40px 0px">Pour supprimer votre compte veuillez cliquer sur le bouton ci-dessous.</p>
-                                        <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="https://tdscoaching.fr/suppression-compte/${validator.escape(token)}" target="_blank">Supprimer votre compte</a>
+                                        <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="https://tdscoaching.fr/suppression-compte/${encodeURIComponent(token)}" target="_blank">Supprimer votre compte</a>
                                         <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et vous devrez refaire une demande de suppression de compte</p>
                                       </div>
                                     </div>
@@ -179,36 +177,15 @@ export async function POST(request: NextRequest) {
                                 </html>`,
               };
               await smtpTransport.sendMail(mailOptions);
-              const csrfToken = generateCsrfToken()
-              session.csrfToken = csrfToken;
-              if (session.rememberMe) {
-                session.updateConfig({
-                  ...sessionOptions,
-                  cookieOptions: {
-                    ...sessionOptions.cookieOptions,
-                    maxAge: 60 * 60 * 24 * 30,
-                  },
-                });
-              } else {
-                session.updateConfig({
-                  ...sessionOptions,
-                  cookieOptions: {
-                    ...sessionOptions.cookieOptions,
-                    maxAge: undefined,
-                  },
-                });
-              }
-              await session.save();
               return NextResponse.json({
                 status: 200,
-                csrfToken: csrfToken,
                 message:
                   "Un email vous a été envoyé pour supprimer votre compte",
               });
             }
             /* if (user.meetingId === null) {
               let token = jwt.sign(
-                { user: validator.escape(user.mail) },
+                { user: user.mail) },
                 process.env.SECRET_TOKEN_DELETE as string,
                 { expiresIn: "30m" }
               );
@@ -216,13 +193,13 @@ export async function POST(request: NextRequest) {
               limitDate.setMinutes(limitDate.getMinutes() + 30);
 
               let editUser = await prisma.user.update({
-                where: { id: validator.escape(session.id) },
+                where: { id: session.id) },
                 data: {
                   deleteToken: {
-                    token: validator.escape(token),
+                    token: encodeURIComponent(token),
                     limitDate: limitDate.getTime(),
                   },
-                  deleteReason: validator.escape(reason.trim()),
+                  deleteReason: reason.trim()),
                 },
               });
               if (editUser === null) {
@@ -249,7 +226,7 @@ export async function POST(request: NextRequest) {
                 });
                 let mailOptions = {
                   from: "contact@tds-coachingdevie.fr",
-                  to: validator.escape(editUser.mail),
+                  to: editUser.mail),
                   subject: "Suppression de compte",
                   html: `<!DOCTYPE html>
                                   <html lang="fr">
@@ -277,7 +254,7 @@ export async function POST(request: NextRequest) {
                                             <p style="display: flex"><img style="margin-right: 5px" src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Ficone%2Ftriangle.png&w=750&q=75" width="20px" height="20px" />Attention vous ne pourrez plus revenir en arrière après cette action.</p>
                                           </div>
                                           <p style="margin: 0px 0px 40px 0px">Pour supprimer votre compte veuillez cliquer sur le bouton ci-dessous.</p>
-                                          <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="https://tdscoaching.fr/suppression-compte/${validator.escape(token)}" target="_blank">Supprimer votre compte</a>
+                                          <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="https://tdscoaching.fr/suppression-compte/${encodeURIComponent(token)}" target="_blank">Supprimer votre compte</a>
                                           <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et vous devrez refaire une demande de suppression de compte</p>
                                         </div>
                                       </div>
@@ -333,13 +310,13 @@ export async function POST(request: NextRequest) {
         limitDate.setMinutes(limitDate.getMinutes() + 30);
 
         let editUser = await prisma.user.update({
-          where: { id: validator.escape(session.id) },
+          where: { id: session.id },
           data: {
             deleteToken: {
               token: token,
               limitDate: limitDate.getTime(),
             },
-            deleteReason: validator.escape(reason.trim()),
+            deleteReason: reason.trim(),
           },
         });
         if (editUser === null) {
@@ -366,7 +343,7 @@ export async function POST(request: NextRequest) {
           });
           let mailOptions = {
             from: "contact@tds-coachingdevie.fr",
-            to: validator.escape(editUser.mail),
+            to: editUser.mail,
             subject: "Suppression de compte",
             html: `<!DOCTYPE html>
                             <html lang="fr">
@@ -394,7 +371,7 @@ export async function POST(request: NextRequest) {
                                       <p style="display: flex"><img style="margin-right: 5px" src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Ficone%2Ftriangle.png&w=750&q=75" width="20px" height="20px" />Attention vous ne pourrez plus revenir en arrière après cette action.</p>
                                     </div>
                                     <p style="margin: 0px 0px 40px 0px">Pour supprimer votre compte veuillez cliquer sur le bouton ci-dessous.</p>
-                                    <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="https://tdscoaching.fr/suppression-compte/${validator.escape(token)}" target="_blank">Supprimer votre compte</a>
+                                    <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="https://tdscoaching.fr/suppression-compte/${encodeURIComponent(token)}" target="_blank">Supprimer votre compte</a>
                                     <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et vous devrez refaire une demande de suppression de compte</p>
                                   </div>
                                 </div>
@@ -402,12 +379,8 @@ export async function POST(request: NextRequest) {
                             </html>`,
           };
           await smtpTransport.sendMail(mailOptions);
-          const csrfToken = generateCsrfToken()
-          session.csrfToken = csrfToken;
-          await session.save();
           return NextResponse.json({
             status: 200,
-            csrfToken: csrfToken,
             message: "Un email vous a été envoyé pour supprimer votre compte",
           });
         }
@@ -421,13 +394,13 @@ export async function POST(request: NextRequest) {
           limitDate.setMinutes(limitDate.getMinutes() + 30);
 
           let editUser = await prisma.user.update({
-            where: { id: validator.escape(session.id) },
+            where: { id: session.id) },
             data: {
               deleteToken: {
                 token: token,
                 limitDate: limitDate.getTime(),
               },
-              deleteReason: validator.escape(reason.trim()),
+              deleteReason: reason.trim()),
             },
           });
           if (editUser === null) {
@@ -454,7 +427,7 @@ export async function POST(request: NextRequest) {
             });
             let mailOptions = {
               from: "contact@tds-coachingdevie.fr",
-              to: validator.escape(editUser.mail),
+              to: editUser.mail),
               subject: "Suppression de compte",
               html: `<!DOCTYPE html>
                               <html lang="fr">
@@ -482,7 +455,7 @@ export async function POST(request: NextRequest) {
                                         <p style="display: flex"><img style="margin-right: 5px" src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Ficone%2Ftriangle.png&w=750&q=75" width="20px" height="20px" />Attention vous ne pourrez plus revenir en arrière après cette action.</p>
                                       </div>
                                       <p style="margin: 0px 0px 40px 0px">Pour supprimer votre compte veuillez cliquer sur le bouton ci-dessous.</p>
-                                      <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="https://tdscoaching.fr/suppression-compte/${validator.escape(token)}" target="_blank">Supprimer votre compte</a>
+                                      <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: red; color: white; margin-top: 50px" href="https://tdscoaching.fr/suppression-compte/${encodeURIComponent(token)}" target="_blank">Supprimer votre compte</a>
                                       <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et vous devrez refaire une demande de suppression de compte</p>
                                     </div>
                                   </div>

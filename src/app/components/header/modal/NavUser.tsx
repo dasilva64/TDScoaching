@@ -42,6 +42,7 @@ const NavUser = ({csrfToken}: any) => {
         }
       }
       mutate("/components/header/ui/api");
+      mutate("/components/header/api");
       dispatch({
         type: "flash/storeFlashMessage",
         payload: {

@@ -14,6 +14,7 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [typeCoaching, setTypeCoaching] = useState<string>("");
   const [pseudo, setPseudo] = useState<string>("");
+  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
     useState<string>("");
   const [typeCoachingValid, setTypeCoachingValid] = useState<boolean>(false);
@@ -58,7 +59,10 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
           setTypeCoachingErrorMessage("");
           setTypeCoachingValid(false);
           setPseudo("");
-
+          dispatch({
+            type: "csrfToken/store",
+            payload: { csrfToken: data.csrfToken },
+          });
           await globalMutate('/components/header/ui/api')
           await mutate();
           await dispatch({ type: "ModalAddMeetingRendezVous/close" });
@@ -203,6 +207,7 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
                       trigger({
                         typeCoaching: typeCoaching,
                         start: dateModalAddMeetingRendezVous,
+                        csrfToken: csrfToken
                       });
                     }
                     e.preventDefault();

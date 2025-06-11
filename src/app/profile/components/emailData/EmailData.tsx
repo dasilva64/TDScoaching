@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "@/app/components/image/Image";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
+import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 
@@ -22,7 +23,6 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
   const { displayModalEditEmail } = useSelector(
     (state: RootState) => state.ModalEditEmail
   );
-  console.log("displayModalEditEmail", displayModalEditEmail)
   /* const {
     data: userData,
     isLoading,
@@ -100,10 +100,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
           type: "ModalEditEmail/close",
         });
         clearState();
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        globalMutate("/components/header/api");
         reset();
         //}
       } else if (data.status === 401) {

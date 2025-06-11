@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../lib/prisma";
 import { validationBody } from "../../../lib/validation";
-import validator from "validator";
 import nodemailer from "nodemailer";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
@@ -69,7 +68,7 @@ export async function POST(request: NextRequest) {
       );
     } else {
       const user = await prisma.user.findUnique({
-        where: { mail: validator.escape(email.trim()), status: true },
+        where: { mail: email.trim(), status: true },
       });
       let smtpTransport = nodemailer.createTransport({
         host: "smtp.ionos.fr",
@@ -84,7 +83,7 @@ export async function POST(request: NextRequest) {
         let mailOptions = {
           from: "contact@tds-coachingdevie.fr",
           to: "contact@tds-coachingdevie.fr",
-          subject: validator.escape(object.trim()),
+          subject: object.trim(),
           html: `<!DOCTYPE html>
                           <html lang="fr">
                             <head>
@@ -102,18 +101,18 @@ export async function POST(request: NextRequest) {
                                 </div>
                                 <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                   <h1 style="text-align: center">tds coaching</h1>
-                                  <h2 style="text-align: center">${validator.escape(
+                                  <h2 style="text-align: center">${
                                     firstname.trim()
-                                  )} ${validator.escape(
+                                  } ${
             lastname.trim()
-          )} vous a envoyé un message</h2>
-                                  <p style="text-align: left; margin-left: 20px">Email : ${validator.escape(
+          } vous a envoyé un message</h2>
+                                  <p style="text-align: left; margin-left: 20px">Email : ${
                                     email.trim()
-                                  )}</p>
+                                  }</p>
                                   <p style="text-align: left; margin-left: 20px">Compte : l'utilisateur n'est pas inscrit</p>
-                                  <p style="text-align: left; margin-left: 20px">Message : ${validator.escape(
+                                  <p style="text-align: left; margin-left: 20px">Message : ${
                                     message.trim()
-                                  )}</p>
+                                  }</p>
                                 </div>
                               </div>
                             </body>
@@ -124,7 +123,7 @@ export async function POST(request: NextRequest) {
         let mailOptions = {
           from: "contact@tds-coachingdevie.fr",
           to: "contact@tds-coachingdevie.fr",
-          subject: validator.escape(object.trim()),
+          subject: object.trim(),
           html: `<!DOCTYPE html>
                           <html lang="fr">
                             <head>
@@ -142,18 +141,18 @@ export async function POST(request: NextRequest) {
                                 </div>
                                 <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                   <h1 style="text-align: center">tds coaching</h1>
-                                  <h2 style="text-align: center">${validator.escape(
+                                  <h2 style="text-align: center">${
                                     firstname.trim()
-                                  )} ${validator.escape(
+                                  } ${
             lastname.trim()
-          )} vous a envoyé un message</h2>
-                                  <p style="text-align: left; margin-left: 20px">Email : ${validator.escape(
+          } vous a envoyé un message</h2>
+                                  <p style="text-align: left; margin-left: 20px">Email : ${
                                     email.trim()
-                                  )}</p>
+                                  }</p>
                                   <p style="text-align: left; margin-left: 20px">Compte : l'utilisateur est inscrit</p>
-                                  <p style="text-align: left; margin-left: 20px">Message : ${validator.escape(
+                                  <p style="text-align: left; margin-left: 20px">Message : ${
                                     message.trim()
-                                  )}</p>
+                                  }</p>
                                 </div>
                               </div>
                             </body>
@@ -163,8 +162,8 @@ export async function POST(request: NextRequest) {
       }
       let mailOptions = {
         from: "contact@tds-coachingdevie.fr",
-        to: validator.escape(email.trim()),
-        subject: validator.escape(object.trim()),
+        to: email.trim(),
+        subject: object.trim(),
         html: `<!DOCTYPE html>
                         <html lang="fr">
                           <head>
@@ -183,21 +182,21 @@ export async function POST(request: NextRequest) {
                               <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                 <h1 style="text-align: center">tds coaching a reçu votre message</h1>
                                 <h2 style="text-align: center">Rappel du message</h2>
-                                <p style="text-align: left; margin-left: 20px">Email : ${validator.escape(
+                                <p style="text-align: left; margin-left: 20px">Email : ${
                                   email.trim()
-                                )}</p>
-                                <p style="text-align: left; margin-left: 20px">Prénom : ${validator.escape(
+                                }</p>
+                                <p style="text-align: left; margin-left: 20px">Prénom : ${
                                   firstname.trim()
-                                )}</p>
-                                <p style="text-align: left; margin-left: 20px">Nom de famille : ${validator.escape(
+                                }</p>
+                                <p style="text-align: left; margin-left: 20px">Nom de famille : ${
                                   lastname.trim()
-                                )}</p>
-                                <p style="text-align: left; margin-left: 20px">Objet : ${validator.escape(
+                                }</p>
+                                <p style="text-align: left; margin-left: 20px">Objet : ${
                                   object.trim()
-                                )}</p>
-                                <p style="text-align: left; margin-left: 20px">Message : ${validator.escape(
+                                }</p>
+                                <p style="text-align: left; margin-left: 20px">Message : ${
                                   message.trim()
-                                )}</p>
+                                }</p>
                               </div>
                             </div>
                           </body>

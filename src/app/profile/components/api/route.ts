@@ -3,18 +3,16 @@ import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
   SessionData,
-  defaultSession,
   sessionOptions,
 } from "../../../lib/session";
 import prisma from "../../../lib/prisma";
-import validator from "validator";
 
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
   if (session.isLoggedIn === true) {
     const user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -33,17 +31,17 @@ export async function GET() {
       let userObject;
       if (copyEditEmail === null) {
         userObject = {
-          firstname: validator.escape(user.firstname),
-          lastname: validator.escape(user.lastname),
-          email: validator.escape(user.mail),
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.mail,
           newEmail: null,
         };
       } else {
         userObject = {
-          firstname: validator.escape(user.firstname),
-          lastname: validator.escape(user.lastname),
-          email: validator.escape(user.mail),
-          newEmail: validator.escape(copyEditEmail.newEmail),
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.mail,
+          newEmail: copyEditEmail.newEmail,
         };
       }
       return NextResponse.json({

@@ -1,4 +1,5 @@
 const fetchPost = async (url: string, { arg }: { arg: any }) => {
+  let { csrfToken, ...filteredArg } = arg;
   let response = await fetch(url, {
     method: "post",
     headers: {
@@ -6,7 +7,7 @@ const fetchPost = async (url: string, { arg }: { arg: any }) => {
       Accept: "application/json",
       "X-CSRF-Token": arg.csrfToken,
     },
-    body: JSON.stringify(arg),
+    body: JSON.stringify(filteredArg),
   });
   let json = await response.json();
   return json;

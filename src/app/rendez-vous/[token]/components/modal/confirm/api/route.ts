@@ -1,29 +1,34 @@
-import { RateLimiter } from "limiter";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from 'jsonwebtoken'
-import validator from "validator";
 import prisma from "@/app/lib/prisma";
-
-const limiter = new RateLimiter({
-    tokensPerInterval: 1000,
-    interval: 5000,
-    fireImmediately: true,
-  });
+import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { SessionData, sessionOptions } from "@/app/lib/session";
+import { getIronSession } from "iron-session";
+import { cookies, headers } from "next/headers";
+import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 
 export async function POST(request: NextRequest) {
-    const remainingRequests = await limiter.removeTokens(1);
-    if (remainingRequests < 0) {
-      return NextResponse.json(
-        {
-          status: 429,
-          type: "error",
-          message: "Trop de requêtes successives, veuillez réessayer plus tard",
-        },
-        {
-          status: 429,
-        }
-      );
-    } else {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip;
+  try {
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-meet-token-confirm");
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const csrfToken = headers().get("x-csrf-token");
+  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
+    return NextResponse.json(
+      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
+      { status: 403 }
+    );
+  }
       const { token } =
       (await request.json()) as {
         token: string;
@@ -61,9 +66,30 @@ export async function POST(request: NextRequest) {
               }
             );
           } else {
+            /* const csrfToken = generateCsrfToken()
+          session.csrfToken = csrfToken;
+          if (session.rememberMe) {
+            session.updateConfig({
+              ...sessionOptions,
+              cookieOptions: {
+                ...sessionOptions.cookieOptions,
+                maxAge: 60 * 60 * 24 * 30,
+              },
+            });
+          } else {
+            session.updateConfig({
+              ...sessionOptions,
+              cookieOptions: {
+                ...sessionOptions.cookieOptions,
+                maxAge: undefined,
+              },
+            });
+          } */
+          await session.save();
             return NextResponse.json(
               {
                 status: 200,
+                /* csrfToken: csrfToken, */
                 message: "Le rendez-vous a bien été confirmé",
               },
               {
@@ -93,5 +119,5 @@ export async function POST(request: NextRequest) {
         
       }
       
-    }
+    
   }

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
@@ -6,8 +6,8 @@ import {
   sessionOptions,
 } from "../../../lib/session";
 import prisma from "../../../lib/prisma";
-import validator from "validator";
 import { generateCsrfToken } from "../../functions/generateCsrfToken";
+import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -39,9 +39,15 @@ export async function GET() {
     });
     if (user === null) {
       session.destroy();
+      session.updateConfig({
+        ...sessionOptions,
+        cookieOptions: {
+          ...sessionOptions.cookieOptions,
+          maxAge: 60 * 15,
+        },
+      });
       await session.save();
       return NextResponse.json(session);
-      
     } else {
       if (session.rememberMe) {
         session.updateConfig({
@@ -60,8 +66,20 @@ export async function GET() {
   }
 }
 
-export async function DELETE() {
-  
+export async function DELETE(request: NextRequest) {
+  const ip: any = request.headers.get("x-forwarded-for") || request.ip;
+  try {
+    const rateLimiter = await getRateLimiter(5, 60, "rlflx-logout");
+    await rateLimiter.consume(ip);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
@@ -79,7 +97,7 @@ export async function DELETE() {
       );
     }
     const user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       return NextResponse.json(

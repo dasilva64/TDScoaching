@@ -224,7 +224,8 @@ const ModalAddDiscoveryMeeting = () => {
           firstname: firstnameInput,
           lastname: lastnameInput,
           email: emailInput,
-          csrfToken: csrfToken
+          csrfToken: csrfToken,
+          pseudo: pseudo
         });
       }
     } else {

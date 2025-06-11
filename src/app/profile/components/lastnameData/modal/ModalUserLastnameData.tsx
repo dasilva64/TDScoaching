@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserLastnameData.module.scss";
 import useSWRMutation from "swr/mutation";
-import validator from "validator";
 import fetchPost from "../../../../components/fetch/FetchPost";
 import Image from "@/app/components/image/Image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -12,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
+import { mutate as globalMutate } from "swr";
 
 const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
   const { displayModalEditLastname } = useSelector(
@@ -51,10 +51,7 @@ const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
           },
           { revalidate: false }
         );
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        globalMutate("/components/header/api");
         reset();
         if (isMutating === false) {
           dispatch({
@@ -123,8 +120,8 @@ const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
       if (inputPseudo.length === 0) {
         const fetchLogin = async () => {
           trigger({
-            lastname: validator.escape(lastnameInput.trim()),
-            pseudo: validator.escape(inputPseudo.trim()),
+            lastname: lastnameInput.trim(),
+            pseudo: inputPseudo.trim(),
             csrfToken: csrfToken
           });
         };

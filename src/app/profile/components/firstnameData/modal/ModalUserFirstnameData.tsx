@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalUserFirstnameData.module.scss";
 import useSWRMutation from "swr/mutation";
-import validator from "validator";
 import fetchPost from "../../../../components/fetch/FetchPost";
 import Image from "@/app/components/image/Image";
 import { useRouter } from "next/navigation";
@@ -12,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
+import { mutate as globalMutate } from "swr";
 
 const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
   const router = useRouter();
@@ -54,10 +54,7 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
             revalidate: false,
           }
         );
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        globalMutate("/components/header/api");
         reset();
         if (isMutating === false) {
           dispatch({
@@ -126,8 +123,8 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
       if (inputPseudo.length === 0) {
         const fetchLogin = async () => {
           trigger({
-            firstname: validator.escape(firstnameInput.trim()),
-            pseudo: validator.escape(inputPseudo.trim()),
+            firstname: firstnameInput.trim(),
+            pseudo: inputPseudo.trim(),
             csrfToken: csrfToken
           });
         };
@@ -243,7 +240,7 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
                     handlerInput(
                       e,
                       "firstname",
-                      /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/,
+                      /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ</> ]{3,40}$/,
                       setValidFirstnameInput,
                       setErrorMessageFirstname,
                       setFirstnameInput,

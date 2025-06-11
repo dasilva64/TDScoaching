@@ -5,7 +5,6 @@ import styles from "../page.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import useSWRMutation from "swr/mutation";
-import validator from "validator";
 import fetchPost from "../../components/fetch/FetchPost";
 import stylesForm from "./ContactForm.module.scss";
 import Input from "@/app/components/input/Input";
@@ -125,12 +124,12 @@ const ContactForm = () => {
         const fetchContact = async () => {
           if (csrfToken) {
             trigger({
-            email: validator.escape(inputEmail.trim()),
-            firstname: validator.escape(inputFirstname.trim()),
-            lastname: validator.escape(inputLastname.trim()),
-            object: validator.escape(inputObject.trim()),
-            message: validator.escape(inputMessage.trim()),
-            pseudo: validator.escape(inputPseudo.trim()),
+            email: inputEmail.trim(),
+            firstname: inputFirstname.trim(),
+            lastname: inputLastname.trim(),
+            object: inputObject.trim(),
+            message: inputMessage.trim(),
+            pseudo: inputPseudo.trim(),
             csrfToken: csrfToken
           });
           } else {

@@ -3,8 +3,6 @@ import prisma from "../lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { unstable_cache } from "next/cache";
-import validator from "validator";
 import styles from "./page.module.scss";
 import CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiquesSomaire from "./components/comment-gerer-le-stress-et-l-anxiete-au-quotidien/comment-gerer-le-stress-et-l-anxiete-au-quotidien-somaire";
 import CommentGererLeStressEtLanxieteAuQuotidienConseilsPratiques from "./components/comment-gerer-le-stress-et-l-anxiete-au-quotidien/comment-gerer-le-stress-et-l-anxiete-au-quotidien";
@@ -35,7 +33,7 @@ export async function generateMetadata({
 
 const getOne = async ({ slug }: { slug: string }) => {
   const article = await prisma.article.findUnique({
-    where: { slug: validator.escape(slug) },
+    where: { slug: slug },
     select: {
       title: true,
       image: true,

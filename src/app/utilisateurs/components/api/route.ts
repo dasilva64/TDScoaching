@@ -3,11 +3,9 @@ import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
   SessionData,
-  defaultSession,
   sessionOptions,
 } from "../../../lib/session";
 import prisma from "../../../lib/prisma";
-import validator from "validator";
 
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -24,7 +22,7 @@ export async function GET() {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       return NextResponse.json(
@@ -64,12 +62,12 @@ export async function GET() {
         let allUserObject = [];
         for (let i = 0; i < copyAllUser.length; i++) {
           let userObject = {
-            id: validator.escape(copyAllUser[i].id),
-            mail: validator.escape(copyAllUser[i].mail),
-            firstName: validator.escape(copyAllUser[i].firstname),
-            lastName: validator.escape(copyAllUser[i].lastname),
-            /* allMeeting: validator.escape(copyAllUser[i].Meeting),
-            idMeeting: validator.escape(copyAllUser[i].meetingId), */
+            id: copyAllUser[i].id,
+            mail: copyAllUser[i].mail,
+            firstName: copyAllUser[i].firstname,
+            lastName: copyAllUser[i].lastname,
+            /* allMeeting: copyAllUser[i].Meeting),
+            idMeeting: copyAllUser[i].meetingId), */
           };
           allUserObject.push(userObject);
         }

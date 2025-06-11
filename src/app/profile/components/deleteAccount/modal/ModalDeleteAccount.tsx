@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import fetchPost from "../../../../components/fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "@/app/components/image/Image";
+import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 
@@ -33,11 +34,8 @@ const ModalDeleteAccount = ({mutate} : any) => {
     if (data) {
       if (data.status === 200) {
         clearState();
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
         mutate()
+        globalMutate("/components/header/api");
         if (isMutating === false) {
           dispatch({
             type: "ModalDeleteAccount/close",

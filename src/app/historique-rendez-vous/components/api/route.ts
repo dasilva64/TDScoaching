@@ -3,11 +3,9 @@ import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import {
   SessionData,
-  defaultSession,
   sessionOptions,
 } from "../../../lib/session";
 import prisma from "../../../lib/prisma";
-import validator from "validator";
 
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -24,7 +22,7 @@ export async function GET() {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       return NextResponse.json(
@@ -46,9 +44,9 @@ export async function GET() {
         for (let i = 0; i < copyAllMeetings.length; i++) {
           let userObject = {
             start: copyAllMeetings[i].startAt,
-            coaching: validator.escape(copyAllMeetings[i].coaching),
+            coaching: copyAllMeetings[i].coaching,
             confirm: copyAllMeetings[i].confirm,
-            status: validator.escape(copyAllMeetings[i].status),
+            status: copyAllMeetings[i].status,
           };
           allMeetingsObject.push(userObject);
         }

@@ -5,11 +5,8 @@ import prisma from "../../../../../lib/prisma";
 import {
   SessionData,
   sessionOptions,
-  defaultSession,
 } from "../../../../../lib/session";
-import validator from "validator";
 import { validationBody } from "../../../../../lib/validation";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 import { getRateLimiter } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
@@ -47,7 +44,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -95,10 +92,10 @@ export async function POST(request: NextRequest) {
       } else {
         let editUser = await prisma.user.update({
           where: {
-            id: validator.escape(user.id),
+            id: user.id,
           },
           data: {
-            lastname: validator.escape(lastname.trim()),
+            lastname: lastname.trim(),
           },
         });
         if (editUser === null) {
@@ -115,33 +112,12 @@ export async function POST(request: NextRequest) {
           );
         } else {
           let userObject = {
-            firstname: validator.escape(editUser.firstname),
-            lastname: validator.escape(editUser.lastname),
-            email: validator.escape(editUser.mail),
+            firstname: editUser.firstname,
+            lastname: editUser.lastname,
+            email: editUser.mail,
           };
-          const csrfToken = generateCsrfToken()
-          session.csrfToken = csrfToken;
-          if (session.rememberMe) {
-            session.updateConfig({
-              ...sessionOptions,
-              cookieOptions: {
-                ...sessionOptions.cookieOptions,
-                maxAge: 60 * 60 * 24 * 30,
-              },
-            });
-          } else {
-            session.updateConfig({
-              ...sessionOptions,
-              cookieOptions: {
-                ...sessionOptions.cookieOptions,
-                maxAge: undefined,
-              },
-            });
-          }
-          await session.save();
           return NextResponse.json({
             status: 200,
-            csrfToken: csrfToken,
             message: "Votre nom de famille a été mis à jours avec succès",
             body: userObject,
           });

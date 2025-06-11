@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     );
   } else {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       return NextResponse.json(
@@ -82,12 +82,12 @@ export async function POST(request: NextRequest) {
               meeting = null;
             } else { */
               /* let meetingByUser = await prisma.meeting_test.findUnique({
-                where: { id: validator.escape(userById.meetingId) },
+                where: { id: userById.meetingId) },
               }); */
               /* if (meetingByUser === null) {
                 let editUser = await prisma.user.update({
                   where: {
-                    id: validator.escape(userById.id),
+                    id: userById.id),
                     status: true,
                   },
                   data: {
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
               } */
             //}
             const meetingByUser = await prisma.meeting_test.findMany({
-              where: { userMail: validator.escape(userById.mail) },
+              where: { userMail: userById.mail },
               select: {
                 startAt: true,
                 coaching: true,
@@ -109,10 +109,10 @@ export async function POST(request: NextRequest) {
             });
 
             let userObject = {
-              id: validator.escape(userById.id),
-              firstname: validator.escape(userById.firstname),
-              lastname: validator.escape(userById.lastname),
-              mail: validator.escape(userById.mail),
+              id: userById.id,
+              firstname: userById.firstname,
+              lastname: userById.lastname,
+              mail: userById.mail,
               discovery: userById.discovery,
               allMeetings: meetingByUser,
               meeting: userById.meeting_test,

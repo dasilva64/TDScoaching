@@ -7,6 +7,7 @@ import Image from "@/app/components/image/Image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
+import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
 
@@ -44,10 +45,7 @@ const ModalUserPasswordData = ({mutate}: any) => {
         dispatch({
           type: "ModalEditPassword/close",
         });
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        globalMutate("/components/header/api");
         mutate()
         reset();
       } else if (data.status === 401) {

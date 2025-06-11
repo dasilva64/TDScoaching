@@ -6,7 +6,6 @@ import {
   sessionOptions,
 } from "../../../../lib/session";
 import { validationBody } from "../../../../lib/validation";
-import validator from "validator";
 import bcrypt from "bcrypt";
 import prisma from "../../../../lib/prisma";
 import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
@@ -37,7 +36,7 @@ export async function POST(request: NextRequest) {
 
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -71,6 +70,7 @@ export async function POST(request: NextRequest) {
     let arrayMessageError = validationBody({
       email: email,
       password: password,
+      remember: remember
     });
     if (arrayMessageError.length > 0) {
       return NextResponse.json(
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     } else {
       const user: any = await prisma.user.findUnique({
         where: {
-          mail: validator.escape(email.trim()),
+          mail: email.trim(),
         },
       });
       if (user) {
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
           );
         }
         const decode: any = await bcrypt.compare(
-          validator.escape(password.trim()),
+          password.trim(),
           user.password
         );
         if (decode === false) {
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
             let copyRegisterToken: any = user?.registerToken;
             if (new Date().getTime() > copyRegisterToken.limitDate) {
               const deleteUser = await prisma.user.delete({
-                where: { mail: validator.escape(user.mail) },
+                where: { mail: user.mail },
               });
               return NextResponse.json(
                 {
@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({
               status: 200,
               csrfToken: csrfToken,
-              message: `Bonjour, ${validator.escape(user.firstname)} vous êtes maintenant connecté`,
+              message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,
             });
           }
         }

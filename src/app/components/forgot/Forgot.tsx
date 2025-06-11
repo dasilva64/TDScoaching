@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./Forgot.module.scss";
 import { AppDispatch, RootState } from "../../../../src/app/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import validator from "validator";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "../image/Image";
 import useSWRMutation from "swr/mutation";
@@ -71,6 +70,7 @@ const Forgot = () => {
     setInputEmailError("");
     setIsLoading(false);
   };
+  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
 
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,8 +82,9 @@ const Forgot = () => {
         setIsLoading(true);
         const fetchApi = async () => {
           trigger({
-            email: validator.escape(inputEmail.trim()),
-            pseudo: validator.escape(inputPseudo.trim()),
+            email: inputEmail.trim(),
+            pseudo: inputPseudo.trim(),
+            csrfToken: csrfToken
           });
         };
         fetchApi();

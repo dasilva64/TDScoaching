@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validationBody } from "../../../lib/validation";
-import validator from "validator";
 import prisma from "../../../lib/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -32,7 +31,7 @@ export async function POST(request: NextRequest) {
 
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -103,7 +102,7 @@ export async function POST(request: NextRequest) {
       );
     } else {
       let userEmail = await prisma.user.findUnique({
-        where: { mail: validator.escape(email.trim()) },
+        where: { mail: email.trim() },
       });
       if (userEmail === null) {
         if (password.trim() !== passwordComfirm.trim()) {
@@ -120,24 +119,24 @@ export async function POST(request: NextRequest) {
         }
         const saltRounds = 10;
         let encrypt = await bcrypt.hash(
-          validator.escape(password.trim()),
+          password.trim(),
           saltRounds
         );
         let token = jwt.sign(
-          { user: validator.escape(email.trim()) },
+          { user: email.trim() },
           process.env.SECRET_TOKEN_REGISTER as string,
           { expiresIn: "30m" }
         );
         let currentDate = new Date();
         let registerTokenObject = {
-          token: validator.escape(token),
+          token: token,
           limitDate: currentDate.setMinutes(currentDate.getMinutes() + 30),
         };
         let UserCreate = await prisma.user.create({
           data: {
-            mail: validator.escape(email.trim()),
-            firstname: validator.escape(firstname.trim()),
-            lastname: validator.escape(lastname.trim()),
+            mail: email.trim(),
+            firstname: firstname.trim(),
+            lastname: lastname.trim(),
             password: encrypt,
             status: false,
             registerToken: registerTokenObject,
@@ -168,7 +167,7 @@ export async function POST(request: NextRequest) {
           });
           let mailOptions = {
             from: "contact@tds-coachingdevie.fr",
-            to: validator.escape(email.trim()),
+            to: email.trim(),
             subject: "Validation de votre compte",
             html: `<!DOCTYPE html>
                         <html lang="fr">
@@ -189,7 +188,7 @@ export async function POST(request: NextRequest) {
                                 <h1 style="text-align: center">tds coaching</h1>
                                 <h2 style="text-align: center">Validation de votre compte</h2>
                                 <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
-                                <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${validator.escape(token)}" target="_blank">Vérifier mon compte</a>
+                                <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${encodeURIComponent(token)}" target="_blank">Vérifier mon compte</a>
                                 <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé</p>
                               </div>
                             </div>
@@ -218,30 +217,30 @@ export async function POST(request: NextRequest) {
             let copyRegisterToken: any = userEmail?.registerToken;
             if (new Date().getTime() > copyRegisterToken.limitDate) {
               const deleteUser = await prisma.user.delete({
-                where: { mail: validator.escape(userEmail.mail) },
+                where: { mail: userEmail.mail },
               });
               const saltRounds = 10;
               let encrypt = await bcrypt.hash(
-                validator.escape(password.trim()),
+                password.trim(),
                 saltRounds
               );
               let token = jwt.sign(
-                { user: validator.escape(email.trim()) },
+                { user: email.trim() },
                 process.env.SECRET_TOKEN_REGISTER as string,
                 { expiresIn: "30m" }
               );
               let currentDate = new Date();
               let registerTokenObject = {
-                token: validator.escape(token),
+                token: token,
                 limitDate: currentDate.setMinutes(
                   currentDate.getMinutes() + 30
                 ),
               };
               let UserCreate = await prisma.user.create({
                 data: {
-                  mail: validator.escape(email.trim()),
-                  firstname: validator.escape(firstname.trim()),
-                  lastname: validator.escape(lastname.trim()),
+                  mail: email.trim(),
+                  firstname: firstname.trim(),
+                  lastname: lastname.trim(),
                   password: encrypt,
                   status: false,
                   registerToken: registerTokenObject,
@@ -272,7 +271,7 @@ export async function POST(request: NextRequest) {
                 });
                 let mailOptions = {
                   from: "contact@tds-coachingdevie.fr",
-                  to: validator.escape(email.trim()),
+                  to: email.trim(),
                   subject: "Validation de votre compte",
                   html: `<!DOCTYPE html>
                               <html lang="fr">
@@ -293,7 +292,7 @@ export async function POST(request: NextRequest) {
                                       <h1 style="text-align: center">tds coaching</h1>
                                       <h2 style="text-align: center">Validation de votre compte</h2>
                                       <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
-                                      <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${validator.escape(token)}" target="_blank">Vérifier mon compte</a>
+                                      <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${encodeURIComponent(token)}" target="_blank">Vérifier mon compte</a>
                                       <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé.</p>
                                     </div>
                                   </div>
@@ -332,17 +331,17 @@ export async function POST(request: NextRequest) {
           } if (userEmail.status === null) {
             const saltRounds = 10;
             let encrypt = await bcrypt.hash(
-              validator.escape(password.trim()),
+              password.trim(),
               saltRounds
             );
             let token = jwt.sign(
-              { user: validator.escape(email.trim()) },
+              { user: email.trim() },
               process.env.SECRET_TOKEN_REGISTER as string,
               { expiresIn: "30m" }
             );
             let currentDate = new Date();
             let registerTokenObject = {
-              token: validator.escape(token),
+              token: token,
               limitDate: currentDate.setMinutes(
                 currentDate.getMinutes() + 30
               ),
@@ -350,8 +349,8 @@ export async function POST(request: NextRequest) {
             const editUser = await prisma.user.update({
               where: { mail: userEmail.mail },
               data: {
-                firstname: validator.escape(firstname.trim()),
-                lastname: validator.escape(lastname.trim()),
+                firstname: firstname.trim(),
+                lastname: lastname.trim(),
                 password: encrypt,
                 status: false,
                 registerToken: registerTokenObject,
@@ -381,7 +380,7 @@ export async function POST(request: NextRequest) {
               });
               let mailOptions = {
                 from: "contact@tds-coachingdevie.fr",
-                to: validator.escape(email.trim()),
+                to: email.trim(),
                 subject: "Validation de votre compte",
                 html: `<!DOCTYPE html>
                             <html lang="fr">
@@ -402,7 +401,7 @@ export async function POST(request: NextRequest) {
                                     <h1 style="text-align: center">tds coaching</h1>
                                     <h2 style="text-align: center">Validation de votre compte</h2>
                                     <p style="margin-bottom: 20px">Pour vous connecter à votre compte, veuillez cliquer sur le lien ci-dessous.</p>
-                                    <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${validator.escape(token)}" target="_blank">Vérifier mon compte</a>
+                                    <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/email-validation/${encodeURIComponent(token)}" target="_blank">Vérifier mon compte</a>
                                     <p style="margin-top: 20px">Ce lien est valide pendant 30 min, au-delà de ce temps il ne sera plus disponible et votre compte sera supprimé.</p>
                                   </div>
                                 </div>

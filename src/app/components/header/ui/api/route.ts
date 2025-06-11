@@ -3,7 +3,6 @@ import { SessionData, sessionOptions, defaultSession } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import validator from "validator";
 
 export async function GET() {
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -15,7 +14,7 @@ export async function GET() {
           });
     } else {
       const user = await prisma.user.findUnique({
-        where: { id: validator.escape(session.id) },
+        where: { id: session.id },
       });
       if (user === null) {
        // session.destroy();

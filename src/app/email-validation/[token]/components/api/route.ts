@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import validator from "validator";
 import jwt from "jsonwebtoken";
 import prisma from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
@@ -32,7 +31,7 @@ export async function POST(request: NextRequest) {
   }
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
-      where: { id: validator.escape(session.id) },
+      where: { id: session.id },
     });
     if (user === null) {
       session.destroy();
@@ -83,7 +82,7 @@ export async function POST(request: NextRequest) {
             process.env.SECRET_TOKEN_REGISTER as string
           );
           let user = await prisma.user.findUnique({
-            where: { mail: validator.escape(decodeToken.user) },
+            where: { mail: decodeToken.user },
           });
           if (user === null) {
             return NextResponse.json(
@@ -98,10 +97,10 @@ export async function POST(request: NextRequest) {
           } else {
             if (user.registerToken && user.status === false) {
               let copyRegisterToken: any = user?.registerToken;
-              if (validator.escape(token.trim()) === copyRegisterToken.token) {
+              if (token.trim() === copyRegisterToken.token) {
                 if (new Date().getTime() > copyRegisterToken.limitDate) {
                   const deleteUser = await prisma.user.delete({
-                    where: { mail: validator.escape(user.mail) },
+                    where: { mail: user.mail },
                   });
                   return NextResponse.json(
                     {
@@ -116,7 +115,7 @@ export async function POST(request: NextRequest) {
                 } else {
                   if (user.status === false) {
                     let editUser = await prisma.user.update({
-                      where: { id: validator.escape(user.id) },
+                      where: { id: user.id },
                       data: { status: true, registerToken: Prisma.DbNull },
                     });
                     return NextResponse.json({

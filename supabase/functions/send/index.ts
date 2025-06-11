@@ -72,6 +72,9 @@ serve(async (req) => {
             .eq("id", user[i].id)
             .select();
             await supabase.from("meeting_test").delete().eq("id", user[i].meetingId);
+            if (user[i].password === null) {
+              await supabase.from("User").delete().eq("id", user[i].id);
+            }
 
         }
       }

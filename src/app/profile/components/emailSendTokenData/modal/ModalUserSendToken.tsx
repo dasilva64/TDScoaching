@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import styles from "./ModalUserSendToken.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import validator from "validator";
 import fetchPost from "../../../../components/fetch/FetchPost";
 import Image from "@/app/components/image/Image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
+import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
 
@@ -15,7 +15,6 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const { displayModalSendTokenEmail, inputEmail } = useSelector(
     (state: RootState) => state.ModalSendTokenEmail
   );
-  console.log("inputEmail", inputEmail)
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken
   );
@@ -24,7 +23,6 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const [emailInput, setEmailInput] = useState<string>(userData.body.email);
-  console.log("emailInput", emailInput) 
   useEffect(() =>  {
       setEmailInput(inputEmail)
     
@@ -51,10 +49,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
             revalidate: false,
           }
         );
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        globalMutate("/components/header/api");
         dispatch({
           type: "ModalSendTokenEmail/close",
           payload: {inputEmail: userData?.body.email}
@@ -122,8 +117,8 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
       if (inputPseudo.length === 0) {
         const fetchLogin = async () => {
           trigger({
-            email: validator.escape(emailInput.trim()),
-            pseudo: validator.escape(inputPseudo.trim()),
+            email: emailInput.trim(),
+            pseudo: inputPseudo.trim(),
             csrfToken: csrfToken
           });
         };

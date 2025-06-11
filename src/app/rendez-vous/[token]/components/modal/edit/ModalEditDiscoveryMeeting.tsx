@@ -7,10 +7,10 @@ import styles from "./ModalEditDiscoveryMeeting.module.scss";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import { RootState } from "@/app/redux/store";
-import validator from "validator";
 
 const ModalEditDiscoveryMeeting = ({ mutate, meeting, token }: any) => {
   const dispatch = useDispatch();
+  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   const [typeCoaching, setTypeCoaching] = useState<string>(meeting.coaching);
   const [pseudo, setPseudo] = useState<string>("");
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
@@ -39,6 +39,10 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token }: any) => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
+       /*  dispatch({
+          type: "csrfToken/store",
+          payload: { csrfToken: data.csrfToken },
+        }); */
         dispatch({
           type: "ModalEditDiscoveryMeetingRendezVousToken/close",
         });
@@ -205,7 +209,8 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token }: any) => {
                       trigger({
                         typeCoaching: typeCoaching,
                         start: dateModalEditDiscoveryMeetingRendezVousToken,
-                        token: validator.escape(token.trim()),
+                        token: token.trim(),
+                        csrfToken: csrfToken
                       });
                     }
                     e.preventDefault();
@@ -358,7 +363,7 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token }: any) => {
                     onClick={() => {
                       trigger({
                         start: dateModalEditDiscoveryMeetingRendezVousToken,
-                        token: validator.escape(token.trim()),
+                        token: token.trim()),
                       });
                     }}
                   >

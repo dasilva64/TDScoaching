@@ -11,8 +11,8 @@ const nextConfig = {
   minimumCacheTTL: 31536000, // Cache de 1 an
 },
    async headers() {
-    return [
-      {
+     return [
+      /*{
       source: "/api/(.*)",
       headers: [
         {
@@ -38,7 +38,7 @@ const nextConfig = {
           value: "public, max-age=3600, must-revalidate",
         },
       ],
-    },
+    }, */
       {
         source: '/robots.txt',
         headers: [
@@ -51,6 +51,10 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [
+          {
+          key: "Cache-Control",
+          value: "public, max-age=3600, must-revalidate",
+        },
           {
             key: "X-Content-Type-Options",
             value: "nosniff",

@@ -10,6 +10,33 @@ const nextConfig = {
    async headers() {
     return [
       {
+      source: "/api/(.*)",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "private, no-store, no-cache, must-revalidate",
+        },
+      ],
+    },
+    {
+      source: "/(profile|rendez-vous|meetings|suppression-compte|utilisateur|utilisateurs|historique-rendez-vous|email-validation|reinitialisation-mot-de-passe)",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "private, no-store, no-cache, must-revalidate",
+        },
+      ],
+    },
+    {
+      source: "/(index|contact|tarif|blog|coaching-de-vie|conditions-generales-utilisations|mentions-legales|politique-de-confidentialite|qui-suis-je|tarif)",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=3600, must-revalidate",
+        },
+      ],
+    },
+      {
         source: '/robots.txt',
         headers: [
           {

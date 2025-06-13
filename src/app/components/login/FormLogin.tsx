@@ -261,6 +261,8 @@ const FormLogin = () => {
               <h2 className={`${styles.login__h1}`}>Se connecter</h2>
               {displayInput === false && (
                 <form
+                action=""
+              method="POST"
                   className={styles.login__form}
                   onSubmit={(e) => {
                     if (isLoading === false) {

@@ -200,6 +200,8 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
                 Veuillez choissir un type de coaching pour ce rendez-vous
               </p>
               <form
+              action=""
+              method="POST"
                 className={styles.modalAddDiscovery__form}
                 onSubmit={(e) => {
                   if (typeCoachingValid) {

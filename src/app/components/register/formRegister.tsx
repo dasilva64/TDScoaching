@@ -378,6 +378,7 @@ const FormRegister = () => {
               <form
                 className={styles.register__form}
                 action=""
+              method="POST"
                 onSubmit={(e) => {
                   if (isLoading === false) {
                     handlerSubmit(e);

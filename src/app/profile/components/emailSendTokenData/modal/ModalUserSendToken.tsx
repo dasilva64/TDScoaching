@@ -217,6 +217,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
               <form
                 className={styles.modalEditEmailData__form}
                 action=""
+              method="POST"
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}

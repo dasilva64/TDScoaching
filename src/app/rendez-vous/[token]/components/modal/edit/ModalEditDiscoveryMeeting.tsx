@@ -201,6 +201,8 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token }: any) => {
                 rendez-vous
               </p>
               <form
+              action=""
+              method="POST"
                 className={styles.modalEditDiscovery__form}
                 onSubmit={(e) => {
                   e.preventDefault();

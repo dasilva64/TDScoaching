@@ -189,6 +189,8 @@ const Forgot = () => {
               </h2>
 
               <form
+              action=""
+              method="POST"
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}

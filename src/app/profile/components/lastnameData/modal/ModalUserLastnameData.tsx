@@ -222,6 +222,7 @@ const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
               <form
                 className={styles.modalEditMainUserData__form}
                 action=""
+              method="POST"
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}

@@ -216,6 +216,8 @@ const ModalEditMeeting = ({ mutate, meeting }: any) => {
                 rendez-vous
               </p>
               <form
+              action=""
+              method="POST"
                 className={styles.modalEditDiscovery__form}
                 onSubmit={(e) => {
                   if (typeCoachingValid) {

@@ -209,6 +209,8 @@ const ModalDeleteAccount = ({mutate} : any) => {
 
               <div className={styles.modalDeleteAccount__div}>
                 <form
+                action=""
+              method="POST"
                   className={styles.modalDeleteAccount__div__form}
                   onSubmit={(e) => {
                     if (reasonValid) {

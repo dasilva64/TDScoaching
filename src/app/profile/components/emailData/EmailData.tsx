@@ -264,8 +264,9 @@ useEffect(() => {
                 chiffres.
               </p>
               <form
+              action=""
+              method="POST"
                 className={styles.modalEditEmailSendData__form}
-                action=""
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}

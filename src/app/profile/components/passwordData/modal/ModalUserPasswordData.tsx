@@ -328,6 +328,7 @@ const ModalUserPasswordData = ({mutate}: any) => {
               <form
                 className={styles.modalEditPasswordData__form}
                 action=""
+              method="POST"
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}

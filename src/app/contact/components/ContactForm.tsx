@@ -199,6 +199,8 @@ const ContactForm = () => {
   return (
     <>
       <form
+      action=""
+              method="POST"
         className={styles.contact__main__container__form}
         id="form"
         onSubmit={(e) => {

@@ -339,6 +339,8 @@ const ModalAddDiscoveryMeeting = () => {
                 </p>
               </div>
               <form
+              action=""
+              method="POST"
                 className={styles.modal__form}
                 onSubmit={(e) => {
                   handlerSubmit(e);

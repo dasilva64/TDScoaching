@@ -223,6 +223,8 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
                 Modifier votre prénom
               </h2>
               <form
+              action=""
+              method="POST"
                 className={styles.modalEditMainUserData__form}
                 onSubmit={(e) => {
                   handlerSubmit(e);

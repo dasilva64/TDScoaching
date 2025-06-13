@@ -199,6 +199,8 @@ const Reset = () => {
 <form
         className={styles.reset__form}
         id="form"
+        action=""
+              method="POST"
         onSubmit={(e) => {
           handlerSubmit(e);
         }}

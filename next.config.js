@@ -7,6 +7,9 @@ const nextConfig = {
   }, */
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
+  images: {
+  minimumCacheTTL: 31536000, // Cache de 1 an
+},
    async headers() {
     return [
       {

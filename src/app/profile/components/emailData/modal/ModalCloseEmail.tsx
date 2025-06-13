@@ -75,7 +75,7 @@ const ModalCloseEmail = ({mutate}: any) => {
         router.push("/");
       }
     }
-  }, [data, dispatch, reset, router]);
+  }, [data, dispatch, reset, router, mutate]);
 
   return (
     <>

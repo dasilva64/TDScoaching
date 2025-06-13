@@ -94,7 +94,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
         reset();
       }
     }
-  }, [data, dispatch, mutate, reset, router, userData]);
+  }, [data, dispatch, mutate, reset, router, userData, emailInput]);
 
   const closeForm = () => {
     clearState();

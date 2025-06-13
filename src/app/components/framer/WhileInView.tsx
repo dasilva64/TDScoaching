@@ -18,6 +18,7 @@ const WhileInView = ({
   const divRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
+    const CurrentRef = divRef.current
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -27,13 +28,13 @@ const WhileInView = ({
       { threshold: 0.1 } // Détecte quand 10% de la div est visible
     );
 
-    if (divRef.current) {
-      observer.observe(divRef.current);
+    if (CurrentRef) {
+      observer.observe(CurrentRef);
     }
 
     return () => {
-      if (divRef.current) {
-        observer.unobserve(divRef.current);
+      if (CurrentRef) {
+        observer.unobserve(CurrentRef);
       }
     };
   }, []);

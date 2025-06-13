@@ -78,7 +78,7 @@ const ModalUserPasswordData = ({mutate}: any) => {
         reset();
       }
     }
-  }, [data, dispatch, reset, router]);
+  }, [data, dispatch, reset, router, mutate]);
 
   const closeForm = () => {
     clearState();

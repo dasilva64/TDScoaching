@@ -135,7 +135,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
         reset();
       }
     }
-  }, [data, dispatch, reset, router]);
+  }, [data, dispatch, reset, router, mutate, userData.body.newEmail]);
   /* 
   useEffect(() => {
     const mutateMainData = async () => {

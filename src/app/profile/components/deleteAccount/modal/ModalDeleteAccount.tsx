@@ -101,7 +101,7 @@ const ModalDeleteAccount = ({mutate} : any) => {
         reset();
       }
     }
-  }, [data, dispatch, isMutating, reset, router]);
+  }, [data, dispatch, isMutating, reset, router, mutate]);
   const clearState = () => {
     setReason("");
     setReasonValid(false);

@@ -17,6 +17,7 @@ import ModalCalendarDiscoveryMeeting from "../modal/discovery/ModalCalendarDisco
 import ModalAddDiscoveryMeeting from "../modal/discovery/ModalAddDiscoveryMeeting";
 import ModalRecapDiscoveryMeeting from "../modal/discovery/ModalRecapDiscoveryMeeting";
 import { useRefreshCsrfToken } from "../../hook/csrf/useRefreshCsrfToken";
+import Form2FACode from "../../login/2fa/Form2FACode";
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
@@ -157,6 +158,7 @@ const Content = () => {
       <ModalCalendarDiscoveryMeeting />
       <ModalAddDiscoveryMeeting />
       <ModalRecapDiscoveryMeeting />
+      <Form2FACode />
       {/* <ModalDiscoveryMeetingTest />
       <ModalAddDiscoveryMeeting />
       <ModalRecapDiscoveryMeeting /> */}

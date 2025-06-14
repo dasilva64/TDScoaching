@@ -29,7 +29,7 @@ const nextConfig = {
           value: "private, no-store, no-cache, must-revalidate",
         },
       ],
-    },
+    },*/
     {
       source: "/(index|contact|tarif|blog|coaching-de-vie|conditions-generales-utilisations|mentions-legales|politique-de-confidentialite|qui-suis-je|tarif)",
       headers: [
@@ -38,7 +38,7 @@ const nextConfig = {
           value: "public, max-age=3600, must-revalidate",
         },
       ],
-    }, */
+    }, 
       {
         source: '/robots.txt',
         headers: [
@@ -51,11 +51,11 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [
-          {
+          /* {
           key: "Cache-Control",
           value: "public, max-age=3600, must-revalidate",
-        },
-          /* {
+        }, */
+          {
             key: "X-Content-Type-Options",
             value: "nosniff",
           },
@@ -90,7 +90,7 @@ const nextConfig = {
           {
             key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
-          }, */
+          },
         ],
       },
     ];

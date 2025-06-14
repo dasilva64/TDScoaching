@@ -117,8 +117,8 @@ export async function POST(request: NextRequest) {
             if (userExist === null) {
               let now = new Date();
               let token = ""
-              let characters = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890?.@&#$,;:!"
-              for(let i = 0; i<14; i++) {
+              let characters = "1234567890"
+              for(let i = 0; i<8; i++) {
                 token += characters.charAt(Math.floor(Math.random() * characters.length))
               }
               /* let min = 10000000;

@@ -17,52 +17,28 @@ model Article {
   image       String   @db.VarChar
 }
 
-model Meeting {
-  id          String   @id(map: "meeting_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  startAt     DateTime @db.Timestamp(6)
-  status      Boolean
-  userId      String   @db.Uuid
-  limitDate   String?  @db.VarChar
-  paymentId   String?  @unique
-  typeMeeting Json?    @db.Json
-  link        String?
-  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "meeting_userid_fkey")
-}
-
-model MeetingDiscovery {
-  id       String   @id(map: "meetingdiscovery_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  startAt  DateTime @db.Timestamp(6)
-  userMail String   @unique @db.VarChar
-  token    String   @unique
-  type     String
-  confirm  Boolean
-  statut   String
-  coaching String
-  User     User     @relation(fields: [userMail], references: [mail], onDelete: Cascade, onUpdate: NoAction, map: "meeting_usermail_fkey")
-}
-
 model User {
-  id                                       String            @id(map: "user_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  mail                                     String            @unique @db.VarChar
-  firstname                                String            @db.VarChar
-  lastname                                 String            @db.VarChar
-  password                                 String?           @db.VarChar
-  registerToken                            Json?             @db.Json
-  resetToken                               Json?             @db.Json
-  editEmail                                Json?             @db.Json
-  role                                     String?           @db.VarChar
+  id                                       String         @id(map: "user_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  mail                                     String         @unique @db.VarChar
+  firstname                                String         @db.VarChar
+  lastname                                 String         @db.VarChar
+  password                                 String?        @db.VarChar
+  registerToken                            Json?          @db.Json
+  resetToken                               Json?          @db.Json
+  editEmail                                Json?          @db.Json
+  role                                     String?        @db.VarChar
   status                                   Boolean?
-  deleteToken                              Json?             @db.Json
-  discovery                                Boolean?          @default(true)
+  deleteToken                              Json?          @db.Json
+  discovery                                Boolean?       @default(true)
   deleteReason                             String?
-  meetingId                                String?           @unique @db.Uuid
-  offreId                                  String?           @db.Uuid
-  Meeting                                  Meeting[]
-  MeetingDiscovery                         MeetingDiscovery?
-  meeting_test                             meeting_test?     @relation(fields: [meetingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  offre_test                               offre_test?       @relation(fields: [offreId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User_offreMeeting_fkey")
-  meeting_test_meeting_test_userMailToUser meeting_test[]    @relation("meeting_test_userMailToUser")
-  offre_test_offre_test_userIdToUser       offre_test[]      @relation("offre_test_userIdToUser")
+  meetingId                                String?        @unique @db.Uuid
+  offreId                                  String?        @db.Uuid
+  isTwoFactorEnabled                       Boolean        @default(false)
+  twoFAToken                               Json?          @db.Json
+  meeting_test                             meeting_test?  @relation(fields: [meetingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  offre_test                               offre_test?    @relation(fields: [offreId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User_offreMeeting_fkey")
+  meeting_test_meeting_test_userMailToUser meeting_test[] @relation("meeting_test_userMailToUser")
+  offre_test_offre_test_userIdToUser       offre_test[]   @relation("offre_test_userIdToUser")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.

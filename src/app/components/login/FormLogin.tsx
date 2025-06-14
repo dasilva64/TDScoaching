@@ -72,7 +72,25 @@ const FormLogin = () => {
   useEffect(() => {
     if (loginData) {
       if (loginData.status === 200) {
-        mutate("/components/header/api");
+        if (loginData.require2FA) {
+        clearState();
+        dispatch({
+          type: "ModalLogin/close",
+        });
+         dispatch({
+          type: "Modal2FACode/open",
+        });
+        dispatch({
+          type: "csrfToken/setCsrfToken",
+          payload: {token: loginData.csrfToken}
+        });
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: loginData.message },
+        });
+        resetLogin();
+        } else {
+          mutate("/components/header/api");
         mutate("/components/header/ui/api");
         clearState();
         dispatch({
@@ -87,6 +105,8 @@ const FormLogin = () => {
           payload: { type: "success", flashMessage: loginData.message },
         });
         resetLogin();
+        }
+        
       } else if (loginData.status === 400) {
         if (loginData.type === "validation") {
           setTimeout(() => {

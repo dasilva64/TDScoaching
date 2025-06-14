@@ -233,12 +233,12 @@ export const validationBody = (body: any) => {
       if (validator.isEmpty(value)) {
         arrayMessageError.push(["code", "Code : ne peut pas être vide"]);
       } else {
-        const regex = /^[a-zA-Z0-9?.@&#$,;:!]{14}$/;
+        const regex = /^[0-9]{8}$/;
     
         if (!regex.test(value)) {
           arrayMessageError.push([
             "code",
-            "Code : format invalide (14 caractères, lettres, chiffres et certains symboles spéciaux uniquement)",
+            "Code : format invalide (8 chiffres)",
           ]);
         } else {
           if (dangerousPattern.test(value.trim())) {

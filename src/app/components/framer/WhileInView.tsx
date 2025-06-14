@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import styles from "./WhileInView.module.scss"
 
 const WhileInView = ({

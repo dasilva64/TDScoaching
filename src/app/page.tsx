@@ -3,11 +3,11 @@ import "server-only";
 import styles from "./page.module.scss";
 import GoDown from "./components/goDown/goDown";
 import Card from "./components/card/Card";
-import Image from "./components/image/Image";
 import WhileInView from "./components/framer/WhileInView";
 import NoScript from "./components/noscript/NoScript";
 import About from "./components/about/About";
 import Footer from "./components/footer/footer";
+import Image from "next/image";
 
 export const metadata = {
   title: "Coach de vie c'est quoi ? - tdscoaching",

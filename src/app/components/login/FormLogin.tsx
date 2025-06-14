@@ -74,16 +74,17 @@ const FormLogin = () => {
       if (loginData.status === 200) {
         if (loginData.require2FA) {
         clearState();
+        mutate("/components/header/api");
         dispatch({
           type: "ModalLogin/close",
         });
          dispatch({
           type: "Modal2FACode/open",
         });
-        dispatch({
+        /* dispatch({
           type: "csrfToken/setCsrfToken",
           payload: {token: loginData.csrfToken}
-        });
+        }); */
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: loginData.message },
@@ -96,10 +97,10 @@ const FormLogin = () => {
         dispatch({
           type: "ModalLogin/close",
         });
-        dispatch({
+        /* dispatch({
           type: "csrfToken/setCsrfToken",
           payload: {token: loginData.csrfToken}
-        });
+        }); */
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: loginData.message },

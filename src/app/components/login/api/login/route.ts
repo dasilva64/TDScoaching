@@ -275,14 +275,14 @@ export async function POST(request: NextRequest) {
               await session.save();
               return NextResponse.json({
                 status: 200,
-                requires2FA: true,
+                require2FA: true,
                 csrfToken: csrfToken,
                 message: `Bonjour, ${user.firstname} veuillez saissir votre code pour votre double authentification`,
               });
             } else {
               await session.save();
               return NextResponse.json({
-                requires2FA: false,
+                require2FA: false,
                 status: 200,
                 csrfToken: csrfToken,
                 message: `Bonjour, ${user.firstname} vous êtes maintenant connecté`,

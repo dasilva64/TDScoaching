@@ -34,6 +34,7 @@ const Form2FACode = () => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
 
   const { displayModal2FACode } = useSelector((state: RootState) => state.Modal2FACode)
+ 
   const {
     trigger: login,
     data: loginData,
@@ -120,7 +121,7 @@ const Form2FACode = () => {
       }
     } else {
       if (code.length === 0) {
-        setErrorCode("Email : ne peut pas être vide");
+        setErrorCode("Code : ne peut pas être vide");
       } else {
         setErrorCode("");
       }
@@ -171,6 +172,7 @@ const Form2FACode = () => {
   useEffect(() => {
     if (loginDataResend) {
       if (loginDataResend.status === 200) {
+        mutate("/components/header/api");
         setTimer(30);
         setCode("");
             setValidCode(false);
@@ -192,7 +194,8 @@ const Form2FACode = () => {
       }
       resetLoginResend()
     }
-  }, [])
+  }, [loginDataResend, resetLoginResend, dispatch])
+  
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     type: string,
@@ -305,7 +308,7 @@ const Form2FACode = () => {
                       setValidCode,
                       setErrorCode,
                       setCode,
-                      "Code : doit avoir le format email@mail.com"
+                      "Code : 8 chiffre"
                     );
                   }}
                   validInput={validCode}
@@ -362,7 +365,7 @@ const Form2FACode = () => {
                 </div>
               </form>
               <button disabled={!canResend} onClick={handleResendCode}>
-                {canResend ? "Renvoyer un code" : `Attendez ${timer}s`}
+                {canResend ? "Renvoyer un code" : `Attendez ${timer}s pour renvoyer un code`}
               </button>
 
             </motion.div>

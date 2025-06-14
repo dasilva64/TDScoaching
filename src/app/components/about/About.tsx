@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./About.module.scss";
 import Link from "next/link";
-import Image from "../image/Image";
+import Image from "next/image";
 
 const About = () => {
   const [open, setOpen] = useState(false);

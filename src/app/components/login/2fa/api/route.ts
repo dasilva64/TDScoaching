@@ -15,7 +15,7 @@ import { Prisma } from "@prisma/client";
 export async function POST(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip;
   try {
-    const rateLimiter = await getRateLimiter(1, 60, "rlflx-login-2fa");
+    const rateLimiter = await getRateLimiter(1, 60, `rlflx-login-2fa${Date.now()}`);
     await rateLimiter.consume(ip);
   } catch (err) {
     return NextResponse.json(
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
   } else {
     const user: any = await prisma.user.findUnique({
       where: {
-        mail: session.id.trim(),
+        id: session.id.trim(),
       },
     });
     if (user) {

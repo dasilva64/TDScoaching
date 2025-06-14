@@ -55,7 +55,7 @@ const nextConfig = {
           key: "Cache-Control",
           value: "public, max-age=3600, must-revalidate",
         },
-          {
+          /* {
             key: "X-Content-Type-Options",
             value: "nosniff",
           },
@@ -90,7 +90,7 @@ const nextConfig = {
           {
             key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
-          },
+          }, */
         ],
       },
     ];

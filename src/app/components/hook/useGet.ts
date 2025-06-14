@@ -10,8 +10,9 @@ function useGet(url: string | null) {
   
   const { data, error, isLoading, mutate } = useSWR(url, (url) =>
     fetchData(url), {
-      revalidateOnMount: true,   // <<== Force le fetch même après un reload
-      revalidateOnFocus: true,
+      revalidateOnMount: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
     }
   );
   return {

@@ -18,10 +18,25 @@ import ModalAddDiscoveryMeeting from "../modal/discovery/ModalAddDiscoveryMeetin
 import ModalRecapDiscoveryMeeting from "../modal/discovery/ModalRecapDiscoveryMeeting";
 import { useRefreshCsrfToken } from "../../hook/csrf/useRefreshCsrfToken";
 import Form2FACode from "../../login/2fa/Form2FACode";
+import useSWR from "swr";
+
+const fetchData = async (url: string) => {
+  let response = await fetch(url);
+  let json = await response.json();
+  return json;
+};
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
-  const csrfRefreshToken = useRefreshCsrfToken();  
+ /*  const csrfRefreshToken = useRefreshCsrfToken();   */
+  const { data: csrfRefreshToken } = useSWR("/api/refresh-csrf-token", (url) =>
+    fetchData(url), {
+      revalidateOnMount: false,
+      refreshInterval: 15 * 60 * 1000, 
+      revalidateOnFocus: false, 
+      revalidateOnReconnect: false, 
+    }
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     if (csrfRefreshToken) {

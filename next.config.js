@@ -7,9 +7,9 @@ const nextConfig = {
   }, */
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
-   /* async headers() {
+   async headers() {
      return [
-      {
+      /* {
       source: "/api/(.*)",
       headers: [
         {
@@ -17,7 +17,7 @@ const nextConfig = {
           value: "private, no-store, no-cache, must-revalidate",
         },
       ],
-    },
+    }, */
     {
       source: "/(profile|rendez-vous|meetings|suppression-compte|utilisateur|utilisateurs|historique-rendez-vous|email-validation|reinitialisation-mot-de-passe)",
       headers: [
@@ -48,10 +48,10 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [
-          {
+          /* {
           key: "Cache-Control",
           value: "public, max-age=3600, must-revalidate",
-        },
+        }, */
           {
             key: "X-Content-Type-Options",
             value: "nosniff",
@@ -91,7 +91,7 @@ const nextConfig = {
         ],
       },
     ];
-  }, */
+  },
   /*  ]
   } */
   /* externals: {

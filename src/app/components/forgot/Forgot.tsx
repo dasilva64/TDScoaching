@@ -8,6 +8,7 @@ import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
+import { mutate } from "swr";
 
 const Forgot = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -34,10 +35,7 @@ const Forgot = () => {
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
         });
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+       mutate('/components/header/api')
         reset();
       } else if (data.status === 400) {
         setTimeout(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styles from "./Content.module.scss";
 import NoScript from "@/app/components/noscript/NoScript";
 import DeleteAccount from "../deleteAccount/DeleteAccount";
@@ -12,7 +12,7 @@ import ModalUserLastnameData from "../lastnameData/modal/ModalUserLastnameData";
 import PasswordData from "../passwordData/PasswordData";
 import localFont from "next/font/local";
 import useGet from "@/app/components/hook/useGet";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import ModalUserPasswordData from "../passwordData/modal/ModalUserPasswordData";
 import ModalUserSendToken from "../emailSendTokenData/modal/ModalUserSendToken";
@@ -22,6 +22,11 @@ import ModalDeleteAccount from "../deleteAccount/modal/ModalDeleteAccount";
 import LastnameDataLoad from "../lastnameData/LastnameDataLoad";
 import FirstnameDataLoad from "../firstnameData/FirstnameDataLoad";
 import EmailDataLoad from "../emailSendTokenData/EmailSendTokenDataLoad";
+import TwoFADataLoad from "../twoFAData/TwoFADataLoad";
+import TwoFAData from "../twoFAData/TwoFAData";
+import ModalTwoFADesactivation from "../twoFAData/modal/desactivation/ModalTwoFADesactivation";
+import ModalTwoFAActivation from "../twoFAData/modal/activation/ModalTwoFAActivation";
+import ModalTwoFAActivationCancel from "../twoFAData/modal/activation/cancel/ModalTwoFAActivationCancel";
 const Parisienne = localFont({
   src: "../../../Parisienne-Regular.ttf",
   display: "swap",
@@ -83,6 +88,9 @@ const Content = () => {
           <ModalUserPasswordData mutate={mutate} />
           <ModalUserSendToken data={data} mutate={mutate} />
           <ModalDeleteAccount mutate={mutate} />
+          <ModalTwoFADesactivation mutate={mutate} data={data} />
+          <ModalTwoFAActivation mutate={mutate} data={data} />
+          <ModalTwoFAActivationCancel />
           {data.body.newEmail && (
             <>
               <EmailCheck data={data} mutate={mutate} />
@@ -130,6 +138,14 @@ const Content = () => {
               {isLoading === true && (
                 <>
                   <EmailDataLoad />
+                </>
+              )}
+              {data && data.body && isLoading === false && (
+                <TwoFAData data={data && data.body && data} />
+              )}
+              {isLoading === true && (
+                <>
+                  <TwoFADataLoad />
                 </>
               )}
             </div>

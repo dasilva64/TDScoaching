@@ -6,6 +6,7 @@ export interface SessionData {
   role: string;
   csrfToken: string;
   rememberMe: boolean;
+  expireTwoFa: number | null
 }
 
 export const defaultSession: SessionData = {
@@ -13,7 +14,8 @@ export const defaultSession: SessionData = {
   isLoggedIn: false,
   role: "",
   csrfToken: "",
-  rememberMe: false
+  rememberMe: false,
+  expireTwoFa: null
 };
 
 export const sessionOptions: SessionOptions = {

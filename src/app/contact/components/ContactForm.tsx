@@ -8,6 +8,7 @@ import useSWRMutation from "swr/mutation";
 import fetchPost from "../../components/fetch/FetchPost";
 import stylesForm from "./ContactForm.module.scss";
 import Input from "@/app/components/input/Input";
+import { mutate } from "swr";
 
 const ContactForm = () => {
   const [inputFirstname, setInputFirstname] = useState<string>("");
@@ -58,10 +59,7 @@ const ContactForm = () => {
     if (data) {
       if (data.status === 200) {
         clearState();
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        mutate('/components/header/api')
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },

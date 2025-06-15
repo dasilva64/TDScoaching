@@ -1,5 +1,5 @@
 import prisma from "@/app/lib/prisma";
-import { SessionData, sessionOptions, defaultSession } from "@/app/lib/session";
+import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -17,7 +17,6 @@ export async function GET() {
         where: { id: session.id },
       });
       if (user === null) {
-       // session.destroy();
         return NextResponse.json({
             isLoggedIn: false,
           });

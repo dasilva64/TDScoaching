@@ -36,12 +36,12 @@ const useDeleteAccount = (token: string, csrfToken: any) => {
             router.push("/");
           }
         }
-        dispatch({
+        /* dispatch({
           type: "csrfToken/store",
           payload: {
             csrfToken: data.csrfToken
           },
-        });
+        }); */
         mutate("/components/header/ui/api");
         mutate("/components/header/api");
         /* dispatch({

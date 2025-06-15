@@ -3,22 +3,22 @@
   height: 100vh;
   background-color: rgba($color: #000000, $alpha: 0.9);
   position: fixed;
-  z-index: 998;
+  z-index: 700;
   top: 0;
 }
 
-.login {
+.modalEditEmailSendData {
   background-color: white;
   box-shadow: 0px 0px 8px 8px aqua;
   border-radius: 20px;
   padding: 50px 30px;
-  width: 50%;
+  width: 70%;
   position: fixed;
   left: 50%;
   top: 50%;
   max-height: 90%;
   overflow: scroll;
-  z-index: 999;
+  z-index: 800;
   &__h1 {
     color: black;
     margin: 40px 0px;
@@ -54,57 +54,47 @@
   &__form {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     &__hidden {
       display: none;
     }
-    &__div {
+    &__group {
       display: flex;
-      margin-top: 25px;
+      flex-direction: column;
+      margin-bottom: 10px;
       &__label {
         color: black;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-weight: 400;
-        font-size: 1rem;
-        line-height: 1.4375em;
-        letter-spacing: 0.00938em;
-        padding: 0;
-        position: relative;
+        margin-bottom: 5px;
       }
-      &__checkbox[type="checkbox"] {
-        margin-left: 20px;
-        cursor: pointer;
-        transform: scale(1.5);
-        transition: transform 0.3s;
-        &:hover {
-          transform: scale(1.6);
-        }
+      &__input {
+        border-radius: 5px;
+      }
+      &__error {
+        color: red;
+        margin: 5px 0px -5px 0px;
       }
     }
     &__submit {
       text-align: center;
-      margin: 0px auto;
+      margin: 30px auto 5px auto;
       &__btn {
         cursor: pointer;
-        padding: 10px;
-        background-color: white;
-        border: 2px solid green;
-        color: black;
         border-radius: 10px;
-        margin-top: 20px;
+        border: 2px solid orange;
+        background-color: white;
+        padding: 10px;
+        color: black;
         transition: all 400ms;
         &:hover {
-          color: white;
-          background-color: green;
+          background-color: orange;
           transform: scale(1.05);
+          color: white;
         }
         &__load {
           border-radius: 10px;
-          border: 2px solid green;
+          border: 2px solid orange;
           background-color: white;
           padding: 0px 10px;
           display: flex;
-          margin-top: 20px;
           color: black;
           &__span {
             align-self: center;
@@ -138,79 +128,66 @@
       color: red;
     }
   }
-  &__resend {
+  &__reSend {
     text-align: center;
-      margin: 0px auto;
-      &__btn {
-        &__active {
-          cursor: pointer;
-          padding: 10px;
-        background-color: white;
-        border: 2px solid orange;
-        color: black;
-        border-radius: 10px;
-        margin-top: 20px;
-        transition: all 400ms;
-        &:hover {
-          color: white;
-          background-color: orange;
-          transform: scale(1.05);
-        }
-        }
-        &__disable {
-          cursor: not-allowed;
-          padding: 10px;
-        background-color: white;
-        border: 2px solid orange;
-        color: black;
-        border-radius: 10px;
-        margin-top: 20px;
-        transition: all 400ms;
-        }
-      }
-        
-  }
-  &__cancel {
-    text-align: center;
-      margin: 0px auto;
-      &__btn {
-        cursor: pointer;
-          padding: 10px;
-        background-color: white;
-        border: 2px solid red;
-        color: black;
-        border-radius: 10px;
-        margin-top: 20px;
-        transition: all 400ms;
-        &:hover {
-          color: white;
-          background-color: red;
-          transform: scale(1.05);
-        }
-      }
-        
-  }
-  
-}
-
-@media screen and (max-width: 768px) {
-  .login {
-    width: 80%;
-    padding: 40px 20px;
+    margin: 20px auto 0px auto;
     &__btn {
-      right: 20px;
-      top: 22px;
+      cursor: pointer;
+      border-radius: 10px;
+      border: 2px solid orange;
+      background-color: white;
+      padding: 10px;
+      color: black;
+      transition: all 400ms;
+      &:hover {
+        background-color: orange;
+        transform: scale(1.05);
+        color: white;
+      }
+      &__load {
+        border-radius: 10px;
+        border: 2px solid orange;
+        background-color: white;
+        padding: 0px 10px;
+        display: flex;
+        margin: auto;
+        color: black;
+        &__span {
+          align-self: center;
+        }
+        &__arc {
+          position: relative;
+          bottom: 9px;
+          margin: 18px 10px 0px 10px;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border-top: 1px solid black;
+          border-bottom: 1px solid transparent;
+          border-left: 1px solid black;
+          border-right: 1px solid transparent;
+          animation: load 2000ms both infinite ease-out;
+          &__circle {
+            position: relative;
+            right: -13px;
+            width: 5px;
+            height: 5px;
+            background-color: black;
+            border-radius: 50%;
+          }
+        }
+      }
     }
   }
 }
 
-@media screen and (max-width: 425px) {
-  .login {
+@media screen and (max-width: 768px) {
+  .modalEditEmailSendData {
     width: 95%;
-    padding: 40px 10px;
+    padding: 40px 20px;
     &__btn {
-      right: 14px;
-      top: 18px;
+      right: 20px;
+      top: 22px;
     }
   }
 }

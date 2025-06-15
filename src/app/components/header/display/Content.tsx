@@ -29,30 +29,21 @@ const fetchData = async (url: string) => {
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
  /*  const csrfRefreshToken = useRefreshCsrfToken();   */
-  const { data: csrfRefreshToken } = useSWR("/api/refresh-csrf-token", (url) =>
+  const { data, isLoading } = useSWR("/components/header/api", (url) =>
     fetchData(url), {
-      revalidateOnMount: false,
+      revalidateOnMount: true,
       refreshInterval: 15 * 60 * 1000, 
       revalidateOnFocus: false, 
       revalidateOnReconnect: false, 
     }
   );
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (csrfRefreshToken) {
-      dispatch({
-        type: "csrfToken/store",
-        payload: {csrfToken: csrfRefreshToken}
-      })
-    }
-  }, [csrfRefreshToken, dispatch]);
 
   const { isActive } = useSelector((state: RootState) => state.menu);
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken);
   
   const router = useRouter();
   const pathname = usePathname();
-  const { data, isLoading } = useGet("/components/header/api");
   useEffect(() => {
     if (data) {
       dispatch({

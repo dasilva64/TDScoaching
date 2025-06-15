@@ -6,6 +6,7 @@ import {
   sessionOptions,
 } from "../../../lib/session";
 import prisma from "../../../lib/prisma";
+import TwoFAData from "../twoFAData/TwoFAData";
 
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -35,6 +36,8 @@ export async function GET() {
           lastname: user.lastname,
           email: user.mail,
           newEmail: null,
+          isTwoFactorEnabled: user.isTwoFactorEnabled
+          
         };
       } else {
         userObject = {
@@ -42,6 +45,7 @@ export async function GET() {
           lastname: user.lastname,
           email: user.mail,
           newEmail: copyEditEmail.newEmail,
+          isTwoFactorEnabled: user.isTwoFactorEnabled
         };
       }
       return NextResponse.json({

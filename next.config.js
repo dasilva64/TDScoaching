@@ -7,12 +7,9 @@ const nextConfig = {
   }, */
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
-  images: {
-  minimumCacheTTL: 31536000, // Cache de 1 an
-},
-   async headers() {
+   /* async headers() {
      return [
-      /*{
+      {
       source: "/api/(.*)",
       headers: [
         {
@@ -29,7 +26,7 @@ const nextConfig = {
           value: "private, no-store, no-cache, must-revalidate",
         },
       ],
-    },*/
+    },
     {
       source: "/(index|contact|tarif|blog|coaching-de-vie|conditions-generales-utilisations|mentions-legales|politique-de-confidentialite|qui-suis-je|tarif)",
       headers: [
@@ -51,10 +48,10 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [
-          /* {
+          {
           key: "Cache-Control",
           value: "public, max-age=3600, must-revalidate",
-        }, */
+        },
           {
             key: "X-Content-Type-Options",
             value: "nosniff",
@@ -94,7 +91,7 @@ const nextConfig = {
         ],
       },
     ];
-  },
+  }, */
   /*  ]
   } */
   /* externals: {

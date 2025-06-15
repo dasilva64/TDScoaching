@@ -25,6 +25,8 @@ serve(async (req) => {
     editemaillimite: editEmail->limitDate,
     deleteToken: deleteToken->token,
     deletelimit: deleteToken->limitDate,
+    twoFAToken: twoFAToken->token,
+    twoFALimit: twoFAToken->limitDate,
     meetingId,
     meetingconfirm: meetingId(confirm),
     meetingstart: meetingId(startAt)

@@ -12,32 +12,16 @@ import { getRateLimiter } from "@/app/lib/rateLimiter";
 export async function GET() {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   session.csrfToken = generateCsrfToken();
-  if (typeof session.isLoggedIn === "undefined") {
-    session.updateConfig({
-      ...sessionOptions,
-      cookieOptions: {
-        ...sessionOptions.cookieOptions,
-        maxAge: 60 * 15,
-      },
-    });
-    await session.save();
-    return NextResponse.json(session);
-  } else {
-    if (session.isLoggedIn !== true) {
-      session.updateConfig({
-        ...sessionOptions,
-        cookieOptions: {
-          ...sessionOptions.cookieOptions,
-          maxAge: 60 * 15,
-        },
-      });
-      await session.save();
-      return NextResponse.json(session);
-    } else {
-      const user = await prisma.user.findUnique({
+
+  const is2FAExpired =
+    session.expireTwoFa && new Date() > new Date(session.expireTwoFa);
+
+  if (session.isLoggedIn === true) {
+    const user = await prisma.user.findUnique({
       where: { id: session.id },
     });
-    if (user === null) {
+
+    if (!user) {
       session.destroy();
       session.updateConfig({
         ...sessionOptions,
@@ -48,23 +32,55 @@ export async function GET() {
       });
       await session.save();
       return NextResponse.json(session);
-    } else {
-      if (session.rememberMe) {
-        session.updateConfig({
-          ...sessionOptions,
-          cookieOptions: {
-            ...sessionOptions.cookieOptions,
-            maxAge: 60 * 60 * 24 * 30,
-          },
-        });
-      } 
+    }
+    if (session.rememberMe) {
+      session.updateConfig({
+        ...sessionOptions,
+        cookieOptions: {
+          ...sessionOptions.cookieOptions,
+          maxAge: 60 * 60 * 24 * 30,
+        },
+      });
+    }
+    await session.save();
+    return NextResponse.json(session);
+  }
+  if (session.id) {
+    if (is2FAExpired) {
+      session.destroy();
+      session.updateConfig({
+        ...sessionOptions,
+        cookieOptions: {
+          ...sessionOptions.cookieOptions,
+          maxAge: 60 * 15,
+        },
+      });
       await session.save();
       return NextResponse.json(session);
     }
+    if (session.rememberMe) {
+      session.updateConfig({
+        ...sessionOptions,
+        cookieOptions: {
+          ...sessionOptions.cookieOptions,
+          maxAge: 60 * 60 * 24 * 30,
+        },
+      });
     }
-    
+    await session.save();
+    return NextResponse.json(session);
   }
+  session.updateConfig({
+    ...sessionOptions,
+    cookieOptions: {
+      ...sessionOptions.cookieOptions,
+      maxAge: 60 * 15,
+    },
+  });
+  await session.save();
+  return NextResponse.json(session);
 }
+
 
 export async function DELETE(request: NextRequest) {
   const ip: any = request.headers.get("x-forwarded-for") || request.ip;

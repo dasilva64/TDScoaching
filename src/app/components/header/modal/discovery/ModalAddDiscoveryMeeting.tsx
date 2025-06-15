@@ -9,6 +9,7 @@ import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import Input from "@/app/components/input/Input";
 import useGet from "@/app/components/hook/useGet";
+import { mutate } from "swr";
 
 const ModalAddDiscoveryMeeting = () => {
   
@@ -127,10 +128,7 @@ const ModalAddDiscoveryMeeting = () => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        mutate('/components/header/api')
         setEmailInputError("");
         setFirstnameInputError("");
         setLastnameInputError("");

@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
             twoFAToken: twoFATokenObject
           }
         })
-        let smtpTransport = nodemailer.createTransport({
+        /* let smtpTransport = nodemailer.createTransport({
           host: "smtp.ionos.fr",
           port: 465,
           secure: true,
@@ -163,8 +163,10 @@ export async function POST(request: NextRequest) {
                                                     </body>
                                                   </html>`,
         };
-        await smtpTransport.sendMail(mailOptions);
+        await smtpTransport.sendMail(mailOptions); */
         const csrfToken = generateCsrfToken();
+        const expireIn = Date.now() + 5 * 60 * 1000;
+            session.expireTwoFa = expireIn
         session.csrfToken = csrfToken;
         if (session.rememberMe) {
           session.updateConfig({

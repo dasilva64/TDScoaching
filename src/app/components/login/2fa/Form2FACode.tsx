@@ -26,15 +26,33 @@ const Form2FACode = () => {
 
   const dispatch = useDispatch<AppDispatch>()
   const closeForm = () => {
-    clearState();
-    dispatch({
-      type: "Modal2FACode/close",
-    });
+    if (inputPseudo.length === 0) {
+      const fetchLoginCancel = async () => {
+        if (csrfToken) {
+          loginCancel({
+            pseudo: inputPseudo.trim(),
+            csrfToken: csrfToken
+          });
+        } else {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: {
+              type: "error",
+              flashMessage: "Une erreur technique est survenue. Merci de recharger la page.",
+            },
+          });
+        }
+
+      };
+      if (inputPseudo.length === 0) {
+        fetchLoginCancel();
+      }
+    }
   };
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
 
   const { displayModal2FACode } = useSelector((state: RootState) => state.Modal2FACode)
- 
+
   const {
     trigger: login,
     data: loginData,
@@ -138,19 +156,19 @@ const Form2FACode = () => {
     if (inputPseudo.length === 0) {
       if (csrfToken) {
         loginResend({ csrfToken: csrfToken, pseudo: inputPseudo.trim(), })
-            
-          } else {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: {
-                type: "error",
-                flashMessage: "Une erreur technique est survenue. Merci de recharger la page.",
-              },
-            });
-          }
-        
+
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: "Une erreur technique est survenue. Merci de recharger la page.",
+          },
+        });
       }
-    
+
+    }
+
     /* try {
       const res = await fetch("/api/2fa/resend", {
         method: "POST",
@@ -175,27 +193,60 @@ const Form2FACode = () => {
         mutate("/components/header/api");
         setTimer(30);
         setCode("");
-            setValidCode(false);
-       dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "success", flashMessage: loginDataResend.message },
-            });
+        setValidCode(false);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: loginDataResend.message },
+        });
       }
-       else  {
+      else {
         setTimer(30);
         setCode("");
-            setValidCode(false);
+        setValidCode(false);
         dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "error", flashMessage: loginDataResend.message },
-            });
-          
-        
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: loginDataResend.message },
+        });
+
+
       }
       resetLoginResend()
     }
   }, [loginDataResend, resetLoginResend, dispatch])
-  
+  const {
+    trigger: loginCancel,
+    data: loginDataCancel,
+    reset: resetLoginCancel,
+  } = useSWRMutation("/components/login/2fa/api/cancel", fetchPost)
+  useEffect(() => {
+    if (loginDataCancel) {
+      if (loginDataCancel.status === 200) {
+        mutate("/components/header/api");
+        setCode("");
+        setValidCode(false);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: loginDataCancel.message },
+        });
+        clearState()
+        dispatch({
+          type: "Modal2FACode/close",
+        });
+
+      }
+      else {
+        setCode("");
+        setValidCode(false);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: loginDataCancel.message },
+        });
+
+
+      }
+      resetLoginCancel()
+    }
+  }, [loginDataCancel, resetLoginCancel, dispatch])
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     type: string,
@@ -229,13 +280,16 @@ const Form2FACode = () => {
   const [timer, setTimer] = useState(30); // Exemple : attente de 30s
 
   useEffect(() => {
-    if (timer > 0) {
-      const interval = setInterval(() => setTimer(timer - 1), 1000);
-      return () => clearInterval(interval);
-    } else {
-      setCanResend(true);
+    if (displayModal2FACode) {
+      if (timer > 0) {
+        const interval = setInterval(() => setTimer(timer - 1), 1000);
+        return () => clearInterval(interval);
+      } else {
+        setCanResend(true);
+      }
     }
-  }, [timer]);
+
+  }, [timer, displayModal2FACode]);
   return (
     <>
       <TabIndex displayModal={displayModal2FACode} />
@@ -281,6 +335,7 @@ const Form2FACode = () => {
                 ></Image>
               </button>
               <h2 className={`${styles.login__h1}`}>Se connecter</h2>
+              <p>Veuillez entrez votre code reçu par mail pour vous connecter</p>
               <form
                 action=""
                 method="POST"
@@ -364,9 +419,17 @@ const Form2FACode = () => {
                   )}
                 </div>
               </form>
-              <button disabled={!canResend} onClick={handleResendCode}>
-                {canResend ? "Renvoyer un code" : `Attendez ${timer}s pour renvoyer un code`}
-              </button>
+              <div className={styles.login__cancel}>
+                <button className={`${styles.login__cancel__btn}`} onClick={closeForm}>
+                  Quitter
+                </button>
+              </div>
+              <div className={styles.login__resend}>
+                <button className={`${canResend ? styles.login__resend__btn__active : styles.login__resend__btn__disable} ${styles.login__resend__btn}`} disabled={!canResend} onClick={handleResendCode}>
+                  {canResend ? "Renvoyer un code" : `Attendez ${timer}s pour renvoyer un code`}
+                </button>
+              </div>
+
 
             </motion.div>
           </>

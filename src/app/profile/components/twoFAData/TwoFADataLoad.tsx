@@ -1,25 +1,16 @@
 "use client";
 
 import React from "react";
-import styles from "./FirstnameData.module.scss";
-import { useDispatch } from "react-redux";
+import styles from "./TwoFAData.module.scss"
 import Image from "@/app/components/image/Image";
-import { AppDispatch } from "@/app/redux/store";
 
-const FirstnameData = ({ data }: any) => {
-  const dispatch = useDispatch<AppDispatch>();
-  return (
+const TwoFADataLoad = () => {
+    return (
     <>
       <button
-        className={`${styles.card} modalOpen`}
+        className={`${styles.card__load} modalOpen`}
         tabIndex={0}
-        onClick={() => {
-          if (data) {
-            dispatch({
-              type: "ModalEditFirstname/open",
-            });
-          }
-        }}
+        disabled={true}
       >
         <Image
           className={styles.card__icone}
@@ -31,10 +22,10 @@ const FirstnameData = ({ data }: any) => {
         />
         <div className={styles.card__info}>
           <p className={styles.card__info__name}>
-            <strong>Prénom</strong>
+            <strong>Double authentification</strong>
           </p>
-          <p data-text={data.body.firstname} className={styles.card__info__p}>
-            {data.body.firstname}
+          <p data-text={"Chargement..."} className={styles.card__info__p}>
+            {"Chargement..."}
           </p>
         </div>
         <Image
@@ -45,9 +36,12 @@ const FirstnameData = ({ data }: any) => {
           src={"/assets/icone/chevron-right-solid.svg"}
           alt="bousole"
         />
+        <div className={styles.card__load__arc}>
+          <div className={styles.card__load__arc__circle}></div>
+        </div>
       </button>
     </>
   );
-};
+}
 
-export default FirstnameData;
+export default TwoFADataLoad

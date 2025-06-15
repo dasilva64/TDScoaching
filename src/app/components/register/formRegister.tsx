@@ -9,6 +9,7 @@ import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
+import { mutate } from "swr";
 
 const FormRegister = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -51,10 +52,7 @@ const FormRegister = () => {
           payload: { flashMessage: data.message, type: "success" },
         });
         clearState();
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        mutate('/components/header/api')
         dispatch({ type: "ModalRegister/close" });
         reset();
       } else if (data.status === 400 && data.type === "validation") {

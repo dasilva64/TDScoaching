@@ -1,72 +1,64 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import styles from "./EmailData.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import useSWRMutation from "swr/mutation";
-import fetchPost from "../../../components/fetch/FetchPost";
-import { AnimatePresence, motion } from "framer-motion";
-import Image from "@/app/components/image/Image";
-import { useRouter } from "next/navigation";
-import Input from "@/app/components/input/Input";
-import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import styles from "./ModalTwoFAActivation.module.scss"
+import { AnimatePresence, motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import { useEffect, useState } from "react";
+import Image from "@/app/components/image/Image";
+import Input from "@/app/components/input/Input";
+import fetchPost from "@/app/components/fetch/FetchPost";
+import useSWRMutation from "swr/mutation";
+import { useRouter } from "next/navigation";
+import {mutate as globalMutate} from 'swr'
 
-const EmailCheck = ({ data: userData, mutate }: any) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
-  const { csrfToken } = useSelector(
-    (state: RootState) => state.csrfToken
-  );
-  const [inputPseudo, setInputPseudo] = useState<string>("");
-  const { displayModalEditEmail } = useSelector(
-    (state: RootState) => state.ModalEditEmail
-  );
+const ModalTwoFAActivation = ({mutate, data: userData} :any) => {
+    const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+    const dispatch = useDispatch()
+     const [codeInput, setCodeInput] = useState<string>("");
+      const [validCodeInput, setValidCodeInput] = useState<boolean>(false);
+      const [errorMessageCode, setErrorMessageCode] = useState<string>("");
+      const [inputPseudo, setInputPseudo] = useState<string>("");
+      const clearState = () => {
+        setCodeInput("");
+        setValidCodeInput(false);
+        setErrorMessageCode("");
+      };
+    const {displayModalTwoFAActivation} = useSelector((state: RootState) => state.ModalTwoFAActivation)
 
-  const [codeInput, setCodeInput] = useState<string>("");
-  const [validCodeInput, setValidCodeInput] = useState<boolean>(false);
-  const [errorMessageCode, setErrorMessageCode] = useState<string>("");
-  const clearState = () => {
-    setCodeInput("");
-    setValidCodeInput(false);
-    setErrorMessageCode("");
-  };
-  const { trigger, data, reset, isMutating } = useSWRMutation(
-    "/profile/components/emailData/api",
+    const closeForm = () => {
+        clearState()
+        dispatch({
+                      type: "ModalTwoFAActivationCancel/open",
+                    });
+    }
+const { trigger, data, reset, isMutating } = useSWRMutation(
+    "/profile/components/twoFAData/modal/activation/api",
     fetchPost
   );
-
+  const router = useRouter()
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
         //if (isMutating === false) {
-          mutate(
-            {
-              ...data,
-              body: {
-                ...data.body,
-                email: userData.body.newEmail,
-                newEmail: null
-              },
-            },
-            {
-              revalidate: false,
-            }
-          );
+         mutate({
+                    ...userData,
+                    body: {
+                        ...userData.body,
+                        isTwoFactorEnabled: !userData.body.isTwoFactorEnabled,
+                    },
+                },
+                    {
+                        revalidate: false,
+                    })
           dispatch({
-            type: "ModalSendTokenEmail/edit",
-            payload: {inputEmail: userData.body.newEmail}
-          });
+                    type: "ModalTwoFAActivation/close"
+                })
+                globalMutate("/components/header/api");
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
-        dispatch({
-          type: "ModalEditEmail/close",
-        });
         clearState();
-        globalMutate("/components/header/api");
         reset();
         //}
       } else if (data.status === 401) {
@@ -102,75 +94,50 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
       }
     }
   }, [data, dispatch, reset, router, mutate, userData.body.newEmail]);
-  /* 
-  useEffect(() => {
-    const mutateMainData = async () => {
-      let copyNewEmail = data.body.mail;
-      mutate(
-        {
-          ...data,
-        },
-        { revalidate: false }
-      );
-      reset();
-    };
-    if (data && data.status === 200) {
-      mutateMainData();
-    }
-  }, [data, mutate, reset]); */
-  const closeForm = () => {
-    dispatch({
-      type: "flash/clearFlashMessage",
-    });
-    clearState();
-    dispatch({
-      type: "ModalCancelEmail/open",
-    });
-  };
-  const handlerSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch({
-      type: "flash/clearFlashMessage",
-    });
-    if (validCodeInput === true) {
-      if (inputPseudo.length === 0) {
-        const fetchLogin = async () => {
-          trigger({ code: codeInput, pseudo: inputPseudo, csrfToken: csrfToken });
-        };
-        fetchLogin();
-      }
-    } else {
-      if (validCodeInput === false) {
-        setErrorMessageCode("Code : doit contenir 8 chiffres");
-      }
-    }
-  };
-  const handlerInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    type: string,
-    regex: RegExp,
-    setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
-    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
-    setInput: React.Dispatch<React.SetStateAction<string>>,
-    errorMessage: string
-  ) => {
-    setInput(e.target.value);
-    if (regex.test(e.target.value)) {
-      setValidInput(true);
-      setErrorMessage("");
-    } else if (e.target.value.length === 0) {
-      setValidInput(false);
-      setErrorMessage("");
-    } else {
-      setValidInput(false);
-      setErrorMessage(errorMessage);
-    }
-  };
-  return (
+    const handlerSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        dispatch({
+          type: "flash/clearFlashMessage",
+        });
+        if (validCodeInput === true) {
+          if (inputPseudo.length === 0) {
+            const fetchLogin = async () => {
+              trigger({ code: codeInput, pseudo: inputPseudo, csrfToken: csrfToken });
+            };
+            fetchLogin();
+          }
+        } else {
+          if (validCodeInput === false) {
+            setErrorMessageCode("Code : doit contenir 8 chiffres");
+          }
+        }
+      };
+    const handlerInput = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        type: string,
+        regex: RegExp,
+        setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
+        setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+        setInput: React.Dispatch<React.SetStateAction<string>>,
+        errorMessage: string
+      ) => {
+        setInput(e.target.value);
+        if (regex.test(e.target.value)) {
+          setValidInput(true);
+          setErrorMessage("");
+        } else if (e.target.value.length === 0) {
+          setValidInput(false);
+          setErrorMessage("");
+        } else {
+          setValidInput(false);
+          setErrorMessage(errorMessage);
+        }
+      };
+    return (
     <>
-      <TabIndex displayModal={displayModalEditEmail} />
+      <TabIndex displayModal={displayModalTwoFAActivation} />
       <AnimatePresence>
-        {displayModalEditEmail === true && (
+        {displayModalTwoFAActivation === true && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
@@ -212,11 +179,10 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
                 ></Image>
               </button>
               <h2 className={`${styles.modalEditEmailSendData__h1}`}>
-                Validation de votre nouvel email {userData.body.newEmail}
+                Activation de la double authentification
               </h2>
               <p>
-                Afin de renforcer la sécurité de vos données et de vos
-                documents, nous devons vérifier votre adresse email. Nous vous
+                Afin de renforcer la sécurité nous devons vérifier votre adresse email. Nous vous
                 avons envoyé un email contenant un code de sécurité à 8
                 chiffres.
               </p>
@@ -238,11 +204,11 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
                     handlerInput(
                       e,
                       "firstname",
-                      /^[a-zA-Z0-9?.@&#$,;:!]{14}$/,
+                      /^[a-zA-Z0-9?.@&#$,;:!]{8}$/,
                       setValidCodeInput,
                       setErrorMessageCode,
                       setCodeInput,
-                      "Code : doit contenir 14 caractères"
+                      "Code : doit contenir 8 caractères"
                     );
                   }}
                   validInput={validCodeInput}
@@ -302,7 +268,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
                           styles.modalEditEmailSendData__form__submit__btn
                         }
                         type="submit"
-                        value="Valider votre mail"
+                        value="Activé la double authentification"
                       />
                     </>
                   )}
@@ -314,6 +280,6 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
       </AnimatePresence>
     </>
   );
-};
+}
 
-export default EmailCheck;
+export default ModalTwoFAActivation

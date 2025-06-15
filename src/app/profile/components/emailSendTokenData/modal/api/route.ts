@@ -121,9 +121,6 @@ export async function POST(request: NextRequest) {
               for(let i = 0; i<8; i++) {
                 token += characters.charAt(Math.floor(Math.random() * characters.length))
               }
-              /* let min = 10000000;
-              let max = 99999999;
-              let random = Math.floor(Math.random() * (max - min)) + min; */
               let editUser = await prisma.user.update({
                 where: { mail: user.mail },
                 data: {

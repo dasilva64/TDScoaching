@@ -1,7 +1,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import useSWR from "swr";
+import useSWR, {mutate as mutateGlobal} from "swr";
+
 
 const fetchUser = async (url: string, token: string, csrfToken: any) => {
   
@@ -36,10 +37,7 @@ const useGetOneByToken = (token: string, csrfToken: any) => {
        
         router.push("/");
       } else if (data.status === 200) {
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+        mutateGlobal('/components/header/api')
       }
     } 
   }, [data, dispatch, router]);

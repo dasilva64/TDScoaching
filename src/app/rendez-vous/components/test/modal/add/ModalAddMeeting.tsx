@@ -59,10 +59,10 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
           setTypeCoachingErrorMessage("");
           setTypeCoachingValid(false);
           setPseudo("");
-          dispatch({
+         /*  dispatch({
             type: "csrfToken/store",
             payload: { csrfToken: data.csrfToken },
-          });
+          }); */
           await globalMutate('/components/header/ui/api')
           await mutate();
           await dispatch({ type: "ModalAddMeetingRendezVous/close" });

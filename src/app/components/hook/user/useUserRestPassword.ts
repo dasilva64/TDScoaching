@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter, useParams, usePathname } from "next/navigation";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import csrfToken from "@/app/redux/feature/csrfToken";
 
 const fetchUserResetPassword = async (url: string, token: string, csrfToken: any) => {
@@ -31,10 +31,7 @@ const useUserResetPassword = (token: string, csrfToken: any) => {
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
         });
-        dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        });
+       mutate('/components/header/api')
       } else {
         dispatch({
           type: "flash/storeFlashMessage",

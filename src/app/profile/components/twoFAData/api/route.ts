@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
                         }
                     );
                 }
-                /* let smtpTransport = nodemailer.createTransport({
+                let smtpTransport = nodemailer.createTransport({
                     host: "smtp.ionos.fr",
                     port: 465,
                     secure: true,
@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
                                               </body>
                                             </html>`,
                 };
-                await smtpTransport.sendMail(mailOptions); */
+                await smtpTransport.sendMail(mailOptions);
                 return NextResponse.json(
                     {
                         status: 200,

@@ -9,9 +9,11 @@ import { AppDispatch, RootState } from '@/app/redux/store';
 import useSWRMutation from 'swr/mutation';
 import fetchPost from '../../fetch/FetchPost';
 import { mutate } from "swr";
+import { useRouter } from 'next/navigation';
 
 
 const Form2FACode = () => {
+  const router = useRouter()
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const [code, setCode] = useState<string>("")
   const [validCode, setValidCode] = useState<boolean>(false)
@@ -104,6 +106,27 @@ const Form2FACode = () => {
           }, 1000);
 
         }
+      } else if (loginData.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: loginData.message },
+        });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        resetLogin();
+        dispatch({
+          type: "Modal2FACode/close",
+        });
+        router.push('/')
+      } else {
+        setIsLoading(false);
+        setCode("");
+        setValidCode(false);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: loginData.message },
+        });
+        resetLogin();
       }
     }
   }, [dispatch, loginData, resetLogin]);
@@ -199,6 +222,18 @@ const Form2FACode = () => {
           payload: { type: "success", flashMessage: loginDataResend.message },
         });
       }
+      else if (loginDataResend.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: loginDataResend.message },
+        });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        dispatch({
+          type: "Modal2FACode/close",
+        });
+        router.push('/')
+      }
       else {
         setTimer(30);
         setCode("");
@@ -222,6 +257,7 @@ const Form2FACode = () => {
     if (loginDataCancel) {
       if (loginDataCancel.status === 200) {
         mutate("/components/header/api");
+        mutate("/components/header/ui/api");
         setCode("");
         setValidCode(false);
         dispatch({
@@ -233,6 +269,19 @@ const Form2FACode = () => {
           type: "Modal2FACode/close",
         });
 
+      }else if (loginDataCancel.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: loginDataCancel.message },
+        });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        setCode("");
+        setValidCode(false);
+        dispatch({
+          type: "Modal2FACode/close",
+        });
+        router.push('/')
       }
       else {
         setCode("");

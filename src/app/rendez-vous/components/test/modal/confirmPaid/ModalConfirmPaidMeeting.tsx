@@ -1,4 +1,4 @@
-/* import fetchPost from "@/app/components/fetch/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
@@ -7,6 +7,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import Image from "next/image";
+import {mutate as globalMutate} from "swr"
 import styles from "./ModalConfirmPaidMeeting.module.scss";
 
 const ModalConfirmPaidMeeting = ({
@@ -16,6 +17,7 @@ const ModalConfirmPaidMeeting = ({
   mutate: any;
   meeting: any;
 }) => {
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const { displayModalConfirmPaidMeetingRendezVous } = useSelector(
     (state: RootState) => state.ModalConfirmPaidMeetingRendezVous
   );
@@ -47,6 +49,8 @@ const ModalConfirmPaidMeeting = ({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         reset();
         router.push("/");
       } else {
@@ -124,12 +128,12 @@ const ModalConfirmPaidMeeting = ({
                         dispatch({
                           type: "flash/clearFlashMessage",
                         });
-                        trigger();
+                        trigger({ csrfToken: csrfToken });
                       };
                       fetchDeleteeeting();
                     }}
                   >
-                    Confirmer ce rendez-vous
+                    Oui, confirmer
                   </button>
                 )}
                 {isMutating === true && (
@@ -150,6 +154,16 @@ const ModalConfirmPaidMeeting = ({
                     </div>
                   </button>
                 )}
+                <button
+                  className={styles.deleteModal__div__btn}
+                  onClick={() => {
+                    dispatch({
+                      type: "ModalConfirmPaidMeetingRendezVous/close",
+                    });
+                  }}
+                >
+                  Non, quitter
+                </button>
               </div>
             </motion.div>
           </>
@@ -160,4 +174,3 @@ const ModalConfirmPaidMeeting = ({
 };
 
 export default ModalConfirmPaidMeeting;
- */

@@ -26,7 +26,12 @@ import TwoFADataLoad from "../twoFAData/TwoFADataLoad";
 import TwoFAData from "../twoFAData/TwoFAData";
 import ModalTwoFADesactivation from "../twoFAData/modal/desactivation/ModalTwoFADesactivation";
 import ModalTwoFAActivation from "../twoFAData/modal/activation/ModalTwoFAActivation";
+import { mutate as globalMutate } from "swr";
 import ModalTwoFAActivationCancel from "../twoFAData/modal/activation/cancel/ModalTwoFAActivationCancel";
+import FirstnameDataError from "../firstnameData/FirstnameDataError";
+import LastnameDataError from "../lastnameData/LastnameDataError";
+import EmailSendTokenDataError from "../emailSendTokenData/EmailSendTokenDataError";
+import TwoFADataError from "../twoFAData/TwoFADataError";
 const Parisienne = localFont({
   src: "../../../Parisienne-Regular.ttf",
   display: "swap",
@@ -47,7 +52,6 @@ const Content = () => {
           flashMessage: "Erreur lors du chargement, veuillez réessayer",
         },
       });
-      router.push("/");
     }
     if (isLoading === false && data) {
       if (data.status === 401) {
@@ -58,6 +62,8 @@ const Content = () => {
             flashMessage: data.message,
           },
         });
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 400) {
         dispatch({
@@ -67,12 +73,19 @@ const Content = () => {
             flashMessage: data.message,
           },
         });
-        router.push("/");
       } else if (data.status === 200) {
         dispatch({
           type: "ModalSendTokenEmail/edit",
           payload: {inputEmail: data.body.email}
         })
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
+        });
       }
     }
   }, [data, dispatch, isError, isLoading, router]);
@@ -80,7 +93,7 @@ const Content = () => {
   return (
     <>
       <NoScript />
-      {isLoading === false && data && data.body && (
+      {isLoading === false && data && data.status === 200 && data.body && (
         <>
         
           <ModalUserFirstnameData data={data} mutate={mutate} />
@@ -99,6 +112,7 @@ const Content = () => {
           )}
         </>
       )}
+      
       <main className={styles.profile}>
         <section className={styles.profile__main}>
           <h1 className={`${styles.profile__main__h1} ${Parisienne.className}`}>
@@ -112,10 +126,16 @@ const Content = () => {
                 Identité
               </h3>
               {}
-              {data && data.body && isLoading === false && (
+              {data && data.status === 200 && data.body && isLoading === false && (
                 <>
                   <FirstnameData data={data && data.body && data} />
                   <LastnameData data={data && data.body && data} />
+                </>
+              )}
+              {data && data.status === 429 && isLoading === false && (
+                <>
+                  <FirstnameDataError />
+                  <LastnameDataError />
                 </>
               )}
               {isLoading === true && (
@@ -135,6 +155,11 @@ const Content = () => {
               {data && data.body && isLoading === false && (
                 <EmailSendTokenData data={data && data.body && data} />
               )}
+              {data && data.status === 429 && isLoading === false && (
+                <>
+                  <EmailSendTokenDataError />
+                </>
+              )}
               {isLoading === true && (
                 <>
                   <EmailDataLoad />
@@ -142,6 +167,11 @@ const Content = () => {
               )}
               {data && data.body && isLoading === false && (
                 <TwoFAData data={data && data.body && data} />
+              )}
+               {data && data.status === 429 && isLoading === false && (
+                <>
+                  <TwoFADataError />
+                </>
               )}
               {isLoading === true && (
                 <>

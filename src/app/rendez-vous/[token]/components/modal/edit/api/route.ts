@@ -2,141 +2,149 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import prisma from "@/app/lib/prisma";
 import { validationBody } from "@/app/lib/validation";
-import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
+import { csrfToken } from "@/app/lib/csrfToken";
 
 export async function POST(request: NextRequest) {
-  const ip: any = request.headers.get("x-forwarded-for") || request.ip;
-  try {
-    const rateLimiter = await getRateLimiter(5, 60, "rlflx-meet-token-edit");
-    await rateLimiter.consume(ip);
-  } catch (err) {
+  const rateLimitResponse = await checkRateLimit(request, {
+    points: 5,
+    duration: 60,
+    keyPrefix: "rlflx-meet-token-edit"
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+  const session = await getIronSession<SessionData>(
+    cookies(),
+    sessionOptions
+  );
+  const csrfTokenHeader = headers().get("x-csrf-token");
+  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+  if (csrfCheckResponse) return csrfCheckResponse;
+  const { token, start, typeCoaching } = (await request.json()) as {
+    start: any;
+    token: string;
+    typeCoaching: string;
+  };
+  let arrayMessageError = validationBody({
+    start: start,
+    typeCoaching: typeCoaching,
+  });
+  if (arrayMessageError.length > 0) {
     return NextResponse.json(
       {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
+        status: 400,
+        type: "validation",
+        message: "Une erreur est survenue lors de la modification du rendez-vous, veuillez réessayer",
       },
-      { status: 429 }
+      {
+        status: 400,
+      }
     );
-  }
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  const csrfToken = headers().get("x-csrf-token");
-  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
-    return NextResponse.json(
-      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
-      { status: 403 }
-    );
-  }
-    const { token, start, typeCoaching } = (await request.json()) as {
-      start: any;
-      token: string;
-      typeCoaching: string;
-    };
-    let arrayMessageError = validationBody({
-      start: start,
-      typeCoaching: typeCoaching,
-    });
-    if (arrayMessageError.length > 0) {
+  } else {
+    if (token === null) {
       return NextResponse.json(
         {
           status: 400,
-          type: "validation",
-          message: arrayMessageError,
+          message: "La requête n'est pas valide, veuillez réessayer",
         },
         {
           status: 400,
         }
       );
     } else {
-      if (token === null) {
-        return NextResponse.json(
-          {
-            status: 400,
-            message: "La requête n'est pas valide, veuillez réessayer",
-          },
-          {
-            status: 400,
-          }
+      const { verify } = jwt;
+      try {
+        const decodeToken: any = verify(token.trim(),
+          process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
         );
-      } else {
-          const { verify } = jwt;
+        let date = new Date(start);
+        if (date < new Date()) {
+          return NextResponse.json(
+            {
+              status: 400,
+              message: "La date ne peut pas être dans le passé",
+            },
+            {
+              status: 400,
+            }
+          );
+        } else {
           try {
-            const decodeToken: any = verify(token.trim(),
-              process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
+            const user = await prisma.user.findUnique({
+              where: {
+                mail: decodeToken.user
+              }
+            })
+            if (user === null) {
+              return NextResponse.json(
+                {
+                  status: 400,
+                  message: "L'utilisateur' n'a pas été trouvé, veuillez réessayer",
+                },
+                {
+                  status: 400,
+                }
+              );
+            }
+            await prisma.$transaction(async (tx) => {
+              await prisma.meeting_test.update({
+                where: { id: user.meetingId! },
+                data: {
+                  startAt: start,
+                },
+              });
+              await prisma.offre_test.update({
+                where: { id: user.offreId! },
+                data: {
+                  coaching: typeCoaching
+                }
+              })
+            })
+            return NextResponse.json(
+              {
+                status: 200,
+                message: "Le rendez-vous a bien été modifié",
+              },
+              {
+                status: 200,
+              }
             );
-            const editMeet = await prisma.meeting_test.update({
-              where: { id: decodeToken.id },
-              data: {
-                startAt: start,
-                coaching: typeCoaching
+          } catch {
+            return NextResponse.json(
+              {
+                status: 400,
+                message: "Une erreur est survenue lors de la modification du rendez-vous, veuillez réessayer",
               },
-            });
-            if (editMeet === null) {
-              return NextResponse.json(
-                {
-                  status: 400,
-                  message:
-                    "Le rendez-vous n'a pas été modifié, veuillez réessayer",
-                },
-                {
-                  status: 400,
-                }
-              );
-            } else {
-             /*  const csrfToken = generateCsrfToken()
-          session.csrfToken = csrfToken;
-          if (session.rememberMe) {
-            session.updateConfig({
-              ...sessionOptions,
-              cookieOptions: {
-                ...sessionOptions.cookieOptions,
-                maxAge: 60 * 60 * 24 * 30,
-              },
-            });
-          } else {
-            session.updateConfig({
-              ...sessionOptions,
-              cookieOptions: {
-                ...sessionOptions.cookieOptions,
-                maxAge: undefined,
-              },
-            });
+              {
+                status: 400,
+              }
+            );
           }
-          await session.save(); */
-              return NextResponse.json(
-                {
-                  status: 200,
-                  message: "Le rendez-vous a bien été modifié",
-                },
-                {
-                  status: 200,
-                }
-              );
-            }
-          } catch (err: any) {
-            if (err.name === "TokenExpiredError") {
-              return NextResponse.json(
-                { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
-                { status: 400 }
-              );
-            } else if (err.name === "JsonWebTokenError") {
-              return NextResponse.json(
-                { status: 400, message: "Le token est invalide." },
-                { status: 400 }
-              );
-            } else {
-              return NextResponse.json(
-                { status: 400, message: "Une erreur inconnue est survenue." },
-                { status: 400 }
-              );
-            }
-          }
-        
+
+        }
+      } catch (err: any) {
+        if (err.name === "TokenExpiredError") {
+          return NextResponse.json(
+            { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
+            { status: 400 }
+          );
+        } else if (err.name === "JsonWebTokenError") {
+          return NextResponse.json(
+            { status: 400, message: "Le token est invalide." },
+            { status: 400 }
+          );
+        } else {
+          return NextResponse.json(
+            { status: 400, message: "Une erreur inconnue est survenue." },
+            { status: 400 }
+          );
+        }
       }
+
     }
-    
   }
+
+}
 

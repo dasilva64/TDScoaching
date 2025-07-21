@@ -5,44 +5,38 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { SessionData, sessionOptions } from "../../../lib/session";
-import { getRateLimiter } from "@/app/lib/rateLimiter";
-import { generateCsrfToken } from "../../functions/generateCsrfToken";
+import { checkRateLimit } from "@/app/lib/rateLimiter";
+import { csrfToken } from "@/app/lib/csrfToken";
 
 export async function POST(request: NextRequest) {
-  const ip: any = request.headers.get("x-forwarded-for") || request.ip;
-  try {
-    const rateLimiter = await getRateLimiter(5, 60, "rlflx-register");
-    await rateLimiter.consume(ip);
-  } catch (err) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
+  const rateLimitResponse = await checkRateLimit(request, {
+    points: 5,
+    duration: 60,
+    keyPrefix: "rlflx-register"
+  });
+  if (rateLimitResponse) return rateLimitResponse;
   const session = await getIronSession<SessionData>(
     cookies(),
     sessionOptions
   );
-
+  const csrfTokenHeader = headers().get("x-csrf-token");
+  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+  if (csrfCheckResponse) return csrfCheckResponse;
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
       where: { id: session.id },
     });
     if (user === null) {
-      session.destroy();
       return NextResponse.json(
         {
-          status: 400,
+          status: 401,
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
         {
-          status: 400,
+          status: 401,
         }
       );
     }
@@ -143,6 +137,17 @@ export async function POST(request: NextRequest) {
             role: "ROLE_USER",
           },
         });
+        const OffreCreate = await prisma.offre_test.create({
+          data: {
+            type: "discovery",
+            userId: UserCreate.id,
+            status: "pending"
+          }
+        })
+        const UserEdit = await prisma.user.update({
+          where: { id: UserCreate.id },
+          data: { offreId: OffreCreate.id }
+        })
 
         if (UserCreate === null) {
           return NextResponse.json(
@@ -196,16 +201,6 @@ export async function POST(request: NextRequest) {
                         </html>`,
           };
           await smtpTransport.sendMail(mailOptions);
-          const csrfToken = generateCsrfToken()
-                    session.csrfToken = csrfToken;
-                    session.updateConfig({
-                      ...sessionOptions,
-                      cookieOptions: {
-                        ...sessionOptions.cookieOptions,
-                        maxAge: 60 * 15,
-                      },
-                    }); 
-                    await session.save()
           return NextResponse.json({
             status: 200,
             message: "Un mail vous a été envoyé pour activer votre compte",
@@ -247,6 +242,17 @@ export async function POST(request: NextRequest) {
                   role: "ROLE_USER",
                 },
               });
+              const OffreCreate = await prisma.offre_test.create({
+                data: {
+                  type: "discovery",
+                  userId: UserCreate.id,
+                   status: "pending"
+                }
+              })
+              const UserEdit = await prisma.user.update({
+                where: { id: UserCreate.id },
+                data: { offreId: OffreCreate.id }
+              })
 
               if (UserCreate === null) {
                 return NextResponse.json(
@@ -300,16 +306,6 @@ export async function POST(request: NextRequest) {
                               </html>`,
                 };
                 await smtpTransport.sendMail(mailOptions);
-                const csrfToken = generateCsrfToken()
-                    session.csrfToken = csrfToken;
-                    session.updateConfig({
-                      ...sessionOptions,
-                      cookieOptions: {
-                        ...sessionOptions.cookieOptions,
-                        maxAge: 60 * 15,
-                      },
-                    }); 
-                    await session.save()
                 return NextResponse.json({
                   status: 200,
                   message:
@@ -409,16 +405,6 @@ export async function POST(request: NextRequest) {
                             </html>`,
               };
               await smtpTransport.sendMail(mailOptions);
-              const csrfToken = generateCsrfToken()
-                    session.csrfToken = csrfToken;
-                    session.updateConfig({
-                      ...sessionOptions,
-                      cookieOptions: {
-                        ...sessionOptions.cookieOptions,
-                        maxAge: 60 * 15,
-                      },
-                    }); 
-                    await session.save()
               return NextResponse.json({
                 csrfToken: csrfToken,
                 status: 200,

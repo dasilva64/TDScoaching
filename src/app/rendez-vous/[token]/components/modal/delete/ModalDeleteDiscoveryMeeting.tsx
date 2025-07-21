@@ -39,10 +39,6 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
           type: "ModalDeleteDiscoveryMeetingRendezVousToken/close",
         });
         mutate("/components/header/api");
-        /* dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        }); */
         router.push("/");
         reset();
       } else {
@@ -109,8 +105,7 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
                 Supprimer le rendez-vous
               </h2>
               <p>
-                Veuillez cliquer sur le bouton ci-dessous si vous voulez
-                supprimer le rendez-vous
+                Êtes vous sûre de vouloir supprimer votre rendez-vous de découverte
               </p>
               <div className={styles.modalCalendarEditDiscovery__submit}>
                 {isMutating && (
@@ -151,10 +146,20 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
                         handlerSubmit(e);
                       }}
                     >
-                      Supprimer
+                      Oui, supprimer
                     </button>
                   </>
                 )}
+                <button
+                      className={styles.modalCalendarEditDiscovery__submit__btn}
+                      onClick={(e) => {
+                        dispatch({
+      type: "ModalDeleteDiscoveryMeetingRendezVousToken/close",
+    });
+                      }}
+                    >
+                      Non, quitter
+                    </button>
               </div>
             </motion.div>
           </>

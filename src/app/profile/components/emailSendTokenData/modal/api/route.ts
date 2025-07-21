@@ -6,31 +6,25 @@ import { SessionData, sessionOptions } from "../../../../../lib/session";
 import nodemailer from "nodemailer";
 import { validationBody } from "../../../../../lib/validation";
 import { Prisma } from "@prisma/client";
-import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { checkRateLimit } from "@/app/lib/rateLimiter";
+import { csrfToken } from "@/app/lib/csrfToken";
+import { handleError } from "@/app/lib/handleError";
 
 export async function POST(request: NextRequest) {
-  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
   try {
-    const rateLimiter = await getRateLimiter(5, 60, "rlflx-profile-email-send-token");
-    await rateLimiter.consume(ip);
-  } catch (err) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  const csrfToken = headers().get("x-csrf-token");
-
-  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
-    return NextResponse.json(
-      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
-      { status: 403 }
-    );
-  }
+    const rateLimitResponse = await checkRateLimit(request, {
+    points: 5,
+    duration: 60,
+    keyPrefix: "rlflx-profile-email-send-token"
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+  const session = await getIronSession<SessionData>(
+    cookies(),
+    sessionOptions
+  );
+  const csrfTokenHeader = headers().get("x-csrf-token");
+  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+  if (csrfCheckResponse) return csrfCheckResponse;
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
       {
@@ -46,15 +40,14 @@ export async function POST(request: NextRequest) {
       where: { id: session.id },
     });
     if (user === null) {
-      session.destroy();
       return NextResponse.json(
         {
-          status: 404,
+          status: 401,
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
         {
-          status: 404,
+          status: 401,
         }
       );
     } else {
@@ -118,7 +111,7 @@ export async function POST(request: NextRequest) {
               let now = new Date();
               let token = ""
               let characters = "1234567890"
-              for(let i = 0; i<8; i++) {
+              for (let i = 0; i < 8; i++) {
                 token += characters.charAt(Math.floor(Math.random() * characters.length))
               }
               let editUser = await prisma.user.update({
@@ -154,7 +147,7 @@ export async function POST(request: NextRequest) {
                     pass: process.env.SECRET_SMTP_PASSWORD,
                   },
                 });
-                
+
                 let mailOptions = {
                   from: "contact@tds-coachingdevie.fr",
                   to: copyEditEmail.newEmail,
@@ -230,7 +223,7 @@ export async function POST(request: NextRequest) {
           );
         } else {
           let userExist = await prisma.user.findUnique({
-            where: { mail: email.trim()},
+            where: { mail: email.trim() },
           });
           if (userExist === null) {
             let now = new Date();
@@ -239,10 +232,10 @@ export async function POST(request: NextRequest) {
             let max = 99999999;
             let random = Math.floor(Math.random() * (max - min)) + min; */
             let token = ""
-              let characters = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890?.@&#$,;:!"
-              for(let i = 0; i<14; i++) {
-                token += characters.charAt(Math.floor(Math.random() * characters.length))
-              }
+            let characters = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890?.@&#$,;:!"
+            for (let i = 0; i < 14; i++) {
+              token += characters.charAt(Math.floor(Math.random() * characters.length))
+            }
             let editUser = await prisma.user.update({
               where: { mail: user.mail },
               data: {
@@ -276,7 +269,7 @@ export async function POST(request: NextRequest) {
                   pass: process.env.SECRET_SMTP_PASSWORD,
                 },
               });
-              
+
               let mailOptions = {
                 from: "contact@tds-coachingdevie.fr",
                 to: copyEditEmail.newEmail,
@@ -340,4 +333,8 @@ export async function POST(request: NextRequest) {
       }
     }
   }
+  }catch (error) {
+      handleError(error)
+    }
+  
 }

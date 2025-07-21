@@ -15,7 +15,7 @@ import { mutate } from "swr";
 const Reset = () => {
   const queryParam: any = usePathname();
   let token = queryParam.toString().split("/");
-  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const { data: dataLoad, isLoading } = useUserResetPassword(token[2], csrfToken);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
@@ -52,11 +52,22 @@ const Reset = () => {
           }
         });
         reset();
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        router.push("/");
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "error" },
         });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
         reset();
         router.push("/");
       }
@@ -191,113 +202,113 @@ const Reset = () => {
       )} */}
       {!isLoading && dataLoad && (
         <>
-        <p className={styles.reset__article__p}>
-              Vous pouvez réinitialiser votre mot de passe en remplissant le
-              formulaire ci-dessous.
-            </p>
+          <p className={styles.reset__article__p}>
+            Vous pouvez réinitialiser votre mot de passe en remplissant le
+            formulaire ci-dessous.
+          </p>
 
-<form
-        className={styles.reset__form}
-        id="form"
-        action=""
-              method="POST"
-        onSubmit={(e) => {
-          handlerSubmit(e);
-        }}
-      >
-        <Input
-          label="Mot de passe"
-          value={passwordInput}
-          id="password"
-          type="password"
-          placeholder="Entrez votre mot de passe"
-          onchange={(
-            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-          ) => {
-            handlerInput(
-              e,
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
-              setValidPasswordInput,
-              setPasswordInputError,
-              setPasswordInput,
-              "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#=&,_) et 8 caractères minimum"
-            );
-          }}
-          validInput={validPasswordInput}
-          errorMessage={passwordInputError}
-          image="eye-solid"
-          alt="icone afficher mot de passe"
-          position="first"
-          tab={false}
-        />
-        <Input
-          label="Confirmation de mot de passe"
-          value={passwordComfirmInput}
-          id="passwordComfirm"
-          type="password"
-          placeholder="Entrez votre confirmation de mot de passe"
-          onchange={(
-            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-          ) => {
-            let removeSpace = "";
-            if (e.target.value.charAt(0) === " ") {
-              removeSpace = e.target.value.replace(/\s/, "");
-              setPasswordComfirmInput(removeSpace);
-            } else {
-              removeSpace = e.target.value.replace(/\s+/g, "");
-              setPasswordComfirmInput(removeSpace);
-            }
-            if (passwordInput.length > 0 && removeSpace !== passwordInput) {
-              setValidPasswordComfirmInput(false);
-              setPasswordComfirmError(
-                "Confirmation mot de passe : les mots de passe doivent être identique"
-              );
-            } else {
-              setValidPasswordComfirmInput(true);
-
-              setPasswordComfirmError("");
-            }
-          }}
-          validInput={validPasswordComfirmInput}
-          errorMessage={passwordComfirmInputError}
-          image="eye-solid"
-          alt="icone afficher mot de passe"
-          tab={false}
-        />
-        <input
-          type="text"
-          name="pseudo"
-          id="pseudo"
-          className={styles.reset__form__hidden}
-          tabIndex={-1}
-          autoComplete="off"
-          onChange={(e) => {
-            setInputPseudo(e.target.value);
-          }}
-        />
-        <div className={styles.reset__form__submit}>
-          {isMutating && (
-            <button disabled className={styles.reset__form__submit__btn__load}>
-              <span className={styles.reset__form__submit__btn__load__span}>
-                Chargement
-              </span>
-
-              <div className={styles.reset__form__submit__btn__load__arc}>
-                <div
-                  className={styles.reset__form__submit__btn__load__arc__circle}
-                ></div>
-              </div>
-            </button>
-          )}
-          {!isMutating && (
-            <input
-              className={styles.reset__form__submit__btn}
-              type="submit"
-              value="Réinitialiser"
+          <form
+            className={styles.reset__form}
+            id="form"
+            action=""
+            method="POST"
+            onSubmit={(e) => {
+              handlerSubmit(e);
+            }}
+          >
+            <Input
+              label="Mot de passe"
+              value={passwordInput}
+              id="password"
+              type="password"
+              placeholder="Entrez votre mot de passe"
+              onchange={(
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => {
+                handlerInput(
+                  e,
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#=&,_])[A-Za-z\d-?!*:@~%.;+|$#=&,_]{8,}$/,
+                  setValidPasswordInput,
+                  setPasswordInputError,
+                  setPasswordInput,
+                  "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#=&,_) et 8 caractères minimum"
+                );
+              }}
+              validInput={validPasswordInput}
+              errorMessage={passwordInputError}
+              image="eye-solid"
+              alt="icone afficher mot de passe"
+              position="first"
+              tab={false}
             />
-          )}
-        </div>
-      </form>
+            <Input
+              label="Confirmation de mot de passe"
+              value={passwordComfirmInput}
+              id="passwordComfirm"
+              type="password"
+              placeholder="Entrez votre confirmation de mot de passe"
+              onchange={(
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => {
+                let removeSpace = "";
+                if (e.target.value.charAt(0) === " ") {
+                  removeSpace = e.target.value.replace(/\s/, "");
+                  setPasswordComfirmInput(removeSpace);
+                } else {
+                  removeSpace = e.target.value.replace(/\s+/g, "");
+                  setPasswordComfirmInput(removeSpace);
+                }
+                if (passwordInput.length > 0 && removeSpace !== passwordInput) {
+                  setValidPasswordComfirmInput(false);
+                  setPasswordComfirmError(
+                    "Confirmation mot de passe : les mots de passe doivent être identique"
+                  );
+                } else {
+                  setValidPasswordComfirmInput(true);
+
+                  setPasswordComfirmError("");
+                }
+              }}
+              validInput={validPasswordComfirmInput}
+              errorMessage={passwordComfirmInputError}
+              image="eye-solid"
+              alt="icone afficher mot de passe"
+              tab={false}
+            />
+            <input
+              type="text"
+              name="pseudo"
+              id="pseudo"
+              className={styles.reset__form__hidden}
+              tabIndex={-1}
+              autoComplete="off"
+              onChange={(e) => {
+                setInputPseudo(e.target.value);
+              }}
+            />
+            <div className={styles.reset__form__submit}>
+              {isMutating && (
+                <button disabled className={styles.reset__form__submit__btn__load}>
+                  <span className={styles.reset__form__submit__btn__load__span}>
+                    Chargement
+                  </span>
+
+                  <div className={styles.reset__form__submit__btn__load__arc}>
+                    <div
+                      className={styles.reset__form__submit__btn__load__arc__circle}
+                    ></div>
+                  </div>
+                </button>
+              )}
+              {!isMutating && (
+                <input
+                  className={styles.reset__form__submit__btn}
+                  type="submit"
+                  value="Réinitialiser"
+                />
+              )}
+            </div>
+          </form>
 
         </>
       )}

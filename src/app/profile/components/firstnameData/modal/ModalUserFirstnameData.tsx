@@ -72,6 +72,8 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        globalMutate("/components/header/api");
+                globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 400) {
         if (data.type === "validation") {
@@ -298,7 +300,7 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
                       </button>
                     </>
                   )}
-                  {isMutating === false && (
+                  {!isMutating && (
                     <>
                       <input
                         className={

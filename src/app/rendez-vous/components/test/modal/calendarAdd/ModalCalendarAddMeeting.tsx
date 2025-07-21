@@ -63,7 +63,7 @@ const ModalCalendarAddMeeting = ({
           dispatch({
             type: "flash/clearFlashMessage",
           });
-          if (offre) {
+          if (offre.type !== "discovery") {
             dispatch({
               type: "ModalAddPaidMeetingRendezVous/open",
               payload: { date: arg.dateStr },
@@ -81,7 +81,7 @@ const ModalCalendarAddMeeting = ({
       dispatch({
         type: "flash/clearFlashMessage",
       });
-      if (offre) {
+      if (offre.type !== "discovery") {
         dispatch({
           type: "ModalAddPaidMeetingRendezVous/open",
           payload: { date: arg.dateStr },

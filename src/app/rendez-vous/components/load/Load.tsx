@@ -5,12 +5,10 @@ const Load = () => {
   return (
     <>
       <div className={styles.load}>
-        {/* <div className={styles.load__container}> */}
         <div className={styles.load__container__arc}>
           <div className={styles.load__container__arc__circle}></div>
         </div>
         <p>Chargement</p>
-        {/* </div> */}
       </div>
     </>
   );

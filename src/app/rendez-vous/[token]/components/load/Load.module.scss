@@ -1,20 +1,18 @@
 .load {
   /* position: relative;*/
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding-top: 84px;
-  height: calc(100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   &__container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     &__arc {
-      /*  position: absolute; */
-      right: 50%;
-      top: 25px;
+      position: relative;
+      left: 50%;
       width: 20px;
       height: 20px;
       border-radius: 50%;
@@ -36,9 +34,9 @@
 }
 @keyframes load {
   0% {
-    transform: rotate(0deg);
+    transform: translateX(-50%) rotate(0deg);
   }
   100% {
-    transform: rotate(680deg);
+    transform: translateX(-50%) rotate(680deg);
   }
 }

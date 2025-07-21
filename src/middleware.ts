@@ -2,11 +2,12 @@ import { getIronSession } from "iron-session";
 import { NextRequest, NextResponse } from "next/server";
 import { SessionData, sessionOptions } from "./app/lib/session";
 import { cookies } from "next/headers";
+import { mutate } from "swr";
 
 export async function middleware(request: NextRequest) {
   //const res = NextResponse.next();
-  
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+
+   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
@@ -31,26 +32,27 @@ export async function middleware(request: NextRequest) {
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
   )
- 
-  const res = NextResponse.next({
+  
+  const res = NextResponse.next( {
     request: {
       headers: requestHeaders,
     },
-  }) 
+  } ) 
    res.headers.set('X-XSS-Protection', '1; mode=block');
   res.headers.set(
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue 
-  )
+  ) 
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
-    let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
+  let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
   if (request.nextUrl.pathname.startsWith("/utilisateurs") ||
-  request.nextUrl.pathname.startsWith("/meetings") ||
-  request.nextUrl.pathname.startsWith("/meetingAdmin") ||
-  regex.test(request.nextUrl.pathname) ||
-  request.nextUrl.pathname === "/rendez-vous" ||
-  regexTwo.test(request.nextUrl.pathname) ||
-  request.nextUrl.pathname.startsWith('/historique-rendez-vous')) {
+    request.nextUrl.pathname.startsWith("/meetings") ||
+    request.nextUrl.pathname.startsWith("/meetingAdmin") ||
+    regex.test(request.nextUrl.pathname) ||
+    request.nextUrl.pathname === "/rendez-vous" ||
+    regexTwo.test(request.nextUrl.pathname) ||
+    request.nextUrl.pathname.startsWith("/profile") ||
+    request.nextUrl.pathname.startsWith('/historique-rendez-vous')) {
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
     if (session.isLoggedIn) {
       if (
@@ -63,7 +65,7 @@ export async function middleware(request: NextRequest) {
           return NextResponse.redirect(new URL("/", request.url));
         }
       }
-  
+
       if (
         request.nextUrl.pathname.startsWith("/rendez-vous") ||
         regexTwo.test(request.nextUrl.pathname) ||
@@ -79,13 +81,14 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/", request.url));
     }
     if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
-      session.destroy()
+     /*  mutate("/components/header/api");
+      mutate("/components/header/ui/api"); */
       return NextResponse.redirect(new URL("/", request.url));
     }
     return res;
-   } 
-   return res;
-  
+  }
+  return res;
+
 }
 
 /* export const config = {
@@ -100,15 +103,15 @@ export async function middleware(request: NextRequest) {
   ],
 }; */
 
- export const config = {
+export const config = {
   matcher: [
-    
+
     /*  * Match all request paths except for the ones starting with:
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file) */
-    
+
     {
       source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
       missing: [

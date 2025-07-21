@@ -3,47 +3,38 @@ import { cookies, headers } from "next/headers"
 import nodemailer from 'nodemailer';
 import { getIronSession } from "iron-session";
 import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
-import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { checkRateLimit } from "@/app/lib/rateLimiter";
 import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
+import { csrfToken } from "@/app/lib/csrfToken";
 
 export async function POST(request: NextRequest) {
-  const ip: any = request.headers.get("x-forwarded-for") || request.ip;
-  try {
-    const rateLimiter = await getRateLimiter(5, 60, "rlflx-login-2fa-resend");
-    await rateLimiter.consume(ip);
-  } catch (err) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  const csrfToken = headers().get("x-csrf-token");
-  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
-    return NextResponse.json(
-      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
-      { status: 403 }
-    );
-  }
-
+  const rateLimitResponse = await checkRateLimit(request, {
+    points: 5,
+    duration: 60,
+    keyPrefix: "rlflx-login-2fa-resend"
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+  const session = await getIronSession<SessionData>(
+    cookies(),
+    sessionOptions
+  );
+  const csrfTokenHeader = headers().get("x-csrf-token");
+  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+  if (csrfCheckResponse) return csrfCheckResponse;
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
       where: { id: session.id },
     });
     if (user === null) {
-      session.destroy();
       return NextResponse.json(
         {
-          status: 400,
+          status: 401,
           message:
             "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
         },
         {
-          status: 400,
+          status: 401,
         }
       );
     }
@@ -166,7 +157,7 @@ export async function POST(request: NextRequest) {
         await smtpTransport.sendMail(mailOptions); */
         const csrfToken = generateCsrfToken();
         const expireIn = Date.now() + 5 * 60 * 1000;
-            session.expireTwoFa = expireIn
+        session.expireTwoFa = expireIn
         session.csrfToken = csrfToken;
         if (session.rememberMe) {
           session.updateConfig({

@@ -1,26 +1,38 @@
 import React from "react";
 import styles from "./Places.module.scss";
 import { useLoadScript } from "@react-google-maps/api";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
-import { Visibility } from "@mui/icons-material";
-import {
-  FormControl,
-  InputLabel,
-  Input,
-  InputAdornment,
-  FormHelperText,
-} from "@mui/material";
+import usePlacesAutocomplete, { getDetails } from "use-places-autocomplete";
+import Input from "@/app/components/input/Input";
+
+const fetchPlaceDetails = async (placeId: string) => {
+  const details: any = await getDetails({
+    placeId,
+    fields: ["address_components", "formatted_address"],
+  });
+
+  const components = details?.address_components;
+
+  const getComponent = (type: string) =>
+    components?.find((c: any) => c.types.includes(type))?.long_name || "";
+
+  const city = getComponent("locality");
+  const country = getComponent("country");
+
+  return {
+    city,
+    country,
+    fullAddress: details?.formatted_address,
+  };
+};
 
 const lib: any = ["places"];
-const Places = ({ errorCity, setErrorCity, setAdresse, setCity }: any) => {
+const Places = ({ errorCity, setErrorCity, setAdresse, setCity, setValidCity }: any) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
     libraries: lib,
   });
+  if (loadError) return <p>Erreur de chargement de Google Maps</p>;
+  if (!isLoaded) return <p>Chargement de la carte...</p>;
   return (
     <>
       <div>
@@ -29,6 +41,7 @@ const Places = ({ errorCity, setErrorCity, setAdresse, setCity }: any) => {
           setErrorCity={setErrorCity}
           setAdresse={setAdresse}
           setCity={setCity}
+          setValidCity={setValidCity}
         />
       </div>
     </>
@@ -40,6 +53,7 @@ const PlacesAutocomplete = ({
   setErrorCity,
   setAdresse,
   setCity,
+  setValidCity
 }: any) => {
   const {
     ready,
@@ -47,61 +61,80 @@ const PlacesAutocomplete = ({
     suggestions: { status, data },
     setValue,
     clearSuggestions,
-  } = usePlacesAutocomplete();
-  const handleSelect = async (address: any, city: any) => {
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      componentRestrictions: { country: "fr" },
+    },
+    debounce: 300,
+  });
+  /* const handleSelect = async (address: any, city: any) => {
     setValue(address, false);
     clearSuggestions();
     setErrorCity("");
     setAdresse(address);
     setCity(city);
+  }; */
+  const handlerInput = (e) => {
+    setValue(e.target.value);
+    if (e.target.value.length > 0) {
+      setErrorCity("")
+      setValidCity(true)
+    } else {
+      setValidCity(false)
+      setErrorCity("Vous devez entrer une adresse")
+    }
   };
+  const frenchResults = data.filter(({ terms }) =>
+    terms.some(term => term.value === "France")
+  );
   return (
     <>
       <div>
-        <FormControl variant="standard" sx={{ width: "100%" }}>
-          <InputLabel
-            sx={{
-              color: "black",
-              "&.Mui-focused": {
-                color: "#1976d2",
-              },
-            }}
-            htmlFor="standard-adornment-email"
-          >
-            Adresse
-          </InputLabel>
-          <Input
-            disabled={!ready}
-            autoFocus
-            id="standard-adornment-email"
-            value={value}
-            placeholder={"Entrez votre adresse"}
-            type={"text"}
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-            endAdornment={
-              <InputAdornment position="end">
-                <LocationCityIcon
-                  sx={{ color: "black" }}
-                  aria-label="toggle email visibility"
-                >
-                  <Visibility />
-                </LocationCityIcon>
-              </InputAdornment>
-            }
-          />
-          <FormHelperText>{errorCity}</FormHelperText>
-        </FormControl>
-        {status === "OK" && data.length > 0 && (
+        <Input
+          disabled={!ready}
+          label="Adresse"
+          value={value}
+          id="firstname"
+          type="text"
+          placeholder="Entrez votre adresse"
+          onchange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => {
+            handlerInput(e);
+          }}
+          errorMessage={errorCity}
+          image="house-solid"
+          alt="icone house"
+          position="first"
+          tab={true}
+        />
+        {status === "OK" && frenchResults.length > 0 && (
           <div className={styles.places__all}>
-            {data.map(
+            {frenchResults.map(
               ({ place_id, description, terms }, index: any) =>
-                terms[terms.length - 1].value === "France" && (
+                terms.some(term => term.value === "France") && (
                   <React.Fragment key={place_id}>
                     <p
                       className={styles.places__all__city}
-                      onClick={() => handleSelect(description, terms[1].value)}
+                      onClick={() => {
+                        const returnAdress = async () => {
+                          const addressDetails = await fetchPlaceDetails(place_id);
+                          if (!addressDetails.city || !addressDetails.country) {
+                            clearSuggestions();
+                            setValidCity(false)
+                            setErrorCity("Veuillez sélectionner une adresse contenant au moins une ville et un pays.");
+                          } else {
+                            setValidCity(true)
+                            setValue(addressDetails.fullAddress, false);
+                            clearSuggestions();
+                            setErrorCity("");
+                            setAdresse(addressDetails.fullAddress);
+                            setCity(addressDetails.city);
+                          }
+                        }
+                        returnAdress()
+                        //handleSelect(description, terms[1].value)
+                      }}
                     >
                       {description}
                       {data.length - 1 !== index && (
@@ -117,19 +150,7 @@ const PlacesAutocomplete = ({
                 )
             )}
           </div>
-        )}{" "}
-        {/*  <div>
-            {status === "OK" &&
-              data.length > 0 &&
-              data.map(
-                ({ place_id, description, terms }: any) =>
-                  terms[terms.length - 1].value === "France" && (
-                    <p onClick={() => handleSelect(description)} key={place_id}>
-                      {description}
-                    </p>
-                  )
-              )}
-          </div> */}
+        )}
       </div>
     </>
   );

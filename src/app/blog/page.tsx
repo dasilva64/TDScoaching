@@ -4,7 +4,6 @@ import styles from "./page.module.scss";
 import prisma from "../lib/prisma";
 import Image from "../components/image/Image";
 import Paragraph from "./components/Paragraph";
-import { unstable_cache } from "next/cache";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Footer from "../components/footer/footer";
@@ -60,11 +59,6 @@ const page = async () => {
                   >
                     <Image
                     className={styles.blog__article__container__card__img}
-                      /* style={{
-                        width: "100%",
-                        height: "200px",
-                        objectFit: "cover",
-                      }} */
                       src={`/assets/blog/${e.image}`}
                       width="0"
                       height="0"

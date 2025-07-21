@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from "@/app/redux/store";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { useRouter } from "next/navigation";
+import { mutate as globalMutate } from "swr";
 
 const TwoFAData = ({ data: userData }: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +38,8 @@ const TwoFAData = ({ data: userData }: any) => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       }  else {
         dispatch({

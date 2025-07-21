@@ -6,31 +6,24 @@ import nodemailer from "nodemailer";
 import { Prisma } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../lib/session";
-import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { checkRateLimit } from "@/app/lib/rateLimiter";
+import { csrfToken } from "@/app/lib/csrfToken";
 
 export async function POST(request: NextRequest) {
-  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
-  try {
-    const rateLimiter = await getRateLimiter(5, 60, "rlflx-delete-account");
-    await rateLimiter.consume(ip);
-  } catch (err) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  const csrfToken = headers().get("x-csrf-token");
 
-  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
-    return NextResponse.json(
-      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
-      { status: 403 }
-    );
-  }
+  const rateLimitResponse = await checkRateLimit(request, {
+    points: 5,
+    duration: 60,
+    keyPrefix: "rlflx-delete-account"
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+  const session = await getIronSession<SessionData>(
+    cookies(),
+    sessionOptions
+  );
+  const csrfTokenHeader = headers().get("x-csrf-token");
+  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+  if (csrfCheckResponse) return csrfCheckResponse;
   if (session.isLoggedIn !== true) {
     return NextResponse.json(
       {
@@ -46,7 +39,6 @@ export async function POST(request: NextRequest) {
       where: { id: session.id },
     });
     if (user === null) {
-      session.destroy();
       return NextResponse.json(
         {
           status: 404,
@@ -72,30 +64,13 @@ export async function POST(request: NextRequest) {
           }
         );
       } else {
+
+        try {
           const { verify } = jwt;
           let decodeToken: any;
-          try {
-            decodeToken = verify(token.trim(),
-              process.env.SECRET_TOKEN_DELETE as string
-            );
-          } catch (err: any) {
-            if (err.name === "TokenExpiredError") {
-              return NextResponse.json(
-                { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
-                { status: 400 }
-              );
-            } else if (err.name === "JsonWebTokenError") {
-              return NextResponse.json(
-                { status: 400, message: "Le token est invalide." },
-                { status: 400 }
-              );
-            } else {
-              return NextResponse.json(
-                { status: 400, message: "Une erreur inconnue est survenue." },
-                { status: 400 }
-              );
-            }
-          }
+          decodeToken = verify(token.trim(),
+            process.env.SECRET_TOKEN_DELETE as string
+          );
           let user = await prisma.user.findUnique({
             where: { mail: decodeToken.user },
           });
@@ -190,7 +165,6 @@ export async function POST(request: NextRequest) {
                     const deleteUser = await prisma.user.delete({
                       where: { id: user.id },
                     });
-                    session.destroy();
                     return NextResponse.json({
                       status: 200,
                       message: "Votre compte a bien été supprimé",
@@ -222,8 +196,29 @@ export async function POST(request: NextRequest) {
               );
             }
           }
-        
+        } catch (err: any) {
+          if (err.name === "TokenExpiredError") {
+            return NextResponse.json(
+              { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
+              { status: 400 }
+            );
+          } else if (err.name === "JsonWebTokenError") {
+            return NextResponse.json(
+              { status: 400, message: "Le token est invalide." },
+              { status: 400 }
+            );
+          } else {
+            return NextResponse.json(
+              { status: 400, message: "Une erreur inconnue est survenue." },
+              { status: 400 }
+            );
+          }
+        }
+
+
       }
     }
   }
+
+
 }

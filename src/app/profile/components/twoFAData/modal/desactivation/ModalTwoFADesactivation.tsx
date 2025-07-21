@@ -1,5 +1,4 @@
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { Input } from "@mui/material";
 import Image from "@/app/components/image/Image";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./ModalTwoFADesactivation.module.scss"
@@ -20,7 +19,7 @@ const ModalTwoFADesactivation = ({ mutate, data: userData }: any) => {
     }
     const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
     const router = useRouter()
-    const { data, reset, trigger, isMutating } = useSWRMutation("/profile/components/twoFAData/modal/desactivation/api", fetchPost)
+    const { data, reset, trigger } = useSWRMutation("/profile/components/twoFAData/modal/desactivation/api", fetchPost)
     useEffect(() => {
         if (data) {
             if (data.status === 200) {
@@ -49,6 +48,8 @@ const ModalTwoFADesactivation = ({ mutate, data: userData }: any) => {
                     payload: { type: "error", flashMessage: data.message },
                 });
                 reset();
+                globalMutate("/components/header/api");
+                globalMutate("/components/header/ui/api");
                 router.push("/");
             } else {
                 dispatch({

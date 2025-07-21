@@ -12,7 +12,8 @@ function useGet(url: string | null) {
     fetchData(url), {
       revalidateOnMount: true,
       revalidateOnFocus: false,
-      revalidateOnReconnect: false
+      revalidateOnReconnect: false,
+      refreshInterval: 30_000
     }
   );
   return {

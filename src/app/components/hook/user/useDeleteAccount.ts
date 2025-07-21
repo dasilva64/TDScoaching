@@ -32,21 +32,12 @@ const useDeleteAccount = (token: string, csrfToken: any) => {
           if (split[1] === "utilisateur" || split[1] === "suppression-compte") {
             router.push("/");
           }
-          if (pathname === "/profile" || pathname === "/utilisateurs") {
+          if (pathname === "/profile" || pathname === "/utilisateurs" || pathname === "rendez-vous" || pathname === "historique-rendez-vous") {
             router.push("/");
           }
         }
-        /* dispatch({
-          type: "csrfToken/store",
-          payload: {
-            csrfToken: data.csrfToken
-          },
-        }); */
         mutate("/components/header/ui/api");
         mutate("/components/header/api");
-        /* dispatch({
-          type: "auth/logout",
-        }); */
         dispatch({
           type: "flash/storeFlashMessage",
           payload: {
@@ -62,7 +53,6 @@ const useDeleteAccount = (token: string, csrfToken: any) => {
             type: "error",
           },
         });
-        router.push("/");
       }
     }
   }, [data, dispatch, pathname, router]);

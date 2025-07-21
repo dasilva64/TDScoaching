@@ -14,18 +14,26 @@ const BtnNav = ({ name }: any) => {
   const pathname = usePathname();
   useEffect(() => {
     if (data) {
-      if (data.isLoggedIn === false) {
-        let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
-        let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-        if (
-          pathname === "/profile" ||
-          pathname === "/utilisateurs" ||
-          regex.test(pathname) ||
-          regexTwo.test(pathname)
-        ) {
-          router.push("/");
+      if (data.status === 429) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+      } else {
+        if (data.isLoggedIn === false) {
+          let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
+          let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
+          if (
+            pathname === "/profile" ||
+            pathname === "/utilisateurs" ||
+            regex.test(pathname) ||
+            regexTwo.test(pathname)
+          ) {
+            router.push("/");
+          }
         }
       }
+
     }
   }, [data, dispatch, pathname, router]);
   let content;
@@ -52,10 +60,10 @@ const BtnNav = ({ name }: any) => {
           if (data.meeting === null) {
             content = (
               <>
-              <Link tabIndex={0}
-                className={`${styles.header__btn} ${styles.header__free} modalOpen`} href={"/rendez-vous"}>{name}</Link>
+                <Link tabIndex={0}
+                  className={`${styles.header__btn} ${styles.header__free} modalOpen`} href={"/rendez-vous"}>{name}</Link>
               </>
-              
+
             );
           } else {
             content = null;

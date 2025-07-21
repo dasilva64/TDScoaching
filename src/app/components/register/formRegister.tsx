@@ -10,8 +10,11 @@ import fetchPost from "../fetch/FetchPost";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
 import { mutate } from "swr";
+import { useRouter } from "next/navigation";
 
 const FormRegister = () => {
+  const router = useRouter()
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const [emailInput, setEmailInput] = useState<string>("");
@@ -80,6 +83,19 @@ const FormRegister = () => {
           });
           reset();
         }, 2000);
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        reset();
+        clearState();
+        dispatch({
+          type: "ModalRegister/close",
+        });
+        router.push('/')
       } else {
         setTimeout(() => {
           setIsLoading(false);
@@ -122,6 +138,7 @@ const FormRegister = () => {
               firstname: firstnameInput.trim(),
               lastname: lastnameInput.trim(),
               pseudo: inputPseudo.trim(),
+              csrfToken: csrfToken
             });
           };
           fetchRegister();
@@ -376,7 +393,7 @@ const FormRegister = () => {
               <form
                 className={styles.register__form}
                 action=""
-              method="POST"
+                method="POST"
                 onSubmit={(e) => {
                   if (isLoading === false) {
                     handlerSubmit(e);

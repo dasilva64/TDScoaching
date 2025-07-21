@@ -49,6 +49,17 @@ import Modal2FACode from "./feature/header/Modal2FACode";
 import ModalTwoFADesactivation from "./feature/profile/ModalTwoFADesactivation";
 import ModalTwoFAActivation from "./feature/profile/ModalTwoFAActivation";
 import ModalTwoFAActivationCancel from "./feature/profile/ModalTwoFAActivationCancel";
+import ModalContractRecapRendezVous from "./feature/rendez-vous/formule/ModalContractRecapRendezVous";
+import ModalContractEditRendezVous from "./feature/rendez-vous/formule/ModalContractEditRendezVous";
+import ModalHelpRendezVous from "./feature/rendez-vous/take/ModalHelpRendezVous";
+import ModalContractHelpRendezVous from "./feature/rendez-vous/formule/ModalContractHelpRendezVous";
+import ModalUserNoShow from "./feature/utilisateur/ModalUserNoShow";
+import ModalCalendarTakeNextMeeting from "./feature/utilisateur/ModalCalendarTakeNextMeeting";
+import ModalTakeNextMeeting from "./feature/utilisateur/ModalTakeNextMeeting";
+import ModalOffreDetail from "./feature/historique-rendez-vous/ModalOffreDetail";
+import ModalHelpPaiementRendezVous from "./feature/rendez-vous/take/ModalHelpPaiementRendezVous";
+import ModalHistoriqueMeetingRendezVous from "./feature/rendez-vous/my/ModalHistoriqueMeetingRendezVous";
+import ModalFormuleCancelRendezVous from "./feature/rendez-vous/take/ModalFormuleCancelRendezVous";
 
 export const store = configureStore({
   reducer: {
@@ -107,6 +118,12 @@ export const store = configureStore({
 
     //utilisateur
     ArrayMeetingByUser: ArrayMeetingByUser.reducer,
+    ModalUserNoShow: ModalUserNoShow.reducer,
+    ModalCalendarTakeNextMeeting: ModalCalendarTakeNextMeeting.reducer,
+    ModalTakeNextMeeting: ModalTakeNextMeeting.reducer,
+
+    //historique-rendez-vous
+    ModalOffreDetail: ModalOffreDetail.reducer,
 
     // Rendez-vous
     ModalCalendarEditMeetingRendezVous: ModalCalendarEditMeetingRendezVous.reducer,
@@ -121,6 +138,13 @@ export const store = configureStore({
     ModalConfirmPaidMeetingRendezVous: ModalConfirmPaidMeetingRendezVous.reducer,
     ModalAddPaidMeetingRendezVous: ModalAddPaidMeetingRendezVous.reducer,
     ModalContractRendezVous: ModalContractRendezVous.reducer,
+    ModalContractRecapRendezVous: ModalContractRecapRendezVous.reducer,
+    ModalContractEditRendezVous: ModalContractEditRendezVous.reducer,
+    ModalHelpRendezVous: ModalHelpRendezVous.reducer,
+    ModalHelpPaiementRendezVous: ModalHelpPaiementRendezVous.reducer,
+    ModalContractHelpRendezVous: ModalContractHelpRendezVous.reducer,
+    ModalHistoriqueMeetingRendezVous: ModalHistoriqueMeetingRendezVous.reducer,
+    ModalFormuleCancelRendezVous: ModalFormuleCancelRendezVous.reducer,
 
     // Rendez-vous/token
     ModalCalendarEditDiscoveryMeetingRendezVousToken: ModalCalendarEditDiscoveryMeetingRendezVousToken.reducer,

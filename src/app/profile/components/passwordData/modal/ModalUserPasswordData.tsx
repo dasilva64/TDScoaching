@@ -54,6 +54,8 @@ const ModalUserPasswordData = ({mutate}: any) => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        globalMutate("/components/header/api");
+                globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 400) {
         if (data.type === "validation") {

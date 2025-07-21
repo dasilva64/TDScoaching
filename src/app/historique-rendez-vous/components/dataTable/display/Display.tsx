@@ -19,21 +19,9 @@ const Display = () => {
   }, [dispatch]);
   useEffect(() => {
     if (datas && datas.length > 0) {
-      setKeyAr(Object.keys(datas[0]));
-    } else {
-      setKeyAr(["Début", "Coaching", "Confirmation", "Status"]);
+      setKeyAr(["Type de l'offre", "Type de coaching", "Statut du paiement", "Dernier rendez-vous"]);
     }
   }, [datas]);
-  /* useEffect(() => {
-    if (sortBy[0] === "" && sortBy[1] === "") {
-      if (keyAr[0]) {
-        dispatch({
-          type: "Array/changeSortBy",
-          payload: { sortBy: [keyAr[0], "ASC"] },
-        });
-      }
-    }
-  }, [dispatch, keyAr, sortBy]); */
   useEffect(() => {
     if (sortBy[0] === "" && sortBy[1] === "" && keyAr[0]) {
       dispatch({
@@ -142,6 +130,7 @@ const Display = () => {
           <tr className={styles.table__head__tr}>
             {keyAr &&
               keyAr.map((key: any, index: any) => {
+                if (key === "meetings") return
                 if (key === sortBy[0]) {
                   if (sortBy[1] === "ASC") {
                     if (key === "Id") {
@@ -154,17 +143,7 @@ const Display = () => {
                           {key}
                         </th>
                       );
-                    } /* else if (key === "RendezVous") {
-                      return (
-                        <th
-                          className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__min} ${styles.table__head__tr__th__asc}`}
-                          onClick={(e) => handlerSortBy(e)}
-                          key={index}
-                        >
-                          {key}
-                        </th>
-                      );
-                    } */
+                    }
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__asc}`}
@@ -185,17 +164,7 @@ const Display = () => {
                           {key}
                         </th>
                       );
-                    } /* else if (key === "RendezVous") {
-                      return (
-                        <th
-                          className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__min} ${styles.table__head__tr__th__desc}`}
-                          onClick={(e) => handlerSortBy(e)}
-                          key={index}
-                        >
-                          {key}
-                        </th>
-                      );
-                    } */
+                    }
                     return (
                       <th
                         className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__desc}`}
@@ -217,17 +186,7 @@ const Display = () => {
                         {key}
                       </th>
                     );
-                  } /* else if (key === "RendezVous") {
-                    return (
-                      <th
-                        className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__min} ${styles.table__head__tr__th__both}`}
-                        onClick={(e) => handlerSortBy(e)}
-                        key={index}
-                      >
-                        {key}
-                      </th>
-                    );
-                  } */
+                  }
                   return (
                     <th
                       className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__both}`}

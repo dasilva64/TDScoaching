@@ -5,32 +5,24 @@ import nodemailer from "nodemailer";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
-import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { checkRateLimit } from "@/app/lib/rateLimiter";
+import { csrfToken } from "@/app/lib/csrfToken";
 
 
 export async function POST(request: NextRequest) {
-  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
-  try {
-    const rateLimiter = await getRateLimiter(5, 60, "rlflx-contact");
-    await rateLimiter.consume(ip);
-  } catch (err) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  const csrfToken = headers().get("x-csrf-token");
-  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
-    return NextResponse.json(
-      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
-      { status: 403 }
-    );
-  }
+  const rateLimitResponse = await checkRateLimit(request, {
+    points: 5,
+    duration: 60,
+    keyPrefix: "rlflx-contact"
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+  const session = await getIronSession<SessionData>(
+    cookies(),
+    sessionOptions
+  );
+  const csrfTokenHeader = headers().get("x-csrf-token");
+  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+  if (csrfCheckResponse) return csrfCheckResponse;
   try {
     const { email, firstname, lastname, object, message, pseudo } =
       await request.json();
@@ -79,7 +71,7 @@ export async function POST(request: NextRequest) {
           pass: process.env.SECRET_SMTP_PASSWORD,
         },
       });
-       if (user === null) {
+      if (user === null) {
         let mailOptions = {
           from: "contact@tds-coachingdevie.fr",
           to: "contact@tds-coachingdevie.fr",
@@ -101,18 +93,14 @@ export async function POST(request: NextRequest) {
                                 </div>
                                 <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                   <h1 style="text-align: center">tds coaching</h1>
-                                  <h2 style="text-align: center">${
-                                    firstname.trim()
-                                  } ${
-            lastname.trim()
-          } vous a envoyé un message</h2>
-                                  <p style="text-align: left; margin-left: 20px">Email : ${
-                                    email.trim()
-                                  }</p>
+                                  <h2 style="text-align: center">${firstname.trim()
+            } ${lastname.trim()
+            } vous a envoyé un message</h2>
+                                  <p style="text-align: left; margin-left: 20px">Email : ${email.trim()
+            }</p>
                                   <p style="text-align: left; margin-left: 20px">Compte : l'utilisateur n'est pas inscrit</p>
-                                  <p style="text-align: left; margin-left: 20px">Message : ${
-                                    message.trim()
-                                  }</p>
+                                  <p style="text-align: left; margin-left: 20px">Message : ${message.trim()
+            }</p>
                                 </div>
                               </div>
                             </body>
@@ -141,18 +129,14 @@ export async function POST(request: NextRequest) {
                                 </div>
                                 <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                   <h1 style="text-align: center">tds coaching</h1>
-                                  <h2 style="text-align: center">${
-                                    firstname.trim()
-                                  } ${
-            lastname.trim()
-          } vous a envoyé un message</h2>
-                                  <p style="text-align: left; margin-left: 20px">Email : ${
-                                    email.trim()
-                                  }</p>
+                                  <h2 style="text-align: center">${firstname.trim()
+            } ${lastname.trim()
+            } vous a envoyé un message</h2>
+                                  <p style="text-align: left; margin-left: 20px">Email : ${email.trim()
+            }</p>
                                   <p style="text-align: left; margin-left: 20px">Compte : l'utilisateur est inscrit</p>
-                                  <p style="text-align: left; margin-left: 20px">Message : ${
-                                    message.trim()
-                                  }</p>
+                                  <p style="text-align: left; margin-left: 20px">Message : ${message.trim()
+            }</p>
                                 </div>
                               </div>
                             </body>
@@ -182,30 +166,22 @@ export async function POST(request: NextRequest) {
                               <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
                                 <h1 style="text-align: center">tds coaching a reçu votre message</h1>
                                 <h2 style="text-align: center">Rappel du message</h2>
-                                <p style="text-align: left; margin-left: 20px">Email : ${
-                                  email.trim()
-                                }</p>
-                                <p style="text-align: left; margin-left: 20px">Prénom : ${
-                                  firstname.trim()
-                                }</p>
-                                <p style="text-align: left; margin-left: 20px">Nom de famille : ${
-                                  lastname.trim()
-                                }</p>
-                                <p style="text-align: left; margin-left: 20px">Objet : ${
-                                  object.trim()
-                                }</p>
-                                <p style="text-align: left; margin-left: 20px">Message : ${
-                                  message.trim()
-                                }</p>
+                                <p style="text-align: left; margin-left: 20px">Email : ${email.trim()
+          }</p>
+                                <p style="text-align: left; margin-left: 20px">Prénom : ${firstname.trim()
+          }</p>
+                                <p style="text-align: left; margin-left: 20px">Nom de famille : ${lastname.trim()
+          }</p>
+                                <p style="text-align: left; margin-left: 20px">Objet : ${object.trim()
+          }</p>
+                                <p style="text-align: left; margin-left: 20px">Message : ${message.trim()
+          }</p>
                               </div>
                             </div>
                           </body>
                         </html>`,
       };
       await smtpTransport.sendMail(mailOptions);
-     const csrfToken = generateCsrfToken()
-      session.csrfToken = csrfToken;
-      await session.save();
       return NextResponse.json({
         status: 200,
         body: user,

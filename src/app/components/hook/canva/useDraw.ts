@@ -1,12 +1,15 @@
-/* import { useEffect, useRef, useState } from "react";
+import { time } from "console";
+import { useEffect, useRef, useState } from "react";
 
 export const useDraw = (
   onDraw: ({ ctx, currentPoint, prevPoint }: any) => void,
   setSignatureRefContent: any,
-  setSignatureError: any
+  setSignatureError: any,
+  setDateSignature: any,
+  setValidSignature: any
 ) => {
   const [mouseDown, setMouseDown] = useState(false);
-
+  //const [dateSignature, setDateSignature] = useState("")
   const canvasRef: any = useRef<any>(null);
   const signatureRef: any = useRef<any>(null);
   const prevPoint = useRef<null | any>(null);
@@ -24,8 +27,10 @@ export const useDraw = (
     signatureRef.current.value = "";
     setSignatureRefContent("");
     setSignatureError("");
+    setDateSignature("")
      if (canvasRef.current) {
       signatureRef.current.value = "";
+      setValidSignature(false)
     } 
   };
 
@@ -57,6 +62,9 @@ export const useDraw = (
         signatureRef.current.value = canvasRef.current.toDataURL();
         setSignatureRefContent(canvasRef.current.toDataURL());
         setSignatureError("");
+        const timestamp = new Date().toISOString();
+        setDateSignature(timestamp)
+        setValidSignature(true)
       }
       setMouseDown(false);
       prevPoint.current = null;
@@ -75,4 +83,3 @@ export const useDraw = (
 
   return { canvasRef, signatureRef, onMouseDown, clear };
 };
- */

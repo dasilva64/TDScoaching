@@ -9,20 +9,27 @@ const allowedFields = [
   "password",
   "formule",
   "typeCoaching",
+  "typeOffre",
   "start",
   "id",
   "userId",
   "code",
   "reason",
-  "remember"
+  "remember",
+  "adresse",
+  "city",
+  "signature"
 ];
 
 const dangerousPattern = /(script|onload|onerror|onclick|onmouseover|onmouseenter|javascript)/i;
 
 export const validationBody = (body: any) => {
   let arrayMessageError: any = [];
+  let unknowField: any = []
   Object.entries(body).forEach(([key, value]: any) => {
-    if (!allowedFields.includes(key)) return;
+    if (!allowedFields.includes(key)) {
+      unknowField.push(key);
+    };
     if (key === "remember") {
       if (typeof value !== "boolean") {
         arrayMessageError.push([
@@ -55,10 +62,10 @@ export const validationBody = (body: any) => {
       }
     }
     if (key === "firstname") {
-      //let regex = /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/;
+      let regex = /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/;
       if (validator.isEmpty(value.trim())) {
         arrayMessageError.push(["firstname", "Prénom : ne peut pas être vide"]);
-      } /* else {
+      } else {
         if (!validator.matches(value.trim(), regex)) {
           arrayMessageError.push([
             "firstname",
@@ -72,7 +79,7 @@ export const validationBody = (body: any) => {
             ]);
           }
         }
-      } */
+      }
     }
     if (key === "lastname") {
       let regex = /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ ]{3,40}$/;
@@ -142,18 +149,18 @@ export const validationBody = (body: any) => {
         arrayMessageError.push(["password", "Mot de passe : ne peut pas être vide"]);
       } else {
         if (
-        !validator.matches(
-          value.trim(),
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#,_])[A-Za-z\d-?!*:@~%.;+|$#,_]{12,}$/
-        )
-      ) {
-        arrayMessageError.push([
-          "password",
-          "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#,_) et 12 caractères minimum",
-        ]);
+          !validator.matches(
+            value.trim(),
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-?!*:@~%.;+|$#,_])[A-Za-z\d-?!*:@~%.;+|$#,_]{12,}$/
+          )
+        ) {
+          arrayMessageError.push([
+            "password",
+            "Mot de passe : doit avoir une lettre en minuscule, majuscule, un nombre, un caractère spécial (-?!*:@~%.;+|$#,_) et 12 caractères minimum",
+          ]);
+        }
       }
-      }
-      
+
     }
     if (key === "formule") {
       if (validator.isEmpty(value)) {
@@ -181,7 +188,7 @@ export const validationBody = (body: any) => {
           "Type de coaching : ne peut pas être vide",
         ]);
       } else {
-        if (!validator.isIn(value, ["familial", "couple", "professionnel", "autre"])) {
+        if (!validator.isIn(value, ["familial", "couple", "professionnel"])) {
           arrayMessageError.push([
             "typeCoaching",
             "Type de coaching : la valeur n'est pas valide",
@@ -191,6 +198,28 @@ export const validationBody = (body: any) => {
             arrayMessageError.push([
               "typeCoaching",
               "Type de coaching : contient un ou plusieurs mots interdits pour des raisons de sécurité (script, onload, onerror, onclick, onmouseover, onmouseenter, javascript)",
+            ]);
+          }
+        }
+      }
+    }
+    if (key === "typeOffre") {
+      if (validator.isEmpty(value)) {
+        arrayMessageError.push([
+          "typeOffre",
+          "Type d'offre : ne peut pas être vide",
+        ]);
+      } else {
+        if (!validator.isIn(value, ["flash", "unique", "custom"])) {
+          arrayMessageError.push([
+            "typeOffre",
+            "Type d'offre : la valeur n'est pas valide",
+          ]);
+        } else {
+          if (dangerousPattern.test(value.trim())) {
+            arrayMessageError.push([
+              "typeOffre",
+              "Type d'offre : contient un ou plusieurs mots interdits pour des raisons de sécurité (script, onload, onerror, onclick, onmouseover, onmouseenter, javascript)",
             ]);
           }
         }
@@ -234,7 +263,7 @@ export const validationBody = (body: any) => {
         arrayMessageError.push(["code", "Code : ne peut pas être vide"]);
       } else {
         const regex = /^[0-9]{8}$/;
-    
+
         if (!regex.test(value)) {
           arrayMessageError.push([
             "code",
@@ -270,6 +299,73 @@ export const validationBody = (body: any) => {
         }
       }
     }
+    if (key === "signature") {
+      if (typeof value !== "string" || validator.isEmpty(value.trim())) {
+        arrayMessageError.push(["signature", "Signature : ne peut pas être vide"]);
+      } else {
+        // Vérifie que c'est bien une dataURL d'image
+        const dataUrlPattern = /^data:image\/(png|jpg|jpeg);base64,/;
+        if (!dataUrlPattern.test(value.trim())) {
+          arrayMessageError.push([
+            "signature",
+            "Signature : format invalide (doit être une image encodée en base64)",
+          ]);
+        } else if (dangerousPattern.test(value.trim())) {
+          arrayMessageError.push([
+            "signature",
+            "Signature : contient un ou plusieurs mots interdits pour des raisons de sécurité",
+          ]);
+        }
+      }
+    }
+
+    if (key === "city") {
+      let regex = /^[A-Za-zÀ-ÿ][a-zA-ZÀ-ÿ \-']{2,40}$/;
+      if (validator.isEmpty(value.trim())) {
+        arrayMessageError.push(["city", "Ville : ne peut pas être vide"]);
+      } else {
+        if (!validator.matches(value.trim(), regex)) {
+          arrayMessageError.push([
+            "city",
+            "Ville : doit contenir uniquement des lettres et entre 2 et 40 caractères",
+          ]);
+        } else if (dangerousPattern.test(value.trim())) {
+          arrayMessageError.push([
+            "city",
+            "Ville : contient un ou plusieurs mots interdits pour des raisons de sécurité",
+          ]);
+        }
+      }
+    }
+
+    if (key === "adresse") {
+      let regex = /^[A-Za-z0-9À-ÿ][A-Za-z0-9À-ÿ,()?!;:"'#@_. \-]{5,100}$/;
+      if (validator.isEmpty(value.trim())) {
+        arrayMessageError.push(["adresse", "Adresse : ne peut pas être vide"]);
+      } else {
+        if (!validator.matches(value.trim(), regex)) {
+          arrayMessageError.push([
+            "adresse",
+            "Adresse : format invalide (entre 5 et 100 caractères, lettres, chiffres, ponctuation)",
+          ]);
+        } else if (dangerousPattern.test(value.trim())) {
+          arrayMessageError.push([
+            "adresse",
+            "Adresse : contient un ou plusieurs mots interdits pour des raisons de sécurité",
+          ]);
+        }
+      }
+    }
   });
+  if (unknowField.length > 0) {
+    arrayMessageError.push([
+      "unknow",
+      unknowField,
+    ]);
+    /*  arrayMessageError.push([
+     "unknown_fields",
+     `Champs non autorisés détectés : ${unknowField.join(", ")}`
+   ]); */
+  }
   return arrayMessageError;
 };

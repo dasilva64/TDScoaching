@@ -11,7 +11,7 @@ import BtnNav from "./ui/BtnNav";
 const Header = async () => {
   return (
     <>
-      <header className={styles.header}>
+      <header id="header" className={styles.header}>
         <figure className={styles.header__figure}>
           <Link className="link modalOpen" href="/" tabIndex={0}>
             <Image

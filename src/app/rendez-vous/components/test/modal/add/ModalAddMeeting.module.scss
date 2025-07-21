@@ -19,41 +19,59 @@
   max-height: 90%;
   overflow: scroll;
   z-index: 998;
+
   &__h1 {
     color: black;
-    margin: 40px 0px;
+    margin: 50px 0px 20px 0px;
     display: inline-block;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
   }
+
   &__rappel {
-    display: flex;
-    align-self: center;
-    justify-content: space-around;
-    margin-bottom: 30px;
+    background: linear-gradient(to bottom, #eaeaea 0%, aqua 100%);
+    border-radius: 20px;
+    box-shadow: inset 0px 1px 15px aqua, 0px 2px 10px orange;
+
+    width: 50%;
+    margin: 20px auto 30px auto;
+    padding-bottom: 30px;
+
+    &__title {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-top: 20px;
+    }
+
     &__p {
       align-items: center;
       margin: 5px 0;
+      padding: 2px 10px;
       display: flex;
-      justify-content: center;
-      font-size: 18px;
-      &__img {
-        margin-right: 10px;
-      }
+
+      &__strong {
+          font-weight: bold;
+          white-space: nowrap;
+        }
     }
   }
+
   &__choose {
     margin-top: 30px;
   }
+
   &__form {
     margin-top: 30px;
+
     &__hidden {
       display: none;
     }
+
     &__submit {
       text-align: center;
       margin: 50px auto 20px auto;
+
       &__btn {
         cursor: pointer;
         border-radius: 10px;
@@ -62,11 +80,13 @@
         padding: 10px;
         color: black;
         transition: all 400ms;
+
         &:hover {
           background-color: orange;
           transform: scale(1.05);
           color: white;
         }
+
         &__load {
           border-radius: 10px;
           border: 2px solid orange;
@@ -75,9 +95,11 @@
           display: flex;
           margin: auto;
           color: black;
+
           &__span {
             align-self: center;
           }
+
           &__arc {
             position: relative;
             bottom: 9px;
@@ -90,6 +112,7 @@
             border-left: 1px solid black;
             border-right: 1px solid transparent;
             animation: load 2000ms both infinite ease-out;
+
             &__circle {
               position: relative;
               right: -13px;
@@ -102,16 +125,19 @@
         }
       }
     }
+
     &__div {
       margin-top: 30px;
       display: flex;
       flex-direction: column;
       margin-bottom: 10px;
+
       &:not(:focus-within) .modalAddDiscovery__form__div__label__value {
         transform: translateY(-13px) scale(0.75);
         transform-origin: top left;
         color: black;
       }
+
       &__label {
         color: black;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -119,6 +145,7 @@
         z-index: 0;
         transform: translateY(6px) scale(1);
         transition: all 0.3s;
+
         &__value {
           color: #1976d2;
           font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -129,9 +156,11 @@
           transition: all 0.3s;
         }
       }
+
       &__div {
         width: 100%;
         position: relative;
+
         &__select {
           -webkit-appearance: none;
           -moz-appearance: none;
@@ -150,13 +179,17 @@
           box-sizing: content-box;
           height: 1.4375em;
           border-bottom: 2px solid rgba(0, 0, 0, 0.42);
+
           &:hover {
             border-bottom: 2px solid black;
           }
+
           &:focus-visible {
-            border-color: #007bff; /* Change la couleur de la bordure */
+            border-color: #007bff;
+            /* Change la couleur de la bordure */
           }
         }
+
         &__img {
           position: absolute;
           z-index: 3;
@@ -166,6 +199,7 @@
           /* transition: all 4000ms; */
         }
       }
+
       &__error {
         color: red;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -175,12 +209,17 @@
         margin-top: 3px;
         margin-bottom: -3px;
       }
+
       &__btn {
         text-align: center;
       }
     }
   }
+
   &__return {
+    display: flex;
+    align-items: center;
+    height: 35px;
     cursor: pointer;
     position: absolute;
     top: 25px;
@@ -190,7 +229,11 @@
     transition: all 400ms;
     color: white;
     padding: 12px 15px;
+    &:hover {
+      transform: scale(1.05);
+    }
   }
+
   &__btn {
     cursor: pointer;
     float: right;
@@ -202,12 +245,15 @@
     border-radius: 5px;
     transition: all 400ms;
     padding: 5px;
+
     &:hover {
       transform: scale(1.05);
     }
-    &:hover > &__img {
+
+    &:hover>&__img {
       transform: rotate(90deg);
     }
+
     &__img {
       display: flex;
       justify-content: center;
@@ -216,24 +262,48 @@
     }
   }
 }
-
+@media screen and (max-width: 1440px) {
+  .modalAddDiscovery {
+    &__rappel {
+       width: 60%;
+    }
+  }
+}
+@media screen and (max-width: 1024px) {
+  .modalAddDiscovery {
+    &__rappel {
+       width: 70%;
+    }
+   
+  }
+}
 @media screen and (max-width: 768px) {
   .modalAddDiscovery {
     width: 80%;
     padding: 40px 20px;
+&__h1 {
+    margin: 50px 0px 20px 0px;
+  }
     &__btn {
       right: 20px;
       top: 22px;
     }
+    &__return {
+    top: 22px;
+  }
+
     &__rappel {
       display: block;
+      width: 100%;
       &__p {
         justify-content: start;
       }
     }
+
     &__payment {
       text-align: justify;
     }
+
     &__choose {
       margin-top: 30px;
       text-align: justify;
@@ -245,10 +315,14 @@
   .modalAddDiscovery {
     width: 95%;
     padding: 40px 10px;
+
     &__btn {
       right: 14px;
       top: 18px;
     }
+    &__return {
+    top: 18px;
+  }
   }
 }
 
@@ -256,6 +330,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(680deg);
   }

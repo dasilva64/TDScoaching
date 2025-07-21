@@ -53,6 +53,10 @@
       transition: all 400ms;
     }
   }
+  &__p {
+      margin-bottom: 20px;
+      text-align: justify;
+    }
 }
 
 @media screen and (max-width: 768px) {

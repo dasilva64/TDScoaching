@@ -14,7 +14,7 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [typeCoaching, setTypeCoaching] = useState<string>("");
   const [pseudo, setPseudo] = useState<string>("");
-  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
     useState<string>("");
   const [typeCoachingValid, setTypeCoachingValid] = useState<boolean>(false);
@@ -38,7 +38,7 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
 
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
-    if (e.target.value.length > 0) {
+    if (e.target.value === "couple" || e.target.value === "familial" || e.target.value === "professionnel") {
       setTypeCoachingValid(true);
       setTypeCoachingErrorMessage("");
     } else {
@@ -59,11 +59,6 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
           setTypeCoachingErrorMessage("");
           setTypeCoachingValid(false);
           setPseudo("");
-         /*  dispatch({
-            type: "csrfToken/store",
-            payload: { csrfToken: data.csrfToken },
-          }); */
-          await globalMutate('/components/header/ui/api')
           await mutate();
           await dispatch({ type: "ModalAddMeetingRendezVous/close" });
           await dispatch({
@@ -106,8 +101,17 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
       }
+      
     }
   }, [data, dispatch, mutate, reset, router]);
   return (
@@ -155,23 +159,24 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
                   className={styles.modalAddDiscovery__btn__img}
                   src="/assets/icone/xmark-solid.svg"
                   alt="icone fermer modal"
-                  width={30}
-                  height={30}
+                  width={25}
+                  height={25}
                 ></Image>
               </button>
               <h2 className={`${styles.modalAddDiscovery__h1}`}>
                 Rendez-vous {discovery && <>de découverte</>}
               </h2>
               <div className={styles.modalAddDiscovery__rappel}>
+                <h3 className={styles.modalAddDiscovery__rappel__title}>Récapitulatif</h3>
                 <p className={styles.modalAddDiscovery__rappel__p}>
-                  <Image
-                    className={styles.modalAddDiscovery__rappel__p__img}
-                    src="/assets/icone/calendar-regular.svg"
-                    alt="clock"
-                    width={25}
-                    height={25}
-                  />
-                  {" : "}
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>{offre.type === "discovery" ? "Type du rendez-vous : " : "Type de l'offre : "}&nbsp;</span>
+                  {offre.type !== "discovery"
+                    ? String(offre.type).charAt(0).toLocaleUpperCase() +
+                    String(offre.type).slice(1)
+                    : "Découverte"}
+                </p>
+                <p className={styles.modalAddDiscovery__rappel__p}>
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Date :&nbsp;</span>
                   {new Date(dateModalAddMeetingRendezVous).toLocaleDateString(
                     "fr-FR",
                     {
@@ -183,25 +188,38 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
                   )}
                 </p>
                 <p className={styles.modalAddDiscovery__rappel__p}>
-                  <Image
-                    className={styles.modalAddDiscovery__rappel__p__img}
-                    src="/assets/icone/clock-solid.svg"
-                    alt="clock"
-                    width={25}
-                    height={25}
-                  />
-                  {" : "}
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Heure :&nbsp;</span>
                   {new Date(dateModalAddMeetingRendezVous).toLocaleTimeString(
                     "fr-FR"
                   )}
+                </p>
+                <p className={styles.modalAddDiscovery__rappel__p}>
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Durée :&nbsp;</span>
+                  {["unique", "discovery"].includes(offre.type)
+                    ? "1h"
+                    : (offre.type === "flash"
+                      ? "3 × 1h (séances individuelles)"
+                      : "1h")}
+                </p>
+
+                <p className={styles.modalAddDiscovery__rappel__p}>
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Tarif :&nbsp;</span>
+                  {offre.type === "discovery" ? "Gratuit" : offre.type === "unique" ? "100€" : "300€"}
+                </p>
+                <p className={styles.modalAddDiscovery__rappel__p}>
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Rendez-vous en cours :&nbsp;</span>
+                  {offre.currentNumberOfMeeting === null
+                    ? 0
+                    : offre.currentNumberOfMeeting}
+                  /{offre.type === "discovery" ? "1" : offre.type === "flash" ? "3" : "1"}
                 </p>
               </div>
               <p className={styles.modalAddDiscovery__choose}>
                 Veuillez choissir un type de coaching pour ce rendez-vous
               </p>
               <form
-              action=""
-              method="POST"
+                action=""
+                method="POST"
                 className={styles.modalAddDiscovery__form}
                 onSubmit={(e) => {
                   if (typeCoachingValid) {
@@ -209,7 +227,8 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
                       trigger({
                         typeCoaching: typeCoaching,
                         start: dateModalAddMeetingRendezVous,
-                        csrfToken: csrfToken
+                        csrfToken: csrfToken,
+                        pseudo: pseudo
                       });
                     }
                     e.preventDefault();
@@ -226,8 +245,8 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
                 <div className={styles.modalAddDiscovery__form__div}>
                   <label
                     className={`${typeCoaching.length > 0
-                        ? styles.modalAddDiscovery__form__div__label__value
-                        : styles.modalAddDiscovery__form__div__label
+                      ? styles.modalAddDiscovery__form__div__label__value
+                      : styles.modalAddDiscovery__form__div__label
                       }`}
                     htmlFor=""
                   >

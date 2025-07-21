@@ -6,6 +6,7 @@ import styles from "./Content.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import { useRouter } from "next/navigation";
+import { mutate as globalMutate } from "swr";
 import NbShow from "./dataTable/nbShow/NbShow";
 import Search from "./dataTable/search/Search";
 import Display from "./dataTable/display/Display";
@@ -16,6 +17,10 @@ import DisplayError from "./dataTable/display/DisplayError";
 import useGetById from "@/app/components/hook/user/useGetById";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import localFont from "next/font/local";
+import ModalUserNoShow from "./modal/ModalUserNoShow";
+import ModalCalendarTakeNextMeeting from "./modal/calendar/ModalCalendarTakeNextMeeting";
+import ModalTakeNextMeeting from "./modal/add/ModalTakeNextMeeting";
+import ModalOffreDetail from "./dataTable/modal/ModalOffreDetail";
 const Parisienne = localFont({
   src: "../../../Parisienne-Regular.ttf",
   display: "swap",
@@ -23,6 +28,7 @@ const Parisienne = localFont({
 
 const Content = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const router = useRouter();
   const { datas } = useSelector((state: RootState) => state.ArrayMeetingByUser);
   const queryParam: any = usePathname();
@@ -39,6 +45,8 @@ const Content = () => {
             flashMessage: data.message,
           },
         });
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 404) {
         dispatch({
@@ -74,7 +82,7 @@ const Content = () => {
     }
   }, [data, dispatch, router]);
 
-  const { data: dataCancel, reset } = useSWRMutation(
+  /*const { data: dataCancel, reset } = useSWRMutation(
     "/api/paiement/cancelByAdmin",
     fetchPost
   );
@@ -98,7 +106,7 @@ const Content = () => {
     }
   }, [dataCancel, dispatch, mutate, reset]);
 
-  const {
+   const {
     data: dataAccept,
     trigger: triggerAccept,
     reset: resetAccept,
@@ -147,37 +155,127 @@ const Content = () => {
       }
     }
   }, [dataAcceptOther, dispatch, mutate, resetAcceptOther]);
-
+ */
   const {
     data: dataFinishMeeting,
     trigger: triggerFinishMeeting,
-    reset: resetFinisMeeting,
+    reset: resetFinishMeeting,
     isMutating: isMutatingFinishMeeting,
-  } = useSWRMutation("/utilisateur/[id]/components/api/finish", fetchPost);
+  } = useSWRMutation("/utilisateur/[id]/components/api/unique/finish", fetchPost);
 
   useEffect(() => {
     if (dataFinishMeeting) {
-      if (dataFinishMeeting.status !== 200) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: dataFinishMeeting.message },
-        });
-      } else {
+      if (dataFinishMeeting.status === 200) {
         mutate(
           {
             ...dataFinishMeeting,
           },
           { revalidate: false }
         );
-        resetFinisMeeting();
+        resetFinishMeeting();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: dataFinishMeeting.message },
         });
+      } else if (dataFinishMeeting.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataFinishMeeting.message },
+        });
+        dataFinishMeeting();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push("/");
+      }else {
+        resetFinishMeeting();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataFinishMeeting.message },
+        });
       }
     }
-  }, [dataFinishMeeting, dispatch, mutate, resetFinisMeeting]);
+  }, [dataFinishMeeting, dispatch, mutate, resetFinishMeeting]);
 
+
+  const {
+    data: dataFinishOtherMeeting,
+    trigger: triggerFinishOtherMeeting,
+    reset: resetFinishOtherMeeting,
+    isMutating: isMutatingFinishOtherMeeting,
+  } = useSWRMutation("/utilisateur/[id]/components/api/other/finish", fetchPost);
+
+  useEffect(() => {
+    if (dataFinishOtherMeeting) {
+      if (dataFinishOtherMeeting.status === 200) {
+        mutate(
+          {
+            ...dataFinishOtherMeeting,
+          },
+          { revalidate: false }
+        );
+        resetFinishOtherMeeting();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataFinishOtherMeeting.message },
+        });
+      } else if (dataFinishOtherMeeting.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataFinishOtherMeeting.message },
+        });
+        resetFinishOtherMeeting();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push("/");
+      } else {
+        resetFinishOtherMeeting();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataFinishOtherMeeting.message },
+        });
+      }
+    }
+  }, [dataFinishOtherMeeting, dispatch, mutate, resetFinishOtherMeeting]);
+
+  const {
+    data: dataFinishDiscoveryMeeting,
+    trigger: triggerFinishDiscoveryMeeting,
+    reset: resetFinishDiscoveryMeeting,
+    isMutating: isMutatingFinishDiscoveryMeeting,
+  } = useSWRMutation("/utilisateur/[id]/components/api/discovery/finish", fetchPost);
+
+  useEffect(() => {
+    if (dataFinishDiscoveryMeeting) {
+      if (dataFinishDiscoveryMeeting.status === 200) {
+        mutate(
+          {
+            ...dataFinishDiscoveryMeeting,
+          },
+          { revalidate: false }
+        );
+        resetFinishDiscoveryMeeting();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataFinishDiscoveryMeeting.message },
+        });
+      } else if (dataFinishDiscoveryMeeting.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataFinishDiscoveryMeeting.message },
+        });
+        resetFinishDiscoveryMeeting();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push("/");
+      } else {
+        resetFinishDiscoveryMeeting();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataFinishDiscoveryMeeting.message },
+        });
+      }
+    }
+  }, [dataFinishDiscoveryMeeting, dispatch, mutate, resetFinishMeeting]);
   /* useEffect(() => {
     const mutateFinishMeeting = () => {
       mutate(
@@ -193,6 +291,40 @@ const Content = () => {
     }
   }, [dataFinishMeeting, mutate, resetFinisMeeting]); */
 
+
+  const {
+    data: dataDeleteOffre,
+    trigger: triggerDeleteOffre,
+    reset: resetDeleteOffre,
+    isMutating: isMutatingDeleteOffre,
+  } = useSWRMutation("/utilisateur/[id]/components/api/DeleteOffre/", fetchPost);
+  useEffect(() => {
+    if (dataDeleteOffre) {
+      if (dataDeleteOffre.status === 200) {
+        mutate();
+        resetDeleteOffre();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataDeleteOffre.message },
+        });
+      } else if (dataDeleteOffre.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataDeleteOffre.message },
+        });
+        resetDeleteOffre();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push("/");
+      } else {
+        resetDeleteOffre();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataDeleteOffre.message },
+        });
+      }
+    }
+  }, [dataDeleteOffre, dispatch, mutate, resetDeleteOffre]);
   useEffect(() => {
     if (isError) {
       setContent(
@@ -334,18 +466,18 @@ const Content = () => {
                   <li className={styles.content__flex__div__left__ul__li}>
                     <strong>Mail</strong> : {data.body.mail}
                   </li>
-                  {data.body.offre === null && data.body.discovery === true && (
+                  {/* {data.body.offre === null && data.body.discovery === true && (
                     <li className={styles.content__flex__div__left__ul__li}>
                       <strong>Offre en cours</strong> : découverte
                     </li>
-                  )}
+                  )} */}
                   {data.body.meeting === null &&
-              data.body.discovery === false &&
-              data.body.offre === null && (
-                <li className={styles.content__flex__div__left__ul__li}>
-                      <strong>Offre en cours</strong> : choix en cours
-                    </li>
-              )}
+                    data.body.discovery === false &&
+                    data.body.offre === null && (
+                      <li className={styles.content__flex__div__left__ul__li}>
+                        <strong>Offre en cours</strong> : choix en cours
+                      </li>
+                    )}
                   {data.body.offre !== null && (
                     <>
                       <ul className={styles.content__flex__div__left__ul__ul}>
@@ -355,7 +487,15 @@ const Content = () => {
                             styles.content__flex__div__left__ul__ul__li
                           }
                         >
-                          <strong>Type</strong> : {data.body.offre.type}
+                          <strong>Type</strong> : {data.body.offre.type === "discovery" ? "Découverte" : data.body.offre.type}
+                        </li>
+                        <li
+                          className={
+                            styles.content__flex__div__left__ul__ul__li
+                          }
+                        >
+                          <strong>Coaching</strong> :{" "}
+                          {data.body.offre.coaching ? data.body.offre.coaching : "Pas encore"}
                         </li>
                         <li
                           className={
@@ -365,19 +505,54 @@ const Content = () => {
                           <strong>Nombre actuel de rendez-vous</strong> :{" "}
                           {data.body.offre.currentNumberOfMeeting === null
                             ? 0
-                            : data.body.offre.currentNumberOfMeeting}
-                        </li>
-                        <li
-                          className={
-                            styles.content__flex__div__left__ul__ul__li
-                          }
-                        >
-                          <strong>Date</strong> :{" "}
-                          {new Date(data.body.meeting.startAt).toLocaleString(
-                            "fr-FR"
-                          )}
+                            : data.body.offre.currentNumberOfMeeting} / {["unique", "discovery"].includes(data.body.offre.type) ? 1 : data.body.offre.type === "flash" ? 3 : "custom"}
                         </li>
                       </ul>
+                      <div>
+                        {isMutatingDeleteOffre && (
+                          <>
+                            <button
+                              disabled
+                              className={
+                                styles.content__flex__div__left__ul__div__btn__load
+                              }
+                            >
+                              <span
+                                className={
+                                  styles.content__flex__div__left__ul__div__btn__load__span
+                                }
+                              >
+                                Chargement
+                              </span>
+
+                              <div
+                                className={
+                                  styles.content__flex__div__left__ul__div__btn__load__arc
+                                }
+                              >
+                                <div
+                                  className={
+                                    styles.content__flex__div__left__ul__div__btn__load__arc__circle
+                                  }
+                                ></div>
+                              </div>
+                            </button>
+                          </>
+                        )}
+                        {!isMutatingDeleteOffre && (
+                          <>
+                            <button className={
+                              styles.content__flex__div__left__ul__div__btn
+                            } onClick={() => {
+                              triggerDeleteOffre({
+                                id: data.body.id,
+                                csrfToken: csrfToken
+                              })
+                            }}>Supprimer l'offre</button>
+                          </>
+                        )}
+
+                      </div>
                     </>
                   )}
 
@@ -390,21 +565,14 @@ const Content = () => {
                     <>
                       <ul className={styles.content__flex__div__left__ul__ul}>
                         <strong>Rendez-vous en cours</strong> :
-                        <li
-                          className={
-                            styles.content__flex__div__left__ul__ul__li
-                          }
-                        >
-                          <strong>Coaching</strong> :{" "}
-                          {data.body.meeting.coaching}
-                        </li>
+
                         <li
                           className={
                             styles.content__flex__div__left__ul__ul__li
                           }
                         >
                           <strong>Confirmé</strong> :{" "}
-                          {data.body.meeting.confirm ? "oui" : "non"}
+                          {data.body.meeting.status}
                         </li>
                         <li
                           className={
@@ -417,90 +585,150 @@ const Content = () => {
                           )}
                         </li>
                       </ul>
-                      {/* {!data.body.discovery === false && (
+                      {data.body.discovery === false && (
                         <div
-                          className={styles.content__flex__div__left__ul__div}
+                          className={styles.content__flex__div__left__ul__div__action}
                         >
-                          {data.body.typeMeeting.type !== "unique" &&
-                            data.body.typeMeeting.number === 1 && (
-                              <button
-                                onClick={() => {
-                                  if (
-                                    (data.body.typeMeeting.type === "flash" &&
-                                      data.body.typeMeeting.number === 1) ||
-                                    (data.body.typeMeeting.type === "longue" &&
-                                      data.body.typeMeeting.number === 1) ||
-                                    data.body.typeMeeting.type === "unique"
-                                  ) {
-                                    if (data.body.typeMeeting.number === 1) {
-                                      triggerAccept({
-                                        meetingId: data.body.meeting.id,
-                                        userId: data.body.id,
-                                      });
-                                    }
-                                  } else {
+                          {data.body.offre.type !== "unique" &&
+                            (data.body.offre.currentNumberOfMeeting === 1 || data.body.offre.currentNumberOfMeeting === 2) && (
+                              <>
+                                <button
+                                  className={
+                                    styles.content__flex__div__left__ul__div__btn
+                                  }
+                                  onClick={() => {
                                     dispatch({
-                                      type: "flash/storeFlashMessage",
-                                      payload: {
-                                        type: "error",
-                                        flashMessage:
-                                          "Vous ne pouvez pas accepter ce rendez-vous",
-                                      },
-                                    });
-                                  }
-                                }}
-                              >
-                                Accepter
-                              </button>
+                                      type: "ModalCalendarTakeNextMeeting/open"
+                                    })
+                                  }}
+                                >
+                                  Fixer le prochain rendez-vous
+                                </button>
+                                {isMutatingFinishOtherMeeting && (
+                                  <>
+                                    <button
+                                      disabled
+                                      className={
+                                        styles.content__flex__div__left__ul__div__btn__load
+                                      }
+                                    >
+                                      <span
+                                        className={
+                                          styles.content__flex__div__left__ul__div__btn__load__span
+                                        }
+                                      >
+                                        Chargement
+                                      </span>
+
+                                      <div
+                                        className={
+                                          styles.content__flex__div__left__ul__div__btn__load__arc
+                                        }
+                                      >
+                                        <div
+                                          className={
+                                            styles.content__flex__div__left__ul__div__btn__load__arc__circle
+                                          }
+                                        ></div>
+                                      </div>
+                                    </button>
+                                  </>
+                                )}
+                                {!isMutatingFinishOtherMeeting && (
+                                  <>
+                                    <button onClick={() => {
+                                      triggerFinishOtherMeeting({
+                                        id: data.body.id,
+                                        csrfToken: csrfToken
+                                      })
+                                    }} className={
+                                      styles.content__flex__div__left__ul__div__btn
+                                    }>Rendez-vous terminé</button>
+                                  </>
+                                )}
+
+                              </>
+
                             )}
-                          {data.body.typeMeeting.type === "unique" && (
-                            <button
-                              className={
-                                styles.content__flex__div__left__ul__div__btn
-                              }
-                              onClick={() => {
-                                if (data.body.typeMeeting.type === "flash") {
-                                  if (data.body.typeMeeting.number === 3) {
-                                    triggerAccept({
-                                      meetingId: data.body.meeting.id,
-                                      userId: data.body.id,
-                                    });
-                                  } else {
-                                    triggerAcceptOther({
-                                      meetingId: data.body.meeting.id,
-                                      userId: data.body.id,
-                                    });
-                                  }
-                                } else if (
-                                  data.body.typeMeeting.type === "longue"
-                                ) {
-                                  if (data.body.typeMeeting.number === 10) {
-                                    triggerAccept({
-                                      meetingId: data.body.meeting.id,
-                                      userId: data.body.id,
-                                    });
-                                  } else {
-                                    triggerAcceptOther({
-                                      meetingId: data.body.meeting.id,
-                                      userId: data.body.id,
-                                    });
-                                  }
-                                } else {
-                                  triggerAccept({
-                                    userId: data.body.id,
+                          {data.body.offre.type !== "unique" &&
+                            data.body.offre.currentNumberOfMeeting === 3 && (
+                              <>
+                                <button className={
+                                  styles.content__flex__div__left__ul__div__btn
+                                } onClick={() => {
+                                  triggerFinishDiscoveryMeeting({
+                                    id: data.body.id,
+                                    csrfToken: csrfToken
                                   });
-                                }
-                              }}
-                            >
-                              Accepter
-                            </button>
+                                }}>Rendez-vous terminé</button>
+                              </>
+
+                            )}
+                          {data.body.offre.type === "unique" && (
+                            <>
+                              {isMutatingFinishMeeting === false && (
+                                <button
+                                  className={
+                                    styles.content__flex__div__left__ul__div__btn
+                                  }
+                                  onClick={() => {
+                                    dispatch({
+                                      type: "flash/clearFlashMessage",
+                                    });
+                                    triggerFinishMeeting({
+                                      id: data.body.id,
+                                      csrfToken: csrfToken
+                                    });
+                                  }}
+                                >
+                                  Terminer
+                                </button>
+                              )}
+                              {isMutatingFinishMeeting === true && (
+                                <>
+                                  <button
+                                    disabled
+                                    className={
+                                      styles.content__flex__div__left__ul__div__btn__load
+                                    }
+                                  >
+                                    <span
+                                      className={
+                                        styles.content__flex__div__left__ul__div__btn__load__span
+                                      }
+                                    >
+                                      Chargement
+                                    </span>
+
+                                    <div
+                                      className={
+                                        styles.content__flex__div__left__ul__div__btn__load__arc
+                                      }
+                                    >
+                                      <div
+                                        className={
+                                          styles.content__flex__div__left__ul__div__btn__load__arc__circle
+                                        }
+                                      ></div>
+                                    </div>
+                                  </button>
+                                </>
+                              )}
+                            </>
                           )}
                         </div>
-                      )} */}
+                      )}
                       {data.body.discovery === true && (
                         <div
                           className={styles.content__flex__div__left__ul__div}
                         >
+                          <button className={
+                            styles.content__flex__div__left__ul__div__btn
+                          } onClick={() => {
+                            dispatch({
+                              type: "ModalUserNoShow/open"
+                            })
+                          }}>Utilisateur non present</button>
                           {isMutatingFinishMeeting === false && (
                             <button
                               className={
@@ -510,9 +738,9 @@ const Content = () => {
                                 dispatch({
                                   type: "flash/clearFlashMessage",
                                 });
-                                triggerFinishMeeting({
+                                triggerFinishDiscoveryMeeting({
                                   id: data.body.id,
-                                  csrfToken: data.csrfToken
+                                  csrfToken: csrfToken
                                 });
                               }}
                             >
@@ -601,12 +829,10 @@ const Content = () => {
     isLoading,
     isMutatingFinishMeeting,
     router,
-    triggerAccept,
-    triggerAcceptOther,
     triggerFinishMeeting,
   ]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (data && data.status === 200) {
       let copyOfItems = [...data.body.allMeetings];
       copyOfItems.map((p: any, index: any) => {
@@ -633,9 +859,69 @@ const Content = () => {
         payload: { datas: copyOfItems },
       });
     }
+  }, [data, dispatch]); */
+  useEffect(() => {
+    if (data && data.status === 200) {
+      let copyOfItems: any = [...data.body.test];
+      dispatch({
+        type: "ArrayMeetingByUser/storeData",
+        payload: { datas: copyOfItems },
+      });
+    }
   }, [data, dispatch]);
+  const [allData, setAllData] = useState<any[]>([]);
+  useEffect(() => {
+    if (data) {
+      if (data.status === 200) {
+        let array = [];
+        for (let i = 0; i < data.body.meetings.length; i++) {
+          if (data.body.meeting === null) {
+            array.push({
+              start: data.body.meetings[i].startAt,
+              startEditable: false,
+              backgroundColor: "red",
+              textColor: "red",
+              id: data.body.meetings[i].userId,
+            });
+          } else {
+            if (
+              data.body.meeting.userMail ===
+              data.body.meetings[i].userMail
+            ) {
+              array.push({
+                start: data.body.meetings[i].startAt,
+                startEditable: false,
+                backgroundColor: "green",
+                textColor: "white",
+                title: data.body.firstname + " " + data.body.lastname,
+                id: data.body.meetings[i].userId,
+              });
+            } else {
+              array.push({
+                start: data.body.meetings[i].startAt,
+                startEditable: false,
+                backgroundColor: "red",
+                textColor: "red",
+                id: data.body.meetings[i].userId,
+              });
+            }
+          }
+        }
+        setAllData(array);
+      }
+    }
+  }, [data]);
   return (
     <>
+      {data && data.body && (
+        <>
+          <ModalOffreDetail />
+          <ModalUserNoShow mutate={mutate} id={id[2]} />
+          <ModalCalendarTakeNextMeeting allData={allData} />
+          <ModalTakeNextMeeting offre={data.body.offre} id={data.body.id} />
+        </>
+      )}
+
       <div className={styles.content}>{content}</div>
     </>
   );

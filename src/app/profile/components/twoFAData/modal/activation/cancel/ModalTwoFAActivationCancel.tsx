@@ -10,17 +10,17 @@ import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 
 const ModalTwoFAActivationCancel = () => {
-    const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
-    const dispatch = useDispatch()
-    const { trigger, data, reset, isMutating } = useSWRMutation(
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
+  const dispatch = useDispatch()
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/profile/components/twoFAData/modal/activation/cancel/api",
     fetchPost
   );
   const router = useRouter()
-   useEffect(() => {
+  useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        
+
         dispatch({
           type: "ModalTwoFAActivationCancel/close",
         });
@@ -34,13 +34,13 @@ const ModalTwoFAActivationCancel = () => {
         });
         reset();
       } else if (data.status === 401) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: data.message },
-          });
-          reset();
-        }, 2000);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 400) {
         dispatch({
@@ -58,8 +58,8 @@ const ModalTwoFAActivationCancel = () => {
       }
     }
   }, [data, dispatch, reset, router, mutate]);
-  const {displayModalTwoFAActivationCancel} = useSelector((state: RootState) => state.ModalTwoFAActivationCancel)
-    return (
+  const { displayModalTwoFAActivationCancel } = useSelector((state: RootState) => state.ModalTwoFAActivationCancel)
+  return (
     <>
       <TabIndex displayModal={displayModalTwoFAActivationCancel} />
       <AnimatePresence>
@@ -145,7 +145,7 @@ const ModalTwoFAActivationCancel = () => {
                         dispatch({
                           type: "flash/clearFlashMessage",
                         });
-                        trigger({csrfToken: csrfToken});
+                        trigger({ csrfToken: csrfToken });
                       }}
                     >
                       Quitter

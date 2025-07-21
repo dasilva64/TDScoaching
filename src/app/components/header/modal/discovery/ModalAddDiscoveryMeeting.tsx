@@ -8,11 +8,11 @@ import { RootState } from "@/app/redux/store";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import Input from "@/app/components/input/Input";
-import useGet from "@/app/components/hook/useGet";
 import { mutate } from "swr";
+import { useRouter } from "next/navigation";
 
 const ModalAddDiscoveryMeeting = () => {
-  
+
   const [emailInput, setEmailInput] = useState<string>("");
   const [firstnameInput, setFirstnameInput] = useState<string>("");
   const [lastnameInput, setLastnameInput] = useState<string>("");
@@ -27,7 +27,7 @@ const ModalAddDiscoveryMeeting = () => {
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
     useState<string>("");
   const [typeCoachingValid, setTypeCoachingValid] = useState<boolean>(false);
-  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch();
   const closeModal = () => {
     setEmailInputError("");
@@ -88,6 +88,7 @@ const ModalAddDiscoveryMeeting = () => {
     "/components/header/modal/discovery/api/ModalAddDiscoveryMeeting",
     fetchPost
   );
+  const router = useRouter();
   useEffect(() => {
     if (data) {
       if (data.status === 400) {
@@ -119,8 +120,8 @@ const ModalAddDiscoveryMeeting = () => {
             payload: { type: "error", flashMessage: data.message },
           });
           setEmailInputError("");
-        setEmailInput('')
-        setValidEmailInput(false);
+          setEmailInput('')
+          setValidEmailInput(false);
           reset();
         }
       } else if (data.status === 200) {
@@ -155,6 +156,18 @@ const ModalAddDiscoveryMeeting = () => {
         });
 
         reset();
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        setEmailInputError("");
+        setEmailInput('')
+        setValidEmailInput(false);
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        router.push("/");
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -337,8 +350,8 @@ const ModalAddDiscoveryMeeting = () => {
                 </p>
               </div>
               <form
-              action=""
-              method="POST"
+                action=""
+                method="POST"
                 className={styles.modal__form}
                 onSubmit={(e) => {
                   handlerSubmit(e);
@@ -413,11 +426,10 @@ const ModalAddDiscoveryMeeting = () => {
                 />
                 <div className={styles.modal__form__div}>
                   <label
-                    className={`${
-                      typeCoaching.length > 0
+                    className={`${typeCoaching.length > 0
                         ? styles.modal__form__div__label__value
                         : styles.modal__form__div__label
-                    }`}
+                      }`}
                     htmlFor=""
                   >
                     Type de coaching

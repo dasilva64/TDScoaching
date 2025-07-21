@@ -36,30 +36,95 @@
       }
     }
     &__title {
-      padding: 5px 0px 5px 10px;
+      padding: 5px 10px 5px 10px;
       display: flex;
-      background-color: aqua;
+      background-color: orange;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
+      color: white;
+
+      &__opacity {
+        opacity: 0.2;
+      }
+
+      &__noOpacity {
+        opacity: 1;
+      }
+
       &__p {
         align-items: center;
         margin: 5px 0;
         display: flex;
         justify-content: center;
+
         &__img {
           margin-right: 5px;
+          filter: invert(1);
         }
+
         &__space {
           margin-left: 30px;
         }
       }
     }
+    &__contact {
+      padding: 0px 20px 30px 20px;
+
+      &__title {
+        text-align: left;
+        padding-bottom: 20px;
+      }
+
+      &__ul {
+        margin-left: 15px;
+
+        &__li {
+          list-style-type: none;
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+
+          &__a {
+            display: inline-block;
+            margin-left: 15px;
+
+            &::after {
+              content: "";
+              width: 0px;
+              height: 2px;
+              display: block;
+              background: orange;
+              transition: 400ms;
+            }
+
+            &:hover::after {
+              width: 100%;
+            }
+
+            &:hover {
+              color: black;
+            }
+          }
+        }
+      }
+    }
     &__confirm {
       text-align: center;
-      &__text {
-        margin: 0px 0px 20px 20px;
+      padding: 0px 20px;
+
+      &__title {
         text-align: left;
+        padding-bottom: 20px;
       }
+
+      &__text {
+        margin: 0px 0px 20px 0px;
+        text-align: left;
+        &__strong {
+          font-weight: bold;
+        }
+      }
+
       &__btn {
         padding: 5px 10px;
         border-radius: 10px;
@@ -68,11 +133,93 @@
         border: 2px solid green;
         transition: all 400ms;
         animation: test 1s infinite;
+
         &:hover {
           transform: scale(1.05);
           background-color: green;
           color: green;
           color: white;
+        }
+
+        &__load {
+          border-radius: 10px;
+          border: 2px solid orange;
+          background-color: white;
+          padding: 0px 10px;
+          display: flex;
+          color: black;
+
+          &__span {
+            align-self: center;
+          }
+
+          &__arc {
+            position: relative;
+            bottom: 9px;
+            margin: 18px 10px 0px 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border-top: 1px solid black;
+            border-bottom: 1px solid transparent;
+            border-left: 1px solid black;
+            border-right: 1px solid transparent;
+            animation: load 2000ms both infinite ease-out;
+
+            &__circle {
+              position: relative;
+              right: -13px;
+              width: 5px;
+              height: 5px;
+              background-color: black;
+              border-radius: 50%;
+            }
+          }
+        }
+      }
+    }
+    &__recap {
+      border-radius: 20px;
+      box-shadow: 0px 0px 5px 2px aqua;
+      border-radius: 10px;
+      width: 70%;
+      margin: 20px auto 20px auto;
+      background-color: aqua;
+      padding: 0px 20px 20px 20px;
+
+      &__opacity {
+        opacity: 0.2;
+      }
+
+      &__noOpacity {
+        opacity: 1;
+      }
+
+      &__title {
+        color: black;
+        padding: 20px 0px 10px 0px;
+      }
+
+      &__p {
+        display: flex;
+        padding-left: 30px;
+        margin-top: 10px;
+        align-content: center;
+        color: black;
+
+        &__strong {
+          font-weight: bold;
+          white-space: nowrap;
+        }
+
+        &__align {
+          line-height: 1;
+        }
+
+        &__img {
+          filter: invert(1);
+          margin-right: 15px;
+          vertical-align: middle;
         }
       }
     }
@@ -164,6 +311,17 @@
 @media screen and (max-width: 768px) {
   .content {
     width: 90%;
+
+    &__card {
+      &__recap {
+        width: 90%;
+        padding: 0px 5px 5px 5px;
+
+        &__p {
+          padding-left: 5px;
+        }
+      }
+    }
   }
 }
 
@@ -177,13 +335,14 @@
           }
         }
       }
+
       &__contact {
-      &__ul {
-        margin-left: 13px;
+        &__ul {
+          margin-left: 13px;
+        }
       }
     }
-    }
-    
+
   }
 }
 
@@ -191,10 +350,22 @@
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
+
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(680deg);
   }
 }

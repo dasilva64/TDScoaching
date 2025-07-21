@@ -6,9 +6,14 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import frLocale from "@fullcalendar/core/locales/fr";
 import useGet from "@/app/components/hook/useGet";
+import { mutate } from "swr";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const AllMeeting = () => {
   const calendarRef: any = useRef(null);
+  const dispatch = useDispatch()
+  const router = useRouter()
   const [allData, setAllData] = useState<any>(null);
   const {
     data: userData,
@@ -53,6 +58,19 @@ const AllMeeting = () => {
           }
         }
         setAllData(array);
+      } else if (userData.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: userData.message },
+        });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        router.push("/");
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: userData.message },
+        });
       }
     }
   }, [isLoading, userData]);

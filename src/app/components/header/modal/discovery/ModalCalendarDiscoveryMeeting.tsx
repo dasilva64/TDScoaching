@@ -39,6 +39,11 @@ const ModalCalendarDiscoveryMeeting = () => {
           });
         }
         setAllData(array);
+      } else {
+        dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: userData.message },
+          });
       }
     }
   }, [isLoading, userData]);

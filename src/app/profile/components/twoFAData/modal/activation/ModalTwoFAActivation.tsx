@@ -9,29 +9,29 @@ import Input from "@/app/components/input/Input";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
-import {mutate as globalMutate} from 'swr'
+import { mutate as globalMutate } from 'swr'
 
-const ModalTwoFAActivation = ({mutate, data: userData} :any) => {
-    const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
-    const dispatch = useDispatch()
-     const [codeInput, setCodeInput] = useState<string>("");
-      const [validCodeInput, setValidCodeInput] = useState<boolean>(false);
-      const [errorMessageCode, setErrorMessageCode] = useState<string>("");
-      const [inputPseudo, setInputPseudo] = useState<string>("");
-      const clearState = () => {
-        setCodeInput("");
-        setValidCodeInput(false);
-        setErrorMessageCode("");
-      };
-    const {displayModalTwoFAActivation} = useSelector((state: RootState) => state.ModalTwoFAActivation)
+const ModalTwoFAActivation = ({ mutate, data: userData }: any) => {
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
+  const dispatch = useDispatch()
+  const [codeInput, setCodeInput] = useState<string>("");
+  const [validCodeInput, setValidCodeInput] = useState<boolean>(false);
+  const [errorMessageCode, setErrorMessageCode] = useState<string>("");
+  const [inputPseudo, setInputPseudo] = useState<string>("");
+  const clearState = () => {
+    setCodeInput("");
+    setValidCodeInput(false);
+    setErrorMessageCode("");
+  };
+  const { displayModalTwoFAActivation } = useSelector((state: RootState) => state.ModalTwoFAActivation)
 
-    const closeForm = () => {
-        clearState()
-        dispatch({
-                      type: "ModalTwoFAActivationCancel/open",
-                    });
-    }
-const { trigger, data, reset, isMutating } = useSWRMutation(
+  const closeForm = () => {
+    clearState()
+    dispatch({
+      type: "ModalTwoFAActivationCancel/open",
+    });
+  }
+  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/profile/components/twoFAData/modal/activation/api",
     fetchPost
   );
@@ -40,20 +40,20 @@ const { trigger, data, reset, isMutating } = useSWRMutation(
     if (data) {
       if (data.status === 200) {
         //if (isMutating === false) {
-         mutate({
-                    ...userData,
-                    body: {
-                        ...userData.body,
-                        isTwoFactorEnabled: !userData.body.isTwoFactorEnabled,
-                    },
-                },
-                    {
-                        revalidate: false,
-                    })
-          dispatch({
-                    type: "ModalTwoFAActivation/close"
-                })
-                globalMutate("/components/header/api");
+        mutate({
+          ...userData,
+          body: {
+            ...userData.body,
+            isTwoFactorEnabled: !userData.body.isTwoFactorEnabled,
+          },
+        },
+          {
+            revalidate: false,
+          })
+        dispatch({
+          type: "ModalTwoFAActivation/close"
+        })
+        globalMutate("/components/header/api");
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
@@ -62,13 +62,13 @@ const { trigger, data, reset, isMutating } = useSWRMutation(
         reset();
         //}
       } else if (data.status === 401) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: data.message },
-          });
-          reset();
-        }, 2000);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 400) {
         if (data.type === "validation") {
@@ -94,46 +94,46 @@ const { trigger, data, reset, isMutating } = useSWRMutation(
       }
     }
   }, [data, dispatch, reset, router, mutate, userData.body.newEmail]);
-    const handlerSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        dispatch({
-          type: "flash/clearFlashMessage",
-        });
-        if (validCodeInput === true) {
-          if (inputPseudo.length === 0) {
-            const fetchLogin = async () => {
-              trigger({ code: codeInput, pseudo: inputPseudo, csrfToken: csrfToken });
-            };
-            fetchLogin();
-          }
-        } else {
-          if (validCodeInput === false) {
-            setErrorMessageCode("Code : doit contenir 8 chiffres");
-          }
-        }
-      };
-    const handlerInput = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        type: string,
-        regex: RegExp,
-        setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
-        setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
-        setInput: React.Dispatch<React.SetStateAction<string>>,
-        errorMessage: string
-      ) => {
-        setInput(e.target.value);
-        if (regex.test(e.target.value)) {
-          setValidInput(true);
-          setErrorMessage("");
-        } else if (e.target.value.length === 0) {
-          setValidInput(false);
-          setErrorMessage("");
-        } else {
-          setValidInput(false);
-          setErrorMessage(errorMessage);
-        }
-      };
-    return (
+  const handlerSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch({
+      type: "flash/clearFlashMessage",
+    });
+    if (validCodeInput === true) {
+      if (inputPseudo.length === 0) {
+        const fetchLogin = async () => {
+          trigger({ code: codeInput, pseudo: inputPseudo, csrfToken: csrfToken });
+        };
+        fetchLogin();
+      }
+    } else {
+      if (validCodeInput === false) {
+        setErrorMessageCode("Code : doit contenir 8 chiffres");
+      }
+    }
+  };
+  const handlerInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    type: string,
+    regex: RegExp,
+    setValidInput: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    setInput: React.Dispatch<React.SetStateAction<string>>,
+    errorMessage: string
+  ) => {
+    setInput(e.target.value);
+    if (regex.test(e.target.value)) {
+      setValidInput(true);
+      setErrorMessage("");
+    } else if (e.target.value.length === 0) {
+      setValidInput(false);
+      setErrorMessage("");
+    } else {
+      setValidInput(false);
+      setErrorMessage(errorMessage);
+    }
+  };
+  return (
     <>
       <TabIndex displayModal={displayModalTwoFAActivation} />
       <AnimatePresence>
@@ -187,8 +187,8 @@ const { trigger, data, reset, isMutating } = useSWRMutation(
                 chiffres.
               </p>
               <form
-              action=""
-              method="POST"
+                action=""
+                method="POST"
                 className={styles.modalEditEmailSendData__form}
                 onSubmit={(e) => {
                   handlerSubmit(e);

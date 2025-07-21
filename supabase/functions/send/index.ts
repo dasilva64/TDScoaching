@@ -37,6 +37,15 @@ serve(async (req) => {
         await supabase.from("User").delete().eq("id", user[i].id);
       }
     }
+    if (user[i].twoFAToken !== null) {
+      if (new Date().getTime() > new Date(user[i].twoFALimit).getTime()) {
+        await supabase
+          .from("User")
+          .update({ twoFAToken: null })
+          .eq("id", user[i].id)
+          .select();
+      }
+    }
 
     if (user[i].resettoken !== null) {
       if (new Date().getTime() > new Date(user[i].resetlimite).getTime()) {
@@ -65,7 +74,7 @@ serve(async (req) => {
           .select();
       }
     }
-    if (user[i].meetingId !== null) {
+    /* if (user[i].meetingId !== null) {
       if (user[i].meetingconfirm.confirm === false) {
         if (new Date(user[i].meetingstart.startAt).getTime() - 24 * 60 * 60 * 1000 < new Date().getTime()) {
           await supabase
@@ -74,13 +83,19 @@ serve(async (req) => {
             .eq("id", user[i].id)
             .select();
             await supabase.from("meeting_test").delete().eq("id", user[i].meetingId);
+            await supabase
+            .from("offre_test")
+            .update({ currentMeetingId: null})
+            .eq("id", user[i].offreId)
+            .select();
             if (user[i].password === null) {
+              await supabase.from("offre_test").delete().eq("id", user[i].offreId)
               await supabase.from("User").delete().eq("id", user[i].id);
             }
 
         }
       }
-    }
+    } */
   }
 
   /* await client.connectTLS({

@@ -28,7 +28,8 @@
   width: 100%;
   z-index: 699;
   background-color: white;
-  top: 0;
+  top: 0px;
+  transition: top 0.4s ease-in-out;
   display: flex;
   &__nocookie {
     width: 100%;

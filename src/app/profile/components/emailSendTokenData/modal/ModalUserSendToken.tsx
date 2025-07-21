@@ -63,13 +63,13 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
         });
         reset();
       } else if (data.status === 401) {
-        setTimeout(() => {
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "error", flashMessage: data.message },
           });
           reset();
-        }, 2000);
+          globalMutate("/components/header/api");
+                  globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 400) {
         if (data.type === "validation") {

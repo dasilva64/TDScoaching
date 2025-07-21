@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Content.module.scss";
 import Image from "@/app/components/image/Image";
-import "../../rendez-vous.scss";
+//import "../../rendez-vous.scss";
 import { usePathname, useRouter } from "next/navigation";
 import useGetOneByToken from "@/app/components/hook/meeting/useGetOneByToken";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,10 +27,10 @@ const Content = () => {
     if (data) {
       if (data.status === 200) {
         let array = [];
-        for (let i = 0; i < data.body.allMeeting.length; i++) {
-          if (data.body.meet.userMail === data.body.allMeeting[i].userMail) {
+        for (let i = 0; i < data.body.meetings.length; i++) {
+          if (data.body.meeting.userMail === data.body.meetings[i].userMail) {
             array.push({
-              start: data.body.allMeeting[i].startAt,
+              start: data.body.meetings[i].startAt,
               startEditable: true,
               backgroundColor: "green",
               textColor: "white",
@@ -38,7 +38,7 @@ const Content = () => {
             });
           } else {
             array.push({
-              start: data.body.allMeeting[i].startAt,
+              start: data.body.meetings[i].startAt,
               startEditable: false,
               backgroundColor: "red",
               textColor: "red",
@@ -49,6 +49,7 @@ const Content = () => {
       }
     }
   }, [data, dispatch, router]);
+
   return (
     <>
       {data && (
@@ -64,7 +65,8 @@ const Content = () => {
               <ModalEditDiscoveryMeeting
                 mutate={mutate}
                 token={token[2]}
-                meeting={data.body.meet}
+                meeting={data.body.meeting}
+                offre={data.body.offre}
               />
             </>
           )}
@@ -87,7 +89,7 @@ const Content = () => {
                 width={25}
                 height={25}
               />
-              {new Date(data.body.meet.startAt).toLocaleDateString("fr-FR", {
+              {new Date(data.body.meeting.startAt).toLocaleDateString("fr-FR", {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
@@ -104,57 +106,169 @@ const Content = () => {
                 width={25}
                 height={25}
               />
-              {new Date(data.body.meet.startAt).toLocaleTimeString("fr-FR")}
+              {new Date(data.body.meeting.startAt).toLocaleTimeString("fr-FR")}
             </p>
           </div>
 
-          <p className={styles.content__card__p}>
-            <Image
-              className={styles.content__card__p__img}
-              src="/assets/icone/coach.png"
-              alt="clock"
-              width={20}
-              height={20}
-            />
-            {data.body.meet.type === "discovery" ? "Découverte" : String(data.body.meet.type)[0].toUpperCase() + "" + String(data.body.meet.type).slice(1)}
-          </p>
-          <p className={`${styles.content__card__p} ${styles.content__card__p__align}`}>
-            <Image
-              className={styles.content__card__p__img}
-              src="/assets/icone/handshake.png"
-              alt="clock"
-              width={20}
-              height={20}
-            />
-            {String(data.body.meet.coaching)[0].toUpperCase()}{String(data.body.meet.coaching).slice(1)}
-          </p>
+          <div className={`${styles.content__card__recap} ${data.body.meeting.status === "expired" ? styles.content__card__recap__opacity : styles.content__card__recap__noOpacity}`}>
+            <h2 className={styles.content__card__recap__title}>Détails du rendez-vous</h2>
 
-          <p className={styles.content__card__p}>
-            <Image
-              className={styles.content__card__p__img}
-              src="/assets/icone/video-solid.svg"
-              alt="clock"
-              width={20}
-              height={20}
-            />
-            Lien vers la visio
-          </p>
+            <p className={styles.content__card__recap__p}>
+              <span className={styles.content__card__recap__p__strong}>{data.body.offre.type === "discovery" ? "Type du rendez-vous : " : "Type de l'offre : "}&nbsp;</span>
+
+              {data.body.offre.type === "discovery" ? "Découverte" : String(data.body.offre.type)[0].toUpperCase() + "" + String(data.offre.type).slice(1)}
+            </p>
+            <p className={`${styles.content__card__recap__p} ${styles.content__card__recap__p__align}`}>
+              <span className={styles.content__card__recap__p__strong}>Type de coaching :&nbsp;</span> {" "}
+              {String(data.body.offre.coaching)[0].toUpperCase()}{String(data.body.offre.coaching).slice(1)}
+            </p>
+            <p className={styles.content__card__recap__p}>
+              <span className={styles.content__card__recap__p__strong}>Durée :&nbsp;</span> {" "}
+              1h
+            </p>
+            <p className={styles.content__card__recap__p}>
+              <span className={styles.content__card__recap__p__strong}>Tarif :&nbsp;</span>
+              {" "}{data.body.offre.type === "discovery" ? "Gratuit" : data.body.offre.type === "unique" ? "100€" : data.offre.type === "flash" ? "3X100€" : "nX100€"}
+            </p>
+            <p className={styles.content__card__recap__p}>
+              <span className={styles.content__card__recap__p__strong}>Rendez-vous en cours :&nbsp;</span> {" "}
+              {data.body.offre.currentNumberOfMeeting} / {["discovery", "unique"].includes(data.body.offre.type) ? "1" : "3"}
+            </p>
+            <p className={styles.content__card__recap__p}>
+              <span className={styles.content__card__recap__p__strong}>Visioconférence :&nbsp;</span> {" "}
+              Pas de lien pour le moment
+            </p></div>
+
           <div className={styles.content__card__line}></div>
-          {!data.body.meet.confirm && (
+          <div className={styles.content__card__confirm}>
+                <h3 className={styles.content__card__confirm__title}>Gestion</h3>
+                {data.body.meeting.status === "pending" && (
+                  <>
+                    <p className={styles.content__card__confirm__text}>
+                      Vous devez confirmer le rendez-vous 24h avant la date du
+                      rendez-vous sinon il sera automatiquement supprimé
+                    </p>
+                    <div className={styles.content__card__action}>
+                      <button
+                        className={`${styles.content__card__confirm__btn}`}
+                        onClick={() => {
+                          dispatch({
+                            type: "ModalConfirmDiscoveryMeetingRendezVousToken/open",
+                            payload: { date: data.body.meeting.startAt },
+                          });
+                        }}
+                      >
+                        Confirmer mon rendez-vous
+                      </button>
+                       <button
+                      className={`${styles.content__card__action__btn} ${styles.content__card__action__btn__edit}`}
+                      onClick={() => {
+                        dispatch({
+                          type: "ModalCalendarEditDiscoveryMeetingRendezVousToken/open",
+                        });
+                      }}
+                    >
+                      Modifier mon rendez-vous
+                    </button>
+                      <button
+                        className={`${styles.content__card__action__btn} ${styles.content__card__action__btn__delete}`}
+                        onClick={() => {
+                          dispatch({
+                            type: "ModalDeleteDiscoveryMeetingRendezVousToken/open",
+                          });
+                        }}
+                      >
+                        Supprimer mon rendez-vous
+                      </button>
+                    </div>
+                  </>
+                )}
+                {data.body.meeting.status === "confirmed" && (
+                  <div className={styles.content__card__action}>
+                    <button
+                      className={`${styles.content__card__action__btn} ${styles.content__card__action__btn__edit}`}
+                      onClick={() => {
+                        dispatch({
+                          type: "ModalCalendarEditDiscoveryMeetingRendezVousToken/open",
+                        });
+                      }}
+                    >
+                      Déplacer mon rendez-vous
+                    </button>
+                    <button
+                      className={`${styles.content__card__action__btn} ${styles.content__card__action__btn__delete}`}
+                      onClick={() => {
+                        dispatch({
+                          type: "ModalDeleteDiscoveryMeetingRendezVousToken/open",
+                        });
+                      }}
+                    >
+                      Supprimer mon rendez-vous
+                    </button>
+                  </div>
+                )}
+                {data.body.meeting.status === "expired" && (
+                  <>
+                    <p className={styles.content__card__confirm__text}>Votre rendez-vous a expiré car vous ne l'avez pas confirmé a temps.</p>
+                    <div className={styles.content__card__action}>
+                      {/* {!isMutating && (
+                        <button
+                          className={styles.content__card__confirm__btn}
+                          onClick={() => {
+                            trigger({ csrfToken: csrfToken })
+                          }}
+                        >
+                          Reprendre un rendez-vous
+                        </button>
+                      )}
+                      {isMutating && (
+                        <button
+                          disabled
+                          className={
+                            styles.content__card__confirm__btn__load
+                          }
+                        >
+                          <span
+                            className={
+                              styles.content__card__confirm__btn__load__span
+                            }
+                          >
+                            Chargement
+                          </span>
+
+                          <div
+                            className={
+                              styles.content__card__confirm__btn__load__arc
+                            }
+                          >
+                            <div
+                              className={
+                                styles.content__card__confirm__btn__load__arc__circle
+                              }
+                            ></div>
+                          </div>
+                        </button>
+                      )} */}
+
+                    </div>
+                  </>
+                )}
+              </div>
+          {/* {!data.body.meeting.confirm && (
             <div className={styles.content__card__confirm}>
               <p className={styles.content__card__confirm__text}>
                 Vous devez confirmer le rendez-vous 24h avant la date du
                 rendez-vous sinon il sera automatiquement supprimé
               </p>
               <div className={styles.content__card__action}>
-                {data.body.meet.type === "unique" && (
+                {data.body.offre.type === "unique" && (
                   <>
                     <button
                       className={`${styles.content__card__confirm__btn}`}
                       onClick={() => {
                         dispatch({
                           type: "ModalConfirmPaidMeetingRendezVous/open",
-                          payload: { date: data.body.meet.startAt },
+                          payload: { date: data.body.meeting.startAt },
                         });
                       }}
                     >
@@ -165,7 +279,7 @@ const Content = () => {
                       onClick={() => {
                         dispatch({
                           type: "ModalCancelMeetingRendezVous/open",
-                          payload: { date: data.body.meet.startAt },
+                          payload: { date: data.body.meeting.startAt },
                         });
                       }}
                     >
@@ -173,7 +287,7 @@ const Content = () => {
                     </button>
                   </>
                 )}
-                {data.body.meet.type === "discovery" && (
+                {data.body.offre.type === "discovery" && (
                   <>
                     <button
                       className={`${styles.content__card__confirm__btn}`}
@@ -210,7 +324,7 @@ const Content = () => {
               </div>
             </div>
           )}
-          {data.body.meet.confirm && (
+          {data.body.offre.confirm && (
             <div className={styles.content__card__action}>
               <button
                 className={`${styles.content__card__action__btn} ${styles.content__card__action__btn__edit}`}
@@ -233,9 +347,10 @@ const Content = () => {
                 Supprimer mon rendez-vous
               </button>
             </div>
-          )}
+          )} */}
           <div className={styles.content__card__line}></div>
           <div className={styles.content__card__contact}>
+            <h3 className={styles.content__card__contact__title}>Contact</h3>
             <p>
               Si vous rencontrer un problème avec le rendez-vous ou le lien de
               visioconférence veuillez me contacter :

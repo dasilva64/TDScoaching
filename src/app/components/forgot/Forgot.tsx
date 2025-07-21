@@ -9,6 +9,7 @@ import fetchPost from "../fetch/FetchPost";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
 import { mutate } from "swr";
+import { useRouter } from "next/navigation";
 
 const Forgot = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -20,6 +21,7 @@ const Forgot = () => {
   const { displayModalForgot } = useSelector(
     (state: RootState) => state.ModalForgot
   );
+  const router = useRouter()
   const { data, trigger, reset } = useSWRMutation(
     "/components/forgot/api/forgot",
     fetchPost
@@ -35,7 +37,7 @@ const Forgot = () => {
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
         });
-       mutate('/components/header/api')
+        mutate('/components/header/api')
         reset();
       } else if (data.status === 400) {
         setTimeout(() => {
@@ -48,6 +50,15 @@ const Forgot = () => {
           });
           reset();
         }, 2000);
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        router.push("/");
       } else {
         setTimeout(() => {
           setIsLoading(false);
@@ -68,7 +79,7 @@ const Forgot = () => {
     setInputEmailError("");
     setIsLoading(false);
   };
-  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
 
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -187,8 +198,8 @@ const Forgot = () => {
               </h2>
 
               <form
-              action=""
-              method="POST"
+                action=""
+                method="POST"
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}
@@ -219,7 +230,7 @@ const Forgot = () => {
                   tab={true}
                 />
                 <input
-                className={styles.forgot__form__hidden}
+                  className={styles.forgot__form__hidden}
                   type="text"
                   name="pseudo"
                   /* style={{ display: "none" }} */

@@ -1,4 +1,4 @@
-/* import fetchDelete from "@/app/components/fetch/FetchDelete";
+import fetchDelete from "@/app/components/fetch/FetchDelete";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
@@ -8,8 +8,12 @@ import styles from "./ModalCancelMeeting.module.scss";
 import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
+import { mutate as globalMutate } from "swr";
 
-const ModalCancelMeeting = ({ mutate }: any) => {
+const ModalCancelMeeting = ({ mutate, offre }: any) => {
+
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
+
   const { displayModalCancelMeetingRendezVous } = useSelector(
     (state: RootState) => state.ModalCancelMeetingRendezVous
   );
@@ -30,6 +34,8 @@ const ModalCancelMeeting = ({ mutate }: any) => {
           type: "ModalCancelMeetingRendezVous/close",
         });
         reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 200) {
         dispatch({
@@ -101,7 +107,12 @@ const ModalCancelMeeting = ({ mutate }: any) => {
               <h1 className={styles.deleteModal__h1}>
                 Annulation du rendez-vous
               </h1>
-
+              <p>Êtes vous sûre de vouloir annuler votre rendez-vous ?</p>
+              {offre.payment && (
+                <>
+                  <p>Votre paiement va être annuler.</p>
+                </>
+              )}
               <div className={styles.deleteModal__div}>
                 {isMutating === false && (
                   <button
@@ -111,12 +122,12 @@ const ModalCancelMeeting = ({ mutate }: any) => {
                         dispatch({
                           type: "flash/clearFlashMessage",
                         });
-                        trigger();
+                        trigger({ csrfToken: csrfToken });
                       };
                       fetchDeleteeeting();
                     }}
                   >
-                    Annuler ce rendez-vous
+                    Oui, annuler
                   </button>
                 )}
                 {isMutating === true && (
@@ -137,6 +148,16 @@ const ModalCancelMeeting = ({ mutate }: any) => {
                     </div>
                   </button>
                 )}
+                <button
+                  className={styles.deleteModal__div__btn}
+                  onClick={() => {
+                    dispatch({
+                      type: "ModalCancelMeetingRendezVous/close",
+                    });
+                  }}
+                >
+                  Non, quitter
+                </button>
               </div>
             </motion.div>
           </>
@@ -147,4 +168,3 @@ const ModalCancelMeeting = ({ mutate }: any) => {
 };
 
 export default ModalCancelMeeting;
- */

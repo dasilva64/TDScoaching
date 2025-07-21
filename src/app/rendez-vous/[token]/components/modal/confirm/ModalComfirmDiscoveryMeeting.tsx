@@ -101,7 +101,7 @@ const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
                 Confirmer le rendez-vous
               </h2>
               <p>
-                Cliquez sur le bouton ce-dessous pour confirmer le rendez-vous.
+                Êtes vous sûre de vouloir confirmer votre rendez-vous de découverte
               </p>
               <div className={styles.modalCalendarEditDiscovery__submit}>
                 {isMutating && (
@@ -142,10 +142,20 @@ const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
                         handlerSubmit(e);
                       }}
                     >
-                      Confirmer
+                      Oui, confirmer
                     </button>
                   </>
                 )}
+                <button
+                      className={styles.modalCalendarEditDiscovery__submit__btn}
+                      onClick={(e) => {
+                         dispatch({
+      type: "ModalConfirmDiscoveryMeetingRendezVousToken/close",
+    });
+                      }}
+                    >
+                      Non, quitter
+                    </button>
               </div>
             </motion.div>
           </>

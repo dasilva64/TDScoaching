@@ -66,25 +66,12 @@ const ModalRecapDiscoveryMeeting = () => {
               <h2 className={`${styles.modal__h1}`}>
                 Récapitulatif de votre rendez-vous de découverte
               </h2>
-              <p className={styles.modal__email}>
-              <Image
-                    className={styles.modal__rappel__p__img}
-                    src="/assets/icone/envelope-at-fill.svg"
-                    alt="clock"
-                    width={25}
-                    height={25}
-                  /> : {emailModalRecapDiscoveryMeetingHeader}
-              </p>
               <div className={styles.modal__rappel}>
                 <p className={styles.modal__rappel__p}>
-                  <Image
-                    className={styles.modal__rappel__p__img}
-                    src="/assets/icone/calendar-regular.svg"
-                    alt="clock"
-                    width={25}
-                    height={25}
-                  />
-                  {" : "}
+              <strong className={styles.modal__rappel__p__strong}>Email :&nbsp;</strong> {emailModalRecapDiscoveryMeetingHeader}
+              </p>
+              <p className={styles.modal__rappel__p}>
+                  <strong className={styles.modal__rappel__p__strong}>Date :&nbsp;</strong>
                   {new Date(
                     dateModalRecapDiscoveryMeetingHeader
                   ).toLocaleDateString("fr-FR", {
@@ -95,27 +82,13 @@ const ModalRecapDiscoveryMeeting = () => {
                   })}
                 </p>
                 <p className={styles.modal__rappel__p}>
-                  <Image
-                    className={styles.modal__rappel__p__img}
-                    src="/assets/icone/clock-solid.svg"
-                    alt="clock"
-                    width={25}
-                    height={25}
-                  />
-                  {" : "}
+                  <strong className={styles.modal__rappel__p__strong}>Heure :&nbsp;</strong>
                   {new Date(
                     dateModalRecapDiscoveryMeetingHeader
                   ).toLocaleTimeString("fr-FR")}
                 </p>
                 <p className={styles.modal__rappel__p}>
-                  <Image
-                    className={styles.modal__rappel__p__img}
-                    src="/assets/icone/coach.png"
-                    alt="clock"
-                    width={25}
-                    height={25}
-                  />
-                  {" : "}
+                  <strong className={styles.modal__rappel__p__strong}>Type de coaching :&nbsp;</strong> 
                   {typeModalRecapDiscoveryMeetingHeader}
                 </p>
               </div>
@@ -123,8 +96,6 @@ const ModalRecapDiscoveryMeeting = () => {
                 Veuillez confirmer votre rendez-vous 24h avant la date du
                 rendez-vous, sinon celui ci sera supprimé automatiquement.
               </p>
-              
-
               <p>
                 Un mail vous a été envoyé avec les informations du rendez-vous
                 et la posibilité de le modifier ou le supprimer et également de

@@ -1,11 +1,12 @@
 .test {
-  overflow-y: scroll;
-  padding-bottom: max(16px, 2vw);
-  padding-top: max(36px, 2vw);
-  /* position: absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);*/
+  transform: translate(-50%,-50%);
+  overflow-y: auto;
+  margin: 0px auto;
+      width: 100%;
+      padding: 0px 20%;
   text-align: center; 
   &__text {
     margin: 20px 0px;
@@ -13,25 +14,38 @@
   &__discovery {
     margin-bottom: 20px;
   }
+  &__help {
+    margin-top: 15px;
+    font-style: italic;
+    text-decoration: underline;
+    cursor: pointer;
+    &:hover {
+      color: aqua;
+    }
+  }
   &__offre {
     border-radius: 5px;
-    padding: 10px 30px;
-    border: 1px solid aqua;
-    background-color: white;
+    padding: 10px 30px 20px 30px;
+     background: linear-gradient(to bottom, #eaeaea 0%, aqua 100%);
+    box-shadow: inset 0px 1px 15px aqua, 0px 2px 10px orange;
     margin-bottom: 30px;
     &__title {
       font-weight: 900;
       text-align: center;
-      margin: 10px 0px 15px 0px;
+      font-size: clamp(17px, 19px, 2vw);
+      margin: 10px 0px 25px 0px;
     }
     &__container {
+      margin: auto;
+    width: 250px;
       &__content {
         display: flex;
-        justify-content: center;
+        align-content: center;
+        padding: 2px 10px;
         margin-top: 5px;
-        &__img {
-          margin-right: 10px;
-          margin-left: -10px;
+        &__strong {
+          font-weight: bold;
+          white-space: nowrap;
         }
       }
       &__action {
@@ -67,5 +81,20 @@
         color: white;
       }
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .test {
+  padding: 0px 10%;
+  }
+}
+@media screen and (max-width: 425px) {
+  .test {
+  padding: 0px 5%;
+  &__offre {
+    border-radius: 5px;
+    padding: 20px 10px;
+  }
   }
 }

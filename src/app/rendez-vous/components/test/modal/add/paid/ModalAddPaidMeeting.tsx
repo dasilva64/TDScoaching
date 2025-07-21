@@ -1,16 +1,17 @@
-/* import fetchPost from "@/app/components/fetch/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 import styles from "./ModalAddPaidMeeting.module.scss";
 import Image from "next/image";
+import { mutate as globalMutate } from "swr";
 
 const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
   const [typeCoaching, setTypeCoaching] = useState<string>("");
   const [pseudo, setPseudo] = useState<string>("");
@@ -55,6 +56,11 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
+        setTypeCoaching("");
+        setTypeCoachingErrorMessage("");
+        setTypeCoachingValid(false);
+        setPseudo("");
+        reset()
         window.location.href = data.url;
       } else if (data.status === 400) {
         if (data.type === "validation") {
@@ -87,9 +93,18 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
       }
     }
+    
   }, [data, dispatch, mutate, reset, router]);
   return (
     <>
@@ -136,44 +151,60 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
                   className={styles.modalAddDiscovery__btn__img}
                   src="/assets/icone/xmark-solid.svg"
                   alt="icone fermer modal"
-                  width={30}
-                  height={30}
+                  width={25}
+                  height={25}
                 ></Image>
               </button>
               <h2 className={`${styles.modalAddDiscovery__h1}`}>
                 Rendez-vous {discovery && <>de découverte</>}
               </h2>
               <div className={styles.modalAddDiscovery__rappel}>
+                <h3 className={styles.modalAddDiscovery__rappel__title}>Récapitulatif</h3>
                 <p className={styles.modalAddDiscovery__rappel__p}>
-                  <Image
-                    className={styles.modalAddDiscovery__rappel__p__img}
-                    src="/assets/icone/calendar-regular.svg"
-                    alt="clock"
-                    width={25}
-                    height={25}
-                  />
-                  {" : "}
-                  {new Date(
-                    dateModalAddPaidMeetingRendezVous
-                  ).toLocaleDateString("fr-FR", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Type de l'offre :&nbsp;</span>
+
+                  {offre.type !== "discovery"
+                    ? String(offre.type).charAt(0).toLocaleUpperCase() +
+                    String(offre.type).slice(1)
+                    : "Découverte"}
                 </p>
                 <p className={styles.modalAddDiscovery__rappel__p}>
-                  <Image
-                    className={styles.modalAddDiscovery__rappel__p__img}
-                    src="/assets/icone/clock-solid.svg"
-                    alt="clock"
-                    width={25}
-                    height={25}
-                  />
-                  {" : "}
-                  {new Date(
-                    dateModalAddPaidMeetingRendezVous
-                  ).toLocaleTimeString("fr-FR")}
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Date du rendez-vous :&nbsp;</span>
+                  {new Date(dateModalAddPaidMeetingRendezVous).toLocaleDateString(
+                    "fr-FR",
+                    {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }
+                  )}
+                </p>
+                <p className={styles.modalAddDiscovery__rappel__p}>
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Heure du rendez-vous :&nbsp;</span>
+                  {new Date(dateModalAddPaidMeetingRendezVous).toLocaleTimeString(
+                    "fr-FR"
+                  )}
+                </p>
+                <p className={styles.modalAddDiscovery__rappel__p}>
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Durée du rendez-vous :&nbsp;</span>
+                  {["unique", "discovery"].includes(offre.type)
+                    ? "1h"
+                    : (offre.type === "flash"
+                      ? "3 × 1h (séances individuelles)"
+                      : "1h")}
+                </p>
+
+                <p className={styles.modalAddDiscovery__rappel__p}>
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Tarif :&nbsp;</span>
+                  {offre.type === "discovery" ? "Gratuit" : offre.type === "unique" ? "100€" : "300€"}
+                </p>
+                <p className={styles.modalAddDiscovery__rappel__p}>
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Rendez-vous en cours :&nbsp;</span>
+                  {offre.currentNumberOfMeeting === null
+                    ? 0
+                    : offre.currentNumberOfMeeting}
+                  /{offre.type === "discovery" ? "1" : offre.type === "flash" ? "3" : "1"}
                 </p>
               </div>
               <p className={styles.modalAddDiscovery__choose}>
@@ -187,6 +218,8 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
                       trigger({
                         typeCoaching: typeCoaching,
                         start: dateModalAddPaidMeetingRendezVous,
+                        csrfToken: csrfToken,
+                        pseudo: pseudo
                       });
                     }
                     e.preventDefault();
@@ -202,11 +235,10 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
               >
                 <div className={styles.modalAddDiscovery__form__div}>
                   <label
-                    className={`${
-                      typeCoaching.length > 0
-                        ? styles.modalAddDiscovery__form__div__label__value
-                        : styles.modalAddDiscovery__form__div__label
-                    }`}
+                    className={`${typeCoaching.length > 0
+                      ? styles.modalAddDiscovery__form__div__label__value
+                      : styles.modalAddDiscovery__form__div__label
+                      }`}
                     htmlFor=""
                   >
                     Type de coaching
@@ -245,6 +277,7 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
                     setPseudo(e.target.value);
                   }}
                 />
+
                 <div className={styles.modalAddDiscovery__form__submit}>
                   {isMutating && (
                     <>
@@ -287,6 +320,11 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
                   )}
                 </div>
               </form>
+              <p className={styles.modalAddDiscovery__help} onClick={() => {
+                dispatch({
+                  type: "ModalHelpPaiementRendezVous/open"
+                })
+              }}>Comment ça marche ?</p>
             </motion.div>
           </>
         )}
@@ -296,4 +334,3 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
 };
 
 export default ModalAddPaidMeeting;
- */

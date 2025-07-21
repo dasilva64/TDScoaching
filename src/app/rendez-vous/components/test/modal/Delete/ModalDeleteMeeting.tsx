@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styles from "./ModalDeleteMeeting.module.scss";
-import fetchDelete from "@/app/components/fetch/FetchDelete";
 import { RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,15 +8,17 @@ import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
+import fetchPost from "@/app/components/fetch/FetchPost";
 
 const ModalDeleteMeeting = ({ mutate }: any) => {
   const { displayModalDeleteMeetingRendezVous } = useSelector(
     (state: RootState) => state.ModalDeleteMeetingRendezVous
   );
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch();
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/rendez-vous/components/test/modal/Delete/api/",
-    fetchDelete
+    fetchPost
   );
   const router = useRouter();
   useEffect(() => {
@@ -31,21 +32,19 @@ const ModalDeleteMeeting = ({ mutate }: any) => {
           type: "ModalDeleteMeetingRendezVous/close",
         });
         reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 200) {
         const processFetchedData = async () => {
-          await globalMutate('/components/header/ui/api')
-             await mutate();
+          await mutate();
           await dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: data.message },
           });
-          
-         
           await dispatch({
             type: "ModalDeleteMeetingRendezVous/close",
           });
-          
           await reset();
         }
         processFetchedData()
@@ -107,13 +106,14 @@ const ModalDeleteMeeting = ({ mutate }: any) => {
                 ></Image>
               </button>
               <h1 className={styles.deleteModal__h1}>
-                Suppression rendez-vous de découverte
+                Suppression rendez-vous
               </h1>
 
               <p>
                 Si vous supprimer ce rendez-vous de découverte vous pourrez en
                 reprendre un autre.
               </p>
+              <p>Êtes vous sûre de vouloir supprimer votre rendez-vous de découverte ?</p>
               <div className={styles.deleteModal__div}>
                 {isMutating === false && (
                   <button
@@ -123,12 +123,12 @@ const ModalDeleteMeeting = ({ mutate }: any) => {
                         dispatch({
                           type: "flash/clearFlashMessage",
                         });
-                        trigger();
+                        trigger({ csrfToken: csrfToken });
                       };
                       fetchDeleteeeting();
                     }}
                   >
-                    Supprimer ce rendez-vous
+                    Oui, supprimer
                   </button>
                 )}
                 {isMutating === true && (
@@ -149,6 +149,16 @@ const ModalDeleteMeeting = ({ mutate }: any) => {
                     </div>
                   </button>
                 )}
+                <button
+                  className={styles.deleteModal__div__btn}
+                  onClick={() => {
+                    dispatch({
+                      type: "ModalDeleteMeetingRendezVous/close",
+                    });
+                  }}
+                >
+                  Non, annuler
+                </button>
               </div>
             </motion.div>
           </>

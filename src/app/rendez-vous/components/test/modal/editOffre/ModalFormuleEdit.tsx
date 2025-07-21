@@ -1,20 +1,19 @@
-/* import fetchPost from "@/app/components/fetch/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { mutate } from "swr";
+import { mutate as globalMutate } from "swr";
 import useSWRMutation from "swr/mutation";
 import styles from "./ModalFormuleEdit.module.scss";
 import Image from "next/image";
 
 const ModalFormuleEdit = ({ mutate }: any) => {
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
-  const [pseudo, setPseudo] = useState<string>("");
   const closeModal = () => {
-    setPseudo("");
     dispatch({ type: "ModalFormuleEditRendezVous/close" });
   };
   const { displayModalFormuleEditRendezVous, idModalFormuleEditRendezVous } =
@@ -27,19 +26,21 @@ const ModalFormuleEdit = ({ mutate }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
+        mutate();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
         dispatch({ type: "ModalFormuleEditRendezVous/close" });
         reset();
-        mutate();
       } else if (data.status === 401) {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       } else {
         dispatch({
@@ -94,7 +95,7 @@ const ModalFormuleEdit = ({ mutate }: any) => {
                 ></Image>
               </button>
               <h2 className={`${styles.modalAddFormule__h1}`}>Formule</h2>
-              <p>Êtes vous sûre de vouloir changer d'offre ?</p>
+              <p className={styles.modalAddFormule__p}>Êtes vous sûre de vouloir changer d'offre ?</p>
 
               <div className={styles.modalAddFormule__action}>
                 {!isMutating && (
@@ -103,11 +104,12 @@ const ModalFormuleEdit = ({ mutate }: any) => {
                       className={styles.modalAddFormule__action__btn}
                       onClick={() => {
                         trigger({
-                          id: idModalFormuleEditRendezVous,
+                          //id: idModalFormuleEditRendezVous,
+                          csrfToken: csrfToken
                         });
                       }}
                     >
-                      Changer
+                      Oui, changer
                     </button>
                   </>
                 )}
@@ -118,6 +120,15 @@ const ModalFormuleEdit = ({ mutate }: any) => {
                     </span>
                   </>
                 )}
+                <button
+                  className={styles.modalAddFormule__action__btn}
+                  onClick={() => {
+                    dispatch({ type: "ModalFormuleEditRendezVous/close" });
+
+                  }}
+                >
+                  Non, annuler
+                </button>
               </div>
             </motion.div>
           </>
@@ -128,4 +139,3 @@ const ModalFormuleEdit = ({ mutate }: any) => {
 };
 
 export default ModalFormuleEdit;
- */

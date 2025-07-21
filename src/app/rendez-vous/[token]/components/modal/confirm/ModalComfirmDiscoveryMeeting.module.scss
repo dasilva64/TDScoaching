@@ -30,6 +30,9 @@
   &__submit {
     text-align: center;
     margin: 50px auto 20px auto;
+    display: flex;
+    justify-content: center;
+    column-gap: 20px;
     &__btn {
       cursor: pointer;
       border-radius: 10px;

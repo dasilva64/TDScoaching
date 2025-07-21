@@ -32,11 +32,21 @@ const useUserEmailValidation = (token: string, csrfToken: any) => {
         });
         router.push("/");
         mutate("/components/header/api");
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        router.push('/')
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "error" },
         });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
         router.push("/");
       }
     }

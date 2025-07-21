@@ -9,10 +9,10 @@ import useSWRMutation from "swr/mutation";
 import { RootState } from "@/app/redux/store";
 import {mutate as mutateGlobal} from "swr"
 
-const ModalEditDiscoveryMeeting = ({ mutate, meeting, token }: any) => {
+const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre }: any) => {
   const dispatch = useDispatch();
   const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
-  const [typeCoaching, setTypeCoaching] = useState<string>(meeting.coaching);
+  const [typeCoaching, setTypeCoaching] = useState<string>(offre.coaching);
   const [pseudo, setPseudo] = useState<string>("");
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
     useState<string>("");
@@ -41,10 +41,6 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token }: any) => {
           payload: { type: "success", flashMessage: data.message },
         });
         mutateGlobal('/components/header/api')
-       /*  dispatch({
-          type: "csrfToken/store",
-          payload: { csrfToken: data.csrfToken },
-        }); */
         dispatch({
           type: "ModalEditDiscoveryMeetingRendezVousToken/close",
         });

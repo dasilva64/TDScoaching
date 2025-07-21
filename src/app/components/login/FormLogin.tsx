@@ -9,12 +9,13 @@ import Image from "../image/Image";
 import { mutate } from "swr";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
+import { useRouter } from "next/navigation";
 
 const FormLogin = () => {
   const { displayModalLogin } = useSelector(
     (state: RootState) => state.ModalLogin
   );
-  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const inputRef: any = React.useRef();
   useEffect(() => {
     if (displayModalLogin === true) {
@@ -43,7 +44,7 @@ const FormLogin = () => {
   const handlerInputRememberMe = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRememberMeInput(e.target.checked);
   };
-
+  const router = useRouter();
   const clearState = () => {
     setDisplayInput(false);
     setInputPseudo("");
@@ -73,41 +74,33 @@ const FormLogin = () => {
     if (loginData) {
       if (loginData.status === 200) {
         if (loginData.require2FA) {
-        clearState();
-        mutate("/components/header/api");
-        dispatch({
-          type: "ModalLogin/close",
-        });
-         dispatch({
-          type: "Modal2FACode/open",
-        });
-        /* dispatch({
-          type: "csrfToken/setCsrfToken",
-          payload: {token: loginData.csrfToken}
-        }); */
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: loginData.message },
-        });
-        resetLogin();
+          clearState();
+          mutate("/components/header/api");
+          dispatch({
+            type: "ModalLogin/close",
+          });
+          dispatch({
+            type: "Modal2FACode/open",
+          });
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: loginData.message },
+          });
+          resetLogin();
         } else {
           mutate("/components/header/api");
-        mutate("/components/header/ui/api");
-        clearState();
-        dispatch({
-          type: "ModalLogin/close",
-        });
-        /* dispatch({
-          type: "csrfToken/setCsrfToken",
-          payload: {token: loginData.csrfToken}
-        }); */
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: loginData.message },
-        });
-        resetLogin();
+          mutate("/components/header/ui/api");
+          clearState();
+          dispatch({
+            type: "ModalLogin/close",
+          });
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: loginData.message },
+          });
+          resetLogin();
         }
-        
+
       } else if (loginData.status === 400) {
         if (loginData.type === "validation") {
           setTimeout(() => {
@@ -124,6 +117,17 @@ const FormLogin = () => {
             });
             resetLogin();
           }, 1000);
+        } else if (loginData.status === 401) {
+          setPasswordInput("");
+          setValidPasswordInput(false);
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: loginData.message },
+          });
+          resetLogin();
+          mutate("/components/header/api");
+          mutate("/components/header/ui/api");
+          router.push("/");
         } else {
           if (
             loginData.message ===
@@ -170,12 +174,12 @@ const FormLogin = () => {
         const fetchLogin = async () => {
           if (csrfToken) {
             login({
-            email: emailInput.trim(),
-            password: passwordInput.trim(),
-            remember: rememberMeInput,
-            pseudo: inputPseudo.trim(),
-            csrfToken: csrfToken
-          });
+              email: emailInput.trim(),
+              password: passwordInput.trim(),
+              remember: rememberMeInput,
+              pseudo: inputPseudo.trim(),
+              csrfToken: csrfToken
+            });
           } else {
             dispatch({
               type: "flash/storeFlashMessage",
@@ -185,7 +189,7 @@ const FormLogin = () => {
               },
             });
           }
-          
+
         };
         if (inputPseudo.length === 0) {
           fetchLogin();
@@ -282,8 +286,8 @@ const FormLogin = () => {
               <h2 className={`${styles.login__h1}`}>Se connecter</h2>
               {displayInput === false && (
                 <form
-                action=""
-              method="POST"
+                  action=""
+                  method="POST"
                   className={styles.login__form}
                   onSubmit={(e) => {
                     if (isLoading === false) {

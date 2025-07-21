@@ -27,51 +27,14 @@
     left: 50%;
     transform: translateX(-50%);
   }
-  &__formule {
-    background-color: #eaeaea;
-    border-radius: 10px;
-    width: 80%;
-    margin: 20px auto;
-    &__title {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    &__content {
-      min-height: 150px;
-      position: relative;
-      &__ul {
-        text-align: center;
-
-        list-style-type: none;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: space-around;
-        height: calc(100% - 200px);
-        &__li {
-          display: flex;
-          align-items: center;
-          &__icone {
-            filter: brightness(0%);
-            margin-right: 10px;
-          }
-        }
-      }
-      &__price {
-        position: absolute;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-weight: 900;
-        font-size: clamp(20px, 26px, 2vw);
-        width: 100%;
-        text-align: center;
-      }
-    }
+  &__p {
+    margin: 0px 0px 20px 0px;
   }
-
   &__action {
     text-align: center;
+    display: flex;
+    justify-content: center;
+    column-gap: 20px;
     &__btn {
       padding: 10px;
       border-radius: 10px;

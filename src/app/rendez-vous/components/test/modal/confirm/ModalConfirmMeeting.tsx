@@ -8,10 +8,10 @@ import Image from "@/app/components/image/Image";
 import styles from "./ModalConfirmMeeting.module.scss";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import fetchPost from "@/app/components/fetch/FetchPost";
+import { mutate as globalMutate } from "swr";
 
 const ModalConfirmMeeting = ({
   mutate,
-  meeting,
 }: {
   mutate: any;
   meeting: any;
@@ -24,6 +24,7 @@ const ModalConfirmMeeting = ({
     "/rendez-vous/components/test/modal/confirm/api/",
     fetchPost
   );
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const router = useRouter();
   useEffect(() => {
     if (data) {
@@ -36,8 +37,11 @@ const ModalConfirmMeeting = ({
           type: "ModalConfirmMeetingRendezVous/close",
         });
         reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 200) {
+        mutate();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
@@ -46,7 +50,6 @@ const ModalConfirmMeeting = ({
           type: "ModalConfirmMeetingRendezVous/close",
         });
         reset();
-        mutate();
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -107,22 +110,22 @@ const ModalConfirmMeeting = ({
               <h1 className={styles.deleteModal__h1}>
                 Confirmation du rendez-vous
               </h1>
-              <p>Êtes vous sûre de vouloir confirmer votre rendez-vous</p>
+              <p>Êtes vous sûre de vouloir confirmer votre rendez-vous de découverte ?</p>
               <div className={styles.deleteModal__div}>
                 {isMutating === false && (
                   <button
                     className={styles.deleteModal__div__btn}
                     onClick={() => {
-                      const fetchDeleteeeting = async () => {
+                      const triggerConfirm = async () => {
                         dispatch({
                           type: "flash/clearFlashMessage",
                         });
-                        trigger();
+                        trigger({ csrfToken: csrfToken });
                       };
-                      fetchDeleteeeting();
+                      triggerConfirm();
                     }}
                   >
-                    Confirmer ce rendez-vous
+                    Oui, confirmer
                   </button>
                 )}
                 {isMutating === true && (
@@ -143,6 +146,16 @@ const ModalConfirmMeeting = ({
                     </div>
                   </button>
                 )}
+                <button
+                  className={styles.deleteModal__div__btn}
+                  onClick={() => {
+                    dispatch({
+                      type: "ModalConfirmMeetingRendezVous/close",
+                    });
+                  }}
+                >
+                  Non, quitter
+                </button>
               </div>
             </motion.div>
           </>

@@ -75,15 +75,6 @@ const ModalCalendarEditMeeting = ({ allData }: any) => {
       dispatch({ type: "ModalCalendarEditMeetingRendezVous/close" });
     }
   };
-  /*  useEffect(() => {
-      if (displayModalCalendarEditMeetingRendezVous === true) {
-        for (let i = 0; i < allData.length; i++) {
-          if (allData[i].backgroundColor === "green") {
-            setMeetingDate(allData[i].start);
-          }
-        }
-      }
-    }, [allData, displayModalCalendarEditMeetingRendezVous]); */
   useEffect(() => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
@@ -149,7 +140,7 @@ const ModalCalendarEditMeeting = ({ allData }: any) => {
               <h2 className={`${styles.modalCalendarEditDiscovery__h1}`}>
                 Modification du rendez-vous
               </h2>
-              <p>Selectionnez une date pour modifier votre rendez-vous</p>
+              <p className={styles.modalCalendarEditDiscovery__p}>Selectionnez une date pour modifier votre rendez-vous</p>
               {isMobile === false && (
                 <>
                   <FullCalendar

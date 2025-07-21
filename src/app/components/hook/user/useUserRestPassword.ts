@@ -20,7 +20,7 @@ const useUserResetPassword = (token: string, csrfToken: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { data, isLoading, error } = useSWR(csrfToken ? 
+  const { data, isLoading, error } = useSWR(csrfToken ?
     [`/reinitialisation-mot-de-passe/[token]/components/api/reset`, token] : null,
     ([url, token]) => fetchUserResetPassword(url, token, csrfToken)
   );
@@ -31,12 +31,22 @@ const useUserResetPassword = (token: string, csrfToken: any) => {
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "success" },
         });
-       mutate('/components/header/api')
+        mutate('/components/header/api')
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        router.push("/");
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { flashMessage: data.message, type: "error" },
         });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
         router.push("/");
       }
     }

@@ -40,24 +40,23 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        //if (isMutating === false) {
-          mutate(
-            {
-              ...data,
-              body: {
-                ...data.body,
-                email: userData.body.newEmail,
-                newEmail: null
-              },
+        mutate(
+          {
+            ...data,
+            body: {
+              ...data.body,
+              email: userData.body.newEmail,
+              newEmail: null
             },
-            {
-              revalidate: false,
-            }
-          );
-          dispatch({
-            type: "ModalSendTokenEmail/edit",
-            payload: {inputEmail: userData.body.newEmail}
-          });
+          },
+          {
+            revalidate: false,
+          }
+        );
+        dispatch({
+          type: "ModalSendTokenEmail/edit",
+          payload: { inputEmail: userData.body.newEmail }
+        });
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
@@ -68,15 +67,14 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
         clearState();
         globalMutate("/components/header/api");
         reset();
-        //}
       } else if (data.status === 401) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: data.message },
-          });
-          reset();
-        }, 2000);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 400) {
         if (data.type === "validation") {
@@ -102,22 +100,6 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
       }
     }
   }, [data, dispatch, reset, router, mutate, userData.body.newEmail]);
-  /* 
-  useEffect(() => {
-    const mutateMainData = async () => {
-      let copyNewEmail = data.body.mail;
-      mutate(
-        {
-          ...data,
-        },
-        { revalidate: false }
-      );
-      reset();
-    };
-    if (data && data.status === 200) {
-      mutateMainData();
-    }
-  }, [data, mutate, reset]); */
   const closeForm = () => {
     dispatch({
       type: "flash/clearFlashMessage",
@@ -221,8 +203,8 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
                 chiffres.
               </p>
               <form
-              action=""
-              method="POST"
+                action=""
+                method="POST"
                 className={styles.modalEditEmailSendData__form}
                 onSubmit={(e) => {
                   handlerSubmit(e);

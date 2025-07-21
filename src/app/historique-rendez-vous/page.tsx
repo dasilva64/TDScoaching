@@ -18,17 +18,7 @@ export const metadata = {
 const Page = () => {
     return (
         <>
-        <NoScript />
-        <main className={styles.allMeetings}>
-        <h1 className={`${styles.allMeetings__h1}`}>Historique de mes rendez-vous</h1>
-        <div className={styles.allMeetings__container}>
-          <div className={styles.allMeetings__article}>
-            <div>
-                <AllMeetings />
-            </div>
-          </div>
-        </div>
-      </main>
+       <AllMeetings />
          </>
     )
 }

@@ -8,10 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import Image from "@/app/components/image/Image";
 import styles from "./ModalEditMeeting.module.scss";
+import { mutate as globalMutate } from "swr";
 
-const ModalEditMeeting = ({ mutate, meeting }: any) => {
+const ModalEditMeeting = ({ mutate, meeting, offre }: any) => {
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
-  const [typeCoaching, setTypeCoaching] = useState<string>(meeting.coaching);
+  const [typeCoaching, setTypeCoaching] = useState<string>(offre.coaching);
   const [pseudo, setPseudo] = useState<string>("");
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
     useState<string>("");
@@ -27,7 +29,7 @@ const ModalEditMeeting = ({ mutate, meeting }: any) => {
     useSelector((state: RootState) => state.ModalEditMeetingRendezVous);
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
-    if (e.target.value.length > 0) {
+    if (e.target.value === "couple" || e.target.value === "familial" || e.target.value === "professionnel") {
       setTypeCoachingValid(true);
       setTypeCoachingErrorMessage("");
     } else {
@@ -43,9 +45,7 @@ const ModalEditMeeting = ({ mutate, meeting }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        setTypeCoaching("");
         setTypeCoachingErrorMessage("");
-        setTypeCoachingValid(false);
         setPseudo("");
         dispatch({ type: "ModalEditMeetingRendezVous/close" });
         dispatch({
@@ -74,8 +74,6 @@ const ModalEditMeeting = ({ mutate, meeting }: any) => {
             payload: { type: "error", flashMessage: data.message },
           });
           setTypeCoachingErrorMessage("");
-          setTypeCoachingValid(false);
-          setTypeCoaching("");
           reset();
         }
       } else if (data.status === 401) {
@@ -84,7 +82,16 @@ const ModalEditMeeting = ({ mutate, meeting }: any) => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        setTypeCoachingErrorMessage("");
+        reset();
       }
     }
   }, [data, dispatch, mutate, reset, router]);
@@ -216,8 +223,8 @@ const ModalEditMeeting = ({ mutate, meeting }: any) => {
                 rendez-vous
               </p>
               <form
-              action=""
-              method="POST"
+                action=""
+                method="POST"
                 className={styles.modalEditDiscovery__form}
                 onSubmit={(e) => {
                   if (typeCoachingValid) {
@@ -225,6 +232,8 @@ const ModalEditMeeting = ({ mutate, meeting }: any) => {
                       trigger({
                         typeCoaching: typeCoaching,
                         start: dateModalEditMeetingRendezVous,
+                        csrfToken: csrfToken,
+                        pseudo: pseudo
                       });
                     }
                     e.preventDefault();
@@ -240,11 +249,10 @@ const ModalEditMeeting = ({ mutate, meeting }: any) => {
               >
                 <div className={styles.modalEditDiscovery__form__div}>
                   <label
-                    className={`${
-                      typeCoaching.length > 0
+                    className={`${typeCoaching.length > 0
                         ? styles.modalEditDiscovery__form__div__label__value
                         : styles.modalEditDiscovery__form__div__label
-                    }`}
+                      }`}
                     htmlFor=""
                   >
                     Type de coaching

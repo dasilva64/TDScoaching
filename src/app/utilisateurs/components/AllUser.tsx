@@ -12,6 +12,7 @@ import DisplayLoad from "./dataTable/display/DisplayLoad";
 import useGet from "../../components/hook/useGet";
 import DisplayError from "./dataTable/display/DisplayError";
 import { useRouter } from "next/navigation";
+import { mutate } from "swr";
 
 const AllUser = () => {
   const { datas } = useSelector((state: RootState) => state.Array);
@@ -88,27 +89,24 @@ const AllUser = () => {
           </>
         );
       } else if (data.status === 401 || data.status === 403) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: data.message,
-            },
-          });
-        }, 2000);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
+        });
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
         router.push("/");
       } else {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: data.message,
-            },
-          });
-        }, 2000);
-        router.refresh();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
+        });
       }
     }
   }, [data, datas, dispatch, isError, isLoading, router]);

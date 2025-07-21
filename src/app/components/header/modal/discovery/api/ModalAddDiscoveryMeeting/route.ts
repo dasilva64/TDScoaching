@@ -1,4 +1,3 @@
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { validationBody } from "@/app/lib/validation";
@@ -7,41 +6,35 @@ import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import nodemailer from 'nodemailer'
-import { getRateLimiter } from "@/app/lib/rateLimiter";
-  
+import { checkRateLimit } from "@/app/lib/rateLimiter";
+import { csrfToken } from "@/app/lib/csrfToken";
+import { handleError } from "@/app/lib/handleError";
+
 export async function POST(request: NextRequest) {
-  const ip: any = request.headers.get("x-forwarded-for") || request.ip; // Récupérer l’IP
   try {
-    const rateLimiter = await getRateLimiter(5, 60, "rlflx-discovery-meeting");
-    await rateLimiter.consume(ip);
-  } catch (err) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
+    const rateLimitResponse = await checkRateLimit(request, {
+      points: 5,
+      duration: 60,
+      keyPrefix: "rlflx-discovery-meeting"
+    });
+    if (rateLimitResponse) return rateLimitResponse;
+    const session = await getIronSession<SessionData>(
+      cookies(),
+      sessionOptions
     );
-  }
-    const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-    const csrfToken = headers().get("x-csrf-token");
-  
-    if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
-      return NextResponse.json(
-        { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
-        { status: 403 }
-      );
-    }
+    const csrfTokenHeader = headers().get("x-csrf-token");
+    const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+    if (csrfCheckResponse) return csrfCheckResponse;
     if (session.isLoggedIn === true) {
-        return NextResponse.json(
-            {
-              status: 401,
-              message: "Accès non autorisé",
-            },
-            {
-              status: 401,
-            }
-          );
+      return NextResponse.json(
+        {
+          status: 401,
+          message: "Accès non autorisé",
+        },
+        {
+          status: 401,
+        }
+      );
     }
     const { start, typeCoaching, email, firstname, lastname, pseudo } =
       (await request.json()) as {
@@ -52,7 +45,7 @@ export async function POST(request: NextRequest) {
         email: string;
         pseudo: string;
       };
-  
+
     let arrayMessageError = validationBody({
       start: start,
       typeCoaching: typeCoaching,
@@ -90,30 +83,19 @@ export async function POST(request: NextRequest) {
         mail: email.trim(),
       },
     });
-    let lastDiscoveryMeetingByUser = await prisma.meeting_test.findMany({
-      take: 1,
-      where: {
-        userMail: email.trim(),
-        type: "discovery",
-      },
-      orderBy: { startAt: "desc" },
-    });
-    let lastNotDiscoveryMeetingByUser = await prisma.meeting_test.findMany({
-      take: 1,
-      where: {
-        userMail: email.trim(),
-        NOT: {
-          type: "discovery",
-        },
-      },
-      orderBy: { startAt: "desc" },
-    });
     if (user) {
+      let lastDiscoveryByUser = await prisma.offre_test.findMany({
+      take: 1,
+      where: {
+        userId: user?.id,
+        type: "discovery"
+      },
+    })
       if (user.role === "ROLE_ADMIN") {
         return NextResponse.json(
           {
             status: 404,
-            message: "Vous ne pouvez pas créer de compte, veuillez réessayer",
+            message: "Vous ne pouvez pas créer de rendez-vous, veuillez réessayer",
           },
           {
             status: 404,
@@ -130,8 +112,8 @@ export async function POST(request: NextRequest) {
             status: 404,
           }
         );
-      } else if (lastDiscoveryMeetingByUser.length > 0) {
-        if (lastDiscoveryMeetingByUser[0].status === "pending") {
+      } else if (lastDiscoveryByUser.length > 0) {
+        if (lastDiscoveryByUser[0].status === "pending") {
           return NextResponse.json(
             {
               status: 404,
@@ -141,7 +123,7 @@ export async function POST(request: NextRequest) {
               status: 404,
             }
           );
-        } else if (lastDiscoveryMeetingByUser[0].status === "finish") {
+        } else if (lastDiscoveryByUser[0].status === "completed") {
           return NextResponse.json(
             {
               status: 400,
@@ -163,77 +145,49 @@ export async function POST(request: NextRequest) {
             }
           );
         }
-      } else if (lastNotDiscoveryMeetingByUser.length > 0) {
-        if (lastNotDiscoveryMeetingByUser[0].status === "pending") {
-          return NextResponse.json(
-            {
-              status: 404,
-              message: "Vous avez déjà un rendez-vous de prévu",
-            },
-            {
-              status: 404,
-            }
-          );
-        } else {
-          return NextResponse.json(
-            {
-              status: 400,
-              message: "Vous avez déjà prit votre rendez-vous de découverte",
-            },
-            {
-              status: 400,
-            }
-          );
-        }
       } else {
-        let createMeeting = await prisma.meeting_test.create({
-          data: {
-            startAt: start.trim(),
-            confirm: false,
-            status: "pending",
-            userMail: email.trim(),
-            coaching: typeCoaching.trim(),
-            type: "discovery",
-          },
-        });
-        let updateUser = await prisma.user.update({
-          where: { id: user.id },
-          data: {
-            meetingId: createMeeting.id,
-          },
-        });
-        if (createMeeting === null) {
-          return NextResponse.json(
-            {
-              status: 404,
-              message: "Impossible de prendre le rendez-vous, veuillez réessayer",
-            },
-            {
-              status: 404,
-            }
-          );
-        } else {
+        try {
+          const { meeting, offre } = await prisma.$transaction(async (tx) => {
+            let meeting = await prisma.meeting_test.create({
+              data: {
+                startAt: start,
+                status: "pending",
+                userMail: email.trim(),
+                offreId: user.offreId,
+                numberOfMeeting: "1"
+              },
+            });
+            let offre = await prisma.offre_test.update({
+              where: { id: user.offreId! },
+              data: {
+                currentNumberOfMeeting: 1,
+                coaching: typeCoaching,
+                currentMeetingId: meeting.id
+              }
+            })
+            await prisma.user.update({
+              where: { id: user.id },
+              data: {
+                meetingId: meeting.id,
+              },
+            });
+            return { meeting, offre }
+          })
           let token = jwt.sign(
             {
               user: email.trim(),
               start: start.trim(),
-              id: createMeeting.id,
+              id: meeting.id,
             },
             process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
           );
-          let updateMeeting = await prisma.meeting_test.update({
-            where: { id: createMeeting.id },
+          await prisma.meeting_test.update({
+            where: { id: meeting.id },
             data: {
               token: token,
             },
           });
-          let updateUser = await prisma.user.update({
-            where: { id: user.id },
-            data: {
-              meetingId: createMeeting.id,
-            },
-          });
-          let smtpTransport = nodemailer.createTransport({
+          /* let smtpTransport = nodemailer.createTransport({
             host: "smtp.ionos.fr",
             port: 465,
             secure: true,
@@ -245,7 +199,7 @@ export async function POST(request: NextRequest) {
           let mailOptions = {
             from: "contact@tds-coachingdevie.fr",
             to: user.mail.trim(),
-            subject: "Rendez-vous du " + new Date(createMeeting.startAt).toLocaleString().trim(),
+            subject: "Rendez-vous du " + new Date(meeting.startAt).toLocaleString().trim(),
             html: `<!DOCTYPE html>
                       <html lang="fr">
                         <head>
@@ -266,8 +220,8 @@ export async function POST(request: NextRequest) {
                               <h2 style="text-align: center">Votre rendez-vous</h2>
                               <p style="margin-bottom: 20px">Information de votre prochain rendez-vous : </p>
                               <ul>
-                              <li>Date: ${new Date(createMeeting.startAt).toLocaleString()}</li>
-                              <li>Coaching: ${createMeeting.coaching}</li>
+                              <li>Date: ${new Date(meeting.startAt).toLocaleString()}</li>
+                              <li>Coaching: ${offre.coaching}</li>
                               </ul>
                               <p style="margin-bottom: 20px">Vous devez le confirmer 24h avant la date du rendez-vous, sinon il sera automatiquement supprimer
                               <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Confirmer mon rendez-vous</a>
@@ -278,99 +232,14 @@ export async function POST(request: NextRequest) {
                         </body>
                       </html>`,
           };
-          await smtpTransport.sendMail(mailOptions);
-          const csrfToken = generateCsrfToken()
-      session.csrfToken = csrfToken;
-      await session.save();
+          await smtpTransport.sendMail(mailOptions); */
           return NextResponse.json({
             status: 200,
             csrfToken: csrfToken,
             message:
               "Le rendez-vous a bien été pris et un mail vous a été envoyé",
           });
-        }
-      }
-    } else {
-      if (lastDiscoveryMeetingByUser.length > 0) {
-        if (lastDiscoveryMeetingByUser[0].status === "pending") {
-          return NextResponse.json(
-            {
-              status: 404,
-              message: "Vous avez déjà un rendez-vous de découverte de prévu",
-            },
-            {
-              status: 404,
-            }
-          );
-        } else if (lastDiscoveryMeetingByUser[0].status === "finish") {
-          return NextResponse.json(
-            {
-              status: 400,
-              message: "Vous avez déjà prit votre rendez-vous de découverte",
-            },
-            {
-              status: 400,
-            }
-          );
-        } else {
-          return NextResponse.json(
-            {
-              status: 400,
-              message:
-                "Votre rendez-vous de découverte est en cours ou est terminer",
-            },
-            {
-              status: 400,
-            }
-          );
-        }
-      } else if (lastNotDiscoveryMeetingByUser.length > 0) {
-        if (lastNotDiscoveryMeetingByUser[0].status === "pending") {
-          return NextResponse.json(
-            {
-              status: 404,
-              message: "Vous avez déjà un rendez-vous de prévu",
-            },
-            {
-              status: 404,
-            }
-          );
-        } else {
-          return NextResponse.json(
-            {
-              status: 400,
-              message: "Vous avez déjà prit votre rendez-vous de découverte",
-            },
-            {
-              status: 400,
-            }
-          );
-        }
-      } else {
-        let createUser = await prisma.user.create({
-          data: {
-            firstname: firstname,
-            lastname: lastname,
-            mail: email,
-          },
-        });
-        let createMeeting = await prisma.meeting_test.create({
-          data: {
-            startAt: start,
-            confirm: false,
-            status: "pending",
-            userMail: email,
-            coaching: typeCoaching,
-            type: "discovery",
-          },
-        });
-        let updateUser = await prisma.user.update({
-          where: { id: createUser.id },
-          data: {
-            meetingId: createMeeting.id,
-          },
-        });
-        if (createMeeting === null) {
+        } catch {
           return NextResponse.json(
             {
               status: 404,
@@ -380,77 +249,133 @@ export async function POST(request: NextRequest) {
               status: 404,
             }
           );
-        } else {
-          let token = jwt.sign(
-            {
-              user: email.trim(),
-              start: start,
-              id: createMeeting.id,
-            },
-            process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
-          );
-          let update = await prisma.meeting_test.update({
-            where: { id: createMeeting.id },
-            data: {
-              token: token,
-            },
-          });
-          let smtpTransport = nodemailer.createTransport({
-            host: "smtp.ionos.fr",
-            port: 465,
-            secure: true,
-            auth: {
-              user: process.env.SECRET_SMTP_EMAIL,
-              pass: process.env.SECRET_SMTP_PASSWORD,
-            },
-          });
-          let mailOptions = {
-            from: "contact@tds-coachingdevie.fr",
-            to: createUser.mail.trim(),
-            subject: "Rendez-vous du " + new Date(createMeeting.startAt).toLocaleString(),
-            html: `<!DOCTYPE html>
-                      <html lang="fr">
-                        <head>
-                          <title>tds coaching</title>
-                          <meta charset="UTF-8" />
-                          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                          <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-                          <title>Document</title>
-                        </head>
-                        <body>
-          
-                          <div style="width: 100%">
-                            <div style="text-align: center">
-                              <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
-                            </div>
-                            <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
-                              <h1 style="text-align: center">tds coaching</h1>
-                              <h2 style="text-align: center">Votre rendez-vous</h2>
-                              <p style="margin-bottom: 20px">Information de votre prochain rendez-vous : </p>
-                              <ul>
-                              <li>Date: ${new Date(createMeeting.startAt).toLocaleString()}</li>
-                              <li>Coaching: ${createMeeting.coaching}</li>
-                              </ul>
-                              <p style="margin-bottom: 20px">Vous devez le confirmer 24h avant la date du rendez-vous, sinon il sera automatiquement supprimer
-                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Confirmer mon rendez-vous</a>
-                              <p style="margin-bottom: 20px">Vous pouvez le modifier, supprimer  en cliquant sur le bouton ci dessous</p>
-                              <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Modifier mon rendez-vous</a>
-                            </div>
-                          </div>
-                        </body>
-                      </html>`,
-          };
-          await smtpTransport.sendMail(mailOptions);
-          const csrfToken = generateCsrfToken()
-      session.csrfToken = csrfToken;
-      await session.save();
-          return NextResponse.json({
-            status: 200,
-            csrfToken: csrfToken,
-            message:
-              "Le rendez-vous a bien été pris et un mail vous a été envoyé",
-          });
         }
       }
+    } else {
+      try {
+        const { meeting, createUser, offre } = await prisma.$transaction(async (tx) => {
+          let createUser = await prisma.user.create({
+            data: {
+              firstname: firstname,
+              lastname: lastname,
+              mail: email,
+            },
+          });
+          const OffreCreate = await prisma.offre_test.create({
+            data: {
+              type: "discovery",
+              userId: createUser.id,
+              status: "pending",
+              currentNumberOfMeeting: 1,
+              coaching: typeCoaching,
+            }
+          })
+          let meeting = await prisma.meeting_test.create({
+            data: {
+              startAt: start,
+              status: "pending",
+              userMail: email.trim(),
+              offreId: OffreCreate.id,
+              numberOfMeeting: "1"
+            },
+          });
+          let offre = await prisma.offre_test.update({
+            where: { id: OffreCreate.id },
+            data: {
+              currentMeetingId: meeting.id
+            }
+          })
+          await prisma.user.update({
+            where: { id: createUser.id },
+            data: {
+              meetingId: meeting.id,
+              offreId: OffreCreate.id,
+            },
+          });
+          return { meeting, createUser, offre }
+        })
+        let token = jwt.sign(
+          {
+            user: email.trim(),
+            start: start,
+            id: meeting.id,
+          },
+          process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
+        );
+        await prisma.meeting_test.update({
+          where: { id: meeting.id },
+          data: {
+            token: token,
+          },
+        });
+        /* let smtpTransport = nodemailer.createTransport({
+          host: "smtp.ionos.fr",
+          port: 465,
+          secure: true,
+          auth: {
+            user: process.env.SECRET_SMTP_EMAIL,
+            pass: process.env.SECRET_SMTP_PASSWORD,
+          },
+        });
+        let mailOptions = {
+          from: "contact@tds-coachingdevie.fr",
+          to: createUser.mail.trim(),
+          subject: "Rendez-vous du " + new Date(meeting.startAt).toLocaleString(),
+          html: `<!DOCTYPE html>
+                    <html lang="fr">
+                      <head>
+                        <title>tds coaching</title>
+                        <meta charset="UTF-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                        <title>Document</title>
+                      </head>
+                      <body>
+        
+                        <div style="width: 100%">
+                          <div style="text-align: center">
+                            <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
+                          </div>
+                          <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
+                            <h1 style="text-align: center">tds coaching</h1>
+                            <h2 style="text-align: center">Votre rendez-vous</h2>
+                            <p style="margin-bottom: 20px">Information de votre prochain rendez-vous : </p>
+                            <ul>
+                            <li>Date: ${new Date(meeting.startAt).toLocaleString()}</li>
+                            <li>Coaching: ${offre.coaching}</li>
+                            </ul>
+                            <p style="margin-bottom: 20px">Vous devez le confirmer 24h avant la date du rendez-vous, sinon il sera automatiquement supprimer
+                            <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Confirmer mon rendez-vous</a>
+                            <p style="margin-bottom: 20px">Vous pouvez le modifier, supprimer  en cliquant sur le bouton ci dessous</p>
+                            <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Modifier mon rendez-vous</a>
+                          </div>
+                        </div>
+                      </body>
+                    </html>`,
+        };
+        await smtpTransport.sendMail(mailOptions); */
+        return NextResponse.json({
+          status: 200,
+          message:
+            "Le rendez-vous a bien été pris et un mail vous a été envoyé",
+        });
+      } catch {
+        return NextResponse.json(
+          {
+            status: 404,
+            message: "Impossible de prendre le rendez-vous, veuillez réessayer",
+          },
+          {
+            status: 404,
+          }
+        );
+      }
+
+
     }
+
+  } catch (error) {
+    handleError(error)
   }
+
+}

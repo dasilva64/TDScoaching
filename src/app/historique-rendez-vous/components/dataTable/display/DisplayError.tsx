@@ -10,13 +10,11 @@ const DisplayError = () => {
           <th
               className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__id}`}
             >
-              Début
+              Type de l'offre
             </th>
-            <th className={`${styles.table__head__tr__th}`}>Coaching</th>
-            <th className={`${styles.table__head__tr__th}`}>Confirmation</th>
-            <th className={`${styles.table__head__tr__th}`}>Status</th>
-            {/* <th className={`${styles.table__head__tr__th}`}>RendezVous</th>
-            <th className={`${styles.table__head__tr__th}`}>Status</th> */}
+            <th className={`${styles.table__head__tr__th}`}>Type de coaching</th>
+            <th className={`${styles.table__head__tr__th}`}>Statut du paiement</th>
+            <th className={`${styles.table__head__tr__th}`}>Dernier rendez-vous</th>
           </tr>
         </thead>
         <tbody className={styles.table__body}>

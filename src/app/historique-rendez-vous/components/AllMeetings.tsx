@@ -12,13 +12,16 @@ import DisplayLoad from "./dataTable/display/DisplayLoad";
 import NbShow from "./dataTable/nbShow/NbShow";
 import Paging from "./dataTable/paging/Paging";
 import Search from "./dataTable/search/Search";
+import { mutate as globalMutate } from "swr";
+import ModalOffreDetail from "./dataTable/modal/ModalOffreDetail";
+import NoScript from "@/app/components/noscript/NoScript";
 
 const AllMeetings = () => {
-    const { datas } = useSelector((state: RootState) => state.Array);
+  const { datas } = useSelector((state: RootState) => state.Array);
   const dispatch = useDispatch();
   const [content, setContent] = useState<any>(null);
   const router = useRouter()
-   const { data, isLoading, isError } = useGet("/historique-rendez-vous/components/api");
+  const { data, isLoading, isError } = useGet("/historique-rendez-vous/components/api");
   useEffect(() => {
     if (isError) {
       dispatch({
@@ -81,78 +84,65 @@ const AllMeetings = () => {
                     </div>
                     <Display />
                     <Paging />
+
                   </>
                 )}
               </div>
             </div>
           </>
         );
-      } else if (data.status === 401 || data.status === 403) {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: data.message,
-            },
-          });
-        }, 2000);
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
+        });
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push("/");
       } else {
-        setTimeout(() => {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: {
-              type: "error",
-              flashMessage: data.message,
-            },
-          });
-        }, 2000);
-        router.refresh();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: data.message,
+          },
+        });
       }
     }
   }, [data, datas, dispatch, isError, isLoading, router]);
 
   useEffect(() => {
     if (data && data.status === 200) {
-      let copyOfItems = [...data.body];
-      copyOfItems.map((p: any, index: any) => {
-        if (p.idMeeting === null || p.meeting === "aucun") {
-          if (p.idMeeting === null) {
-            copyOfItems[index] = {
-              ...p,
-              Début: new Date(p.start).toLocaleString(),
-              Coaching: p.coaching,
-              Confirmation: p.confirm ? "Oui" : "Non",
-              Status: p.confirm === "pending" ? "En cours" : "Finit"
-            };
-            delete copyOfItems[index].start;
-            delete copyOfItems[index].coaching;
-            delete copyOfItems[index].confirm;
-            delete copyOfItems[index].status;
-          }
-        } else if (p.idMeeting !== null) {
-          let date = null;
-          copyOfItems[index] = {
-            ...p,
-            Début: new Date(p.start).toLocaleString(),
-            Coaching: p.coaching,
-            Confirmation: p.confirm ? "Oui" : "Non",
-            Status: p.confirm === "pending" ? "En cours" : "Finit"
-          };
-          delete copyOfItems[index].start;
-          delete copyOfItems[index].coaching;
-          delete copyOfItems[index].confirm;
-          delete copyOfItems[index].status;
-        }
-      });
+      let copyOfItems: any = [...data.body];
       dispatch({
         type: "Array/storeData",
         payload: { datas: copyOfItems },
       });
     }
-  }, [data, dispatch]); 
-  return <>{content}</>;
+  }, [data, dispatch]);
+  return (
+    <>
+      <NoScript />
+      {data && data.status === 200 && (
+        <>
+          <ModalOffreDetail />
+        </>
+      )}
+      <main className={styles.allMeetings}>
+        <h1 className={`${styles.allMeetings__h1}`}>Historique de mes rendez-vous</h1>
+        <div className={styles.allMeetings__container}>
+          <div className={styles.allMeetings__article}>
+            <div>
+              {content}
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </>);
 }
 
 export default AllMeetings

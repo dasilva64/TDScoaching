@@ -1,34 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from 'jsonwebtoken'
 import prisma from "@/app/lib/prisma";
-import { getRateLimiter } from "@/app/lib/rateLimiter";
+import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
-  
-  export async function POST(request: NextRequest) {
-    const ip: any = request.headers.get("x-forwarded-for") || request.ip;
-  try {
-    const rateLimiter = await getRateLimiter(15, 60, "rlflx-meet-token");
-    await rateLimiter.consume(ip);
-  } catch (err) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  const csrfToken = headers().get("x-csrf-token");
-  if (!csrfToken || !session.csrfToken || csrfToken !== session.csrfToken) {
-    return NextResponse.json(
-      { status: 403, message: "Requête refusée (CSRF token invalide ou absent)" },
-      { status: 403 }
-    );
-  }
+import { csrfToken } from "@/app/lib/csrfToken";
+
+export async function POST(request: NextRequest) {
+  const rateLimitResponse = await checkRateLimit(request, {
+    points: 5,
+    duration: 60,
+    keyPrefix: "rlflx-meet-token"
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+  const session = await getIronSession<SessionData>(
+    cookies(),
+    sessionOptions
+  );
+  const csrfTokenHeader = headers().get("x-csrf-token");
+  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+  if (csrfCheckResponse) return csrfCheckResponse;
   if (session.isLoggedIn) {
     return NextResponse.json(
       {
@@ -41,99 +33,150 @@ import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken"
       }
     )
   }
-      const { token } =
-      (await request.json()) as {
-        token: string;
-      };
+  const { token } =
+    (await request.json()) as {
+      token: string;
+    };
 
-      if (token === null) {
+  if (token === null) {
+    return NextResponse.json(
+      {
+        status: 400,
+        message: "Le token n'est pas valide, veuillez réessayer",
+      },
+      {
+        status: 400,
+      }
+    );
+  } else {
+    const { verify } = jwt;
+    try {
+      const decodeToken: any = verify(token.trim(),
+        process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
+      );
+      const meet = await prisma.meeting_test.findUnique({
+        where: {
+          id: decodeToken.id
+        },
+        select: {
+          startAt: true,
+          userMail: true,
+        }
+      })
+      if (meet === null) {
         return NextResponse.json(
           {
             status: 400,
-            message: "Le token n'est pas valide, veuillez réessayer",
+            message: "Le rendez-vous n'a pas été trouvé, veuillez réessayer",
           },
           {
             status: 400,
           }
         );
       } else {
-        const { verify } = jwt;
-        try {
-          const decodeToken: any = verify(token.trim(),
-            process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
+        /* const allMeeting = await prisma.meeting_test.findMany({
+          where: { startAt: { gte: new Date() } },
+          select: {
+            startAt: true,
+            userMail: true,
+          },
+        }) */
+        const user = await prisma.user.findUnique({
+          where: {
+            mail: decodeToken.user
+          }
+        })
+        if (user === null) {
+          return NextResponse.json(
+            {
+              status: 400,
+              message: "L'utilisateur' n'a pas été trouvé, veuillez réessayer",
+            },
+            {
+              status: 400,
+            }
           );
-          const meet = await prisma.meeting_test.findUnique({
+        }
+        const { allMeeting, meeting, offre, allOffresWithMeetings } = await prisma.$transaction(async (tx) => {
+          const allMeeting = await tx.meeting_test.findMany({
             where: {
-              id: decodeToken.id
+              startAt: { gte: new Date() },
+              status: { not: "cancelled" },
             },
             select: {
               startAt: true,
-              type: true,
-              confirm: true,
               userMail: true,
-              coaching: true
-            }
-          })
-          if (meet === null) {
-            return NextResponse.json(
-              {
-                status: 400,
-                message: "Le rendez-vous n'a pas été trouvé, veuillez réessayer",
-              },
-              {
-                status: 400,
-              }
-            );
-          } else {
-            const allMeeting = await prisma.meeting_test.findMany({
-              where: { startAt: { gte: new Date() } },
-              select: {
-                startAt: true,
-                userMail: true,
+            },
+          });
+
+          const meeting = user.meetingId
+            ? await tx.meeting_test.findUnique({ where: { id: user.meetingId } })
+            : null;
+          const offre = user.offreId
+            ? await tx.offre_test.findUnique({ where: { id: user.offreId } })
+            : null;
+
+          const allOffresWithMeetings = user.offreId
+            ? await tx.offre_test.findUnique({
+              where: { id: user.offreId },
+              include: {
+                meeting_test_meeting_test_offreIdTooffre_test: {
+                  select: {
+                    id: true,
+                    status: true,
+                    startAt: true,
+                    numberOfMeeting: true,
+                  },
+                },
               },
             })
-            const csrfToken = generateCsrfToken()
-          session.csrfToken = csrfToken;
-            session.updateConfig({
-              ...sessionOptions,
-              cookieOptions: {
-                ...sessionOptions.cookieOptions,
-                maxAge: 60 * 15,
-              },
-            });
-          
-          await session.save();
-            return NextResponse.json(
-              {
-                status: 200,
-                csrfToken: csrfToken,
-                message: "Le rendez-vous a été trouvé",
-                body: {meet: meet, allMeeting: allMeeting},
-              },
-              {
-                status: 200,
-              }
-            );
-          }
+            : null;
 
-        }  catch (err: any) {
-          if (err.name === "TokenExpiredError") {
-            return NextResponse.json(
-              { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
-              { status: 400 }
-            );
-          } else if (err.name === "JsonWebTokenError") {
-            return NextResponse.json(
-              { status: 400, message: "Le token est invalide." },
-              { status: 400 }
-            );
-          } else {
-            return NextResponse.json(
-              { status: 400, message: "Une erreur inconnue est survenue." },
-              { status: 400 }
-            );
-          }
+          return { allMeeting, meeting, offre, allOffresWithMeetings };
+        });
+        let updatedArray;
+        if (allOffresWithMeetings) {
+          updatedArray = allOffresWithMeetings.meeting_test_meeting_test_offreIdTooffre_test.filter(obj => obj.status !== "cancelled");
         }
-      
-    }}
-  
+
+        let userObject = {
+          meetings: allMeeting,
+          meeting: meeting,
+          offre: offre,
+          discovery: user.discovery,
+          link: null,
+          meetingsByUser: updatedArray ? updatedArray.sort((a: any, b: any) => a.numberOfMeeting - b.numberOfMeeting) : null
+        };
+        return NextResponse.json(
+          {
+            status: 200,
+            message: "Le rendez-vous a été trouvé",
+            body: userObject,
+          },
+          {
+            status: 200,
+          }
+        );
+      }
+
+    } catch (err: any) {
+      if (err.name === "TokenExpiredError") {
+        return NextResponse.json(
+          { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
+          { status: 400 }
+        );
+      } else if (err.name === "JsonWebTokenError") {
+        return NextResponse.json(
+          { status: 400, message: "Le token est invalide." },
+          { status: 400 }
+        );
+      } else {
+        return NextResponse.json(
+          { status: 400, message: "Une erreur inconnue est survenue." },
+          { status: 400 }
+        );
+      }
+    }
+
+  }
+}

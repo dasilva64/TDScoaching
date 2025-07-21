@@ -19,9 +19,7 @@ const Display = () => {
   }, [dispatch]); */
   useEffect(() => {
     if (datas && datas.length > 0) {
-      setKeyAr(Object.keys(datas[0]));
-    } else {
-      setKeyAr(["Id", "Prénom", "Nom", "Mail", "RendezVous"]);
+      setKeyAr(["Type de l'offre", "Type de coaching", "Statut du paiement", "Dernier rendez-vous"]);
     }
   }, [datas]);
   /* useEffect(() => {
@@ -150,6 +148,7 @@ const Display = () => {
           <tr className={styles.table__head__tr}>
             {keyAr &&
               keyAr.map((key: any, index: any) => {
+                if (key === "meetings") return
                 if (key === sortBy[0]) {
                   if (sortBy[1] === "ASC") {
                     if (key === "id") {

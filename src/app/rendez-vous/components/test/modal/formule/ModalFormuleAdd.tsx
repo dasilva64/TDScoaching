@@ -1,16 +1,17 @@
-/* import fetchPost from "@/app/components/fetch/FetchPost";
+import fetchPost from "@/app/components/fetch/FetchPost";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { mutate } from "swr";
 import Image from "next/image";
 import styles from "./ModalFormuleAdd.module.scss";
 import useSWRMutation from "swr/mutation";
+import {mutate as globalMutate} from 'swr'
 
 const ModalFormuleAdd = ({ mutate }: any) => {
+  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
   const [pseudo, setPseudo] = useState<string>("");
   const closeModal = () => {
@@ -32,6 +33,7 @@ const ModalFormuleAdd = ({ mutate }: any) => {
           payload: { type: "success", flashMessage: data.message },
         });
         dispatch({ type: "ModalFormuleAddRendezVous/close" });
+        globalMutate("/components/header/api")
         reset();
         mutate();
       } else if (data.status === 401) {
@@ -94,10 +96,10 @@ const ModalFormuleAdd = ({ mutate }: any) => {
                 ></Image>
               </button>
               <h2 className={`${styles.modalAddFormule__h1}`}>Formule</h2>
-              <p>Rappel de la formule sélectionné</p>
+              <p className={styles.modalAddFormule__p}>Rappel de la formule sélectionné :</p>
               <div className={styles.modalAddFormule__formule}>
                 <h3 className={styles.modalAddFormule__formule__title}>
-                  {typeModalFormuleAddRendezVous}
+                 {typeModalFormuleAddRendezVous[0].toUpperCase()}{typeModalFormuleAddRendezVous.slice(1)}
                 </h3>
                 {typeModalFormuleAddRendezVous === "unique" && (
                   <div className={styles.modalAddFormule__formule__content}>
@@ -279,6 +281,7 @@ const ModalFormuleAdd = ({ mutate }: any) => {
                           trigger({
                             formule: typeModalFormuleAddRendezVous,
                             pseudo: pseudo,
+                            csrfToken: csrfToken
                           });
                         } else {
                           dispatch({ type: "ModalFormuleAddRendezVous/close" });
@@ -286,6 +289,7 @@ const ModalFormuleAdd = ({ mutate }: any) => {
                             type: "ModalContractRendezVous/open",
                             payload: {
                               type: typeModalFormuleAddRendezVous,
+                              statut: "creation"
                             },
                           });
                         }
@@ -312,4 +316,3 @@ const ModalFormuleAdd = ({ mutate }: any) => {
 };
 
 export default ModalFormuleAdd;
- */

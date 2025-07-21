@@ -20,9 +20,18 @@ const DisplayOne = ({ i }: any) => {
       {datas && datas.length > 0 && (
         <tr
           className={i === 0 ? styles.table__body__tr : styles.table__body__tr}
+          onClick={() => {
+            dispatch({
+              type: "ModalOffreDetail/open",
+              payload: { meet: datas[i] }
+            })
+          }}
         >
           {keyAr &&
             keyAr.map((p: any, index: any) => {
+             if (p === "meetings") {
+              return
+            }
               if (datas[i] !== undefined) {
                 if (sortBy[0] === p) {
                   if (i % 2 === 0) {

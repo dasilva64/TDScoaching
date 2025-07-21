@@ -105,15 +105,21 @@
           }
 
           &__ul {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             list-style-type: none;
             &__li {
               margin-left: 20px;
             }
           }
           &__div {
+            &__action {
+              display: flex;
+              justify-content: center;
+              column-gap: 20px;
+            }
             &__btn {
               padding: 10px;
+              margin-bottom: 10px;
               cursor: pointer;
               background-color: white;
               border: none;

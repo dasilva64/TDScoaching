@@ -18,29 +18,36 @@
   top: 50%;
   max-height: 90%;
   overflow: scroll;
-  z-index: 999;
+  z-index: 998;
+
   &__h1 {
     color: black;
     margin: 40px 0px;
     text-align: center;
   }
+
   &__top {
     display: flex;
+    height: 40px;
     justify-content: space-between;
+
     &__back {
       padding: 10px;
       border-radius: 5px;
       background-color: white;
       color: black;
+      align-self: center;
       border: 2px solid orange;
       cursor: pointer;
       transition: all 400ms;
+
       &:hover {
         color: white;
         background-color: orange;
         transform: scale(1.05);
       }
     }
+
     &__close {
       cursor: pointer;
       border: none;
@@ -48,12 +55,15 @@
       border-radius: 5px;
       transition: all 400ms;
       padding: 5px;
+
       &:hover {
         transform: scale(1.05);
       }
-      &:hover > &__img {
+
+      &:hover>&__img {
         transform: rotate(90deg);
       }
+
       &__img {
         display: flex;
         justify-content: center;
@@ -62,10 +72,44 @@
       }
     }
   }
+
   &__content {
     display: flex;
     flex-direction: column;
     position: relative;
+&__allow {
+      &__div {
+        display: flex;
+        &__label {
+          color: black;
+          font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+          font-weight: 400;
+          font-size: 1rem;
+          line-height: 1.4375em;
+          letter-spacing: 0.00938em;
+          padding: 0;
+          position: relative;
+        }
+        &__checkbox[type="checkbox"] {
+          margin-left: 20px;
+          cursor: pointer;
+          transform: scale(1.5);
+          transition: transform 0.3s;
+          &:hover {
+            transform: scale(1.6);
+          }
+        }
+        &__error {
+          color: red;
+          font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+          font-size: 0.75rem;
+          line-height: 1.66;
+          letter-spacing: 0.03333em;
+          margin-top: 3px;
+        }
+      }
+      
+    }
     &__btnEdit {
       padding: 10px;
       border: none;
@@ -77,31 +121,80 @@
       width: 175px;
       text-align: center;
       margin: 20px auto;
+
       &:hover {
         background-color: orange;
         color: white;
         transform: scale(1.05);
       }
     }
+
     &__contract {
       padding: 10px;
       border: none;
-      width: 175px;
+      // width: 175px;
       text-align: center;
+      background-color: white;
+      cursor: pointer;
       margin: 20px auto;
       outline: 1px solid orange;
       border-radius: 10px;
       transition: all 400ms;
-      &__hover {
+
+      &:hover {
         background-color: orange;
+        transform: scale(1.05);
+        color: white;
+      }
+
+      &__load {
+        //width: 175px;
+        text-align: center;
+        cursor: pointer;
+        margin: 20px auto;
+        color: black;
+        outline: none;
+        border-radius: 10px;
+        border: 2px solid orange;
+        background-color: white;
+        padding: 0px 10px;
+        display: flex;
+        color: black;
+
+        &__span {
+          align-self: center;
+        }
+
+        &__arc {
+          position: relative;
+          bottom: 9px;
+          margin: 18px 10px 0px 10px;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border-top: 1px solid black;
+          border-bottom: 1px solid transparent;
+          border-left: 1px solid black;
+          border-right: 1px solid transparent;
+          animation: load 2000ms both infinite ease-out;
+
+          &__circle {
+            position: relative;
+            right: -13px;
+            width: 5px;
+            height: 5px;
+            background-color: black;
+            border-radius: 50%;
+          }
+        }
       }
     }
+
     &__canvas {
       border: 1px solid black;
-      width: 300px;
-      height: 100px;
-      margin: 20px auto;
+      margin: 20px auto 10px auto;
       border-radius: 10px;
+
       &__btnClearSignature {
         padding: 10px;
         border: none;
@@ -110,9 +203,9 @@
         background-color: white;
         cursor: pointer;
         transition: all 400ms;
-        width: 175px;
         text-align: center;
         margin: 20px auto;
+
         &:hover {
           background-color: orange;
           color: white;
@@ -120,14 +213,18 @@
         }
       }
     }
+
     &__cities {
       position: relative;
+      margin: 0px 0px 20px 0px;
       &__highMargin {
         margin-top: 250px;
       }
+
       &__smallMargin {
         margin-top: 100px;
       }
+
       &__all {
         width: 100%;
         max-height: 150px;
@@ -139,24 +236,29 @@
         position: absolute;
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
+
         &::-webkit-scrollbar {
           -webkit-appearance: none;
           width: 17px;
         }
+
         &::-webkit-scrollbar-thumb {
           background-color: orange;
           border: 5px solid white;
           border-radius: 10rem;
           -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
         }
+
         &::-webkit-scrollbar-track {
           position: absolute;
           right: -13rem;
           top: -50rem;
           background: transparent;
         }
+
         &__city {
           padding: 10px;
+
           &:hover {
             background-color: #1976d2;
             color: white;
@@ -165,6 +267,78 @@
         }
       }
     }
+    &__signature {
+      &__error {
+        width: 300px;
+        margin: auto;
+            font-size: 0.75rem;
+            color: red;
+      }
+    }
+    &__line {
+      height: 1px;
+    width: 100%;
+    border: 1px solid rgb(0 0 0 / 21%);
+    margin: 0px auto 20px auto;
+    border-radius: 10px;
+    }
+&__submit {
+        padding: 10px;
+        border: none;
+        outline: 1px solid green;
+        border-radius: 10px;
+        background-color: white;
+        cursor: pointer;
+        transition: all 400ms;
+        text-align: center;
+        margin: 20px auto;
+
+        &:hover {
+          background-color: green;
+          color: white;
+          transform: scale(1.05);
+        }
+        &__load {
+        //width: 175px;
+        cursor: pointer;
+        margin: 20px 0px;
+        color: black;
+        outline: none;
+        border-radius: 10px;
+        border: 2px solid green;
+        background-color: white;
+        padding: 0px 10px;
+        display: flex;
+        color: black;
+
+        &__span {
+          align-self: center;
+        }
+
+        &__arc {
+          position: relative;
+          bottom: 9px;
+          margin: 18px 10px 0px 10px;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border-top: 1px solid black;
+          border-bottom: 1px solid transparent;
+          border-left: 1px solid black;
+          border-right: 1px solid transparent;
+          animation: load 2000ms both infinite ease-out;
+
+          &__circle {
+            position: relative;
+            right: -13px;
+            width: 5px;
+            height: 5px;
+            background-color: black;
+            border-radius: 50%;
+          }
+        }
+      }
+      }
     &__price {
       position: absolute;
       top: 80px;
@@ -174,24 +348,30 @@
       background-color: orange;
       width: 60%;
       margin: 20px auto;
+
       &__h1 {
         color: white;
         margin: 10px 0px 20px 0px;
       }
+
       &__content {
         text-align: center;
         color: white;
         justify-content: center;
         display: flex;
+
         &__price {
           margin-top: 20px;
           font-size: 26px;
         }
+
         &__text {
           margin-left: 5px;
         }
+
         &__icone {
           margin-right: 5px;
+
           &__left {
             position: relative;
             top: 20px;
@@ -207,10 +387,17 @@
   .contratModal {
     width: 80%;
     padding: 40px 20px;
+
     &__btn {
       right: 20px;
       top: 22px;
     }
+    /* &__content {
+      &__canvas {
+      width: 250px;
+    }
+    } */
+    
   }
 }
 
@@ -218,6 +405,7 @@
   .contratModal {
     width: 95%;
     padding: 40px 10px;
+
     &__btn {
       right: 14px;
       top: 18px;
@@ -229,6 +417,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(680deg);
   }

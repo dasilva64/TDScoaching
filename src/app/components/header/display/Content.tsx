@@ -16,7 +16,6 @@ import NavUser from "../modal/NavUser";
 import ModalCalendarDiscoveryMeeting from "../modal/discovery/ModalCalendarDiscoveryMeeting";
 import ModalAddDiscoveryMeeting from "../modal/discovery/ModalAddDiscoveryMeeting";
 import ModalRecapDiscoveryMeeting from "../modal/discovery/ModalRecapDiscoveryMeeting";
-import { useRefreshCsrfToken } from "../../hook/csrf/useRefreshCsrfToken";
 import Form2FACode from "../../login/2fa/Form2FACode";
 import useSWR from "swr";
 
@@ -28,29 +27,57 @@ const fetchData = async (url: string) => {
 
 const Content = () => {
   const [displayLogMenu, setDisplayLogMenu] = useState<boolean>(false);
- /*  const csrfRefreshToken = useRefreshCsrfToken();   */
   const { data, isLoading } = useSWR("/components/header/api", (url) =>
     fetchData(url), {
-      revalidateOnMount: true,
-      refreshInterval: 15 * 60 * 1000, 
-      revalidateOnFocus: false, 
-      revalidateOnReconnect: false, 
-    }
+    revalidateOnMount: true,
+    refreshInterval: 15 * 60 * 1000,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  }
   );
   const dispatch = useDispatch();
 
   const { isActive } = useSelector((state: RootState) => state.menu);
-  const { csrfToken } = useSelector((state: RootState) => state.csrfToken);
-  
+  useEffect(() => {
+    let previousY = 0;
+    let lastDirection: any = null; // Pour suivre la direction du scroll
+    const header = document.getElementById("header");
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      if (!header) return;
+      if (scrollY > previousY) {
+        if (lastDirection !== "down") {
+          lastDirection = "down"
+          header.style.top = "-84px"
+        }
+      } else if (scrollY < previousY) {
+        if (lastDirection !== "up") {
+          header.style.top = "0px"
+          lastDirection = "up"
+        }
+      }
+      previousY = scrollY;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);  // Nettoyage
+    };
+  }, []);
   const router = useRouter();
   const pathname = usePathname();
   useEffect(() => {
     if (data) {
-      dispatch({
+      if (data.status === 429) {
+         dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+      } else {
+        dispatch({
         type: "csrfToken/store",
-        payload: {csrfToken: data.csrfToken}
+        payload: { csrfToken: data.csrfToken }
       })
-      if (typeof data.isLoggedIn !== "undefined" && data.isLoggedIn === false) {
+      if (data.isLoggedIn !== true) {
         let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
         let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
         if (
@@ -62,6 +89,8 @@ const Content = () => {
           router.push("/");
         }
       }
+      }
+      
     }
   }, [data, dispatch, pathname, router]);
   let content;
@@ -191,15 +220,14 @@ const Content = () => {
           <NavAdmin csrfToken={data.csrfToken} />
         </>
       )}
-      
+
       <Nav />
-      
+
 
       {content}
       <div
-        className={`${
-          displayLogMenu === true ? styles.headerr__log : styles.headerr
-        }`}
+        className={`${displayLogMenu === true ? styles.headerr__log : styles.headerr
+          }`}
       >
         <button
           tabIndex={0}
@@ -211,9 +239,8 @@ const Content = () => {
           aria-label="button pour ouvrir le menu"
         >
           <span
-            className={`${styles.burger} ${
-              isActive ? styles.burgerActive : ""
-            }`}
+            className={`${styles.burger} ${isActive ? styles.burgerActive : ""
+              }`}
           ></span>
         </button>
       </div>

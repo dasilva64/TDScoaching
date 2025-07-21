@@ -52,13 +52,13 @@ const ModalCloseEmail = ({mutate}: any) => {
         });
         reset();
       } else if (data.status === 401) {
-        setTimeout(() => {
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "error", flashMessage: data.message },
           });
           reset();
-        }, 2000);
+          globalMutate("/components/header/api");
+                  globalMutate("/components/header/ui/api");
         router.push("/");
       } else if (data.status === 400) {
         dispatch({
@@ -72,7 +72,6 @@ const ModalCloseEmail = ({mutate}: any) => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
-        router.push("/");
       }
     }
   }, [data, dispatch, reset, router, mutate]);

@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
                 );
               }
             }
-            let stripeSession;
+            let stripeSession: any;
             
             try {
               stripeSession = await stripe.checkout.sessions.create({
@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
               await prisma.$transaction(async (tx) => {
                 await prisma.offre_test.update({
                   where: {
-                    id: user.offreId!,
+                    id: user?.offreId!,
                   },
                   data: {
                     sessionId: stripeSession.id,
@@ -203,7 +203,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 }
 

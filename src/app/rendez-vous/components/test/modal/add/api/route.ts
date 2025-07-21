@@ -101,13 +101,13 @@ export async function POST(request: NextRequest) {
                   data: {
                     startAt: start,
                     status: "pending",
-                    userMail: user.mail,
-                    offreId: user.offreId,
+                    userMail: user?.mail!,
+                    offreId: user?.offreId,
                     numberOfMeeting: "1"
                   },
                 });
                 let EditOffer = await prisma.offre_test.update({
-                  where: { id: user.offreId! },
+                  where: { id: user?.offreId! },
                   data: {
                     currentNumberOfMeeting: 1,
                     currentMeetingId: meeting.id,
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
                   }
                 })
                 let EditUser = await prisma.user.update({
-                  where: { id: user.id },
+                  where: { id: user?.id },
                   data: {
                     meetingId: meeting.id,
                   },
@@ -157,6 +157,6 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 }

@@ -52,11 +52,11 @@ export async function POST(request: NextRequest) {
                     try {
                         await prisma.$transaction(async (tx) => {
                             const editOffre = await prisma.offre_test.update({
-                                where: { id: user.offreId! },
+                                where: { id: user?.offreId! },
                                 data: { currentMeetingId: null }
                             })
                             const editMeet = await prisma.user.update({
-                                where: { id: user.id },
+                                where: { id: user?.id },
                                 data: { meetingId: null }
                             })
                             return { editOffre, editMeet };
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
             );
         }
     } catch (error: any) {
-        handleError(error)
+        return handleError(error)
     }
 
 }

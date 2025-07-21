@@ -7,7 +7,6 @@ const nextConfig = {
   }, */
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
-  swcMinify: false,
    async headers() {
      return [
       {

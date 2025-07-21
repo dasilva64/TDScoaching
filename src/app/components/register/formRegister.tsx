@@ -113,7 +113,7 @@ const FormRegister = () => {
         }, 2000);
       }
     }
-  }, [data, dispatch, reset]);
+  }, [data, dispatch, reset, router]);
   const handlerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({

@@ -98,13 +98,13 @@ export async function POST(request: NextRequest) {
               try {
                 await prisma.$transaction(async (tx) => {
                   await prisma.meeting_test.update({
-                    where: { id: user.meetingId! },
+                    where: { id: user?.meetingId! },
                     data: {
                       startAt: start,
                     },
                   });
                   await prisma.offre_test.update({
-                    where: { id: user.offreId! },
+                    where: { id: user?.offreId! },
                     data: {
                       coaching: typeCoaching
                     }
@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 
 }

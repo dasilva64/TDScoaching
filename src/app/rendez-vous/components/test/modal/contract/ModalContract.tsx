@@ -2,12 +2,10 @@
 
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { AppDispatch, RootState } from "@/app/redux/store";
-import { pdfjs } from "react-pdf";
 import { rgb } from "pdf-lib";
 import { AnimatePresence, motion, px } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { mutate } from "swr";
 import styles from "./ModalContract.module.scss";
 import useSWRMutation from "swr/mutation";
 import Image from "next/image";
@@ -15,11 +13,6 @@ import Places from "../../google/Places";
 import { useDraw } from "@/app/components/hook/canva/useDraw";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString();
 
 const ModalContract = ({ mutate }: any) => {
   const router = useRouter()
@@ -120,7 +113,7 @@ const ModalContract = ({ mutate }: any) => {
         });
       }
     }
-  }, [dataSee, dispatch])
+  }, [dataSee, dispatch, resetSee, router])
   const { data: dataAdd, trigger: triggerAdd, reset: resetAdd, isMutating: isMutatingAdd } = useSWRMutation("/rendez-vous/components/test/modal/contract/api/edit/", fetchPost)
   useEffect(() => {
     if (dataAdd) {
@@ -184,7 +177,7 @@ const ModalContract = ({ mutate }: any) => {
         }
       }
     }
-  }, [dataAdd, dispatch])
+  }, [dataAdd, dispatch, mutate, resetAdd, router, typeModalContractRendezVous])
   let content = (
     <>
       <div className={styles.contratModal__content}>
@@ -237,7 +230,7 @@ const ModalContract = ({ mutate }: any) => {
         <div className={styles.contratModal__content__line}></div>
         {typeModalContractRendezVous === "flash" && (
           <>
-            <p>Vous devez entrer votre adresse postal et signé pour commencer l'offre.</p>
+            <p>Vous devez entrer votre adresse postal et signé pour commencer l&apos;offre.</p>
             <div className={styles.contratModal__content__cities}>
               <Places
                 errorCity={errorCity}
@@ -870,7 +863,7 @@ const ModalContract = ({ mutate }: any) => {
                     });
                   }}
                 >
-                  Retour au détails de l'offre
+                  Retour au détails de l&apos;offre
                 </button>
                 <button
                   type="button"

@@ -116,7 +116,7 @@ const FormuleNotConfirm = ({ offre }: any) => {
                             type: "ModalFormuleEditRendezVous/open",
                             payload: { id: offre.id },
                         });
-                    }}>Changer d'offre</button>
+                    }}>Changer d&apos;offre</button>
                 </div>
             </div>
 

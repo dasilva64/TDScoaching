@@ -57,7 +57,7 @@ const ModalTwoFAActivationCancel = () => {
         router.push("/");
       }
     }
-  }, [data, dispatch, reset, router, mutate]);
+  }, [data, dispatch, reset, router]);
   const { displayModalTwoFAActivationCancel } = useSelector((state: RootState) => state.ModalTwoFAActivationCancel)
   return (
     <>

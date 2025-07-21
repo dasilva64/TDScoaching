@@ -118,14 +118,14 @@ export async function POST(request: NextRequest) {
               let createOffre = await prisma.offre_test.create({
                 data: {
                   type: typeOffre,
-                  userId: user.id,
+                  userId: user?.id!,
                   contract_status: "GENERATED_NAME_ONLY",
                   price: typeOffre === "flash" ? 300 : 100,
                   status: "pending"
                 }
               })
               await prisma.user.update({
-                where: { id: user.id },
+                where: { id: user?.id },
                 data: {
                   offreId: createOffre.id
                 }
@@ -167,6 +167,6 @@ export async function POST(request: NextRequest) {
     }
   }
   catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 }

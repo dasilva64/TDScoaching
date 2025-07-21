@@ -73,7 +73,7 @@ const AllMeeting = () => {
         });
       }
     }
-  }, [isLoading, userData]);
+  }, [isLoading, userData, dispatch, mutate, router]);
   const [isMobile, setIsMobile] = useState<null | boolean>(null);
   useEffect(() => {
     if (window.innerWidth < 768) {

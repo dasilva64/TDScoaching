@@ -96,30 +96,27 @@ export async function POST(request: NextRequest) {
             });
           } */
           //let copyTypeMeeting: any = user.typeMeeting;
-          let meeting = await prisma.meeting_test.create({
+          /* let meeting = await prisma.meeting_test.create({
             data: {
               startAt: start,
               status: validator.escape("pending"),
               userMail: user.mail,
-              confirm: false,
-              coaching: typeCoaching,
-              type: "discovery"
-              /* typeMeeting: {
+               typeMeeting: {
                 ...copyTypeMeeting,
                 coaching: typeCoaching,
-              }, */
+              }, 
             },
-          });
+          }); 
           await prisma.user.update({
             where: { id: user.id },
             data: {
               meetingId: meeting.id,
-              /* typeMeeting: {
+             typeMeeting: {
                 ...copyTypeMeeting,
                 coaching: typeCoaching,
-              }, */
+              }, 
             },
-          });
+          });*/
           return NextResponse.json(
             {
               status: 200,

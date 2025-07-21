@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
           const pagesCreate = pdfDocCreate.getPages();
 
           const firstPageCreate = pagesCreate[0];
-          const { widthCreate, heightCreate } = firstPageCreate.getSize();
+          const { widthCreate, heightCreate }: any = firstPageCreate.getSize();
           firstPageCreate.drawText(`${user.firstname}${" "}${user.lastname}`, {
             x: 160,
             y: 700,
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
             rotate: degrees(0),
           });
           const finalPdfBytesCreate = await pdfDocCreate.save();
-          const { dataCreate, errorCreate } = await supabase.storage
+          const { dataCreate, errorCreate }: any = await supabase.storage
             .from("tds")
             .upload(`contrat-${user.firstname}-${user.lastname}-${user.id}.pdf`, finalPdfBytesCreate, {
               contentType: "application/pdf",
@@ -211,7 +211,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 
 }

@@ -41,7 +41,7 @@ const My = ({ meeting, offre, mutate }: any) => {
         reset()
       }
     }
-  }, [data, reset])
+  }, [data, reset, dispatch, mutate, router])
   return (
     <>
       <div className={styles.test}>
@@ -220,7 +220,7 @@ const My = ({ meeting, offre, mutate }: any) => {
                 )}
                 {meeting.status === "expired" && (
                   <>
-                    <p className={styles.test__card__confirm__text}>Votre rendez-vous a expiré car vous ne l'avez pas confirmé a temps.</p>
+                    <p className={styles.test__card__confirm__text}>Votre rendez-vous a expiré car vous ne l&apos;avez pas confirmé a temps.</p>
                     <div className={styles.test__card__action}>
                       {!isMutating && (
                         <button
@@ -360,7 +360,7 @@ const My = ({ meeting, offre, mutate }: any) => {
                 )}
                 {meeting.status === "expired" && (
                   <>
-                    <p className={styles.test__card__confirm__text}>Votre rendez-vous a expiré car vous ne l'avez pas confirmé a temps.</p>
+                    <p className={styles.test__card__confirm__text}>Votre rendez-vous a expiré car vous ne l&apos;avez pas confirmé a temps.</p>
                     <div className={styles.test__card__action}>
                       {!isMutating && (
                         <button

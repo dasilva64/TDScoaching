@@ -60,7 +60,7 @@ const ModalTwoFADesactivation = ({ mutate, data: userData }: any) => {
             }
 
         }
-    }, [data, dispatch, reset, router, mutate]);
+    }, [data, dispatch, reset, router, mutate, userData]);
     const { displayModalTwoFADesactivation } = useSelector((state: RootState) => state.ModalTwoFADesactivation)
     return (
         <>

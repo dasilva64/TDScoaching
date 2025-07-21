@@ -209,7 +209,7 @@ const Content = () => {
                 )}
                 {data.body.meeting.status === "expired" && (
                   <>
-                    <p className={styles.content__card__confirm__text}>Votre rendez-vous a expiré car vous ne l'avez pas confirmé a temps.</p>
+                    <p className={styles.content__card__confirm__text}>Votre rendez-vous a expiré car vous ne l&apos;avez pas confirmé a temps.</p>
                     <div className={styles.content__card__action}>
                       {/* {!isMutating && (
                         <button

@@ -186,6 +186,7 @@ const ModalAddDiscoveryMeeting = () => {
     emailInput,
     reset,
     typeCoaching,
+    router
   ]);
 
   const handlerInput = (

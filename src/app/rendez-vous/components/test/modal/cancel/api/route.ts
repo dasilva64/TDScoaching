@@ -77,12 +77,12 @@ export async function DELETE(request: NextRequest) {
                   },
                 });
                 await prisma.meeting_test.update({
-                  where: { id: user.meetingId! },
+                  where: { id: user?.meetingId! },
                   data: { status: "cancelled" }
                 });
                 await prisma.offre_test.update({
                   where: {
-                    id: user.offre_test?.id
+                    id: user?.offre_test?.id
                   },
                   data: {
                     currentNumberOfMeeting: null,
@@ -143,6 +143,6 @@ export async function DELETE(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 }

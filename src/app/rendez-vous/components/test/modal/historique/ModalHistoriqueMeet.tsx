@@ -66,9 +66,9 @@ const { displayModalHistoriqueMeetingRendezVous }: any = useSelector(
                 ></Image>
               </button>
               <h2 className={`${styles.modalOffreDetail__h1}`}>
-                Rendez-vous de l'offre
+                Rendez-vous de l&apos;offre
               </h2>
-              <p><span className={`${styles.modalOffreDetail__strong}`}>Type de l'offre :</span> {offre.type[0].toUpperCase() + offre.type.slice(1)}</p>
+              <p><span className={`${styles.modalOffreDetail__strong}`}>Type de l&apos;offre :</span> {offre.type[0].toUpperCase() + offre.type.slice(1)}</p>
               <p><span className={`${styles.modalOffreDetail__strong}`}>Type de coaching :</span> {offre.coaching[0].toUpperCase() + offre.coaching.slice(1)}</p>
               {
                 meet.length > 0 && (

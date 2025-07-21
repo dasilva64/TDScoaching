@@ -56,8 +56,8 @@ const ModalFormuleCancel = () => {
                                     height={30}
                                 ></Image>
                             </button>
-                            <h2 className={`${styles.modalFormuleCancel__h1}`}>Annuler l'offre</h2>
-                            <p>En supprimant votre offre, vous serez rembourser de la difference de l'argent par rapport au rdv</p>
+                            <h2 className={`${styles.modalFormuleCancel__h1}`}>Annuler l&apos;offre</h2>
+                            <p>En supprimant votre offre, vous serez rembourser de la difference de l&apos;argent par rapport au rdv</p>
                             <p>Vous ne bénéficirait donc plus des avantages de votre offre comme les bilan offert ou les bilans entre les rdv</p>
                             <p>Êtes vous sûre de vouloir supprimer votre offre ?</p>
                             <div>

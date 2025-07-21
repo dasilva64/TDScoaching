@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
               await prisma.$transaction(async (tx) => {
                 await prisma.user.update({
                   where: {
-                    id: user.id
+                    id: user?.id
                   },
                   data: {
                     offreId: null,
@@ -122,16 +122,16 @@ export async function POST(request: NextRequest) {
           try {
             await prisma.$transaction(async (tx) => {
 
-              let editUser = await prisma.user.update({
+              await prisma.user.update({
                 where: {
-                  id: user.id
+                  id: user?.id
                 },
                 data: {
                   offreId: null,
 
                 }
               })
-              let deleteOffre = await prisma.offre_test.delete({
+              await prisma.offre_test.delete({
                 where: {
                   id: offre?.id
                 }
@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 
 }

@@ -194,7 +194,7 @@ const Content = () => {
         });
       }
     }
-  }, [dataFinishMeeting, dispatch, mutate, resetFinishMeeting]);
+  }, [dataFinishMeeting, dispatch, mutate, resetFinishMeeting, router]);
 
 
   const {
@@ -235,7 +235,7 @@ const Content = () => {
         });
       }
     }
-  }, [dataFinishOtherMeeting, dispatch, mutate, resetFinishOtherMeeting]);
+  }, [dataFinishOtherMeeting, dispatch, mutate, resetFinishOtherMeeting, router]);
 
   const {
     data: dataFinishDiscoveryMeeting,
@@ -275,7 +275,7 @@ const Content = () => {
         });
       }
     }
-  }, [dataFinishDiscoveryMeeting, dispatch, mutate, resetFinishMeeting]);
+  }, [dataFinishDiscoveryMeeting, dispatch, mutate, resetFinishMeeting, resetFinishDiscoveryMeeting, router]);
   /* useEffect(() => {
     const mutateFinishMeeting = () => {
       mutate(
@@ -324,7 +324,7 @@ const Content = () => {
         });
       }
     }
-  }, [dataDeleteOffre, dispatch, mutate, resetDeleteOffre]);
+  }, [dataDeleteOffre, dispatch, mutate, resetDeleteOffre, router]);
   useEffect(() => {
     if (isError) {
       setContent(
@@ -548,7 +548,7 @@ const Content = () => {
                                 id: data.body.id,
                                 csrfToken: csrfToken
                               })
-                            }}>Supprimer l'offre</button>
+                            }}>Supprimer l&apos;offre</button>
                           </>
                         )}
 
@@ -822,6 +822,13 @@ const Content = () => {
       }
     }
   }, [
+    isMutatingFinishOtherMeeting,
+    csrfToken,
+    isMutatingDeleteOffre,
+    isMutatingFinishDiscoveryMeeting,
+    triggerDeleteOffre,
+    triggerFinishDiscoveryMeeting,
+    triggerFinishOtherMeeting,
     data,
     datas,
     dispatch,

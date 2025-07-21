@@ -129,7 +129,7 @@ const Form2FACode = () => {
         resetLogin();
       }
     }
-  }, [dispatch, loginData, resetLogin]);
+  }, [dispatch, loginData, resetLogin, router]);
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({
@@ -247,7 +247,7 @@ const Form2FACode = () => {
       }
       resetLoginResend()
     }
-  }, [loginDataResend, resetLoginResend, dispatch])
+  }, [loginDataResend, resetLoginResend, dispatch, router])
   const {
     trigger: loginCancel,
     data: loginDataCancel,
@@ -295,7 +295,7 @@ const Form2FACode = () => {
       }
       resetLoginCancel()
     }
-  }, [loginDataCancel, resetLoginCancel, dispatch])
+  }, [loginDataCancel, resetLoginCancel, dispatch, router])
   const handlerInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     type: string,

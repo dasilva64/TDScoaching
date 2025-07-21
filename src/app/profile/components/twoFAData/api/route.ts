@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
         }
     } 
     }catch (error) {
-        handleError(error)
+        return handleError(error)
       }
     
 }

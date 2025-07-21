@@ -3,28 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./ContractModal.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Link from "next/link";
 import useGet from "../../../../components/hook/useGet";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
 //import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../../../../../../src/app/components/fetch/FetchPost";
 //import { useDraw } from "../../../../components/hook/canva/useDraw";
-import Input from "@mui/material/Input";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import {
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-} from "@mui/material";
 import { mutate } from "swr";
 //import Places from "../../../../components/google/Places";
 import { translate } from "googleapis/build/src/apis/translate";
@@ -135,11 +119,6 @@ const ContractModal = () => {
     dispatch({
       type: "ModalContract/close",
     });
-  };
-  const handleChange = (event: SelectChangeEvent) => {
-    setNumber(event.target.value as string);
-    let price: number = Number(event.target.value) * 100;
-    setTotal(price.toString());
   };
   /* const { canvasRef, onMouseDown, signatureRef, clear } = useDraw(
     drawLine,

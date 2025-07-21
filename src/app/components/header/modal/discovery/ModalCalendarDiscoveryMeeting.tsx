@@ -46,7 +46,7 @@ const ModalCalendarDiscoveryMeeting = () => {
           });
       }
     }
-  }, [isLoading, userData]);
+  }, [isLoading, userData, dispatch]);
 
   const calendarRef: any = useRef(null);
 

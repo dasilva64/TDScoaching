@@ -93,7 +93,7 @@ const ModalTwoFAActivation = ({ mutate, data: userData }: any) => {
         reset();
       }
     }
-  }, [data, dispatch, reset, router, mutate, userData.body.newEmail]);
+  }, [data, dispatch, reset, router, mutate, userData.body.newEmail, userData]);
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({

@@ -54,7 +54,7 @@ const ModalContractRecap = ({mutate}: any) => {
         resetConfirm()
       }
     }
-  }, [dataConfirm, dispatch, resetConfirm]);
+  }, [dataConfirm, dispatch, resetConfirm, mutate, router]);
   const { data: dataSee, trigger: triggerSee, reset: resetSee, isMutating: isMutatingSee } = useSWRMutation("/rendez-vous/components/test/modal/contract/api/see/", fetchPost)
   useEffect(() => {
     if (dataSee) {
@@ -81,7 +81,7 @@ const ModalContractRecap = ({mutate}: any) => {
         });
       }
     }
-  }, [dataSee, dispatch])
+  }, [dataSee, dispatch, resetSee, router])
   const { displayModalContractRecapRendezVous, typeModalContractRecapRendezVous } = useSelector((state: RootState) => state.ModalContractRecapRendezVous)
   let content = (
     <>

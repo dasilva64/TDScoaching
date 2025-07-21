@@ -162,7 +162,7 @@ const FormLogin = () => {
         }
       }
     }
-  }, [dispatch, emailInput, loginData, resetLogin]);
+  }, [dispatch, emailInput, loginData, resetLogin, router]);
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({

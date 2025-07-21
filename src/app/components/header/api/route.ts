@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     await session.save();
     return NextResponse.json(session);
   } catch (error) {
-    handleError(error)
+    return handleError(error)
   }
 
 }
@@ -142,7 +142,7 @@ export async function DELETE(request: NextRequest) {
       }
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 
 }

@@ -96,7 +96,7 @@ const ModalHelpMeeting = ({ offre }: any) => {
                       <p className={styles.modalHelpMeeting__card__title}>Étape 3 - Paiement sécurisé</p>
                       <p>Pour finaliser votre rendez-vous payant, vous allez être redirigé vers notre interface de paiement sécurisée via Stripe.</p>
                       <ul className={styles.modalHelpMeeting__card__list}>
-                        <li><span className={styles.modalHelpMeeting__card__list__strong}>Sécurité garantie</span> : Stripe est une plateforme de paiement mondialement reconnue, utilisée par des millions d'entreprises. Toutes les transactions sont protégées par un système de chiffrement de niveau bancaire.</li>
+                        <li><span className={styles.modalHelpMeeting__card__list__strong}>Sécurité garantie</span> : Stripe est une plateforme de paiement mondialement reconnue, utilisée par des millions d&apos;entreprises. Toutes les transactions sont protégées par un système de chiffrement de niveau bancaire.</li>
                         <li><span className={styles.modalHelpMeeting__card__list__strong}>Processus simple et rapide</span> : Le paiement s’effectue en quelques clics. Vous n’avez besoin que de vos informations bancaires habituelles.</li>
                         <li><span className={styles.modalHelpMeeting__card__list__strong}>Aucune information stockée</span> : Nous ne conservons aucune donnée bancaire. Toutes les informations sont traitées exclusivement par Stripe, en toute confidentialité.</li>
                         <li><span className={styles.modalHelpMeeting__card__list__strong}>Confirmation instantanée</span> : Une fois le paiement validé, vous recevrez une confirmation de votre rendez-vous par email.</li>

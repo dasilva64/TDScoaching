@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
             );
         }
     } catch (error: any) {
-        handleError(error)
+       return  handleError(error)
     }
 
 }

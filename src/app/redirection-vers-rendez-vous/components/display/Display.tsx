@@ -51,7 +51,7 @@ const Display = () => {
       }
 
     }
-  }, [dataStripe])
+  }, [dataStripe, dispatch, router, reset])
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
@@ -83,7 +83,7 @@ const Display = () => {
         router.push('/')
       }
     }
-  }, [data, csrfToken, dispatch])
+  }, [data, csrfToken, dispatch, result, router, trigger])
   return (
     <>
 

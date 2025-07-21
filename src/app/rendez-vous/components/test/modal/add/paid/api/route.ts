@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
                 }
               );
             } else {
-              let stripeSession;
+              let stripeSession: any;
               try {
                 stripeSession = await stripe.checkout.sessions.create({
                   line_items: [
@@ -163,13 +163,13 @@ export async function POST(request: NextRequest) {
                     data: {
                       startAt: start,
                       status: "pending",
-                      userMail: user.mail,
+                      userMail: user?.mail!,
                       numberOfMeeting: "1"
                     }
                   });
 
                   const updatedOffer = await tx.offre_test.update({
-                    where: { id: user.offreId! },
+                    where: { id: user?.offreId! },
                     data: {
                       sessionId: stripeSession.id,
                       currentMeetingId: createdMeeting.id,
@@ -187,7 +187,7 @@ export async function POST(request: NextRequest) {
                   });
 
                   await tx.user.update({
-                    where: { id: user.id },
+                    where: { id: user?.id },
                     data: {
                       meetingId: createdMeeting.id
                     }
@@ -232,6 +232,6 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 }

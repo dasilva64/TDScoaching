@@ -64,7 +64,7 @@ const ModalHelpContract = () => {
               <div className={styles.modalHelpContract__container}>
 
                 <div className={styles.modalHelpContract__card}>
-                  <p className={styles.modalHelpContract__card__title}>Étape 1 - Choix de l'offre</p>
+                  <p className={styles.modalHelpContract__card__title}>Étape 1 - Choix de l&apos;offre</p>
                   <div className={styles.modalHelpContract__card__radio}>
                     <div className={styles.modalHelpContract__card__radio__element}>
                       <label htmlFor="">Unique</label>
@@ -95,7 +95,7 @@ const ModalHelpContract = () => {
                       height={20}
                     ></Image>
                     <div className={styles.modalHelpContract__card}><p className={styles.modalHelpContract__card__title}>Étape 2 - Modal recapitulatif</p>
-                      <p>- Affichage récapitulatif de l'offre selectionné</p></div>
+                      <p>- Affichage récapitulatif de l&apos;offre selectionné</p></div>
 
                   </>
                 )}
@@ -109,7 +109,7 @@ const ModalHelpContract = () => {
                       height={20}
                     ></Image>
                     <div className={styles.modalHelpContract__card}><p className={styles.modalHelpContract__card__title}>Étape 2 - Modal recapitulatif</p>
-                      <p>- Affichage récapitulatif de l'offre selectionné</p></div>
+                      <p>- Affichage récapitulatif de l&apos;offre selectionné</p></div>
                       <Image
                       className={styles.modalHelpContract__card__row}
                       src="/assets/icone/arrow-down-solid.svg"
@@ -119,11 +119,11 @@ const ModalHelpContract = () => {
                     ></Image>
                     <div className={styles.modalHelpContract__card}><p className={styles.modalHelpContract__card__title}>Étape 3 - Modal création du contract</p>
                       <ul className={styles.modalHelpContract__card__list}>
-                        <li>Ajout de l'adresse</li>
+                        <li>Ajout de l&apos;adresse</li>
                         <li>Ajout de la signature</li>
-                        <li>Cocher la case "Lu et approuvé"</li>
+                        <li>Cocher la case &quot;Lu et approuvé&quot;</li>
                       </ul>
-                      <p>- Création du contract et ajout de l'adresse et signature</p></div>
+                      <p>- Création du contract et ajout de l&apos;adresse et signature</p></div>
                       <Image
                       className={styles.modalHelpContract__card__row}
                       src="/assets/icone/arrow-down-solid.svg"

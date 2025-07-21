@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
               await prisma.$transaction(async (tx) => {
                 await prisma.meeting_test.update({
                   where: {
-                    id: user.meetingId!,
+                    id: user?.meetingId!,
                   },
                   data: {
                     status: "confirmed",
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
                 });
                 await prisma.offre_test.update({
                   where: {
-                    id: user.offreId!
+                    id: user?.offreId!
                   },
                   data: {
                     status: "confirmed",
@@ -132,6 +132,6 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 }

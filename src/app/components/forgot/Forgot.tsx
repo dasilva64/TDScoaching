@@ -71,7 +71,7 @@ const Forgot = () => {
         }, 2000);
       }
     }
-  }, [data, dispatch, reset]);
+  }, [data, dispatch, reset, router]);
   const clearState = () => {
     setInputPseudo("");
     setInputEmail("");

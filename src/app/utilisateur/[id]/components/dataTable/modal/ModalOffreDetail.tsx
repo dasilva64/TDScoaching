@@ -1,7 +1,6 @@
 import fetchPost from "@/app/components/fetch/FetchPost";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store";
-import { Input } from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -72,9 +71,9 @@ const ModalOffreDetail = () => {
                 ></Image>
               </button>
               <h2 className={`${styles.modalOffreDetail__h1}`}>
-                Rendez-vous de l'offre
+                Rendez-vous de l&apos;offre
               </h2>
-              <p><span className={`${styles.modalOffreDetail__strong}`}>Type de l'offre :</span> {meetingModalOffreDetail["Type de l'offre"][0].toUpperCase() + meetingModalOffreDetail["Type de l'offre"].slice(1)}</p>
+              <p><span className={`${styles.modalOffreDetail__strong}`}>Type de l&apos;offre :</span> {meetingModalOffreDetail["Type de l'offre"][0].toUpperCase() + meetingModalOffreDetail["Type de l'offre"].slice(1)}</p>
               <p><span className={`${styles.modalOffreDetail__strong}`}>Type de coaching :</span> {meetingModalOffreDetail["Type de coaching"][0].toUpperCase() + meetingModalOffreDetail["Type de coaching"].slice(1)}</p>
               {
                 meetingModalOffreDetail.meetings.length > 0 && (

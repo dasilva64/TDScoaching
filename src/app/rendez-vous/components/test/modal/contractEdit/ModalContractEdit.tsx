@@ -58,7 +58,7 @@ const ModalContractEdit = ({mutate}: any) => {
       }
 
     }
-  }, [data, dispatch])
+  }, [data, dispatch, mutate, reset, router, typeModalContractEditRendezVous])
   return (
     <>
       <AnimatePresence>
@@ -104,7 +104,7 @@ const ModalContractEdit = ({mutate}: any) => {
                 </button>
               </div>
               <h1 className={styles.contratModal__h1}>Modification du contract</h1>
-              <p>Cette action supprimera l'ancien contrat et vous devriez alors signé et un remplir un autre de nouveau</p>
+              <p>Cette action supprimera l&apos;ancien contrat et vous devriez alors signé et un remplir un autre de nouveau</p>
               <p>Êtes vous sûre de vouloir modifier votre contrat ?</p>
               {/* {content} */}
               <div className={styles.contratModal__actions}>

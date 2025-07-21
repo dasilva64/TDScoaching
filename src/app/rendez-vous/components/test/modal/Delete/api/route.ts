@@ -73,13 +73,13 @@ export async function POST(request: NextRequest) {
                   },
                 });
                 await prisma.meeting_test.update({
-                  where: { id: user.meetingId! },
+                  where: { id: user?.meetingId! },
                   data: {
                     status: "cancelled"
                   }
                 });
                 await prisma.offre_test.update({
-                  where: { id: user.offreId! },
+                  where: { id: user?.offreId! },
                   data: {
                     currentNumberOfMeeting: null,
                      status: "cancelled"
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 
 }

@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
       }
     }
   } catch (error) {
-    handleError(error)
+    return handleError(error)
   }
 
 }

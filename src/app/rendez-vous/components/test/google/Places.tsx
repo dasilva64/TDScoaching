@@ -74,7 +74,7 @@ const PlacesAutocomplete = ({
     setAdresse(address);
     setCity(city);
   }; */
-  const handlerInput = (e) => {
+  const handlerInput = (e: any) => {
     setValue(e.target.value);
     if (e.target.value.length > 0) {
       setErrorCity("")

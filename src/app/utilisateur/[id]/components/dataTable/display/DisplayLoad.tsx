@@ -10,7 +10,7 @@ const DisplayLoad = () => {
             <th
               className={`${styles.table__head__tr__th} ${styles.table__head__tr__th__id}`}
             >
-              Type de l'offre
+              Type de l&apos;offre
             </th>
             <th className={`${styles.table__head__tr__th}`}>Type de coaching</th>
             <th className={`${styles.table__head__tr__th}`}>Statut du paiement</th>

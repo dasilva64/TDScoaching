@@ -47,7 +47,7 @@ const ModalUserNoShow = ({ mutate, id }: any) => {
         });
       }
     }
-  }, [data, dispatch, mutate, reset]);
+  }, [data, dispatch, mutate, reset, router]);
   return (
     <>
       <TabIndex displayModal={displayModalUserNoShow} />
@@ -96,7 +96,7 @@ const ModalUserNoShow = ({ mutate, id }: any) => {
 
 
               <p className={styles.modalUserNoShow__choose}>
-                Si l'user n'as pas été présent pour le rendez-vous, vous pouvez ici lui envoyer un mail pour lui permettre de reprendre le rendez-vous.
+                Si l&apos;user n&apos;as pas été présent pour le rendez-vous, vous pouvez ici lui envoyer un mail pour lui permettre de reprendre le rendez-vous.
               </p>
 
               <div className={styles.modalUserNoShow__form__submit}>

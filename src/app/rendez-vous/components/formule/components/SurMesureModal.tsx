@@ -4,10 +4,6 @@ import styles from "./DiscoveryModal.module.scss";
 import Image from "@/app/components/image/Image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 const SurMesureModal = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,11 +17,6 @@ const SurMesureModal = () => {
     dispatch({
       type: "ModalSurMesure/close",
     });
-  };
-  const handleChange = (event: SelectChangeEvent) => {
-    setNumber(event.target.value as string);
-    let price: number = Number(event.target.value) * 100;
-    setTotal(price.toString());
   };
   return (
     <>

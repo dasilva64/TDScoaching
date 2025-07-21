@@ -1,4 +1,3 @@
-import { time } from "console";
 import { useEffect, useRef, useState } from "react";
 
 export const useDraw = (
@@ -35,51 +34,44 @@ export const useDraw = (
   };
 
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (!mouseDown) return;
-      const currentPoint = computePointInCanvas(e);
+  const canvas = canvasRef.current; // Capture la ref une fois pour l'effet entier
 
-      const ctx = canvasRef.current?.getContext("2d");
-      if (!ctx || !currentPoint) return;
+  const handler = (e: MouseEvent) => {
+    if (!mouseDown || !canvas) return;
 
-      onDraw({ ctx, currentPoint, prevPoint: prevPoint.current });
-      prevPoint.current = currentPoint;
-    };
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const currentPoint = { x, y };
 
-    const computePointInCanvas = (e: MouseEvent) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+    onDraw({ ctx, currentPoint, prevPoint: prevPoint.current });
+    prevPoint.current = currentPoint;
+  };
 
-      return { x, y };
-    };
+  const mouseUpHandler = () => {
+    if (canvas && mouseDown) {
+      const dataUrl = canvas.toDataURL();
+      signatureRef.current.value = dataUrl;
+      setSignatureRefContent(dataUrl);
+      setSignatureError("");
+      setDateSignature(new Date().toISOString());
+      setValidSignature(true);
+    }
+    setMouseDown(false);
+    prevPoint.current = null;
+  };
 
-    const mouseUpHandler = () => {
-      if (canvasRef.current && mouseDown) {
-        signatureRef.current.value = canvasRef.current.toDataURL();
-        setSignatureRefContent(canvasRef.current.toDataURL());
-        setSignatureError("");
-        const timestamp = new Date().toISOString();
-        setDateSignature(timestamp)
-        setValidSignature(true)
-      }
-      setMouseDown(false);
-      prevPoint.current = null;
-    };
+  canvas?.addEventListener("mousemove", handler);
+  window.addEventListener("mouseup", mouseUpHandler);
 
-    // Add event listeners
-    canvasRef.current?.addEventListener("mousemove", handler);
-    window.addEventListener("mouseup", mouseUpHandler);
-
-    // Remove event listeners
-    return () => {
-      canvasRef.current?.removeEventListener("mousemove", handler);
-      window.removeEventListener("mouseup", mouseUpHandler);
-    };
-  }, [mouseDown, onDraw]);
+  return () => {
+    canvas?.removeEventListener("mousemove", handler);
+    window.removeEventListener("mouseup", mouseUpHandler);
+  };
+}, [mouseDown, onDraw, setDateSignature, setSignatureError, setSignatureRefContent, setValidSignature]);
 
   return { canvasRef, signatureRef, onMouseDown, clear };
 };

@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
       }
     }
   } catch (error: any) {
-    handleError(error)
+    return handleError(error)
   }
 
 }

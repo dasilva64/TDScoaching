@@ -161,7 +161,7 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
               <div className={styles.modalAddDiscovery__rappel}>
                 <h3 className={styles.modalAddDiscovery__rappel__title}>Récapitulatif</h3>
                 <p className={styles.modalAddDiscovery__rappel__p}>
-                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Type de l'offre :&nbsp;</span>
+                  <span className={styles.modalAddDiscovery__rappel__p__strong}>Type de l&apos;offre :&nbsp;</span>
 
                   {offre.type !== "discovery"
                     ? String(offre.type).charAt(0).toLocaleUpperCase() +

@@ -17,6 +17,7 @@ const ModalDeleteAccount = ({mutate} : any) => {
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken
   );
+  console.log("test")
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [inputPseudo, setInputPseudo] = useState<string>("");

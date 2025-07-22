@@ -39,7 +39,7 @@ export const handleError = (error: any) => {
     }
     return NextResponse.json({
       status: 500,
-      message: error.message,
+      message: "Oups, notre serveur a rencontré un problème. Veuillez réessayer plus tard.",
     }, { status: 500 });
 
 }

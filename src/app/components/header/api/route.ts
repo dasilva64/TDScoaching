@@ -106,6 +106,7 @@ export async function GET(request: NextRequest) {
     await session.save();
     return NextResponse.json(session);
   } catch (error) {
+    console.error("RateLimiter error:", error);
     return handleError(error)
   }
 

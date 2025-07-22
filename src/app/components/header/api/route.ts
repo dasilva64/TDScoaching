@@ -7,7 +7,6 @@ import {
 } from "../../../lib/session";
 import prisma from "../../../lib/prisma";
 import { generateCsrfToken } from "../../functions/generateCsrfToken";
-import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { handleError } from "@/app/lib/handleError";
 import kv from '@vercel/kv';
@@ -15,29 +14,25 @@ import { Ratelimit } from '@upstash/ratelimit';
 
 const ratelimit = new Ratelimit({
   redis: kv,
-  limiter: Ratelimit.fixedWindow(5, '60s'),
+  limiter: Ratelimit.fixedWindow(100, '60s'),
 });
 
 export async function GET(request: NextRequest) {
   try {
     const ip = request.ip ?? 'ip';
-  const { success, remaining } = await ratelimit.limit(ip);
+    const keyPrefix = "rlflx-header";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
 
-  if (!success) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
-   /*  const rateLimitResponse = await checkRateLimit(request, {
-      points: 10000,
-      duration: 60,
-      keyPrefix: "rlflx-header"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
     session.csrfToken = generateCsrfToken();
     const is2FAExpired =
@@ -114,12 +109,12 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-   /*  const rateLimitResponse = await checkRateLimit(request, {
-      points: 5,
-      duration: 60,
-      keyPrefix: "rlflx-logout"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    /*  const rateLimitResponse = await checkRateLimit(request, {
+       points: 5,
+       duration: 60,
+       keyPrefix: "rlflx-logout"
+     });
+     if (rateLimitResponse) return rateLimitResponse; */
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions

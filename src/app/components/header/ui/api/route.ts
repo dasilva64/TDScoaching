@@ -5,15 +5,22 @@ import { SessionData, sessionOptions } from "@/app/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(100, '60s'),
+});
 
 export async function GET(request: NextRequest) {
   try {
-   /*  const rateLimitResponse = await checkRateLimit(request, {
+    const rateLimitResponse = await checkRateLimit(request, {
       points: 10000,
       duration: 60,
       keyPrefix: "rlflx-header-ui"
     });
-    if (rateLimitResponse) return rateLimitResponse; */
+    if (rateLimitResponse) return rateLimitResponse;
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
     if (session.isLoggedIn !== true) {

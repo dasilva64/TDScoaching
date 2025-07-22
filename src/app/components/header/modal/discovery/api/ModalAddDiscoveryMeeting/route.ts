@@ -12,34 +12,27 @@ import { handleError } from "@/app/lib/handleError";
 import kv from '@vercel/kv';
 import { Ratelimit } from '@upstash/ratelimit';
 
-export const maxDuration = 30;
-
-// Create Rate limit
 const ratelimit = new Ratelimit({
   redis: kv,
-  limiter: Ratelimit.fixedWindow(5, '60s'),
+  limiter: Ratelimit.fixedWindow(100, '60s'),
 });
 
 export async function POST(request: NextRequest) {
   try {
     const ip = request.ip ?? 'ip';
-  const { success, remaining } = await ratelimit.limit(ip);
+    const keyPrefix = "rlflx-discovery-meeting";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
 
-  if (!success) {
-   return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
-   /*  const rateLimitResponse = await checkRateLimit(request, {
-      points: 5,
-      duration: 60,
-      keyPrefix: "rlflx-discovery-meeting"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions
@@ -107,12 +100,12 @@ export async function POST(request: NextRequest) {
     });
     if (user) {
       let lastDiscoveryByUser = await prisma.offre_test.findMany({
-      take: 1,
-      where: {
-        userId: user?.id,
-        type: "discovery"
-      },
-    })
+        take: 1,
+        where: {
+          userId: user?.id,
+          type: "discovery"
+        },
+      })
       if (user.role === "ROLE_ADMIN") {
         return NextResponse.json(
           {

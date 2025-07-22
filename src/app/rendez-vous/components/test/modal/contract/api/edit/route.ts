@@ -10,6 +10,13 @@ import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { handleError } from "@/app/lib/handleError";
 import { validationBody } from "@/app/lib/validation";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 const supabase = createClient(
   process.env.SUPABASE_BASE_URL_UPLOAD!,
@@ -18,12 +25,20 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
   try {
-    /* const rateLimitResponse = await checkRateLimit(request, {
-      points: 5,
-      duration: 60,
-      keyPrefix: "rlflx-contract-edit"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    const ip = request.ip ?? 'ip';
+    const keyPrefix = "rlflx-contract-edit";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions

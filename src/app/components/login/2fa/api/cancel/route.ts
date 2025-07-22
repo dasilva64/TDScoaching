@@ -6,106 +6,127 @@ import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { Prisma } from "@prisma/client";
 import { csrfToken } from "@/app/lib/csrfToken";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+import { handleError } from "@/app/lib/handleError";
+
+const ratelimit = new Ratelimit({
+    redis: kv,
+    limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
-    /* const rateLimitResponse = await checkRateLimit(request, {
-        points: 5,
-        duration: 60,
-        keyPrefix: "rlflx-login-2fa-resend"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
-    const session = await getIronSession<SessionData>(
-        cookies(),
-        sessionOptions
-    );
-    const csrfTokenHeader = headers().get("x-csrf-token");
-    const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
-    if (csrfCheckResponse) return csrfCheckResponse;
-    if (session.isLoggedIn === true) {
-        let user = await prisma.user.findUnique({
-            where: { id: session.id },
-        });
-        if (user === null) {
+    try {
+        const ip = request.ip ?? 'ip';
+        const keyPrefix = "rlflx-login-2fa-cancel";
+        const key = `${keyPrefix}:${ip}`
+        const { success, remaining } = await ratelimit.limit(key);
+
+        if (!success) {
             return NextResponse.json(
                 {
-                    status: 401,
-                    message:
-                        "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+                    status: 429,
+                    message: "Trop de requêtes, veuillez réessayer plus tard",
                 },
-                {
-                    status: 401,
-                }
+                { status: 429 }
             );
         }
-        return NextResponse.json(
-            {
-                status: 200,
-                message: "Vous êtes déjà connecté",
-            },
-            {
-                status: 200,
-            }
+        const session = await getIronSession<SessionData>(
+            cookies(),
+            sessionOptions
         );
-    } else {
-        if (!session.id) {
+        const csrfTokenHeader = headers().get("x-csrf-token");
+        const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+        if (csrfCheckResponse) return csrfCheckResponse;
+        if (session.isLoggedIn === true) {
+            let user = await prisma.user.findUnique({
+                where: { id: session.id },
+            });
+            if (user === null) {
+                return NextResponse.json(
+                    {
+                        status: 401,
+                        message:
+                            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+                    },
+                    {
+                        status: 401,
+                    }
+                );
+            }
+            return NextResponse.json(
+                {
+                    status: 200,
+                    message: "Vous êtes déjà connecté",
+                },
+                {
+                    status: 200,
+                }
+            );
+        } else {
+            if (!session.id) {
+                return NextResponse.json(
+                    {
+                        status: 400,
+                        type: "error",
+                        message:
+                            "Erreur lors de la double authentification, veuillez réessayer",
+                    },
+                    {
+                        status: 400,
+                    }
+                );
+            }
+        }
+        const { pseudo } = (await request.json()) as {
+            pseudo: string;
+        };
+        if (pseudo.trim() !== "") {
             return NextResponse.json(
                 {
                     status: 400,
                     type: "error",
-                    message:
-                        "Erreur lors de la double authentification, veuillez réessayer",
-                },
-                {
-                    status: 400,
-                }
-            );
-        }
-    }
-    const { pseudo } = (await request.json()) as {
-        pseudo: string;
-    };
-    if (pseudo.trim() !== "") {
-        return NextResponse.json(
-            {
-                status: 400,
-                type: "error",
-                message: "Vous ne pouvez pas vous connecter, veuillez réessayer",
-            },
-            {
-                status: 400,
-            }
-        );
-    } else {
-        const editUser = await prisma.user.update({
-            where: {
-                id: session.id
-            },
-            data: {
-                twoFAToken: Prisma.JsonNull
-            }
-        })
-        if (editUser === null) {
-            return NextResponse.json(
-                {
-                    status: 400,
-                    message: "Erreur lors de la modification de la double authentification, veuillez réessayer",
+                    message: "Vous ne pouvez pas vous connecter, veuillez réessayer",
                 },
                 {
                     status: 400,
                 }
             );
         } else {
-            session.destroy();
-            return NextResponse.json(
-                {
-                    status: 200,
-                    message: "Vous avez quitté la double authentification",
+            const editUser = await prisma.user.update({
+                where: {
+                    id: session.id
                 },
-                {
-                    status: 200,
+                data: {
+                    twoFAToken: Prisma.JsonNull
                 }
-            );
-        }
+            })
+            if (editUser === null) {
+                return NextResponse.json(
+                    {
+                        status: 400,
+                        message: "Erreur lors de la modification de la double authentification, veuillez réessayer",
+                    },
+                    {
+                        status: 400,
+                    }
+                );
+            } else {
+                session.destroy();
+                return NextResponse.json(
+                    {
+                        status: 200,
+                        message: "Vous avez quitté la double authentification",
+                    },
+                    {
+                        status: 200,
+                    }
+                );
+            }
 
+        }
+    } catch (error) {
+        handleError(error)
     }
+
 }

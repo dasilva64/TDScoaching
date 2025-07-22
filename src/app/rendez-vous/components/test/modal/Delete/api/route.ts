@@ -7,15 +7,30 @@ import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from "next/server";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    /* const rateLimitResponse = await checkRateLimit(request, {
-      points: 5,
-      duration: 60,
-      keyPrefix: "rlflx-meet-delete"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    const ip = request.ip ?? 'ip';
+    const keyPrefix = "rlflx-meet-delete";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions
@@ -66,7 +81,7 @@ export async function POST(request: NextRequest) {
             );
           } else {
             try {
-               const {meeting, offre} = await prisma.$transaction(async (tx) => {
+              const { meeting, offre } = await prisma.$transaction(async (tx) => {
                 await prisma.user.update({
                   where: { id: session.id },
                   data: {
@@ -86,7 +101,7 @@ export async function POST(request: NextRequest) {
                     status: "cancelled"
                   }
                 })
-                return {meeting, offre}
+                return { meeting, offre }
               })
               let smtpTransport = nodemailer.createTransport({
                 host: "smtp.ionos.fr",

@@ -8,15 +8,29 @@ import prisma from "../../../../lib/prisma";
 import { SessionData, sessionOptions } from "../../../../lib/session";
 import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { csrfToken } from "@/app/lib/csrfToken";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
+  const ip = request.ip ?? 'ip';
+  const keyPrefix = "rlflx-delete-account";
+  const key = `${keyPrefix}:${ip}`
+  const { success, remaining } = await ratelimit.limit(key);
 
-  /* const rateLimitResponse = await checkRateLimit(request, {
-    points: 5,
-    duration: 60,
-    keyPrefix: "rlflx-delete-account"
-  });
-  if (rateLimitResponse) return rateLimitResponse; */
+  if (!success) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
   const session = await getIronSession<SessionData>(
     cookies(),
     sessionOptions

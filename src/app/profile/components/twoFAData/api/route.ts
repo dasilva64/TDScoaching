@@ -7,107 +7,122 @@ import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer"
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+    redis: kv,
+    limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
     try {
-       /* const rateLimitResponse = await checkRateLimit(request, {
-        points: 5,
-        duration: 60,
-        keyPrefix: "rlflx-profile-twofa"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
-    const session = await getIronSession<SessionData>(
-        cookies(),
-        sessionOptions
-    );
-    const csrfTokenHeader = headers().get("x-csrf-token");
-    const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
-    if (csrfCheckResponse) return csrfCheckResponse;
-    if (session.isLoggedIn !== true) {
-        return NextResponse.json(
-            {
-                status: 401,
-                message: "Vous n'êtes pas connecté, veuillez réessayer",
-            },
-            {
-                status: 401,
-            }
+        const ip = request.ip ?? 'ip';
+        const keyPrefix = "rlflx-profile-twofa";
+        const key = `${keyPrefix}:${ip}`
+        const { success, remaining } = await ratelimit.limit(key);
+
+        if (!success) {
+            return NextResponse.json(
+                {
+                    status: 429,
+                    message: "Trop de requêtes, veuillez réessayer plus tard",
+                },
+                { status: 429 }
+            );
+        }
+        const session = await getIronSession<SessionData>(
+            cookies(),
+            sessionOptions
         );
-    } else {
-        let user = await prisma.user.findUnique({
-            where: { id: session.id },
-        });
-        if (user === null) {
+        const csrfTokenHeader = headers().get("x-csrf-token");
+        const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+        if (csrfCheckResponse) return csrfCheckResponse;
+        if (session.isLoggedIn !== true) {
             return NextResponse.json(
                 {
                     status: 401,
-                    message:
-                        "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+                    message: "Vous n'êtes pas connecté, veuillez réessayer",
                 },
                 {
                     status: 401,
                 }
             );
         } else {
-            const { twoFaCheck } = (await request.json()) as {
-                twoFaCheck: boolean;
-            };
-            if (typeof twoFaCheck !== "boolean") {
+            let user = await prisma.user.findUnique({
+                where: { id: session.id },
+            });
+            if (user === null) {
                 return NextResponse.json(
                     {
-                        status: 404,
+                        status: 401,
                         message:
-                            "Erreur dans le format des données, veuillez réessayer",
+                            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
                     },
                     {
-                        status: 404,
+                        status: 401,
                     }
                 );
-            }
-            if (twoFaCheck) {
-                let token = ""
-                let now = new Date();
-                let characters = "1234567890"
-                for (let i = 0; i < 8; i++) {
-                    token += characters.charAt(Math.floor(Math.random() * characters.length))
-                }
-                let editUser = await prisma.user.update({
-                    where: { mail: user.mail },
-                    data: {
-                        twoFAToken: {
-                            limitDate: now.setMinutes(now.getMinutes() + 30),
-                            token: token,
-                        },
-                    },
-                });
-                if (editUser === null) {
+            } else {
+                const { twoFaCheck } = (await request.json()) as {
+                    twoFaCheck: boolean;
+                };
+                if (typeof twoFaCheck !== "boolean") {
                     return NextResponse.json(
                         {
-                            status: 400,
-                            type: "error",
+                            status: 404,
                             message:
-                                "Une erreur est survenue lors de la modification de la double authentification, veuillez réessayer",
+                                "Erreur dans le format des données, veuillez réessayer",
                         },
                         {
-                            status: 400,
+                            status: 404,
                         }
                     );
                 }
-                let smtpTransport = nodemailer.createTransport({
-                    host: "smtp.ionos.fr",
-                    port: 465,
-                    secure: true,
-                    auth: {
-                        user: process.env.SECRET_SMTP_EMAIL,
-                        pass: process.env.SECRET_SMTP_PASSWORD,
-                    },
-                });
+                if (twoFaCheck) {
+                    let token = ""
+                    let now = new Date();
+                    let characters = "1234567890"
+                    for (let i = 0; i < 8; i++) {
+                        token += characters.charAt(Math.floor(Math.random() * characters.length))
+                    }
+                    let editUser = await prisma.user.update({
+                        where: { mail: user.mail },
+                        data: {
+                            twoFAToken: {
+                                limitDate: now.setMinutes(now.getMinutes() + 30),
+                                token: token,
+                            },
+                        },
+                    });
+                    if (editUser === null) {
+                        return NextResponse.json(
+                            {
+                                status: 400,
+                                type: "error",
+                                message:
+                                    "Une erreur est survenue lors de la modification de la double authentification, veuillez réessayer",
+                            },
+                            {
+                                status: 400,
+                            }
+                        );
+                    }
+                    let smtpTransport = nodemailer.createTransport({
+                        host: "smtp.ionos.fr",
+                        port: 465,
+                        secure: true,
+                        auth: {
+                            user: process.env.SECRET_SMTP_EMAIL,
+                            pass: process.env.SECRET_SMTP_PASSWORD,
+                        },
+                    });
 
-                let mailOptions = {
-                    from: "contact@tds-coachingdevie.fr",
-                    to: user.mail,
-                    subject: "Validation de votre nouvelle adresse email",
-                    html: `<!DOCTYPE html>
+                    let mailOptions = {
+                        from: "contact@tds-coachingdevie.fr",
+                        to: user.mail,
+                        subject: "Validation de votre nouvelle adresse email",
+                        html: `<!DOCTYPE html>
                                             <html lang="fr">
                                               <head>
                                                 <title>tds coaching</title>
@@ -133,34 +148,34 @@ export async function POST(request: NextRequest) {
                                                 </div>
                                               </body>
                                             </html>`,
-                };
-                await smtpTransport.sendMail(mailOptions);
-                return NextResponse.json(
-                    {
-                        status: 200,
-                        twoFaCheck: twoFaCheck,
-                        message:
-                            "Un code vous a été envoyé pour activé la double authentification",
-                    },
-                    {
-                        status: 200,
-                    }
-                );
-            } else {
-                return NextResponse.json(
-                    {
-                        status: 200,
-                        twoFaCheck: twoFaCheck,
-                    },
-                    {
-                        status: 200,
-                    }
-                );
+                    };
+                    await smtpTransport.sendMail(mailOptions);
+                    return NextResponse.json(
+                        {
+                            status: 200,
+                            twoFaCheck: twoFaCheck,
+                            message:
+                                "Un code vous a été envoyé pour activé la double authentification",
+                        },
+                        {
+                            status: 200,
+                        }
+                    );
+                } else {
+                    return NextResponse.json(
+                        {
+                            status: 200,
+                            twoFaCheck: twoFaCheck,
+                        },
+                        {
+                            status: 200,
+                        }
+                    );
+                }
             }
         }
-    } 
-    }catch (error) {
+    } catch (error) {
         return handleError(error)
-      }
-    
+    }
+
 }

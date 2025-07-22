@@ -10,123 +10,139 @@ import { checkRateLimit } from "@/app/lib/rateLimiter";
 import validator from "validator";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { handleError } from "@/app/lib/handleError";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+    redis: kv,
+    limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
+
     try {
-        /* const rateLimitResponse = await checkRateLimit(request, {
-        points: 5,
-        duration: 60,
-        keyPrefix: "rlflx-utilisateur-modal-api"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
-    const session = await getIronSession<SessionData>(
-        cookies(),
-        sessionOptions
-    );
-    const csrfTokenHeader = headers().get("x-csrf-token");
-    const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
-    if (csrfCheckResponse) return csrfCheckResponse;
-    if (session.isLoggedIn !== true) {
-        return NextResponse.json(
-            {
-                status: 401,
-                message: "Vous n'êtes pas connecté, veuillez réessayer",
-            },
-            {
-                status: 401,
-            }
+        const ip = request.ip ?? 'ip';
+        const keyPrefix = "rlflx-utilisateur-modal-api";
+        const key = `${keyPrefix}:${ip}`
+        const { success, remaining } = await ratelimit.limit(key);
+
+        if (!success) {
+            return NextResponse.json(
+                {
+                    status: 429,
+                    message: "Trop de requêtes, veuillez réessayer plus tard",
+                },
+                { status: 429 }
+            );
+        }
+        const session = await getIronSession<SessionData>(
+            cookies(),
+            sessionOptions
         );
-    } else {
-        let user = await prisma.user.findUnique({
-            where: { id: session.id },
-        });
-        if (user === null) {
+        const csrfTokenHeader = headers().get("x-csrf-token");
+        const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+        if (csrfCheckResponse) return csrfCheckResponse;
+        if (session.isLoggedIn !== true) {
             return NextResponse.json(
                 {
                     status: 401,
-                    message:
-                        "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+                    message: "Vous n'êtes pas connecté, veuillez réessayer",
                 },
                 {
                     status: 401,
                 }
             );
         } else {
-            if (user.role !== "ROLE_ADMIN") {
+            let user = await prisma.user.findUnique({
+                where: { id: session.id },
+            });
+            if (user === null) {
                 return NextResponse.json(
                     {
                         status: 401,
-                        message: "Vous n'avez pas accès à cette page, veuillez réessayer",
+                        message:
+                            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
                     },
                     {
                         status: 401,
                     }
                 );
             } else {
-                const { id } = (await request.json()) as {
-                    id: string;
-                };
-                if (validator.isUUID(id) !== true) {
+                if (user.role !== "ROLE_ADMIN") {
                     return NextResponse.json(
                         {
-                            status: 400,
-                            message: "L'identifiant de l'utilisateur est invalide",
+                            status: 401,
+                            message: "Vous n'avez pas accès à cette page, veuillez réessayer",
                         },
                         {
-                            status: 400,
+                            status: 401,
                         }
                     );
                 } else {
-                    const userById = await prisma.user.findUnique({
-                        where: { id: id },
-                        include: {
-                            offre_test: true,
-                            meeting_test: true
-                        }
-                    });
-                    if (userById === null) {
+                    const { id } = (await request.json()) as {
+                        id: string;
+                    };
+                    if (validator.isUUID(id) !== true) {
                         return NextResponse.json(
                             {
-                                status: 404,
-                                message: `L'utilisateur avec l'id : ${id} n'a pas été trouvé, veuillez réessayer`,
+                                status: 400,
+                                message: "L'identifiant de l'utilisateur est invalide",
                             },
                             {
-                                status: 404,
+                                status: 400,
                             }
                         );
                     } else {
-                        const editOffre = await prisma.offre_test.update({
-                            where: { id: userById.offreId! },
-                            data: {
-                                currentMeetingId: null,
-                                currentNumberOfMeeting: null
+                        const userById = await prisma.user.findUnique({
+                            where: { id: id },
+                            include: {
+                                offre_test: true,
+                                meeting_test: true
                             }
-                        })
-                        const editUser = await prisma.user.update({
-                            where: { id: userById.id },
-                            data: {
-                                meetingId: null
-                            }
-                        })
-                        const removeMeet = await prisma.meeting_test.delete({
-                            where: { id: userById.meetingId! }
-                        })
-                        return NextResponse.json(
-                            {
-                                status: 200,
-                                message: `Un mail a été envoyé a l'utilisateur ${userById.mail}`,
-                            },
-                            {
-                                status: 200,
-                            }
-                        );
+                        });
+                        if (userById === null) {
+                            return NextResponse.json(
+                                {
+                                    status: 404,
+                                    message: `L'utilisateur avec l'id : ${id} n'a pas été trouvé, veuillez réessayer`,
+                                },
+                                {
+                                    status: 404,
+                                }
+                            );
+                        } else {
+                            const editOffre = await prisma.offre_test.update({
+                                where: { id: userById.offreId! },
+                                data: {
+                                    currentMeetingId: null,
+                                    currentNumberOfMeeting: null
+                                }
+                            })
+                            const editUser = await prisma.user.update({
+                                where: { id: userById.id },
+                                data: {
+                                    meetingId: null
+                                }
+                            })
+                            const removeMeet = await prisma.meeting_test.delete({
+                                where: { id: userById.meetingId! }
+                            })
+                            return NextResponse.json(
+                                {
+                                    status: 200,
+                                    message: `Un mail a été envoyé a l'utilisateur ${userById.mail}`,
+                                },
+                                {
+                                    status: 200,
+                                }
+                            );
+                        }
                     }
                 }
             }
         }
-    }
     } catch (error) {
-       return  handleError(error)
+        return handleError(error)
     }
-    
+
 }

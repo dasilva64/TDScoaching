@@ -10,6 +10,13 @@ import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { PDFDocument, StandardFonts, rgb, degrees } from "pdf-lib";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 const supabase = createClient(
   process.env.SUPABASE_BASE_URL_UPLOAD!,
@@ -18,12 +25,20 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
   try {
-    /* const rateLimitResponse = await checkRateLimit(request, {
-      points: 5,
-      duration: 60,
-      keyPrefix: "rlflx-contract-refresh"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    const ip = request.ip ?? 'ip';
+    const keyPrefix = "rlflx-contract-refresh";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions

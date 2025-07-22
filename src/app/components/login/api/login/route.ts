@@ -13,15 +13,30 @@ import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken"
 import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { handleError } from "@/app/lib/handleError";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    /* const rateLimitResponse = await checkRateLimit(request, {
-      points: 5,
-      duration: 60,
-      keyPrefix: "rlflx-login"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    const ip = request.ip ?? 'ip';
+    const keyPrefix = "rlflx-login";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions
@@ -228,19 +243,19 @@ export async function POST(request: NextRequest) {
                   }
                 })
                 let smtpTransport = nodemailer.createTransport({
-                            host: "smtp.ionos.fr",
-                            port: 465,
-                            secure: true,
-                            auth: {
-                              user: process.env.SECRET_SMTP_EMAIL,
-                              pass: process.env.SECRET_SMTP_PASSWORD,
-                            },
-                          });
-                          let mailOptions = {
-                            from: "contact@tds-coachingdevie.fr",
-                            to: email.trim(),
-                            subject: "Code double authentification",
-                            html: `<!DOCTYPE html>
+                  host: "smtp.ionos.fr",
+                  port: 465,
+                  secure: true,
+                  auth: {
+                    user: process.env.SECRET_SMTP_EMAIL,
+                    pass: process.env.SECRET_SMTP_PASSWORD,
+                  },
+                });
+                let mailOptions = {
+                  from: "contact@tds-coachingdevie.fr",
+                  to: email.trim(),
+                  subject: "Code double authentification",
+                  html: `<!DOCTYPE html>
                                         <html lang="fr">
                                           <head>
                                             <title>tds coaching</title>
@@ -265,8 +280,8 @@ export async function POST(request: NextRequest) {
                                             </div>
                                           </body>
                                         </html>`,
-                          };
-                          await smtpTransport.sendMail(mailOptions);
+                };
+                await smtpTransport.sendMail(mailOptions);
                 await session.save();
                 return NextResponse.json({
                   status: 200,

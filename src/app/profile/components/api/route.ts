@@ -8,15 +8,30 @@ import {
 import prisma from "../../../lib/prisma";
 import { handleError } from "@/app/lib/handleError";
 import { checkRateLimit } from "@/app/lib/rateLimiter";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(100, '60s'),
+});
 
 export async function GET(request: NextRequest) {
   try {
-    /* const rateLimitResponse = await checkRateLimit(request, {
-      points: 100,
-      duration: 60,
-      keyPrefix: "rlflx-profile-get"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    const ip = request.ip ?? 'ip';
+    const keyPrefix = "rlflx-profile-get";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
     if (session.isLoggedIn === true) {

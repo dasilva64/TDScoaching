@@ -8,15 +8,30 @@ import { getIronSession } from "iron-session";
 import nodemailer from "nodemailer";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
   try {
-   /*  const rateLimitResponse = await checkRateLimit(request, {
-      points: 5,
-      duration: 60,
-      keyPrefix: "rlflx-meet-edit"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    const ip = request.ip ?? 'ip';
+    const keyPrefix = "rlflx-meet-edit";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions
@@ -97,7 +112,7 @@ export async function POST(request: NextRequest) {
               );
             } else {
               try {
-                const {meeting, offre} = await prisma.$transaction(async (tx) => {
+                const { meeting, offre } = await prisma.$transaction(async (tx) => {
                   let meeting = await prisma.meeting_test.update({
                     where: { id: user?.meetingId! },
                     data: {
@@ -110,7 +125,7 @@ export async function POST(request: NextRequest) {
                       coaching: typeCoaching
                     }
                   })
-                  return {meeting, offre}
+                  return { meeting, offre }
                 })
                 let smtpTransport = nodemailer.createTransport({
                   host: "smtp.ionos.fr",
@@ -150,7 +165,7 @@ export async function POST(request: NextRequest) {
                                                                 <li>Heure : ${new Date(meeting.startAt).toLocaleTimeString('fr')}</li>
                                                                 <li>Type : ${offre.type}</li>
                                                                 <li>Type de coaching : ${offre.coaching}</li>
-                                                                <li>Prix : ${offre.type === "flash"? "300€" : "100€"}</li>
+                                                                <li>Prix : ${offre.type === "flash" ? "300€" : "100€"}</li>
                                                                 </ul>
                                                                 <p style="margin-bottom: 20px">Vous pouvez consulter, modifier ou supprimer votre rendez-vous en cliquant sur le bouton ci-dessous</p>
                                                                 <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous" target="_blank">Mon rendez-vous</a>
@@ -193,7 +208,7 @@ export async function POST(request: NextRequest) {
                                                                 <li>Heure : ${new Date(meeting.startAt).toLocaleTimeString('fr')}</li>
                                                                 <li>Type : ${offre.type}</li>
                                                                 <li>Type de coaching : ${offre.coaching}</li>
-                                                                <li>Prix : ${offre.type === "flash"? "300€" : "100€"}</li>
+                                                                <li>Prix : ${offre.type === "flash" ? "300€" : "100€"}</li>
                                                                 <li>Status : ${meeting.status}</li>
                                                                 </ul>
                                                                 <p style="margin-bottom: 20px">Voir la page de l'utilisateur</p>

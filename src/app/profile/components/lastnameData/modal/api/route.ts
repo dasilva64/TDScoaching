@@ -10,116 +10,131 @@ import { validationBody } from "../../../../../lib/validation";
 import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { handleError } from "@/app/lib/handleError";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    /* const rateLimitResponse = await checkRateLimit(request, {
-    points: 5,
-    duration: 60,
-    keyPrefix: "rlflx-profile-lastname"
-  });
-  if (rateLimitResponse) return rateLimitResponse; */
-  const session = await getIronSession<SessionData>(
-    cookies(),
-    sessionOptions
-  );
-  const csrfTokenHeader = headers().get("x-csrf-token");
-  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
-  if (csrfCheckResponse) return csrfCheckResponse;
-  if (session.isLoggedIn !== true) {
-    return NextResponse.json(
-      {
-        status: 401,
-        message: "Vous n'êtes pas connecté, veuillez réessayer",
-      },
-      {
-        status: 401,
-      }
+    const ip = request.ip ?? 'ip';
+    const keyPrefix = "rlflx-profile-lastname";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
+    const session = await getIronSession<SessionData>(
+      cookies(),
+      sessionOptions
     );
-  } else {
-    let user = await prisma.user.findUnique({
-      where: { id: session.id },
-    });
-    if (user === null) {
+    const csrfTokenHeader = headers().get("x-csrf-token");
+    const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+    if (csrfCheckResponse) return csrfCheckResponse;
+    if (session.isLoggedIn !== true) {
       return NextResponse.json(
         {
           status: 401,
-          message:
-            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+          message: "Vous n'êtes pas connecté, veuillez réessayer",
         },
         {
           status: 401,
         }
       );
     } else {
-      const { lastname, pseudo } = (await request.json()) as {
-        lastname: string;
-        pseudo: string;
-      };
-      let arrayMessageError = validationBody({ lastname: lastname });
-
-      if (arrayMessageError.length > 0) {
+      let user = await prisma.user.findUnique({
+        where: { id: session.id },
+      });
+      if (user === null) {
         return NextResponse.json(
           {
-            status: 400,
-            type: "validation",
-            message: arrayMessageError,
-          },
-          {
-            status: 400,
-          }
-        );
-      }
-      if (pseudo.trim() !== "") {
-        return NextResponse.json(
-          {
-            status: 400,
-            type: "error",
+            status: 401,
             message:
-              "Vous ne pouvez pas modifier votre nom de famille, veuillez réessayer",
+              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
           },
           {
-            status: 400,
+            status: 401,
           }
         );
       } else {
-        let editUser = await prisma.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            lastname: lastname.trim(),
-          },
-        });
-        if (editUser === null) {
+        const { lastname, pseudo } = (await request.json()) as {
+          lastname: string;
+          pseudo: string;
+        };
+        let arrayMessageError = validationBody({ lastname: lastname });
+
+        if (arrayMessageError.length > 0) {
+          return NextResponse.json(
+            {
+              status: 400,
+              type: "validation",
+              message: arrayMessageError,
+            },
+            {
+              status: 400,
+            }
+          );
+        }
+        if (pseudo.trim() !== "") {
           return NextResponse.json(
             {
               status: 400,
               type: "error",
               message:
-                "Une erreur est survenue lors de la modification de votre nom de famille, veuillez réessayer",
+                "Vous ne pouvez pas modifier votre nom de famille, veuillez réessayer",
             },
             {
               status: 400,
             }
           );
         } else {
-          let userObject = {
-            firstname: editUser.firstname,
-            lastname: editUser.lastname,
-            email: editUser.mail,
-          };
-          return NextResponse.json({
-            status: 200,
-            message: "Votre nom de famille a été mis à jours avec succès",
-            body: userObject,
+          let editUser = await prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: {
+              lastname: lastname.trim(),
+            },
           });
+          if (editUser === null) {
+            return NextResponse.json(
+              {
+                status: 400,
+                type: "error",
+                message:
+                  "Une erreur est survenue lors de la modification de votre nom de famille, veuillez réessayer",
+              },
+              {
+                status: 400,
+              }
+            );
+          } else {
+            let userObject = {
+              firstname: editUser.firstname,
+              lastname: editUser.lastname,
+              email: editUser.mail,
+            };
+            return NextResponse.json({
+              status: 200,
+              message: "Votre nom de famille a été mis à jours avec succès",
+              body: userObject,
+            });
+          }
         }
       }
     }
+  } catch (error) {
+    return handleError(error)
   }
-  }catch (error) {
-      return handleError(error)
-    }
-  
+
 }

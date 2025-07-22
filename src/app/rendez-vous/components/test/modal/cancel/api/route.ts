@@ -8,15 +8,30 @@ import nodemailer from "nodemailer";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function DELETE(request: NextRequest) {
   try {
-    /* const rateLimitResponse = await checkRateLimit(request, {
-      points: 5,
-      duration: 60,
-      keyPrefix: "rlflx-meet-cancel"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
+    const ip = request.ip ?? 'ip';
+    const keyPrefix = "rlflx-meet-cancel";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
+        },
+        { status: 429 }
+      );
+    }
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions
@@ -70,7 +85,7 @@ export async function DELETE(request: NextRequest) {
             );
           } else {
             try {
-             const {offre, meeting} =  await prisma.$transaction(async (tx) => {
+              const { offre, meeting } = await prisma.$transaction(async (tx) => {
                 await prisma.user.update({
                   where: { id: session.id },
                   data: {
@@ -90,7 +105,7 @@ export async function DELETE(request: NextRequest) {
                     status: "cancelled"
                   }
                 })
-                return {offre, meeting}
+                return { offre, meeting }
               })
               const stripe = new Stripe(
                 "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f" as string, {

@@ -9,21 +9,36 @@ import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { csrfToken } from "@/app/lib/csrfToken";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
-  /* const rateLimitResponse = await checkRateLimit(request, {
-      points: 5,
-      duration: 60,
-      keyPrefix: "rlflx-reset-password-form"
-    });
-    if (rateLimitResponse) return rateLimitResponse; */
-    const session = await getIronSession<SessionData>(
-      cookies(),
-      sessionOptions
+  const ip = request.ip ?? 'ip';
+  const keyPrefix = "rlflx-reset-password-form";
+  const key = `${keyPrefix}:${ip}`
+  const { success, remaining } = await ratelimit.limit(key);
+
+  if (!success) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
     );
-    const csrfTokenHeader = headers().get("x-csrf-token");
-    const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
-    if (csrfCheckResponse) return csrfCheckResponse;
+  }
+  const session = await getIronSession<SessionData>(
+    cookies(),
+    sessionOptions
+  );
+  const csrfTokenHeader = headers().get("x-csrf-token");
+  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+  if (csrfCheckResponse) return csrfCheckResponse;
   if (session.isLoggedIn === true) {
     let user = await prisma.user.findUnique({
       where: { id: session.id },
@@ -55,186 +70,186 @@ export async function POST(request: NextRequest) {
       }
     );
   }
-  
-    const { token, password, passwordConfirm, pseudo } =
-      (await request.json()) as {
-        token: string;
-        password: string;
-        passwordConfirm: string;
-        pseudo: string;
-      };
 
-    let arrayMessageError = validationBody({
-      token: token,
-      password: password,
-    });
-    if (arrayMessageError.length > 0) {
+  const { token, password, passwordConfirm, pseudo } =
+    (await request.json()) as {
+      token: string;
+      password: string;
+      passwordConfirm: string;
+      pseudo: string;
+    };
+
+  let arrayMessageError = validationBody({
+    token: token,
+    password: password,
+  });
+  if (arrayMessageError.length > 0) {
+    return NextResponse.json(
+      {
+        status: 400,
+        type: "validation",
+        message: arrayMessageError,
+      },
+      {
+        status: 400,
+      }
+    );
+  }
+  if (pseudo.trim() !== "") {
+    return NextResponse.json(
+      {
+        status: 400,
+        type: "error",
+        message:
+          "Vous ne pouvez pas modifier votre mot de passe, veuillez réessayer",
+      },
+      {
+        status: 400,
+      }
+    );
+  } else {
+    if (token === null) {
       return NextResponse.json(
         {
           status: 400,
-          type: "validation",
-          message: arrayMessageError,
+          message: "La requête n'est pas valide, veuillez réessayer",
         },
         {
           status: 400,
         }
       );
     }
-    if (pseudo.trim() !== "") {
-      return NextResponse.json(
-        {
-          status: 400,
-          type: "error",
-          message:
-            "Vous ne pouvez pas modifier votre mot de passe, veuillez réessayer",
-        },
-        {
-          status: 400,
-        }
+
+    try {
+      const { verify } = jwt;
+      const decodeToken: any = verify(token.trim(),
+        process.env.SECRET_TOKEN_RESET as string
       );
-    } else {
-      if (token === null) {
+      let user = await prisma.user.findUnique({
+        where: { mail: decodeToken.user },
+      });
+      if (user === null) {
         return NextResponse.json(
           {
-            status: 400,
-            message: "La requête n'est pas valide, veuillez réessayer",
+            status: 404,
+            message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
           },
           {
-            status: 400,
+            status: 404,
           }
         );
-      }
-        
-        try {
-          const { verify } = jwt;
-          const decodeToken: any = verify(token.trim(),
-            process.env.SECRET_TOKEN_RESET as string
-          );
-          let user = await prisma.user.findUnique({
-            where: { mail: decodeToken.user },
-          });
-          if (user === null) {
-            return NextResponse.json(
-              {
-                status: 404,
-                message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
-              },
-              {
-                status: 404,
-              }
-            );
-          } else {
-            if (user.password === null) {
-              return NextResponse.json(
-                {
-                  status: 404,
-                  message:
-                    "Aucun mot de passe existe pour ce compte, veuillez vous inscrire",
-                },
-                {
-                  status: 404,
-                }
-              );
+      } else {
+        if (user.password === null) {
+          return NextResponse.json(
+            {
+              status: 404,
+              message:
+                "Aucun mot de passe existe pour ce compte, veuillez vous inscrire",
+            },
+            {
+              status: 404,
             }
-            if (user.resetToken === null) {
+          );
+        }
+        if (user.resetToken === null) {
+          return NextResponse.json(
+            {
+              status: 404,
+              message:
+                "Aucune demande de réinitialisation de mot de passe n'a été faite, veuillez réessayer",
+            },
+            {
+              status: 404,
+            }
+          );
+        } else {
+          let copyResetToken: any = user.resetToken;
+          if (token === copyResetToken.token) {
+            if (new Date().getTime() > copyResetToken.limitDate) {
+              const deleteResetToken = await prisma.user.update({
+                where: { mail: user.mail },
+                data: { resetToken: Prisma.DbNull },
+              });
               return NextResponse.json(
                 {
                   status: 404,
                   message:
-                    "Aucune demande de réinitialisation de mot de passe n'a été faite, veuillez réessayer",
+                    "Le lien de réinitialisation n'est plus valide, veuillez réessayer",
                 },
                 {
                   status: 404,
                 }
               );
             } else {
-              let copyResetToken: any = user.resetToken;
-              if (token === copyResetToken.token) {
-                if (new Date().getTime() > copyResetToken.limitDate) {
-                  const deleteResetToken = await prisma.user.update({
-                    where: { mail: user.mail },
-                    data: { resetToken: Prisma.DbNull },
-                  });
-                  return NextResponse.json(
-                    {
-                      status: 404,
-                      message:
-                        "Le lien de réinitialisation n'est plus valide, veuillez réessayer",
-                    },
-                    {
-                      status: 404,
-                    }
-                  );
-                } else {
-                  if (password !== passwordConfirm) {
-                    return NextResponse.json(
-                      {
-                        status: 400,
-                        message:
-                          "Les mots de passe ne correspondent pas, veuillez réessayer",
-                      },
-                      {
-                        status: 400,
-                      }
-                    );
+              if (password !== passwordConfirm) {
+                return NextResponse.json(
+                  {
+                    status: 400,
+                    message:
+                      "Les mots de passe ne correspondent pas, veuillez réessayer",
+                  },
+                  {
+                    status: 400,
                   }
-                  let encrypt = await bcrypt.hash(password, 10);
-                  let editUser = await prisma.user.update({
-                    where: { mail: user.mail },
-                    data: { resetToken: Prisma.DbNull, password: encrypt },
-                  });
-                  if (editUser === null) {
-                    return NextResponse.json(
-                      {
-                        status: 404,
-                        message:
-                          "La modification du mot de passe a échoué, veuillez réessayer",
-                      },
-                      {
-                        status: 404,
-                      }
-                    );
-                  } else {
-                    return NextResponse.json({
-                      status: 200,
-                      message:
-                        "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
-                    });
-                  }
-                }
-              } else {
+                );
+              }
+              let encrypt = await bcrypt.hash(password, 10);
+              let editUser = await prisma.user.update({
+                where: { mail: user.mail },
+                data: { resetToken: Prisma.DbNull, password: encrypt },
+              });
+              if (editUser === null) {
                 return NextResponse.json(
                   {
                     status: 404,
                     message:
-                      "Le lien de réinitialisation n'est pas valide, veuillez réessayer",
+                      "La modification du mot de passe a échoué, veuillez réessayer",
                   },
                   {
                     status: 404,
                   }
                 );
+              } else {
+                return NextResponse.json({
+                  status: 200,
+                  message:
+                    "Votre mot de passe a été modifié, vous pouvez maintenant vous connecter",
+                });
               }
             }
-          }
-        } catch (err: any) {
-          if (err.name === "TokenExpiredError") {
-            return NextResponse.json(
-              { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
-              { status: 400 }
-            );
-          } else if (err.name === "JsonWebTokenError") {
-            return NextResponse.json(
-              { status: 400, message: "Le token est invalide." },
-              { status: 400 }
-            );
           } else {
             return NextResponse.json(
-              { status: 400, message: "Une erreur inconnue est survenue." },
-              { status: 400 }
+              {
+                status: 404,
+                message:
+                  "Le lien de réinitialisation n'est pas valide, veuillez réessayer",
+              },
+              {
+                status: 404,
+              }
             );
           }
         }
-      
+      }
+    } catch (err: any) {
+      if (err.name === "TokenExpiredError") {
+        return NextResponse.json(
+          { status: 400, message: "Le token a expiré, veuillez en générer un nouveau." },
+          { status: 400 }
+        );
+      } else if (err.name === "JsonWebTokenError") {
+        return NextResponse.json(
+          { status: 400, message: "Le token est invalide." },
+          { status: 400 }
+        );
+      } else {
+        return NextResponse.json(
+          { status: 400, message: "Une erreur inconnue est survenue." },
+          { status: 400 }
+        );
+      }
     }
-  
+
+  }
+
 }

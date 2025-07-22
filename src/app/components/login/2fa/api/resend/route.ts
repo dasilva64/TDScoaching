@@ -7,128 +7,145 @@ import { checkRateLimit } from "@/app/lib/rateLimiter";
 import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { csrfToken } from "@/app/lib/csrfToken";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+import { handleError } from "@/app/lib/handleError";
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(10, '60s'),
+});
 
 export async function POST(request: NextRequest) {
-  /* const rateLimitResponse = await checkRateLimit(request, {
-    points: 5,
-    duration: 60,
-    keyPrefix: "rlflx-login-2fa-resend"
-  });
-  if (rateLimitResponse) return rateLimitResponse; */
-  const session = await getIronSession<SessionData>(
-    cookies(),
-    sessionOptions
-  );
-  const csrfTokenHeader = headers().get("x-csrf-token");
-  const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
-  if (csrfCheckResponse) return csrfCheckResponse;
-  if (session.isLoggedIn === true) {
-    let user = await prisma.user.findUnique({
-      where: { id: session.id },
-    });
-    if (user === null) {
+  try {
+    const ip = request.ip ?? 'ip';
+    const keyPrefix = "rlflx-login-2fa-resend";
+    const key = `${keyPrefix}:${ip}`
+    const { success, remaining } = await ratelimit.limit(key);
+
+    if (!success) {
       return NextResponse.json(
         {
-          status: 401,
-          message:
-            "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+          status: 429,
+          message: "Trop de requêtes, veuillez réessayer plus tard",
         },
-        {
-          status: 401,
-        }
+        { status: 429 }
       );
     }
-    return NextResponse.json(
-      {
-        status: 200,
-        message: "Vous êtes déjà connecté",
-      },
-      {
-        status: 200,
-      }
+    const session = await getIronSession<SessionData>(
+      cookies(),
+      sessionOptions
     );
-  } else {
-    if (!session.id) {
+    const csrfTokenHeader = headers().get("x-csrf-token");
+    const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
+    if (csrfCheckResponse) return csrfCheckResponse;
+    if (session.isLoggedIn === true) {
+      let user = await prisma.user.findUnique({
+        where: { id: session.id },
+      });
+      if (user === null) {
+        return NextResponse.json(
+          {
+            status: 401,
+            message:
+              "L'utilisateur utilisant cette session n'as pas été trouvé, veuillez réessayer",
+          },
+          {
+            status: 401,
+          }
+        );
+      }
       return NextResponse.json(
         {
-          status: 400,
-          type: "error",
-          message:
-            "Erreur lors de la double authentification, veuillez réessayer",
+          status: 200,
+          message: "Vous êtes déjà connecté",
         },
         {
-          status: 400,
+          status: 200,
         }
       );
-    }
-  }
-  const { pseudo } = (await request.json()) as {
-    pseudo: string;
-  };
-  if (pseudo.trim() !== "") {
-    return NextResponse.json(
-      {
-        status: 400,
-        type: "error",
-        message: "Vous ne pouvez pas vous connecter, veuillez réessayer",
-      },
-      {
-        status: 400,
-      }
-    );
-  } else {
-    const user: any = await prisma.user.findUnique({
-      where: {
-        id: session.id.trim(),
-      },
-    });
-    if (user) {
-      if (!user.isTwoFactorEnabled) {
+    } else {
+      if (!session.id) {
         return NextResponse.json(
           {
             status: 400,
+            type: "error",
             message:
-              "Authentification double facteur pas activé, veuillez réessayer",
+              "Erreur lors de la double authentification, veuillez réessayer",
           },
           {
             status: 400,
           }
         );
-      } else {
-        let token = ""
-        let characters = "1234567890"
-        for (let i = 0; i < 8; i++) {
-          token += characters.charAt(Math.floor(Math.random() * characters.length))
+      }
+    }
+    const { pseudo } = (await request.json()) as {
+      pseudo: string;
+    };
+    if (pseudo.trim() !== "") {
+      return NextResponse.json(
+        {
+          status: 400,
+          type: "error",
+          message: "Vous ne pouvez pas vous connecter, veuillez réessayer",
+        },
+        {
+          status: 400,
         }
-        let currentDate = new Date();
-        let twoFATokenObject = {
-          token: token,
-          limitDate: currentDate.setMinutes(
-            currentDate.getMinutes() + 5
-          ),
-        };
-        const editUser = await prisma.user.update({
-          where: {
-            id: user.id
-          },
-          data: {
-            twoFAToken: twoFATokenObject
+      );
+    } else {
+      const user: any = await prisma.user.findUnique({
+        where: {
+          id: session.id.trim(),
+        },
+      });
+      if (user) {
+        if (!user.isTwoFactorEnabled) {
+          return NextResponse.json(
+            {
+              status: 400,
+              message:
+                "Authentification double facteur pas activé, veuillez réessayer",
+            },
+            {
+              status: 400,
+            }
+          );
+        } else {
+          let token = ""
+          let characters = "1234567890"
+          for (let i = 0; i < 8; i++) {
+            token += characters.charAt(Math.floor(Math.random() * characters.length))
           }
-        })
-        let smtpTransport = nodemailer.createTransport({
-          host: "smtp.ionos.fr",
-          port: 465,
-          secure: true,
-          auth: {
-            user: process.env.SECRET_SMTP_EMAIL,
-            pass: process.env.SECRET_SMTP_PASSWORD,
-          },
-        });
-        let mailOptions = {
-          from: "contact@tds-coachingdevie.fr",
-          to: user.mail.trim(),
-          subject: "Code double authentification",
-          html: `<!DOCTYPE html>
+          let currentDate = new Date();
+          let twoFATokenObject = {
+            token: token,
+            limitDate: currentDate.setMinutes(
+              currentDate.getMinutes() + 5
+            ),
+          };
+          const editUser = await prisma.user.update({
+            where: {
+              id: user.id
+            },
+            data: {
+              twoFAToken: twoFATokenObject
+            }
+          })
+          let smtpTransport = nodemailer.createTransport({
+            host: "smtp.ionos.fr",
+            port: 465,
+            secure: true,
+            auth: {
+              user: process.env.SECRET_SMTP_EMAIL,
+              pass: process.env.SECRET_SMTP_PASSWORD,
+            },
+          });
+          let mailOptions = {
+            from: "contact@tds-coachingdevie.fr",
+            to: user.mail.trim(),
+            subject: "Code double authentification",
+            html: `<!DOCTYPE html>
                                                   <html lang="fr">
                                                     <head>
                                                       <title>tds coaching</title>
@@ -153,49 +170,53 @@ export async function POST(request: NextRequest) {
                                                       </div>
                                                     </body>
                                                   </html>`,
-        };
-        await smtpTransport.sendMail(mailOptions);
-        const csrfToken = generateCsrfToken();
-        const expireIn = Date.now() + 5 * 60 * 1000;
-        session.expireTwoFa = expireIn
-        session.csrfToken = csrfToken;
-        if (session.rememberMe) {
-          session.updateConfig({
-            ...sessionOptions,
-            cookieOptions: {
-              ...sessionOptions.cookieOptions,
-              maxAge: 60 * 60 * 24 * 30,
-            },
-          });
-        } else {
-          session.updateConfig({
-            ...sessionOptions,
-            cookieOptions: {
-              ...sessionOptions.cookieOptions,
-              maxAge: undefined,
-            },
+          };
+          await smtpTransport.sendMail(mailOptions);
+          const csrfToken = generateCsrfToken();
+          const expireIn = Date.now() + 5 * 60 * 1000;
+          session.expireTwoFa = expireIn
+          session.csrfToken = csrfToken;
+          if (session.rememberMe) {
+            session.updateConfig({
+              ...sessionOptions,
+              cookieOptions: {
+                ...sessionOptions.cookieOptions,
+                maxAge: 60 * 60 * 24 * 30,
+              },
+            });
+          } else {
+            session.updateConfig({
+              ...sessionOptions,
+              cookieOptions: {
+                ...sessionOptions.cookieOptions,
+                maxAge: undefined,
+              },
+            });
+          }
+          await session.save();
+          return NextResponse.json({
+            status: 200,
+            requires2FA: true,
+            csrfToken: csrfToken,
+            message: `Code 2FA renvoyer`,
           });
         }
-        await session.save();
-        return NextResponse.json({
-          status: 200,
-          requires2FA: true,
-          csrfToken: csrfToken,
-          message: `Code 2FA renvoyer`,
-        });
+      } else {
+        return NextResponse.json(
+          {
+            status: 400,
+            type: "error",
+            message:
+              "L'utilisateur n'as pas été trouvé, veuillez réessayer",
+          },
+          {
+            status: 400,
+          }
+        );
       }
-    } else {
-      return NextResponse.json(
-        {
-          status: 400,
-          type: "error",
-          message:
-            "L'utilisateur n'as pas été trouvé, veuillez réessayer",
-        },
-        {
-          status: 400,
-        }
-      );
     }
+  } catch (error) {
+    handleError(error)
   }
+
 }

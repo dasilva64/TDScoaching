@@ -20,7 +20,6 @@ const ratelimit = new Ratelimit({
 
 export async function GET(request: NextRequest) {
   try {
-    try {
     const ip = request.ip ?? 'ip';
   const { success, remaining } = await ratelimit.limit(ip);
 

@@ -29,7 +29,7 @@ export const sessionOptions: SessionOptions = {
     maxAge: undefined,
     httpOnly: true,
     path: "/",
-    sameSite: "strict"
+    sameSite: "lax"
   },
 };
 

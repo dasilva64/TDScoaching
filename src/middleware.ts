@@ -2,7 +2,6 @@ import { getIronSession } from "iron-session";
 import { NextRequest, NextResponse } from "next/server";
 import { SessionData, sessionOptions } from "./app/lib/session";
 import { cookies } from "next/headers";
-import { mutate } from "swr";
 
 export async function middleware(request: NextRequest) {
   //const res = NextResponse.next();

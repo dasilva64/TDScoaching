@@ -13,12 +13,12 @@ import { handleError } from "@/app/lib/handleError";
 
 export async function POST(request: NextRequest) {
   try {
-    const rateLimitResponse = await checkRateLimit(request, {
+    /* const rateLimitResponse = await checkRateLimit(request, {
       points: 5,
       duration: 60,
       keyPrefix: "rlflx-profile-firstname"
     });
-    if (rateLimitResponse) return rateLimitResponse;
+    if (rateLimitResponse) return rateLimitResponse; */
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions

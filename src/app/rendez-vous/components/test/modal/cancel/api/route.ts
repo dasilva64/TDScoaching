@@ -11,12 +11,12 @@ import Stripe from "stripe";
 
 export async function DELETE(request: NextRequest) {
   try {
-    const rateLimitResponse = await checkRateLimit(request, {
+    /* const rateLimitResponse = await checkRateLimit(request, {
       points: 5,
       duration: 60,
       keyPrefix: "rlflx-meet-cancel"
     });
-    if (rateLimitResponse) return rateLimitResponse;
+    if (rateLimitResponse) return rateLimitResponse; */
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions

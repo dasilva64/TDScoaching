@@ -9,12 +9,12 @@ import { SessionData, sessionOptions } from "@/app/lib/session";
 import { csrfToken } from "@/app/lib/csrfToken";
 
 export async function POST(request: NextRequest) {
-  const rateLimitResponse = await checkRateLimit(request, {
+  /* const rateLimitResponse = await checkRateLimit(request, {
     points: 5,
     duration: 60,
     keyPrefix: "rlflx-login-2fa-resend"
   });
-  if (rateLimitResponse) return rateLimitResponse;
+  if (rateLimitResponse) return rateLimitResponse; */
   const session = await getIronSession<SessionData>(
     cookies(),
     sessionOptions

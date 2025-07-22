@@ -13,12 +13,12 @@ import { handleError } from "@/app/lib/handleError";
 
 export async function GET(request: NextRequest) {
   try {
-    const rateLimitResponse = await checkRateLimit(request, {
+   /*  const rateLimitResponse = await checkRateLimit(request, {
       points: 10000,
       duration: 60,
       keyPrefix: "rlflx-header"
     });
-    if (rateLimitResponse) return rateLimitResponse;
+    if (rateLimitResponse) return rateLimitResponse; */
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
     session.csrfToken = generateCsrfToken();
     const is2FAExpired =
@@ -95,12 +95,12 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const rateLimitResponse = await checkRateLimit(request, {
+   /*  const rateLimitResponse = await checkRateLimit(request, {
       points: 5,
       duration: 60,
       keyPrefix: "rlflx-logout"
     });
-    if (rateLimitResponse) return rateLimitResponse;
+    if (rateLimitResponse) return rateLimitResponse; */
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions

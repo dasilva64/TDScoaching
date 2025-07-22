@@ -5,12 +5,12 @@ import { checkRateLimit } from "@/app/lib/rateLimiter";
 
 export async function GET(request: NextRequest) {
   try {
-    const rateLimitResponse = await checkRateLimit(request, {
+   /*  const rateLimitResponse = await checkRateLimit(request, {
       points: 100,
       duration: 60,
       keyPrefix: "rlflx-header-discovery-get"
     });
-    if (rateLimitResponse) return rateLimitResponse;
+    if (rateLimitResponse) return rateLimitResponse; */
     const allMeeting = await prisma.meeting_test.findMany({
       where: { startAt: { gte: new Date() } },
       select: {

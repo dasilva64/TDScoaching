@@ -12,12 +12,12 @@ import { csrfToken } from "@/app/lib/csrfToken";
 import { sendMail } from "@/app/lib/sendMail";
 
 export async function POST(request: NextRequest) {
-  const rateLimitResponse = await checkRateLimit(request, {
+ /*  const rateLimitResponse = await checkRateLimit(request, {
     points: 5,
     duration: 60,
     keyPrefix: "rlflx-forgot"
   });
-  if (rateLimitResponse) return rateLimitResponse;
+  if (rateLimitResponse) return rateLimitResponse; */
   const session = await getIronSession<SessionData>(
     cookies(),
     sessionOptions

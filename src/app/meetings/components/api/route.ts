@@ -8,12 +8,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const rateLimitResponse = await checkRateLimit(request, {
+    /* const rateLimitResponse = await checkRateLimit(request, {
       points: 100,
       duration: 60,
       keyPrefix: "rlflx-meetings-get"
     });
-    if (rateLimitResponse) return rateLimitResponse;
+    if (rateLimitResponse) return rateLimitResponse; */
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
     if (session.isLoggedIn !== true) {

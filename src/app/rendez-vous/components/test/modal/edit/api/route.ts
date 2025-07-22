@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
                                                               <div style="text-align: center">
                                                                 <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
                                                               </div>
-                                                              <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
+                                                              <div style="background: aqua; padding: 50px 0px 50px 20px; border-radius: 20px">
                                                                 <h1 style="text-align: center">tds coaching</h1>
                                                                 <h2 style="text-align: center">Modification de votre rendez-vous</h2>
                                                                 <p style="margin-bottom: 20px">Information de votre nouveau rendez-vous :</p>
@@ -195,7 +195,7 @@ export async function POST(request: NextRequest) {
                                                               <div style="text-align: center">
                                                                 <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
                                                               </div>
-                                                              <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
+                                                              <div style="background: aqua; padding: 50px 0px 50px 20px; border-radius: 20px">
                                                                 <h1 style="text-align: center">tds coaching</h1>
                                                                 <h2 style="text-align: center">Modification du rendez-vous</h2>
                                                                 <p style="margin-bottom: 20px">Information du nouveau rendez-vous :</p>

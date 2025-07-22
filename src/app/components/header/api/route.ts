@@ -10,9 +10,29 @@ import { generateCsrfToken } from "../../functions/generateCsrfToken";
 import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { handleError } from "@/app/lib/handleError";
+import kv from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
+
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.fixedWindow(5, '60s'),
+});
 
 export async function GET(request: NextRequest) {
   try {
+    try {
+    const ip = request.ip ?? 'ip';
+  const { success, remaining } = await ratelimit.limit(ip);
+
+  if (!success) {
+    return NextResponse.json(
+      {
+        status: 429,
+        message: "Trop de requêtes, veuillez réessayer plus tard",
+      },
+      { status: 429 }
+    );
+  }
    /*  const rateLimitResponse = await checkRateLimit(request, {
       points: 10000,
       duration: 60,

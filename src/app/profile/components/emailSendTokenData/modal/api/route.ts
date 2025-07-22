@@ -83,9 +83,7 @@ export async function POST(request: NextRequest) {
         );
       } else {
         if (user.editEmail !== null) {
-          let copyEditEmail: any = user.editEmail;
-          let now = new Date();
-          let editUser = await prisma.user.update({
+          await prisma.user.update({
             where: { mail: user.mail },
             data: {
               editEmail: Prisma.DbNull,
@@ -172,7 +170,7 @@ export async function POST(request: NextRequest) {
                                       <h2 style="text-align: center">Validation de votre adresse email</h2>
                                       <p style="margin-bottom: 20px">Pour activer cette addresse email, veuillez entrer le code ci-dessous.</p>
                                       <p style="width: 100px; margin: auto; padding: 20px; background: white; border-radius: 10px">${token}</p>
-                                      <p style="margin-top: 20px">Le code est valide pendant 1 heure.</p>
+                                      <p style="margin-top: 20px">Le code est valide pendant 30 min.</p>
                                       
                                     </div>
                                   </div>

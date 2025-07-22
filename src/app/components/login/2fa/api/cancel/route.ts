@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies, headers } from "next/headers"
-import nodemailer from 'nodemailer';
 import { getIronSession } from "iron-session";
-import { generateCsrfToken } from "@/app/components/functions/generateCsrfToken";
 import { checkRateLimit } from "@/app/lib/rateLimiter";
 import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
@@ -90,7 +88,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json(
                 {
                     status: 400,
-                    message: "L'utilisateur n'a pas été trouvé",
+                    message: "Erreur lors de la modification de la double authentification, veuillez réessayer",
                 },
                 {
                     status: 400,

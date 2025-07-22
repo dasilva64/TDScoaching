@@ -104,6 +104,18 @@ export async function POST(request: NextRequest) {
                     }
                   );
                 } else {
+                  if (user.offreId !== null) {
+                    return NextResponse.json(
+                      {
+                        status: 404,
+                        message:
+                          "Vous ne pouvez pas supprimer votre compte car vous avez une offre en cours",
+                      },
+                      {
+                        status: 404,
+                      }
+                    );
+                  }
                   if (user.meetingId !== null) {
                     return NextResponse.json(
                       {

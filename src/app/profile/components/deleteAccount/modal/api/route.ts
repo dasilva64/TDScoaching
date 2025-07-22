@@ -86,13 +86,6 @@ export async function POST(request: NextRequest) {
           let copyDeleteToken: any = user.deleteToken;
           let date = new Date();
           if (copyDeleteToken.limitDate < date) {
-            /* let editUser = await prisma.user.update({
-              where: { id: session.id) },
-              data: {
-                deleteToken: Prisma.JsonNull,
-                deleteReason: null,
-              },
-            }); */
             let token = jwt.sign(
               { user: user.mail },
               process.env.SECRET_TOKEN_DELETE as string,

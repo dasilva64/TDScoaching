@@ -185,7 +185,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         status: 200,
         body: user,
-        csrfToken: csrfToken,
         message:
           "Merci de nous avoir contacté, nous allons vous répondre le plus vite possible",
       });

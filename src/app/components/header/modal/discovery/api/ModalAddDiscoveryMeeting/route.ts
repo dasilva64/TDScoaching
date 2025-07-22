@@ -220,10 +220,11 @@ export async function POST(request: NextRequest) {
                               <h2 style="text-align: center">Votre rendez-vous</h2>
                               <p style="margin-bottom: 20px">Information de votre prochain rendez-vous : </p>
                               <ul>
-                              <li>Date: ${new Date(meeting.startAt).toLocaleString()}</li>
-                              <li>Coaching: ${offre.coaching}</li>
+                              <li>Type : Découverte</> 
+                              <li>Date : ${new Date(meeting.startAt).toLocaleString()}</li>
+                              <li>Coaching : ${offre.coaching}</li>
                               </ul>
-                              <p style="margin-bottom: 20px">Vous devez le confirmer 24h avant la date du rendez-vous, sinon il sera automatiquement supprimer
+                              <p style="margin-bottom: 20px">Vous devez le confirmer 16h avant la date du rendez-vous, sinon il sera automatiquement supprimer
                               <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Confirmer mon rendez-vous</a>
                               <p style="margin-bottom: 20px">Vous pouvez le modifier, supprimer  en cliquant sur le bouton ci dessous</p>
                               <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous/${encodeURIComponent(token)}" target="_blank">Modifier mon rendez-vous</a>
@@ -341,6 +342,7 @@ export async function POST(request: NextRequest) {
                             <h2 style="text-align: center">Votre rendez-vous</h2>
                             <p style="margin-bottom: 20px">Information de votre prochain rendez-vous : </p>
                             <ul>
+                            <li>Type : Découverte</> 
                             <li>Date: ${new Date(meeting.startAt).toLocaleString()}</li>
                             <li>Coaching: ${offre.coaching}</li>
                             </ul>

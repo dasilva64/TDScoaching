@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
                 }
               });
               let offre = await prisma.offre_test.findUnique({
-                where: { id: user.offreId! }
+                where: { id: user?.offreId! }
               })
               return { meeting, offre }
             })

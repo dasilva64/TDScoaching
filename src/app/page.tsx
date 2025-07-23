@@ -47,7 +47,7 @@ export default async function Home() {
       <NoScript />
 
       <main className={styles.home}>
-        <section className={styles.home__bg}>
+        {/* <section className={styles.home__bg}>
           <Image
             className={styles.home__bg__img}
             width={1200}
@@ -61,7 +61,7 @@ export default async function Home() {
           <About />
 
           <GoDown />
-        </section>
+        </section> */}
         <section className={styles.home__who}>
           <h1 className={`${styles.home__who__h2}`}>
             Vous êtes en quête <br /> de bien-être ?
@@ -74,7 +74,7 @@ export default async function Home() {
             conscience de ses propres pensées, comportements et motivations.
           </p>
 
-          <div className={styles.home__who__content}>
+          {/* <div className={styles.home__who__content}>
             <div className={styles.home__who__content__div}>
               <h2 className={`${styles.home__who__content__div__h3}`}>
                 Coacher une personne, c’est quoi ?
@@ -104,9 +104,9 @@ export default async function Home() {
                 alt="Coucher de soleil sur la plage avec deux personnes qui sautent"
               />
             </WhileInView>
-          </div>
+          </div> */}
         </section>
-        <section className={styles.home__what}>
+        {/* <section className={styles.home__what}>
           <div className={styles.home__what__container}>
             <h2 className={`${styles.home__what__container__h2}`}>
               Le coaching de vie, <br /> c’est quoi ?
@@ -204,9 +204,9 @@ export default async function Home() {
               }
             />
           </div>
-        </section>
+        </section> */}
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

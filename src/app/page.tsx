@@ -42,11 +42,11 @@ export default async function Home() {
             src={"/assets/img/moi8.webp"}
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
           />
-          <About />
+          {/* <About />
 
-          <GoDown />
+          <GoDown /> */}
         </section>
-        <section className={styles.home__who}>
+       {/*  <section className={styles.home__who}>
           <h1 className={`${styles.home__who__h2}`}>
             Vous êtes en quête <br /> de bien-être ?
           </h1>
@@ -188,9 +188,9 @@ export default async function Home() {
               }
             />
           </div>
-        </section>
+        </section> */}
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

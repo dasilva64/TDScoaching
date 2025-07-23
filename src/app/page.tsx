@@ -1,14 +1,14 @@
 import "server-only";
 
 import styles from "./page.module.scss";
-/* import GoDown from "./components/goDown/goDown";
+import GoDown from "./components/goDown/goDown";
 import Card from "./components/card/Card";
 import Image from "./components/image/Image";
-import WhileInView from "./components/framer/WhileInView"; */
+import WhileInView from "./components/framer/WhileInView";
 import NoScript from "./components/noscript/NoScript";
-/* import About from "./components/about/About";
+import About from "./components/about/About";
 import Footer from "./components/footer/footer";
-import Head from "next/head"; */
+import Head from "next/head";
 
 export const metadata = {
   title: "Coach de vie c'est quoi ? - tdscoaching",
@@ -29,26 +29,19 @@ export const metadata = {
 export default async function Home() {
   return (
     <>
-      {/* <Head>
+      <Head>
         <link
           rel="preload"
           as="image"
           href="/assets/img/moi8.jpg"
           fetchPriority="high"
         />
-        <link
-    rel="preload"
-    href="/assets/font/Parisienne/Parisienne-Regular.ttf"
-    as="font"
-    type="font/ttf"
-    crossOrigin="anonymous"
-  />
-      </Head> */}
+      </Head>
       <NoScript />
 
       <main className={styles.home}>
-        {/*<section className={styles.home__bg}>
-           <Image
+        <section className={styles.home__bg}>
+          <Image
             className={styles.home__bg__img}
             width={1200}
             height={800}
@@ -57,11 +50,11 @@ export default async function Home() {
             loading={"eager"}
             src={"/assets/img/moi8.jpg"}
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
-          /> 
+          />
           <About />
 
           <GoDown />
-        </section>*/}
+        </section>
         <section className={styles.home__who}>
           <h2 className={`${styles.home__who__h2}`}>
             Vous êtes en quête <br /> de bien-être ?
@@ -74,7 +67,7 @@ export default async function Home() {
             conscience de ses propres pensées, comportements et motivations.
           </p>
 
-          {/* <div className={styles.home__who__content}>
+          <div className={styles.home__who__content}>
             <div className={styles.home__who__content__div}>
               <h2 className={`${styles.home__who__content__div__h3}`}>
                 Coacher une personne, c’est quoi ?
@@ -104,9 +97,9 @@ export default async function Home() {
                 alt="Coucher de soleil sur la plage avec deux personnes qui sautent"
               />
             </WhileInView>
-          </div> */}
+          </div>
         </section>
-        {/* <section className={styles.home__what}>
+        <section className={styles.home__what}>
           <div className={styles.home__what__container}>
             <h2 className={`${styles.home__what__container__h2}`}>
               Le coaching de vie, <br /> c’est quoi ?
@@ -204,9 +197,9 @@ export default async function Home() {
               }
             />
           </div>
-        </section> */}
+        </section>
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

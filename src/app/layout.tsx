@@ -1,6 +1,6 @@
 import "./globals.scss";
 import { Providers } from "./redux/provider/provider";
-/* import Header from "./components/header/header"; */
+import Header from "./components/header/header";
 
 export const dynamic = "force-dynamic";
 
@@ -12,10 +12,10 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        {/* <Providers> */}
-          {/* <Header /> */}
+        <Providers>
+          <Header />
           {children}
-        {/* </Providers> */}
+        </Providers>
       </body>
     </html>
   );

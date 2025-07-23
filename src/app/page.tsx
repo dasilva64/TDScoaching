@@ -29,7 +29,7 @@ export const metadata = {
 export default async function Home() {
   return (
     <>
-      <Head>
+      {/* <Head>
         <link
           rel="preload"
           as="image"
@@ -43,7 +43,7 @@ export default async function Home() {
     type="font/ttf"
     crossOrigin="anonymous"
   />
-      </Head>
+      </Head> */}
       <NoScript />
 
       <main className={styles.home}>

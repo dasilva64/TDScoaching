@@ -63,9 +63,9 @@ export default async function Home() {
           <GoDown />
         </section>
         <section className={styles.home__who}>
-          <h1 className={`${styles.home__who__h2}`}>
+          <h2 className={`${styles.home__who__h2}`}>
             Vous êtes en quête <br /> de bien-être ?
-          </h1>
+          </h2>
 
           <p className={styles.home__who__p}>
             En offrant un espace pour la réflexion, le coaching peut aider à

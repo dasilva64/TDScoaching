@@ -17,7 +17,7 @@
     transform: translate(-600px, -50%);
   }
 
-  &__h2 {
+  &__h1 {
     display: inline-block;
     text-align: left;
     margin-bottom: 20px;
@@ -84,6 +84,7 @@
     width: calc(100% - 20px);
     height: 380px;
     top: 50%;
+    align-items: center;
     margin: 50px 10px 0 10px;
     padding: 20px;
     border: none;
@@ -93,9 +94,6 @@
     &__open {
       //transform: translate(0, -50%);
       transform: translate(calc(-100% - 10px), -50%);
-    }
-    &__h2 {
-      text-align: center;
     }
     &__p {
     text-align: center;
@@ -110,7 +108,7 @@
       left: unset;
       transform: unset;
     }
-    &__h2 {
+    &__h1 {
       display: block;
       margin-bottom: 40px;
       width: 228px;

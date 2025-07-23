@@ -1,5 +1,5 @@
 import TabIndex from "@/app/components/tabIndex/TabIndex"
-import { RootState } from "@/app/redux/store"
+import { RootState } from "@/app/redux/store/store"
 import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"

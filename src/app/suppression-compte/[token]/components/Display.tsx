@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import useDeleteAccount from "../../../components/hook/user/useDeleteAccount";
 import Load from "./load/Load";
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 
 const Display = () => {
   const queryParam: any = usePathname();

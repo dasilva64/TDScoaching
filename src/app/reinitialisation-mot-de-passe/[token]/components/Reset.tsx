@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import Input from "@/app/components/input/Input";
 import useUserResetPassword from "@/app/components/hook/user/useUserRestPassword";
 import Load from "./load/Load";

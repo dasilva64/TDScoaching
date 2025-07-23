@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import fetchPost from "@/app/components/fetch/FetchPost";
 
 const ModalCloseEmail = ({mutate}: any) => {

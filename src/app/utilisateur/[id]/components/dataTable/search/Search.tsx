@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Search.module.scss";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import Image from "@/app/components/image/Image";
 
 /**

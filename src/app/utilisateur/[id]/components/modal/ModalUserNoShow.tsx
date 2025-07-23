@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import styles from "./ModalUserNoShow.module.scss"
 import Image from "@/app/components/image/Image";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { useEffect } from "react";

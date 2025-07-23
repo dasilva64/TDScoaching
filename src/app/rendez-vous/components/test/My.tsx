@@ -4,7 +4,7 @@ import Image from "@/app/components/image/Image";
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr"
 

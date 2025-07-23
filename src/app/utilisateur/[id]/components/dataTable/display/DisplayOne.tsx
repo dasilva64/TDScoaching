@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Display.module.scss";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 
 const DisplayOne = ({ i }: any) => {
   const dispatch = useDispatch();

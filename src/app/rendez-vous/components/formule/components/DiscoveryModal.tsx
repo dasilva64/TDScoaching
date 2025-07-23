@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./DiscoveryModal.module.scss";
 import Image from "@/app/components/image/Image";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 
 const DiscoveryModal = () => {
   const dispatch = useDispatch<AppDispatch>();

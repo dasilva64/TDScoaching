@@ -4,7 +4,7 @@ import styles from "./ModalTwoFAActivationCancel.module.scss"
 import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";

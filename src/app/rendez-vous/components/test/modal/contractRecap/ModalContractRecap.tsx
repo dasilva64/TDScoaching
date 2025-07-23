@@ -1,5 +1,5 @@
 import Image from "@/app/components/image/Image";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalContractRecap.module.scss"

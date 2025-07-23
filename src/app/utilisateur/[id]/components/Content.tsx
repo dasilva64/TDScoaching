@@ -4,7 +4,7 @@ import React, { use, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from "./Content.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";
 import NbShow from "./dataTable/nbShow/NbShow";

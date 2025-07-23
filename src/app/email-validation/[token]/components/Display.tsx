@@ -6,7 +6,7 @@ import useUserEmailValidation from "../../../components/hook/user/useUserEmailVa
 import { usePathname } from "next/navigation";
 import Load from "./load/Load";
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 
 const Display = () => {
   const {csrfToken} = useSelector((state: RootState) => state.csrfToken)

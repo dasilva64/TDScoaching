@@ -1,4 +1,4 @@
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";

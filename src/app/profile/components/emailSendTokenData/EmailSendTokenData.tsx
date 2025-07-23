@@ -1,6 +1,6 @@
 "use client";
 
-import { AppDispatch } from "../../../redux/store";
+import { AppDispatch } from "../../../redux/store/store";
 import React from "react";
 import { useDispatch } from "react-redux";
 import styles from "./EmailSendTokenData.module.scss";

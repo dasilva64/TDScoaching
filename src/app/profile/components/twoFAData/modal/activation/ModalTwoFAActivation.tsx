@@ -2,7 +2,7 @@ import TabIndex from "@/app/components/tabIndex/TabIndex";
 import styles from "./ModalTwoFAActivation.module.scss"
 import { AnimatePresence, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { useEffect, useState } from "react";
 import Image from "@/app/components/image/Image";
 import Input from "@/app/components/input/Input";

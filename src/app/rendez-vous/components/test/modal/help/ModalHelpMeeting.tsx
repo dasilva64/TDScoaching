@@ -2,7 +2,7 @@ import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./ModalHelpMeeting.module.scss"
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import Image from "@/app/components/image/Image";
 import { useState } from "react";
 

@@ -1,5 +1,6 @@
 import React from "react";
 import Content from "./components/Content";
+import { ProviderRendezVousToken } from "@/app/redux/provider/providerRendezVousToken";
 
 export const metadata = {
   title: "Votre rendez-vous - tdscoaching",
@@ -17,7 +18,8 @@ export const metadata = {
 const page = () => {
   return (
     <>
-      <Content />
+    <ProviderRendezVousToken><Content /></ProviderRendezVousToken>
+      
     </>
   );
 };

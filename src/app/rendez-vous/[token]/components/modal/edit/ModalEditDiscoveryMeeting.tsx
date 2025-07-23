@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./ModalEditDiscoveryMeeting.module.scss";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import {mutate as mutateGlobal} from "swr"
 
 const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre }: any) => {

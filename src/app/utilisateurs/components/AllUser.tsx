@@ -1,6 +1,6 @@
 "use client";
 
-import { RootState } from "../../redux/store";
+import { RootState } from "../../redux/store/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NbShow from "./dataTable/nbShow/NbShow";

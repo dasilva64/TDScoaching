@@ -3,7 +3,7 @@ import Image from "@/app/components/image/Image";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./ModalTwoFADesactivation.module.scss"
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { mutate as globalMutate } from "swr";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";

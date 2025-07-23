@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "./goTop.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { useSelector } from "react-redux";
 
 const GoTop = () => {

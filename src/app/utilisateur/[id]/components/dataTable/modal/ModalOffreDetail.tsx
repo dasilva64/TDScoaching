@@ -1,6 +1,6 @@
 import fetchPost from "@/app/components/fetch/FetchPost";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { RootState, AppDispatch } from "@/app/redux/store";
+import { RootState, AppDispatch } from "@/app/redux/store/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";

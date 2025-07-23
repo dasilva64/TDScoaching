@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./ContractModal.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import Link from "next/link";
 import useGet from "../../../../components/hook/useGet";
 //import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";

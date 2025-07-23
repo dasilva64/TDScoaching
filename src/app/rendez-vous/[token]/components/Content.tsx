@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalCalendarEditDiscoveryMeeting from "./modal/editCalendar/ModalCalendarEditDiscoveryMeeting";
 import ModalDeleteDiscoveryMeeting from "./modal/delete/ModalDeleteDiscoveryMeeting";
 import ModalComfirmDiscoveryMeeting from "./modal/confirm/ModalComfirmDiscoveryMeeting";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import ModalEditDiscoveryMeeting from "./modal/edit/ModalEditDiscoveryMeeting";
 import Load from "./load/Load";
 import NoScript from "@/app/components/noscript/NoScript";

@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "@/app/components/image/Image";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 
 const ModalDeleteAccount = ({mutate} : any) => {
   const { displayModalDeleteAccount } = useSelector(

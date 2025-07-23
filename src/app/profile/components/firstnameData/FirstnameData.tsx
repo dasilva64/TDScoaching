@@ -4,7 +4,7 @@ import React from "react";
 import styles from "./FirstnameData.module.scss";
 import { useDispatch } from "react-redux";
 import Image from "@/app/components/image/Image";
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch } from "@/app/redux/store/store";
 
 const FirstnameData = ({ data }: any) => {
   const dispatch = useDispatch<AppDispatch>();

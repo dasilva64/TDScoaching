@@ -1,3 +1,4 @@
+import { ProviderRendezVous } from "../redux/provider/providerRendezVous";
 import Display from "./components/display/Display";
 
 export const metadata = {
@@ -16,7 +17,8 @@ export const metadata = {
 const Page = () => {
   return (
     <>
-      <Display />
+    <ProviderRendezVous><Display /></ProviderRendezVous>
+      
     </>
   );
 };

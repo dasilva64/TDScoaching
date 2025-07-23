@@ -1,5 +1,5 @@
 import "./globals.scss";
-import { Providers } from "./redux/provider";
+import { Providers } from "./redux/provider/provider";
 /* import Header from "./components/header/header"; */
 
 export const dynamic = "force-dynamic";

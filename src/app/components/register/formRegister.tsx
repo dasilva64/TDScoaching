@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./formRegister.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../src/app/redux/store";
+import { AppDispatch, RootState } from "../../redux/store/store";
 import Link from "next/link";
 import Image from "../image/Image";
 import { AnimatePresence, motion } from "framer-motion";

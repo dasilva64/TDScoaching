@@ -1,7 +1,7 @@
 "use client";
 
 import fetchPost from "@/app/components/fetch/FetchPost";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import { rgb } from "pdf-lib";
 import { AnimatePresence, motion, px } from "framer-motion";
 import React, { useEffect, useState } from "react";

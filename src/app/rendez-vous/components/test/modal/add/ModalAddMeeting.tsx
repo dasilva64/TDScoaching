@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./ModalAddMeeting.module.scss";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";

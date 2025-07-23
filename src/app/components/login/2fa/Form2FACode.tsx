@@ -5,7 +5,7 @@ import Image from '../../image/Image';
 import Input from '../../input/Input';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from 'react';
-import { AppDispatch, RootState } from '@/app/redux/store';
+import { AppDispatch, RootState } from '@/app/redux/store/store';
 import useSWRMutation from 'swr/mutation';
 import fetchPost from '../../fetch/FetchPost';
 import { mutate } from "swr";

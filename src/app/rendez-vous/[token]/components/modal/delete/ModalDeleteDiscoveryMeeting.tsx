@@ -6,7 +6,7 @@ import Image from "@/app/components/image/Image";
 import useSWRMutation from "swr/mutation";
 import styles from "./ModalDeleteDiscoveryMeeting.module.scss";
 import fetchPost from "@/app/components/fetch/FetchPost";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 

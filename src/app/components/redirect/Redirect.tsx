@@ -1,6 +1,6 @@
 "use client";
 
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch } from "@/app/redux/store/store";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 

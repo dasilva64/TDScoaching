@@ -1,5 +1,5 @@
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import Image from "@/app/components/image/Image";
 import styles from "./ModalCalendarEditMeeting.module.scss";
 import { AnimatePresence, motion } from "framer-motion";

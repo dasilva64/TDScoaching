@@ -1,6 +1,6 @@
 import fetchPost from "@/app/components/fetch/FetchPost";
 import csrfToken from "@/app/redux/feature/csrfToken";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import { animate, AnimatePresence, motion } from "framer-motion";
 import { discovery } from "googleapis/build/src/apis/discovery";
 import { useRouter } from "next/navigation";

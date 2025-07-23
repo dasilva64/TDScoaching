@@ -6,7 +6,7 @@ import useSWRMutation from "swr/mutation";
 import styles from "./ModalComfirmDiscoveryMeeting.module.scss";
 import Image from "@/app/components/image/Image";
 import fetchPost from "@/app/components/fetch/FetchPost";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 
 const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
   const { displayModalConfirmDiscoveryMeetingRendezVousToken } = useSelector(

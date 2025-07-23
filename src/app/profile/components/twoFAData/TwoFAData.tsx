@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./TwoFAData.module.scss"
 import { useDispatch, useSelector } from "react-redux";
 import Image from "@/app/components/image/Image";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { useRouter } from "next/navigation";

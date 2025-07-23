@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { RootState, AppDispatch } from "@/app/redux/store";
+import { RootState, AppDispatch } from "@/app/redux/store/store";
 import { mutate as globalMutate } from "swr";
 
 const ModalUserLastnameData = ({ data: userData, mutate }: any) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Forgot.module.scss";
-import { AppDispatch, RootState } from "../../../../src/app/redux/store";
+import { AppDispatch, RootState } from "../../redux/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "../image/Image";

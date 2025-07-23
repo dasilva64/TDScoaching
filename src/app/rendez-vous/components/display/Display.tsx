@@ -4,7 +4,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import styles from "./Display.module.scss";
 import { useRouter } from "next/navigation";
-import { AppDispatch } from "@/app/redux/store";
+import { AppDispatch } from "@/app/redux/store/store";
 import { useDispatch } from "react-redux";
 import NoScript from "@/app/components/noscript/NoScript";
 import Load from "../load/Load";

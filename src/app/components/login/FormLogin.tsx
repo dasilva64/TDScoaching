@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./FormLogin.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../src/app/redux/store";
+import { AppDispatch, RootState } from "../../redux/store/store";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../fetch/FetchPost";
 import { AnimatePresence, motion } from "framer-motion";

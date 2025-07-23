@@ -1,7 +1,7 @@
 "use client"
 
 import useGet from "@/app/components/hook/useGet";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";

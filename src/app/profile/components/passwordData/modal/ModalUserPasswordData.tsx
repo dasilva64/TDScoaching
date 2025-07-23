@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { RootState, AppDispatch } from "@/app/redux/store";
+import { RootState, AppDispatch } from "@/app/redux/store/store";
 
 const ModalUserPasswordData = ({mutate}: any) => {
   const { displayModalEditPassword } = useSelector(

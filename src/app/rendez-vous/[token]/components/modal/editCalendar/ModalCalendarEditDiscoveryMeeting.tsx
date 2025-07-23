@@ -8,7 +8,7 @@ import frLocale from "@fullcalendar/core/locales/fr";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 
 const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
   const [meetingDate, setMeetingDate] = useState<any>(null);

@@ -4,7 +4,7 @@ import styles from "./ModalAddDiscoveryMeeting.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "@/app/components/image/Image";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import Input from "@/app/components/input/Input";

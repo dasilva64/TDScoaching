@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "./ModalDeleteMeeting.module.scss";
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import Image from "@/app/components/image/Image";

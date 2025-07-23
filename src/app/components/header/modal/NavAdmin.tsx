@@ -3,7 +3,7 @@ import styles from "./NavAdmin.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "../../image/Image";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";

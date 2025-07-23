@@ -1,6 +1,6 @@
 "use client";
 
-import { RootState } from "@/app/redux/store";
+import { RootState } from "@/app/redux/store/store";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

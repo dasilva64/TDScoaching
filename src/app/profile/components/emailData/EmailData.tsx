@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 
 const EmailCheck = ({ data: userData, mutate }: any) => {
   const dispatch = useDispatch<AppDispatch>();

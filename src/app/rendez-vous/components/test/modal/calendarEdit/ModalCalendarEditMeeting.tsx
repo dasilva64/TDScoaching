@@ -9,6 +9,7 @@ import FullCalendar from "@fullcalendar/react";
 import interactionPlugin from "@fullcalendar/interaction";
 import frLocale from "@fullcalendar/core/locales/fr";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalCalendarEditMeeting = ({ allData }: any) => {
   const [isMobile, setIsMobile] = useState<null | boolean>(null);
@@ -18,7 +19,7 @@ const ModalCalendarEditMeeting = ({ allData }: any) => {
     dispatch({ type: "ModalCalendarEditMeetingRendezVous/close" });
   };
   const { displayModalCalendarEditMeetingRendezVous } = useSelector(
-    (state: RootState) => state.ModalCalendarEditMeetingRendezVous
+    (state: RootStateRendezVous) => state.ModalCalendarEditMeetingRendezVous
   );
   const [meetingDate, setMeetingDate] = useState<any>(null);
   const handleDateClick = (dateCalendar: any) => {

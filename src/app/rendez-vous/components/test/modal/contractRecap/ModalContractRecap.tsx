@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import useSWRMutation from "swr/mutation";
 import { mutate as globalMutate } from "swr";
 import { useRouter } from "next/navigation";
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalContractRecap = ({mutate}: any) => {
   const router = useRouter()
@@ -82,7 +83,7 @@ const ModalContractRecap = ({mutate}: any) => {
       }
     }
   }, [dataSee, dispatch, resetSee, router])
-  const { displayModalContractRecapRendezVous, typeModalContractRecapRendezVous } = useSelector((state: RootState) => state.ModalContractRecapRendezVous)
+  const { displayModalContractRecapRendezVous, typeModalContractRecapRendezVous } = useSelector((state: RootStateRendezVous) => state.ModalContractRecapRendezVous)
   let content = (
     <>
       <div className={styles.contratModal__content}>

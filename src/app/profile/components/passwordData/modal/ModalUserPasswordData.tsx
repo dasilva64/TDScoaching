@@ -10,10 +10,11 @@ import Input from "@/app/components/input/Input";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store/store";
+import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const ModalUserPasswordData = ({mutate}: any) => {
   const { displayModalEditPassword } = useSelector(
-    (state: RootState) => state.ModalEditPassword
+    (state: RootStateProfile) => state.ModalEditPassword
   );
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken

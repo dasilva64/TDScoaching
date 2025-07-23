@@ -21,6 +21,7 @@ import ModalUserNoShow from "./modal/ModalUserNoShow";
 import ModalCalendarTakeNextMeeting from "./modal/calendar/ModalCalendarTakeNextMeeting";
 import ModalTakeNextMeeting from "./modal/add/ModalTakeNextMeeting";
 import ModalOffreDetail from "./dataTable/modal/ModalOffreDetail";
+import { RootStateUtilisateur } from "@/app/redux/store/storeUtilisateur";
 const Parisienne = localFont({
   src: "../../../Parisienne-Regular.ttf",
   display: "swap",
@@ -30,7 +31,7 @@ const Content = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const router = useRouter();
-  const { datas } = useSelector((state: RootState) => state.ArrayMeetingByUser);
+  const { datas } = useSelector((state: RootStateUtilisateur) => state.ArrayMeetingByUser);
   const queryParam: any = usePathname();
   const [content, setContent] = useState<null | any>(null);
   let id = queryParam.toString().split("/");

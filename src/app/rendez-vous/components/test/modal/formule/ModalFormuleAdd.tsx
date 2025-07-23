@@ -9,6 +9,7 @@ import Image from "next/image";
 import styles from "./ModalFormuleAdd.module.scss";
 import useSWRMutation from "swr/mutation";
 import {mutate as globalMutate} from 'swr'
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalFormuleAdd = ({ mutate }: any) => {
   const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
@@ -19,7 +20,7 @@ const ModalFormuleAdd = ({ mutate }: any) => {
     dispatch({ type: "ModalFormuleAddRendezVous/close" });
   };
   const { displayModalFormuleAddRendezVous, typeModalFormuleAddRendezVous } =
-    useSelector((state: RootState) => state.ModalFormuleAddRendezVous);
+    useSelector((state: RootStateRendezVous) => state.ModalFormuleAddRendezVous);
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/rendez-vous/components/test/modal/formule/api/",
     fetchPost

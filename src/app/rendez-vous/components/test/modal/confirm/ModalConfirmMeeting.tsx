@@ -9,6 +9,7 @@ import styles from "./ModalConfirmMeeting.module.scss";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { mutate as globalMutate } from "swr";
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalConfirmMeeting = ({
   mutate,
@@ -17,7 +18,7 @@ const ModalConfirmMeeting = ({
   meeting: any;
 }) => {
   const { displayModalConfirmMeetingRendezVous } = useSelector(
-    (state: RootState) => state.ModalConfirmMeetingRendezVous
+    (state: RootStateRendezVous) => state.ModalConfirmMeetingRendezVous
   );
   const dispatch = useDispatch();
   const { trigger, data, reset, isMutating } = useSWRMutation(

@@ -9,6 +9,7 @@ import useSWRMutation from "swr/mutation";
 import styles from "./ModalAddPaidMeeting.module.scss";
 import Image from "next/image";
 import { mutate as globalMutate } from "swr";
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
@@ -36,7 +37,7 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
   const {
     displayModalAddPaidMeetingRendezVous,
     dateModalAddPaidMeetingRendezVous,
-  } = useSelector((state: RootState) => state.ModalAddPaidMeetingRendezVous);
+  } = useSelector((state: RootStateRendezVous) => state.ModalAddPaidMeetingRendezVous);
 
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);

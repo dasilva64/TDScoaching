@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store/store";
 import Image from "@/app/components/image/Image";
 import { useState } from "react";
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalHelpMeeting = ({ offre }: any) => {
-  const { displayModalHelpRendezVous } = useSelector((state: RootState) => state.ModalHelpRendezVous)
+  const { displayModalHelpRendezVous } = useSelector((state: RootStateRendezVous) => state.ModalHelpRendezVous)
   const dispatch = useDispatch()
   const closeModal = () => {
     dispatch({

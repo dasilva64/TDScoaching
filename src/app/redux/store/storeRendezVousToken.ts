@@ -17,5 +17,5 @@ export const storeRendezVousToken = configureStore({
     }),
 });
 
-export type RootState = ReturnType<typeof storeRendezVousToken.getState>;
-export type AppDispatch = typeof storeRendezVousToken.dispatch;
+export type RootStateRendezVousToken = ReturnType<typeof storeRendezVousToken.getState>;
+export type AppDispatchRendezVousToken = typeof storeRendezVousToken.dispatch;

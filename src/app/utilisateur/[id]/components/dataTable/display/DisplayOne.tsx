@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Display.module.scss";
-import { RootState } from "@/app/redux/store/store";
+import { RootStateUtilisateur } from "@/app/redux/store/storeUtilisateur";
 
 const DisplayOne = ({ i }: any) => {
   const dispatch = useDispatch();
   const { datas, sortBy } = useSelector(
-    (state: RootState) => state.ArrayMeetingByUser
+    (state: RootStateUtilisateur) => state.ArrayMeetingByUser
   );
   const [keyAr, setKeyAr] = useState<any>([]);
   useEffect(() => {

@@ -11,5 +11,5 @@ export const storeUtilisateurs = configureStore({
         }),
 });
 
-export type RootState = ReturnType<typeof storeUtilisateurs.getState>;
-export type AppDispatch = typeof storeUtilisateurs.dispatch;
+export type RootStateUtilisateurs = ReturnType<typeof storeUtilisateurs.getState>;
+export type AppDispatchUtilisateurs = typeof storeUtilisateurs.dispatch;

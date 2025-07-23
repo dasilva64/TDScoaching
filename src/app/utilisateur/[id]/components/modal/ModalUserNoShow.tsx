@@ -9,6 +9,7 @@ import fetchPost from "@/app/components/fetch/FetchPost";
 import { useEffect } from "react";
 import { mutate as globalMutate } from "swr";
 import { useRouter } from "next/navigation";
+import { RootStateUtilisateur } from "@/app/redux/store/storeUtilisateur";
 
 const ModalUserNoShow = ({ mutate, id }: any) => {
   const router = useRouter()
@@ -19,7 +20,7 @@ const ModalUserNoShow = ({ mutate, id }: any) => {
       type: "ModalUserNoShow/close"
     })
   }
-  const { displayModalUserNoShow } = useSelector((state: RootState) => state.ModalUserNoShow)
+  const { displayModalUserNoShow } = useSelector((state: RootStateUtilisateur) => state.ModalUserNoShow)
   const { data, isMutating, trigger, reset } = useSWRMutation("/utilisateur/[id]/components/modal/api", fetchPost)
   useEffect(() => {
     if (data) {

@@ -3,17 +3,19 @@ import React from "react";
 import styles from "./DiscoveryModal.module.scss";
 import Image from "@/app/components/image/Image";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store/store";
+import { RootState } from "@/app/redux/store/store";
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
+import { RootStateTarif } from "@/app/redux/store/storeTarif";
 
 const DiscoveryModal = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const closeForm = () => {
     dispatch({
       type: "ModalDiscovery/close",
     });
   };
   const { displayModalDiscovery } = useSelector(
-    (state: RootState) => state.ModalDiscovery
+    (state: RootStateTarif) => state.ModalDiscovery
   );
   return (
     <>

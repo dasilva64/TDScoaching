@@ -10,10 +10,11 @@ import Input from "@/app/components/input/Input";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store/store";
+import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const ModalUserSendToken = ({ data: userData, mutate }: any) => {
   const { displayModalSendTokenEmail, inputEmail } = useSelector(
-    (state: RootState) => state.ModalSendTokenEmail
+    (state: RootStateProfile) => state.ModalSendTokenEmail
   );
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken

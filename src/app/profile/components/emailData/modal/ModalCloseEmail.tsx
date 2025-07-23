@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import fetchPost from "@/app/components/fetch/FetchPost";
+import { RootState } from "@/app/redux/store/store";
+import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const ModalCloseEmail = ({mutate}: any) => {
   const dispatch = useDispatch<any>();
@@ -18,10 +20,10 @@ const ModalCloseEmail = ({mutate}: any) => {
     fetchPost
   );
   const { csrfToken } = useSelector(
-    (state: any) => state.csrfToken
+    (state: RootState) => state.csrfToken
   );
   const { displayModalCancelEmail } = useSelector(
-    (state: any) => state.ModalCancelEmail
+    (state: RootStateProfile) => state.ModalCancelEmail
   );
   useEffect(() => {
     if (data) {

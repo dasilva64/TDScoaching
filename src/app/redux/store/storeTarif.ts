@@ -13,5 +13,5 @@ export const storeTarif = configureStore({
         }),
 });
 
-export type RootState = ReturnType<typeof storeTarif.getState>;
-export type AppDispatch = typeof storeTarif.dispatch;
+export type RootStateTarif = ReturnType<typeof storeTarif.getState>;
+export type AppDispatchTarif = typeof storeTarif.dispatch;

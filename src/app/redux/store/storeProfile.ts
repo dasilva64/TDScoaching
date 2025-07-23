@@ -29,5 +29,5 @@ export const storeProfile = configureStore({
     }),
 });
 
-export type RootState = ReturnType<typeof storeProfile.getState>;
-export type AppDispatch = typeof storeProfile.dispatch;
+export type RootStateProfile = ReturnType<typeof storeProfile.getState>;
+export type AppDispatchProfile = typeof storeProfile.dispatch;

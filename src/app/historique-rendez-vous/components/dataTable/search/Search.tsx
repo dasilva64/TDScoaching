@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Search.module.scss";
 import Image from "@/app/components/image/Image";
+import { RootStateHistoriqueRendezVous } from "@/app/redux/store/storeHistoriqueRendezVous";
 /**
  * React component - Component for display search bar and search element
  * @return {JSX.Element}
@@ -11,7 +12,7 @@ const Search = (): JSX.Element => {
   const [displayCancel, setDisplayCancel] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
   const { onSearch, datas, initialDatas } = useSelector(
-    (state: any) => state.Array
+    (state: RootStateHistoriqueRendezVous) => state.Array
   );
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);

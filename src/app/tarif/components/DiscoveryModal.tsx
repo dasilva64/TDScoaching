@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store/store";
 
 import TabIndex from "@/app/components/tabIndex/TabIndex";
+import { RootStateTarif } from "@/app/redux/store/storeTarif";
 
 const DiscoveryModal = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,7 +16,7 @@ const DiscoveryModal = () => {
     });
   };
   const { displayModalDiscovery } = useSelector(
-    (state: RootState) => state.ModalDiscovery
+    (state: RootStateTarif) => state.ModalDiscovery
   );
   return (
     <>

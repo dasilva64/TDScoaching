@@ -8,6 +8,7 @@ import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import { RootState } from "@/app/redux/store/store";
 import {mutate as mutateGlobal} from "swr"
+import { RootStateRendezVousToken } from "@/app/redux/store/storeRendezVousToken";
 
 const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre }: any) => {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre }: any) => {
     useState<string>("");
   const [typeCoachingValid, setTypeCoachingValid] = useState<boolean>(true);
   const { displayModalEditDiscoveryMeetingRendezVousToken, dateModalEditDiscoveryMeetingRendezVousToken }: any =
-    useSelector((state: RootState) => state.ModalEditDiscoveryMeetingRendezVousToken);
+    useSelector((state: RootStateRendezVousToken) => state.ModalEditDiscoveryMeetingRendezVousToken);
   const { trigger, data, reset, isMutating } = useSWRMutation(
     `/rendez-vous/[token]/components/modal/edit/api/`,
     fetchPost

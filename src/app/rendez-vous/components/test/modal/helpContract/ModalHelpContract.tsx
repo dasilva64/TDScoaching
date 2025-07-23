@@ -5,9 +5,10 @@ import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import styles from "./ModalHelpContract.module.scss"
 import Image from "@/app/components/image/Image"
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous"
 
 const ModalHelpContract = () => {
-  const { displayModalContractHelpRendezVous } = useSelector((state: RootState) => state.ModalContractHelpRendezVous)
+  const { displayModalContractHelpRendezVous } = useSelector((state: RootStateRendezVous) => state.ModalContractHelpRendezVous)
   const dispatch = useDispatch()
   const closeModal = () => {
     setRadioInput("")

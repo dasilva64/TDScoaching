@@ -9,6 +9,7 @@ import useSWRMutation from "swr/mutation";
 import Image from "next/image";
 import {mutate as globalMutate} from "swr"
 import styles from "./ModalConfirmPaidMeeting.module.scss";
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalConfirmPaidMeeting = ({
   mutate,
@@ -19,7 +20,7 @@ const ModalConfirmPaidMeeting = ({
 }) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const { displayModalConfirmPaidMeetingRendezVous } = useSelector(
-    (state: RootState) => state.ModalConfirmPaidMeetingRendezVous
+    (state: RootStateRendezVous) => state.ModalConfirmPaidMeetingRendezVous
   );
   const dispatch = useDispatch();
   const router = useRouter();

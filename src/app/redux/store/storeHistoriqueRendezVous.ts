@@ -13,5 +13,5 @@ export const storeHistoriqueRendezVous = configureStore({
     }),
 });
 
-export type RootState = ReturnType<typeof storeHistoriqueRendezVous.getState>;
-export type AppDispatch = typeof storeHistoriqueRendezVous.dispatch;
+export type RootStateHistoriqueRendezVous = ReturnType<typeof storeHistoriqueRendezVous.getState>;
+export type AppDispatchHistoriqueRendezVous = typeof storeHistoriqueRendezVous.dispatch;

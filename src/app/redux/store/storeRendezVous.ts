@@ -47,5 +47,5 @@ export const storeRendezVous = configureStore({
     }),
 });
 
-export type RootState = ReturnType<typeof storeRendezVous.getState>;
-export type AppDispatch = typeof storeRendezVous.dispatch;
+export type RootStateRendezVous = ReturnType<typeof storeRendezVous.getState>;
+export type AppDispatchRendezVous = typeof storeRendezVous.dispatch;

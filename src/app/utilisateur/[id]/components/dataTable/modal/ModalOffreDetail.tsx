@@ -10,10 +10,13 @@ import useSWRMutation from "swr/mutation";
 import styles from "./ModalOffreDetail.module.scss"
 import Image from "@/app/components/image/Image";
 import React from "react";
+import { RootStateTarif } from "@/app/redux/store/storeTarif";
+import { RootStateUtilisateur } from "@/app/redux/store/storeUtilisateur";
+import { RootStateHistoriqueRendezVous } from "@/app/redux/store/storeHistoriqueRendezVous";
 
 const ModalOffreDetail = () => {
   const { displayModalOffreDetail, meetingModalOffreDetail }: any = useSelector(
-    (state: RootState) => state.ModalOffreDetail
+    (state: RootStateHistoriqueRendezVous) => state.ModalOffreDetail
   );
   const dispatch = useDispatch<AppDispatch>();
   const closeForm = () => {

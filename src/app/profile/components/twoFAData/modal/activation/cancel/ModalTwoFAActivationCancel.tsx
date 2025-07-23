@@ -8,6 +8,7 @@ import { RootState } from "@/app/redux/store/store";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
+import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const ModalTwoFAActivationCancel = () => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
@@ -58,7 +59,7 @@ const ModalTwoFAActivationCancel = () => {
       }
     }
   }, [data, dispatch, reset, router]);
-  const { displayModalTwoFAActivationCancel } = useSelector((state: RootState) => state.ModalTwoFAActivationCancel)
+  const { displayModalTwoFAActivationCancel } = useSelector((state: RootStateProfile) => state.ModalTwoFAActivationCancel)
   return (
     <>
       <TabIndex displayModal={displayModalTwoFAActivationCancel} />

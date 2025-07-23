@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DisplayOne from "./DisplayOne";
 import styles from "./Display.module.scss";
 import { RootState } from "../../../../redux/store/store";
+import { RootStateUtilisateurs } from "@/app/redux/store/storeUtilisateurs";
 
 const Display = () => {
   const [keyAr, setKeyAr] = useState<string[]>([]);
@@ -10,7 +11,7 @@ const Display = () => {
   const dispatch = useDispatch();
   
   const { datas, currentPage, nbShow, sortBy } = useSelector(
-    (state: RootState) => state.Array
+    (state: RootStateUtilisateurs) => state.Array
   );
   useEffect(() => {
     dispatch({

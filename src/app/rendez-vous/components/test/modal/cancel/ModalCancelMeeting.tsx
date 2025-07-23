@@ -9,13 +9,14 @@ import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import { mutate as globalMutate } from "swr";
+import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalCancelMeeting = ({ mutate, offre }: any) => {
 
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
 
   const { displayModalCancelMeetingRendezVous } = useSelector(
-    (state: RootState) => state.ModalCancelMeetingRendezVous
+    (state: RootStateRendezVous) => state.ModalCancelMeetingRendezVous
   );
   const dispatch = useDispatch();
   const { trigger, data, reset, isMutating } = useSWRMutation(

@@ -8,6 +8,7 @@ import WhileInView from "./components/framer/WhileInView";
 import NoScript from "./components/noscript/NoScript";
 import About from "./components/about/About";
 import Footer from "./components/footer/footer";
+import Head from "next/head";
 
 export const metadata = {
   title: "Coach de vie c'est quoi ? - tdscoaching",
@@ -28,6 +29,14 @@ export const metadata = {
 export default async function Home() {
   return (
     <>
+      <Head>
+        <link
+          rel="preload"
+          as="image"
+          href="/assets/img/moi8.jpg"
+          fetchPriority="high"
+        />
+      </Head>
       <NoScript />
 
       <main className={styles.home}>
@@ -39,14 +48,14 @@ export default async function Home() {
             sizes="100vw"
             priority={true}
             loading={"eager"}
-            src={"/assets/img/moi8.webp"}
+            src={"/assets/img/moi8.jpg"}
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
           />
-          {/* <About />
+          <About />
 
-          <GoDown /> */}
+          <GoDown />
         </section>
-       {/*  <section className={styles.home__who}>
+        <section className={styles.home__who}>
           <h1 className={`${styles.home__who__h2}`}>
             Vous êtes en quête <br /> de bien-être ?
           </h1>
@@ -188,9 +197,9 @@ export default async function Home() {
               }
             />
           </div>
-        </section> */}
+        </section>
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

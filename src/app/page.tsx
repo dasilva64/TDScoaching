@@ -48,7 +48,7 @@ export default async function Home() {
 
       <main className={styles.home}>
         <section className={styles.home__bg}>
-          <Image
+          {/* <Image
             className={styles.home__bg__img}
             width={1200}
             height={800}
@@ -57,7 +57,7 @@ export default async function Home() {
             loading={"eager"}
             src={"/assets/img/moi8.jpg"}
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
-          />
+          /> */}
           <About />
 
           <GoDown />

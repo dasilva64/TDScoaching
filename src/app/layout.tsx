@@ -1,4 +1,4 @@
-import "./globals.scss";
+/* import "./globals.scss"; */
 import { Providers } from "./redux/provider";
 import Header from "./components/header/header";
 
@@ -13,7 +13,7 @@ export default function RootLayout({
     <html lang="fr">
       <body>
         <Providers>
-          <Header />
+          {/* <Header /> */}
           {children}
         </Providers>
       </body>

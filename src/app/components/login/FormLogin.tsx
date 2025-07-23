@@ -160,6 +160,28 @@ const FormLogin = () => {
             }, 1000);
           }
         }
+      } else if (loginData.status === 401) {
+        setPasswordInput("");
+        setValidPasswordInput(false);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: loginData.message },
+        });
+        resetLogin();
+        mutate("/components/header/api");
+        mutate("/components/header/ui/api");
+        router.push("/");
+      } else {
+        setTimeout(() => {
+          setIsLoading(false);
+          setPasswordInput("");
+          setValidPasswordInput(false);
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: loginData.message },
+          });
+          resetLogin();
+        }, 1000);
       }
     }
   }, [dispatch, emailInput, loginData, resetLogin, router]);

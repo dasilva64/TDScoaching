@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
                           </html>`,
               };
               await smtpTransport.sendMail(mailOptions);
-              let mailOptionsAdmin = {
+              /* let mailOptionsAdmin = {
                 from: "contact@tds-coachingdevie.fr",
                 to: "contact@tds-coachingdevie.fr",
                 subject: `[À confirmer] Prise de rendez-vous de ${user.firstname} ${user.lastname}`,
@@ -230,7 +230,7 @@ export async function POST(request: NextRequest) {
                             </body>
                           </html>`,
               };
-              await smtpTransport.sendMail(mailOptionsAdmin);
+              await smtpTransport.sendMail(mailOptionsAdmin); */
               return NextResponse.json(
                 {
                   status: 200,

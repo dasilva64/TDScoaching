@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
                                                           </body>
                                                         </html>`,
                 };
-                await smtpTransport.sendMail(mailOptions);
+                /* await smtpTransport.sendMail(mailOptions);
                 let mailOptionsAdmin = {
                   from: "contact@tds-coachingdevie.fr",
                   to: "contact@tds-coachingdevie.fr",
@@ -218,7 +218,7 @@ export async function POST(request: NextRequest) {
                                                           </body>
                                                         </html>`,
                 };
-                await smtpTransport.sendMail(mailOptionsAdmin);
+                await smtpTransport.sendMail(mailOptionsAdmin); */
                 return NextResponse.json(
                   {
                     status: 200,

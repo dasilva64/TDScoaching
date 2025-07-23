@@ -34,10 +34,11 @@ export default async function Home() {
         <section className={styles.home__bg}>
           <Image
             className={styles.home__bg__img}
-            width="0"
-            height="0"
+            width={1200}
+            height={800}
             sizes="100vw"
             priority={true}
+            loading={"eager"}
             src={"/assets/img/moi8.webp"}
             alt="Image de couverture avec Thierry Da Silva coach professionnel certifié"
           />

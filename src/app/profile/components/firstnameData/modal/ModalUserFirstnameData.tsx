@@ -20,9 +20,7 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
     (state: RootStateProfile) => state.ModalEditFirstname
   );
   const dispatch = useDispatch<AppDispatch>();
-  const { csrfToken } = useSelector(
-    (state: RootState) => state.csrfToken
-  );
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const [firstnameInput, setFirstnameInput] = useState<string>(
     userData.body.firstname

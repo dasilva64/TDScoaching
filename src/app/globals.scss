@@ -1,6 +1,7 @@
 @font-face {
   font-family: Parisienne;
   src: url("/assets/font/Parisienne/Parisienne-Regular.ttf");
+  font-display: swap
 }
 
 * {
@@ -36,7 +37,7 @@ span {
 h1,
 h2,
 h3 {
-  font-family: Parisienne;
+  font-family: Parisienne, Raleway;
   text-decoration: underline;
   text-underline-offset: 5px;
   text-decoration-color: orange;

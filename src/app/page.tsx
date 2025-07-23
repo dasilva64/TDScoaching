@@ -36,6 +36,13 @@ export default async function Home() {
           href="/assets/img/moi8.jpg"
           fetchPriority="high"
         />
+        <link
+    rel="preload"
+    href="/assets/font/Parisienne/Parisienne-Regular.ttf"
+    as="font"
+    type="font/ttf"
+    crossOrigin="anonymous"
+  />
       </Head>
       <NoScript />
 

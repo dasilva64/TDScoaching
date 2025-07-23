@@ -1,7 +1,6 @@
 "use client"
 
 import useGet from "@/app/components/hook/useGet";
-import { RootState } from "@/app/redux/store/store";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,7 +16,7 @@ import ModalOffreDetail from "./dataTable/modal/ModalOffreDetail";
 import NoScript from "@/app/components/noscript/NoScript";
 
 const AllMeetings = () => {
-  const { datas } = useSelector((state: RootState) => state.Array);
+  const { datas } = useSelector((state: any) => state.Array);
   const dispatch = useDispatch();
   const [content, setContent] = useState<any>(null);
   const router = useRouter()

@@ -1,12 +1,10 @@
-import { RootState } from "../../../../redux/store/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Display.module.scss";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const DisplayOne = ({ i }: any) => {
-  const { datas, sortBy } = useSelector((state: RootState) => state.Array);
+  const { datas, sortBy } = useSelector((state: any) => state.Array);
   const [keyAr, setKeyAr] = useState<any>([]);
   const router = useRouter();
   const dispatch = useDispatch();

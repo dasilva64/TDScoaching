@@ -8,18 +8,17 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "@/app/components/image/Image";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store/store";
 
 const ModalDeleteAccount = ({mutate} : any) => {
   const { displayModalDeleteAccount } = useSelector(
-    (state: RootState) => state.ModalDeleteAccount
+    (state: any) => state.ModalDeleteAccount
   );
   const { csrfToken } = useSelector(
-    (state: RootState) => state.csrfToken
+    (state: any) => state.csrfToken
   );
   console.log("test")
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<any>();
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const [reason, setReason] = useState<string>("");
   const [reasonErrorMessage, setReasonErrorMessage] = useState<string>("");

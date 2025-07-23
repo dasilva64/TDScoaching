@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Search.module.scss";
-import { RootState } from "../../../../redux/store/store";
 import Image from "@/app/components/image/Image";
 /**
  * React component - Component for display search bar and search element
@@ -12,7 +11,7 @@ const Search = (): JSX.Element => {
   const [displayCancel, setDisplayCancel] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
   const { onSearch, datas, initialDatas } = useSelector(
-    (state: RootState) => state.Array
+    (state: any) => state.Array
   );
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);

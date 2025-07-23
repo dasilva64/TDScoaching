@@ -8,21 +8,20 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store/store";
 import fetchPost from "@/app/components/fetch/FetchPost";
 
 const ModalCloseEmail = ({mutate}: any) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<any>();
   const router = useRouter();
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/profile/components/emailData/modal/api",
     fetchPost
   );
   const { csrfToken } = useSelector(
-    (state: RootState) => state.csrfToken
+    (state: any) => state.csrfToken
   );
   const { displayModalCancelEmail } = useSelector(
-    (state: RootState) => state.ModalCancelEmail
+    (state: any) => state.ModalCancelEmail
   );
   useEffect(() => {
     if (data) {

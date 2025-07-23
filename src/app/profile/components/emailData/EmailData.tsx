@@ -11,17 +11,16 @@ import { useRouter } from "next/navigation";
 import Input from "@/app/components/input/Input";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { AppDispatch, RootState } from "@/app/redux/store/store";
 
 const EmailCheck = ({ data: userData, mutate }: any) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<any>();
   const router = useRouter();
   const { csrfToken } = useSelector(
-    (state: RootState) => state.csrfToken
+    (state: any) => state.csrfToken
   );
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const { displayModalEditEmail } = useSelector(
-    (state: RootState) => state.ModalEditEmail
+    (state: any) => state.ModalEditEmail
   );
 
   const [codeInput, setCodeInput] = useState<string>("");

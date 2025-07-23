@@ -6,10 +6,9 @@ import useUserEmailValidation from "../../../components/hook/user/useUserEmailVa
 import { usePathname } from "next/navigation";
 import Load from "./load/Load";
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store/store";
 
 const Display = () => {
-  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const {csrfToken} = useSelector((state: any) => state.csrfToken)
   const queryParam: any = usePathname();
   let token = queryParam.toString().split("/");
   const { data, isLoading, error } = useUserEmailValidation(token[2], csrfToken);

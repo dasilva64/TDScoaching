@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DisplayOne from "./DisplayOne";
 import styles from "./Display.module.scss";
-import { RootState } from "../../../../redux/store/store";
 
 const Display = () => {
   const [keyAr, setKeyAr] = useState<string[]>([]);
@@ -10,7 +9,7 @@ const Display = () => {
   const dispatch = useDispatch();
   
   const { datas, currentPage, nbShow, sortBy } = useSelector(
-    (state: RootState) => state.Array
+    (state: any) => state.Array
   );
   useEffect(() => {
     dispatch({

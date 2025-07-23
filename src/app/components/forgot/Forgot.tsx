@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Forgot.module.scss";
-import { AppDispatch, RootState } from "../../redux/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "../image/Image";
@@ -10,6 +9,7 @@ import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
 import { mutate } from "swr";
 import { useRouter } from "next/navigation";
+import { AppDispatch, RootState } from "@/app/redux/store/store";
 
 const Forgot = () => {
   const [inputPseudo, setInputPseudo] = useState<string>("");

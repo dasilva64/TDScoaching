@@ -3,7 +3,7 @@
 import React, { use, useEffect, useState } from "react";
 import styles from "../page.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store/store";
+import { AppDispatch } from "../../redux/store/store";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "../../components/fetch/FetchPost";
 import stylesForm from "./ContactForm.module.scss";
@@ -31,7 +31,7 @@ const ContactForm = () => {
   const [emailInputError, setEmailInputError] = useState<string>("");
   const [objectInputError, setObjectInputError] = useState<string>("");
   const [messageInputError, setMessageInputError] = useState<string>("");
-   const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+   const {csrfToken} = useSelector((state: any) => state.csrfToken)
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/contact/components/api",
     fetchPost

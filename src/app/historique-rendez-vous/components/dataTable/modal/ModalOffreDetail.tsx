@@ -1,5 +1,4 @@
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { RootState, AppDispatch } from "@/app/redux/store/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,9 +8,9 @@ import React from "react";
 
 const ModalOffreDetail = () => {
   const { displayModalOffreDetail, meetingModalOffreDetail }: any = useSelector(
-    (state: RootState) => state.ModalOffreDetail
+    (state: any) => state.ModalOffreDetail
   );
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<any>();
   const closeForm = () => {
     dispatch({
       type: "ModalOffreDetail/close",

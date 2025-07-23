@@ -2,13 +2,13 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 import flash from "./feature/header/flash";
-import Array from "./feature/utilisateurs/Array";
-import ArrayMeetingByUser from "./feature/utilisateur/ArrayMeetingByUser";
+/* import Array from "./feature/utilisateurs/Array";
+import ArrayMeetingByUser from "./feature/utilisateur/ArrayMeetingByUser"; */
 import ModalLogin from "./feature/header/ModalLogin";
 import ModalRegister from "./feature/header/ModalRegister";
 import ModalForgot from "./feature/header/ModalForgot";
-import ModalDiscovery from "./feature/tarif/ModalDiscovery";
-import ModalNormal from "./feature/tarif/ModalNormal";
+/* import ModalDiscovery from "./feature/tarif/ModalDiscovery";
+import ModalNormal from "./feature/tarif/ModalNormal"; */
 import ModalNavAdmin from "./feature/header/ModalNavAdmin";
 import ModalNav from "./feature/header/ModalNav";
 import ModalNavUser from "./feature/header/ModalNavUser";
@@ -16,18 +16,18 @@ import ModalNavUser from "./feature/header/ModalNavUser";
 import ModalConfirmDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalConfirmDiscoveryMeetingRendezVousToken";
 import ModalDeleteDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalDeleteDiscoveryMeetingRendezVousToken";
 import ModalEditDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalEditDiscoveryMeetingRendezVousToken"; */
-import ModalEditFirstname from "./feature/profile/ModalEditFirstname";
+/* import ModalEditFirstname from "./feature/profile/ModalEditFirstname";
 import ModalEditLastname from "./feature/profile/ModalEditLastname";
 import ModalCancelEmail from "./feature/profile/ModalCancelEmail";
 import ModalDeleteAccount from "./feature/profile/ModalDeleteAccount";
 import ModalEditEmail from "./feature/profile/ModalEditEmail";
 import ModalEditPassword from "./feature/profile/ModalEditPassword";
-import ModalSendTokenEmail from "./feature/profile/ModalSendTokenEmail";
+import ModalSendTokenEmail from "./feature/profile/ModalSendTokenEmail"; */
 import menu from "./feature/header/menu";
 import ModalCalendarDiscoveryMeetingHeader from "./feature/header/ModalCalendarDiscoveryMeetingHeader";
 import ModalAddDiscoveryMeetingHeader from "./feature/header/ModalAddDiscoveryMeetingHeader";
 import ModalRecapDiscoveryMeetingHeader from "./feature/header/ModalRecapDiscoveryMeetingHeader";
-import ModalCalendarEditDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalCalendarEditDiscoveryMeetingRendezVousToken";
+/* import ModalCalendarEditDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalCalendarEditDiscoveryMeetingRendezVousToken";
 import ModalConfirmDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalConfirmDiscoveryMeetingRendezVousToken";
 import ModalDeleteDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalDeleteDiscoveryMeetingRendezVousToken";
 import ModalEditDiscoveryMeetingRendezVousToken from "./feature/rendez-vous/token/ModalEditDiscoveryMeetingRendezVousToken";
@@ -42,11 +42,11 @@ import ModalFormuleEditRendezVous from "./feature/rendez-vous/formule/ModalFormu
 import ModalConfirmPaidMeetingRendezVous from "./feature/rendez-vous/my/ModalConfirmPaidMeetingRendezVous";
 import ModalCancelMeetingRendezVous from "./feature/rendez-vous/my/ModalCancelMeetingRendezVous";
 import ModalAddPaidMeetingRendezVous from "./feature/rendez-vous/take/ModalAddPaidMeetingRendezVous";
-import ModalContractRendezVous from "./feature/rendez-vous/formule/ModalContractRendezVous";
+import ModalContractRendezVous from "./feature/rendez-vous/formule/ModalContractRendezVous"; */
 import ModalCalendarEditDiscoveryMeetingHeader from "./feature/header/ModalCalendarEditDiscoveryMeetingHeader";
 import csrfToken from "./feature/csrfToken";
 import Modal2FACode from "./feature/header/Modal2FACode";
-import ModalTwoFADesactivation from "./feature/profile/ModalTwoFADesactivation";
+/* import ModalTwoFADesactivation from "./feature/profile/ModalTwoFADesactivation";
 import ModalTwoFAActivation from "./feature/profile/ModalTwoFAActivation";
 import ModalTwoFAActivationCancel from "./feature/profile/ModalTwoFAActivationCancel";
 import ModalContractRecapRendezVous from "./feature/rendez-vous/formule/ModalContractRecapRendezVous";
@@ -59,7 +59,7 @@ import ModalTakeNextMeeting from "./feature/utilisateur/ModalTakeNextMeeting";
 import ModalOffreDetail from "./feature/historique-rendez-vous/ModalOffreDetail";
 import ModalHelpPaiementRendezVous from "./feature/rendez-vous/take/ModalHelpPaiementRendezVous";
 import ModalHistoriqueMeetingRendezVous from "./feature/rendez-vous/my/ModalHistoriqueMeetingRendezVous";
-import ModalFormuleCancelRendezVous from "./feature/rendez-vous/take/ModalFormuleCancelRendezVous";
+import ModalFormuleCancelRendezVous from "./feature/rendez-vous/take/ModalFormuleCancelRendezVous"; */
 
 export const store = configureStore({
   reducer: {
@@ -98,7 +98,7 @@ export const store = configureStore({
     Modal2FACode: Modal2FACode.reducer,
 
     //profile
-    ModalCancelEmail: ModalCancelEmail.reducer,
+    /* ModalCancelEmail: ModalCancelEmail.reducer,
     ModalDeleteAccount: ModalDeleteAccount.reducer,
     ModalEditFirstname: ModalEditFirstname.reducer,
     ModalEditLastname: ModalEditLastname.reducer,
@@ -150,7 +150,7 @@ export const store = configureStore({
     ModalCalendarEditDiscoveryMeetingRendezVousToken: ModalCalendarEditDiscoveryMeetingRendezVousToken.reducer,
     ModalConfirmDiscoveryMeetingRendezVousToken: ModalConfirmDiscoveryMeetingRendezVousToken.reducer,
     ModalDeleteDiscoveryMeetingRendezVousToken: ModalDeleteDiscoveryMeetingRendezVousToken.reducer,
-    ModalEditDiscoveryMeetingRendezVousToken: ModalEditDiscoveryMeetingRendezVousToken.reducer
+    ModalEditDiscoveryMeetingRendezVousToken: ModalEditDiscoveryMeetingRendezVousToken.reducer */
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

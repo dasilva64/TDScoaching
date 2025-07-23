@@ -21,7 +21,7 @@ const About = () => {
         styles.about
       }`}
     >
-      <h2 className={`${styles.about__h1}`}>Thierry Da Silva</h2>
+      <h2 className={`${styles.about__h2}`}>Thierry Da Silva</h2>
       <p className={styles.about__p}>
         Coach professionnel certifié, je vous accompagne dans votre
       </p>

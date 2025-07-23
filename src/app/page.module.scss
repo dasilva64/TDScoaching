@@ -89,7 +89,7 @@
   &__who {
     padding: 0px 0 50px 0;
     margin: 0 10% 0 10%;
-    &__h2 {
+    &__h1 {
       color: black;
       padding-top: 80px;
       width: 353px;
@@ -266,7 +266,8 @@
       height: 400px;
       margin-top: 75px;
       &__img {
-        height: 400px;
+        display: none;
+        //height: 400px;
       }
       &__container {
         padding: 40px 0 40px 40px;
@@ -316,7 +317,7 @@
       }
     }
     &__who {
-      &__h2 {
+      &__h1 {
         padding-top: 80px;
         margin-bottom: 30px;
         width: 280px;

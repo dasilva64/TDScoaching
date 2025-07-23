@@ -28,7 +28,7 @@ import Modal from "./components/modal/Modal";
 import Footer from "../components/footer/footer";
 import { ProviderTarif } from "../redux/provider/providerTarif";
 const Parisienne = localFont({
-  src: "../Parisienne-Regular.ttf",
+  src: "../parisienne-regular-webfont.woff2",
   display: "swap",
 });
 

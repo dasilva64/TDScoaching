@@ -23,7 +23,7 @@ import ModalTakeNextMeeting from "./modal/add/ModalTakeNextMeeting";
 import ModalOffreDetail from "./dataTable/modal/ModalOffreDetail";
 import { RootStateUtilisateur } from "@/app/redux/store/storeUtilisateur";
 const Parisienne = localFont({
-  src: "../../../Parisienne-Regular.ttf",
+  src: "../../../parisienne-regular-webfont.woff2",
   display: "swap",
 });
 

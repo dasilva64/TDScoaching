@@ -1,14 +1,10 @@
 import React from "react";
 import styles from "./page.module.scss";
 import Display from "./components/Display";
-import { getIronSession } from "iron-session";
-import { SessionData, sessionOptions } from "../../lib/session";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import NoScript from "@/app/components/noscript/NoScript";
 import localFont from "next/font/local";
 const Parisienne = localFont({
-  src: "../../Parisienne-Regular.ttf",
+  src: "../../parisienne-regular-webfont.woff2",
   display: "swap",
 });
 

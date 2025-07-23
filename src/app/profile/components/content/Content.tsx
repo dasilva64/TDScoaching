@@ -33,7 +33,7 @@ import LastnameDataError from "../lastnameData/LastnameDataError";
 import EmailSendTokenDataError from "../emailSendTokenData/EmailSendTokenDataError";
 import TwoFADataError from "../twoFAData/TwoFADataError";
 const Parisienne = localFont({
-  src: "../../../Parisienne-Regular.ttf",
+  src: "../../../parisienne-regular-webfont.woff2",
   display: "swap",
 });
 

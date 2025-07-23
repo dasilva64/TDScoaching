@@ -5,7 +5,7 @@ import NoScript from "@/app/components/noscript/NoScript";
 import localFont from "next/font/local";
 import Footer from "@/app/components/footer/footer";
 const Parisienne = localFont({
-  src: "../../Parisienne-Regular.ttf",
+  src: "../../parisienne-regular-webfont.woff2",
   display: "swap",
 });
 

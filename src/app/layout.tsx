@@ -12,10 +12,10 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <Providers>
+        {/* <Providers> */}
           {/* <Header /> */}
           {children}
-        </Providers>
+        {/* </Providers> */}
       </body>
     </html>
   );

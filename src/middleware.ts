@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 export async function middleware(request: NextRequest) {
   //const res = NextResponse.next();
 
-   /* const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
@@ -23,33 +23,25 @@ export async function middleware(request: NextRequest) {
   const contentSecurityPolicyHeaderValue = cspHeader
     .replace(/\s{2,}/g, ' ')
     .trim()
- 
+
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-nonce', nonce)
- 
+
   requestHeaders.set(
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
-  ) */
-  
-  const res = NextResponse.next( /* {
+  )
+
+  const res = NextResponse.next({
     request: {
       headers: requestHeaders,
     },
-  } */ ) 
-   /* res.headers.set('X-XSS-Protection', '1; mode=block');
+  })
+  res.headers.set('X-XSS-Protection', '1; mode=block');
   res.headers.set(
     'Content-Security-Policy',
-    contentSecurityPolicyHeaderValue 
-  )  */
- console.log(" Middleware intercepté :", {
-  pathname: request.nextUrl.pathname,
-  method: request.method,
-  headers: {
-    purpose: request.headers.get("purpose"),
-    userAgent: request.headers.get("user-agent")
-  }
-});
+    contentSecurityPolicyHeaderValue
+  )
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
   let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
   if (request.nextUrl.pathname.startsWith("/utilisateurs") ||
@@ -69,7 +61,7 @@ export async function middleware(request: NextRequest) {
         regex.test(request.nextUrl.pathname)
       ) {
         if (session.role !== "ROLE_ADMIN") {
-          return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length-1)}`, request.url));
+          return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length - 1)}`, request.url));
         }
       }
 
@@ -79,16 +71,16 @@ export async function middleware(request: NextRequest) {
         request.nextUrl.pathname.startsWith('/historique-rendez-vous')
       ) {
         if (session.role !== "ROLE_USER") {
-          return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length-1)}`, request.url));
+          return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length - 1)}`, request.url));
         }
       }
     }
     if (!session.isLoggedIn || Object.keys(session).length === 0) {
 
-      return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length-1)}`, request.url));
+      return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length - 1)}`, request.url));
     }
     if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
-      return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length-1)}`, request.url));
+      return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length - 1)}`, request.url));
     }
     return res;
   }

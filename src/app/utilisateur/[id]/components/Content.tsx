@@ -47,7 +47,7 @@ const Content = () => {
         });
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=utilisateur/${id}`)
       } else if (data.status === 404) {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -185,7 +185,7 @@ const Content = () => {
         dataFinishMeeting();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=utilisateur/${id}`)
       }else {
         resetFinishMeeting();
         dispatch({
@@ -226,7 +226,7 @@ const Content = () => {
         resetFinishOtherMeeting();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=utilisateur/${id}`)
       } else {
         resetFinishOtherMeeting();
         dispatch({
@@ -266,7 +266,7 @@ const Content = () => {
         resetFinishDiscoveryMeeting();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=utilisateur/${id}`)
       } else {
         resetFinishDiscoveryMeeting();
         dispatch({
@@ -315,7 +315,7 @@ const Content = () => {
         resetDeleteOffre();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=utilisateur/${id}`)
       } else {
         resetDeleteOffre();
         dispatch({

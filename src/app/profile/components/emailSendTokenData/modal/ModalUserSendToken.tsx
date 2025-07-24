@@ -23,9 +23,9 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const [emailInput, setEmailInput] = useState<string>(userData.body.email);
-  useEffect(() =>  {
-      setEmailInput(inputEmail)
-    
+  useEffect(() => {
+    setEmailInput(inputEmail)
+
   }, [inputEmail, displayModalSendTokenEmail])
   const [validEmailInput, setValidEmailInput] = useState<boolean>(true);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string>("");
@@ -52,7 +52,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
         globalMutate("/components/header/api");
         dispatch({
           type: "ModalSendTokenEmail/close",
-          payload: {inputEmail: userData?.body.email}
+          payload: { inputEmail: userData?.body.email }
         });
         dispatch({
           type: "ModalEditEmail/open",
@@ -63,14 +63,14 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
         });
         reset();
       } else if (data.status === 401) {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "error", flashMessage: data.message },
-          });
-          reset();
-          globalMutate("/components/header/api");
-                  globalMutate("/components/header/ui/api");
-        router.push("/");
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=profile`);
       } else if (data.status === 400) {
         if (data.type === "validation") {
           data.message.forEach((element: string) => {
@@ -100,7 +100,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
     clearState();
     dispatch({
       type: "ModalSendTokenEmail/close",
-      payload: {inputEmail: userData.body.email}
+      payload: { inputEmail: userData.body.email }
     });
   };
   /*   useEffect(() => {
@@ -217,7 +217,7 @@ const ModalUserSendToken = ({ data: userData, mutate }: any) => {
               <form
                 className={styles.modalEditEmailData__form}
                 action=""
-              method="POST"
+                method="POST"
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}

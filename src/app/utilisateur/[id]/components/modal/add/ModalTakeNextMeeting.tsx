@@ -92,7 +92,7 @@ const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
         reset();
         globalMutate("/components/header/api");
                 globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=utilisateur/${id}`)
       }
     }
   }, [data, dispatch, reset, router]);

@@ -51,14 +51,17 @@ const Forgot = () => {
           reset();
         }, 2000);
       } else if (data.status === 401) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: data.message },
-        });
-        reset();
-        mutate("/components/header/api");
+        setTimeout(() => {
+          setIsLoading(false);
+          setInputEmail("")
+          mutate("/components/header/api");
         mutate("/components/header/ui/api");
-        router.push("/");
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          reset();
+        }, 2000);
       } else {
         setTimeout(() => {
           setIsLoading(false);

@@ -32,7 +32,7 @@ const useDeleteAccount = (token: string, csrfToken: any) => {
           if (split[1] === "utilisateur" || split[1] === "suppression-compte") {
             router.push("/");
           }
-          if (pathname === "/profile" || pathname === "/utilisateurs" || pathname === "rendez-vous" || pathname === "historique-rendez-vous") {
+          if (pathname === "/profile" || pathname === "/utilisateurs" || pathname === "rendez-vous" || pathname === "historique-rendez-vous" || pathname === "/redirection-vers-rendez-vous") {
             router.push("/");
           }
         }

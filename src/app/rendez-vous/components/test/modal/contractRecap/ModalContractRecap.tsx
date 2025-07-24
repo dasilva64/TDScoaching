@@ -45,7 +45,7 @@ const ModalContractRecap = ({mutate}: any) => {
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
         resetConfirm()
-        router.push("/")
+        router.push(`/acces-refuse?destination=rendez-vous`)
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -69,7 +69,7 @@ const ModalContractRecap = ({mutate}: any) => {
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
         resetSee();
-        router.push("/")
+        router.push(`/acces-refuse?destination=rendez-vous`)
       }else {
         resetSee();
         dispatch({

@@ -10,9 +10,8 @@ import Input from "@/app/components/input/Input";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store/store";
-import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
-const ModalUserPasswordData = ({mutate}: any) => {
+const ModalUserPasswordData = ({ mutate }: any) => {
   const { displayModalEditPassword } = useSelector(
     (state: RootState) => state.ModalEditPassword
   );
@@ -56,8 +55,8 @@ const ModalUserPasswordData = ({mutate}: any) => {
         });
         reset();
         globalMutate("/components/header/api");
-                globalMutate("/components/header/ui/api");
-        router.push("/");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=profile`);
       } else if (data.status === 400) {
         if (data.type === "validation") {
           data.message.forEach((element: string) => {
@@ -331,7 +330,7 @@ const ModalUserPasswordData = ({mutate}: any) => {
               <form
                 className={styles.modalEditPasswordData__form}
                 action=""
-              method="POST"
+                method="POST"
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}

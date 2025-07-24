@@ -82,11 +82,15 @@ const Content = () => {
         let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
         if (
           pathname === "/profile" ||
+          pathname === "/rendez-vous" ||
+          pathname === "/historique-rendez-vous" ||
+          pathname === "/meetings" ||
+          pathname === "/redirection-vers-rendez-vous" ||
           pathname === "/utilisateurs" ||
           regex.test(pathname) ||
           regexTwo.test(pathname)
         ) {
-          router.push("/");
+          router.push(`/acces-refuse?destination=${pathname.substring(1, pathname.length-1)}`);
         }
       }
       }

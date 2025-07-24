@@ -84,7 +84,7 @@ const ModalEditMeeting = ({ mutate, meeting, offre }: any) => {
         reset();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=rendez-vous`)
       } else {
         dispatch({
           type: "flash/storeFlashMessage",

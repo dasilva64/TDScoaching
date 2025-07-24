@@ -35,7 +35,7 @@ const useGetOneByToken = (token: string, csrfToken: any) => {
           payload: { flashMessage: data.message, type: "error" },
         });
        
-        //router.push("/");
+        router.push("/");
       } else if (data.status === 200) {
         mutateGlobal('/components/header/api')
       }

@@ -36,7 +36,7 @@ const ModalCancelMeeting = ({ mutate, offre }: any) => {
         reset();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=rendez-vous`)
       } else if (data.status === 200) {
         dispatch({
           type: "flash/storeFlashMessage",

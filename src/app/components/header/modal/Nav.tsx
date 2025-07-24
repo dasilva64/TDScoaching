@@ -6,10 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "../../image/Image";
 import { useDispatch, useSelector } from "react-redux";
-import router from "next/router";
-import useSWRMutation from "swr/mutation";
-import { defaultSession } from "../../../lib/session";
-import fetchDelete from "../../fetch/FetchDelete";
 import TabIndex from "../../tabIndex/TabIndex";
 
 const Nav = () => {
@@ -20,33 +16,7 @@ const Nav = () => {
       type: "ModalNav/close",
     });
   };
-  const {
-    trigger,
-    data: dataLogout,
-    reset,
-  } = useSWRMutation("/components/header/api", fetchDelete);
   const pathname = usePathname();
-  useEffect(() => {
-    if (dataLogout) {
-      if (pathname) {
-        let split = pathname.split("/");
-        if (split[1] === "utilisateur") {
-          router.push("/");
-        }
-        if (pathname === "/profile" || pathname === "/utilisateurs") {
-          router.push("/");
-        }
-      }
-      dispatch({
-        type: "flash/storeFlashMessage",
-        payload: {
-          type: "error",
-          flashMessage: dataLogout.message,
-        },
-      });
-      reset();
-    }
-  }, [dispatch, pathname, reset, dataLogout]);
 
   return (
     <>

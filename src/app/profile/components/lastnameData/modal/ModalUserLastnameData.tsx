@@ -70,8 +70,8 @@ const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
         });
         reset();
         globalMutate("/components/header/api");
-                globalMutate("/components/header/ui/api");
-        router.push("/");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=profile`);
       } else if (data.status === 400) {
         if (data.type === "validation") {
           data.message.forEach((element: string) => {
@@ -224,7 +224,7 @@ const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
               <form
                 className={styles.modalEditMainUserData__form}
                 action=""
-              method="POST"
+                method="POST"
                 onSubmit={(e) => {
                   handlerSubmit(e);
                 }}

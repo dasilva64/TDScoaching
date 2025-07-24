@@ -37,7 +37,7 @@ const NavUser = ({csrfToken}: any) => {
         if (split[1] === "suppression-compte") {
           router.push("/");
         }
-        if (pathname === "/profile" || pathname === "/rendez-vous" || pathname === "/historique-rendez-vous") {
+        if (pathname === "/profile" || pathname === "/rendez-vous" || pathname === "/historique-rendez-vous" || pathname === "/redirection-vers-rendez-vous") {
           router.push("/");
         }
       }

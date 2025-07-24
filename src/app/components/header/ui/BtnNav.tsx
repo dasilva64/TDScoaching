@@ -23,14 +23,18 @@ const BtnNav = ({ name }: any) => {
         if (data.isLoggedIn === false) {
           let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
           let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-          if (
-            pathname === "/profile" ||
-            pathname === "/utilisateurs" ||
-            regex.test(pathname) ||
-            regexTwo.test(pathname)
-          ) {
-            router.push("/");
-          }
+         if (
+          pathname === "/profile" ||
+          pathname === "/rendez-vous" ||
+          pathname === "/historique-rendez-vous" ||
+          pathname === "/meetings" ||
+          pathname === "/redirection-vers-rendez-vous" ||
+          pathname === "/utilisateurs" ||
+          regex.test(pathname) ||
+          regexTwo.test(pathname)
+        ) {
+          router.push(`/acces-refuse?destination=${pathname.substring(1, pathname.length-1)}`);
+        }
         }
       }
 

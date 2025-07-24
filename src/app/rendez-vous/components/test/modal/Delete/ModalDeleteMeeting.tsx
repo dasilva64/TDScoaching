@@ -34,7 +34,7 @@ const ModalDeleteMeeting = ({ mutate }: any) => {
         reset();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=rendez-vous`)
       } else if (data.status === 200) {
         const processFetchedData = async () => {
           await mutate();

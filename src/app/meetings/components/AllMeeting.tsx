@@ -65,7 +65,7 @@ const AllMeeting = () => {
         });
         mutate("/components/header/api");
         mutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=meetings`);
       } else {
         dispatch({
           type: "flash/storeFlashMessage",

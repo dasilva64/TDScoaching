@@ -10,15 +10,15 @@ const Btn = ({destination}: any) => {
       console.log("destination", destination)
     if (!destination) return false;
 
-    const regex = /^\/utilisateur\/[0-9A-Za-z-]+$/;
-    const regexTwo = /^\/suppression-compte\/[0-9A-Za-z-]+$/;
+    const regex = /^utilisateur\/[0-9A-Za-z-]+$/;
+    const regexTwo = /^suppression-compte\/[0-9A-Za-z-]+$/;
 
     return (
-      destination.startsWith("/meetings") ||
-      destination.startsWith("/meetingAdmin") ||
-      destination === "/rendez-vous" ||
-      destination.startsWith("/profile") ||
-      destination.startsWith("/historique-rendez-vous") ||
+      destination.startsWith("meetings") ||
+      destination.startsWith("meetingAdmin") ||
+      destination === "rendez-vous" ||
+      destination.startsWith("profile") ||
+      destination.startsWith("historique-rendez-vous") ||
       regex.test(destination) ||
       regexTwo.test(destination)
     );

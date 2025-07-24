@@ -101,7 +101,7 @@ const ModalContract = ({ mutate }: any) => {
         resetSee();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/")
+        router.push(`/acces-refuse?destination=rendez-vous`)
       } else {
         resetSee();
         dispatch({
@@ -147,7 +147,7 @@ const ModalContract = ({ mutate }: any) => {
         });
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=rendez-vous`)
       }
       else {
         if (dataAdd.type === "validation") {

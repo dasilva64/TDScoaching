@@ -31,12 +31,12 @@ export async function middleware(request: NextRequest) {
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
   )
-  
+
   const res = NextResponse.next( {
     request: {
       headers: requestHeaders,
     },
-  } ) 
+  } )
    res.headers.set('X-XSS-Protection', '1; mode=block');
   res.headers.set(
     'Content-Security-Policy',
@@ -48,12 +48,23 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/meetings") ||
     request.nextUrl.pathname.startsWith("/meetingAdmin") ||
     regex.test(request.nextUrl.pathname) ||
+    request.nextUrl.pathname === "/acces-refuse" ||
     request.nextUrl.pathname === "/rendez-vous" ||
     regexTwo.test(request.nextUrl.pathname) ||
     request.nextUrl.pathname.startsWith("/profile") ||
+    request.nextUrl.pathname.startsWith("/redirection-vers-rendez-vous") ||
     request.nextUrl.pathname.startsWith('/historique-rendez-vous')) {
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+    if (request.nextUrl.pathname.startsWith('/acces-refuse')) {
+      if (session.isLoggedIn) {
+        return NextResponse.redirect(new URL(`/`, request.url));
+      }
+      return res
+    }
     if (session.isLoggedIn) {
+      if (request.nextUrl.pathname.startsWith('/acces-refuse')) {
+        return NextResponse.redirect(new URL(`/`, request.url));
+      }
       if (
         request.nextUrl.pathname.startsWith("/utilisateurs") ||
         request.nextUrl.pathname.startsWith("/meetings") ||
@@ -61,26 +72,27 @@ export async function middleware(request: NextRequest) {
         regex.test(request.nextUrl.pathname)
       ) {
         if (session.role !== "ROLE_ADMIN") {
-          return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length-1)}`, request.url));
+          return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length)}`, request.url));
         }
       }
 
       if (
         request.nextUrl.pathname.startsWith("/rendez-vous") ||
         regexTwo.test(request.nextUrl.pathname) ||
+        request.nextUrl.pathname.startsWith("/redirection-vers-rendez-vous") ||
         request.nextUrl.pathname.startsWith('/historique-rendez-vous')
       ) {
         if (session.role !== "ROLE_USER") {
-          return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length-1)}`, request.url));
+          return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length)}`, request.url));
         }
       }
     }
     if (!session.isLoggedIn || Object.keys(session).length === 0) {
 
-      return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length-1)}`, request.url));
+      return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length)}`, request.url));
     }
     if (session.role !== "ROLE_USER" && session.role !== "ROLE_ADMIN") {
-      return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length-1)}`, request.url));
+      return NextResponse.redirect(new URL(`/acces-refuse?destination=${request.nextUrl.pathname.substring(1, request.nextUrl.pathname.length)}`, request.url));
     }
     return res;
   }

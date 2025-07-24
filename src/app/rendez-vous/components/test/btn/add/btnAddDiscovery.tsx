@@ -69,7 +69,7 @@ const BtnAddDiscovery = ({
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
-        router.push("/");
+        router.push(`/acces-refuse?destination=rendez-vous`)
       }
     }
   }, [

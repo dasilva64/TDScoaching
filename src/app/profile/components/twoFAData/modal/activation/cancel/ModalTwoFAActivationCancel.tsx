@@ -41,7 +41,7 @@ const ModalTwoFAActivationCancel = () => {
         reset();
         mutate("/components/header/api");
         mutate("/components/header/ui/api");
-        router.push("/");
+       router.push(`/acces-refuse?destination=profile`);
       } else if (data.status === 400) {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -54,7 +54,6 @@ const ModalTwoFAActivationCancel = () => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
-        router.push("/");
       }
     }
   }, [data, dispatch, reset, router]);

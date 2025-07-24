@@ -10,7 +10,7 @@ import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState } from "@/app/redux/store/store";
 
-const ModalDeleteAccount = ({mutate} : any) => {
+const ModalDeleteAccount = ({ mutate }: any) => {
   const { displayModalDeleteAccount } = useSelector(
     (state: RootState) => state.ModalDeleteAccount
   );
@@ -54,8 +54,8 @@ const ModalDeleteAccount = ({mutate} : any) => {
         });
         reset();
         globalMutate("/components/header/api");
-                globalMutate("/components/header/ui/api");
-        router.push("/");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=profile`);
       } else if (data.status === 400) {
         if (data.type === "validation") {
           data.message.forEach((element: string) => {
@@ -212,8 +212,8 @@ const ModalDeleteAccount = ({mutate} : any) => {
 
               <div className={styles.modalDeleteAccount__div}>
                 <form
-                action=""
-              method="POST"
+                  action=""
+                  method="POST"
                   className={styles.modalDeleteAccount__div__form}
                   onSubmit={(e) => {
                     if (reasonValid) {
@@ -246,11 +246,10 @@ const ModalDeleteAccount = ({mutate} : any) => {
                 >
                   <div className={styles.modalDeleteAccount__div__form__div}>
                     <label
-                      className={`${
-                        reason.length > 0
+                      className={`${reason.length > 0
                           ? styles.modalDeleteAccount__div__form__div__label__value
                           : styles.modalDeleteAccount__div__form__div__label
-                      }`}
+                        }`}
                       htmlFor=""
                     >
                       Selectionnez une raison de la suppression de votre compte
@@ -259,9 +258,8 @@ const ModalDeleteAccount = ({mutate} : any) => {
                       className={styles.modalDeleteAccount__div__form__div__div}
                     >
                       <select
-                        className={`${
-                          styles.modalDeleteAccount__div__form__div__div__select
-                        }`}
+                        className={`${styles.modalDeleteAccount__div__form__div__div__select
+                          }`}
                         name="reason"
                         id="reason"
                         value={reason}

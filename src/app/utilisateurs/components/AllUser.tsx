@@ -98,7 +98,7 @@ const AllUser = () => {
         });
         mutate("/components/header/api");
         mutate("/components/header/ui/api");
-        router.push("/");
+       router.push(`/acces-refuse?destination=utilisateurs`)
       } else {
         dispatch({
           type: "flash/storeFlashMessage",

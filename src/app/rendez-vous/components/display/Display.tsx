@@ -66,7 +66,7 @@ const Display = () => {
         });
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=rendez-vous`);
       } if (userData.status === 200) {
         let array = [];
         for (let i = 0; i < userData.body.meetings.length; i++) {

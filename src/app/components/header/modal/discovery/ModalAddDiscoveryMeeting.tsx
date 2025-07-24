@@ -167,7 +167,6 @@ const ModalAddDiscoveryMeeting = () => {
         setValidEmailInput(false);
         mutate("/components/header/api");
         mutate("/components/header/ui/api");
-        router.push("/");
       } else {
         dispatch({
           type: "flash/storeFlashMessage",

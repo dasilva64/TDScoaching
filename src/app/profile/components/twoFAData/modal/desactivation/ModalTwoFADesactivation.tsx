@@ -50,7 +50,7 @@ const ModalTwoFADesactivation = ({ mutate, data: userData }: any) => {
                 reset();
                 globalMutate("/components/header/api");
                 globalMutate("/components/header/ui/api");
-                router.push("/");
+                router.push(`/acces-refuse?destination=profile`);
             } else {
                 dispatch({
                     type: "flash/storeFlashMessage",

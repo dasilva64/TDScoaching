@@ -45,7 +45,7 @@ const ModalContractEdit = ({mutate}: any) => {
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
         reset();
-        router.push("/")
+        router.push(`/acces-refuse?destination=rendez-vous`)
       } else {
         reset();
         dispatch({

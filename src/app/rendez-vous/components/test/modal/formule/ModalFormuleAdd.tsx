@@ -42,7 +42,7 @@ const ModalFormuleAdd = ({ mutate }: any) => {
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
-        router.push("/");
+        router.push(`/acces-refuse?destination=rendez-vous`);
       } else {
         dispatch({
           type: "flash/storeFlashMessage",

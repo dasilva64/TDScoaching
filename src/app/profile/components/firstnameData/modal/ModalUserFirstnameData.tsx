@@ -71,8 +71,8 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
         });
         reset();
         globalMutate("/components/header/api");
-                globalMutate("/components/header/ui/api");
-        router.push("/");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=profile`);
       } else if (data.status === 400) {
         if (data.type === "validation") {
           data.message.forEach((element: string) => {
@@ -223,8 +223,8 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
                 Modifier votre prénom
               </h2>
               <form
-              action=""
-              method="POST"
+                action=""
+                method="POST"
                 className={styles.modalEditMainUserData__form}
                 onSubmit={(e) => {
                   handlerSubmit(e);

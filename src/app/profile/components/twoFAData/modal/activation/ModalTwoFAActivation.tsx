@@ -69,7 +69,7 @@ const ModalTwoFAActivation = ({ mutate, data: userData }: any) => {
         reset();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
-        router.push("/");
+        router.push(`/acces-refuse?destination=profile`);
       } else if (data.status === 400) {
         if (data.type === "validation") {
           data.message.forEach((element: string) => {

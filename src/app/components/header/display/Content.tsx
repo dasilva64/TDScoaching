@@ -183,6 +183,7 @@ const Content = () => {
   const handlerClick = () => {
     dispatch({
       type: "ModalLogin/open",
+      payload: {destination: ""}
     });
   };
   return (

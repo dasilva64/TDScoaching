@@ -13,7 +13,6 @@ import Places from "../../google/Places";
 import { useDraw } from "@/app/components/hook/canva/useDraw";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";
-import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalContract = ({ mutate }: any) => {
   const router = useRouter()
@@ -33,7 +32,7 @@ const ModalContract = ({ mutate }: any) => {
   const [dateSignature, setDateSignature] = useState("")
 
   const { displayModalContractRendezVous, typeModalContractRendezVous, statusModalContractRendezVous } =
-    useSelector((state: RootStateRendezVous) => state.ModalContractRendezVous);
+    useSelector((state: RootState) => state.ModalContractRendezVous);
   const clearState = () => {
     setAdresse("");
     setDateSignature("")

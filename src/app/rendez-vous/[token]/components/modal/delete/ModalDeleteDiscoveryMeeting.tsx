@@ -9,13 +9,12 @@ import fetchPost from "@/app/components/fetch/FetchPost";
 import { AppDispatch, RootState } from "@/app/redux/store/store";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
-import { RootStateRendezVousToken } from "@/app/redux/store/storeRendezVousToken";
 
 const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { displayModalDeleteDiscoveryMeetingRendezVousToken } = useSelector(
-    (state: RootStateRendezVousToken) => state.ModalDeleteDiscoveryMeetingRendezVousToken
+    (state: RootState) => state.ModalDeleteDiscoveryMeetingRendezVousToken
   );
   const closeModal = () => {
     dispatch({

@@ -1,14 +1,12 @@
 import TabIndex from "@/app/components/tabIndex/TabIndex"
 import { RootState } from "@/app/redux/store/store"
 import { AnimatePresence, motion } from "framer-motion"
-import { useState } from "react"
 import Image from "@/app/components/image/Image"
 import styles from "./ModalFormuleCancel.module.scss"
 import { useSelector, useDispatch } from "react-redux"
-import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous"
 
 const ModalFormuleCancel = () => {
-    const { displayModalFormuleCancelRendezVous } = useSelector((state: RootStateRendezVous) => state.ModalFormuleCancelRendezVous)
+    const { displayModalFormuleCancelRendezVous } = useSelector((state: RootState) => state.ModalFormuleCancelRendezVous)
     const dispatch = useDispatch()
     const closeModal = () => {
         dispatch({

@@ -10,7 +10,6 @@ import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from 'swr'
-import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const ModalTwoFAActivation = ({ mutate, data: userData }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
@@ -24,7 +23,7 @@ const ModalTwoFAActivation = ({ mutate, data: userData }: any) => {
     setValidCodeInput(false);
     setErrorMessageCode("");
   };
-  const { displayModalTwoFAActivation } = useSelector((state: RootStateProfile) => state.ModalTwoFAActivation)
+  const { displayModalTwoFAActivation } = useSelector((state: RootState) => state.ModalTwoFAActivation)
 
   const closeForm = () => {
     clearState()

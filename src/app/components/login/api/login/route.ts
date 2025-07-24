@@ -17,6 +17,7 @@ import { checkRateLimitShort } from "@/app/lib/rateLimiter";
 export async function POST(request: NextRequest) {
   try {
     const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-login');
+    console.log(rateLimitResponse)
     if (rateLimitResponse) return rateLimitResponse;
     const session = await getIronSession<SessionData>(
       cookies(),
@@ -223,7 +224,7 @@ export async function POST(request: NextRequest) {
                     twoFAToken: twoFATokenObject
                   }
                 })
-                let smtpTransport = nodemailer.createTransport({
+                /* let smtpTransport = nodemailer.createTransport({
                   host: "smtp.ionos.fr",
                   port: 465,
                   secure: true,
@@ -262,7 +263,7 @@ export async function POST(request: NextRequest) {
                                           </body>
                                         </html>`,
                 };
-                await smtpTransport.sendMail(mailOptions);
+                await smtpTransport.sendMail(mailOptions); */
                 await session.save();
                 return NextResponse.json({
                   status: 200,

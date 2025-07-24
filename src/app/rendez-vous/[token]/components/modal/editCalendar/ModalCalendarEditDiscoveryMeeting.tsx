@@ -9,7 +9,6 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store/store";
-import { RootStateRendezVousToken } from "@/app/redux/store/storeRendezVousToken";
 
 const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
   const [meetingDate, setMeetingDate] = useState<any>(null);
@@ -44,7 +43,7 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
   const calendarRef: any = useRef(null);
   const { displayModalCalendarEditDiscoveryMeetingRendezVousToken } =
     useSelector(
-      (state: RootStateRendezVousToken) =>
+      (state: RootState) =>
         state.ModalCalendarEditDiscoveryMeetingRendezVousToken
     );
 

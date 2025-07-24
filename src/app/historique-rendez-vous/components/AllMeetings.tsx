@@ -14,10 +14,10 @@ import Search from "./dataTable/search/Search";
 import { mutate as globalMutate } from "swr";
 import ModalOffreDetail from "./dataTable/modal/ModalOffreDetail";
 import NoScript from "@/app/components/noscript/NoScript";
-import { RootStateHistoriqueRendezVous } from "@/app/redux/store/storeHistoriqueRendezVous";
+import { RootState } from "@/app/redux/store/store";
 
 const AllMeetings = () => {
-  const { datas } = useSelector((state: RootStateHistoriqueRendezVous) => state.Array);
+  const { datas } = useSelector((state: RootState) => state.Array);
   const dispatch = useDispatch();
   const [content, setContent] = useState<any>(null);
   const router = useRouter()

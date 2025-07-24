@@ -13,10 +13,9 @@ import useGet from "../../components/hook/useGet";
 import DisplayError from "./dataTable/display/DisplayError";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
-import { RootStateUtilisateurs } from "@/app/redux/store/storeUtilisateurs";
 
 const AllUser = () => {
-  const { datas } = useSelector((state: RootStateUtilisateurs) => state.Array);
+  const { datas } = useSelector((state: RootState) => state.Array);
   const dispatch = useDispatch();
   const router = useRouter();
   const [content, setContent] = useState<any>(null);

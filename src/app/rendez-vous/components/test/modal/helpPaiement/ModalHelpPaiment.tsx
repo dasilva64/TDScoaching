@@ -4,10 +4,9 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useSelector, useDispatch } from "react-redux"
 import styles from "./ModalHelpPaiment.module.scss"
 import Image from "@/app/components/image/Image"
-import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous"
 
 const ModalHelpPaiement = () => {
-  const { displayModalHelpPaiementRendezVous } = useSelector((state: RootStateRendezVous) => state.ModalHelpPaiementRendezVous)
+  const { displayModalHelpPaiementRendezVous } = useSelector((state: RootState) => state.ModalHelpPaiementRendezVous)
   const dispatch = useDispatch()
   const closeModal = () => {
     dispatch({

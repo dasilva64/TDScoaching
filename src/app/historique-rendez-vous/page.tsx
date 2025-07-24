@@ -1,7 +1,4 @@
-import NoScript from "../components/noscript/NoScript";
-import { ProviderHistoriqueRendezVous } from "../redux/provider/providerHistoriqueRendezVous";
 import AllMeetings from "./components/AllMeetings";
-import styles from './page.module.scss'
 
 export const metadata = {
     title: "Historique de mes rendez-vous - tdscoaching",
@@ -19,7 +16,7 @@ export const metadata = {
 const Page = () => {
     return (
         <>
-        <ProviderHistoriqueRendezVous><AllMeetings /></ProviderHistoriqueRendezVous>
+        <AllMeetings />
        
          </>
     )

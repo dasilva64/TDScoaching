@@ -10,7 +10,6 @@ import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { RootState } from "@/app/redux/store/store";
-import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const ModalCloseEmail = ({mutate}: any) => {
   const dispatch = useDispatch<any>();
@@ -23,7 +22,7 @@ const ModalCloseEmail = ({mutate}: any) => {
     (state: RootState) => state.csrfToken
   );
   const { displayModalCancelEmail } = useSelector(
-    (state: RootStateProfile) => state.ModalCancelEmail
+    (state: RootState) => state.ModalCancelEmail
   );
   useEffect(() => {
     if (data) {

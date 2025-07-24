@@ -1,4 +1,3 @@
-import { ProviderProfile } from "../redux/provider/providerProfile";
 import Content from "./components/content/Content";
 
 export const metadata = {
@@ -18,7 +17,7 @@ export const metadata = {
 const Profile = () => {
   return (
     <>
-    <ProviderProfile><Content /></ProviderProfile>
+    <Content />
       
     </>
   );

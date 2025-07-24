@@ -9,7 +9,6 @@ import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const ModalTwoFADesactivation = ({ mutate, data: userData }: any) => {
     const dispatch = useDispatch()
@@ -62,7 +61,7 @@ const ModalTwoFADesactivation = ({ mutate, data: userData }: any) => {
 
         }
     }, [data, dispatch, reset, router, mutate, userData]);
-    const { displayModalTwoFADesactivation } = useSelector((state: RootStateProfile) => state.ModalTwoFADesactivation)
+    const { displayModalTwoFADesactivation } = useSelector((state: RootState) => state.ModalTwoFADesactivation)
     return (
         <>
             <TabIndex displayModal={displayModalTwoFADesactivation} />

@@ -97,7 +97,7 @@ const Content = () => {
         <>
         
           <ModalUserFirstnameData data={data} mutate={mutate} />
-          <ModalUserLastnameData data={data} mutate={mutate} />
+           <ModalUserLastnameData data={data} mutate={mutate} />
           <ModalUserPasswordData mutate={mutate} />
           <ModalUserSendToken data={data} mutate={mutate} />
           <ModalDeleteAccount mutate={mutate} />
@@ -125,7 +125,6 @@ const Content = () => {
               >
                 Identité
               </h3>
-              {}
               {data && data.status === 200 && data.body && isLoading === false && (
                 <>
                   <FirstnameData data={data && data.body && data} />
@@ -151,7 +150,7 @@ const Content = () => {
               >
                 Connexion
               </h3>
-              <PasswordData />
+               <PasswordData />
               {data && data.body && isLoading === false && (
                 <EmailSendTokenData data={data && data.body && data} />
               )}

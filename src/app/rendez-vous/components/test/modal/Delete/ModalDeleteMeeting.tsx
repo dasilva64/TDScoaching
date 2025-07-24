@@ -9,11 +9,10 @@ import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import fetchPost from "@/app/components/fetch/FetchPost";
-import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalDeleteMeeting = ({ mutate }: any) => {
   const { displayModalDeleteMeetingRendezVous } = useSelector(
-    (state: RootStateRendezVous) => state.ModalDeleteMeetingRendezVous
+    (state: RootState) => state.ModalDeleteMeetingRendezVous
   );
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch();

@@ -1,8 +1,6 @@
 import fetchPost from "@/app/components/fetch/FetchPost";
-import csrfToken from "@/app/redux/feature/csrfToken";
 import { AppDispatch, RootState } from "@/app/redux/store/store";
-import { animate, AnimatePresence, motion } from "framer-motion";
-import { discovery } from "googleapis/build/src/apis/discovery";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +9,6 @@ import Image from "@/app/components/image/Image";
 import styles from './ModalTakeNextMeeting.module.scss'
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { RootStateUtilisateur } from "@/app/redux/store/storeUtilisateur";
 
 const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,7 +31,7 @@ const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
     dispatch({ type: "ModalCalendarAddMeetingRendezVous/open" });
   };
   const { dateModalTakeNextMeeting, displayModalTakeNextMeeting } =
-    useSelector((state: RootStateUtilisateur) => state.ModalTakeNextMeeting);
+    useSelector((state: RootState) => state.ModalTakeNextMeeting);
 
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/utilisateur/[id]/components/modal/add/api/",

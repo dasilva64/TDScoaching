@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./Display.module.scss";
 import { useRouter } from "next/navigation";
-import { RootStateUtilisateurs } from "@/app/redux/store/storeUtilisateurs";
 
 const DisplayOne = ({ i }: any) => {
-  const { datas, sortBy } = useSelector((state: RootStateUtilisateurs) => state.Array);
+  const { datas, sortBy } = useSelector((state: RootState) => state.Array);
   const [keyAr, setKeyAr] = useState<any>([]);
   const router = useRouter();
   const dispatch = useDispatch();

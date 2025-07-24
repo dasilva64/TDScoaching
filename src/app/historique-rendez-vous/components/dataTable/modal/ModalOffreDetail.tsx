@@ -5,11 +5,11 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from "./ModalOffreDetail.module.scss"
 import Image from "@/app/components/image/Image";
 import React from "react";
-import { RootStateHistoriqueRendezVous } from "@/app/redux/store/storeHistoriqueRendezVous";
+import { RootState } from "@/app/redux/store/store";
 
 const ModalOffreDetail = () => {
   const { displayModalOffreDetail, meetingModalOffreDetail }: any = useSelector(
-    (state: RootStateHistoriqueRendezVous) => state.ModalOffreDetail
+    (state: RootState) => state.ModalOffreDetail
   );
   const dispatch = useDispatch<any>();
   const closeForm = () => {

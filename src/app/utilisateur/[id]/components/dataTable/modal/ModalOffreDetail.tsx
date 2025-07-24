@@ -2,21 +2,15 @@ import fetchPost from "@/app/components/fetch/FetchPost";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store/store";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { mutate } from "swr";
-import useSWRMutation from "swr/mutation";
 import styles from "./ModalOffreDetail.module.scss"
 import Image from "@/app/components/image/Image";
 import React from "react";
-import { RootStateTarif } from "@/app/redux/store/storeTarif";
-import { RootStateUtilisateur } from "@/app/redux/store/storeUtilisateur";
-import { RootStateHistoriqueRendezVous } from "@/app/redux/store/storeHistoriqueRendezVous";
 
 const ModalOffreDetail = () => {
   const { displayModalOffreDetail, meetingModalOffreDetail }: any = useSelector(
-    (state: RootStateHistoriqueRendezVous) => state.ModalOffreDetail
+    (state: RootState) => state.ModalOffreDetail
   );
   const dispatch = useDispatch<AppDispatch>();
   const closeForm = () => {

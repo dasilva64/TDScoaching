@@ -7,11 +7,10 @@ import styles from "./ModalComfirmDiscoveryMeeting.module.scss";
 import Image from "@/app/components/image/Image";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { RootState } from "@/app/redux/store/store";
-import { RootStateRendezVousToken } from "@/app/redux/store/storeRendezVousToken";
 
 const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
   const { displayModalConfirmDiscoveryMeetingRendezVousToken } = useSelector(
-    (state: RootStateRendezVousToken) => state.ModalConfirmDiscoveryMeetingRendezVousToken
+    (state: RootState) => state.ModalConfirmDiscoveryMeetingRendezVousToken
   );
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken

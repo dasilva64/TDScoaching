@@ -12,11 +12,10 @@ import Input from "@/app/components/input/Input";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store/store";
 import { mutate as globalMutate } from "swr";
-import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const ModalUserLastnameData = ({ data: userData, mutate }: any) => {
   const { displayModalEditLastname } = useSelector(
-    (state: RootStateProfile) => state.ModalEditLastname
+    (state: RootState) => state.ModalEditLastname
   );
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken

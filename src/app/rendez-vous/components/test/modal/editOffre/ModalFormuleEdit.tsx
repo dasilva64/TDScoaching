@@ -9,7 +9,6 @@ import { mutate as globalMutate } from "swr";
 import useSWRMutation from "swr/mutation";
 import styles from "./ModalFormuleEdit.module.scss";
 import Image from "next/image";
-import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalFormuleEdit = ({ mutate }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
@@ -18,7 +17,7 @@ const ModalFormuleEdit = ({ mutate }: any) => {
     dispatch({ type: "ModalFormuleEditRendezVous/close" });
   };
   const { displayModalFormuleEditRendezVous, idModalFormuleEditRendezVous } =
-    useSelector((state: RootStateRendezVous) => state.ModalFormuleEditRendezVous);
+    useSelector((state: RootState) => state.ModalFormuleEditRendezVous);
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/rendez-vous/components/test/modal/editOffre/api/",
     fetchPost

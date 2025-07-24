@@ -14,7 +14,7 @@ import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const ModalUserPasswordData = ({mutate}: any) => {
   const { displayModalEditPassword } = useSelector(
-    (state: RootStateProfile) => state.ModalEditPassword
+    (state: RootState) => state.ModalEditPassword
   );
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken

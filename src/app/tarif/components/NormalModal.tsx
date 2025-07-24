@@ -5,7 +5,6 @@ import Image from "@/app/components/image/Image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/redux/store/store";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import { RootStateTarif } from "@/app/redux/store/storeTarif";
 
 const NormalModal = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,7 +14,7 @@ const NormalModal = () => {
     });
   };
   const { displayModalNormal } = useSelector(
-    (state: RootStateTarif) => state.ModalNormal
+    (state: RootState) => state.ModalNormal
   );
   return (
     <>

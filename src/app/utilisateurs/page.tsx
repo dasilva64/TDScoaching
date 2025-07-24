@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./page.module.scss";
 import AllUser from "./components/AllUser";
 import NoScript from "../components/noscript/NoScript";
-import { ProviderUtilisateurs } from "../redux/provider/providerUtilisateurs";
 
 export const metadata = {
   title: "Tous les utilisateurs - tdscoaching",
@@ -21,7 +20,6 @@ export const metadata = {
 const page = async () => {
   return (
     <>
-    <ProviderUtilisateurs>
       <NoScript />
 
       <main className={styles.allUser}>
@@ -34,7 +32,6 @@ const page = async () => {
           </div>
         </div>
       </main>
-      </ProviderUtilisateurs>
     </>
   );
 };

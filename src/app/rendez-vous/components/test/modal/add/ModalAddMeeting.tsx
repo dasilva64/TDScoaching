@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import useSWRMutation from "swr/mutation";
 import Image from "@/app/components/image/Image";
 import { mutate as globalMutate } from "swr";
-import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,7 +34,7 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
     dispatch({ type: "ModalCalendarAddMeetingRendezVous/open" });
   };
   const { displayModalAddMeetingRendezVous, dateModalAddMeetingRendezVous } =
-    useSelector((state: RootStateRendezVous) => state.ModalAddMeetingRendezVous);
+    useSelector((state: RootState) => state.ModalAddMeetingRendezVous);
 
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);

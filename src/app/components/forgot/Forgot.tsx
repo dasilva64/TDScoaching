@@ -128,7 +128,7 @@ const Forgot = () => {
   const backLogin = async () => {
     clearState();
     await dispatch({ type: "ModalForgot/close" });
-    await dispatch({ type: "ModalLogin/open" });
+    await dispatch({ type: "ModalLogin/open", payload: {destination: ""} });
   };
   return (
     <>

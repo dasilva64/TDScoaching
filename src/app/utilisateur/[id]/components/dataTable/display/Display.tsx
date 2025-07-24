@@ -3,14 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import DisplayOne from "./DisplayOne";
 import styles from "./Display.module.scss";
 import { RootState } from "@/app/redux/store/store";
-import { RootStateUtilisateur } from "@/app/redux/store/storeUtilisateur";
 
 const Display = () => {
   const [keyAr, setKeyAr] = useState<string[]>([]);
   const [see, setSee] = useState<any[] | null>(null);
   const dispatch = useDispatch();
   const { datas, currentPage, nbShow, sortBy } = useSelector(
-    (state: RootStateUtilisateur) => state.ArrayMeetingByUser
+    (state: RootState) => state.ArrayMeetingByUser
   );
 
   /* useEffect(() => {

@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./NbShow.module.scss";
 import { RootState } from "@/app/redux/store/store";
-import { RootStateUtilisateurs } from "@/app/redux/store/storeUtilisateurs";
 
 /**
  * React component - Component to change tthe number of items to display
@@ -10,7 +9,7 @@ import { RootStateUtilisateurs } from "@/app/redux/store/storeUtilisateurs";
  */
 const NbShow = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { nbShow } = useSelector((state: RootStateUtilisateurs) => state.Array);
+  const { nbShow } = useSelector((state: RootState) => state.Array);
   const handlerChange = (e: any) => {
     dispatch({
       type: "Array/changeNbShow",

@@ -328,7 +328,7 @@ const FormRegister = () => {
   const backLogin = async () => {
     clearState();
     await dispatch({ type: "ModalRegister/close" });
-    await dispatch({ type: "ModalLogin/open" });
+    await dispatch({ type: "ModalLogin/open", payload: {destination: ""} });
   };
   const closeForm = () => {
     clearState();

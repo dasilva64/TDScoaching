@@ -4,8 +4,6 @@ import styles from "./DiscoveryModal.module.scss";
 import Image from "@/app/components/image/Image";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store/store";
-import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
-import { RootStateTarif } from "@/app/redux/store/storeTarif";
 
 const DiscoveryModal = () => {
   const dispatch = useDispatch();
@@ -15,7 +13,7 @@ const DiscoveryModal = () => {
     });
   };
   const { displayModalDiscovery } = useSelector(
-    (state: RootStateTarif) => state.ModalDiscovery
+    (state: RootState) => state.ModalDiscovery
   );
   return (
     <>

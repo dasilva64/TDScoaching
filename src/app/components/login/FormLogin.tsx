@@ -89,6 +89,9 @@ const FormLogin = () => {
           });
           resetLogin();
         } else {
+          if (destinationModalLogin !== "") {
+            router.push(`/${destinationModalLogin}`)
+          }
           mutate("/components/header/api");
           mutate("/components/header/ui/api");
           clearState();
@@ -100,9 +103,7 @@ const FormLogin = () => {
             payload: { type: "success", flashMessage: loginData.message },
           });
           resetLogin();
-          if (destinationModalLogin !== "") {
-            router.push(`/${destinationModalLogin}`)
-          }
+          
         }
 
       } else if (loginData.status === 400) {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./Paging.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
-import { RootStateUtilisateurs } from "@/app/redux/store/storeUtilisateurs";
 
 const Paging = () => {
   /* const dispatch = useDispatch();
@@ -148,7 +147,7 @@ const Paging = () => {
   const dispatch = useDispatch();
   const [displayPagingElement, setDisplayPagingElement] = useState<any[]>([]);
   const { currentPage, nbShow, datas } = useSelector(
-    (state: RootStateUtilisateurs) => state.Array
+    (state: RootState) => state.Array
   );
   let countPage = datas ? Math.ceil(datas.length / nbShow) : 0;
 

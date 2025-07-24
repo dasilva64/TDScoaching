@@ -4,21 +4,21 @@ import React, { useEffect, useState } from "react";
 import styles from "./TwoFAData.module.scss"
 import { useDispatch, useSelector } from "react-redux";
 import Image from "@/app/components/image/Image";
-import { AppDispatch, RootState } from "@/app/redux/store/store";
 import useSWRMutation from "swr/mutation";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { useRouter } from "next/navigation";
 import { mutate as globalMutate } from "swr";
+import { RootState } from "@/app/redux/store/store";
 
 const TwoFAData = ({ data: userData }: any) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
  const { trigger, data, reset, isMutating } = useSWRMutation(
     "/profile/components/twoFAData/api",
     fetchPost
   );
   const [checked, setChecked] = useState(userData.body.isTwoFactorEnabled)
   const router = useRouter()
-  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   useEffect(() => {
     if (data) {
       if (data.status === 200) {

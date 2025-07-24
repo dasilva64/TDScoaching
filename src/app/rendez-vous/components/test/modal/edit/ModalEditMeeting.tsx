@@ -9,7 +9,6 @@ import useSWRMutation from "swr/mutation";
 import Image from "@/app/components/image/Image";
 import styles from "./ModalEditMeeting.module.scss";
 import { mutate as globalMutate } from "swr";
-import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalEditMeeting = ({ mutate, meeting, offre }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
@@ -27,7 +26,7 @@ const ModalEditMeeting = ({ mutate, meeting, offre }: any) => {
     dispatch({ type: "ModalCalendarEditMeetingRendezVous/open" });
   };
   const { displayModalEditMeetingRendezVous, dateModalEditMeetingRendezVous }: any =
-    useSelector((state: RootStateRendezVous) => state.ModalEditMeetingRendezVous);
+    useSelector((state: RootState) => state.ModalEditMeetingRendezVous);
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
     if (e.target.value === "couple" || e.target.value === "familial" || e.target.value === "professionnel") {

@@ -8,12 +8,11 @@ import fetchPost from "@/app/components/fetch/FetchPost";
 import { useEffect } from "react";
 import { mutate as globalMutate } from "swr";
 import { useRouter } from "next/navigation";
-import { RootStateRendezVous } from "@/app/redux/store/storeRendezVous";
 
 const ModalContractEdit = ({mutate}: any) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { displayModalContractEditRendezVous, typeModalContractEditRendezVous } = useSelector((state: RootStateRendezVous) => state.ModalContractEditRendezVous)
+  const { displayModalContractEditRendezVous, typeModalContractEditRendezVous } = useSelector((state: RootState) => state.ModalContractEditRendezVous)
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const { data, reset, trigger, isMutating } = useSWRMutation("/rendez-vous/components/test/modal/contractEdit/api/", fetchPost)
   useEffect(() => {

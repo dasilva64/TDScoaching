@@ -12,7 +12,6 @@ import Input from "@/app/components/input/Input";
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState } from "@/app/redux/store/store";
-import { RootStateProfile } from "@/app/redux/store/storeProfile";
 
 const EmailCheck = ({ data: userData, mutate }: any) => {
   const dispatch = useDispatch<any>();
@@ -22,7 +21,7 @@ const EmailCheck = ({ data: userData, mutate }: any) => {
   );
   const [inputPseudo, setInputPseudo] = useState<string>("");
   const { displayModalEditEmail } = useSelector(
-    (state: RootStateProfile) => state.ModalEditEmail
+    (state: RootState) => state.ModalEditEmail
   );
 
   const [codeInput, setCodeInput] = useState<string>("");

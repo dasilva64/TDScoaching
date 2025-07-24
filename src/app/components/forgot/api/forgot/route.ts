@@ -7,32 +7,13 @@ import { Prisma } from "@prisma/client";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import { SessionData, sessionOptions } from "../../../../lib/session";
-import { checkRateLimit } from "@/app/lib/rateLimiter";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { sendMail } from "@/app/lib/sendMail";
-import kv from '@vercel/kv';
-import { Ratelimit } from '@upstash/ratelimit';
-
-const ratelimit = new Ratelimit({
-  redis: kv,
-  limiter: Ratelimit.fixedWindow(10, '60s'),
-});
+import { checkRateLimitShort } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
-  const ip = request.ip ?? 'ip';
-  const keyPrefix = "rlflx-forgot";
-  const key = `${keyPrefix}:${ip}`
-  const { success, remaining } = await ratelimit.limit(key);
-
-  if (!success) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
+  const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-forgot');
+  if (rateLimitResponse) return rateLimitResponse;
   const session = await getIronSession<SessionData>(
     cookies(),
     sessionOptions

@@ -7,7 +7,7 @@ const nextConfig = {
   }, */
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
-   async headers() {
+   /* async headers() {
      return [
       {
       source: "/api/(.*)",
@@ -48,10 +48,6 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [ 
-           /* {
-          key: "Cache-Control",
-          value: "public, max-age=3600, must-revalidate",
-        },  */
            {
             key: "X-Content-Type-Options",
             value: "nosniff",
@@ -91,7 +87,7 @@ const nextConfig = {
         ],
       },
     ];
-  },
+  }, */
   /*  ]
   } */
   /* externals: {

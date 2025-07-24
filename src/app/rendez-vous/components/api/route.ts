@@ -4,31 +4,12 @@ import { getIronSession } from "iron-session";
 import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { handleError } from "@/app/lib/handleError";
-import { checkRateLimit } from "@/app/lib/rateLimiter";
-import kv from '@vercel/kv';
-import { Ratelimit } from '@upstash/ratelimit';
-
-const ratelimit = new Ratelimit({
-  redis: kv,
-  limiter: Ratelimit.fixedWindow(100, '60s'),
-});
+import { checkRateLimitLong } from "@/app/lib/rateLimiter";
 
 export async function GET(request: NextRequest) {
   try {
-    const ip = request.ip ?? 'ip';
-    const keyPrefix = "rlflx-rdv-get";
-    const key = `${keyPrefix}:${ip}`
-    const { success, remaining } = await ratelimit.limit(key);
-
-    if (!success) {
-      return NextResponse.json(
-        {
-          status: 429,
-          message: "Trop de requêtes, veuillez réessayer plus tard",
-        },
-        { status: 429 }
-      );
-    }
+    const rateLimitResponse = await checkRateLimitLong(request, 'rlflx-rdv-get');
+    if (rateLimitResponse) return rateLimitResponse;
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
 
     if (session.isLoggedIn === true) {

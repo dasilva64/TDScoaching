@@ -12,7 +12,7 @@ import TabIndex from "../tabIndex/TabIndex";
 import { useRouter } from "next/navigation";
 
 const FormLogin = () => {
-  const { displayModalLogin } = useSelector(
+  const { displayModalLogin, destinationModalLogin } = useSelector(
     (state: RootState) => state.ModalLogin
   );
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
@@ -81,6 +81,7 @@ const FormLogin = () => {
           });
           dispatch({
             type: "Modal2FACode/open",
+            payload: {destination: destinationModalLogin}
           });
           dispatch({
             type: "flash/storeFlashMessage",
@@ -99,6 +100,9 @@ const FormLogin = () => {
             payload: { type: "success", flashMessage: loginData.message },
           });
           resetLogin();
+          if (destinationModalLogin !== "") {
+            router.push(`/${destinationModalLogin}`)
+          }
         }
 
       } else if (loginData.status === 400) {

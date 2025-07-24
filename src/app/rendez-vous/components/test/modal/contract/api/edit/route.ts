@@ -6,39 +6,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { pdfSupabase } from "@/app/lib/pdfSupabase";
 import { createClient } from "@supabase/supabase-js";
-import { checkRateLimit } from "@/app/lib/rateLimiter";
+import { checkRateLimitShort } from "@/app/lib/rateLimiter";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { handleError } from "@/app/lib/handleError";
 import { validationBody } from "@/app/lib/validation";
-import kv from '@vercel/kv';
-import { Ratelimit } from '@upstash/ratelimit';
-
-const ratelimit = new Ratelimit({
-  redis: kv,
-  limiter: Ratelimit.fixedWindow(10, '60s'),
-});
 
 const supabase = createClient(
   process.env.SUPABASE_BASE_URL_UPLOAD!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // Clé privée côté serveur uniquement
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 export async function POST(request: NextRequest) {
   try {
-    const ip = request.ip ?? 'ip';
-    const keyPrefix = "rlflx-contract-edit";
-    const key = `${keyPrefix}:${ip}`
-    const { success, remaining } = await ratelimit.limit(key);
-
-    if (!success) {
-      return NextResponse.json(
-        {
-          status: 429,
-          message: "Trop de requêtes, veuillez réessayer plus tard",
-        },
-        { status: 429 }
-      );
-    }
+    const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-contract-edit');
+    if (rateLimitResponse) return rateLimitResponse;
     const session = await getIronSession<SessionData>(
       cookies(),
       sessionOptions

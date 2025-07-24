@@ -6,35 +6,16 @@ import {
     SessionData,
     sessionOptions,
 } from "../../../../../lib/session";
-import { checkRateLimit } from "@/app/lib/rateLimiter";
+import { checkRateLimitShort } from "@/app/lib/rateLimiter";
 import validator from "validator";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { handleError } from "@/app/lib/handleError";
-import kv from '@vercel/kv';
-import { Ratelimit } from '@upstash/ratelimit';
-
-const ratelimit = new Ratelimit({
-    redis: kv,
-    limiter: Ratelimit.fixedWindow(10, '60s'),
-});
 
 export async function POST(request: NextRequest) {
 
     try {
-        const ip = request.ip ?? 'ip';
-        const keyPrefix = "rlflx-utilisateur-modal-api";
-        const key = `${keyPrefix}:${ip}`
-        const { success, remaining } = await ratelimit.limit(key);
-
-        if (!success) {
-            return NextResponse.json(
-                {
-                    status: 429,
-                    message: "Trop de requêtes, veuillez réessayer plus tard",
-                },
-                { status: 429 }
-            );
-        }
+        const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-utilisateur-modal-api');
+        if (rateLimitResponse) return rateLimitResponse;
         const session = await getIronSession<SessionData>(
             cookies(),
             sessionOptions

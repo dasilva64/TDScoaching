@@ -53,7 +53,7 @@ const Form2FACode = () => {
   };
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
 
-  const { displayModal2FACode } = useSelector((state: RootState) => state.Modal2FACode)
+  const { displayModal2FACode, destinationModal2FACode } = useSelector((state: RootState) => state.Modal2FACode)
 
   const {
     trigger: login,
@@ -78,7 +78,9 @@ const Form2FACode = () => {
           payload: { type: "success", flashMessage: loginData.message },
         });
         resetLogin();
-
+        if (destinationModal2FACode !== "") {
+          router.push(`/${destinationModal2FACode}`)
+        }
 
       } else if (loginData.status === 400) {
         if (loginData.type === "validation") {
@@ -269,7 +271,7 @@ const Form2FACode = () => {
           type: "Modal2FACode/close",
         });
 
-      }else if (loginDataCancel.status === 401) {
+      } else if (loginDataCancel.status === 401) {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: loginDataCancel.message },

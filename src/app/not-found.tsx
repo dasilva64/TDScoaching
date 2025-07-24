@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./page.module.scss";
-import Error from "./components/error/Error";
 import Image from "./components/image/Image";
+import Link from "next/link";
 
 const NotFound = () => {
   return (
@@ -17,7 +17,17 @@ const NotFound = () => {
             width={50}
             height={50}
           />
-          <Error />
+          <p className={styles.notfound__container__article__p}>
+            La page actuelle n&apos;a pas été trouvé.
+          </p>
+          <div className={styles.notfound__container__article__box}>
+            <Link
+              className={styles.notfound__container__article__box__link}
+              href={"/"}
+            >
+              Revenir sur la page d&apos;accueil
+            </Link>
+          </div>
         </div>
       </div>
     </main>

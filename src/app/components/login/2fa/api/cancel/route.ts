@@ -1,36 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies, headers } from "next/headers"
 import { getIronSession } from "iron-session";
-import { checkRateLimit } from "@/app/lib/rateLimiter";
+import { checkRateLimitShort } from "@/app/lib/rateLimiter";
 import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { Prisma } from "@prisma/client";
 import { csrfToken } from "@/app/lib/csrfToken";
-import kv from '@vercel/kv';
-import { Ratelimit } from '@upstash/ratelimit';
 import { handleError } from "@/app/lib/handleError";
-
-const ratelimit = new Ratelimit({
-    redis: kv,
-    limiter: Ratelimit.fixedWindow(10, '60s'),
-});
 
 export async function POST(request: NextRequest) {
     try {
-        const ip = request.ip ?? 'ip';
-        const keyPrefix = "rlflx-login-2fa-cancel";
-        const key = `${keyPrefix}:${ip}`
-        const { success, remaining } = await ratelimit.limit(key);
-
-        if (!success) {
-            return NextResponse.json(
-                {
-                    status: 429,
-                    message: "Trop de requêtes, veuillez réessayer plus tard",
-                },
-                { status: 429 }
-            );
-        }
+        const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-login-2fa-cancel');
+        if (rateLimitResponse) return rateLimitResponse;
         const session = await getIronSession<SessionData>(
             cookies(),
             sessionOptions

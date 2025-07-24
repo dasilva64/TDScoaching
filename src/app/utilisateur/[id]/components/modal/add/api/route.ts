@@ -5,30 +5,11 @@ import validator from "validator";
 import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { csrfToken } from "@/app/lib/csrfToken";
-import { checkRateLimit } from "@/app/lib/rateLimiter";
-import kv from '@vercel/kv';
-import { Ratelimit } from '@upstash/ratelimit';
-
-const ratelimit = new Ratelimit({
-  redis: kv,
-  limiter: Ratelimit.fixedWindow(10, '60s'),
-});
+import { checkRateLimitShort } from "@/app/lib/rateLimiter";
 
 export async function POST(request: NextRequest) {
-  const ip = request.ip ?? 'ip';
-  const keyPrefix = "rlflx-utilisateur-add-meet";
-  const key = `${keyPrefix}:${ip}`
-  const { success, remaining } = await ratelimit.limit(key);
-
-  if (!success) {
-    return NextResponse.json(
-      {
-        status: 429,
-        message: "Trop de requêtes, veuillez réessayer plus tard",
-      },
-      { status: 429 }
-    );
-  }
+  const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-utilisateur-add-meet');
+  if (rateLimitResponse) return rateLimitResponse;
   const session = await getIronSession<SessionData>(
     cookies(),
     sessionOptions

@@ -86,8 +86,8 @@ export async function POST(request: NextRequest) {
               }
             );
           } else {
-            await prisma.$transaction(async (tx) => {
-              await prisma.user.update({
+            const {editUser} = await prisma.$transaction(async (tx) => {
+              let editUser = await prisma.user.update({
                 where: {
                   id: user?.id
                 },
@@ -96,6 +96,7 @@ export async function POST(request: NextRequest) {
 
                 }
               })
+              return {editUser}
             })
              let smtpTransport = nodemailer.createTransport({
               host: "smtp.ionos.fr",
@@ -185,6 +186,10 @@ export async function POST(request: NextRequest) {
             await smtpTransport.sendMail(mailOptionsAdmin);  */
             return NextResponse.json({
               status: 200,
+              body: {
+                offre: createOffre,
+                user: editUser
+              },
               message: `Vous avez choisi l'offre ${formule === "custom" ? "sur mesure" : formule} avec succès`,
             });
           }

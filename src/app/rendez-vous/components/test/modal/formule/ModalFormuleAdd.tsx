@@ -10,7 +10,7 @@ import styles from "./ModalFormuleAdd.module.scss";
 import useSWRMutation from "swr/mutation";
 import { mutate as globalMutate } from 'swr'
 
-const ModalFormuleAdd = ({ mutate }: any) => {
+const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
   const [pseudo, setPseudo] = useState<string>("");
@@ -29,7 +29,15 @@ const ModalFormuleAdd = ({ mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         const waiting = async () => {
-          await mutate(undefined ,{revalidate: false});
+          await mutate({
+            ...globalData,
+            body: {
+              body: {
+                ...data.body,
+                offre: data.body.offre,
+              },
+            }
+          }, { revalidate: false });
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: data.message },

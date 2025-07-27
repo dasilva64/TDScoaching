@@ -10,7 +10,7 @@ import useSWRMutation from "swr/mutation";
 import styles from "./ModalFormuleEdit.module.scss";
 import Image from "next/image";
 
-const ModalFormuleEdit = ({ mutate }: any) => {
+const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
   const closeModal = () => {
@@ -27,7 +27,15 @@ const ModalFormuleEdit = ({ mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         const waiting = async () => {
-          await mutate(undefined ,{revalidate: false})
+          await mutate({
+            ...globalData,
+            body: {
+              body: {
+                ...data.body,
+                offre: null,
+              },
+            }
+          }, { revalidate: false });
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: data.message },

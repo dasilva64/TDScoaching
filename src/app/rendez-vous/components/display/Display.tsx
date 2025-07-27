@@ -177,8 +177,8 @@ const Display = () => {
           {userData.body.meeting === null &&
             userData.body.discovery === false && (
               <>
-                <ModalFormuleAdd mutate={mutate} />
-                <ModalFormuleEdit mutate={mutate} />
+                <ModalFormuleAdd mutate={mutate} data={userData} />
+                <ModalFormuleEdit mutate={mutate} data={userData} />
                 <ModalFormuleCancel />
                 <ModalContract mutate={mutate} />
                 <ModalContractRecap mutate={mutate} />

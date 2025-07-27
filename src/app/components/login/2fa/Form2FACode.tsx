@@ -78,7 +78,9 @@ const Form2FACode = () => {
           payload: { type: "success", flashMessage: loginData.message },
         });
         resetLogin();
-        if (destinationModal2FACode !== "") {
+        if (destinationModal2FACode === "home") {
+          router.push(`/`)
+        } else if (destinationModal2FACode !== "" && destinationModal2FACode !== "home") {
           router.push(`/${destinationModal2FACode}`)
         }
 

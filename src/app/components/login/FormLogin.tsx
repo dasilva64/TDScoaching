@@ -101,9 +101,12 @@ const FormLogin = () => {
             payload: { type: "success", flashMessage: loginData.message },
           });
           resetLogin();
-           if (destinationModalLogin !== "") {
+          if (destinationModalLogin === "home") {
+            router.push(`/`)
+          } else if (destinationModalLogin !== "" && destinationModalLogin !== "home") {
             router.push(`/${destinationModalLogin}`)
           }
+           
         }
 
       } else if (loginData.status === 400) {

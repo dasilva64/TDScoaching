@@ -32,10 +32,8 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
           await mutate({
             ...globalData,
             body: {
-              body: {
                 ...data.body,
                 offre: data.body.offre,
-              },
             }
           }, { revalidate: false });
           dispatch({

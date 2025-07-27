@@ -30,10 +30,8 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
           await mutate({
             ...globalData,
             body: {
-              body: {
                 ...data.body,
                 offre: null,
-              },
             }
           }, { revalidate: false });
           dispatch({

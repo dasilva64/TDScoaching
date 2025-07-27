@@ -7,7 +7,6 @@ const Btn = ({destination}: any) => {
     
     const dispatch = useDispatch()
     const isValidDestination = () => {
-      console.log("destination", destination)
     if (!destination) return false;
 
     const regex = /^utilisateur\/[0-9A-Za-z-]+$/;
@@ -26,10 +25,9 @@ const Btn = ({destination}: any) => {
     return (
         <>
         <button className={styles.btn} onClick={() => {
-          console.log(isValidDestination() ? destination : "nothing")
             dispatch({
                 type: "ModalLogin/open",
-                payload: {destination: isValidDestination() ? destination : ""}
+                payload: {destination: isValidDestination() ? destination : "home"}
             })
         }}>Se connecter</button>
         </>

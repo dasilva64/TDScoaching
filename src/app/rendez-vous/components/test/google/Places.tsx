@@ -68,7 +68,7 @@ const PlacesAutocomplete = ({
     debounce: 300,
   });
   const handlerInput = (e: any) => {
-    console.log("API key =", process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+    console.log("API key =", process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
     setValue(e.target.value);
     if (e.target.value.length > 0) {
       setErrorCity("")

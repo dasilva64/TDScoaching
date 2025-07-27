@@ -165,11 +165,11 @@ export async function POST(request: NextRequest) {
                   },
                 });
 
-                const meeting = user.meetingId
+                const meeting = user?.meetingId
                   ? await tx.meeting_test.findUnique({ where: { id: user.meetingId } })
                   : null;
 
-                const offreReturn = user.offreId
+                const offreReturn = user?.offreId
                   ? await tx.offre_test.findUnique({ where: { id: user.offreId } })
                   : null;
 

@@ -7,7 +7,7 @@ const nextConfig = {
   }, */
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
-   /* async headers() {
+   async headers() {
      return [
       {
       source: "/api/(.*)",
@@ -87,7 +87,7 @@ const nextConfig = {
         ],
       },
     ];
-  }, */
+  },
   /*  ]
   } */
   /* externals: {

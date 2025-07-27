@@ -108,8 +108,8 @@ export async function POST(request: NextRequest) {
                             </body>
                           </html>`,
                             };
-                            /*await smtpTransport.sendMail(mailOptions);
-                            let mailOptionsAdmin = {
+                            await smtpTransport.sendMail(mailOptions);
+                           /* let mailOptionsAdmin = {
                                 from: "contact@tds-coachingdevie.fr",
                                 to: "contact@tds-coachingdevie.fr",
                                 subject: `[ANNULATION] Annulation du contrat sélectionnée par ${user.firstname} ${user.lastname}`,

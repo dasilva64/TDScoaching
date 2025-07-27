@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Places.module.scss";
 import { useLoadScript } from "@react-google-maps/api";
 import usePlacesAutocomplete, { getDetails } from "use-places-autocomplete";
@@ -31,6 +31,9 @@ const Places = ({ errorCity, setErrorCity, setAdresse, setCity, setValidCity }: 
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string,
     libraries: lib,
   });
+  useEffect(() => {
+  console.log("Clé côté client =", process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
+}, []);
   if (loadError) return <p>Erreur de chargement de Google Maps</p>;
   if (!isLoaded) return <p>Chargement de la carte...</p>;
   return (
@@ -68,6 +71,7 @@ const PlacesAutocomplete = ({
     debounce: 300,
   });
   const handlerInput = (e: any) => {
+    console.log("API key =", process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
     console.log("API key =", process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
     setValue(e.target.value);
     if (e.target.value.length > 0) {

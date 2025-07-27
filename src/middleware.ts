@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 export async function middleware(request: NextRequest) {
   //const res = NextResponse.next();
 
-   /* const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://maps.googleapis.com https://maps.gstatic.com;
@@ -32,17 +32,17 @@ export async function middleware(request: NextRequest) {
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
   )
- */
-  const res = NextResponse.next( /* {
+
+  const res = NextResponse.next( {
     request: {
       headers: requestHeaders,
     },
-  } */ )
-  /*  res.headers.set('X-XSS-Protection', '1; mode=block');
+  } )
+   res.headers.set('X-XSS-Protection', '1; mode=block');
   res.headers.set(
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue 
-  )  */
+  ) 
   let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
   let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
   if (request.nextUrl.pathname.startsWith("/utilisateurs") ||

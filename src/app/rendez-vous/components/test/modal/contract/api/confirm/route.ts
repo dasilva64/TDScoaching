@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
                                     <li>Prix : ${editOffre.type === "unique" ? "100€" : "300€"}</li>
                                     <li>Statut du contrat : ${editOffre.contract_status === "GENERATED_NAME_ONLY" ? "En attente de signature" : editOffre.contract_status === "SIGNED" ? "En attente de confirmation" : "A été signé et confirmé"}</li>
                                   </ul>
-                                  <p style="margin-bottom: 20px">“Votre contrat personnalisé est disponible et téléchargeable depuis votre espace client sur le site TDS Coaching. Vous pouvez le consulter à tout moment avant ou après la confirmation de votre offre.”</p>
+                                  <p style="margin-bottom: 20px">Votre contrat personnalisé est disponible et téléchargeable depuis votre espace client sur le site TDS Coaching. Vous pouvez le consulter à tout moment avant ou après la confirmation de votre offre.</p>
                                   <p style="margin-bottom: 20px">Vous pouvez consulter, modifier votre offre en cliquant sur le bouton ci-dessous</p>
                                   <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous" target="_blank">Mon rendez-vous</a>
                                   <p style="margin-top: 20px">Ce message vous est personnel. Il contient des informations confidentielles concernant votre rendez-vous. Merci de ne pas le transférer sans votre accord.</p>

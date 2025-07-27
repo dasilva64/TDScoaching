@@ -26,13 +26,17 @@ const ModalFormuleEdit = ({ mutate }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        mutate();
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: data.message },
-        });
-        dispatch({ type: "ModalFormuleEditRendezVous/close" });
-        reset();
+        const waiting = async () => {
+          await mutate(undefined ,{revalidate: false})
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: data.message },
+          });
+          dispatch({ type: "ModalFormuleEditRendezVous/close" });
+          reset();
+        }
+        waiting()
+
       } else if (data.status === 401) {
         dispatch({
           type: "flash/storeFlashMessage",

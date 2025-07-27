@@ -8,10 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import styles from "./ModalFormuleAdd.module.scss";
 import useSWRMutation from "swr/mutation";
-import {mutate as globalMutate} from 'swr'
+import { mutate as globalMutate } from 'swr'
 
 const ModalFormuleAdd = ({ mutate }: any) => {
-  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
   const [pseudo, setPseudo] = useState<string>("");
   const closeModal = () => {
@@ -28,14 +28,18 @@ const ModalFormuleAdd = ({ mutate }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: data.message },
-        });
-        dispatch({ type: "ModalFormuleAddRendezVous/close" });
-        globalMutate("/components/header/api")
-        reset();
-        mutate();
+        const waiting = async () => {
+          await mutate(undefined ,{revalidate: false});
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: data.message },
+          });
+          dispatch({ type: "ModalFormuleAddRendezVous/close" });
+          globalMutate("/components/header/api")
+          reset();
+        }
+        waiting()
+
       } else if (data.status === 401) {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -99,7 +103,7 @@ const ModalFormuleAdd = ({ mutate }: any) => {
               <p className={styles.modalAddFormule__p}>Rappel de la formule sélectionné :</p>
               <div className={styles.modalAddFormule__formule}>
                 <h3 className={styles.modalAddFormule__formule__title}>
-                 {typeModalFormuleAddRendezVous[0].toUpperCase()}{typeModalFormuleAddRendezVous.slice(1)}
+                  {typeModalFormuleAddRendezVous[0].toUpperCase()}{typeModalFormuleAddRendezVous.slice(1)}
                 </h3>
                 {typeModalFormuleAddRendezVous === "unique" && (
                   <div className={styles.modalAddFormule__formule__content}>

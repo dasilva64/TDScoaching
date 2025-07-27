@@ -27,13 +27,7 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         const waiting = async () => {
-          await mutate({
-            ...globalData,
-            body: {
-                ...data.body,
-                offre: null,
-            }
-          }, { revalidate: false });
+          await mutate();
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: data.message },

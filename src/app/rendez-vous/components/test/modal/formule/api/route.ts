@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
               }
             );
           } else {
-            const {editUser} = await prisma.$transaction(async (tx) => {
+            const { editUser } = await prisma.$transaction(async (tx) => {
               let editUser = await prisma.user.update({
                 where: {
                   id: user?.id
@@ -96,9 +96,9 @@ export async function POST(request: NextRequest) {
 
                 }
               })
-              return {editUser}
+              return { editUser }
             })
-             let smtpTransport = nodemailer.createTransport({
+            let smtpTransport = nodemailer.createTransport({
               host: "smtp.ionos.fr",
               port: 465,
               secure: true,
@@ -145,51 +145,101 @@ export async function POST(request: NextRequest) {
                           </html>`,
             };
             await smtpTransport.sendMail(mailOptions);
-             /*let mailOptionsAdmin = {
-              from: "contact@tds-coachingdevie.fr",
-              to: "contact@tds-coachingdevie.fr",
-              subject: `Nouvelle offre sélectionnée par ${user.firstname} ${user.lastname}`,
-              html: `<!DOCTYPE html>
-                        <html lang="fr">
-                          <head>
-                            <title>tds coaching</title>
-                            <meta charset="UTF-8" />
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                            <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-                            <title>Document</title>
-                          </head>
-                          <body>
-                            
-                            <div style="width: 100%">
-                              <div style="text-align: center">
-                                <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
-                              </div>
-                              <div style="background: aqua; padding: 50px 0px 50px 20px; border-radius: 20px">
-                                <h1 style="text-align: center">tds coaching</h1>
-                                <h2 style="text-align: center">Prise d'offre'</h2>
-                                <p style="margin-bottom: 20px">Information de l'offre en cours :</p>
-                                <ul>
-                                <li>Prénom : ${user.firstname}</li>
-                                <li>Nom de famille : ${user.lastname}</li>
-                                <li>Email : ${user.mail}</li>
-                                <li>ID de l'offre : ${createOffre.id}</li>
-                                  <li>Type de l'offre : ${createOffre.type}</li>
-                                  <li>Prix : ${createOffre.type === "unique" ? "100€" : "300€"}</li>
-                                </ul>
-                                <p style="margin-bottom: 20px">Voir la page de l'utilisateur</p>
-                                <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/utilisateur/${encodeURI(user.id)}" target="_blank">Page utilisateur</a>
-                              </div>
-                            </div>
-                          </body>
-                        </html>`,
+            /*let mailOptionsAdmin = {
+             from: "contact@tds-coachingdevie.fr",
+             to: "contact@tds-coachingdevie.fr",
+             subject: `Nouvelle offre sélectionnée par ${user.firstname} ${user.lastname}`,
+             html: `<!DOCTYPE html>
+                       <html lang="fr">
+                         <head>
+                           <title>tds coaching</title>
+                           <meta charset="UTF-8" />
+                           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                           <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                           <title>Document</title>
+                         </head>
+                         <body>
+                           
+                           <div style="width: 100%">
+                             <div style="text-align: center">
+                               <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
+                             </div>
+                             <div style="background: aqua; padding: 50px 0px 50px 20px; border-radius: 20px">
+                               <h1 style="text-align: center">tds coaching</h1>
+                               <h2 style="text-align: center">Prise d'offre'</h2>
+                               <p style="margin-bottom: 20px">Information de l'offre en cours :</p>
+                               <ul>
+                               <li>Prénom : ${user.firstname}</li>
+                               <li>Nom de famille : ${user.lastname}</li>
+                               <li>Email : ${user.mail}</li>
+                               <li>ID de l'offre : ${createOffre.id}</li>
+                                 <li>Type de l'offre : ${createOffre.type}</li>
+                                 <li>Prix : ${createOffre.type === "unique" ? "100€" : "300€"}</li>
+                               </ul>
+                               <p style="margin-bottom: 20px">Voir la page de l'utilisateur</p>
+                               <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/utilisateur/${encodeURI(user.id)}" target="_blank">Page utilisateur</a>
+                             </div>
+                           </div>
+                         </body>
+                       </html>`,
+           };
+           await smtpTransport.sendMail(mailOptionsAdmin);  */
+            let link = null;
+            const { allMeeting, meeting, offreReturn, allOffresWithMeetings } = await prisma.$transaction(async (tx) => {
+              const allMeeting = await tx.meeting_test.findMany({
+                where: {
+                  startAt: { gte: new Date() },
+                  status: { not: "cancelled" },
+                },
+                select: {
+                  startAt: true,
+                  userMail: true,
+                },
+              });
+
+              const meeting = user.meetingId
+                ? await tx.meeting_test.findUnique({ where: { id: user.meetingId } })
+                : null;
+
+              const offreReturn = user.offreId
+                ? await tx.offre_test.findUnique({ where: { id: user.offreId } })
+                : null;
+
+              const allOffresWithMeetings = user.offreId
+                ? await tx.offre_test.findUnique({
+                  where: { id: user.offreId },
+                  include: {
+                    meeting_test_meeting_test_offreIdTooffre_test: {
+                      select: {
+                        id: true,
+                        status: true,
+                        startAt: true,
+                        numberOfMeeting: true,
+                      },
+                    },
+                  },
+                })
+                : null;
+
+              return { allMeeting, meeting, offreReturn, allOffresWithMeetings };
+            });
+
+            let updatedArray;
+            if (allOffresWithMeetings) {
+              updatedArray = allOffresWithMeetings.meeting_test_meeting_test_offreIdTooffre_test.filter(obj => obj.status !== "cancelled");
+            }
+
+            let userObject = {
+              meetings: allMeeting,
+              meeting: meeting,
+              offre: offreReturn,
+              discovery: user.discovery,
+              link: link,
+              meetingsByUser: updatedArray ? updatedArray.sort((a: any, b: any) => a.numberOfMeeting - b.numberOfMeeting) : null
             };
-            await smtpTransport.sendMail(mailOptionsAdmin);  */
             return NextResponse.json({
               status: 200,
-              body: {
-                offre: createOffre,
-                user: editUser
-              },
+              body: userObject,
               message: `Vous avez choisi l'offre ${formule === "custom" ? "sur mesure" : formule} avec succès`,
             });
           }

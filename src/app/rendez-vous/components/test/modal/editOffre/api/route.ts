@@ -152,8 +152,62 @@ export async function POST(request: NextRequest) {
                          </html>`,
              };
              await smtpTransport.sendMail(mailOptionsAdmin);  */
+              let link = null;
+              const { allMeeting, meeting, offreReturn, allOffresWithMeetings } = await prisma.$transaction(async (tx) => {
+                const allMeeting = await tx.meeting_test.findMany({
+                  where: {
+                    startAt: { gte: new Date() },
+                    status: { not: "cancelled" },
+                  },
+                  select: {
+                    startAt: true,
+                    userMail: true,
+                  },
+                });
+
+                const meeting = user.meetingId
+                  ? await tx.meeting_test.findUnique({ where: { id: user.meetingId } })
+                  : null;
+
+                const offreReturn = user.offreId
+                  ? await tx.offre_test.findUnique({ where: { id: user.offreId } })
+                  : null;
+
+                const allOffresWithMeetings = user.offreId
+                  ? await tx.offre_test.findUnique({
+                    where: { id: user.offreId },
+                    include: {
+                      meeting_test_meeting_test_offreIdTooffre_test: {
+                        select: {
+                          id: true,
+                          status: true,
+                          startAt: true,
+                          numberOfMeeting: true,
+                        },
+                      },
+                    },
+                  })
+                  : null;
+
+                return { allMeeting, meeting, offreReturn, allOffresWithMeetings };
+              });
+
+              let updatedArray;
+              if (allOffresWithMeetings) {
+                updatedArray = allOffresWithMeetings.meeting_test_meeting_test_offreIdTooffre_test.filter(obj => obj.status !== "cancelled");
+              }
+
+              let userObject = {
+                meetings: allMeeting,
+                meeting: meeting,
+                offre: offreReturn,
+                discovery: user.discovery,
+                link: link,
+                meetingsByUser: updatedArray ? updatedArray.sort((a: any, b: any) => a.numberOfMeeting - b.numberOfMeeting) : null
+              };
               return NextResponse.json({
                 status: 200,
+                body: userObject,
                 message: `Vous avez supprimé l'ancienne offre, vous pouvez en choisir une nouvelle`,
               });
 

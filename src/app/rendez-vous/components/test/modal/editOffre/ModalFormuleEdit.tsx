@@ -27,7 +27,10 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         const waiting = async () => {
-          mutate();
+          mutate({
+            ...globalData,
+            body: data.body
+          }, {revalidate: false});
           globalMutate("/components/header/api");
           reset();
           if (isMutating === false) {

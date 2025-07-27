@@ -7,6 +7,7 @@ import { createClient } from "@supabase/supabase-js";
 import { getIronSession } from "iron-session";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer"
 
 const supabase = createClient(
     process.env.SUPABASE_BASE_URL_UPLOAD!,
@@ -27,6 +28,9 @@ export async function POST(request: NextRequest) {
         if (session.isLoggedIn === true) {
             let user = await prisma.user.findUnique({
                 where: { id: session.id },
+                include: {
+                    offre_test: true
+                }
             });
             if (user === null) {
                 return NextResponse.json(
@@ -42,6 +46,7 @@ export async function POST(request: NextRequest) {
             } else {
                 try {
                     if (user.offreId) {
+                        let previousOffre = user.offre_test?.type
                         const { error } = await supabase.storage.from('tds').remove(["contrat-" + user.firstname + "-" + user.lastname + "-" + user.id + ".pdf"])
                         await prisma.offre_test.delete({
                             where: { id: user.offreId! }
@@ -63,6 +68,78 @@ export async function POST(request: NextRequest) {
                                 }
                             );
                         } else {
+                             let smtpTransport = nodemailer.createTransport({
+                                host: "smtp.ionos.fr",
+                                port: 465,
+                                secure: true,
+                                auth: {
+                                    user: process.env.SECRET_SMTP_EMAIL,
+                                    pass: process.env.SECRET_SMTP_PASSWORD,
+                                },
+                            });
+                            let mailOptions = {
+                                from: "contact@tds-coachingdevie.fr",
+                                to: user.mail,
+                                subject: `Suppression de votre ancien contrat`,
+                                html: `<!DOCTYPE html>
+                          <html lang="fr">
+                            <head>
+                              <title>tds coaching</title>
+                              <meta charset="UTF-8" />
+                              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                              <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                              <title>Document</title>
+                            </head>
+                            <body>
+                              
+                              <div style="width: 100%">
+                                <div style="text-align: center">
+                                  <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
+                                </div>
+                                <div style="background: aqua; padding: 50px 0px 50px 20px; border-radius: 20px">
+                                  <h1 style="text-align: center">tds coaching</h1>
+                                  <h2 style="text-align: center">Annulation du contrat</h2>
+                                  <p style="margin-bottom: 20px">Comme vous l'avez souhaité, le contrat initial lié à votre offre <strong>${previousOffre}</strong> a été annulé.</p>
+                                  <p style="margin-bottom: 20px">Nous avons remis à zéro le processus de signature afin que vous puissiez générer un nouveau contrat avec les modifications nécessaires.</p>
+                                  <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous" target="_blank">Mes rendez-vous</a>
+                                  <p style="margin-top: 20px">Ce message vous est personnel. Il contient des informations confidentielles concernant votre rendez-vous. Merci de ne pas le transférer sans votre accord.</p>
+                                </div>
+                              </div>
+                            </body>
+                          </html>`,
+                            };
+                            /*await smtpTransport.sendMail(mailOptions);
+                            let mailOptionsAdmin = {
+                                from: "contact@tds-coachingdevie.fr",
+                                to: "contact@tds-coachingdevie.fr",
+                                subject: `[ANNULATION] Annulation du contrat sélectionnée par ${user.firstname} ${user.lastname}`,
+                                html: `<!DOCTYPE html>
+                        <html lang="fr">
+                          <head>
+                            <title>tds coaching</title>
+                            <meta charset="UTF-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                            <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                            <title>Document</title>
+                          </head>
+                          <body>
+                            
+                            <div style="width: 100%">
+                              <div style="text-align: center">
+                                <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
+                              </div>
+                              <div style="background: aqua; padding: 50px 0px 50px 20px; border-radius: 20px">
+                                <h1 style="text-align: center">tds coaching</h1>
+                                <h2 style="text-align: center">Annulation du contrat</h2>
+                                <p style="margin-bottom: 20px">L'utilisateur <strong>${user.firstname} ${user.lastname}</strong> (${user.mail}) a remis a zéro son contrat lié a son offre <strong>${previousOffre}</strong></p>
+                                <p style="margin-bottom: 20px">Voir la page de l'utilisateur</p>
+                                <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/utilisateur/${encodeURI(user.id)}" target="_blank">Page utilisateur</a>
+                              </div>
+                            </div>
+                          </body>
+                        </html>`,
+                            };
+                            await smtpTransport.sendMail(mailOptionsAdmin); */
                             return NextResponse.json(
                                 {
                                     status: 200,

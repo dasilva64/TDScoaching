@@ -173,7 +173,7 @@ export async function POST(request: NextRequest) {
                   ? await tx.offre_test.findUnique({ where: { id: user.offreId } })
                   : null;
 
-                const allOffresWithMeetings = user.offreId
+                const allOffresWithMeetings = user?.offreId
                   ? await tx.offre_test.findUnique({
                     where: { id: user.offreId },
                     include: {

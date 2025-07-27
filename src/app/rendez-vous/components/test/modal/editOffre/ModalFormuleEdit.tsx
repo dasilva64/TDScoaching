@@ -28,12 +28,15 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
       if (data.status === 200) {
         const waiting = async () => {
           await mutate();
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "success", flashMessage: data.message },
-          });
-          dispatch({ type: "ModalFormuleEditRendezVous/close" });
+          globalMutate("/components/header/api");
           reset();
+          if (isMutating === false) {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "success", flashMessage: data.message },
+            });
+            dispatch({ type: "ModalFormuleEditRendezVous/close" });
+          }
         }
         waiting()
 

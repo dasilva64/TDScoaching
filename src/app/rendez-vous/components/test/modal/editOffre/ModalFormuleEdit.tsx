@@ -94,7 +94,7 @@ const ModalFormuleEdit = ({ mutate }: any) => {
                   height={30}
                 ></Image>
               </button>
-              <h2 className={`${styles.modalAddFormule__h1}`}>Formule</h2>
+              <h2 className={`${styles.modalAddFormule__h1}`}>Changer de formule</h2>
               <p className={styles.modalAddFormule__p}>Êtes vous sûre de vouloir changer d&apos;offre ?</p>
 
               <div className={styles.modalAddFormule__action}>

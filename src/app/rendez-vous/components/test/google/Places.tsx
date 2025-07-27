@@ -67,13 +67,6 @@ const PlacesAutocomplete = ({
     },
     debounce: 300,
   });
-  /* const handleSelect = async (address: any, city: any) => {
-    setValue(address, false);
-    clearSuggestions();
-    setErrorCity("");
-    setAdresse(address);
-    setCity(city);
-  }; */
   const handlerInput = (e: any) => {
     setValue(e.target.value);
     if (e.target.value.length > 0) {

@@ -17,6 +17,7 @@ export async function middleware(request: NextRequest) {
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
+    connect-src 'self' https://maps.googleapis.com https://maps.gstatic.com;
     upgrade-insecure-requests;
 `
   // Replace newline characters and spaces

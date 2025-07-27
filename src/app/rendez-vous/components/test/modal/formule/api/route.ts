@@ -135,7 +135,6 @@ export async function POST(request: NextRequest) {
                                   <li>Nom : ${user.firstname} ${user.lastname}</li>
                                   <li>Prix : ${createOffre.type === "unique" ? "100€" : "300€"}</li>
                                   </ul>
-                                  <p style="margin-bottom: 20px">Vous devez confirmer votre rendez-vous 16h avant le début de celui ci</p>
                                   <p style="margin-bottom: 20px">Vous pouvez consulter, modifier ou supprimer votre offre en cliquant sur le bouton ci-dessous</p>
                                   <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous" target="_blank">Mon rendez-vous</a>
                                   <p style="margin-top: 20px">Ce message vous est personnel. Il contient des informations confidentielles concernant votre rendez-vous. Merci de ne pas le transférer sans votre accord.</p>

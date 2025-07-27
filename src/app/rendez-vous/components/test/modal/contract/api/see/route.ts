@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
                                     <li>Statut du contrat : ${createOffre.contract_status === "GENERATED_NAME_ONLY" ? "En attente de signature" : createOffre.contract_status === "SIGNED" ? "En attente de confirmation" : "Erreur" }</li>
                                   </ul>
                                   <p style="margin-bottom: 20px">⚠️ Ce contrat n’est pas encore signé et confirmé. L’offre sera prise en compte qu’une fois votre validation effectuée sur le site.</p>
-                                  <p style="margin-bottom: 20px">“Votre contrat personnalisé est disponible et téléchargeable depuis votre espace client sur le site TDS Coaching. Vous pouvez le consulter à tout moment avant ou après la confirmation de votre offre.”</p>
+                                  <p style="margin-bottom: 20px">Votre contrat personnalisé est disponible et téléchargeable depuis votre espace client sur le site TDS Coaching. Vous pouvez le consulter à tout moment avant ou après la confirmation de votre offre.</p>
                                   <p style="margin-bottom: 20px">Vous pouvez consulter, modifier ou confirmer votre contrat en cliquant sur le bouton ci-dessous</p>
                                   <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="https://tdscoaching.fr/rendez-vous" target="_blank">Mon rendez-vous</a>
                                   <p style="margin-top: 20px">Ce message vous est personnel. Il contient des informations confidentielles concernant votre rendez-vous. Merci de ne pas le transférer sans votre accord.</p>
@@ -219,6 +219,15 @@ export async function POST(request: NextRequest) {
                         </html>`,
             };
             await smtpTransport.sendMail(mailOptionsAdmin); */
+            return NextResponse.json(
+            {
+              status: 200,
+              body: fullUrl,
+            },
+            {
+              status: 200,
+            }
+          );
           }
           return NextResponse.json(
             {

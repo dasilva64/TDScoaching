@@ -29,7 +29,7 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         const waiting = async () => {
-          await mutate();
+          mutate();
           globalMutate("/components/header/api")
           reset();
           if (isMutating === false) {

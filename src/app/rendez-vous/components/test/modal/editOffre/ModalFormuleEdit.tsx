@@ -29,15 +29,14 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
       if (data.status === 200) {
         const waiting = async () => {
           await mutate();
-          globalMutate("/components/header/api");
+          await globalMutate("/components/header/api");
           reset();
-          if (isMutating === false) {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "success", flashMessage: data.message },
-            });
-            dispatch({ type: "ModalFormuleEditRendezVous/close" });
-          }
+          await dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: data.message },
+          });
+          await dispatch({ type: "ModalFormuleEditRendezVous/close" });
+          setIsLoading(false)
         }
         waiting()
 
@@ -50,14 +49,16 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
         router.push(`/acces-refuse?destination=rendez-vous`)
+        setIsLoading(false)
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        setIsLoading(false)
       }
-      setIsLoading(false)
+
     }
   }, [data, dispatch, mutate, reset, router]);
 

@@ -14,7 +14,7 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
   const [pseudo, setPseudo] = useState<string>("");
-  
+
   const [isLoading, setIsLoading] = useState(false)
   const closeModal = () => {
     setPseudo("");
@@ -32,15 +32,14 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
       if (data.status === 200) {
         const waiting = async () => {
           await mutate();
-          globalMutate("/components/header/api")
+          await globalMutate("/components/header/api")
           reset();
-          if (isMutating === false) {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: { type: "success", flashMessage: data.message },
-            });
-            dispatch({ type: "ModalFormuleAddRendezVous/close" });
-          }
+          await dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: data.message },
+          });
+          await dispatch({ type: "ModalFormuleAddRendezVous/close" });
+          setIsLoading(false)
         }
         waiting()
 
@@ -51,14 +50,15 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
         });
         reset();
         router.push(`/acces-refuse?destination=rendez-vous`);
+        setIsLoading(false)
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        setIsLoading(false)
       }
-      setIsLoading(false)
     }
   }, [data, dispatch, mutate, reset, router]);
 

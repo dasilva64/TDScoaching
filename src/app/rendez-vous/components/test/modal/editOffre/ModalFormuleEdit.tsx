@@ -16,6 +16,7 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
   const closeModal = () => {
     dispatch({ type: "ModalFormuleEditRendezVous/close" });
   };
+  const [isLoading, setIsLoading] = useState(false)
   const { displayModalFormuleEditRendezVous, idModalFormuleEditRendezVous } =
     useSelector((state: RootState) => state.ModalFormuleEditRendezVous);
   const { trigger, data, reset, isMutating } = useSWRMutation(
@@ -27,10 +28,7 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         const waiting = async () => {
-          mutate({
-            ...globalData,
-            body: data.body
-          }, {revalidate: false});
+          await mutate();
           globalMutate("/components/header/api");
           reset();
           if (isMutating === false) {
@@ -59,6 +57,7 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
         });
         reset();
       }
+      setIsLoading(false)
     }
   }, [data, dispatch, mutate, reset, router]);
 
@@ -108,11 +107,12 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
               <p className={styles.modalAddFormule__p}>Êtes vous sûre de vouloir changer d&apos;offre ?</p>
 
               <div className={styles.modalAddFormule__action}>
-                {!isMutating && (
+                {!isLoading && (
                   <>
                     <button
                       className={styles.modalAddFormule__action__btn}
                       onClick={() => {
+                        setIsLoading(true)
                         trigger({
                           //id: idModalFormuleEditRendezVous,
                           csrfToken: csrfToken
@@ -123,7 +123,7 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
                     </button>
                   </>
                 )}
-                {isMutating && (
+                {isLoading && (
                   <>
                     <span className={styles.modalAddFormule__action__btn}>
                       Chargement ...

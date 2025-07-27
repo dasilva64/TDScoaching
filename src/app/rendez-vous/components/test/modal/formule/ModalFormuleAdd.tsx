@@ -14,6 +14,8 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
   const [pseudo, setPseudo] = useState<string>("");
+  
+  const [isLoading, setIsLoading] = useState(false)
   const closeModal = () => {
     setPseudo("");
     dispatch({ type: "ModalFormuleAddRendezVous/close" });
@@ -29,10 +31,7 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         const waiting = async () => {
-          mutate({
-            ...globalData,
-            body: data.body
-          }, {revalidate: false});
+          await mutate();
           globalMutate("/components/header/api")
           reset();
           if (isMutating === false) {
@@ -59,6 +58,7 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
         });
         reset();
       }
+      setIsLoading(false)
     }
   }, [data, dispatch, mutate, reset, router]);
 
@@ -281,12 +281,13 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
               </div>
 
               <div className={styles.modalAddFormule__action}>
-                {!isMutating && (
+                {!isLoading && (
                   <>
                     <button
                       className={styles.modalAddFormule__action__btn}
                       onClick={() => {
                         if (typeModalFormuleAddRendezVous === "unique") {
+                          setIsLoading(true)
                           trigger({
                             formule: typeModalFormuleAddRendezVous,
                             pseudo: pseudo,
@@ -308,7 +309,7 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
                     </button>
                   </>
                 )}
-                {isMutating && (
+                {isLoading && (
                   <>
                     <span className={styles.modalAddFormule__action__btn}>
                       Chargement ...

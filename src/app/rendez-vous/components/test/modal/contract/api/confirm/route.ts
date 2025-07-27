@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
                     if (user.offreId) {
                         const { editOffre } = await prisma.$transaction(async (tx) => {
                             let editOffre = await prisma.offre_test.update({
-                                where: { id: user.offreId! },
+                                where: { id: user?.offreId! },
                                 data: {
                                     contract_status: "CONFIRMED"
                                 }

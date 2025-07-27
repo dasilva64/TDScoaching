@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
             await prisma.$transaction(async (tx) => {
               await prisma.user.update({
                 where: {
-                  id: user.id
+                  id: user?.id
                 },
                 data: {
                   offreId: createOffre.id,
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
                 }
               })
             })
-            /* let smtpTransport = nodemailer.createTransport({
+             let smtpTransport = nodemailer.createTransport({
               host: "smtp.ionos.fr",
               port: 465,
               secure: true,
@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
                           </html>`,
             };
             await smtpTransport.sendMail(mailOptions);
-             let mailOptionsAdmin = {
+             /*let mailOptionsAdmin = {
               from: "contact@tds-coachingdevie.fr",
               to: "contact@tds-coachingdevie.fr",
               subject: `Nouvelle offre sélectionnée par ${user.firstname} ${user.lastname}`,

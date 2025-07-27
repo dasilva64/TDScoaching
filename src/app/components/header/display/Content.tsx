@@ -45,7 +45,7 @@ const Content = () => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       if (!header) return;
-      if (scrollY > previousY) {
+      if (scrollY > previousY && scrollY > 0) {
         if (lastDirection !== "down") {
           lastDirection = "down"
           header.style.top = "-84px"

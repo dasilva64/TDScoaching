@@ -132,8 +132,8 @@ export async function POST(request: NextRequest) {
                 customer_email: user?.mail,
                 locale: "fr",
                 payment_intent_data: { capture_method: "manual" },
-                success_url: `http://localhost:3000/redirection-vers-rendez-vous?result=success&session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: "http://localhost:3000/redirection-vers-rendez-vous?result=cancel",
+                success_url: `https://tdscoaching.fr/redirection-vers-rendez-vous?result=success&session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: "https://tdscoaching.fr/redirection-vers-rendez-vous?result=cancel",
               });
             } catch {
               return NextResponse.json({

@@ -7,11 +7,12 @@ import styles from "./ModalEditDiscoveryMeeting.module.scss";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import { RootState } from "@/app/redux/store/store";
-import {mutate as mutateGlobal} from "swr"
+import { mutate as mutateGlobal } from "swr"
+import { useRouter } from "next/navigation";
 
-const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre }: any) => {
+const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre, globalData }: any) => {
   const dispatch = useDispatch();
-  const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const [typeCoaching, setTypeCoaching] = useState<string>(offre.coaching);
   const [pseudo, setPseudo] = useState<string>("");
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
@@ -33,9 +34,10 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre }: any) => {
       setTypeCoachingValid(false);
     }
   };
+  const router = useRouter();
   useEffect(() => {
     if (data) {
-       if (data.status === 200) {
+      if (data.status === 200) {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
@@ -45,16 +47,39 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre }: any) => {
           type: "ModalEditDiscoveryMeetingRendezVousToken/close",
         });
         reset();
-        mutate();
+        const { meeting, offre } = data.body;
+        mutate(
+          {
+            ...globalData,
+            body: {
+              ...globalData.body,
+              meeting,
+              offre,
+              meetings: globalData.body.meetings.map((m: any) =>
+                m.id === meeting.id ? { ...m, startAt: meeting.startAt } : m
+              ),
+            },
+          },
+          { revalidate: false }
+        );
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        mutateGlobal("/components/header/api");
+        mutateGlobal("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=profile`);
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
-      } 
+      }
     }
-  }, [data, dispatch, mutate, reset]);
+  }, [data, dispatch, mutate, reset, globalData, router]);
   return (
     <>
       <TabIndex
@@ -199,8 +224,8 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre }: any) => {
                 rendez-vous
               </p>
               <form
-              action=""
-              method="POST"
+                action=""
+                method="POST"
                 className={styles.modalEditDiscovery__form}
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -226,11 +251,10 @@ const ModalEditDiscoveryMeeting = ({ mutate, meeting, token, offre }: any) => {
               >
                 <div className={styles.modalEditDiscovery__form__div}>
                   <label
-                    className={`${
-                      typeCoaching.length > 0
+                    className={`${typeCoaching.length > 0
                         ? styles.modalEditDiscovery__form__div__label__value
                         : styles.modalEditDiscovery__form__div__label
-                    }`}
+                      }`}
                     htmlFor=""
                   >
                     Type de coaching

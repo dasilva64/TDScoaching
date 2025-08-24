@@ -1,0 +1,359 @@
+import fetchPost from "@/app/components/fetch/FetchPost";
+import TabIndex from "@/app/components/tabIndex/TabIndex";
+import { RootState, AppDispatch } from "@/app/redux/store/store";
+import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import styles from "./ModalEditMeetingUnique.module.scss"
+import Image from "@/app/components/image/Image";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import useSWRMutation from "swr/mutation";
+import { mutate as globalMutate } from "swr";
+
+const ModalEditMeetingUnique = ({ mutate, meeting, offre, userData }: any) => {
+  const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
+  const dispatch = useDispatch<AppDispatch>();
+  const [typeCoaching, setTypeCoaching] = useState<string>(offre.coaching);
+  const [pseudo, setPseudo] = useState<string>("");
+  const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
+    useState<string>("");
+  const [typeCoachingValid, setTypeCoachingValid] = useState<boolean>(true);
+  const closeModal = () => {
+    dispatch({ type: "ModalEditMeetingRendezVous/close" });
+  };
+  const openCalendar = () => {
+    dispatch({ type: "ModalEditMeetingRendezVous/close" });
+    dispatch({ type: "ModalCalendarEditMeetingRendezVous/open" });
+  };
+  const { displayModalEditMeetingRendezVous, dateModalEditMeetingRendezVous }: any =
+    useSelector((state: RootState) => state.ModalEditMeetingRendezVous);
+  const handleChange = (e: any) => {
+    setTypeCoaching(e.target.value);
+    if (e.target.value === "couple" || e.target.value === "familial" || e.target.value === "professionnel") {
+      setTypeCoachingValid(true);
+      setTypeCoachingErrorMessage("");
+    } else {
+      setTypeCoachingErrorMessage("Veuillez selectionner un type de coaching");
+      setTypeCoachingValid(false);
+    }
+  };
+  const { trigger, data, reset, isMutating } = useSWRMutation(
+    "/rendez-vous/components/test/modal/unique/editMeeting/api/",
+    fetchPost
+  );
+  const router = useRouter();
+  useEffect(() => {
+    if (data) {
+      if (data.status === 200) {
+        setTypeCoachingErrorMessage("");
+        setPseudo("");
+        dispatch({ type: "ModalEditMeetingRendezVous/close" });
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: data.message },
+        });
+        globalMutate("/components/header/api");
+        const { meeting, offre } = data.body;
+        mutate(
+          {
+            ...userData,
+            body: {
+              ...userData.body,
+              meeting,
+              offre,
+              meetings: userData.body.meetings.map((m: any) =>
+                m.id === meeting.id ? { ...m, startAt: meeting.startAt } : m
+              ),
+            },
+          },
+          { revalidate: false }
+        );
+        reset();
+      } else if (data.status === 400) {
+        if (data.type === "validation") {
+          data.message.forEach((element: string) => {
+            if (element[0] === "typeCoaching") {
+              setTypeCoachingErrorMessage(element[1]);
+            }
+            if (element[0] === "start") {
+              dispatch({
+                type: "flash/storeFlashMessage",
+                payload: { type: "error", flashMessage: element[1] },
+              });
+            }
+          });
+          reset();
+        } else {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+          setTypeCoachingErrorMessage("");
+          reset();
+        }
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=rendez-vous`)
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        setTypeCoachingErrorMessage("");
+        reset();
+      }
+    }
+  }, [data, dispatch, mutate, reset, router, userData]);
+
+  return (
+    <>
+      <TabIndex displayModal={displayModalEditMeetingRendezVous} />
+      <AnimatePresence>
+        {displayModalEditMeetingRendezVous === true && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { duration: 0.3 } }}
+              exit={{ opacity: 0 }}
+              className={styles.bg}
+              onClick={() => closeModal()}
+            />
+            <motion.div
+              className={styles.modalEditMeetingUnique}
+              initial={{ y: 200, x: "-50%", opacity: 0 }}
+              animate={{
+                y: "-50%",
+                x: "-50%",
+                opacity: 1,
+                transition: { duration: 0.3 },
+              }}
+              exit={{
+                y: 200,
+                x: "-50%",
+                opacity: 0,
+                transition: { duration: 0.3 },
+              }}
+            >
+              <button
+                type="button"
+                className={styles.modalEditMeetingUnique__return}
+                onClick={() => openCalendar()}
+              >
+                Retour au calendrier
+              </button>
+              <button
+                type="button"
+                className={styles.modalEditMeetingUnique__btn}
+                onClick={() => closeModal()}
+              >
+                <Image
+                  className={styles.modalEditMeetingUnique__btn__img}
+                  src="/assets/icone/xmark-solid.svg"
+                  alt="icone fermer modal"
+                  width={30}
+                  height={30}
+                ></Image>
+              </button>
+              <h2 className={`${styles.modalEditMeetingUnique__h1}`}>
+                Modification du rendez-vous
+              </h2>
+              <div
+                className={`${styles.modalEditMeetingUnique__previous} ${styles.modalEditMeetingUnique__rdv}`}
+              >
+                <p className={styles.modalEditMeetingUnique__rdv__title}>
+                  Ancien rendez-vous
+                </p>
+                <p className={styles.modalEditMeetingUnique__rdv__p}>
+                  <Image
+                    className={styles.modalEditMeetingUnique__rdv__p__img}
+                    src="/assets/icone/calendar-regular.svg"
+                    alt="clock"
+                    width={25}
+                    height={25}
+                  />
+                  {new Date(meeting.startAt).toLocaleDateString("fr-FR", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+                <p className={styles.modalEditMeetingUnique__rdv__p}>
+                  <Image
+                    className={styles.modalEditMeetingUnique__rdv__p__img}
+                    src="/assets/icone/clock-solid.svg"
+                    alt="clock"
+                    width={25}
+                    height={25}
+                  />
+                  {new Date(meeting.startAt).toLocaleTimeString("fr-FR")}
+                </p>
+              </div>
+              <div
+                className={`${styles.modalEditMeetingUnique__new} ${styles.modalEditMeetingUnique__rdv}`}
+              >
+                <p className={styles.modalEditMeetingUnique__rdv__title}>
+                  Nouveau rendez-vous
+                </p>
+                <p className={styles.modalEditMeetingUnique__rdv__p}>
+                  <Image
+                    className={styles.modalEditMeetingUnique__rdv__p__img}
+                    src="/assets/icone/calendar-regular.svg"
+                    alt="clock"
+                    width={25}
+                    height={25}
+                  />
+                  {new Date(dateModalEditMeetingRendezVous).toLocaleDateString(
+                    "fr-FR",
+                    {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }
+                  )}
+                </p>
+                <p className={styles.modalEditMeetingUnique__rdv__p}>
+                  <Image
+                    className={styles.modalEditMeetingUnique__rdv__p__img}
+                    src="/assets/icone/clock-solid.svg"
+                    alt="clock"
+                    width={25}
+                    height={25}
+                  />
+                  {new Date(dateModalEditMeetingRendezVous).toLocaleTimeString(
+                    "fr-FR"
+                  )}
+                </p>
+              </div>
+
+              <p className={styles.modalEditMeetingUnique__choose}>
+                Vous pouvez également changer le type de coaching pour ce
+                rendez-vous
+              </p>
+              <form
+                action=""
+                method="POST"
+                className={styles.modalEditMeetingUnique__form}
+                onSubmit={(e) => {
+                  if (typeCoachingValid) {
+                    if (pseudo.length === 0) {
+                      trigger({
+                        typeCoaching: typeCoaching,
+                        start: dateModalEditMeetingRendezVous,
+                        csrfToken: csrfToken,
+                        pseudo: pseudo
+                      });
+                    }
+                    e.preventDefault();
+                  } else {
+                    e.preventDefault();
+                    if (typeCoaching.length === 0) {
+                      setTypeCoachingErrorMessage(
+                        "Veuillez selectionner un type de coaching"
+                      );
+                    }
+                  }
+                }}
+              >
+                <div className={styles.modalEditMeetingUnique__form__div}>
+                  <label
+                    className={`${typeCoaching.length > 0
+                      ? styles.modalEditMeetingUnique__form__div__label__value
+                      : styles.modalEditMeetingUnique__form__div__label
+                      }`}
+                    htmlFor=""
+                  >
+                    Type de coaching
+                  </label>
+                  <div className={styles.modalEditMeetingUnique__form__div__div}>
+                    <select
+                      className={
+                        styles.modalEditMeetingUnique__form__div__div__select
+                      }
+                      name="typeCoaching"
+                      id="typeCoaching"
+                      value={typeCoaching}
+                      onChange={handleChange}
+                    >
+                      <option disabled value=""></option>
+                      <option value="familial">Coaching familial</option>
+                      <option value="couple">Coaching de couple</option>
+                      <option value="professionnel">
+                        Coaching professionnel
+                      </option>
+                    </select>
+                  </div>
+                  <div className={styles.modalEditMeetingUnique__form__div__error}>
+                    {typeCoachingErrorMessage}
+                  </div>
+                </div>
+
+                <input
+                  type="text"
+                  name="pseudo"
+                  id="pseudo"
+                  className={styles.modalEditMeetingUnique__form__hidden}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  onChange={(e) => {
+                    setPseudo(e.target.value);
+                  }}
+                />
+                <div className={styles.modalEditMeetingUnique__form__submit}>
+                  {isMutating && (
+                    <>
+                      <button
+                        disabled
+                        className={
+                          styles.modalEditMeetingUnique__form__submit__btn__load
+                        }
+                      >
+                        <span
+                          className={
+                            styles.modalEditMeetingUnique__form__submit__btn__load__span
+                          }
+                        >
+                          Chargement
+                        </span>
+
+                        <div
+                          className={
+                            styles.modalEditMeetingUnique__form__submit__btn__load__arc
+                          }
+                        >
+                          <div
+                            className={
+                              styles.modalEditMeetingUnique__form__submit__btn__load__arc__circle
+                            }
+                          ></div>
+                        </div>
+                      </button>
+                    </>
+                  )}
+                  {isMutating === false && (
+                    <>
+                      <button
+                        className={styles.modalEditMeetingUnique__form__submit__btn}
+                      >
+                        Modifier le rendez-vous
+                      </button>
+                    </>
+                  )}
+                </div>
+              </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+export default ModalEditMeetingUnique

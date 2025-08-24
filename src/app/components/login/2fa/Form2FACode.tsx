@@ -24,6 +24,7 @@ const Form2FACode = () => {
     setCode("")
     setErrorCode("")
     setValidCode(false)
+    setIsLoading(false);
   };
 
   const dispatch = useDispatch<AppDispatch>()
@@ -97,8 +98,22 @@ const Form2FACode = () => {
             });
             resetLogin();
           }, 1000);
+        } else if (loginData.type === "expire") {
+          setTimeout(() => {
+            setIsLoading(false);
+            setCode("");
+            setValidCode(false);
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "error", flashMessage: loginData.message },
+            });
+            resetLogin();
+          }, 1000);
         } else {
           setTimeout(() => {
+            dispatch({
+              type: "Modal2FACode/close",
+            });
             setIsLoading(false);
             setCode("");
             setValidCode(false);
@@ -111,6 +126,7 @@ const Form2FACode = () => {
 
         }
       } else if (loginData.status === 401) {
+        setIsLoading(false);
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: loginData.message },
@@ -133,7 +149,7 @@ const Form2FACode = () => {
         resetLogin();
       }
     }
-  }, [dispatch, loginData, resetLogin, router]);
+  }, [dispatch, loginData, resetLogin, router, destinationModal2FACode]);
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({
@@ -195,24 +211,6 @@ const Form2FACode = () => {
       }
 
     }
-
-    /* try {
-      const res = await fetch("/api/2fa/resend", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ csrfToken }), // Ajoute protection CSRF
-      });
-  
-      const data = await res.json();
-      if (data.status === 200) {
-        alert("Un nouveau code a été envoyé !");
-        setTimer(30); // Réactive le bouton après X secondes
-      } else {
-        alert("Erreur lors de l'envoi du code !");
-      }
-    } catch (error) {
-      alert("Échec du renvoi du code.");
-    } */
   };
   useEffect(() => {
     if (loginDataResend) {
@@ -237,6 +235,17 @@ const Form2FACode = () => {
           type: "Modal2FACode/close",
         });
         router.push('/')
+      } else if (loginDataResend.status === 400 && loginDataResend.type === "expire") {
+        setTimer(30);
+        dispatch({
+          type: "Modal2FACode/close",
+        });
+        setCode("");
+        setValidCode(false);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: loginDataResend.message },
+        });
       }
       else {
         setTimer(30);
@@ -274,6 +283,7 @@ const Form2FACode = () => {
         });
 
       } else if (loginDataCancel.status === 401) {
+        setIsLoading(false);
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: loginDataCancel.message },
@@ -286,8 +296,20 @@ const Form2FACode = () => {
           type: "Modal2FACode/close",
         });
         router.push('/')
+      }else if (loginDataCancel.status === 400 && loginDataCancel.type === "expire") {
+         dispatch({
+          type: "Modal2FACode/close",
+        });
+        setIsLoading(false);
+        setCode("");
+        setValidCode(false);
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: loginDataCancel.message },
+        });
       }
       else {
+        setIsLoading(false);
         setCode("");
         setValidCode(false);
         dispatch({

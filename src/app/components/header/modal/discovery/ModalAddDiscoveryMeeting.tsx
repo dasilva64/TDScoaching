@@ -10,6 +10,7 @@ import useSWRMutation from "swr/mutation";
 import Input from "@/app/components/input/Input";
 import { mutate } from "swr";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const ModalAddDiscoveryMeeting = () => {
 
@@ -27,6 +28,14 @@ const ModalAddDiscoveryMeeting = () => {
   const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
     useState<string>("");
   const [typeCoachingValid, setTypeCoachingValid] = useState<boolean>(false);
+  const [majorInput, setMajorInput] = useState<boolean>(false);
+  const [validMajorInput, setValidMajorInput] = useState<boolean>(false);
+  const [majorInputError, setMajorInputError] = useState<string>("");
+
+  const [cguInput, setCguInput] = useState<boolean>(false);
+      const [validCguInput, setValidCguInput] = useState<boolean>(false);
+      const [cguInputError, setCguInputError] = useState<string>("");
+
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch();
   const closeModal = () => {
@@ -36,11 +45,17 @@ const ModalAddDiscoveryMeeting = () => {
     setTypeCoachingErrorMessage("");
     setValidLastnameInput(false);
     setValidEmailInput(false);
+    setMajorInput(false)
+    setMajorInputError('')
+    setValidMajorInput(false)
     setValidFirstnameInput(false);
     setTypeCoachingValid(false);
     setEmailInput("");
     setFirstnameInput("");
     setLastnameInput("");
+    setCguInput(false)
+          setCguInputError("")
+          setValidCguInput(false)
     setTypeCoaching("");
     dispatch({
       type: "ModalAddDiscoveryMeetingHeader/close",
@@ -51,11 +66,17 @@ const ModalAddDiscoveryMeeting = () => {
     setEmailInputError("");
     setFirstnameInputError("");
     setLastnameInputError("");
+    setMajorInput(false)
+    setMajorInputError('')
+    setValidMajorInput(false)
     setTypeCoachingErrorMessage("");
     setValidLastnameInput(false);
     setValidEmailInput(false);
     setValidFirstnameInput(false);
     setTypeCoachingValid(false);
+    setCguInput(false)
+          setCguInputError("")
+          setValidCguInput(false)
     setEmailInput("");
     setFirstnameInput("");
     setLastnameInput("");
@@ -112,6 +133,12 @@ const ModalAddDiscoveryMeeting = () => {
             if (element[0] === "type") {
               setTypeCoachingErrorMessage(element[1]);
             }
+            if (element[0] === "majorInput") {
+              setMajorInputError(element[1]);
+            }
+            if (element[0] === "cguInput") {
+              setCguInputError(element[1]);
+            }
           });
           reset();
         } else {
@@ -135,6 +162,9 @@ const ModalAddDiscoveryMeeting = () => {
         setLastnameInputError("");
         setTypeCoachingErrorMessage("");
         setValidLastnameInput(false);
+        setCguInput(false)
+          setCguInputError("")
+          setValidCguInput(false)
         setValidEmailInput(false);
         setValidFirstnameInput(false);
         setTypeCoachingValid(false);
@@ -226,7 +256,9 @@ const ModalAddDiscoveryMeeting = () => {
       validEmailInput === true &&
       validFirstnameInput === true &&
       validLastnameInput === true &&
-      typeCoachingValid === true
+      typeCoachingValid === true &&
+      validMajorInput === true &&
+      validCguInput === true
     ) {
       if (pseudo.length === 0) {
         trigger({
@@ -236,7 +268,9 @@ const ModalAddDiscoveryMeeting = () => {
           lastname: lastnameInput,
           email: emailInput,
           csrfToken: csrfToken,
-          pseudo: pseudo
+          pseudo: pseudo,
+          majorInput: majorInput,
+              cguInput: cguInput,
         });
       }
     } else {
@@ -262,8 +296,27 @@ const ModalAddDiscoveryMeeting = () => {
           );
         }
       }
+      if (validMajorInput === false) {
+        setMajorInputError("Vous devez être majeur");
+      }
+      if (validCguInput === false) {
+        setCguInputError("Vous devez accepter les conditions générales d'utilisation");
+      }
     }
   };
+  const inputRef: any = React.useRef();
+  useEffect(() => {
+    if (displayModalAddDiscoveryMeetingHeader === true) {
+      if (inputRef && inputRef.current) {
+        inputRef.current.addEventListener("keydown", (e: any) => {
+          if (e.key === "Enter") {
+            e.srcElement.click();
+            e.preventDefault();
+          }
+        });
+      }
+    }
+  }, [displayModalAddDiscoveryMeetingHeader]);
   return (
     <>
       <TabIndex displayModal={displayModalAddDiscoveryMeetingHeader} />
@@ -427,8 +480,8 @@ const ModalAddDiscoveryMeeting = () => {
                 <div className={styles.modal__form__div}>
                   <label
                     className={`${typeCoaching.length > 0
-                        ? styles.modal__form__div__label__value
-                        : styles.modal__form__div__label
+                      ? styles.modal__form__div__label__value
+                      : styles.modal__form__div__label
                       }`}
                     htmlFor=""
                   >
@@ -462,7 +515,80 @@ const ModalAddDiscoveryMeeting = () => {
                     {typeCoachingErrorMessage}
                   </div>
                 </div>
-
+                <div className={styles.modal__form__div}>
+                  <div className={styles.modal__form__div__div}>
+                    <label
+                      className={styles.modal__form__div__div__label}
+                      htmlFor="remenber"
+                    >
+                      Je certifie avoir 18 ans ou plus pour utiliser ce service
+                    </label>
+                    <input
+                      ref={inputRef}
+                      className={styles.modal__form__div__div__checkbox}
+                      type="checkbox"
+                      defaultChecked={majorInput}
+                      name="legal"
+                      id="legal"
+                      onChange={(e) => {
+                        if (e.target.checked === true) {
+                          setMajorInput(true);
+                          setValidMajorInput(true);
+                          setMajorInputError("");
+                        } else {
+                          setMajorInput(false);
+                          setValidMajorInput(false);
+                          setMajorInputError(
+                            "Vous devez être majeur pour vous inscrire"
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className={styles.modal__form__div__div__error}>
+                    {majorInputError}
+                  </div>
+                </div>
+                <div className={styles.modal__form__div}>
+                  <div className={styles.modal__form__div__div}>
+                    <label
+                      className={styles.modal__form__div__div__label}
+                      htmlFor="remenber"
+                    >J’ai lu et j’accepte les&nbsp;
+                      <Link
+                    className={styles.modal__form__link}
+                    target="_blank"
+                    href={"/conditions-generales-utilisations"}
+                  >
+                     conditions générales d&apos;utilisation
+                  </Link>
+                    </label>
+                    <input
+                      ref={inputRef}
+                      className={styles.modal__form__div__div__checkbox}
+                      type="checkbox"
+                      defaultChecked={majorInput}
+                      name="legal"
+                      id="legal"
+                      onChange={(e) => {
+                        if (e.target.checked === true) {
+                          setCguInput(true);
+                          setValidCguInput(true);
+                          setCguInputError("");
+                        } else {
+                          setCguInput(false);
+                          setValidCguInput(false);
+                          setCguInputError(
+                            "Vous devez accepter les conditions générales d'utilisation pour vous inscrire"
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className={styles.modal__form__div__div__error}>
+                    {cguInputError}
+                  </div>
+                </div>
                 <input
                   type="text"
                   name="pseudo"

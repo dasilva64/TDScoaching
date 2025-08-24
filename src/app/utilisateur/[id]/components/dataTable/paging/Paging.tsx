@@ -281,17 +281,6 @@ const Paging = () => {
           </div>
         </>
       )}
-      {datas && datas.length === 0 && (
-        <>
-          <p className={styles.paging__p}>
-            Affichage de 0 à{" "}
-            {datas?.length! < currentPage * nbShow
-              ? datas?.length
-              : currentPage * nbShow}{" "}
-            sur {datas?.length} entrées
-          </p>
-        </>
-      )}
     </div>
   );
 };

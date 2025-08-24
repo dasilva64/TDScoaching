@@ -14,52 +14,85 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch<AppDispatch>();
   const [pseudo, setPseudo] = useState<string>("");
-
+  const [typeCoaching, setTypeCoaching] = useState<string>("");
+  const [typeCoachingErrorMessage, setTypeCoachingErrorMessage] =
+    useState<string>("");
+  const [typeCoachingValid, setTypeCoachingValid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false)
   const closeModal = () => {
     setPseudo("");
     dispatch({ type: "ModalFormuleAddRendezVous/close" });
   };
+  const handleChange = (e: any) => {
+    setTypeCoaching(e.target.value);
+    if (e.target.value === "couple" || e.target.value === "familial" || e.target.value === "professionnel") {
+      setTypeCoachingValid(true);
+      setTypeCoachingErrorMessage("");
+    } else {
+      setTypeCoachingErrorMessage("Veuillez selectionner un type de coaching");
+      setTypeCoachingValid(false);
+    }
+  };
   const { displayModalFormuleAddRendezVous, typeModalFormuleAddRendezVous } =
     useSelector((state: RootState) => state.ModalFormuleAddRendezVous);
   const { trigger, data, reset, isMutating } = useSWRMutation(
-    "/rendez-vous/components/test/modal/formule/api/",
+    "/rendez-vous/components/test/modal/add/paid/flash/api",
     fetchPost
   );
   const router = useRouter();
   useEffect(() => {
     if (data) {
-      if (data.status === 200) {
-        const waiting = async () => {
-          await mutate();
-          await globalMutate("/components/header/api")
-          reset();
-          await dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "success", flashMessage: data.message },
-          });
-          await dispatch({ type: "ModalFormuleAddRendezVous/close" });
-          setIsLoading(false)
+          if (data.status === 200) {
+            setTypeCoaching("");
+            globalMutate("/components/header/api");
+            setTypeCoachingErrorMessage("");
+            setTypeCoachingValid(false);
+            setPseudo("");
+            reset()
+            window.location.href = data.url;
+          } else if (data.status === 400) {
+            if (data.type === "validation") {
+              data.message.forEach((element: string) => {
+                if (element[0] === "typeCoaching") {
+                  setTypeCoachingErrorMessage(element[1]);
+                  setTypeCoachingValid(false);
+                }
+                if (element[0] === "start") {
+                  dispatch({
+                    type: "flash/storeFlashMessage",
+                    payload: { type: "error", flashMessage: element[1] },
+                  });
+                }
+              });
+              reset();
+            } else {
+              dispatch({
+                type: "flash/storeFlashMessage",
+                payload: { type: "error", flashMessage: data.message },
+              });
+              setTypeCoachingErrorMessage("");
+              setTypeCoachingValid(false);
+              setTypeCoaching("");
+              dispatch({ type: "ModalAddDiscovery/close" });
+              reset();
+            }
+          } else if (data.status === 401) {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "error", flashMessage: data.message },
+            });
+            reset();
+            globalMutate("/components/header/api");
+            globalMutate("/components/header/ui/api");
+            router.push(`/acces-refuse?destination=rendez-vous`)
+          } else {
+            dispatch({
+              type: "flash/storeFlashMessage",
+              payload: { type: "error", flashMessage: data.message },
+            });
+            reset();
+          }
         }
-        waiting()
-
-      } else if (data.status === 401) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: data.message },
-        });
-        reset();
-        router.push(`/acces-refuse?destination=rendez-vous`);
-        setIsLoading(false)
-      } else {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: data.message },
-        });
-        reset();
-        setIsLoading(false)
-      }
-    }
   }, [data, dispatch, mutate, reset, router]);
 
   return (
@@ -112,7 +145,11 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
                 </h3>
                 {typeModalFormuleAddRendezVous === "unique" && (
                   <div className={styles.modalAddFormule__formule__content}>
-                    <ul
+                    <p>- faire directement appel au callendar pour unique</p>
+                    <p>- je créer directemnet l&apos;offre et le rdv ensemble</p>
+                    <p>- donc pas de take components pour l&apos;unique</p>
+                    <p>- si l&apos;user supprime son rdv payé ou non alors il restart direct au choix offre</p>
+                    {/* <ul
                       className={styles.modalAddFormule__formule__content__ul}
                     >
                       <li
@@ -157,7 +194,7 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
                     >
                       100
                       <span>€</span>
-                    </p>
+                    </p> */}
                   </div>
                 )}
                 {typeModalFormuleAddRendezVous === "flash" && (
@@ -200,6 +237,7 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
                         1 bilan final offert
                       </li>
                     </ul>
+
                     <p
                       className={
                         styles.modalAddFormule__formule__content__price
@@ -279,44 +317,145 @@ const ModalFormuleAdd = ({ data: globalData, mutate }: any) => {
                   </div>
                 )}
               </div>
-
-              <div className={styles.modalAddFormule__action}>
-                {!isLoading && (
-                  <>
-                    <button
-                      className={styles.modalAddFormule__action__btn}
-                      onClick={() => {
-                        if (typeModalFormuleAddRendezVous === "unique") {
-                          setIsLoading(true)
-                          trigger({
-                            formule: typeModalFormuleAddRendezVous,
-                            pseudo: pseudo,
-                            csrfToken: csrfToken
-                          });
-                        } else {
-                          dispatch({ type: "ModalFormuleAddRendezVous/close" });
-                          dispatch({
-                            type: "ModalContractRendezVous/open",
-                            payload: {
-                              type: typeModalFormuleAddRendezVous,
-                              statut: "creation"
-                            },
-                          });
-                        }
-                      }}
+              <form
+                action=""
+                method="POST"
+                className={styles.modalAddFormule__form}
+                onSubmit={(e) => {
+                  if (typeCoachingValid) {
+                    if (pseudo.length === 0) {
+                      trigger({
+                        typeCoaching: typeCoaching,
+                        csrfToken: csrfToken,
+                        formule: typeModalFormuleAddRendezVous,
+                        pseudo: pseudo
+                      });
+                    }
+                    e.preventDefault();
+                  } else {
+                    e.preventDefault();
+                    if (typeCoaching.length === 0) {
+                      setTypeCoachingErrorMessage(
+                        "Veuillez selectionner un type de coaching"
+                      );
+                    }
+                  }
+                }}
+              >
+                <div className={styles.modalAddFormule__form__div}>
+                  <label
+                    className={`${typeCoaching.length > 0
+                      ? styles.modalAddFormule__form__div__label__value
+                      : styles.modalAddFormule__form__div__label
+                      }`}
+                    htmlFor=""
+                  >
+                    Type de coaching
+                  </label>
+                  <div className={styles.modalAddFormule__form__div__div}>
+                    <select
+                      className={
+                        styles.modalAddFormule__form__div__div__select
+                      }
+                      name="typeCoaching"
+                      id="typeCoaching"
+                      value={typeCoaching}
+                      onChange={handleChange}
                     >
-                      Prendre cette offre
-                    </button>
-                  </>
-                )}
-                {isLoading && (
-                  <>
-                    <span className={styles.modalAddFormule__action__btn}>
-                      Chargement ...
-                    </span>
-                  </>
-                )}
-              </div>
+                      <option disabled value=""></option>
+                      <option value="familial">Coaching familial</option>
+                      <option value="couple">Coaching de couple</option>
+                      <option value="professionnel">
+                        Coaching professionnel
+                      </option>
+                    </select>
+                  </div>
+                  <div className={styles.modalAddFormule__form__div__error}>
+                    {typeCoachingErrorMessage}
+                  </div>
+                </div>
+
+                <input
+                  type="text"
+                  name="pseudo"
+                  id="pseudo"
+                  className={styles.modalAddFormule__form__hidden}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  onChange={(e) => {
+                    setPseudo(e.target.value);
+                  }}
+                />
+
+                <div className={styles.modalAddFormule__form__submit}>
+                  {!isMutating && (
+                    <>
+                      <input
+                        className={styles.modalAddFormule__form__submit__btn}
+                        /* onClick={() => {
+                          if (typeModalFormuleAddRendezVous === "unique") {
+                            setIsLoading(true)
+                            trigger({
+                              formule: typeModalFormuleAddRendezVous,
+                              pseudo: pseudo,
+                              csrfToken: csrfToken
+                            }); 
+                          } else {
+                             dispatch({ type: "ModalFormuleAddRendezVous/close" });
+                            dispatch({
+                              type: "ModalContractRendezVous/open",
+                              payload: {
+                                type: typeModalFormuleAddRendezVous,
+                                statut: "creation"
+                              },
+                            }); 
+                          }
+                        }}*/
+                        value={"Prendre cette offre"}
+                        type="submit"
+                      />
+                        
+                    </>
+                  )}
+                  {isMutating && (
+                    <>
+                      <button
+                        disabled
+                        className={
+                          styles.modalAddFormule__form__submit__btn__load
+                        }
+                      >
+                        <span
+                          className={
+                            styles.modalAddFormule__form__submit__btn__load__span
+                          }
+                        >
+                          Chargement
+                        </span>
+
+                        <div
+                          className={
+                            styles.modalAddFormule__form__submit__btn__load__arc
+                          }
+                        >
+                          <div
+                            className={
+                              styles.modalAddFormule__form__submit__btn__load__arc__circle
+                            }
+                          ></div>
+                        </div>
+                      </button>
+                    </>
+                  )}
+                  <p onClick={() => {
+                    dispatch({
+                      type: "ModalHelpPaiementRendezVous/open"
+                    })
+
+                  }} className={styles.modalAddFormule__form__help}>Information sur le paiement</p>
+                </div>
+              </form>
+
             </motion.div>
           </>
         )}

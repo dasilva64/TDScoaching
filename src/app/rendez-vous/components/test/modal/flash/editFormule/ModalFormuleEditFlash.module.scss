@@ -1,0 +1,142 @@
+.bg {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba($color: #000000, $alpha: 0.9);
+  position: fixed;
+  z-index: 700;
+  top: 0;
+}
+
+.modalEditFormuleFlash {
+  background-color: white;
+  box-shadow: 0px 0px 8px 8px aqua;
+  border-radius: 20px;
+  padding: 50px 30px;
+  width: 70%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  max-height: 90%;
+  overflow: scroll;
+  z-index: 998;
+  &__h1 {
+    color: black;
+    margin: 40px 0px;
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &__p {
+    margin: 0px 0px 20px 0px;
+  }
+  &__action {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    column-gap: 20px;
+    &__btn {
+      padding: 10px;
+      border-radius: 10px;
+      background-color: white;
+      border: 1px solid green;
+      cursor: pointer;
+      transition: all 0.3s;
+      &:hover {
+        transform: scale(1.1);
+        color: white;
+        background-color: green;
+      }
+      &__load {
+          border-radius: 10px;
+          border: 2px solid orange;
+          background-color: white;
+          padding: 0px 10px;
+          display: flex;
+          color: black;
+
+          &__span {
+            align-self: center;
+          }
+
+          &__arc {
+            position: relative;
+            bottom: 9px;
+            margin: 18px 10px 0px 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border-top: 1px solid black;
+            border-bottom: 1px solid transparent;
+            border-left: 1px solid black;
+            border-right: 1px solid transparent;
+            animation: load 2000ms both infinite ease-out;
+
+            &__circle {
+              position: relative;
+              right: -13px;
+              width: 5px;
+              height: 5px;
+              background-color: black;
+              border-radius: 50%;
+            }
+          }
+        }
+    }
+  }
+  &__btn {
+    cursor: pointer;
+    float: right;
+    position: absolute;
+    right: 28px;
+    top: 25px;
+    border: none;
+    background-color: orange;
+    border-radius: 5px;
+    transition: all 400ms;
+    padding: 5px;
+    &:hover {
+      transform: scale(1.05);
+    }
+    &:hover > &__img {
+      transform: rotate(90deg);
+    }
+    &__img {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 400ms;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .modalEditFormuleFlash {
+    width: 80%;
+    padding: 40px 20px;
+    &__btn {
+      right: 20px;
+      top: 22px;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .modalEditFormuleFlash {
+    width: 95%;
+    padding: 40px 10px;
+    &__btn {
+      right: 14px;
+      top: 18px;
+    }
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(680deg);
+  }
+}

@@ -7,11 +7,14 @@ import styles from "./ModalComfirmDiscoveryMeeting.module.scss";
 import Image from "@/app/components/image/Image";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { RootState } from "@/app/redux/store/store";
+import { mutate as globalMutate } from "swr";
+import { useRouter } from "next/navigation";
 
-const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
+const ModalComfirmDiscoveryMeeting = ({ token, mutate, globalData }: any) => {
   const { displayModalConfirmDiscoveryMeetingRendezVousToken } = useSelector(
     (state: RootState) => state.ModalConfirmDiscoveryMeetingRendezVousToken
   );
+  const router = useRouter()
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken
   );
@@ -35,8 +38,28 @@ const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
         dispatch({
           type: "ModalConfirmDiscoveryMeetingRendezVousToken/close",
         });
+        globalMutate("/components/header/api");
         reset();
-        mutate();
+        const { meeting } = data.body;
+        mutate(
+          {
+            ...globalData,
+            body: {
+              ...globalData.body,
+              meeting,
+            },
+          },
+          { revalidate: false }
+        );
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse`);
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -45,7 +68,7 @@ const ModalComfirmDiscoveryMeeting = ({ token, mutate }: any) => {
         reset();
       }
     }
-  }, [data, dispatch, mutate, reset]);
+  }, [data, dispatch, mutate, reset, globalData]);
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({

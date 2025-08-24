@@ -8,7 +8,7 @@ const Load = () => {
         <div className={styles.load__container__arc}>
           <div className={styles.load__container__arc__circle}></div>
         </div>
-        <p>Chargement</p>
+        <p>Chargement ...</p>
       </div>
     </>
   );

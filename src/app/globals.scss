@@ -20,6 +20,7 @@ body {
 #conclusion {
   scroll-margin-top: 60px;
 }
+
 #techniquesDeRelaxationEtDeMéditation,
 #changerDePerspective,
 #demanderDeLAide,
@@ -38,6 +39,7 @@ input,
 span {
   font-family: Helvetica, Arial, sans-serif;
 }
+
 h1,
 h2,
 h3 {
@@ -48,9 +50,11 @@ h3 {
   text-decoration-thickness: 2px;
   text-align: center;
 }
+
 summary {
   font-size: clamp(15px, 17px, 2vw);
 }
+
 p,
 label,
 input,
@@ -58,18 +62,23 @@ button,
 ul {
   font-size: clamp(15px, 17px, 2vw);
 }
+
 h1 {
   font-size: clamp(36px, 48px, 5vw);
 }
+
 h2 {
   font-size: clamp(30px, 38px, 4vw);
 }
+
 h3 {
   font-size: clamp(26px, 32px, 4vw);
 }
+
 h4 {
   font-size: clamp(20px, 26px, 4vw);
 }
+
 .slot-cell {
   flex: 1;
   text-align: center;
@@ -81,6 +90,7 @@ h4 {
     opacity: 1;
   }
 }
+
 /* *:focus-visible {
   outline: 1px dotted black !important;
   outline: 1px auto #254deb !important;
@@ -90,13 +100,16 @@ button:focus {
   outline: 1px dotted black !important;
   outline: 1px auto #254deb !important;
 }
+
 button,
 input[type="button"] {
   padding: 1px;
   outline: none;
-  box-sizing: border-box; /* S'assure que le padding et les bordures ne dépassent pas la taille de l'élément */
+  box-sizing: border-box;
+  /* S'assure que le padding et les bordures ne dépassent pas la taille de l'élément */
   box-shadow: none !important;
 }
+
 button::-moz-focus-inner,
 input[type="button"]::-moz-focus-inner {
   border: 0;
@@ -112,25 +125,35 @@ input[type="button"]:focus {
   outline: none;
   box-shadow: none !important;
 }
+
+.fc-event-title {
+  overflow: scroll;
+}
+
 .fc .fc-toolbar-title {
   font-size: 1.3em;
   text-decoration: none;
   font-family: "__Inter_d65c78", "__Inter_Fallback_d65c78";
 }
+
 .fc .fc-button {
   background-color: white !important;
   color: black;
 }
+
 .fc .fc-button:hover {
   background-color: aqua !important;
   color: black;
 }
+
 .fc .fc-button-primary:disabled {
   background-color: gray !important;
 }
+
 .fc .fc-button-primary:disabled:hover {
   color: white;
 }
+
 .fc .fc-bg-event {
   opacity: 0;
   text-align: center;
@@ -151,6 +174,7 @@ details summary {
   //margin-bottom: -10px; /* for more prominent move */
   transition: margin 450ms ease-out;
 }
+
 @media screen and (max-width: 500px) {
   details summary {
     padding: 15px 50px 50px 15px;
@@ -162,9 +186,11 @@ details summary {
   .fc .fc-toolbar {
     display: unset;
   }
+
   .fc-toolbar-title {
     margin-bottom: 10px !important;
   }
+
   .fc-toolbar-chunk {
     text-align: center;
   }
@@ -175,9 +201,11 @@ details summary {
     margin-bottom: 20px !important;
   }
 }
+
 .fc-timegrid-slot {
   cursor: pointer;
 }
+
 /* 
 .fc-timegrid-slot:hover {
   background: black;
@@ -196,8 +224,8 @@ details[open] summary {
   }
 }
 
-details > summary::-webkit-details-marker,
-details > summary::marker {
+details>summary::-webkit-details-marker,
+details>summary::marker {
   display: none;
   content: "";
 }
@@ -222,6 +250,7 @@ details[open] summary:after {
   .css-f2kq0q-MuiFormControl-root {
     min-width: unset;
   }
+
   .vertical-timeline-element-title {
     font-size: 16px;
   }
@@ -266,12 +295,14 @@ h2 {
       width: 95%;
       transition: all 400ms;
       z-index: 999;
+
       &__img {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
         left: 20px;
       }
+
       &__span {
         transform: translateY(-50%);
         position: absolute;
@@ -283,12 +314,14 @@ h2 {
         border-radius: 50%;
         cursor: pointer;
         transition: all 400ms;
+
         &__error {
           &:hover {
             background-color: white;
             color: red;
           }
         }
+
         &__success {
           &:hover {
             background-color: white;
@@ -297,9 +330,11 @@ h2 {
         }
       }
     }
+
     &__error {
       background-color: red;
     }
+
     &__success {
       background-color: green;
     }
@@ -356,6 +391,7 @@ h2 {
 .fc .fc-button-primary:disabled {
   background-color: violet;
 }
+
 .fc-v-event {
   background-color: violet;
   border-color: violet;

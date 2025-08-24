@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-    const { start, typeCoaching, email, firstname, lastname, pseudo } =
+    const { start, typeCoaching, email, firstname, lastname, pseudo, majorInput, cguInput } =
       (await request.json()) as {
         start: string;
         typeCoaching: string;
@@ -40,6 +40,8 @@ export async function POST(request: NextRequest) {
         lastname: string;
         email: string;
         pseudo: string;
+        majorInput: boolean;
+        cguInput: boolean;
       };
 
     let arrayMessageError = validationBody({
@@ -48,8 +50,23 @@ export async function POST(request: NextRequest) {
       firstname: firstname,
       lastname: lastname,
       email: email,
+      majorInput: majorInput,
+      cguInput: cguInput
     });
     if (arrayMessageError.length > 0) {
+      if (arrayMessageError.length === 1) {
+        if (arrayMessageError[0][0] === "unknown_fields") {
+          return NextResponse.json(
+            {
+              status: 400,
+              message: arrayMessageError[0][1],
+            },
+            {
+              status: 400,
+            }
+          );
+        }
+      }
       return NextResponse.json(
         {
           status: 400,
@@ -79,7 +96,7 @@ export async function POST(request: NextRequest) {
         mail: email.trim(),
       },
     });
-    if (user) {
+    if (user && user.status === true) {
       let lastDiscoveryByUser = await prisma.offre_test.findMany({
         take: 1,
         where: {
@@ -102,18 +119,18 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             status: 404,
-            message: "Vous avez déjà un rendez-vous de prévu",
+            message: "Un rendez-vous est déjà prévu avec cet email",
           },
           {
             status: 404,
           }
         );
       } else if (lastDiscoveryByUser.length > 0) {
-        if (lastDiscoveryByUser[0].status === "pending") {
+        if (lastDiscoveryByUser[0].status === "not_confirmed") {
           return NextResponse.json(
             {
               status: 404,
-              message: "Vous avez déjà un rendez-vous de découverte de prévu",
+              message: "Un rendez-vous de découverte est déjà prévu avec cet email",
             },
             {
               status: 404,
@@ -147,10 +164,11 @@ export async function POST(request: NextRequest) {
             let meeting = await prisma.meeting_test.create({
               data: {
                 startAt: start,
-                status: "pending",
+                status: "not_confirmed",
                 userMail: email.trim(),
                 offreId: user?.offreId,
-                numberOfMeeting: "1"
+                numberOfMeeting: "1",
+                status_payment: "free"
               },
             });
             let offre = await prisma.offre_test.update({
@@ -158,7 +176,8 @@ export async function POST(request: NextRequest) {
               data: {
                 currentNumberOfMeeting: 1,
                 coaching: typeCoaching,
-                currentMeetingId: meeting.id
+                currentMeetingId: meeting.id,
+                hasCard: true
               }
             })
             await prisma.user.update({
@@ -236,7 +255,7 @@ export async function POST(request: NextRequest) {
             message:
               "Le rendez-vous a bien été pris et un mail vous a été envoyé",
           });
-        } catch {
+        } catch (error) {
           return NextResponse.json(
             {
               status: 404,
@@ -256,24 +275,36 @@ export async function POST(request: NextRequest) {
               firstname: firstname,
               lastname: lastname,
               mail: email,
+              isMajor: true
             },
           });
+          let currentDate = new Date();
+          let userAgreements = await prisma.userAgreement.create({
+            data: {
+              userId: createUser.id,
+              acceptedCGUAt: currentDate,
+              acceptedCGU: true,
+            }
+          })
           const OffreCreate = await prisma.offre_test.create({
             data: {
               type: "discovery",
               userId: createUser.id,
               status: "pending",
+              hasCard: false,
               currentNumberOfMeeting: 1,
               coaching: typeCoaching,
+
             }
           })
           let meeting = await prisma.meeting_test.create({
             data: {
               startAt: start,
-              status: "pending",
+              status: "not_confirmed",
               userMail: email.trim(),
               offreId: OffreCreate.id,
-              numberOfMeeting: "1"
+              numberOfMeeting: "1",
+              status_payment: "free",
             },
           });
           let offre = await prisma.offre_test.update({
@@ -286,7 +317,7 @@ export async function POST(request: NextRequest) {
             where: { id: createUser.id },
             data: {
               meetingId: meeting.id,
-              offreId: OffreCreate.id,
+              offreId: offre.id,
             },
           });
           return { meeting, createUser, offre }
@@ -357,7 +388,7 @@ export async function POST(request: NextRequest) {
           message:
             "Le rendez-vous a bien été pris et un mail vous a été envoyé",
         });
-      } catch {
+      } catch (error) {
         return NextResponse.json(
           {
             status: 404,

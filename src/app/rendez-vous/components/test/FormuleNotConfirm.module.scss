@@ -22,10 +22,8 @@
       padding-top: 20px;
     }
     &__price {
-      position: absolute;
       bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
+      margin-top: 20px;
       font-weight: 900;
       font-size: clamp(20px, 26px, 2vw);
       width: 100%;
@@ -47,6 +45,96 @@
         }
       }
     }
+    &__action {
+        text-align: center;
+        margin-top: 15px;
+
+        &__btn {
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+          border: 1px solid green;
+          transition: all 0.3s;
+
+          &:hover {
+            background-color: green;
+            color: white;
+            transform: scale(1.05);
+          }
+          &__load {
+            border-radius: 10px;
+            border: 1px solid green;
+            padding: 0px 10px;
+            display: flex;
+            margin: auto;
+            color: black;
+
+            &__span {
+              align-self: center;
+            }
+
+            &__arc {
+              position: relative;
+              bottom: 9px;
+              margin: 18px 10px 0px 10px;
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              border-top: 1px solid black;
+              border-bottom: 1px solid transparent;
+              border-left: 1px solid black;
+              border-right: 1px solid transparent;
+              animation: load 2000ms both infinite ease-out;
+
+              &__circle {
+                position: relative;
+                right: -13px;
+                width: 5px;
+                height: 5px;
+                background-color: black;
+                border-radius: 50%;
+              }
+            }
+          }
+        }
+
+        &__load {
+          border-radius: 10px;
+          border: 2px solid orange;
+          background-color: white;
+          padding: 0px 10px;
+          display: flex;
+          margin: auto;
+          color: black;
+
+          &__span {
+            align-self: center;
+          }
+
+          &__arc {
+            position: relative;
+            bottom: 9px;
+            margin: 18px 10px 0px 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border-top: 1px solid black;
+            border-bottom: 1px solid transparent;
+            border-left: 1px solid black;
+            border-right: 1px solid transparent;
+            animation: load 2000ms both infinite ease-out;
+
+            &__circle {
+              position: relative;
+              right: -13px;
+              width: 5px;
+              height: 5px;
+              background-color: black;
+              border-radius: 50%;
+            }
+          }
+        }
+      }
   }
 }
 
@@ -79,6 +167,17 @@
             color: white;
         }
     }
+    &__help {
+    margin-top: 15px;
+    font-style: italic;
+    text-decoration: underline;
+    display: inline-block;
+    cursor: pointer;
+
+    &:hover {
+      color: aqua;
+    }
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -90,4 +189,14 @@
     justify-content: center;
 }
 
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(680deg);
+  }
 }

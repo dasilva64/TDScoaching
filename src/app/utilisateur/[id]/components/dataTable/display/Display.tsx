@@ -19,7 +19,7 @@ const Display = () => {
   }, [dispatch]); */
   useEffect(() => {
     if (datas && datas.length > 0) {
-      setKeyAr(["Type de l'offre", "Type de coaching", "Statut du paiement", "Dernier rendez-vous"]);
+      setKeyAr(["Type de l'offre", "Type de coaching", "Statut de l'offre", "Dernier rendez-vous"]);
     }
   }, [datas]);
   /* useEffect(() => {
@@ -36,11 +36,11 @@ const Display = () => {
     if (sortBy[0] === "" && sortBy[1] === "" && keyAr[0]) {
       dispatch({
         type: "ArrayMeetingByUser/changeSortBy",
-        payload: { sortBy: [keyAr[0], "ASC"] },
+        payload: { sortBy: ["Dernier rendez-vous", "DESC"] },
       });
       let arr: any = datas;
       let newat: any = Object.entries(arr).sort(function (a: any, b: any): any {
-        return a[1][keyAr[0]] > b[1][keyAr[0]];
+        return a[1]["Dernier rendez-vous"] < b[1]["Dernier rendez-vous"];
       });
 
       let test: any = [];

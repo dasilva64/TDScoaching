@@ -14,6 +14,27 @@
     margin: 10px 0px 10px 0px;
     line-height: 1.4;
   }
+  &__link {
+    display: inline-block;
+    color: #ff6600;
+    font-weight: bold;
+    text-decoration: none;
+    &::after {
+      content: "";
+      width: 0px;
+      height: 2px;
+      display: block;
+      padding-bottom: -10px;
+      background: black;
+      transition: 400ms;
+    }
+    &:hover::after {
+      width: 100%;
+    }
+    &:hover {
+      color: black;
+    }
+  }
   &__line {
     width: 100%;
     height: 1px;

@@ -1,7 +1,5 @@
 .cgu {
-  margin: 0px 5%;
-  padding-top: 200px;
-  padding-bottom: 100px;
+  padding: 200px 5% 100px 5%;
   &__h1 {
     padding-bottom: 80px;
   }
@@ -25,11 +23,24 @@
     line-height: 1.4;
   }
   &__link {
-    color: #0000009e;
-    text-decoration: underline;
-    font-weight: 600;
+    display: inline-block;
+    color: #ff6600;
+    font-weight: bold;
+    text-decoration: none;
+    &::after {
+      content: "";
+      width: 0px;
+      height: 2px;
+      display: block;
+      padding-bottom: -10px;
+      background: black;
+      transition: 400ms;
+    }
+    &:hover::after {
+      width: 100%;
+    }
     &:hover {
-      color: #000;
+      color: black;
     }
   }
   &__h3 {

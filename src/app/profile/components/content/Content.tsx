@@ -32,6 +32,11 @@ import FirstnameDataError from "../firstnameData/FirstnameDataError";
 import LastnameDataError from "../lastnameData/LastnameDataError";
 import EmailSendTokenDataError from "../emailSendTokenData/EmailSendTokenDataError";
 import TwoFADataError from "../twoFAData/TwoFADataError";
+import CardDataLoad from "../cardData/CardDataLoad";
+import CardDataError from "../cardData/CardDataError";
+import CardData from "../cardData/CardData";
+import ModalCardDataActivation from "../cardData/modal/activation/ModalCardDataActivation";
+import ModalCardDataDesactivation from "../cardData/modal/desactivation/ModalCardDataDesactivation";
 const Parisienne = localFont({
   src: "../../../parisienne-regular-webfont.woff2",
   display: "swap",
@@ -76,7 +81,7 @@ const Content = () => {
       } else if (data.status === 200) {
         dispatch({
           type: "ModalSendTokenEmail/edit",
-          payload: {inputEmail: data.body.email}
+          payload: { inputEmail: data.body.email }
         })
       } else {
         dispatch({
@@ -89,21 +94,23 @@ const Content = () => {
       }
     }
   }, [data, dispatch, isError, isLoading, router]);
-  
+
   return (
     <>
       <NoScript />
       {isLoading === false && data && data.status === 200 && data.body && (
         <>
-        
+
           <ModalUserFirstnameData data={data} mutate={mutate} />
-           <ModalUserLastnameData data={data} mutate={mutate} />
+          <ModalUserLastnameData data={data} mutate={mutate} />
           <ModalUserPasswordData mutate={mutate} />
           <ModalUserSendToken data={data} mutate={mutate} />
           <ModalDeleteAccount mutate={mutate} />
           <ModalTwoFADesactivation mutate={mutate} data={data} />
           <ModalTwoFAActivation mutate={mutate} data={data} />
           <ModalTwoFAActivationCancel />
+          <ModalCardDataActivation mutate={mutate} data={data} />
+          <ModalCardDataDesactivation mutate={mutate} data={data} />
           {data.body.newEmail && (
             <>
               <EmailCheck data={data} mutate={mutate} />
@@ -112,7 +119,7 @@ const Content = () => {
           )}
         </>
       )}
-      
+
       <main className={styles.profile}>
         <section className={styles.profile__main}>
           <h1 className={`${styles.profile__main__h1} ${Parisienne.className}`}>
@@ -150,7 +157,7 @@ const Content = () => {
               >
                 Connexion
               </h3>
-               <PasswordData />
+              <PasswordData />
               {data && data.body && isLoading === false && (
                 <EmailSendTokenData data={data && data.body && data} />
               )}
@@ -167,7 +174,7 @@ const Content = () => {
               {data && data.body && isLoading === false && (
                 <TwoFAData data={data && data.body && data} />
               )}
-               {data && data.status === 429 && isLoading === false && (
+              {data && data.status === 429 && isLoading === false && (
                 <>
                   <TwoFADataError />
                 </>
@@ -175,6 +182,24 @@ const Content = () => {
               {isLoading === true && (
                 <>
                   <TwoFADataLoad />
+                </>
+              )}
+            </div>
+            <div className={styles.profile__main__container__content}>
+              <h3
+                className={`${styles.profile__main__container__content__h3} ${Parisienne.className}`}
+              >Gestion des paiements</h3>
+              {data && data.body && isLoading === false && (
+                <CardData data={data && data.body && data} />
+              )}
+              {data && data.status === 429 && isLoading === false && (
+                <>
+                  <CardDataError />
+                </>
+              )}
+              {isLoading === true && (
+                <>
+                  <CardDataLoad />
                 </>
               )}
             </div>

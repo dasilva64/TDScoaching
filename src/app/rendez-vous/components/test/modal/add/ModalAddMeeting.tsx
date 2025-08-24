@@ -59,14 +59,15 @@ const ModalAddMeeting = ({ mutate, discovery, offre }: any) => {
           setTypeCoachingErrorMessage("");
           setTypeCoachingValid(false);
           setPseudo("");
-          await mutate();
-          await dispatch({ type: "ModalAddMeetingRendezVous/close" });
-          await dispatch({
+          mutate();
+          globalMutate("/components/header/api");
+          dispatch({ type: "ModalAddMeetingRendezVous/close" });
+          dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: data.message },
           });
 
-          await reset();
+          reset();
         }
         processFetchedData()
 

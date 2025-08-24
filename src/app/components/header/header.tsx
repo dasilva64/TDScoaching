@@ -7,6 +7,7 @@ import Link from "next/link";
 import Content from "./display/Content";
 import FlashMessage from "./ui/flashMessage/FlashMessage";
 import BtnNav from "./ui/BtnNav";
+import Rappel from "./rappel/Rappel";
 
 const Header = async () => {
   return (
@@ -54,7 +55,9 @@ const Header = async () => {
           </ul>
         </nav>
         <Content />
+        
       </header>
+      
       <FlashMessage />
     </>
   );

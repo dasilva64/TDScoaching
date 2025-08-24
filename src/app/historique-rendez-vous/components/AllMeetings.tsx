@@ -132,14 +132,19 @@ const AllMeetings = () => {
         </>
       )}
       <main className={styles.allMeetings}>
-        <h1 className={`${styles.allMeetings__h1}`}>Historique de mes rendez-vous</h1>
-        <div className={styles.allMeetings__container}>
-          <div className={styles.allMeetings__article}>
-            <div>
-              {content}
+        <section className={styles.allMeetings__main}>
+
+          <h1 className={`${styles.allMeetings__main__h1}`}>Historique de mes rendez-vous</h1>
+          <div className={styles.allMeetings__main__container}>
+            <div className={styles.allMeetings__main__article}>
+              <div>
+                {content}
+              </div>
             </div>
           </div>
-        </div>
+        </section>
+
+
       </main>
 
     </>);

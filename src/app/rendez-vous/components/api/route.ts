@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       } else {
         let link = null;
         try {
-          const { allMeeting, meeting, offre, allOffresWithMeetings } = await prisma.$transaction(async (tx) => {
+          const { allMeeting, userMeeting, userOffreWithMeetings } = await prisma.$transaction(async (tx) => {
             const allMeeting = await tx.meeting_test.findMany({
               where: {
                 startAt: { gte: new Date() },
@@ -39,18 +39,15 @@ export async function GET(request: NextRequest) {
               select: {
                 startAt: true,
                 userMail: true,
+                id: true,
               },
             });
 
-            const meeting = user.meetingId
+            const userMeeting = user.meetingId
               ? await tx.meeting_test.findUnique({ where: { id: user.meetingId } })
               : null;
 
-            const offre = user.offreId
-              ? await tx.offre_test.findUnique({ where: { id: user.offreId } })
-              : null;
-
-            const allOffresWithMeetings = user.offreId
+            const userOffreWithMeetings = user.offreId
               ? await tx.offre_test.findUnique({
                 where: { id: user.offreId },
                 include: {
@@ -60,37 +57,35 @@ export async function GET(request: NextRequest) {
                       status: true,
                       startAt: true,
                       numberOfMeeting: true,
+                      status_payment: true
                     },
                   },
                 },
               })
               : null;
 
-            return { allMeeting, meeting, offre, allOffresWithMeetings };
+            return { allMeeting, userMeeting, userOffreWithMeetings };
           });
 
-          let updatedArray;
-          if (allOffresWithMeetings) {
-            updatedArray = allOffresWithMeetings.meeting_test_meeting_test_offreIdTooffre_test.filter(obj => obj.status !== "cancelled");
-          }
-
-          let userObject = {
+          /* const filteredMeetings = userOffreWithMeetings?.meeting_test_meeting_test_offreIdTooffre_test
+            .filter(m => m.status !== "cancelled")
+            .sort((a, b) => a.numberOfMeeting.localeCompare(b.numberOfMeeting)) ?? null;
+ */
+          const userObject = {
             meetings: allMeeting,
-            meeting: meeting,
-            offre: offre,
+            meeting: userMeeting,
+            offre: userOffreWithMeetings,
             discovery: user.discovery,
             link: link,
-            meetingsByUser: updatedArray ? updatedArray.sort((a: any, b: any) => a.numberOfMeeting - b.numberOfMeeting) : null
-          };
-          return NextResponse.json(
-            {
-              status: 200,
-              body: userObject,
+            user: {
+              mail: user.mail,
+              firstname: user.firstname,
+              lastname: user.lastname,
             },
-            {
-              status: 200,
-            }
-          );
+            meetingsByUser: userOffreWithMeetings?.meeting_test_meeting_test_offreIdTooffre_test,
+          };
+
+          return NextResponse.json({ status: 200, body: userObject }, { status: 200 });
         } catch {
           return NextResponse.json(
             {

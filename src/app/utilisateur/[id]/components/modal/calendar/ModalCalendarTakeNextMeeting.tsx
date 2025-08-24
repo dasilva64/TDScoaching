@@ -168,7 +168,7 @@ const ModalCalendarTakeNextMeeting = ({ allData }: any) => {
                         click: function () {
                           if (calendarRef.current === null) return;
                           const calendarApi = calendarRef.current.getApi();
-                          calendarApi.gotoDate(meetingDate);
+                          calendarApi.gotoDate(new Date(Date.now() + 36 * 60 * 60 * 1000));
                         },
                       },
                     }}
@@ -192,14 +192,14 @@ const ModalCalendarTakeNextMeeting = ({ allData }: any) => {
                     }}
                     validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
                     }}
                     visibleRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
@@ -228,7 +228,7 @@ const ModalCalendarTakeNextMeeting = ({ allData }: any) => {
                           const calendarApi = calendarRef.current.getApi();
                           let currentDate = new Date();
                           calendarApi.gotoDate(
-                            currentDate.setDate(currentDate.getDate() + 2)
+                            new Date(Date.now() + 36 * 60 * 60 * 1000)
                           );
                         },
                       },
@@ -257,14 +257,14 @@ const ModalCalendarTakeNextMeeting = ({ allData }: any) => {
                     }}
                     validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
                     }}
                     visibleRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };

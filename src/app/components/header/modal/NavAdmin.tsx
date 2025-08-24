@@ -7,10 +7,7 @@ import { AppDispatch, RootState } from "@/app/redux/store/store";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
-import { defaultSession } from "../../../lib/session";
-import fetchDelete from "../../fetch/FetchDelete";
 import TabIndex from "../../tabIndex/TabIndex";
-import fetchLogout from "../../fetch/FetchLogout";
 import FetchLogout from "../../fetch/FetchLogout";
 import { mutate } from "swr";
 
@@ -35,15 +32,6 @@ const NavAdmin = ({csrfToken}: any) => {
 
   useEffect(() => {
     if (dataLogout) {
-      if (pathname) {
-        let split = pathname.split("/");
-        if (split[1] === "utilisateur") {
-          router.push("/");
-        }
-        if (pathname === "/profile" || pathname === "/utilisateurs" || pathname === "/meetings") {
-          router.push("/");
-        }
-      }
       mutate("/components/header/ui/api");
       mutate("/components/header/api");
       dispatch({
@@ -155,9 +143,7 @@ const NavAdmin = ({csrfToken}: any) => {
                   const logout = async () => {
                     trigger({ csrfToken });
                   };
-                  setTimeout(() => {
                     logout();
-                  }, 800);
                 }}
               >
                 Se déconnecter

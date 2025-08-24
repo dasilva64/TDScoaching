@@ -18,6 +18,7 @@ import ModalAddDiscoveryMeeting from "../modal/discovery/ModalAddDiscoveryMeetin
 import ModalRecapDiscoveryMeeting from "../modal/discovery/ModalRecapDiscoveryMeeting";
 import Form2FACode from "../../login/2fa/Form2FACode";
 import useSWR from "swr";
+import Rappel from "../rappel/Rappel";
 
 const fetchData = async (url: string) => {
   let response = await fetch(url);
@@ -31,7 +32,7 @@ const Content = () => {
     fetchData(url), {
     revalidateOnMount: true,
     refreshInterval: 15 * 60 * 1000,
-    revalidateOnFocus: false,
+    revalidateOnFocus: true,
     revalidateOnReconnect: false,
   }
   );
@@ -40,61 +41,86 @@ const Content = () => {
   const { isActive } = useSelector((state: RootState) => state.menu);
   useEffect(() => {
     let previousY = 0;
-    let lastDirection: any = null; // Pour suivre la direction du scroll
+    let lastDirection: any = null;
+    let hasResized = false;
     const header = document.getElementById("header");
+
     const handleScroll = () => {
       const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const isNearBottom = scrollY >= maxScroll - 50;
       if (!header) return;
-      if (scrollY > previousY && scrollY > 0) {
+      if (scrollY > previousY && scrollY > 50) {
         if (lastDirection !== "down") {
+          hasResized = false;
           lastDirection = "down"
           header.style.top = "-84px"
         }
-      } else if (scrollY < previousY) {
+      } else if (scrollY < previousY && !isNearBottom) {
         if (lastDirection !== "up") {
+          hasResized = false;
           header.style.top = "0px"
           lastDirection = "up"
         }
       }
       previousY = scrollY;
     };
+    const handleResize = () => {
+      if (!header || hasResized) return;
+      header.style.top = "0px";
+      lastDirection = "up";
+      hasResized = true;
+    }
+    window.addEventListener('resize', handleResize);
+
     window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);  // Nettoyage
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
   const router = useRouter();
   const pathname = usePathname();
   useEffect(() => {
+    console.log(data)
     if (data) {
-      if (data.status === 429) {
-         dispatch({
+      if (data.status === 429 || data.status === 500) {
+        dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: data.message },
         });
       } else {
+        if (data.status !== 200) {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "error", flashMessage: data.message },
+          });
+        }
+
         dispatch({
-        type: "csrfToken/store",
-        payload: { csrfToken: data.csrfToken }
-      })
-      if (data.isLoggedIn !== true) {
-        let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
-        let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-        if (
-          pathname === "/profile" ||
-          pathname === "/rendez-vous" ||
-          pathname === "/historique-rendez-vous" ||
-          pathname === "/meetings" ||
-          pathname === "/redirection-vers-rendez-vous" ||
-          pathname === "/utilisateurs" ||
-          regex.test(pathname) ||
-          regexTwo.test(pathname)
-        ) {
-          router.push(`/acces-refuse?destination=${pathname.substring(1, pathname.length-1)}`);
+          type: "csrfToken/store",
+          payload: { csrfToken: data.session.csrfToken }
+        })
+        if (data.session.isLoggedIn !== true) {
+          let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
+          let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
+          if (
+
+            pathname === "/profile" ||
+            pathname === "/rendez-vous" ||
+            pathname === "/historique-rendez-vous" ||
+            pathname === "/meetings" ||
+            pathname === "/redirection-vers-rendez-vous" ||
+            pathname === "/utilisateurs" ||
+            regex.test(pathname) ||
+            regexTwo.test(pathname)
+          ) {
+            //router.push(`/acces-refuse?destination=${pathname.substring(1, pathname.length)}`);
+            router.push(`/`);
+          }
         }
       }
-      }
-      
+
     }
   }, [data, dispatch, pathname, router]);
   let content;
@@ -106,7 +132,14 @@ const Content = () => {
     );
   }
   if (data) {
-    if (typeof data.isLoggedIn === "undefined" || data.isLoggedIn === false) {
+    if (data.status === 500 || data.status === 429) {
+      content = (
+        <div className={styles.header__log}>
+          <div className={styles.header__log__div}></div>
+        </div>
+      );
+    }
+    else if (typeof data.session.isLoggedIn === "undefined" || data.session.isLoggedIn === false) {
       content = (
         <>
           <div className={styles.header__log}>
@@ -132,7 +165,7 @@ const Content = () => {
         </>
       );
     } else {
-      if (data.role === "ROLE_ADMIN") {
+      if (data.session.role === "ROLE_ADMIN") {
         content = (
           <>
             <div className={styles.header__log}>
@@ -157,7 +190,7 @@ const Content = () => {
             </div>
           </>
         );
-      } else if (data.role === "ROLE_USER") {
+      } else if (data.session.role === "ROLE_USER") {
         content = (
           <>
             <div className={styles.header__log}>
@@ -183,11 +216,32 @@ const Content = () => {
       }
     }
   }
+  const [destination, setDestination] = useState<string | null>(null);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setDestination(params.get('destination'));
+  }, []);
+  const isValidDestination = () => {
+    if (!destination) return false;
+
+    const regex = /^utilisateur\/[0-9A-Za-z-]+$/;
+    const regexTwo = /^suppression-compte\/[0-9A-Za-z-]+$/;
+
+    return (
+      destination.startsWith("meetings") ||
+      destination.startsWith("meetingAdmin") ||
+      destination === "rendez-vous" ||
+      destination.startsWith("profile") ||
+      destination.startsWith("historique-rendez-vous") ||
+      regex.test(destination) ||
+      regexTwo.test(destination)
+    );
+  };
   const handlerClick = () => {
     dispatch({
       type: "ModalLogin/open",
-      payload: {destination: ""}
+      payload: { destination: isValidDestination() ? destination : "home" }
     });
   };
   return (
@@ -219,14 +273,28 @@ const Content = () => {
         )}
       <FormRegister />
       <Forgot />
-      {data && data.csrfToken && (
+      {data && data.status === 200 && (
         <>
-          <NavUser csrfToken={data.csrfToken} />
-          <NavAdmin csrfToken={data.csrfToken} />
+          {data.session.csrfToken && (
+            <>
+              <NavUser csrfToken={data.session.csrfToken} />
+              <NavAdmin csrfToken={data.session.csrfToken} />
+            </>
+          )}
+
         </>
       )}
+      {data && data.status && (
+        <>
+          {data.session && (
+            <>
+              <Nav discovery={data.body ? data.body.discovery : null} role={data.session.role} isLoggedIn={data.session.isLoggedIn} meeting={data.body ? data.body.hasMeeting : null} />
+            </>
+          )}
+        </>
 
-      <Nav />
+      )}
+
 
 
       {content}
@@ -249,6 +317,19 @@ const Content = () => {
           ></span>
         </button>
       </div>
+      {data && data.status === 200 && (
+        <>
+          {data.body && data.session.role === "ROLE_USER" && (
+            <>
+              {(data.body.meeting === "not_confirmed" || !data.body.offre) && (
+                <Rappel meeting={data.body.meeting} offre={data.body.offre} typeOffre={data.body.typeOffre} />
+              )}
+
+            </>
+          )}
+        </>
+      )}
+
     </>
   );
 };

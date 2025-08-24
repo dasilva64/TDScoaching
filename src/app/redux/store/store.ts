@@ -56,6 +56,9 @@ import ModalCalendarTakeNextMeeting from "../feature/utilisateur/ModalCalendarTa
 import ModalTakeNextMeeting from "../feature/utilisateur/ModalTakeNextMeeting";
 import ModalUserNoShow from "../feature/utilisateur/ModalUserNoShow";
 import Array from "../feature/utilisateurs/Array";
+import ModalAddCardStripe from "../feature/rendez-vous/formule/ModalAddCardStripe";
+import ModalSaveCardDesactivation from "../feature/profile/ModalSaveCardDesactivation";
+import ModalSaveCardActivation from "../feature/profile/ModalSaveCardActivation";
 
 const rootReducer = combineReducers({
   csrfToken: csrfToken.reducer,
@@ -86,6 +89,8 @@ const rootReducer = combineReducers({
   ModalTwoFADesactivation: ModalTwoFADesactivation.reducer,
   ModalTwoFAActivation: ModalTwoFAActivation.reducer,
   ModalTwoFAActivationCancel: ModalTwoFAActivationCancel.reducer,
+  ModalSaveCardActivation: ModalSaveCardActivation.reducer,
+  ModalSaveCardDesactivation: ModalSaveCardDesactivation.reducer,
 
   //historique rendez vous
   ModalOffreDetail: ModalOffreDetail.reducer,
@@ -110,6 +115,7 @@ const rootReducer = combineReducers({
   ModalContractHelpRendezVous: ModalContractHelpRendezVous.reducer,
   ModalHistoriqueMeetingRendezVous: ModalHistoriqueMeetingRendezVous.reducer,
   ModalFormuleCancelRendezVous: ModalFormuleCancelRendezVous.reducer,
+  ModalAddCardStripe: ModalAddCardStripe.reducer,
 
   //rendez vous token 
   ModalCalendarEditDiscoveryMeetingRendezVousToken: ModalCalendarEditDiscoveryMeetingRendezVousToken.reducer,

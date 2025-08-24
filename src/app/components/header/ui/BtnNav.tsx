@@ -12,34 +12,6 @@ const BtnNav = ({ name }: any) => {
   const { data, isLoading } = useGet("/components/header/ui/api");
   const router = useRouter();
   const pathname = usePathname();
-  useEffect(() => {
-    if (data) {
-      if (data.status === 429) {
-        dispatch({
-          type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: data.message },
-        });
-      } else {
-        if (data.isLoggedIn === false) {
-          let regex = /\/utilisateur\/[0-9A-Za-z-]+/g;
-          let regexTwo = /\/suppression-compte\/[0-9A-Za-z-]+/g;
-         if (
-          pathname === "/profile" ||
-          pathname === "/rendez-vous" ||
-          pathname === "/historique-rendez-vous" ||
-          pathname === "/meetings" ||
-          pathname === "/redirection-vers-rendez-vous" ||
-          pathname === "/utilisateurs" ||
-          regex.test(pathname) ||
-          regexTwo.test(pathname)
-        ) {
-          router.push(`/acces-refuse?destination=${pathname.substring(1, pathname.length-1)}`);
-        }
-        }
-      }
-
-    }
-  }, [data, dispatch, pathname, router]);
   let content;
   if (isLoading) {
     content = null;

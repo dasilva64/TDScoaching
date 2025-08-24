@@ -106,7 +106,38 @@
       margin-top: 30px;
       display: flex;
       flex-direction: column;
+      
       margin-bottom: 10px;
+      &__div {
+        display: flex;
+        align-items: center;
+        &__label {
+          color: black;
+          font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+          font-weight: 400;
+          line-height: 1.4375em;
+          letter-spacing: 0.00938em;
+          padding: 0;
+          position: relative;
+        }
+        &__checkbox[type="checkbox"] {
+          margin-left: 20px;
+          cursor: pointer;
+          transform: scale(1.5);
+          transition: transform 0.3s;
+          &:hover {
+            transform: scale(1.6);
+          }
+        }
+        &__error {
+          color: red;
+          font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+          font-size: 0.75rem;
+          line-height: 1.66;
+          letter-spacing: 0.03333em;
+          margin-top: 3px;
+        }
+      }
       &:not(:focus-within) .modal__form__div__label__value {
         transform: translateY(-13px) scale(0.75);
         transform-origin: top left;

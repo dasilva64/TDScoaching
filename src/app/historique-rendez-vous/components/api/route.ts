@@ -49,7 +49,8 @@ export async function GET(request: NextRequest) {
                 id: true,
                 status: true,
                 startAt: true,
-                numberOfMeeting: true
+                numberOfMeeting: true,
+                status_payment: true
               },
             },
           }
@@ -60,20 +61,20 @@ export async function GET(request: NextRequest) {
         });
 
         const lastMeetings = await Promise.all(lastMeetingPromises);
-
+        
         const objet = allOffresWithMeetings.map((offre, index) => {
           const LastMeeting = lastMeetings[index];
-          const updatedArray = offre.meeting_test_meeting_test_offreIdTooffre_test
+          /* const updatedArray = offre.meeting_test_meeting_test_offreIdTooffre_test
             .filter(obj => obj.status !== "cancelled")
-            .sort((a: any, b: any) => a.numberOfMeeting - b.numberOfMeeting);
+            .sort((a: any, b: any) => a.numberOfMeeting - b.numberOfMeeting); */
           return {
             "Type de l'offre": offre.type === "discovery" ? "Découverte" : offre.type[0].toUpperCase() + offre.type.slice(1),
             "Type de coaching": offre.coaching ? offre.coaching[0].toUpperCase() + offre.coaching.slice(1) : "Pas encore de coaching",
-            "Statut du paiement": offre.type === "discovery" ? "Gratuit" : offre.payment ? "Payé" : "Non payé",
+            "Statut de l'offre": offre.status === "cancelled" ? "Annulé" : offre.status === "pending" ? "En cours" : "Terminé",
             "Dernier rendez-vous": LastMeeting
-              ? `${new Date(LastMeeting.startAt).toLocaleString("fr")} (${offre.currentNumberOfMeeting}/${["discovery", "unique"].includes(offre.type) ? "1" : "3"})`
+              ? `${new Date(LastMeeting.startAt).toLocaleString("fr")} (${offre.currentNumberOfMeeting === null ? 0 : offre.currentNumberOfMeeting}/${["discovery", "unique"].includes(offre.type) ? "1" : "4"})`
               : "Pas encore de rendez-vous",
-            meetings: updatedArray
+            meetings: offre.meeting_test_meeting_test_offreIdTooffre_test.sort((a: any, b: any) => a.numberOfMeeting - b.numberOfMeeting)
           };
         });
         return NextResponse.json({
@@ -88,3 +89,4 @@ export async function GET(request: NextRequest) {
   }
 
 }
+/* "Statut du paiement": offre.type === "discovery" ? "Gratuit" : offre.status_payment === "completed" ? "Payé" : offre.status_payment === "failed" ? "Échoué" : "En attente", */

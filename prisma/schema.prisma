@@ -35,8 +35,12 @@ model User {
   offreId                                  String?        @db.Uuid
   isTwoFactorEnabled                       Boolean        @default(false)
   twoFAToken                               Json?          @db.Json
+  saveCard                                 Boolean?
+  customerId                               String?
+  isMajor                                  Boolean
   meeting_test                             meeting_test?  @relation(fields: [meetingId], references: [id], onUpdate: NoAction)
   offre_test                               offre_test?    @relation(fields: [offreId], references: [id], onUpdate: NoAction, map: "User_offreMeeting_fkey")
+  UserAgreement                            UserAgreement?
   meeting_test_meeting_test_userMailToUser meeting_test[] @relation("meeting_test_userMailToUser")
   offre_test_offre_test_userIdToUser       offre_test[]   @relation("offre_test_userIdToUser")
 }
@@ -48,12 +52,12 @@ model offre_test {
   currentMeetingId                                       String?        @db.Uuid
   id                                                     String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId                                                 String         @db.Uuid
-  sessionId                                              String?        @unique
-  payment                                                Boolean?
-  contract_status                                        String?
+  acceptedContrat                                        Boolean?
   coaching                                               String?
   price                                                  Int?
   status                                                 String
+  stripeIntentId                                         String?        @unique(map: "offre_test_paymentMethodId_key")
+  hasCard                                                Boolean
   User                                                   User[]
   meeting_test_meeting_test_offreIdTooffre_test          meeting_test[] @relation("meeting_test_offreIdTooffre_test")
   meeting_test_offre_test_currentMeetingIdTomeeting_test meeting_test?  @relation("offre_test_currentMeetingIdTomeeting_test", fields: [currentMeetingId], references: [id], onUpdate: NoAction)
@@ -70,8 +74,21 @@ model meeting_test {
   createdAt                                            DateTime     @default(now()) @db.Timestamp(6)
   offreId                                              String?      @db.Uuid
   numberOfMeeting                                      String
+  reminderSent                                         Boolean      @default(false)
+  status_payment                                       String
   User                                                 User?
   offre_test_meeting_test_offreIdTooffre_test          offre_test?  @relation("meeting_test_offreIdTooffre_test", fields: [offreId], references: [id], onUpdate: NoAction)
   User_meeting_test_userMailToUser                     User         @relation("meeting_test_userMailToUser", fields: [userMail], references: [mail], onDelete: SetNull, onUpdate: NoAction)
   offre_test_offre_test_currentMeetingIdTomeeting_test offre_test[] @relation("offre_test_currentMeetingIdTomeeting_test")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model UserAgreement {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String    @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  acceptedCGV   Boolean?
+  acceptedCGVAt DateTime? @db.Timestamp(6)
+  acceptedCGU   Boolean
+  acceptedCGUAt DateTime  @db.Timestamp(6)
+  User          User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

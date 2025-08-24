@@ -10,7 +10,7 @@ import styles from './ModalTakeNextMeeting.module.scss'
 import { mutate as globalMutate } from "swr";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 
-const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
+const ModalTakeNextMeeting = ({ discovery, offre, id, mutate, globalData }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [pseudo, setPseudo] = useState<string>("");
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
@@ -21,14 +21,14 @@ const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
     setTypeCoachingErrorMessage("");
     setTypeCoachingValid(false);
     setPseudo("");
-    dispatch({ type: "ModalAddMeetingRendezVous/close" });
+    dispatch({ type: "ModalTakeNextMeeting/close" });
   };
   const openCalendar = () => {
     setTypeCoachingErrorMessage("");
     setTypeCoachingValid(false);
     setPseudo("");
-    dispatch({ type: "ModalAddMeetingRendezVous/close" });
-    dispatch({ type: "ModalCalendarAddMeetingRendezVous/open" });
+    dispatch({ type: "ModalTakeNextMeeting/close" });
+    dispatch({ type: "ModalCalendarTakeNextMeeting/open" });
   };
   const { dateModalTakeNextMeeting, displayModalTakeNextMeeting } =
     useSelector((state: RootState) => state.ModalTakeNextMeeting);
@@ -45,18 +45,29 @@ const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
           setTypeCoachingErrorMessage("");
           setTypeCoachingValid(false);
           setPseudo("");
-          /*  dispatch({
-             type: "csrfToken/store",
-             payload: { csrfToken: data.csrfToken },
-           }); */
           globalMutate('/components/header/ui/api')
-          await dispatch({ type: "ModalAddMeetingRendezVous/close" });
-          await dispatch({
+          dispatch({ type: "ModalTakeNextMeeting/close" });
+          dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: data.message },
           });
 
-          await reset();
+          reset();
+          const { meeting, offre, allMeetings, meetings, meetingByOffre } = data.body;
+          mutate(
+            {
+              ...globalData,
+              body: {
+                ...globalData.body,
+                meeting,
+                offre,
+                allMeetings,
+                meetings,
+                meetingByOffre
+              },
+            },
+            { revalidate: false }
+          );
         }
         processFetchedData()
 
@@ -91,11 +102,11 @@ const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
         });
         reset();
         globalMutate("/components/header/api");
-                globalMutate("/components/header/ui/api");
+        globalMutate("/components/header/ui/api");
         router.push(`/acces-refuse?destination=utilisateur/${id}`)
       }
     }
-  }, [data, dispatch, reset, router]);
+  }, [data, dispatch, reset, router, id, mutate, globalData]);
   return (
     <>
       <TabIndex displayModal={displayModalTakeNextMeeting} />
@@ -177,7 +188,7 @@ const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
                     }
                   )}
                 </p>
-                 <p className={styles.modalAddDiscovery__rappel__p}>
+                <p className={styles.modalAddDiscovery__rappel__p}>
                   Type coaching
                   {" : "}
                   {offre.coaching}
@@ -225,12 +236,9 @@ const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
                   {offre.currentNumberOfMeeting === null
                     ? 0
                     : offre.currentNumberOfMeeting}
-                  /{offre.type === "discovery" ? "1" : offre.type === "flash" ? "3" : "1"}
+                  /{offre.type === "discovery" ? "1" : offre.type === "flash" ? "4" : "1"}
                 </p>
               </div>
-              <p className={styles.modalAddDiscovery__choose}>
-                Veuillez choissir un type de coaching pour ce rendez-vous
-              </p>
               {isMutating && (
                 <>
                   <button
@@ -261,20 +269,20 @@ const ModalTakeNextMeeting = ({ discovery, offre, id }: any) => {
                   </button>
                 </>
               )}
-              {isMutating === false && (
+              {!isMutating && (
                 <>
                   <button
                     className={styles.modalAddDiscovery__form__submit__btn}
                     onClick={(e) => {
-                        if (pseudo.length === 0) {
-                          trigger({
-                            start: dateModalTakeNextMeeting,
-                            csrfToken: csrfToken,
-                            id: id
-                          });
-                        }
-                        e.preventDefault();
-                      
+                      if (pseudo.length === 0) {
+                        trigger({
+                          start: dateModalTakeNextMeeting,
+                          csrfToken: csrfToken,
+                          id: id
+                        });
+                      }
+                      e.preventDefault();
+
                     }}
                   >
                     Ajouter le rendez-vous

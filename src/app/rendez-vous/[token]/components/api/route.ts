@@ -14,9 +14,10 @@ export async function POST(request: NextRequest) {
     cookies(),
     sessionOptions
   );
-  const csrfTokenHeader = headers().get("x-csrf-token");
+  /* const csrfTokenHeader = headers().get("x-csrf-token");
   const csrfCheckResponse = csrfToken(csrfTokenHeader, session.csrfToken);
   if (csrfCheckResponse) return csrfCheckResponse;
+  */
   if (session.isLoggedIn) {
     return NextResponse.json(
       {
@@ -56,103 +57,109 @@ export async function POST(request: NextRequest) {
         },
         select: {
           startAt: true,
-          userMail: true,
+          id: true,
+          User: {
+            select: {
+              id: true
+            }
+          }
         }
       })
       if (meet === null) {
         return NextResponse.json(
           {
-            status: 400,
+            status: 401,
             message: "Le rendez-vous n'a pas été trouvé, veuillez réessayer",
           },
           {
-            status: 400,
+            status: 401,
           }
         );
       } else {
-        /* const allMeeting = await prisma.meeting_test.findMany({
-          where: { startAt: { gte: new Date() } },
-          select: {
-            startAt: true,
-            userMail: true,
-          },
-        }) */
-        const user = await prisma.user.findUnique({
-          where: {
-            mail: decodeToken.user
-          }
-        })
-        if (user === null) {
-          return NextResponse.json(
-            {
-              status: 400,
-              message: "L'utilisateur' n'a pas été trouvé, veuillez réessayer",
+        try {
+          const user = await prisma.user.findUnique({
+            where: { mail: decodeToken.user },
+            select: {
+              id: true,
+              meetingId: true,
+              meeting_test: {
+                select: {
+                  startAt: true,
+                  status: true,
+                },
+              },
+              offre_test: {
+                select: {
+                  coaching: true,
+                  currentNumberOfMeeting: true,
+                },
+              },
             },
-            {
-              status: 400,
-            }
-          );
-        }
-        const { allMeeting, meeting, offre, allOffresWithMeetings } = await prisma.$transaction(async (tx) => {
-          const allMeeting = await tx.meeting_test.findMany({
+          });
+
+          if (!user) {
+            return NextResponse.json(
+              {
+                status: 400,
+                message: "L'utilisateur n'a pas été trouvé, veuillez réessayer",
+              },
+              { status: 400 }
+            );
+          }
+          if (user.meetingId === null) {
+            return NextResponse.json(
+              {
+                status: 401,
+                message: "Le rendez-vous n'a pas été trouvé, veuillez réessayer",
+              },
+              {
+                status: 401,
+              }
+            );
+          }
+
+          const allMeeting = await prisma.meeting_test.findMany({
             where: {
               startAt: { gte: new Date() },
               status: { not: "cancelled" },
             },
             select: {
               startAt: true,
-              userMail: true,
+              id: true,
+              User: {
+                select: {
+                  id: true
+                }
+              }
             },
           });
+          const userObject = {
+            id: user.id,
+            meetings: allMeeting,
+            meeting: user.meeting_test ?? null,
+            offre: user.offre_test ?? null,
+            link: null,
+          };
 
-          const meeting = user.meetingId
-            ? await tx.meeting_test.findUnique({ where: { id: user.meetingId } })
-            : null;
-          const offre = user.offreId
-            ? await tx.offre_test.findUnique({ where: { id: user.offreId } })
-            : null;
-
-          const allOffresWithMeetings = user.offreId
-            ? await tx.offre_test.findUnique({
-              where: { id: user.offreId },
-              include: {
-                meeting_test_meeting_test_offreIdTooffre_test: {
-                  select: {
-                    id: true,
-                    status: true,
-                    startAt: true,
-                    numberOfMeeting: true,
-                  },
-                },
-              },
-            })
-            : null;
-
-          return { allMeeting, meeting, offre, allOffresWithMeetings };
-        });
-        let updatedArray;
-        if (allOffresWithMeetings) {
-          updatedArray = allOffresWithMeetings.meeting_test_meeting_test_offreIdTooffre_test.filter(obj => obj.status !== "cancelled");
+          return NextResponse.json(
+            {
+              status: 200,
+              message: "Le rendez-vous a été trouvé",
+              body: userObject,
+            },
+            { status: 200 }
+          );
+        } catch (error: any) {
+          return NextResponse.json(
+            {
+              status: 500,
+              message: "Une erreur est survenue, veuillez réessayer",
+            },
+            { status: 500 }
+          );
         }
 
-        let userObject = {
-          meetings: allMeeting,
-          meeting: meeting,
-          offre: offre,
-          discovery: user.discovery,
-          link: null,
-          meetingsByUser: updatedArray ? updatedArray.sort((a: any, b: any) => a.numberOfMeeting - b.numberOfMeeting) : null
-        };
-        return NextResponse.json(
-          {
-            status: 200,
-            message: "Le rendez-vous a été trouvé",
-            body: userObject,
-          },
-          {
-            status: 200,
-          }
-        );
+
       }
 
     } catch (err: any) {

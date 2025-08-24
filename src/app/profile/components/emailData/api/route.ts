@@ -52,7 +52,20 @@ export async function POST(request: NextRequest) {
         };
         let arrayMessageError = validationBody({ code: code });
 
-        if (arrayMessageError.length > 0) {
+         if (arrayMessageError.length > 0) {
+          if (arrayMessageError.length === 1) {
+            if (arrayMessageError[0][0] === "unknown_fields") {
+              return NextResponse.json(
+                {
+                  status: 400,
+                  message: arrayMessageError[0][1],
+                },
+                {
+                  status: 400,
+                }
+              );
+            }
+          }
           return NextResponse.json(
             {
               status: 400,

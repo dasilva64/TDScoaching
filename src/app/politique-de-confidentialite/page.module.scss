@@ -10,6 +10,27 @@
     padding-top: 30px;
     text-align: left;
   }
+  &__link {
+    display: inline-block;
+    color: #ff6600;
+    font-weight: bold;
+    text-decoration: none;
+    &::after {
+      content: "";
+      width: 0px;
+      height: 2px;
+      display: block;
+      padding-bottom: -10px;
+      background: black;
+      transition: 400ms;
+    }
+    &:hover::after {
+      width: 100%;
+    }
+    &:hover {
+      color: black;
+    }
+  }
   &__p {
     margin: 10px 0px 10px 0px;
     line-height: 1.4;

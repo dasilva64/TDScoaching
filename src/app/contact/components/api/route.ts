@@ -31,18 +31,31 @@ export async function POST(request: NextRequest) {
         object: object,
         message: message,
       });
-      if (arrayMessageError.length > 0) {
-        return NextResponse.json(
-          {
-            status: 400,
-            type: "validation",
-            message: arrayMessageError,
-          },
-          {
-            status: 400,
+       if (arrayMessageError.length > 0) {
+          if (arrayMessageError.length === 1) {
+            if (arrayMessageError[0][0] === "unknown_fields") {
+              return NextResponse.json(
+                {
+                  status: 400,
+                  message: arrayMessageError[0][1],
+                },
+                {
+                  status: 400,
+                }
+              );
+            }
           }
-        );
-      }
+          return NextResponse.json(
+            {
+              status: 400,
+              type: "validation",
+              message: arrayMessageError,
+            },
+            {
+              status: 400,
+            }
+          );
+        }
       if (pseudo.trim() !== "") {
         return NextResponse.json(
           {

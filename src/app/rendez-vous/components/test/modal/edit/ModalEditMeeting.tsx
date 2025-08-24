@@ -52,6 +52,7 @@ const ModalEditMeeting = ({ mutate, meeting, offre }: any) => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
+        globalMutate("/components/header/api");
         mutate();
         reset();
       } else if (data.status === 400) {

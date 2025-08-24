@@ -32,15 +32,6 @@ const NavUser = ({csrfToken}: any) => {
 
   useEffect(() => {
     if (dataLogout) {
-      if (pathname) {
-        let split = pathname.split("/");
-        if (split[1] === "suppression-compte") {
-          router.push("/");
-        }
-        if (pathname === "/profile" || pathname === "/rendez-vous" || pathname === "/historique-rendez-vous" || pathname === "/redirection-vers-rendez-vous") {
-          router.push("/");
-        }
-      }
       mutate("/components/header/ui/api");
       mutate("/components/header/api");
       dispatch({
@@ -157,9 +148,7 @@ const NavUser = ({csrfToken}: any) => {
                   const logout = async () => {
                     trigger({ csrfToken });
                   };
-                  setTimeout(() => {
                     logout();
-                  }, 800);
                 }}
               >
                 Se déconnecter

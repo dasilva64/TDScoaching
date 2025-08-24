@@ -7,6 +7,7 @@
     padding-bottom: 100px;
   }
   &__article {
+    padding: 20px;
     margin-left: 10%;
     margin-right: 10%;
     text-align: justify;
@@ -22,4 +23,13 @@
       padding: 21px 0px 21px 40px;
     }
   }
+}
+
+@media screen and (max-width: 768px) {
+    .allMeeting {
+      &__article {
+        margin: 0px 5%;
+        padding: 10px;
+      }
+    }
 }

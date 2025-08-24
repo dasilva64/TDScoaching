@@ -13,7 +13,7 @@ const DisplayError = () => {
               Type de l&apos;offre
             </th>
             <th className={`${styles.table__head__tr__th}`}>Type de coaching</th>
-            <th className={`${styles.table__head__tr__th}`}>Statut du paiement</th>
+            <th className={`${styles.table__head__tr__th}`}>Statut de l&apos;offre</th>
             <th className={`${styles.table__head__tr__th}`}>Dernier rendez-vous</th>
           </tr>
         </thead>

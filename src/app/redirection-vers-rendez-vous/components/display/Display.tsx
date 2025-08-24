@@ -16,56 +16,55 @@ const Display = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const searchParams = useSearchParams()
-  const result = searchParams.get('result')
-  const session_id = searchParams.get('session_id')
-  const { data } = useSWR("/redirection-vers-rendez-vous/components/api", fetchGet, {
-    revalidateOnFocus: false,
-  });
+  //const result = searchParams.get('result')
+  const setup_intent = searchParams.get('setup_intent')
+  const { data } = useSWR("/redirection-vers-rendez-vous/components/api", fetchGet);
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
-  const { trigger, data: dataStripe, reset } = useSWRMutation(`api/stripe?session_id=${session_id}`, fetchPost)
+
+  const { trigger: triggerCardStripe, data: dataCardStripe, reset: resetCardStripe } = useSWRMutation(`/redirection-vers-rendez-vous/components/api/cardStripe/`, fetchPost)
   useEffect(() => {
-    if (dataStripe) {
-      if (dataStripe.status === 401) {
+    if (dataCardStripe) {
+      if (dataCardStripe.status === 401) {
         dispatch({
           type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: dataStripe.message },
+          payload: { type: "error", flashMessage: dataCardStripe.message },
         });
-        reset()
+        resetCardStripe()
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
         router.push('/')
-      } else if (dataStripe.status === 200) {
+      } else if (dataCardStripe.status === 200) {
         dispatch({
           type: "flash/storeFlashMessage",
-          payload: { type: "success", flashMessage: dataStripe.message },
+          payload: { type: "success", flashMessage: dataCardStripe.message },
         });
-        reset()
+        resetCardStripe()
         router.push('/rendez-vous')
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
-          payload: { type: "error", flashMessage: dataStripe.message },
+          payload: { type: "error", flashMessage: dataCardStripe.message },
         });
-        reset()
+        resetCardStripe()
         router.push('/rendez-vous')
       }
 
     }
-  }, [dataStripe, dispatch, router, reset])
+  }, [dataCardStripe, dispatch, router, resetCardStripe])
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        if (result === "cancel") {
-          dispatch({
-            type: "flash/storeFlashMessage",
-            payload: { type: "success", flashMessage: data.message },
-          });
-          router.push('/rendez-vous')
-        } else {
+         if (setup_intent) {
           if (csrfToken) {
-            trigger({ csrfToken: csrfToken })
+            triggerCardStripe({ setup_intent: setup_intent, csrfToken: csrfToken })
           }
 
+        }else {
+          dispatch({
+            type: "flash/storeFlashMessage",
+            payload: { type: "success", flashMessage: "Mauvais parametre dans l'url" },
+          });
+          router.push('/')
         }
 
       }else if (data.status === 429) {
@@ -73,6 +72,7 @@ const Display = () => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
+        router.push('/')
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -83,7 +83,7 @@ const Display = () => {
         router.push('/')
       }
     }
-  }, [data, csrfToken, dispatch, result, router, trigger])
+  }, [data, csrfToken, dispatch, router, triggerCardStripe, setup_intent])
   return (
     <>
 

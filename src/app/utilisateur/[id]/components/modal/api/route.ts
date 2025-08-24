@@ -92,25 +92,49 @@ export async function POST(request: NextRequest) {
                                 }
                             );
                         } else {
-                            const editOffre = await prisma.offre_test.update({
-                                where: { id: userById.offreId! },
-                                data: {
-                                    currentMeetingId: null,
-                                    currentNumberOfMeeting: null
-                                }
+                            if (userById?.meeting_test?.status === "not_confirmed") {
+                                return NextResponse.json(
+                                    {
+                                        status: 404,
+                                        message: `Le rendez-vous de l'utilisateur n'est pas encore confirmé, veuillez réessayer`,
+                                    },
+                                    {
+                                        status: 404,
+                                    }
+                                );
+                            }
+                            const { editOffre, editUser, editMeet } = await prisma.$transaction(async (tx) => {
+                                const editOffre = await prisma.offre_test.update({
+                                    where: { id: userById.offreId! },
+                                    data: {
+                                        currentMeetingId: null,
+                                        currentNumberOfMeeting: userById.offre_test?.currentNumberOfMeeting! - 1,
+
+                                    }
+                                })
+                                const editUser = await prisma.user.update({
+                                    where: { id: userById.id },
+                                    data: {
+                                        meetingId: null
+                                    }
+                                })
+                                const editMeet = await prisma.meeting_test.update({
+                                    where: { id: userById.meetingId! },
+                                    data: {
+                                        status: "absent",
+                                        status_payment: userById.offre_test?.type === "discovery" ? "free" : "not_paid"
+                                    }
+                                })
+                                return { editMeet, editUser, editOffre }
                             })
-                            const editUser = await prisma.user.update({
-                                where: { id: userById.id },
-                                data: {
-                                    meetingId: null
-                                }
-                            })
-                            const removeMeet = await prisma.meeting_test.delete({
-                                where: { id: userById.meetingId! }
-                            })
+
                             return NextResponse.json(
                                 {
                                     status: 200,
+                                    body: {
+                                        meeting: null,
+                                        offre: editOffre,
+                                    },
                                     message: `Un mail a été envoyé a l'utilisateur ${userById.mail}`,
                                 },
                                 {

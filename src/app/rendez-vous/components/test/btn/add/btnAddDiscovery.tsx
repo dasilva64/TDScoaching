@@ -5,7 +5,7 @@ import styles from "./btnAddDiscovery.module.scss";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import useSWRMutation from "swr/mutation";
 import router from "next/router";
-import { mutate } from "swr";
+import { mutate as globalMutate } from "swr";
 import { useDispatch } from "react-redux";
 
 const BtnAddDiscovery = ({
@@ -31,6 +31,7 @@ const BtnAddDiscovery = ({
         setTypeCoachingErrorMessage("");
         setTypeCoachingValid(false);
         setPseudo("");
+        globalMutate("/components/header/api");
         dispatch({ type: "ModalAddMeetingRendezVous/close" });
         dispatch({
           type: "flash/storeFlashMessage",
@@ -69,6 +70,8 @@ const BtnAddDiscovery = ({
           payload: { type: "error", flashMessage: data.message },
         });
         reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
         router.push(`/acces-refuse?destination=rendez-vous`)
       }
     }

@@ -7,8 +7,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { mutate as globalMutate } from "swr";
 import useSWRMutation from "swr/mutation";
+import Image from "@/app/components/image/Image";
 import styles from "./ModalFormuleEdit.module.scss";
-import Image from "next/image";
 
 const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
@@ -28,14 +28,14 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         const waiting = async () => {
-          await mutate();
-          await globalMutate("/components/header/api");
+          mutate();
+          globalMutate("/components/header/api");
           reset();
-          await dispatch({
+          dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: data.message },
           });
-          await dispatch({ type: "ModalFormuleEditRendezVous/close" });
+          dispatch({ type: "ModalFormuleEditRendezVous/close" });
           setIsLoading(false)
         }
         waiting()
@@ -105,6 +105,21 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
                 ></Image>
               </button>
               <h2 className={`${styles.modalAddFormule__h1}`}>Changer de formule</h2>
+              {globalData.body.offre && (
+                <>
+
+                  {globalData.body.offre.type === 'flash' && globalData.body.offre.contract_status && (
+                    <>
+                      <p>
+                        En choisissant une nouvelle offre, le contrat associé à votre formule actuelle sera automatiquement résilié.
+                        Cette action est irréversible et peut entraîner la perte des avantages liés à l’offre “flash”.
+                      </p><br />
+                    </>
+
+                  )}
+                </>
+              )}
+
               <p className={styles.modalAddFormule__p}>Êtes vous sûre de vouloir changer d&apos;offre ?</p>
 
               <div className={styles.modalAddFormule__action}>
@@ -126,10 +141,33 @@ const ModalFormuleEdit = ({ data: globalData, mutate }: any) => {
                 )}
                 {isLoading && (
                   <>
-                    <span className={styles.modalAddFormule__action__btn}>
-                      Chargement ...
-                    </span>
-                  </>
+                      <button
+                        disabled
+                        className={
+                          styles.modalAddFormule__action__btn__load
+                        }
+                      >
+                        <span
+                          className={
+                            styles.modalAddFormule__action__btn__load__span
+                          }
+                        >
+                          Chargement
+                        </span>
+
+                        <div
+                          className={
+                            styles.modalAddFormule__action__btn__load__arc
+                          }
+                        >
+                          <div
+                            className={
+                              styles.modalAddFormule__action__btn__load__arc__circle
+                            }
+                          ></div>
+                        </div>
+                      </button>
+                    </>
                 )}
                 <button
                   className={styles.modalAddFormule__action__btn}

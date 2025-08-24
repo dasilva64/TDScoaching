@@ -22,7 +22,7 @@ const FormRegister = () => {
   const [lastnameInput, setLastnameInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [passwordComfirmInput, setPasswordComfirmInput] = useState<string>("");
-  const [majorInput, setMajorInput] = useState<string>("");
+  const [majorInput, setMajorInput] = useState<boolean>(false);
   const [validEmailInput, setValidEmailInput] = useState<boolean>(false);
   const [validFirstnameInput, setValidFirstnameInput] =
     useState<boolean>(false);
@@ -38,6 +38,15 @@ const FormRegister = () => {
     useState<string>("");
   const [emailInputError, setEmailInputError] = useState<string>("");
   const [majorInputError, setMajorInputError] = useState<string>("");
+
+  const [cguInput, setCguInput] = useState<boolean>(false);
+    const [validCguInput, setValidCguInput] = useState<boolean>(false);
+    const [cguInputError, setCguInputError] = useState<string>("");
+
+    const [cgvInput, setCgvInput] = useState<boolean>(false);
+    const [validCgvInput, setValidCgvInput] = useState<boolean>(false);
+    const [cgvInputError, setCgvInputError] = useState<string>("");
+
   const { displayModalRegister } = useSelector(
     (state: RootState) => state.ModalRegister
   );
@@ -80,6 +89,21 @@ const FormRegister = () => {
             if (element[0] === "lastname") {
               setLastnameInputError(element[1]);
             }
+            if (element[0] === "majorInput") {
+              setMajorInputError(element[1]);
+            }
+            if (element[0] === "majorInput") {
+              setMajorInputError(element[1]);
+            }
+            if (element[0] === "majorInput") {
+              setMajorInputError(element[1]);
+            }
+            if (element[0] === "cguInput") {
+              setCguInputError(element[1]);
+            }
+            if (element[0] === "cgvInput") {
+              setCgvInputError(element[1]);
+            }
           });
           reset();
         }, 2000);
@@ -104,7 +128,16 @@ const FormRegister = () => {
           setValidPasswordInput(false);
           setValidPasswordComfirmInput(false);
           setValidEmailInput(false);
+          setMajorInput(false)
+          setValidMajorInput(false)
           setEmailInput("");
+          setCguInput(false)
+          setCguInputError("")
+          setValidCguInput(false)
+          setCgvInput(false)
+          setCgvInputError('')
+          
+          setValidCgvInput(false)
           dispatch({
             type: "flash/storeFlashMessage",
             payload: { flashMessage: data.message, type: "error" },
@@ -125,7 +158,9 @@ const FormRegister = () => {
       validLastnameInput === true &&
       validPasswordInput === true &&
       validPasswordComfirmInput === true &&
-      validMajorInput === true
+      validMajorInput === true &&
+      validCguInput === true  &&
+      validCgvInput === true
     ) {
       if (passwordInput === passwordComfirmInput) {
         if (inputPseudo.length === 0) {
@@ -138,7 +173,10 @@ const FormRegister = () => {
               firstname: firstnameInput.trim(),
               lastname: lastnameInput.trim(),
               pseudo: inputPseudo.trim(),
-              csrfToken: csrfToken
+              csrfToken: csrfToken,
+              majorInput: majorInput,
+              cguInput: cguInput,
+              cgvInput: cgvInput
             });
           };
           fetchRegister();
@@ -183,6 +221,12 @@ const FormRegister = () => {
       }
       if (validMajorInput === false) {
         setMajorInputError("Vous devez être majeur pour vous inscrire");
+      }
+      if (validCguInput === false) {
+        setCguInputError("Vous devez accepter les conditions générales d'utilisation pour vous inscrire");
+      }
+      if (validCgvInput === false) {
+        setCgvInputError("Vous devez accepter les conditions générales de vente pour vous inscrire");
       }
     }
   };
@@ -314,8 +358,14 @@ const FormRegister = () => {
     setFirstnameInput("");
     setLastnameInput("");
     setPasswordInput("");
+    setCguInput(false)
+          setCguInputError("")
+          setCgvInput(false)
+          setCgvInputError('')
+          setValidCguInput(false)
+          setValidCgvInput(false)
     setPasswordComfirmInput("");
-    setMajorInput("");
+    setMajorInput(false);
     setEmailInputError("");
     setFirstnameInputError("");
     setLastnameInputError("");
@@ -531,21 +581,22 @@ const FormRegister = () => {
                       className={styles.register__form__div__div__label}
                       htmlFor="remenber"
                     >
-                      Êtes vous majeur ?
+                      Je certifie avoir 18 ans ou plus pour utiliser ce service
                     </label>
                     <input
                       ref={inputRef}
                       className={styles.register__form__div__div__checkbox}
                       type="checkbox"
+                      defaultChecked={majorInput}
                       name="legal"
                       id="legal"
                       onChange={(e) => {
                         if (e.target.checked === true) {
-                          setMajorInput("true");
+                          setMajorInput(true);
                           setValidMajorInput(true);
                           setMajorInputError("");
                         } else {
-                          setMajorInput("false");
+                          setMajorInput(false);
                           setValidMajorInput(false);
                           setMajorInputError(
                             "Vous devez être majeur pour vous inscrire"
@@ -556,6 +607,86 @@ const FormRegister = () => {
                   </div>
                   <div className={styles.register__form__div__div__error}>
                     {majorInputError}
+                  </div>
+                </div>
+                <div className={styles.register__form__div}>
+                  <div className={styles.register__form__div__div}>
+                    <label
+                      className={styles.register__form__div__div__label}
+                      htmlFor="remenber"
+                    >J’ai lu et j’accepte les&nbsp;
+                      <Link
+                    className={styles.register__form__link}
+                    target="_blank"
+                    href={"/conditions-generales-utilisations"}
+                  >
+                     conditions générales d&apos;utilisation
+                  </Link>
+                    </label>
+                    <input
+                      ref={inputRef}
+                      className={styles.register__form__div__div__checkbox}
+                      type="checkbox"
+                      defaultChecked={cguInput}
+                      name="legal"
+                      id="legal"
+                      onChange={(e) => {
+                        if (e.target.checked === true) {
+                          setCguInput(true);
+                          setValidCguInput(true);
+                          setCguInputError("");
+                        } else {
+                          setCguInput(false);
+                          setValidCguInput(false);
+                          setCguInputError(
+                            "Vous devez accepter les conditions générales d'utilisation pour vous inscrire"
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className={styles.register__form__div__div__error}>
+                    {cguInputError}
+                  </div>
+                </div>
+                <div className={styles.register__form__div}>
+                  <div className={styles.register__form__div__div}>
+                    <label
+                      className={styles.register__form__div__div__label}
+                      htmlFor="remenber"
+                    >J’ai lu et j’accepte les&nbsp;
+                      <Link
+                    className={styles.register__form__link}
+                    target="_blank"
+                    href={"/conditions-generales-de-vente"}
+                  >
+                     conditions générales de vente
+                  </Link>
+                    </label>
+                    <input
+                      ref={inputRef}
+                      className={styles.register__form__div__div__checkbox}
+                      type="checkbox"
+                      defaultChecked={cgvInput}
+                      name="legal"
+                      id="legal"
+                      onChange={(e) => {
+                        if (e.target.checked === true) {
+                           setCgvInput(true);
+                          setValidCgvInput(true);
+                          setCgvInputError("");
+                        } else {
+                          setCgvInput(false);
+                          setValidCgvInput(false);
+                          setCgvInputError(
+                            "Vous devez accepter les conditions générales de vente pour vous inscrire"
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className={styles.register__form__div__div__error}>
+                    {cgvInputError}
                   </div>
                 </div>
                 <input
@@ -570,17 +701,6 @@ const FormRegister = () => {
                     setInputPseudo(e.target.value);
                   }}
                 />
-                <p>
-                  En vous inscrivant, vous acceptez nos{" "}
-                  <Link
-                    className={styles.register__form__link}
-                    target="_blank"
-                    href={"/conditions-generales-utilisations"}
-                  >
-                    conditions générales d&apos;utilisation
-                  </Link>{" "}
-                  du site
-                </p>
                 <div className={styles.register__form__submit}>
                   {isLoading === false && (
                     <input

@@ -14,12 +14,14 @@ const Formule = () => {
         <div
           className={`${styles.formule__card} ${styles.formule__card__unique}`}
           onClick={async () => {
-            dispatch({
+            dispatch({ type: "ModalCalendarAddMeetingRendezVous/open",
+             });
+            /* dispatch({
               type: "ModalFormuleAddRendezVous/open",
               payload: {
                 type: "unique",
               },
-            });
+            }); */
           }}
         >
           <h3 className={styles.formule__card__title}>Pack unique</h3>

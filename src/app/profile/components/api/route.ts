@@ -39,7 +39,8 @@ export async function GET(request: NextRequest) {
             lastname: user.lastname,
             email: user.mail,
             newEmail: null,
-            isTwoFactorEnabled: user.isTwoFactorEnabled
+            isTwoFactorEnabled: user.isTwoFactorEnabled,
+            saveCard: user.saveCard
 
           };
         } else {
@@ -48,7 +49,8 @@ export async function GET(request: NextRequest) {
             lastname: user.lastname,
             email: user.mail,
             newEmail: copyEditEmail.newEmail,
-            isTwoFactorEnabled: user.isTwoFactorEnabled
+            isTwoFactorEnabled: user.isTwoFactorEnabled,
+            saveCard: user.saveCard
           };
         }
         return NextResponse.json({

@@ -39,7 +39,6 @@ const ModalTwoFAActivation = ({ mutate, data: userData }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        //if (isMutating === false) {
         mutate({
           ...userData,
           body: {
@@ -60,7 +59,6 @@ const ModalTwoFAActivation = ({ mutate, data: userData }: any) => {
         });
         clearState();
         reset();
-        //}
       } else if (data.status === 401) {
         dispatch({
           type: "flash/storeFlashMessage",

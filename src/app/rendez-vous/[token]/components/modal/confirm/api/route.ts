@@ -37,13 +37,45 @@ export async function POST(request: NextRequest) {
       const decodeToken: any = verify(token.trim(),
         process.env.SECRET_TOKEN_DISCOVERY_MEETING as string
       );
-      const editMeet = await prisma.meeting_test.update({
+      const user = await prisma.user.findUnique({
+        where: {
+          mail: decodeToken.user
+
+        },
+        select: {
+          meeting_test: true
+        }
+
+      })
+      if (user === null) {
+        return NextResponse.json(
+          {
+            status: 400,
+            message: "L'utilisateur' n'a pas été trouvé, veuillez réessayer",
+          },
+          {
+            status: 400,
+          }
+        );
+      }
+      if (user.meeting_test?.status !== "not_confirmed") {
+        return NextResponse.json(
+          {
+            status: 400,
+            message: "Votre rendez-vous n'est pas a confirmé",
+          },
+          {
+            status: 400,
+          }
+        );
+      }
+      const meeting = await prisma.meeting_test.update({
         where: { id: decodeToken.id },
         data: {
           status: "confirmed"
         },
       })
-      if (editMeet === null) {
+      if (meeting === null) {
         return NextResponse.json(
           {
             status: 400,
@@ -57,6 +89,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             status: 200,
+            body: { meeting },
             message: "Le rendez-vous a bien été confirmé",
           },
           {

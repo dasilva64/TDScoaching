@@ -1,5 +1,6 @@
 .loadData {
   text-align: center;
+
   &__arc {
     margin: 20px auto 0px auto;
     width: 30px;
@@ -10,6 +11,7 @@
     border-left: 1px solid black;
     border-right: 1px solid transparent;
     animation: load 2000ms both infinite ease-out;
+
     &__circle {
       position: absolute;
       top: 17px;
@@ -35,6 +37,7 @@
   border-left: 1px solid black;
   border-right: 1px solid transparent;
   animation: load 2000ms both infinite ease-out;
+
   &__circle {
     position: relative;
     right: -9px;
@@ -50,41 +53,49 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(680deg);
   }
 }
 
 .content {
-  width: 100%;
   margin: auto 5%;
   background-color: white;
   border-radius: 20px;
   padding: 20px;
+
   &__flex {
     display: flex;
-    justify-content: space-around;
-    margin: 40px 0px;
+    justify-content: space-between;
+    margin: 0px 0px 20px 0px;
+
     &__div {
       &__right {
         width: 60%;
+        padding: 10px;
+
         &__h2 {
           margin-bottom: 20px;
         }
+
         &__div {
           max-height: 210px;
           overflow: scroll;
+
           &__table {
             width: 100%;
           }
         }
       }
+
       &__left {
         padding: 10px;
-        box-shadow: 0px 0px 14px 5px aqua;
+        box-shadow: 0px 0px 8px 3px aqua;
         border-radius: 20px;
         padding-bottom: 20px;
         height: fit-content;
+
         &__h2 {
           margin-bottom: 20px;
           background-color: orange;
@@ -92,13 +103,16 @@
           color: white;
           border-radius: 10px;
         }
+
         &__ul {
           line-height: 1.4;
           list-style-type: none;
+
           &__li {
             &__flex {
               display: flex;
             }
+
             &__span {
               font-weight: 600;
             }
@@ -107,16 +121,19 @@
           &__ul {
             margin-bottom: 10px;
             list-style-type: none;
+
             &__li {
               margin-left: 20px;
             }
           }
+
           &__div {
             &__action {
               display: flex;
-              justify-content: center;
+              justify-content: left;
               column-gap: 20px;
             }
+
             &__btn {
               padding: 10px;
               margin-bottom: 10px;
@@ -125,10 +142,12 @@
               border: none;
               border-radius: 10px;
               outline: 2px solid orange;
+
               &:hover {
                 background-color: orange;
                 color: white;
               }
+
               &__load {
                 border-radius: 10px;
                 border: 2px solid orange;
@@ -136,9 +155,11 @@
                 padding: 0px 10px;
                 display: flex;
                 color: black;
+
                 &__span {
                   align-self: center;
                 }
+
                 &__arc {
                   position: relative;
                   bottom: 9px;
@@ -151,6 +172,7 @@
                   border-left: 1px solid black;
                   border-right: 1px solid transparent;
                   animation: load 2000ms both infinite ease-out;
+
                   &__circle {
                     position: relative;
                     right: -13px;
@@ -185,11 +207,13 @@
       display: flex;
       flex-direction: column;
       justify-content: space-around;
-      margin: 40px 0px;
+      margin: 0px 0px 20px 0px;
+
       &__div {
         &__left {
           margin-bottom: 60px;
         }
+
         &__right {
           width: 100%;
         }
@@ -208,11 +232,16 @@
       }
     }
   }
+
+  .content {
+    margin: auto 5%;
+    padding: 10px;
+  }
+
 }
 
 @media screen and (max-width: 425px) {
   .content {
-    margin: auto 2%;
     padding: 0px;
   }
 }
@@ -221,6 +250,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(680deg);
   }

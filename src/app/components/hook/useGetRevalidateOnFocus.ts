@@ -11,7 +11,7 @@ function useGetRevalidateOnFocus(url: string | null) {
   const { data, error, isLoading, mutate } = useSWR(url, (url) =>
     fetchData(url), {
       revalidateOnMount: true,
-      revalidateOnFocus: false,
+      revalidateOnFocus: true,
       revalidateOnReconnect: false
     }
   );

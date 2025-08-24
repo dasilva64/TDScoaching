@@ -98,10 +98,10 @@
       display: none;
     }
     &__div {
-      margin-bottom: 10px;
       &__div {
         display: flex;
         margin-top: 25px;
+        align-items: center;
         &__label {
           color: black;
           font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -142,7 +142,7 @@
         background-color: white;
         color: black;
         border-radius: 10px;
-        margin-top: 40px;
+        margin-top: 20px;
         transition: all 400ms;
         &:hover {
           color: white;

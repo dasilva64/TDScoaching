@@ -8,7 +8,7 @@ import Image from "../../image/Image";
 import { useDispatch, useSelector } from "react-redux";
 import TabIndex from "../../tabIndex/TabIndex";
 
-const Nav = () => {
+const Nav = ({ discovery, role, meeting, isLoggedIn }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const { displayModalNav } = useSelector((state: RootState) => state.ModalNav);
   const closeForm = () => {
@@ -17,7 +17,7 @@ const Nav = () => {
     });
   };
   const pathname = usePathname();
-
+ const regex = /^\/rendez-vous\/[a-zA-Z0-9._\-+=]+$/;
   return (
     <>
       <TabIndex displayModal={displayModalNav} />
@@ -69,11 +69,10 @@ const Nav = () => {
                     className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
                   >
                     <Link
-                      className={`${
-                        pathname === "/"
-                          ? styles.nav__nav__ul__li__link__active
-                          : null
-                      } ${styles.nav__nav__ul__li__link}`}
+                      className={`${pathname === "/"
+                        ? styles.nav__nav__ul__li__link__active
+                        : null
+                        } ${styles.nav__nav__ul__li__link}`}
                       href="/"
                       onClick={() => closeForm()}
                     >
@@ -84,11 +83,10 @@ const Nav = () => {
                     className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
                   >
                     <Link
-                      className={`${
-                        pathname === "/qui-suis-je"
-                          ? styles.nav__nav__ul__li__link__active
-                          : null
-                      } ${styles.nav__nav__ul__li__link}`}
+                      className={`${pathname === "/qui-suis-je"
+                        ? styles.nav__nav__ul__li__link__active
+                        : null
+                        } ${styles.nav__nav__ul__li__link}`}
                       href="/qui-suis-je"
                       onClick={() => closeForm()}
                     >
@@ -99,11 +97,10 @@ const Nav = () => {
                     className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
                   >
                     <Link
-                      className={`${
-                        pathname === "/coaching-de-vie"
-                          ? styles.nav__nav__ul__li__link__active
-                          : null
-                      } ${styles.nav__nav__ul__li__link}`}
+                      className={`${pathname === "/coaching-de-vie"
+                        ? styles.nav__nav__ul__li__link__active
+                        : null
+                        } ${styles.nav__nav__ul__li__link}`}
                       href="/coaching-de-vie"
                       onClick={() => closeForm()}
                     >
@@ -114,11 +111,10 @@ const Nav = () => {
                     className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
                   >
                     <Link
-                      className={`${
-                        pathname === "/tarif"
-                          ? styles.nav__nav__ul__li__link__active
-                          : null
-                      } ${styles.nav__nav__ul__li__link}`}
+                      className={`${pathname === "/tarif"
+                        ? styles.nav__nav__ul__li__link__active
+                        : null
+                        } ${styles.nav__nav__ul__li__link}`}
                       href="/tarif"
                       onClick={() => closeForm()}
                     >
@@ -129,11 +125,10 @@ const Nav = () => {
                     className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
                   >
                     <Link
-                      className={`${
-                        pathname === "/contact"
-                          ? styles.nav__nav__ul__li__link__active
-                          : null
-                      } ${styles.nav__nav__ul__li__link}`}
+                      className={`${pathname === "/contact"
+                        ? styles.nav__nav__ul__li__link__active
+                        : null
+                        } ${styles.nav__nav__ul__li__link}`}
                       href="/contact"
                       onClick={() => closeForm()}
                     >
@@ -144,17 +139,57 @@ const Nav = () => {
                     className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
                   >
                     <Link
-                      className={`${
-                        pathname === "/blog"
-                          ? styles.nav__nav__ul__li__link__active
-                          : null
-                      } ${styles.nav__nav__ul__li__link}`}
+                      className={`${pathname === "/blog"
+                        ? styles.nav__nav__ul__li__link__active
+                        : null
+                        } ${styles.nav__nav__ul__li__link}`}
                       href="/blog"
                       onClick={() => closeForm()}
                     >
                       Blog
                     </Link>
                   </li>
+                  {isLoggedIn === false || isLoggedIn === undefined && (
+                    <>
+                    
+                      {!regex.test(pathname) && (
+                        <li
+                          className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
+                        >
+                          <button
+                            className={`${styles.nav__nav__ul__li__btn}`}
+                            onClick={() => {
+                              closeForm()
+                              dispatch({ type: "ModalCalendarDiscoveryMeetingHeader/open" });
+                            }}
+                          >
+                            RDV gratuit
+                          </button>
+                        </li>
+                      )}
+                    </>
+                    
+                  )}
+                  {role === "ROLE_USER" && (
+                    <>
+                      {discovery === true && meeting === null && (
+                        <li
+                          className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
+                        >
+                          <button
+                            className={`${styles.nav__nav__ul__li__btn}`}
+                            onClick={() => {
+                              closeForm()
+                              dispatch({ type: "ModalCalendarDiscoveryMeetingHeader/open" });
+                            }}
+                          >
+                            RDV gratuit
+                          </button>
+                        </li>
+                      )}
+                    </>
+                  )}
+
                 </ul>
               </nav>
             </motion.div>

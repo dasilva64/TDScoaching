@@ -53,7 +53,6 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
           }
         );
         globalMutate("/components/header/api");
-        reset();
         if (isMutating === false) {
           dispatch({
             type: "flash/storeFlashMessage",
@@ -63,6 +62,7 @@ const ModalUserFirstnameData = ({ data: userData, mutate }: any) => {
             type: "ModalEditFirstname/close",
           });
           clearState();
+          reset();
         }
       } else if (data.status === 401) {
         dispatch({

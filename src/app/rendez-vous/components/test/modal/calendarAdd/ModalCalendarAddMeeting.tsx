@@ -81,17 +81,17 @@ const ModalCalendarAddMeeting = ({
       dispatch({
         type: "flash/clearFlashMessage",
       });
-      if (offre.type !== "discovery") {
+      /* if (typeModalCalendarAddMeetingRendezVous !== "discovery") {
         dispatch({
           type: "ModalAddPaidMeetingRendezVous/open",
-          payload: { date: arg.dateStr },
+          payload: { date: arg.dateStr, type: typeModalCalendarAddMeetingRendezVous },
         });
       } else {
         dispatch({
           type: "ModalAddMeetingRendezVous/open",
           payload: { date: arg.dateStr },
         });
-      }
+      } */
 
       dispatch({ type: "ModalCalendarAddMeetingRendezVous/close" });
     }
@@ -184,7 +184,7 @@ const ModalCalendarAddMeeting = ({
                           const calendarApi = calendarRef.current.getApi();
                           let currentDate = new Date();
                           calendarApi.gotoDate(
-                            currentDate.setDate(currentDate.getDate() + 2)
+                            new Date(Date.now() + 36 * 60 * 60 * 1000)
                           );
                         },
                       },
@@ -212,14 +212,14 @@ const ModalCalendarAddMeeting = ({
                     }}
                     validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
                     }}
                     visibleRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
@@ -248,7 +248,7 @@ const ModalCalendarAddMeeting = ({
                           const calendarApi = calendarRef.current.getApi();
                           let currentDate = new Date();
                           calendarApi.gotoDate(
-                            currentDate.setDate(currentDate.getDate() + 2)
+                            new Date(Date.now() + 36 * 60 * 60 * 1000)
                           );
                         },
                       },
@@ -276,14 +276,14 @@ const ModalCalendarAddMeeting = ({
                     }}
                     validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
                     }}
                     visibleRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };

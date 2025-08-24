@@ -19,7 +19,7 @@ const Display = () => {
   }, [dispatch]);
   useEffect(() => {
     if (datas && datas.length > 0) {
-      setKeyAr(["Type de l'offre", "Type de coaching", "Statut du paiement", "Dernier rendez-vous"]);
+      setKeyAr(["Type de l'offre", "Type de coaching", "Statut de l'offre", "Dernier rendez-vous"]);
     }
   }, [datas]);
   useEffect(() => {

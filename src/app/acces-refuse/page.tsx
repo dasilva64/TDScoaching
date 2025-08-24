@@ -5,7 +5,6 @@ import Btn from "./components/Btn";
 
 const page = ({ searchParams }: { searchParams: { destination?: string } }) => {
     const destination = searchParams.destination;
-  console.log(destination)
     return (
         <main className={styles.noAccess}>
             <div className={styles.noAccess__container}>

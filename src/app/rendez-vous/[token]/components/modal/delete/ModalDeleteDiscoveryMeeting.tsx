@@ -8,7 +8,7 @@ import styles from "./ModalDeleteDiscoveryMeeting.module.scss";
 import fetchPost from "@/app/components/fetch/FetchPost";
 import { AppDispatch, RootState } from "@/app/redux/store/store";
 import { useRouter } from "next/navigation";
-import { mutate } from "swr";
+import { mutate as globalMutate } from "swr";
 
 const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
   const router = useRouter();
@@ -38,9 +38,19 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
         dispatch({
           type: "ModalDeleteDiscoveryMeetingRendezVousToken/close",
         });
-        mutate("/components/header/api");
+        globalMutate("/components/header/api");
         router.push("/");
+        globalMutate("/components/header/api");
         reset();
+      } else if (data.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: data.message },
+        });
+        reset();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse`);
       } else {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -151,15 +161,15 @@ const ModalDeleteDiscoveryMeeting = ({ token }: any) => {
                   </>
                 )}
                 <button
-                      className={styles.modalCalendarEditDiscovery__submit__btn}
-                      onClick={(e) => {
-                        dispatch({
-      type: "ModalDeleteDiscoveryMeetingRendezVousToken/close",
-    });
-                      }}
-                    >
-                      Non, quitter
-                    </button>
+                  className={styles.modalCalendarEditDiscovery__submit__btn}
+                  onClick={(e) => {
+                    dispatch({
+                      type: "ModalDeleteDiscoveryMeetingRendezVousToken/close",
+                    });
+                  }}
+                >
+                  Non, quitter
+                </button>
               </div>
             </motion.div>
           </>

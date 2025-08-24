@@ -13,9 +13,15 @@ const My = ({ meeting, offre, mutate }: any) => {
   const dispatch = useDispatch();
   let current = new Date();
   const router = useRouter()
-  current.setHours(current.getHours() + 8);
-  const [rdvDate, setRdvDate] = useState(new Date(meeting.startAt))
-  const { data, trigger, isMutating, reset } = useSWRMutation("/rendez-vous/components/test/api/my/", fetchPost)
+  current.setHours(current.getHours() + 5);
+  const [confirmationDeadline, setConfirmationDeadline] = useState<Date | null>(null);
+
+  useEffect(() => {
+    const deadline = new Date(meeting.startAt);
+    deadline.setHours(deadline.getHours() - 12);
+    setConfirmationDeadline(deadline);
+  }, [meeting.startAt]);
+  const { data, trigger, isMutating, reset } = useSWRMutation("/rendez-vous/components/test/api/my/new", fetchPost)
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
@@ -24,6 +30,7 @@ const My = ({ meeting, offre, mutate }: any) => {
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
+        globalMutate("/components/header/api");
         reset()
       } else if (data.status === 401) {
         dispatch({
@@ -32,6 +39,7 @@ const My = ({ meeting, offre, mutate }: any) => {
         });
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
+        reset()
         router.push('/')
       } else {
         dispatch({
@@ -42,6 +50,99 @@ const My = ({ meeting, offre, mutate }: any) => {
       }
     }
   }, [data, reset, dispatch, mutate, router])
+  const { data: dataSee, trigger: triggerSee, reset: resetSee, isMutating: isMutatingSee } = useSWRMutation("/rendez-vous/components/test/api/take/see", fetchPost)
+  useEffect(() => {
+    if (dataSee) {
+      if (dataSee.status === 200) {
+        resetSee();
+        window.open(dataSee.body, '_ blank')
+      } else if (dataSee.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: dataSee.message,
+          },
+        });
+        resetSee();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=rendez-vous`)
+      } else {
+        resetSee();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: dataSee.message,
+          },
+        });
+      }
+    }
+  }, [dataSee, dispatch, resetSee, router])
+  /* const { data: dataSee, trigger: triggerSee, isMutating: isMutatingSee, reset: resetSee } = useSWRMutation("/rendez-vous/components/test/api/my/see", fetchPost)
+  useEffect(() => {
+    if (dataSee) {
+      if (dataSee.status === 200) {
+        resetSee();
+        mutate()
+        window.open(dataSee.body, '_ blank')
+      } else if (dataSee.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: dataSee.message,
+          },
+        });
+        resetSee();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=rendez-vous`)
+      } else {
+        resetSee();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: {
+            type: "error",
+            flashMessage: dataSee.message,
+          },
+        });
+      }
+    }
+  }, [dataSee, dispatch, resetSee, router]) */
+
+  const { data: dataCardStripe, trigger: triggerCardStripe, isMutating: isMutatingCardStripe, reset: resetCardStripe } = useSWRMutation("/rendez-vous/components/test/api/my/cardStripe", fetchPost)
+  useEffect(() => {
+    if (dataCardStripe) {
+      if (dataCardStripe.status === 200) {
+        mutate()
+        resetCardStripe()
+        globalMutate("/components/header/api");
+        dispatch({
+          type: "ModalAddCardStripe/open",
+          payload: {
+            secret: dataCardStripe.body
+          }
+        });
+      } else if (dataCardStripe.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataCardStripe.message },
+        });
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        resetCardStripe()
+        router.push('/')
+      } else {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataCardStripe.message },
+        });
+        resetCardStripe()
+      }
+    }
+  }, [dataCardStripe, resetCardStripe, dispatch, mutate, router])
   return (
     <>
       <div className={styles.test}>
@@ -84,6 +185,53 @@ const My = ({ meeting, offre, mutate }: any) => {
 
               {offre.type === "discovery" ? "Découverte" : String(offre.type)[0].toUpperCase() + "" + String(offre.type).slice(1)}
             </p>
+            {offre.type === "flash" && (
+              <>
+                {!isMutatingSee && (
+                  <button
+                    className={styles.test__card__recap__btn}
+                    onClick={() => {
+                      const fetchContract = async () => {
+                        triggerSee({
+                          csrfToken: csrfToken
+                        })
+                      }
+                      fetchContract()
+                    }}
+                  >
+                    Consulter le contrat de prestation
+                  </button>
+                )}
+                {isMutatingSee && (
+                  <button
+                    disabled
+                    className={
+                      styles.test__card__recap__btn__load
+                    }
+                  >
+                    <span
+                      className={
+                        styles.test__card__recap__btn__load__span
+                      }
+                    >
+                      Chargement
+                    </span>
+
+                    <div
+                      className={
+                        styles.test__card__recap__btn__load__arc
+                      }
+                    >
+                      <div
+                        className={
+                          styles.test__card__recap__btn__load__arc__circle
+                        }
+                      ></div>
+                    </div>
+                  </button>
+                )}
+              </>
+            )}
             <p className={`${styles.test__card__recap__p} ${styles.test__card__recap__p__align}`}>
               <span className={styles.test__card__recap__p__strong}>Type de coaching :&nbsp;</span> {" "}
               {String(offre.coaching)[0].toUpperCase()}{String(offre.coaching).slice(1)}
@@ -98,12 +246,15 @@ const My = ({ meeting, offre, mutate }: any) => {
             </p>
             <p className={styles.test__card__recap__p}>
               <span className={styles.test__card__recap__p__strong}>Rendez-vous en cours :&nbsp;</span> {" "}
-              {offre.currentNumberOfMeeting} / {["discovery", "unique"].includes(offre.type) ? "1" : "3"}
+              {offre.currentNumberOfMeeting} / {["discovery", "unique"].includes(offre.type) ? "1" : "4"} {offre.currentNumberOfMeeting === 4 && <strong>&nbsp;(Bilan offert)</strong>}
             </p>
             <p className={styles.test__card__recap__p}>
               <span className={styles.test__card__recap__p__strong}>Visioconférence :&nbsp;</span> {" "}
               Pas de lien pour le moment
-            </p></div>
+            </p>
+
+
+          </div>
 
           <div className={styles.test__card__line}></div>
           {offre.type === "flash" && (
@@ -123,53 +274,69 @@ const My = ({ meeting, offre, mutate }: any) => {
               <div className={styles.test__card__line}></div>
             </>
           )}
-
-          {offre.type !== "discovery" && (
+          {offre.type === "unique" && (
             <>
+
               <div className={styles.test__card__confirm}>
                 <h3 className={styles.test__card__confirm__title}>Gestion</h3>
-                {meeting.status === "pending" && (
+                {!offre.hasCard && meeting.status === "not_confirmed" && (
                   <>
-                    {/* {offre.payment && (
-                      <>
-                        <p className={styles.test__card__confirm__text}>
-                          Vous devez confirmer le rendez-vous 24h avant la date du
-                          rendez-vous sinon il sera automatiquement supprimé
-                        </p>
-                      </>
-                    )} */}
-                    {!offre.payment && (
-                      <>
-                        <p className={styles.test__card__confirm__text}>
-                          ⚠️ Le <strong className={styles.test__card__confirm__text__strong}>paiement</strong> de ce rendez-vous n’a pas été effectué.
-                        </p>
-                        <p className={styles.test__card__confirm__text}>
-                          <strong className={styles.test__card__confirm__text__strong}>Attention</strong> : si le paiement n’est pas effectué au moins 24h avant le début du rendez-vous, il sera automatiquement annulé.
-                        </p>
-                      </>
-                    )}
-
+                    <p className={styles.test__card__confirm__text}>
+                      ⚠️ Vous n’avez pas encore ajouté votre carte pour le paiement automatique de ce rendez-vous.
+                    </p>
+                    <p className={styles.test__card__confirm__text}>
+                      <strong className={styles.test__card__confirm__text__strong}>Attention</strong> : Vous avez jusqu’au {new Date(confirmationDeadline!).toLocaleString("fr-FR", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"
+                      })} pour enregistrer votre carte. Passé ce délai, le rendez-vous expirera automatiquement.
+                    </p>
                     <div className={styles.test__card__action}>
-                      <button
-                        className={`${styles.test__card__confirm__btn}`}
-                        onClick={() => {
-                          if (offre.currentNumberOfMeeting === 2) {
-                            dispatch({
-                              type: "ModalConfirmMeetingRendezVous/open",
-                              payload: { date: meeting.startAt },
-                            });
-                          } else {
-                            dispatch({
-                              type: "ModalConfirmPaidMeetingRendezVous/open",
-                              payload: { date: meeting.startAt },
-                            });
-                          }
-                        }
-                        }
+                      {!isMutatingCardStripe &&
+                        (
+                          <button
+                            className={`${styles.test__card__confirm__btn}`}
+                            onClick={() => {
+                              triggerCardStripe({ csrfToken: csrfToken })
+                            }
+                            }
 
-                      >
-                        Confirmer mon rendez-vous
-                      </button>
+                          >
+                            Ajouter la carte
+                          </button>
+
+                        )}
+                      {isMutatingCardStripe && (
+                        <button
+                          disabled
+                          className={
+                            styles.test__card__confirm__btn__load
+                          }
+                        >
+                          <span
+                            className={
+                              styles.test__card__confirm__btn__load__span
+                            }
+                          >
+                            Chargement
+                          </span>
+
+                          <div
+                            className={
+                              styles.test__card__confirm__btn__load__arc
+                            }
+                          >
+                            <div
+                              className={
+                                styles.test__card__confirm__btn__load__arc__circle
+                              }
+                            ></div>
+                          </div>
+                        </button>
+                      )}
                       <button
                         className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__edit}`}
                         onClick={() => {
@@ -185,7 +352,64 @@ const My = ({ meeting, offre, mutate }: any) => {
                         onClick={() => {
                           dispatch({
                             type: "ModalCancelMeetingRendezVous/open",
-                            payload: { date: meeting.startAt },
+                            payload: { type: offre.type },
+                          });
+                        }}
+                      >
+                        Supprimer mon rendez-vous
+                      </button>
+                    </div>
+
+                  </>
+                )}
+                {offre.hasCard && meeting.status === "not_confirmed" && (
+                  <>
+                    <p className={styles.test__card__confirm__text}>
+                      ⚠️ Vous n’avez pas encore confirmé votre rendez-vous.
+                    </p>
+                    <p className={styles.test__card__confirm__text}>
+                      <strong className={styles.test__card__confirm__text__strong}>Attention</strong> : Vous avez jusqu’au {new Date(confirmationDeadline!).toLocaleString("fr-FR", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"
+                      })} pour le confirmer. Passé ce délai, le rendez-vous expirera automatiquement.
+                    </p>
+
+                    <div className={styles.test__card__action}>
+
+                      <button
+                        className={`${styles.test__card__confirm__btn}`}
+                        onClick={() => {
+                          dispatch({
+                            type: "ModalConfirmPaidMeetingRendezVous/open",
+                          });
+                        }
+                        }
+
+                      >
+                        Confirmer mon rendez-vous
+                      </button>
+
+
+                      <button
+                        className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__edit}`}
+                        onClick={() => {
+                          dispatch({
+                            type: "ModalCalendarEditMeetingRendezVous/open",
+                          });
+                        }}
+                      >
+                        Déplacer mon rendez-vous
+                      </button>
+                      <button
+                        className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__delete}`}
+                        onClick={() => {
+                          dispatch({
+                            type: "ModalCancelMeetingRendezVous/open",
+                            payload: { type: offre.type },
                           });
                         }}
                       >
@@ -195,28 +419,225 @@ const My = ({ meeting, offre, mutate }: any) => {
                   </>
                 )}
                 {meeting.status === "confirmed" && (
-                  <div className={styles.test__card__action}>
-                    <button
-                      className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__edit}`}
-                      onClick={() => {
-                        dispatch({
-                          type: "ModalCalendarEditMeetingRendezVous/open",
-                        });
-                      }}
-                    >
-                      Déplacer mon rendez-vous
-                    </button>
-                    <button
-                      className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__delete}`}
-                      onClick={() => {
-                        dispatch({
-                          type: "ModalCancelMeetingRendezVous/open",
-                        });
-                      }}
-                    >
-                      Supprimer mon rendez-vous
-                    </button>
-                  </div>
+                  <>
+                    {current < new Date(meeting.startAt) && (
+                      <div className={styles.test__card__action}>
+                        <button
+                          className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__edit}`}
+                          onClick={() => {
+                            dispatch({
+                              type: "ModalCalendarEditMeetingRendezVous/open",
+                            });
+                          }}
+                        >
+                          Déplacer mon rendez-vous
+                        </button>
+                        <button
+                          className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__delete}`}
+                          onClick={() => {
+                            dispatch({
+                              type: "ModalCancelMeetingRendezVous/open",
+                              payload: { type: offre.type },
+                            });
+                          }}
+                        >
+                          Supprimer mon rendez-vous
+                        </button>
+                      </div>
+                    )}
+                    {current > new Date(meeting.startAt) && (
+                      <>
+                        <p className={styles.test__card__confirm__text}>
+                          Ce rendez-vous est imminent. Pour toute modification ou suppression, merci de nous contacter directement.
+                        </p>
+                      </>
+                    )}
+                  </>
+
+                )}
+                {meeting.status === "expired" && (
+                  <>
+                    <p className={styles.test__card__confirm__text}>Votre rendez-vous a expiré car vous ne l&apos;avez pas confirmé a temps.</p>
+                    <div className={styles.test__card__action}>
+                      {!isMutating && (
+                        <button
+                          className={styles.test__card__confirm__btn}
+                          onClick={() => {
+                            trigger({ csrfToken: csrfToken })
+                          }}
+                        >
+                          Reprendre un rendez-vous
+                        </button>
+                      )}
+                      {isMutating && (
+                        <button
+                          disabled
+                          className={
+                            styles.test__card__confirm__btn__load
+                          }
+                        >
+                          <span
+                            className={
+                              styles.test__card__confirm__btn__load__span
+                            }
+                          >
+                            Chargement
+                          </span>
+
+                          <div
+                            className={
+                              styles.test__card__confirm__btn__load__arc
+                            }
+                          >
+                            <div
+                              className={
+                                styles.test__card__confirm__btn__load__arc__circle
+                              }
+                            ></div>
+                          </div>
+                        </button>
+                      )}
+
+                    </div>
+                  </>
+                )}
+              </div>
+            </>
+          )}
+          {offre.type === "flash" && (
+            <>
+              <div className={styles.test__card__confirm}>
+                <h3 className={styles.test__card__confirm__title}>Gestion</h3>
+                {meeting.status === "not_confirmed" && (
+                  <>
+                    {/* {offre.payment && (
+                      <>
+                        <p className={styles.test__card__confirm__text}>
+                          Vous devez confirmer le rendez-vous 24h avant la date du
+                          rendez-vous sinon il sera automatiquement supprimé
+                        </p>
+                      </>
+                    )} */}
+                    <p className={styles.test__card__confirm__text}>
+                      ⚠️ Vous n’avez pas encore confirmé votre rendez-vous.
+                    </p>
+                    <p className={styles.test__card__confirm__text}>
+                      <strong className={styles.test__card__confirm__text__strong}>Attention</strong> : Vous avez jusqu’au {new Date(confirmationDeadline!).toLocaleString("fr-FR", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"
+                      })} pour confirmer votre rendez-vous. Passé ce délai, le rendez-vous expirera automatiquement.
+                    </p>
+
+                    <div className={styles.test__card__action}>
+                      {!isMutatingCardStripe &&
+                        (
+                          <button
+                            className={`${styles.test__card__confirm__btn}`}
+                            onClick={() => {
+                              dispatch({
+                                type: "ModalConfirmMeetingRendezVous/open",
+                                payload: { date: meeting.startAt },
+                              });
+                            }
+                            }
+
+                          >
+                            Confirmer mon rendez-vous
+                          </button>
+
+                        )}
+                      {isMutatingCardStripe && (
+                        <button
+                          disabled
+                          className={
+                            styles.test__card__confirm__btn__load
+                          }
+                        >
+                          <span
+                            className={
+                              styles.test__card__confirm__btn__load__span
+                            }
+                          >
+                            Chargement
+                          </span>
+
+                          <div
+                            className={
+                              styles.test__card__confirm__btn__load__arc
+                            }
+                          >
+                            <div
+                              className={
+                                styles.test__card__confirm__btn__load__arc__circle
+                              }
+                            ></div>
+                          </div>
+                        </button>
+                      )}
+                      <button
+                        className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__edit}`}
+                        onClick={() => {
+                          dispatch({
+                            type: "ModalCalendarEditMeetingRendezVous/open",
+                          });
+                        }}
+                      >
+                        Déplacer mon rendez-vous
+                      </button>
+                      <button
+                        className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__delete}`}
+                        onClick={() => {
+                          dispatch({
+                            type: "ModalCancelMeetingRendezVous/open",
+                            payload: { type: offre.type },
+                          });
+                        }}
+                      >
+                        Supprimer mon rendez-vous
+                      </button>
+                    </div>
+                  </>
+                )}
+                {meeting.status === "confirmed" && (
+                  <>
+                    {current < new Date(meeting.startAt) && (
+                      <div className={styles.test__card__action}>
+                        <button
+                          className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__edit}`}
+                          onClick={() => {
+                            dispatch({
+                              type: "ModalCalendarEditMeetingRendezVous/open",
+                            });
+                          }}
+                        >
+                          Déplacer mon rendez-vous
+                        </button>
+                        <button
+                          className={`${styles.test__card__action__btn} ${styles.test__card__action__btn__delete}`}
+                          onClick={() => {
+                            dispatch({
+                              type: "ModalCancelMeetingRendezVous/open",
+                              payload: { type: offre.type },
+                            });
+                          }}
+                        >
+                          Supprimer mon rendez-vous
+                        </button>
+                      </div>
+                    )}
+                    {current > new Date(meeting.startAt) && (
+                      <>
+                        <p className={styles.test__card__confirm__text}>
+                          Ce rendez-vous est imminent. Pour toute modification ou suppression, merci de nous contacter directement.
+                        </p>
+                      </>
+                    )}
+                  </>
+
                 )}
                 {meeting.status === "expired" && (
                   <>
@@ -271,17 +692,20 @@ const My = ({ meeting, offre, mutate }: any) => {
             <>
               <div className={styles.test__card__confirm}>
                 <h3 className={styles.test__card__confirm__title}>Gestion</h3>
-                {meeting.status === "pending" && (
+                {meeting.status === "not_confirmed" && (
                   <>
                     <p className={styles.test__card__confirm__text}>
-                      Vous avez jusqu’au {new Date(rdvDate.setHours(rdvDate.getHours() + 16)).toLocaleString("fr-FR", {
+                      ⚠️ Vous n’avez pas encore confirmé votre rendez-vous.
+                    </p>
+                    <p className={styles.test__card__confirm__text}>
+                      <strong className={styles.test__card__confirm__text__strong}>Attention</strong> : Vous avez jusqu’au {new Date(confirmationDeadline!).toLocaleString("fr-FR", {
                         weekday: "long",
                         year: "numeric",
                         month: "long",
                         day: "numeric",
                         hour: "numeric",
                         minute: "numeric"
-                      })} pour confirmer votre rendez-vous, après quoi il expirera automatiquement.
+                      })} pour confirmer votre rendez-vous. Passé ce délai, le rendez-vous expirera automatiquement.
                     </p>
                     <div className={styles.test__card__action}>
                       <button

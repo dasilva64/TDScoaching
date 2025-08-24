@@ -6,10 +6,11 @@ import prisma from "@/app/lib/prisma";
 import { SessionData, sessionOptions } from "@/app/lib/session";
 import { csrfToken } from "@/app/lib/csrfToken";
 import { checkRateLimitShort } from "@/app/lib/rateLimiter";
+import Stripe from "stripe";
 
 export async function POST(request: NextRequest) {
   const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-utilisateur-unique-finish');
-      if (rateLimitResponse) return rateLimitResponse;
+  if (rateLimitResponse) return rateLimitResponse;
   const session = await getIronSession<SessionData>(
     cookies(),
     sessionOptions
@@ -28,10 +29,10 @@ export async function POST(request: NextRequest) {
       }
     );
   } else {
-    let user = await prisma.user.findUnique({
+    let adminUser = await prisma.user.findUnique({
       where: { id: session.id },
     });
-    if (user === null) {
+    if (adminUser === null) {
       return NextResponse.json(
         {
           status: 401,
@@ -43,7 +44,7 @@ export async function POST(request: NextRequest) {
         }
       );
     } else {
-      if (user.role !== "ROLE_ADMIN") {
+      if (adminUser.role !== "ROLE_ADMIN") {
         return NextResponse.json(
           {
             status: 401,
@@ -71,17 +72,24 @@ export async function POST(request: NextRequest) {
           const user = await prisma.user.findUnique({
             where: { id: id },
             select: {
-              mail: true
+              mail: true,
+              id: true,
+              offre_test: true,
+              meetingId: true,
+              firstname: true,
+              lastname: true,
+              discovery: true,
+              meeting_test: true
             }
           })
-          const meetingById = await prisma.meeting_test.findMany({
+          /* const meetingById = await prisma.meeting_test.findMany({
             where: { userMail: user?.mail },
             take: 1,
             orderBy: {
               createdAt: 'desc'
             }
-          });
-          if (meetingById === null) {
+          }); */
+          if (user?.meetingId === null) {
             return NextResponse.json(
               {
                 status: 404,
@@ -92,61 +100,161 @@ export async function POST(request: NextRequest) {
               }
             );
           } else {
-            let updateMeeting = await prisma.meeting_test.update({
-              where: { id: meetingById[0].id },
-              data: {
-                status: "completed"
-              }
-            })
-            let updateUser = await prisma.user.update({
-              where: { meetingId: meetingById[0].id },
-              data: {
-                meetingId: null,
-                offreId: null
-              }
-            })
-            const userById = await prisma.user.findUnique({
-              where: { id: id },
-              include: {
-                offre_test: true,
-                meeting_test: true
-              }
-            });
-            if (userById === null) {
+            if (user?.meeting_test?.status === "not_confirmed") {
               return NextResponse.json(
                 {
                   status: 404,
-                  message: `L'utilisateur avec l'id : ${id} n'a pas été trouvé, veuillez réessayer`,
+                  message: `Le rendez-vous de l'utilisateur n'est pas encore confirmé, veuillez réessayer`,
                 },
                 {
                   status: 404,
                 }
               );
-            } else {
-              const meetingByUser = await prisma.meeting_test.findMany({
-                where: { userMail: userById.mail },
-                select: {
-                  startAt: true,
-                },
+            }
+            let status_payment;
+            try {
+              const stripe = new Stripe(
+                "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f" as string, {
+                apiVersion: '2022-11-15',
+                typescript: true
+              }
+              );
+              const setupIntent = await stripe.setupIntents.retrieve(user?.offre_test?.stripeIntentId!);
+              const customerId =
+                typeof setupIntent.customer === 'string' ? setupIntent.customer : setupIntent.customer?.id;
+              const paymentMethodId =
+                typeof setupIntent.payment_method === 'string' ? setupIntent.payment_method : setupIntent.payment_method?.id;
+
+              const paymentIntent = await stripe.paymentIntents.create({
+                amount: 10000,
+                currency: 'eur',
+                customer: customerId,
+                payment_method: paymentMethodId,
+                off_session: true,
+                confirm: true,
               });
-              //paymentIntents.capture
-              let userObject = {
-                id: userById.id,
-                firstname: userById.firstname,
-                lastname: userById.lastname,
-                mail: userById.mail,
-                discovery: userById.discovery,
-                allMeetings: meetingByUser,
-                meeting: userById.meeting_test,
-                offre: userById.offre_test
-              };
+              status_payment = 'completed'
+              await prisma.meeting_test.update({
+                where: { id: user?.meeting_test!.id },
+                data: {
+                  status_payment: "success"
+                }
+              })
+              await prisma.offre_test.update({
+                where: { id: user?.offre_test!.id },
+                data: {
+                  stripeIntentId: paymentIntent.id
+                }
+              })
+            } catch (error) {
+              status_payment = 'failed'
+              await prisma.meeting_test.update({
+                where: { id: user?.meeting_test!.id },
+                data: {
+                  status_payment: "failed"
+                }
+              })
               return NextResponse.json({
-                status: 200,
-                body: userObject,
-                message: "Le rendez-vous a été supprimé"
+                status: 400,
+                message: `Erreur : ${error}`
               });
             }
+            try {
+              if (status_payment === "completed") {
+                const { meeting } = await prisma.$transaction(async (tx) => {
+                  let meeting = await prisma.meeting_test.update({
+                    where: { id: user?.meetingId! },
+                    data: {
+                      status: "completed"
+                    }
+                  })
+                  await prisma.offre_test.update({
+                    where: { id: user?.offre_test!.id },
+                    data: {
+                      status: "completed"
+                    }
+                  })
+                  await prisma.user.update({
+                    where: { id: user?.id },
+                    data: {
+                      meetingId: null,
+                      offreId: null
+                    }
+                  })
+
+                  return { meeting }
+                })
+                try {
+                  const stripe = new Stripe(
+                    "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f" as string, {
+                    apiVersion: '2022-11-15',
+                    typescript: true
+                  }
+                  );
+                  const setupIntent = await stripe.setupIntents.retrieve(user?.offre_test?.stripeIntentId!);
+                  const customerId =
+                    typeof setupIntent.customer === 'string' ? setupIntent.customer : setupIntent.customer?.id;
+
+                  if (typeof customerId === 'string') {
+                    const paymentMethods = await stripe.paymentMethods.list({
+                      customer: customerId,
+                      type: 'card',
+                    });
+                    for (const pm of paymentMethods.data) {
+                      await stripe.paymentMethods.detach(pm.id);
+                    }
+                    await stripe.customers.del(customerId);
+                  } else {
+                    return NextResponse.json({
+                      status: 400,
+                      message: `Impossible de récupérer les données de paiement, veuillez réessayer`
+                    });
+                  }
+                } catch {
+                  return NextResponse.json({
+                    status: 400,
+                    message: `Erreur lors de la suppression des données de paiement, veuillez réessayer`
+                  });
+                }
+                const meetingByUser = await prisma.meeting_test.findMany({
+                  where: { userMail: user?.mail },
+                  select: {
+                    startAt: true,
+                  },
+                });
+
+                let userObject = {
+                  id: user?.id,
+                  firstname: user?.firstname,
+                  lastname: user?.lastname,
+                  mail: user?.mail,
+                  discovery: user?.discovery,
+                  allMeetings: meetingByUser,
+                  meeting: user?.meeting_test,
+                  offre: user?.offre_test
+                };
+                return NextResponse.json({
+                  status: 200,
+                  body: userObject,
+                  message: "Le paiement a été un succes et le rendez-vous est terminé"
+                });
+              } else {
+                return NextResponse.json({
+                  status: 400,
+                  message: `Erreur lors du paiement`
+                });
+              }
+
+
+            } catch (error) {
+              return NextResponse.json({
+                status: 400,
+                message: `Erreur : ${error}`
+              });
+            }
+
           }
+
         }
       }
     }

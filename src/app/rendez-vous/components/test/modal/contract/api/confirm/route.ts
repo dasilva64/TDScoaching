@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
                 try {
 
                     if (user.offreId) {
-                        const { editOffre } = await prisma.$transaction(async (tx) => {
+                        /* const { editOffre } = await prisma.$transaction(async (tx) => {
                             let editOffre = await prisma.offre_test.update({
                                 where: { id: user?.offreId! },
                                 data: {
@@ -46,8 +46,8 @@ export async function POST(request: NextRequest) {
                                 }
                             })
                             return { editOffre }
-                        })
-                        let smtpTransport = nodemailer.createTransport({
+                        }) */
+                         /*let smtpTransport = nodemailer.createTransport({
                             host: "smtp.ionos.fr",
                             port: 465,
                             secure: true,
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
                           </html>`,
                         };
                         await smtpTransport.sendMail(mailOptions);
-                        /* let mailOptionsAdmin = {
+                         let mailOptionsAdmin = {
                             from: "contact@tds-coachingdevie.fr",
                             to: "contact@tds-coachingdevie.fr",
                             subject: `[CONFIRMÉ] L'offre ${editOffre.type} a été confirmé par ${user.firstname} ${user.lastname}`,

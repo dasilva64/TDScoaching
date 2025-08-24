@@ -18,18 +18,90 @@ const allowedFields = [
   "remember",
   "adresse",
   "city",
-  "signature"
+  "signature",
+  "majorInput",
+  "cguInput",
+  "cgvInput",
+  "contratInput"
 ];
 
 const dangerousPattern = /(script|onload|onerror|onclick|onmouseover|onmouseenter|javascript)/i;
 
 export const validationBody = (body: any) => {
+  
   let arrayMessageError: any = [];
-  let unknowField: any = []
+  //let unknowField: any = []
+  const unknownFields = Object.keys(body).filter(k => !allowedFields.includes(k));
+  if (unknownFields.length > 0) {
+    return [[
+      "unknown_fields",
+      `Requête rejetée : champs non autorisés détectés (${unknownFields.join(", ")})`
+    ]];
+  }
   Object.entries(body).forEach(([key, value]: any) => {
-    if (!allowedFields.includes(key)) {
+    /* if (!allowedFields.includes(key)) {
       unknowField.push(key);
-    };
+    }; */
+    if (key === "contratInput") {
+      if (typeof value !== "boolean") {
+        arrayMessageError.push([
+          "contratInput",
+          "Vous devez accepter le contrat",
+        ]);
+      } else {
+        if (value !== true) {
+          arrayMessageError.push([
+            "contratInput",
+            "Vous devez accepter le contrat",
+          ]);
+        }
+      }
+    }
+    if (key === "majorInput") {
+      if (typeof value !== "boolean") {
+        arrayMessageError.push([
+          "majorInput",
+          "Vous devez être majeur",
+        ]);
+      } else {
+        if (value !== true) {
+          arrayMessageError.push([
+            "majorInput",
+            "Vous devez être majeur",
+          ]);
+        }
+      }
+    }
+    if (key === "cguInput") {
+      if (typeof value !== "boolean") {
+        arrayMessageError.push([
+          "cguInput",
+          "Vous devez accepter les conditions générales d'utilisation",
+        ]);
+      } else {
+        if (value !== true) {
+          arrayMessageError.push([
+            "cguInput",
+            "Vous devez accepter les conditions générales d'utilisation",
+          ]);
+        }
+      }
+    }
+    if (key === "cgvInput") {
+      if (typeof value !== "boolean") {
+        arrayMessageError.push([
+          "cgvInput",
+          "Vous devez accepter les conditions générales de vente",
+        ]);
+      } else {
+        if (value !== true) {
+          arrayMessageError.push([
+            "cgvInput",
+            "Vous devez accepter les conditions générales de vente",
+          ]);
+        }
+      }
+    }
     if (key === "remember") {
       if (typeof value !== "boolean") {
         arrayMessageError.push([
@@ -357,15 +429,22 @@ export const validationBody = (body: any) => {
       }
     }
   });
-  if (unknowField.length > 0) {
+   /*const unknown = Object.keys(body).filter(k => !allowedFields.includes(k));
+  if (unknown.length) {
+    return [[
+      "unknown_fields",
+      `Champs non autorisés : ${unknown.join(", ")}`
+    ]];
+  }
+ if (unknowField.length > 0) {
     arrayMessageError.push([
       "unknow",
       unknowField,
     ]);
-    /*  arrayMessageError.push([
+      arrayMessageError.push([
      "unknown_fields",
      `Champs non autorisés détectés : ${unknowField.join(", ")}`
-   ]); */
-  }
+   ]); 
+  }*/
   return arrayMessageError;
 };

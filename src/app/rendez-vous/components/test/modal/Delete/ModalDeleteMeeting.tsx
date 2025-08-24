@@ -37,15 +37,16 @@ const ModalDeleteMeeting = ({ mutate }: any) => {
         router.push(`/acces-refuse?destination=rendez-vous`)
       } else if (data.status === 200) {
         const processFetchedData = async () => {
-          await mutate();
-          await dispatch({
+          mutate();
+          dispatch({
             type: "flash/storeFlashMessage",
             payload: { type: "success", flashMessage: data.message },
           });
-          await dispatch({
+          globalMutate("/components/header/api");
+          dispatch({
             type: "ModalDeleteMeetingRendezVous/close",
           });
-          await reset();
+          reset();
         }
         processFetchedData()
       } else {

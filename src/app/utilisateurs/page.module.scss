@@ -8,6 +8,7 @@
   }
   &__article {
     margin-left: 10%;
+    padding: 20px;
     margin-right: 10%;
     text-align: justify;
     background-color: white;
@@ -28,6 +29,7 @@
     .allUser {
       &__article {
         margin: 0px 5%;
+        padding: 10px;
       }
     }
 }

@@ -94,7 +94,7 @@ const ModalHelpContract = () => {
                       width={20}
                       height={20}
                     ></Image>
-                    <div className={styles.modalHelpContract__card}><p className={styles.modalHelpContract__card__title}>Étape 2 - Modal recapitulatif</p>
+                    <div className={styles.modalHelpContract__card}><p className={styles.modalHelpContract__card__title}>Étape 2 - Modal récapitulatif</p>
                       <p>- Affichage récapitulatif de l&apos;offre selectionné</p></div>
 
                   </>
@@ -108,7 +108,7 @@ const ModalHelpContract = () => {
                       width={20}
                       height={20}
                     ></Image>
-                    <div className={styles.modalHelpContract__card}><p className={styles.modalHelpContract__card__title}>Étape 2 - Modal recapitulatif</p>
+                    <div className={styles.modalHelpContract__card}><p className={styles.modalHelpContract__card__title}>Étape 2 - Modal récapitulatif</p>
                       <p>- Affichage récapitulatif de l&apos;offre selectionné</p></div>
                       <Image
                       className={styles.modalHelpContract__card__row}
@@ -131,7 +131,7 @@ const ModalHelpContract = () => {
                       width={20}
                       height={20}
                     ></Image>
-                    <div className={styles.modalHelpContract__card}><p className={styles.modalHelpContract__card__title}>Étape 4 - Modal recapitulatif du contract</p>
+                    <div className={styles.modalHelpContract__card}><p className={styles.modalHelpContract__card__title}>Étape 4 - Modal récapitulatif du contract</p>
                     <p>- Bouton pour :</p>
                      <ul className={styles.modalHelpContract__card__list}>
                         <li>Voir le contrat</li>

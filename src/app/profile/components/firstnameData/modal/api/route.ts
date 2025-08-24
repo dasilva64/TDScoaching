@@ -12,6 +12,7 @@ import { csrfToken } from "@/app/lib/csrfToken";
 import { handleError } from "@/app/lib/handleError";
 
 export async function POST(request: NextRequest) {
+
   try {
     const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-profile-firstname');
     if (rateLimitResponse) return rateLimitResponse;
@@ -55,6 +56,19 @@ export async function POST(request: NextRequest) {
         let arrayMessageError = validationBody({ firstname: firstname });
 
         if (arrayMessageError.length > 0) {
+          if (arrayMessageError.length === 1) {
+            if (arrayMessageError[0][0] === "unknown_fields") {
+              return NextResponse.json(
+                {
+                  status: 400,
+                  message: arrayMessageError[0][1],
+                },
+                {
+                  status: 400,
+                }
+              );
+            }
+          }
           return NextResponse.json(
             {
               status: 400,

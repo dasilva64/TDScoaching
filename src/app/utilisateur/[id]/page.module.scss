@@ -2,10 +2,13 @@
   &__h1 {
     padding-top: 160px;
   }
+
   &__container {
     padding-bottom: 100px;
-    display: flex;
+    //display: flex;
+    margin-top: 60px;
   }
+
   &__article {
     width: 100%;
     margin-left: 10%;
@@ -13,5 +16,21 @@
     text-align: justify;
     display: flex;
     justify-content: center;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .user {
+    &__container {
+      padding-bottom: 50px;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .user {
+    &__container {
+      padding-bottom: 20px;
+    }
   }
 }

@@ -19,12 +19,6 @@ export async function pdfSupabase(file: string) {
   }
 
   const arrayBuffer: any = await pdfResponse.arrayBuffer();
-  /* const pdfDoc = await PDFDocument.load(arrayBuffer);
-  const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-  const [firstPage] = pdfDoc.getPages();
-  firstPage.drawText(`${user.firstname} ${user.lastname}`, { x: 160, y: 700, size: 12, font: helveticaFont, color: rgb(0, 0, 0) });
-  firstPage.drawText(`${type}`, { x: 180, y: 320, size: 12, font: helveticaFont, color: rgb(0, 0, 0) }); */
-
-  return arrayBuffer; // retourne les bytes
+  return arrayBuffer;
 }

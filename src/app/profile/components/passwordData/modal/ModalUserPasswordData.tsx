@@ -46,7 +46,6 @@ const ModalUserPasswordData = ({ mutate }: any) => {
           type: "ModalEditPassword/close",
         });
         globalMutate("/components/header/api");
-        mutate()
         reset();
       } else if (data.status === 401) {
         dispatch({

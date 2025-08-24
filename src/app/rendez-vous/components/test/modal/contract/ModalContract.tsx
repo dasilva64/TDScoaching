@@ -89,6 +89,7 @@ const ModalContract = ({ mutate }: any) => {
     if (dataSee) {
       if (dataSee.status === 200) {
         resetSee();
+        mutate()
         window.open(dataSee.body, '_ blank')
       } else if (dataSee.status === 401) {
         dispatch({
@@ -113,7 +114,7 @@ const ModalContract = ({ mutate }: any) => {
         });
       }
     }
-  }, [dataSee, dispatch, resetSee, router])
+  }, [dataSee, dispatch, resetSee, router, mutate])
   const { data: dataAdd, trigger: triggerAdd, reset: resetAdd, isMutating: isMutatingAdd } = useSWRMutation("/rendez-vous/components/test/modal/contract/api/edit/", fetchPost)
   useEffect(() => {
     if (dataAdd) {
@@ -128,6 +129,7 @@ const ModalContract = ({ mutate }: any) => {
             type: typeModalContractRendezVous,
           },
         });
+        globalMutate("/components/header/api");
         clearState();
         dispatch({
           type: "flash/storeFlashMessage",
@@ -145,6 +147,7 @@ const ModalContract = ({ mutate }: any) => {
             flashMessage: dataAdd.message,
           },
         });
+        resetAdd()
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
         router.push(`/acces-refuse?destination=rendez-vous`)
@@ -154,7 +157,7 @@ const ModalContract = ({ mutate }: any) => {
           dataAdd.message.forEach((element: string) => {
             if (element[0] === "signature") {
               setSignatureError(element[1]);
-    setValidSignature(false);
+              setValidSignature(false);
             }
             if (element[0] === "city" || element[0] === "adresse") {
               setErrorCity(element[1]);

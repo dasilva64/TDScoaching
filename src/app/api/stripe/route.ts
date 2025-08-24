@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
         where: { id: session.id },
         include: {
           meeting_test: true,
+          offre_test: true
         },
       });
       if (user === null) {
@@ -42,7 +43,19 @@ export async function POST(request: NextRequest) {
           }
         );
       } else {
-        if (user.meetingId === null) {
+        if (user.offreId === null) {
+          return NextResponse.json(
+            {
+              status: 400,
+              message:
+                "Vous n'avez pas d'offre en cours, veuillez réessayer",
+            },
+            {
+              status: 400,
+            }
+          );
+        }
+        if (user.offre_test!.type === "unique" && user.meetingId === null) {
           return NextResponse.json(
             {
               status: 400,
@@ -53,7 +66,18 @@ export async function POST(request: NextRequest) {
               status: 400,
             }
           );
-        } else {
+        }if (user.offre_test!.type === "flash" && user.meetingId !== null) {
+          return NextResponse.json(
+            {
+              status: 400,
+              message:
+                "Vous avez deja un rendez-vous en cours, veuillez réessayer",
+            },
+            {
+              status: 400,
+            }
+          );
+        }
           try {
             const stripe = new Stripe(
               "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f" as string, {
@@ -65,15 +89,15 @@ export async function POST(request: NextRequest) {
             );
             if (session) {
               await prisma.$transaction(async (tx) => {
-                await prisma.meeting_test.update({
+               /*  await prisma.meeting_test.update({
                   where: {
                     id: user?.meetingId!,
                   },
                   data: {
                     status: "confirmed",
                   },
-                });
-                await prisma.offre_test.update({
+                }); */
+                /* await prisma.offre_test.update({
                   where: {
                     id: user?.offreId!
                   },
@@ -81,7 +105,7 @@ export async function POST(request: NextRequest) {
                     status: "confirmed",
                     payment: true
                   }
-                })
+                }) */
               });
               return NextResponse.json(
                 {
@@ -103,7 +127,7 @@ export async function POST(request: NextRequest) {
                 }
               );
             }
-          } catch {
+          } catch (error) {
             return NextResponse.json(
               {
                 status: 400,
@@ -115,7 +139,7 @@ export async function POST(request: NextRequest) {
             );
           }
 
-        }
+        
       }
     } else {
       return NextResponse.json(

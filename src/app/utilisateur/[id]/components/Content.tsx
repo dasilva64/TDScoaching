@@ -36,6 +36,7 @@ const Content = () => {
   let id = queryParam.toString().split("/");
   const { data, isLoading, isError, mutate } = useGetById(id[2]);
   useEffect(() => {
+    console.log(data)
     if (data) {
       if (data.status === 401 || data.status === 403) {
         dispatch({
@@ -80,7 +81,7 @@ const Content = () => {
         });
       }
     }
-  }, [data, dispatch, router]);
+  }, [data, dispatch, router, id]);
 
   /*const { data: dataCancel, reset } = useSWRMutation(
     "/api/paiement/cancelByAdmin",
@@ -166,12 +167,14 @@ const Content = () => {
   useEffect(() => {
     if (dataFinishMeeting) {
       if (dataFinishMeeting.status === 200) {
-        mutate(
-          {
-            ...dataFinishMeeting,
-          },
-          { revalidate: false }
-        );
+        mutate()
+        /*  mutate(
+           {
+             ...dataFinishMeeting,
+           },
+           { revalidate: false }
+         ); */
+        globalMutate("/components/header/api");
         resetFinishMeeting();
         dispatch({
           type: "flash/storeFlashMessage",
@@ -182,11 +185,12 @@ const Content = () => {
           type: "flash/storeFlashMessage",
           payload: { type: "error", flashMessage: dataFinishMeeting.message },
         });
+        resetFinishMeeting()
         dataFinishMeeting();
         globalMutate("/components/header/api");
         globalMutate("/components/header/ui/api");
         router.push(`/acces-refuse?destination=utilisateur/${id}`)
-      }else {
+      } else {
         resetFinishMeeting();
         dispatch({
           type: "flash/storeFlashMessage",
@@ -194,7 +198,7 @@ const Content = () => {
         });
       }
     }
-  }, [dataFinishMeeting, dispatch, mutate, resetFinishMeeting, router]);
+  }, [dataFinishMeeting, dispatch, mutate, resetFinishMeeting, router, id]);
 
 
   const {
@@ -202,22 +206,31 @@ const Content = () => {
     trigger: triggerFinishOtherMeeting,
     reset: resetFinishOtherMeeting,
     isMutating: isMutatingFinishOtherMeeting,
-  } = useSWRMutation("/utilisateur/[id]/components/api/other/finish", fetchPost);
+  } = useSWRMutation("/utilisateur/[id]/components/api/flash/finishMeeting/", fetchPost);
 
   useEffect(() => {
     if (dataFinishOtherMeeting) {
       if (dataFinishOtherMeeting.status === 200) {
-        mutate(
-          {
-            ...dataFinishOtherMeeting,
-          },
-          { revalidate: false }
-        );
+        globalMutate("/components/header/api");
         resetFinishOtherMeeting();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: dataFinishOtherMeeting.message },
         });
+        const { allMeetings, meeting, offre, meetingByOffre } = dataFinishOtherMeeting.body;
+        mutate(
+          {
+            ...data,
+            body: {
+              ...data.body,
+              allMeetings,
+              meeting,
+              offre,
+              meetingByOffre
+            },
+          },
+          { revalidate: false }
+        );
       } else if (dataFinishOtherMeeting.status === 401) {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -235,7 +248,7 @@ const Content = () => {
         });
       }
     }
-  }, [dataFinishOtherMeeting, dispatch, mutate, resetFinishOtherMeeting, router]);
+  }, [dataFinishOtherMeeting, dispatch, mutate, resetFinishOtherMeeting, router, data, id]);
 
   const {
     data: dataFinishDiscoveryMeeting,
@@ -247,17 +260,25 @@ const Content = () => {
   useEffect(() => {
     if (dataFinishDiscoveryMeeting) {
       if (dataFinishDiscoveryMeeting.status === 200) {
-        mutate(
-          {
-            ...dataFinishDiscoveryMeeting,
-          },
-          { revalidate: false }
-        );
+        globalMutate("/components/header/api");
         resetFinishDiscoveryMeeting();
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: dataFinishDiscoveryMeeting.message },
         });
+        const { allMeetings, meeting, offre } = dataFinishDiscoveryMeeting.body;
+        mutate(
+          {
+            ...data,
+            body: {
+              ...data.body,
+              allMeetings,
+              meeting,
+              offre,
+            },
+          },
+          { revalidate: false }
+        );
       } else if (dataFinishDiscoveryMeeting.status === 401) {
         dispatch({
           type: "flash/storeFlashMessage",
@@ -275,7 +296,56 @@ const Content = () => {
         });
       }
     }
-  }, [dataFinishDiscoveryMeeting, dispatch, mutate, resetFinishMeeting, resetFinishDiscoveryMeeting, router]);
+  }, [dataFinishDiscoveryMeeting, dispatch, mutate, resetFinishMeeting, resetFinishDiscoveryMeeting, router, data, id]);
+
+  const {
+    data: dataFinishOffreMeeting,
+    trigger: triggerFinishOffreMeeting,
+    reset: resetFinishOffreMeeting,
+    isMutating: isMutatingFinishOffreMeeting,
+  } = useSWRMutation("/utilisateur/[id]/components/api/flash/finishOffre", fetchPost);
+
+  useEffect(() => {
+    if (dataFinishOffreMeeting) {
+      if (dataFinishOffreMeeting.status === 200) {
+        globalMutate("/components/header/api");
+        resetFinishOffreMeeting();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "success", flashMessage: dataFinishOffreMeeting.message },
+        });
+        const { allMeetings, meeting, offre, meetingByOffre } = dataFinishOffreMeeting.body;
+        mutate(
+          {
+            ...data,
+            body: {
+              ...data.body,
+              allMeetings,
+              meeting,
+              offre,
+              meetingByOffre
+            },
+          },
+          { revalidate: false }
+        );
+      } else if (dataFinishOffreMeeting.status === 401) {
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataFinishOffreMeeting.message },
+        });
+        resetFinishOffreMeeting();
+        globalMutate("/components/header/api");
+        globalMutate("/components/header/ui/api");
+        router.push(`/acces-refuse?destination=utilisateur/${id}`)
+      } else {
+        resetFinishOffreMeeting();
+        dispatch({
+          type: "flash/storeFlashMessage",
+          payload: { type: "error", flashMessage: dataFinishOffreMeeting.message },
+        });
+      }
+    }
+  }, [dataFinishOffreMeeting, dispatch, mutate, resetFinishMeeting, resetFinishOffreMeeting, router, data, id]);
   /* useEffect(() => {
     const mutateFinishMeeting = () => {
       mutate(
@@ -301,7 +371,9 @@ const Content = () => {
   useEffect(() => {
     if (dataDeleteOffre) {
       if (dataDeleteOffre.status === 200) {
+        //do
         mutate();
+        globalMutate("/components/header/api");
         resetDeleteOffre();
         dispatch({
           type: "flash/storeFlashMessage",
@@ -324,7 +396,7 @@ const Content = () => {
         });
       }
     }
-  }, [dataDeleteOffre, dispatch, mutate, resetDeleteOffre, router]);
+  }, [dataDeleteOffre, dispatch, mutate, resetDeleteOffre, router, id]);
   useEffect(() => {
     if (isError) {
       setContent(
@@ -505,8 +577,22 @@ const Content = () => {
                           <strong>Nombre actuel de rendez-vous</strong> :{" "}
                           {data.body.offre.currentNumberOfMeeting === null
                             ? 0
-                            : data.body.offre.currentNumberOfMeeting} / {["unique", "discovery"].includes(data.body.offre.type) ? 1 : data.body.offre.type === "flash" ? 3 : "custom"}
+                            : data.body.offre.currentNumberOfMeeting} / {["unique", "discovery"].includes(data.body.offre.type) ? 1 : data.body.offre.type === "flash" ? 4 : "custom"}
                         </li>
+                        {data.body.offre.type !== "discovery" && (
+                          <>
+                            <li
+                              className={
+                                styles.content__flex__div__left__ul__ul__li
+                              }
+                            >
+                              <strong>Carte ajouté</strong> :{" "}
+                              {data.body.offre.hasCard
+                                ? "oui"
+                                : "non"}
+                            </li>
+                          </>
+                        )}
                       </ul>
                       <div>
                         {isMutatingDeleteOffre && (
@@ -590,8 +676,15 @@ const Content = () => {
                           className={styles.content__flex__div__left__ul__div__action}
                         >
                           {data.body.offre.type !== "unique" &&
-                            (data.body.offre.currentNumberOfMeeting === 1 || data.body.offre.currentNumberOfMeeting === 2) && (
+                            data.body.offre.currentNumberOfMeeting < 4 && (
                               <>
+                              <button className={
+                            styles.content__flex__div__left__ul__div__btn
+                          } onClick={() => {
+                            dispatch({
+                              type: "ModalUserNoShow/open"
+                            })
+                          }}>Utilisateur non present</button>
                                 <button
                                   className={
                                     styles.content__flex__div__left__ul__div__btn
@@ -650,22 +743,70 @@ const Content = () => {
                               </>
 
                             )}
-                          {data.body.offre.type !== "unique" &&
-                            data.body.offre.currentNumberOfMeeting === 3 && (
+                          {data.body.offre.type === "flash" &&
+                            data.body.offre.currentNumberOfMeeting === 4 && (
                               <>
-                                <button className={
-                                  styles.content__flex__div__left__ul__div__btn
-                                } onClick={() => {
-                                  triggerFinishDiscoveryMeeting({
-                                    id: data.body.id,
-                                    csrfToken: csrfToken
-                                  });
-                                }}>Rendez-vous terminé</button>
+                               <button className={
+                            styles.content__flex__div__left__ul__div__btn
+                          } onClick={() => {
+                            dispatch({
+                              type: "ModalUserNoShow/open"
+                            })
+                          }}>Utilisateur non present</button>
+                                {!isMutatingFinishOffreMeeting && (
+                                  <>
+                                    <button className={
+                                      styles.content__flex__div__left__ul__div__btn
+                                    } onClick={() => {
+                                      triggerFinishOffreMeeting({
+                                        id: data.body.id,
+                                        csrfToken: csrfToken
+                                      });
+                                    }}>Rendez-vous terminé</button>
+                                  </>
+                                )}
+                                {isMutatingFinishOffreMeeting && (
+                                  <>
+                                    <button
+                                      disabled
+                                      className={
+                                        styles.content__flex__div__left__ul__div__btn__load
+                                      }
+                                    >
+                                      <span
+                                        className={
+                                          styles.content__flex__div__left__ul__div__btn__load__span
+                                        }
+                                      >
+                                        Chargement
+                                      </span>
+
+                                      <div
+                                        className={
+                                          styles.content__flex__div__left__ul__div__btn__load__arc
+                                        }
+                                      >
+                                        <div
+                                          className={
+                                            styles.content__flex__div__left__ul__div__btn__load__arc__circle
+                                          }
+                                        ></div>
+                                      </div>
+                                    </button>
+                                  </>
+                                )}
                               </>
 
                             )}
                           {data.body.offre.type === "unique" && (
                             <>
+                             <button className={
+                            styles.content__flex__div__left__ul__div__btn
+                          } onClick={() => {
+                            dispatch({
+                              type: "ModalUserNoShow/open"
+                            })
+                          }}>Utilisateur non present</button>
                               {isMutatingFinishMeeting === false && (
                                 <button
                                   className={
@@ -681,7 +822,7 @@ const Content = () => {
                                     });
                                   }}
                                 >
-                                  Terminer
+                                  Finaliser RDV & Paiement
                                 </button>
                               )}
                               {isMutatingFinishMeeting === true && (
@@ -720,7 +861,7 @@ const Content = () => {
                       )}
                       {data.body.discovery === true && (
                         <div
-                          className={styles.content__flex__div__left__ul__div}
+                          className={styles.content__flex__div__left__ul__div__action}
                         >
                           <button className={
                             styles.content__flex__div__left__ul__div__btn
@@ -729,7 +870,7 @@ const Content = () => {
                               type: "ModalUserNoShow/open"
                             })
                           }}>Utilisateur non present</button>
-                          {isMutatingFinishMeeting === false && (
+                          {isMutatingFinishDiscoveryMeeting === false && (
                             <button
                               className={
                                 styles.content__flex__div__left__ul__div__btn
@@ -747,7 +888,7 @@ const Content = () => {
                               Terminer
                             </button>
                           )}
-                          {isMutatingFinishMeeting === true && (
+                          {isMutatingFinishDiscoveryMeeting === true && (
                             <>
                               <button
                                 disabled
@@ -822,12 +963,14 @@ const Content = () => {
       }
     }
   }, [
+    isMutatingFinishDiscoveryMeeting,
+    triggerFinishDiscoveryMeeting,
     isMutatingFinishOtherMeeting,
     csrfToken,
     isMutatingDeleteOffre,
-    isMutatingFinishDiscoveryMeeting,
+    isMutatingFinishOffreMeeting,
     triggerDeleteOffre,
-    triggerFinishDiscoveryMeeting,
+    triggerFinishOffreMeeting,
     triggerFinishOtherMeeting,
     data,
     datas,
@@ -869,7 +1012,7 @@ const Content = () => {
   }, [data, dispatch]); */
   useEffect(() => {
     if (data && data.status === 200) {
-      let copyOfItems: any = [...data.body.test];
+      let copyOfItems: any = [...data.body.meetingByOffre];
       dispatch({
         type: "ArrayMeetingByUser/storeData",
         payload: { datas: copyOfItems },
@@ -923,9 +1066,9 @@ const Content = () => {
       {data && data.body && (
         <>
           <ModalOffreDetail />
-          <ModalUserNoShow mutate={mutate} id={id[2]} />
+          <ModalUserNoShow mutate={mutate} id={id[2]} globalData={data} />
           <ModalCalendarTakeNextMeeting allData={allData} />
-          <ModalTakeNextMeeting offre={data.body.offre} id={data.body.id} />
+          <ModalTakeNextMeeting offre={data.body.offre} id={data.body.id} mutate={mutate} globalData={data} />
         </>
       )}
 

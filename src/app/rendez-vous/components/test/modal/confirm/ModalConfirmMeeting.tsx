@@ -46,6 +46,7 @@ const ModalConfirmMeeting = ({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
         });
+        globalMutate("/components/header/api");
         dispatch({
           type: "ModalConfirmMeetingRendezVous/close",
         });

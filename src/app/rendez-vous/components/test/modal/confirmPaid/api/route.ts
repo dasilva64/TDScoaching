@@ -39,119 +39,52 @@ export async function POST(request: NextRequest) {
           }
         );
       } else {
-        if (user.meetingId === null) {
+        if (user.offre_test!.type === "unique" && user.meetingId === null) {
           return NextResponse.json(
             {
               status: 400,
-              message: "Vous n'avez aucun rendez-vous en cours",
+              message: "Vous n'avez pas de rendez-vous en cours",
             },
             {
               status: 400,
             }
           );
-        } else {
-          const stripe = new Stripe(
-            "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f" as string, {
-            apiVersion: '2022-11-15',
-            typescript: true
-          }
+        }
+        if (user.offre_test!.type === "flash" && user.meetingId !== null) {
+          return NextResponse.json(
+            {
+              status: 400,
+              message: "Vous avez déjà un rendez-vous en cours",
+            },
+            {
+              status: 400,
+            }
           );
-          let offre = await prisma.offre_test.findUnique({
-            where: { id: user.offreId! }
-          })
-          /*let test = await prisma.user.findUnique({
-            where: {
-              id: user.id,
-            },
-            include: {
-              offre_test: true,
-              meeting_test: true,
-            },
-          }); */
-          if (offre) {
-            if (offre.sessionId) {
-              try {
-                let stripeSession = await stripe.checkout.sessions.retrieve(
-                  offre.sessionId
-                );
-                return NextResponse.json(
-                  {
-                    status: 200,
-                    url: stripeSession.url,
-                  },
-                  {
-                    status: 200,
-                  }
-                );
-              } catch (error) {
-                const offreEdit = await prisma.offre_test.update({
-                  where: {
-                    id: user.offreId!
-                  },
-                  data: {
-                    sessionId: null
-                  }
-                })
-                return NextResponse.json(
-                  {
-                    status: 404,
-                    message: "Erreur Stripe : impossible de retrouver la session de paiement",
-                  },
-                  {
-                    status: 404,
-                  }
-                );
-              }
-            }
-            let stripeSession: any;
-
+        }
+        const stripe = new Stripe(
+          "sk_test_51J9UwTBp4Rgye6f3R2h9T8ANw2bHyxrCUCAmirPjmEsTV0UETstCh93THc8FmDhNyDKvbtOBh1fxAu4Y8kSs2pwl00W9fP745f" as string, {
+          apiVersion: '2022-11-15',
+          typescript: true
+        }
+        );
+        let offre = await prisma.offre_test.findUnique({
+          where: { id: user.offreId! }
+        })
+        /*let test = await prisma.user.findUnique({
+          where: {
+            id: user.id,
+          },
+          include: {
+            offre_test: true,
+            meeting_test: true,
+          },
+        }); */
+        if (offre) {
+          /* if (offre.sessionId) {
             try {
-              stripeSession = await stripe.checkout.sessions.create({
-                line_items: [
-                  {
-                    price_data: {
-                      currency: "eur",
-                      product_data: {
-                        name: offre.type !== 'flash' ? "Rendez-vous unique" : "Offre flash",
-                        description: offre.type === "unique" ? `
-              Date: ${new Date(user.meeting_test?.startAt!).toLocaleString("fr")} - 
-              Type de coaching: ${offre.coaching}
-            ` : `
-              1er rendez-vous: ${new Date(user.meeting_test?.startAt!).toLocaleString("fr")} - 
-              Type de coaching: ${offre.coaching} - 3×1h + bilan offert
-            `,
-                      },
-
-                      unit_amount: offre.price!,
-                    },
-
-                    quantity: 1,
-                  },
-                ],
-                mode: "payment",
-                customer_email: user?.mail,
-                locale: "fr",
-                payment_intent_data: { capture_method: "manual" },
-                success_url: `https://tdscoaching.fr/redirection-vers-rendez-vous?result=success&session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: "https://tdscoaching.fr/redirection-vers-rendez-vous?result=cancel",
-              });
-            } catch {
-              return NextResponse.json({
-                status: 500,
-                message: "Erreur Stripe : impossible de créer la session de paiement"
-              }, { status: 500 });
-            }
-            try {
-              await prisma.$transaction(async (tx) => {
-                await prisma.offre_test.update({
-                  where: {
-                    id: user?.offreId!,
-                  },
-                  data: {
-                    sessionId: stripeSession.id,
-                  },
-                })
-              });
+              let stripeSession = await stripe.checkout.sessions.retrieve(
+                offre.sessionId
+              );
               return NextResponse.json(
                 {
                   status: 200,
@@ -161,30 +94,106 @@ export async function POST(request: NextRequest) {
                   status: 200,
                 }
               );
-            } catch {
+            } catch (error) {
+              const offreEdit = await prisma.offre_test.update({
+                where: {
+                  id: user.offreId!
+                },
+                data: {
+                  sessionId: null
+                }
+              })
               return NextResponse.json(
                 {
-                  status: 400,
-                  message:
-                    "Une erreur est survenue lors de la confirmation du rendez-vous, veuillez réessayer",
+                  status: 404,
+                  message: "Erreur Stripe : impossible de retrouver la session de paiement",
                 },
                 {
-                  status: 400,
+                  status: 404,
                 }
               );
             }
-          } else {
+          } */
+          let stripeSession: any;
+
+          try {
+            stripeSession = await stripe.checkout.sessions.create({
+              line_items: [
+                {
+                  price_data: {
+                    currency: "eur",
+                    product_data: {
+                      name: offre.type !== 'flash' ? "Rendez-vous unique" : "Offre flash",
+                      description: offre.type === "unique" ? `
+              Type de coaching: ${offre.coaching}
+            ` : `
+              Type de coaching: ${offre.coaching} - 3×1h + bilan offert
+            `,
+                    },
+
+                    unit_amount: offre.price!,
+                  },
+
+                  quantity: 1,
+                },
+              ],
+              mode: "payment",
+              customer_email: user?.mail,
+              locale: "fr",
+              payment_intent_data: { capture_method: "manual" },
+              success_url: `http://localhost:3000/redirection-vers-rendez-vous?result=success&session_id={CHECKOUT_SESSION_ID}`,
+              cancel_url: "http://localhost:3000/redirection-vers-rendez-vous?result=cancel",
+            });
+          } catch {
+            return NextResponse.json({
+              status: 500,
+              message: "Erreur Stripe : impossible de créer la session de paiement"
+            }, { status: 500 });
+          }
+          try {
+            await prisma.$transaction(async (tx) => {
+              /* await prisma.offre_test.update({
+                where: {
+                  id: user?.offreId!,
+                },
+                data: {
+                  sessionId: stripeSession.id,
+                },
+              }) */
+            });
             return NextResponse.json(
               {
-                status: 404,
-                message: "Aucune offre en cours, veuillez réessayer",
+                status: 200,
+                url: stripeSession.url,
               },
               {
-                status: 404,
+                status: 200,
+              }
+            );
+          } catch {
+            return NextResponse.json(
+              {
+                status: 400,
+                message:
+                  "Une erreur est survenue lors de la confirmation du rendez-vous, veuillez réessayer",
+              },
+              {
+                status: 400,
               }
             );
           }
+        } else {
+          return NextResponse.json(
+            {
+              status: 404,
+              message: "Aucune offre en cours, veuillez réessayer",
+            },
+            {
+              status: 404,
+            }
+          );
         }
+
       }
     } else {
       return NextResponse.json(

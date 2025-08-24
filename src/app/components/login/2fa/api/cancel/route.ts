@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json(
                     {
                         status: 400,
-                        type: "error",
+                        type: "expire",
                         message:
                             "Erreur lors de la double authentification, veuillez réessayer",
                     },

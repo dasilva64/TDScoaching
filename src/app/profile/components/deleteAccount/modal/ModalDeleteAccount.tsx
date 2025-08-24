@@ -17,7 +17,6 @@ const ModalDeleteAccount = ({ mutate }: any) => {
   const { csrfToken } = useSelector(
     (state: RootState) => state.csrfToken
   );
-  console.log("test")
   const router = useRouter();
   const dispatch = useDispatch<any>();
   const [inputPseudo, setInputPseudo] = useState<string>("");
@@ -35,6 +34,7 @@ const ModalDeleteAccount = ({ mutate }: any) => {
     if (data) {
       if (data.status === 200) {
         clearState();
+        //do
         mutate()
         globalMutate("/components/header/api");
         if (isMutating === false) {

@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
               })
               return { meeting, offre }
             })
-            let smtpTransport = nodemailer.createTransport({
+             /*let smtpTransport = nodemailer.createTransport({
               host: "smtp.ionos.fr",
               port: 465,
               secure: true,
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
                                       </html>`,
             };
             await smtpTransport.sendMail(mailOptions);
-            /* let mailOptionsAdmin = {
+             let mailOptionsAdmin = {
               from: "contact@tds-coachingdevie.fr",
               to: "contact@tds-coachingdevie.fr",
               subject: `[Confirmé] Rendez-vous avec ${user.firstname} ${user.lastname}`,

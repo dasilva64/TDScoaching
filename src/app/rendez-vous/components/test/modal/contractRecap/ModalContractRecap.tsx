@@ -32,7 +32,7 @@ const ModalContractRecap = ({mutate}: any) => {
         dispatch({
           type: "ModalContractRecapRendezVous/close",
         });
-
+globalMutate("/components/header/api");
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: dataConfirm.message },

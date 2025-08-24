@@ -6,16 +6,16 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useSWRMutation from "swr/mutation";
-import Image from "next/image";
+import Image from "@/app/components/image/Image";
 import {mutate as globalMutate} from "swr"
 import styles from "./ModalConfirmPaidMeeting.module.scss";
 
 const ModalConfirmPaidMeeting = ({
   mutate,
-  meeting,
+  offre,
 }: {
   mutate: any;
-  meeting: any;
+  offre: any;
 }) => {
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const { displayModalConfirmPaidMeetingRendezVous } = useSelector(
@@ -36,6 +36,7 @@ const ModalConfirmPaidMeeting = ({
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
+        reset()
         router.push(data.url);
       } else if (data.status === 400) {
         dispatch({
@@ -113,11 +114,8 @@ const ModalConfirmPaidMeeting = ({
               <h1 className={styles.deleteModal__h1}>
                 Confirmation du rendez-vous
               </h1>
-              {meeting.type === "unique" && (
-                <>
-                  <p>100€</p>
-                </>
-              )}
+              <p>Pour confirmer votre rendez-vous, vous devez payer la somme de {offre.type === "unique" ? "100€" : "300€"}</p>
+             
               <p>Êtes vous sûre de vouloir confirmer votre rendez-vous</p>
               <div className={styles.deleteModal__div}>
                 {isMutating === false && (

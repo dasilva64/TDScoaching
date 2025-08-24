@@ -9,7 +9,7 @@ import Image from "../image/Image";
 import { mutate } from "swr";
 import Input from "../input/Input";
 import TabIndex from "../tabIndex/TabIndex";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const FormLogin = () => {
   const { displayModalLogin, destinationModalLogin } = useSelector(
@@ -57,7 +57,7 @@ const FormLogin = () => {
     setErrorMessageEmail("");
     setErrorMessagePassword("");
   };
-
+const pathname = usePathname();
   const closeForm = () => {
     clearState();
     dispatch({
@@ -102,7 +102,10 @@ const FormLogin = () => {
           });
           resetLogin();
           if (destinationModalLogin === "home") {
-            router.push(`/`)
+            if (pathname !== "/") {
+               router.push(`/`)
+            }
+           
           } else if (destinationModalLogin !== "" && destinationModalLogin !== "home") {
             router.push(`/${destinationModalLogin}`)
           }
@@ -190,7 +193,7 @@ const FormLogin = () => {
         }, 1000);
       }
     }
-  }, [dispatch, emailInput, loginData, resetLogin, router]);
+  }, [dispatch, emailInput, loginData, resetLogin, router, destinationModalLogin, pathname]);
   const handlerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({

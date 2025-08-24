@@ -6,7 +6,9 @@ export interface SessionData {
   role: string;
   csrfToken: string;
   rememberMe: boolean;
-  expireTwoFa: number | null
+  expireTwoFa: number | null;
+  ip: string;
+  userAgent: string;
 }
 
 export const defaultSession: SessionData = {
@@ -15,7 +17,9 @@ export const defaultSession: SessionData = {
   role: "",
   csrfToken: "",
   rememberMe: false,
-  expireTwoFa: null
+  expireTwoFa: null,
+  ip: "",
+  userAgent: ""
 };
 
 export const sessionOptions: SessionOptions = {

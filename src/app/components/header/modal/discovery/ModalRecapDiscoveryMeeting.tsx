@@ -1,5 +1,5 @@
 import TabIndex from "@/app/components/tabIndex/TabIndex";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./ModalRecapDiscoveryMeeting.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,13 @@ const ModalRecapDiscoveryMeeting = () => {
     dateModalRecapDiscoveryMeetingHeader,
     typeModalRecapDiscoveryMeetingHeader,
   } = useSelector((state: RootState) => state.ModalRecapDiscoveryMeetingHeader);
+  const [confirmationDeadline, setConfirmationDeadline] = useState<Date | null>(null);
+  
+    useEffect(() => {
+      const deadline = new Date(dateModalRecapDiscoveryMeetingHeader);
+      deadline.setHours(deadline.getHours() - 10);
+      setConfirmationDeadline(deadline);
+    }, [dateModalRecapDiscoveryMeetingHeader]);
   return (
     <>
       <TabIndex displayModal={displayModalRecapDiscoveryMeetingHeader} />
@@ -93,13 +100,18 @@ const ModalRecapDiscoveryMeeting = () => {
                 </p>
               </div>
               <p className={styles.modal__info}>
-                Veuillez confirmer votre rendez-vous 24h avant la date du
-                rendez-vous, sinon celui ci sera supprimé automatiquement.
-              </p>
+                      <strong className={styles.modal__info__strong}>Attention</strong> : Vous avez jusqu’au {new Date(confirmationDeadline!).toLocaleString("fr-FR", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"
+                      })} pour confirmer votre rendez-vous. Passé ce délai, le rendez-vous expirera automatiquement.
+                    </p>
               <p>
                 Un mail vous a été envoyé avec les informations du rendez-vous
-                et la posibilité de le modifier ou le supprimer et également de
-                le confirmer.
+                et la posibilité de le confirmer / modifier / supprimer.
               </p>
             </motion.div>
           </>

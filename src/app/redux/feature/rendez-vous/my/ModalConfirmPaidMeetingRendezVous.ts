@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   displayModalConfirmPaidMeetingRendezVous: false,
-  dateModalConfirmPaidMeetingRendezVous: "",
 };
 
 const ModalConfirmPaidMeetingRendezVous = createSlice({
@@ -11,11 +10,9 @@ const ModalConfirmPaidMeetingRendezVous = createSlice({
   reducers: {
     open: (state, action) => {
       state.displayModalConfirmPaidMeetingRendezVous = true;
-      state.dateModalConfirmPaidMeetingRendezVous = action.payload.date;
     },
     close: (state) => {
       state.displayModalConfirmPaidMeetingRendezVous = false;
-      state.dateModalConfirmPaidMeetingRendezVous = "";
     },
   },
 });

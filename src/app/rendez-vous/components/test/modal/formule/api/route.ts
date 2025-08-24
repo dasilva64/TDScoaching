@@ -42,11 +42,25 @@ export async function POST(request: NextRequest) {
         };
         let arrayMessageError = validationBody({ formule: formule });
 
-        if (arrayMessageError.length > 0) {
+         if (arrayMessageError.length > 0) {
+          if (arrayMessageError.length === 1) {
+            if (arrayMessageError[0][0] === "unknown_fields") {
+              return NextResponse.json(
+                {
+                  status: 400,
+                  message: arrayMessageError[0][1],
+                },
+                {
+                  status: 400,
+                }
+              );
+            }
+          }
           return NextResponse.json(
             {
               status: 400,
-              message: "Une erreur est survenue, veuillez réessayer",
+              type: "validation",
+              message: arrayMessageError,
             },
             {
               status: 400,
@@ -70,7 +84,9 @@ export async function POST(request: NextRequest) {
               type: formule,
               userId: user.id,
               price: formule === "unique" ? 100 : 300,
-              status: "pending"
+              status: "pending",
+              stripeIntentId: '',
+              hasCard: false
             }
           })
           if (createOffre === null) {
@@ -97,7 +113,7 @@ export async function POST(request: NextRequest) {
                 }
               })
             })
-             let smtpTransport = nodemailer.createTransport({
+              /*let smtpTransport = nodemailer.createTransport({
               host: "smtp.ionos.fr",
               port: 465,
               secure: true,
@@ -144,7 +160,7 @@ export async function POST(request: NextRequest) {
                           </html>`,
             };
             await smtpTransport.sendMail(mailOptions);
-             /*let mailOptionsAdmin = {
+             let mailOptionsAdmin = {
               from: "contact@tds-coachingdevie.fr",
               to: "contact@tds-coachingdevie.fr",
               subject: `Nouvelle offre sélectionnée par ${user.firstname} ${user.lastname}`,

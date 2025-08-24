@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { mutate as globalMutate } from "swr";
 import { useRouter } from "next/navigation";
 
-const ModalUserNoShow = ({ mutate, id }: any) => {
+const ModalUserNoShow = ({ mutate, id, globalData }: any) => {
   const router = useRouter()
   const { csrfToken } = useSelector((state: RootState) => state.csrfToken)
   const dispatch = useDispatch()
@@ -24,8 +24,24 @@ const ModalUserNoShow = ({ mutate, id }: any) => {
   useEffect(() => {
     if (data) {
       if (data.status === 200) {
-        mutate()
+        //do
+        const { meeting, offre } = data.body;
+          mutate(
+            {
+              ...globalData,
+              body: {
+                ...globalData.body,
+                meeting,
+                offre,
+              },
+            },
+            { revalidate: false }
+          );
         reset()
+        dispatch({
+          type: "ModalUserNoShow/close"
+        })
+        globalMutate("/components/header/api");
         dispatch({
           type: "flash/storeFlashMessage",
           payload: { type: "success", flashMessage: data.message },
@@ -47,7 +63,7 @@ const ModalUserNoShow = ({ mutate, id }: any) => {
         });
       }
     }
-  }, [data, dispatch, mutate, reset, router]);
+  }, [data, dispatch, mutate, reset, router, id, globalData]);
   return (
     <>
       <TabIndex displayModal={displayModalUserNoShow} />

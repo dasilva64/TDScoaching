@@ -1,6 +1,19 @@
 .container {
-  overflow: scroll;
-}
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    &::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 1px grey;
+      border-radius: 2px;
+    }
+  }
 
 .table {
   width: 100%;
@@ -17,6 +30,7 @@
       &__th {
         border-radius: 5px;
         padding: 10px 18px;
+        min-width: 200px;
 
         &:hover {
           background-color: orange;
@@ -171,6 +185,23 @@
     background-color: black;
     border-radius: 50%;
   }
+}
+
+@media screen and (max-width: 768px) {
+  .table {
+    &__head {
+    &__tr {
+      background: aqua;
+      cursor: pointer;
+      &__th {
+        padding: 5px 7% 5px 10px;
+        text-align: left;
+                word-spacing: 2px;
+      }
+    }
+  }
+  }
+  
 }
 
 @keyframes load {

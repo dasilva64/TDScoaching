@@ -10,7 +10,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store/store";
 
-const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
+const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting, startMeet }: any) => {
   const [meetingDate, setMeetingDate] = useState<any>(null);
   const dispatch = useDispatch();
   const [error, setError] = useState<number>(0);
@@ -167,6 +167,7 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
               {isMobile === false && (
                 <>
                   <FullCalendar
+                  initialDate={startMeet}
                     ref={calendarRef}
                     locale={frLocale}
                     plugins={[timeGridPlugin, interactionPlugin]}
@@ -182,7 +183,7 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
                         click: function () {
                           if (calendarRef.current === null) return;
                           const calendarApi = calendarRef.current.getApi();
-                          calendarApi.gotoDate(meetingDate);
+                          calendarApi.gotoDate(startMeet);
                         },
                       },
                     }}
@@ -202,25 +203,36 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
                     eventStartEditable={false}
                     height={"auto"}
                     dateClick={(e) => {
-                      handleDateClick(e.dateStr);
+                      const now = new Date();
+                      const minDate = new Date(now.getTime() + 36 * 60 * 60 * 1000);
+                      if (e.date < minDate) {
+                        alert("Impossible de créer un événement avant 36h.");
+                      } else {
+                        handleDateClick(e.dateStr);
+                      }
                     }}
-                    eventDrop={(e) => {
-                      handleDateClick(e.event.start);
+                    eventAllow={(dropInfo, draggedEvent) => {
+                      const now = new Date();
+                      const minDate = new Date(now.getTime() + 36 * 60 * 60 * 1000);
+                      return dropInfo.start >= minDate;
                     }}
-                    validRange={(nowDate) => {
+                  eventDrop={(e) => {
+                    handleDateClick(e.event.start);
+                  }}
+                    /* validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
                     }}
                     visibleRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
-                    }}
+                    }} */
                     slotDuration={"01:00:00"}
                   />
                 </>
@@ -228,6 +240,7 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
               {isMobile === true && (
                 <>
                   <FullCalendar
+                  initialDate={startMeet}
                     ref={calendarRef}
                     locale={frLocale}
                     plugins={[interactionPlugin, timeGridPlugin]}
@@ -239,14 +252,11 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
                     }}
                     customButtons={{
                       myCustomButton: {
-                        text: "Aujourd'hui",
+                        text: "Mon rendez-vous",
                         click: function () {
                           if (calendarRef.current === null) return;
                           const calendarApi = calendarRef.current.getApi();
-                          let currentDate = new Date();
-                          calendarApi.gotoDate(
-                            currentDate.setDate(currentDate.getDate() + 2)
-                          );
+                          calendarApi.gotoDate(startMeet);
                         },
                       },
                     }}
@@ -269,25 +279,36 @@ const ModalCalendarEditDiscoveryMeeting = ({ token, allMeeting }: any) => {
                     selectable={false}
                     height={"auto"}
                     dateClick={(e) => {
-                      handleDateClick(e.dateStr);
+                      const now = new Date();
+                      const minDate = new Date(now.getTime() + 36 * 60 * 60 * 1000);
+                      if (e.date < minDate) {
+                        alert("Impossible de créer un événement avant 36h.");
+                      } else {
+                        handleDateClick(e.dateStr);
+                      }
                     }}
-                    eventDrop={(e) => {
-                      handleDateClick(e.event.start);
+                    eventAllow={(dropInfo, draggedEvent) => {
+                      const now = new Date();
+                      const minDate = new Date(now.getTime() + 36 * 60 * 60 * 1000);
+                      return dropInfo.start >= minDate;
                     }}
-                    validRange={(nowDate) => {
+                  eventDrop={(e) => {
+                    handleDateClick(e.event.start);
+                  }}
+                    /* validRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
                     }}
                     visibleRange={(nowDate) => {
                       var startDate = new Date(nowDate.valueOf());
-                      startDate.setDate(startDate.getDate() + 2);
+                      startDate.setTime(startDate.getTime() + 36 * 60 * 60 * 1000)
                       return {
                         start: startDate,
                       };
-                    }}
+                    }} */
                     slotDuration={"01:00:00"}
                   />
                 </>

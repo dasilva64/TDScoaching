@@ -2,18 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   displayModalCancelMeetingRendezVous: false,
-  dataModalCancelMeetingRendezVous: "",
+  typeModalCancelMeetingRendezVous: "",
 };
 
 const ModalCancelMeetingRendezVous = createSlice({
   name: "ModalCancelMeetingRendezVous",
   initialState,
   reducers: {
-    open: (state) => {
+    open: (state, action) => {
       state.displayModalCancelMeetingRendezVous = true;
+      state.typeModalCancelMeetingRendezVous = action.payload.type;
     },
     close: (state) => {
       state.displayModalCancelMeetingRendezVous = false;
+      state.typeModalCancelMeetingRendezVous = "";
     },
   },
 });

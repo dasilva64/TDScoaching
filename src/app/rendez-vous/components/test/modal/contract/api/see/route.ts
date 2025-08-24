@@ -51,12 +51,25 @@ export async function POST(request: NextRequest) {
           typeOffre: string;
         };
         let arrayMessageError = validationBody({ typeOffre: typeOffre });
-        if (arrayMessageError.length > 0) {
+         if (arrayMessageError.length > 0) {
+          if (arrayMessageError.length === 1) {
+            if (arrayMessageError[0][0] === "unknown_fields") {
+              return NextResponse.json(
+                {
+                  status: 400,
+                  message: arrayMessageError[0][1],
+                },
+                {
+                  status: 400,
+                }
+              );
+            }
+          }
           return NextResponse.json(
             {
               status: 400,
               type: "validation",
-              message: "Une erreur est survenue, veuillez réessayer",
+              message: arrayMessageError,
             },
             {
               status: 400,
@@ -111,7 +124,7 @@ export async function POST(request: NextRequest) {
           const { signedURL } = await response.json();
           const fullUrl = `${process.env.SUPABASE_BASE_URL_FETCH}${signedURL}`;
           if (user.offreId === null) {
-            const { createOffre } = await prisma.$transaction(async (tx) => {
+            /* const { createOffre } = await prisma.$transaction(async (tx) => {
               let createOffre = await prisma.offre_test.create({
                 data: {
                   type: typeOffre,
@@ -128,8 +141,8 @@ export async function POST(request: NextRequest) {
                 }
               })
               return { createOffre }
-            })
-             let smtpTransport = nodemailer.createTransport({
+            }) */
+             /*let smtpTransport = nodemailer.createTransport({
               host: "smtp.ionos.fr",
               port: 465,
               secure: true,
@@ -178,7 +191,7 @@ export async function POST(request: NextRequest) {
                             </body>
                           </html>`,
             };
-            await smtpTransport.sendMail(mailOptions);/*
+            await smtpTransport.sendMail(mailOptions);
             let mailOptionsAdmin = {
               from: "contact@tds-coachingdevie.fr",
               to: "contact@tds-coachingdevie.fr",

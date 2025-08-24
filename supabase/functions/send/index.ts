@@ -5,18 +5,20 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const supUrl = Deno.env.get("_SUPABASE_URL") as string;
-const supKey = Deno.env.get("_SUPABASE_SERVICE_KEY") as string;
+const supUrl = Deno.env.get("SUPABASE_URL") as string;
+const supKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") as string;
+const resendKey = Deno.env.get("_RESEND_API_KEY") as string
 const supabase = createClient(supUrl, supKey);
 /* const client = new SmtpClient({
   content_encoding: "quoted-printable", // 7bit, 8bit, base64, binary, quoted-printable
 }); */
 
 serve(async (req) => {
-  
-   let { data: user, error: errorMeet } = await supabase.from("User").select(`
+  let { data: user, error: errorMeet } = await supabase.from('User').select(`
     id,
     role,
+    firstname,
+    mail,
     resettoken:  resetToken->token,
     registertoken:        registerToken->token,
     resetlimite:      resetToken->limitDate,
@@ -28,8 +30,13 @@ serve(async (req) => {
     twoFAToken: twoFAToken->token,
     twoFALimit: twoFAToken->limitDate,
     meetingId,
-    meetingconfirm: meetingId(confirm),
-    meetingstart: meetingId(startAt)
+    meetingconfirm: meetingId(status),
+    meetingtoken: meetingId(token),
+    meetingstart: meetingId(startAt),
+    meetingremimdersent: meetingId(reminderSent),
+    meetingrappelsent: meetingId(rappelSent),
+    offrecoaching: offreId(coaching),
+    offretype: offreId(type)
   `);
   for (let i = 0; i < user.length; i++) {
     if (user[i].registertoken !== null) {
@@ -74,111 +81,209 @@ serve(async (req) => {
           .select();
       }
     }
-    /* if (user[i].meetingId !== null) {
-      if (user[i].meetingconfirm.confirm === false) {
-        if (new Date(user[i].meetingstart.startAt).getTime() - 24 * 60 * 60 * 1000 < new Date().getTime()) {
-          await supabase
-            .from("User")
-            .update({ meetingId: null})
-            .eq("id", user[i].id)
-            .select();
-            await supabase.from("meeting_test").delete().eq("id", user[i].meetingId);
-            await supabase
-            .from("offre_test")
-            .update({ currentMeetingId: null})
-            .eq("id", user[i].offreId)
-            .select();
-            if (user[i].password === null) {
-              await supabase.from("offre_test").delete().eq("id", user[i].offreId)
-              await supabase.from("User").delete().eq("id", user[i].id);
+    if (user[i].meetingId !== null) {
+      if (user[i].meetingconfirm.status === "not_confirmed") {
+        if (new Date(user[i].meetingstart.startAt).getTime() - 12 * 60 * 60 * 1000 < new Date().getTime()) {
+          const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fr">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>tds coaching</title>
+      </head>
+      <body>
+        <div style="width: 100%">
+          <div style="text-align: center">
+            <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
+          </div>
+          <div style="background: aqua; padding: 50px 20px; border-radius: 20px">
+            <h1 style="text-align: center">tds coaching</h1>
+            <h2 style="text-align: center">Votre rendez-vous a expiré</h2>
+            <p>Bonjour ${user[i].firstname},</p>
+            <p>Votre rendez-vous a expiré :</p>
+            <ul>
+              <li>ID du rendez-vous : ${user[i].meetingId}</li>
+              <li>Date : ${new Date(user[i].meetingstart.startAt).toLocaleDateString("fr-FR")}</li>
+              <li>Heure : ${new Date(user[i].meetingstart.startAt).toLocaleTimeString("fr-FR")}</li>
+              <li>Type : ${user[i].offretype.type === "discovery" ? "Découverte" : user[i].offretype.type[0].toUpperCase() + user[i].offretype.type.slice(1)}</li>
+              <li>Type de coaching : ${user[i].offrecoaching.coaching}</li>
+              <li>Prix : Gratuit</li>
+            </ul>
+            <p style="margin-bottom: 20px;">Vous pouvez reprendre un autre rendez-vous en cliquant sur le bouton ci-dessous</p>
+            <a href="https://tdscoaching.fr/rendez-vous" style="text-decoration: none; padding: 10px; border-radius: 10px; background: orange; color: white;">Reprendre un rendez-vous</a>
+            <p style="margin-top: 20px;">Ce message est personnel. Ne le transférez pas sans votre accord.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+          const response = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${Deno.env.get("_RESEND_API_KEY")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              from: "contact@tdscoaching.fr",
+              to: user[i].mail,
+              subject: "[Expiration] Votre rendez-vous a expiré",
+              html: htmlContent,
+            }),
+          });
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Erreur lors de l'envoi du mail avec Resend :", errorText);
+          } else {
+            if (user[i].meetingtoken.token !== null || user[i].meetingtoken.token.length > 0) {
+              await supabase.from("meeting_test").update({
+                status: "expired",
+                token: null
+              }).eq("id", user[i].meetingId);
+            } else {
+              await supabase.from("meeting_test").update({
+                status: "expired"
+              }).eq("id", user[i].meetingId);
             }
 
-        }
-      }
-    } */
-  }
-
-  /* await client.connectTLS({
-    hostname: "smtp.gmail.com",
-    port: 465,
-    username: "thomasdasilva010@gmail.com",
-    password: "zcijrlsalibfiytj",
-  });
-  try {
-    await client.send({
-      from: "thomasdasilva010@gmail.com",
-      to: "thomasdasilva010@gmail.com",
-      subject: "Lien d'accès à la réunion",
-      html: ` <div style="width: 100%">
-                <div style="text-align: center">
-                  <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
-                </div>
-                <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
-                  <h1 style="text-align: center">tds coaching</h1>
-                  <h2 style="text-align: center">Vous pouvez maintenant accèder à votre rendez-vous</h2>
-                  <p style="margin-bottom: 20px">Pour y accèder, veuillez cliquer sur le lien ci-dessous.</p>
-                  <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="http://localhost:3000" target="_blank">Mon rendez-vous</a>
-                </div>
-              </div>`,
-    });
-  } catch (error) {
-    return new Response("erreur", { status: 500 });
-  }
-
-  await client.close(); */
-  /* let { data: Meeting, error: errorMeet } = await supabase
-    .from("Meeting")
-    .select("*");
-  let current = new Date();
-  let test = current.setHours(current.getHours() + 348);
-  let ar = "";
-  Meeting.forEach((meet) => {
-    if (new Date(test) > new Date(meet.startAt)) {
-      if (meet.link === null) {
-        async function updateMeeting() {
-          const { data, error: errorMeet } = await supabase
-            .from("Meeting")
-            .update({ link: "http://localhost:3000" })
-            .eq("id", meet.id);
-
-          let { data: User, error: errorUser } = await supabase
-            .from("User")
-            .select("*")
-            .eq("id", meet.userId);
-
-          await client.connectTLS({
-            hostname: "smtp.gmail.com",
-            port: 465,
-            username: Deno.env.get("_SECRET_SMTP_EMAIL"),
-            password: Deno.env.get("_SECRET_SMTP_PASSWORD"),
-          });
-          try {
-            await client.send({
-              from: "thomasdasilva010@gmail.com",
-              to: "thomasdasilva010@gmail.com",
-              subject: "Lien d'accès à la réunion",
-              html: ` <div style="width: 100%">
-                        <div style="text-align: center">
-                          <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
-                        </div>
-                        <div style="text-align: center; background: aqua; padding: 50px 0px; border-radius: 20px">
-                          <h1 style="text-align: center">tds coaching</h1>
-                          <h2 style="text-align: center">Vous pouvez maintenant accèder à votre rendez-vous</h2>
-                          <p style="margin-bottom: 20px">Pour y accèder, veuillez cliquer sur le lien ci-dessous.</p>
-                          <a style="text-decoration: none; padding: 10px; border-radius: 10px; cursor: pointer; background: orange; color: white" href="http://localhost:3000" target="_blank">Mon rendez-vous</a>
-                        </div>
-                      </div>`,
-            });
-          } catch (error) {
-            return new Response(error.message, { status: 500 });
           }
 
-          await client.close();
+
         }
-        updateMeeting();
+        if (new Date(user[i].meetingstart.startAt).getTime() - 24 * 60 * 60 * 1000 < new Date().getTime()) {
+          if (user[i].meetingremimdersent.reminderSent === false) {
+            const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fr">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>tds coaching</title>
+      </head>
+      <body>
+        <div style="width: 100%">
+          <div style="text-align: center">
+            <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
+          </div>
+          <div style="background: aqua; padding: 50px 20px; border-radius: 20px">
+            <h1 style="text-align: center">tds coaching</h1>
+            <h2 style="text-align: center">Rappel important – confirmation requise</h2>
+            <p>Bonjour ${user[i].firstname},</p>
+            <p>Votre rendez-vous approche et <strong>nécessite une confirmation avant expiration</strong> :</p>
+            <ul>
+              <li>ID du rendez-vous : ${user[i].meetingId}</li>
+              <li>Date : ${new Date(user[i].meetingstart.startAt).toLocaleDateString("fr-FR")}</li>
+              <li>Heure : ${new Date(user[i].meetingstart.startAt).toLocaleTimeString("fr-FR")}</li>
+              <li>Type : ${user[i].offretype.type === "discovery" ? "Découverte" : user[i].offretype.type[0].toUpperCase() + user[i].offretype.type.slice(1)}</li>
+              <li>Type de coaching : ${user[i].offrecoaching.coaching}</li>
+              <li>Prix : Gratuit</li>
+            </ul>
+            <p style="margin-bottom: 20px; color: red;"><strong>⚠️ Merci de confirmer votre présence au plus tard 12h avant le rendez-vous.</strong></p>
+            <p>Pour cela, cliquez ci-dessous :</p>
+            <a href="https://tdscoaching.fr/rendez-vous" style="text-decoration: none; padding: 10px; border-radius: 10px; background: orange; color: white;">Confirmer mon rendez-vous</a>
+            <p style="margin-top: 20px;">Ce message est personnel. Ne le transférez pas sans votre accord.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+            const response = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${Deno.env.get("_RESEND_API_KEY")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                from: "contact@tdscoaching.fr",
+                to: user[i].mail,
+                subject: "[Rappel] Confirmation requise de votre rendez-vous",
+                html: htmlContent,
+              }),
+            });
+            if (!response.ok) {
+              const errorText = await response.text();
+              console.error("Erreur lors de l'envoi du mail avec Resend :", errorText);
+            } else {
+              await supabase.from("meeting_test").update({
+                reminderSent: true
+              }).eq("id", user[i].meetingId);
+            }
+
+          }
+
+        }
       }
+      if (user[i].meetingconfirm.status === "confirmed") {
+        if (new Date(user[i].meetingstart.startAt).getTime() - 6 * 60 * 60 * 1000 < new Date().getTime()) {
+          if (user[i].meetingrappelsent.rappelSent === false) {
+            const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fr">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>tds coaching</title>
+      </head>
+      <body>
+        <div style="width: 100%">
+          <div style="text-align: center">
+            <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
+          </div>
+          <div style="background: aqua; padding: 50px 20px; border-radius: 20px">
+            <h1 style="text-align: center">tds coaching</h1>
+            <h2 style="text-align: center">Lien de la visioconférence</h2>
+            <p>Bonjour ${user[i].firstname},</p>
+            <p>Votre rendez-vous approche :</p>
+            <ul>
+              <li>ID du rendez-vous : ${user[i].meetingId}</li>
+              <li>Date : ${new Date(user[i].meetingstart.startAt).toLocaleDateString("fr-FR")}</li>
+              <li>Heure : ${new Date(user[i].meetingstart.startAt).toLocaleTimeString("fr-FR")}</li>
+              <li>Type : ${user[i].offretype.type === "discovery" ? "Découverte" : user[i].offretype.type[0].toUpperCase() + user[i].offretype.type.slice(1)}</li>
+              <li>Type de coaching : ${user[i].offrecoaching.coaching}</li>
+              <li>Prix : Gratuit</li>
+            </ul>
+            <p>Le lien de la visioconférence a été générer, pour y accèder veuillez cliquer sur le bouton ci-dessous</p>
+            <a href="https://tdscoaching.fr/rendez-vous" style="margin-bottom: 10px; text-decoration: none; padding: 10px; border-radius: 10px; background: orange; color: white;">Lien de la visioconférence</a>
+            <p>Vous pouvez voir les détail de votre rendez-vous en cliquant sur le bouton ci-dessous</p>
+            <a href="https://tdscoaching.fr/rendez-vous" style="text-decoration: none; padding: 10px; border-radius: 10px; background: orange; color: white;">Mon rendez-vous</a>
+            <p style="margin-top: 20px;">Ce message est personnel. Ne le transférez pas sans votre accord.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+            const response = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${Deno.env.get("_RESEND_API_KEY")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                from: "contact@tdscoaching.fr",
+                to: user[i].mail,
+                subject: "[Rappel] Lien de la visioconférence de votre rendez-vous",
+                html: htmlContent,
+              }),
+            });
+            if (!response.ok) {
+              const errorText = await response.text();
+              console.error("Erreur lors de l'envoi du mail avec Resend :", errorText);
+            } else {
+              await supabase.from("meeting_test").update({
+                rappelSent: true
+              }).eq("id", user[i].meetingId);
+            }
+
+          }
+
+        }
+      }
+
     }
-  }); */
+  }
   const { name } = await req.json();
   let data = { message: `Hello good` };
   return new Response(JSON.stringify(data), {

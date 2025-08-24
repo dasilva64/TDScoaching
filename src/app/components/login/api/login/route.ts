@@ -17,7 +17,6 @@ import { checkRateLimitShort } from "@/app/lib/rateLimiter";
 export async function POST(request: NextRequest) {
   try {
     const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-login');
-    console.log(rateLimitResponse)
     if (rateLimitResponse) return rateLimitResponse;
     const session = await getIronSession<SessionData>(
       cookies(),
@@ -63,18 +62,31 @@ export async function POST(request: NextRequest) {
         password: password,
         remember: remember
       });
-      if (arrayMessageError.length > 0) {
-        return NextResponse.json(
-          {
-            status: 400,
-            type: "validation",
-            message: arrayMessageError,
-          },
-          {
-            status: 400,
+       if (arrayMessageError.length > 0) {
+          if (arrayMessageError.length === 1) {
+            if (arrayMessageError[0][0] === "unknown_fields") {
+              return NextResponse.json(
+                {
+                  status: 400,
+                  message: arrayMessageError[0][1],
+                },
+                {
+                  status: 400,
+                }
+              );
+            }
           }
-        );
-      }
+          return NextResponse.json(
+            {
+              status: 400,
+              type: "validation",
+              message: arrayMessageError,
+            },
+            {
+              status: 400,
+            }
+          );
+        }
       if (pseudo.trim() !== "") {
         return NextResponse.json(
           {
@@ -158,7 +170,7 @@ export async function POST(request: NextRequest) {
                 session.id = user.id;
                 session.csrfToken = csrfToken;
                 session.rememberMe = remember
-                const expireIn = Date.now() + 5 * 60 * 1000;
+                const expireIn = Date.now() + 15 * 60 * 1000;
                 session.expireTwoFa = expireIn
                 if (remember) {
                   session.updateConfig({
@@ -224,7 +236,7 @@ export async function POST(request: NextRequest) {
                     twoFAToken: twoFATokenObject
                   }
                 })
-                /* let smtpTransport = nodemailer.createTransport({
+                let smtpTransport = nodemailer.createTransport({
                   host: "smtp.ionos.fr",
                   port: 465,
                   secure: true,
@@ -263,7 +275,7 @@ export async function POST(request: NextRequest) {
                                           </body>
                                         </html>`,
                 };
-                await smtpTransport.sendMail(mailOptions); */
+                await smtpTransport.sendMail(mailOptions);
                 await session.save();
                 return NextResponse.json({
                   status: 200,

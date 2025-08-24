@@ -40,6 +40,13 @@ export async function POST(request: NextRequest) {
       const user = await prisma.user.findUnique({
         where: {
           mail: decodeToken.user
+        },
+        select: {
+          meeting_test: true,
+          offreId: true,
+          id: true,
+          password: true,
+          meetingId: true
         }
       })
       if (user === null) {
@@ -53,34 +60,56 @@ export async function POST(request: NextRequest) {
           }
         );
       }
+      let currentDate = new Date()
+      if (new Date(user.meeting_test!.startAt).getTime() < currentDate.setHours(currentDate.getHours() + 5)) {
+        return NextResponse.json(
+          {
+            status: 400,
+            message: "Vous ne pouvez plus supprimer votre rendez-vous, veuillez nous contacter",
+          },
+          {
+            status: 400,
+          }
+        );
+      }
       try {
-        await prisma.$transaction(async (tx) => {
-          if (!user.password) {
+        if (!user.password) {
+          await prisma.$transaction(async (tx) => {
             await prisma.meeting_test.delete({
               where: { id: user.meetingId! }
             })
             await prisma.offre_test.delete({
               where: { id: user.offreId! }
             })
+            await prisma.userAgreement.delete({
+              where: { userId: user.id }
+            })
             await prisma.user.delete({
               where: { id: user.id }
             })
-          } else {
-            await prisma.meeting_test.delete({
-              where: { id: user.meetingId! }
-            })
-          }
-        })
-        return NextResponse.json(
-          {
-            status: 200,
-            message: "Le rendez-vous a bien été supprimé, vous pouvez reprendre un rendez-vous de découverte",
-          },
-          {
-            status: 200,
-          }
-        );
-      } catch {
+          })
+          return NextResponse.json(
+            {
+              status: 200,
+              message: "Le rendez-vous a bien été supprimé, vous pouvez reprendre un rendez-vous de découverte",
+            },
+            {
+              status: 200,
+            }
+          );
+        } else {
+          return NextResponse.json(
+            {
+              status: 400,
+              message: "Vous ne pouvez pas supprimer votre rendez-vous, veuillez réessayer",
+            },
+            {
+              status: 400,
+            }
+          );
+        }
+
+      } catch (error) {
         return NextResponse.json(
           {
             status: 400,

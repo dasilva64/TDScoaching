@@ -25,18 +25,22 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
     setPseudo("");
     dispatch({ type: "ModalAddPaidMeetingRendezVous/close" });
   };
+  const {
+    displayModalAddPaidMeetingRendezVous,
+    dateModalAddPaidMeetingRendezVous,
+  } = useSelector((state: RootState) => state.ModalAddPaidMeetingRendezVous);
+
   const openCalendar = () => {
     setTypeCoaching("");
     setTypeCoachingErrorMessage("");
     setTypeCoachingValid(false);
     setPseudo("");
     dispatch({ type: "ModalAddPaidMeetingRendezVous/close" });
-    dispatch({ type: "ModalCalendarAddMeetingRendezVous/open" });
+    dispatch({
+      type: "ModalCalendarAddMeetingRendezVous/open",
+
+    });
   };
-  const {
-    displayModalAddPaidMeetingRendezVous,
-    dateModalAddPaidMeetingRendezVous,
-  } = useSelector((state: RootState) => state.ModalAddPaidMeetingRendezVous);
 
   const handleChange = (e: any) => {
     setTypeCoaching(e.target.value);
@@ -50,7 +54,7 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
   };
   const router = useRouter();
   const { trigger, data, reset, isMutating } = useSWRMutation(
-    "/rendez-vous/components/test/modal/add/paid/api/",
+    "/rendez-vous/components/test/modal/add/paid/unique/api/",
     fetchPost
   );
   useEffect(() => {
@@ -67,6 +71,7 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
           data.message.forEach((element: string) => {
             if (element[0] === "typeCoaching") {
               setTypeCoachingErrorMessage(element[1]);
+              setTypeCoachingValid(false);
             }
             if (element[0] === "start") {
               dispatch({
@@ -104,7 +109,7 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
         reset();
       }
     }
-    
+
   }, [data, dispatch, mutate, reset, router]);
   return (
     <>
@@ -163,10 +168,7 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
                 <p className={styles.modalAddDiscovery__rappel__p}>
                   <span className={styles.modalAddDiscovery__rappel__p__strong}>Type de l&apos;offre :&nbsp;</span>
 
-                  {offre.type !== "discovery"
-                    ? String(offre.type).charAt(0).toLocaleUpperCase() +
-                    String(offre.type).slice(1)
-                    : "Découverte"}
+                  
                 </p>
                 <p className={styles.modalAddDiscovery__rappel__p}>
                   <span className={styles.modalAddDiscovery__rappel__p__strong}>Date du rendez-vous :&nbsp;</span>
@@ -188,23 +190,15 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
                 </p>
                 <p className={styles.modalAddDiscovery__rappel__p}>
                   <span className={styles.modalAddDiscovery__rappel__p__strong}>Durée du rendez-vous :&nbsp;</span>
-                  {["unique", "discovery"].includes(offre.type)
-                    ? "1h"
-                    : (offre.type === "flash"
-                      ? "3 × 1h (séances individuelles)"
-                      : "1h")}
+                  
                 </p>
 
                 <p className={styles.modalAddDiscovery__rappel__p}>
                   <span className={styles.modalAddDiscovery__rappel__p__strong}>Tarif :&nbsp;</span>
-                  {offre.type === "discovery" ? "Gratuit" : offre.type === "unique" ? "100€" : "300€"}
                 </p>
                 <p className={styles.modalAddDiscovery__rappel__p}>
                   <span className={styles.modalAddDiscovery__rappel__p__strong}>Rendez-vous en cours :&nbsp;</span>
-                  {offre.currentNumberOfMeeting === null
-                    ? 0
-                    : offre.currentNumberOfMeeting}
-                  /{offre.type === "discovery" ? "1" : offre.type === "flash" ? "3" : "1"}
+                  0
                 </p>
               </div>
               <p className={styles.modalAddDiscovery__choose}>
@@ -219,7 +213,7 @@ const ModalAddPaidMeeting = ({ mutate, discovery, offre }: any) => {
                         typeCoaching: typeCoaching,
                         start: dateModalAddPaidMeetingRendezVous,
                         csrfToken: csrfToken,
-                        pseudo: pseudo
+                        pseudo: pseudo,
                       });
                     }
                     e.preventDefault();

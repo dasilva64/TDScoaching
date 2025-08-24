@@ -144,10 +144,10 @@
         width: 100%;
         position: relative;
         &__select {
-          /* -webkit-appearance: none;
-              -moz-appearance: none;
-              appearance: none;
-              padding: 5px;*/
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          border-radius: 0px;
           font: inherit;
           position: relative;
           z-index: 2;

@@ -17,7 +17,7 @@ const TwoFADataLoad = () => {
           width="20"
           height="20"
           priority={true}
-          src={"/assets/icone/user-solid.svg"}
+          src={"/assets/icone/2fa.png"}
           alt="bousole"
         />
         <div className={styles.card__info}>

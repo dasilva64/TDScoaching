@@ -8,7 +8,7 @@ const ModalCalendarAddMeetingRendezVous = createSlice({
   name: "ModalCalendarAddMeetingRendezVous",
   initialState,
   reducers: {
-    open: (state) => {
+    open: (state, action) => {
       state.displayModalCalendarAddMeetingRendezVous = true;
     },
     close: (state) => {

@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         }
       );
     } else {
-      const { email, password, passwordComfirm, firstname, lastname, pseudo } =
+      const { email, password, passwordComfirm, firstname, lastname, pseudo, majorInput, cguInput, cgvInput } =
         (await request.json()) as {
           email: string;
           password: string;
@@ -61,6 +61,9 @@ export async function POST(request: NextRequest) {
           firstname: string;
           lastname: string;
           pseudo: string;
+          majorInput: boolean;
+          cguInput: boolean
+          cgvInput: boolean
         };
 
       let arrayMessageError = validationBody({
@@ -68,8 +71,24 @@ export async function POST(request: NextRequest) {
         password: password,
         firstname: firstname,
         lastname: lastname,
+        majorInput: majorInput,
+        cguInput: cguInput,
+        cgvInput: cgvInput
       });
       if (arrayMessageError.length > 0) {
+        if (arrayMessageError.length === 1) {
+          if (arrayMessageError[0][0] === "unknown_fields") {
+            return NextResponse.json(
+              {
+                status: 400,
+                message: arrayMessageError[0][1],
+              },
+              {
+                status: 400,
+              }
+            );
+          }
+        }
         return NextResponse.json(
           {
             status: 400,
@@ -127,19 +146,31 @@ export async function POST(request: NextRequest) {
           let UserCreate = await prisma.user.create({
             data: {
               mail: email.trim(),
+              saveCard: false,
               firstname: firstname.trim(),
               lastname: lastname.trim(),
               password: encrypt,
               status: false,
               registerToken: registerTokenObject,
               role: "ROLE_USER",
+              isMajor: true
             },
           });
+          let userAgreements = await prisma.userAgreement.create({
+            data: {
+              userId: UserCreate.id,
+              acceptedCGUAt: currentDate,
+              acceptedCGU: true,
+              acceptedCGV: true,
+              acceptedCGVAt: currentDate
+            }
+          })
           const OffreCreate = await prisma.offre_test.create({
             data: {
               type: "discovery",
               userId: UserCreate.id,
-              status: "pending"
+              status: "pending",
+              hasCard: true
             }
           })
           const UserEdit = await prisma.user.update({
@@ -232,19 +263,31 @@ export async function POST(request: NextRequest) {
                 let UserCreate = await prisma.user.create({
                   data: {
                     mail: email.trim(),
+                    saveCard: false,
                     firstname: firstname.trim(),
                     lastname: lastname.trim(),
                     password: encrypt,
                     status: false,
                     registerToken: registerTokenObject,
                     role: "ROLE_USER",
+                    isMajor: true
                   },
                 });
+                let userAgreements = await prisma.userAgreement.create({
+                  data: {
+                    userId: UserCreate.id,
+                    acceptedCGUAt: currentDate,
+                    acceptedCGU: true,
+                    acceptedCGV: true,
+                    acceptedCGVAt: currentDate
+                  }
+                })
                 const OffreCreate = await prisma.offre_test.create({
                   data: {
                     type: "discovery",
                     userId: UserCreate.id,
-                    status: "pending"
+                    status: "pending",
+                    hasCard: true
                   }
                 })
                 const UserEdit = await prisma.user.update({
@@ -351,6 +394,15 @@ export async function POST(request: NextRequest) {
                   role: "ROLE_USER",
                 }
               })
+              let userAgreements = await prisma.userAgreement.create({
+                  data: {
+                    userId: editUser.id,
+                    acceptedCGUAt: currentDate,
+                    acceptedCGU: true,
+                    acceptedCGV: true,
+                    acceptedCGVAt: currentDate
+                  }
+                })
               if (editUser === null) {
                 return NextResponse.json(
                   {

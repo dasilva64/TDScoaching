@@ -1,9 +1,47 @@
 import Image from "@/app/components/image/Image";
 import styles from "./FormuleNotConfirm.module.scss"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import fetchPost from "@/app/components/fetch/FetchPost";
+import { mutate as globalMutate } from "swr"
+import { useEffect } from "react";
+import useSWRMutation from "swr/mutation";
+import { useRouter } from "next/navigation";
+import { RootState } from "@/app/redux/store/store";
 
 const FormuleNotConfirm = ({ offre }: any) => {
     const dispatch = useDispatch()
+    const router = useRouter()
+    const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
+    const { data: dataSee, trigger: triggerSee, reset: resetSee, isMutating: isMutatingSee } = useSWRMutation("/rendez-vous/components/test/api/take/see", fetchPost)
+    useEffect(() => {
+        if (dataSee) {
+            if (dataSee.status === 200) {
+                resetSee();
+                window.open(dataSee.body, '_ blank')
+            } else if (dataSee.status === 401) {
+                dispatch({
+                    type: "flash/storeFlashMessage",
+                    payload: {
+                        type: "error",
+                        flashMessage: dataSee.message,
+                    },
+                });
+                resetSee();
+                globalMutate("/components/header/api");
+                globalMutate("/components/header/ui/api");
+                router.push(`/acces-refuse?destination=rendez-vous`)
+            } else {
+                resetSee();
+                dispatch({
+                    type: "flash/storeFlashMessage",
+                    payload: {
+                        type: "error",
+                        flashMessage: dataSee.message,
+                    },
+                });
+            }
+        }
+    }, [dataSee, dispatch, resetSee, router])
     return (
         <>
             <div className={styles.container}>
@@ -88,36 +126,89 @@ const FormuleNotConfirm = ({ offre }: any) => {
                                 <p className={styles.formule__card__price}>Prix sur demande</p>
                             </>
                         )}
+                        <div className={styles.formule__card__action}>
+                            {!isMutatingSee && (
+                                <button
+                                    className={styles.formule__card__action__btn}
+                                    onClick={() => {
+                                        const fetchContract = async () => {
+                                            triggerSee({
+                                                csrfToken: csrfToken
+                                            })
+                                        }
+                                        fetchContract()
+                                    }}
+                                >
+                                    Consulter le contrat de prestation
+                                </button>
+                            )}
+                            {isMutatingSee && (
+                                <button
+                                    disabled
+                                    className={
+                                        styles.formule__card__action__btn__load
+                                    }
+                                >
+                                    <span
+                                        className={
+                                            styles.formule__card__action__btn__load__span
+                                        }
+                                    >
+                                        Chargement
+                                    </span>
 
+                                    <div
+                                        className={
+                                            styles.formule__card__action__btn__load__arc
+                                        }
+                                    >
+                                        <div
+                                            className={
+                                                styles.formule__card__action__btn__load__arc__circle
+                                            }
+                                        ></div>
+                                    </div>
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
-                <p> Souhaitez-vous reprendre là où vous en étiez
+                <p> Souhaitez-vous confirmer votre offre
                     ?</p>
                 <div className={styles.actions}>
                     <button className={styles.actions__reprendre} onClick={async () => {
-                        if (offre.contract_status === "GENERATED_NAME_ONLY") {
-                            dispatch({
-                                type: "ModalContractRendezVous/open",
-                                payload: {
-                                    type: offre.type,
-                                    statut: "reprendre"
-                                },
-                            });
-                        } else if (offre.contract_status === "SIGNED")
-                            dispatch({
-                                type: "ModalContractRecapRendezVous/open",
-                                payload: {
-                                    type: offre.type,
-                                },
-                            });
-                    }}>Reprendre</button>
+                        /*  if (offre.contract_status === "GENERATED_NAME_ONLY") {
+                             dispatch({
+                                 type: "ModalContractRendezVous/open",
+                                 payload: {
+                                     type: offre.type,
+                                     statut: "reprendre"
+                                 },
+                             });
+                         } else if (offre.contract_status === "SIGNED")
+                             dispatch({
+                                 type: "ModalContractRecapRendezVous/open",
+                                 payload: {
+                                     type: offre.type,
+                                 },
+                             }); */
+                        dispatch({
+                            type: "ModalConfirmPaidMeetingRendezVous/open",
+                        });
+                    }}>Oui, confirmer</button>
                     <button className={styles.actions__annule} onClick={() => {
                         dispatch({
                             type: "ModalFormuleEditRendezVous/open",
                             payload: { id: offre.id },
                         });
-                    }}>Changer d&apos;offre</button>
+                    }}>Non, changer d&apos;offre</button>
                 </div>
+                {/*  <p onClick={() => {
+                    dispatch({
+                      type: "ModalHelpPaiementRendezVous/open"
+                    })
+
+                  }} className={styles.actions__help}>Information sur le paiement</p> */}
             </div>
 
         </>

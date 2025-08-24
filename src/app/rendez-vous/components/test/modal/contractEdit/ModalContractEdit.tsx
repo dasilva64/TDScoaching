@@ -23,6 +23,7 @@ const ModalContractEdit = ({mutate}: any) => {
         dispatch({
           type: "ModalContractEditRendezVous/close"
         })
+        globalMutate("/components/header/api");
         dispatch({
           type: "ModalContractRendezVous/open",
           payload: {

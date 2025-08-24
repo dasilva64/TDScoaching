@@ -27,18 +27,31 @@ export async function POST(request: NextRequest) {
     start: start,
     typeCoaching: typeCoaching,
   });
-  if (arrayMessageError.length > 0) {
-    return NextResponse.json(
-      {
-        status: 400,
-        type: "validation",
-        message: "Une erreur est survenue lors de la modification du rendez-vous, veuillez réessayer",
-      },
-      {
-        status: 400,
-      }
-    );
-  } else {
+   if (arrayMessageError.length > 0) {
+          if (arrayMessageError.length === 1) {
+            if (arrayMessageError[0][0] === "unknown_fields") {
+              return NextResponse.json(
+                {
+                  status: 400,
+                  message: arrayMessageError[0][1],
+                },
+                {
+                  status: 400,
+                }
+              );
+            }
+          }
+          return NextResponse.json(
+            {
+              status: 400,
+              type: "validation",
+              message: arrayMessageError,
+            },
+            {
+              status: 400,
+            }
+          );
+        } else {
     if (token === null) {
       return NextResponse.json(
         {
@@ -67,10 +80,27 @@ export async function POST(request: NextRequest) {
             }
           );
         } else {
+          let currentDate = new Date()
+              if (date.getTime() < currentDate.setHours(currentDate.getHours() + 36)) {
+                return NextResponse.json(
+                  {
+                    status: 400,
+                    message: "Veuillez sélectionner une date située au-delà des prochaines 36 heures",
+                  },
+                  {
+                    status: 400,
+                  }
+                );
+              }
           try {
             const user = await prisma.user.findUnique({
               where: {
                 mail: decodeToken.user
+              },
+              select: {
+                meeting_test: true,
+                meetingId: true,
+                offreId: true
               }
             })
             if (user === null) {
@@ -84,23 +114,39 @@ export async function POST(request: NextRequest) {
                 }
               );
             }
-            await prisma.$transaction(async (tx) => {
-              await prisma.meeting_test.update({
+            if (new Date(user.meeting_test!.startAt).getTime() < currentDate.setHours(currentDate.getHours() + 5)) {
+                return NextResponse.json(
+                  {
+                    status: 400,
+                    message: "Vous ne pouvez plus modifier votre rendez-vous, veuillez nous contacter",
+                  },
+                  {
+                    status: 400,
+                  }
+                );
+              }
+            const {meeting, offre} = await prisma.$transaction(async (tx) => {
+              let meeting = await prisma.meeting_test.update({
                 where: { id: user.meetingId! },
                 data: {
                   startAt: start,
                 },
               });
-              await prisma.offre_test.update({
+              let offre = await prisma.offre_test.update({
                 where: { id: user.offreId! },
                 data: {
                   coaching: typeCoaching
                 }
               })
+              return {meeting, offre}
             })
             return NextResponse.json(
               {
                 status: 200,
+                body: {
+                  meeting,
+                  offre
+                },
                 message: "Le rendez-vous a bien été modifié",
               },
               {

@@ -1,4 +1,3 @@
-import fetchPost from "@/app/components/fetch/FetchPost";
 import TabIndex from "@/app/components/tabIndex/TabIndex";
 import { RootState, AppDispatch } from "@/app/redux/store/store";
 import { AnimatePresence, motion } from "framer-motion";
@@ -21,7 +20,7 @@ const ModalOffreDetail = () => {
   const [keyAr, setKeyAr] = useState<string[]>([]);
   useEffect(() => {
     if (meetingModalOffreDetail && meetingModalOffreDetail.meetings.length > 0) {
-      setKeyAr(["Status", "Début", "Rdv dans l’offre"]);
+      setKeyAr(["Status", "Début", "Rdv dans l’offre", "Status du paiement"]);
     }
   }, [meetingModalOffreDetail]);
   return (
@@ -119,12 +118,17 @@ const ModalOffreDetail = () => {
                                           )}
                                           {key === "Status" && (
                                             <>
-                                              {data["status"] === "pending" ? "En cours" : data["status"] === "confirmed" ? "Confirmé" : data["status"] === "completed" ? "Terminé" : "Erreur"}
+                                              {data["status"] === "pending" ? "En cours" : data["status"] === "confirmed" ? "Confirmé" : data["status"] === "completed" ? "Terminé" : data['status'] === "not_confirmed" ? "Pas confirmé" : data['status'] === "cancelled" ? "Annulé" : data['status'] === "expired" ? "Expiré" : "Absent"}
                                             </>
                                           )}
-                                          {key === "Rdv dans l’offre" && (
+                                           {key === "Rdv dans l’offre" && (
                                             <>
-                                              {data["numberOfMeeting"]} / {meetingModalOffreDetail["Type de l'offre"].toUpperCase() === "UNIQUE" ? 1 : 3}
+                                              {data["numberOfMeeting"]} / {["Découverte", 'Unique'].includes(meetingModalOffreDetail["Type de l'offre"]) ? 1 : 4}
+                                            </>
+                                          )}
+                                          {key === "Status du paiement" && (
+                                            <>
+                                              {data["status_payment"] === "pending" ? "En attente" : data["status_payment"] === "success" ? "Payé" : data["status_payment"] === "not_paid" ? "Pas payé" : data["status_payment"] === "free" ? "Gratuit" : "Erreur"}
                                             </>
                                           )}
                                         </div>

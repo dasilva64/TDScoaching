@@ -12,8 +12,6 @@ import { handleError } from "@/app/lib/handleError";
 import { Resend } from "resend";
 import { EmailTemplate } from "@/app/components/resend/template/test/EmailTemplate";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: NextRequest) {
   try {
     const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-meet-add-paid');

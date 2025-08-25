@@ -37,11 +37,13 @@ export async function POST(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET!, {
     apiVersion: '2022-11-15',
   });
-
+  console.log("Stripe", "ok")
   let event;
   try {
     event = stripe.webhooks.constructEvent(body, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
+    console.log("event", "good")
   } catch (err) {
+    console.log("event", "fail")
     return new Response('Webhook signature verification failed', { status: 400 });
   }
   console.log(event)

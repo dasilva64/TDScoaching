@@ -53,7 +53,6 @@ const Display = () => {
   const [options, setOptions] = useState<any>(null)
   useEffect(() => {
     if (secretModalAddCardStripe !== "") {
-      console.log(secretModalAddCardStripe)
       setOptions({
         clientSecret: secretModalAddCardStripe, // 👈 obligatoire pour PaymentElement
         appearance: {
@@ -158,7 +157,6 @@ const Display = () => {
                   <>
                     {options !== null && (
                       <>
-                        {console.log("options", options)}
                         <Elements stripe={stripePromise} options={options}>
                           <ModalAddCardStripeUnique />
                         </Elements>
@@ -182,7 +180,6 @@ const Display = () => {
                   <>
                     {options !== null && (
                       <>
-                        {console.log("options", options)}
                         <Elements stripe={stripePromise} options={options}>
                           <ModalAddCardStripeUnique />
                         </Elements>
@@ -363,3 +360,5 @@ const Display = () => {
 };
 
 export default Display;
+
+//seti_1S03QVBp4Rgye6f3jBxhftX1

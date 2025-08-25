@@ -3,7 +3,6 @@ import Stripe from "stripe";
 import prisma from "@/app/lib/prisma";
 
 export async function GET() {
-  console.log("Stripe webhook endpoint. Use POST.")
   return NextResponse.json(
     {
       status: 200,
@@ -17,10 +16,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  console.log("call webhook")
   const body = await req.text();
   const sig = req.headers.get('stripe-signature');
-  console.log("sig", sig)
   if (!sig) {
 
     return NextResponse.json(
@@ -37,17 +34,12 @@ export async function POST(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET!, {
     apiVersion: '2022-11-15',
   });
-  console.log("Stripe", "ok")
   let event;
   try {
     event = stripe.webhooks.constructEvent(body, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
-    console.log("event", "good")
   } catch (err) {
-    console.log("event", "fail")
     return new Response('Webhook signature verification failed', { status: 400 });
   }
-  console.log(event)
-  console.log(event.type)
   if (event.type === 'setup_intent.succeeded') {
     const setupIntent: any = event.data.object;
     const userId = setupIntent.metadata?.userId; // à ajouter lors de la création du setupIntent

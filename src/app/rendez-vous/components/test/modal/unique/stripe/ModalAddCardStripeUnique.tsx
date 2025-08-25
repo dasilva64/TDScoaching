@@ -10,7 +10,6 @@ import Link from "next/link";
 
 const ModalAddCardStripeUnique = () => {
     const { secretModalAddCardStripe } = useSelector((state: RootState) => state.ModalAddCardStripe)
-    console.log('secretModalAddCardStripe', secretModalAddCardStripe)
     const stripe = useStripe();
     const elements = useElements();
     const isStripeReady = stripe && elements;

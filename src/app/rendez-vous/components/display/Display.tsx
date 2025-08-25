@@ -158,7 +158,7 @@ const Display = () => {
                   <>
                     {options !== null && (
                       <>
-
+                        {console.log("options", options)}
                         <Elements stripe={stripePromise} options={options}>
                           <ModalAddCardStripeUnique />
                         </Elements>
@@ -178,17 +178,23 @@ const Display = () => {
                 <ModalCalendarEditMeetingUnique allData={allData} startMeet={userData.body.meeting.startAt} />
                 <ModalCancelMeetingUnique mutate={mutate} offre={userData.body.offre} userData={userData} />
                 <ModalHelpSaveCardGlobal />
-                {options !== null && (
+                {displayModalAddCardStripe && (
                   <>
-
-                    <Elements stripe={stripePromise} options={options}>
-                      <ModalAddCardStripeUnique />
-                    </Elements>
+                    {options !== null && (
+                      <>
+                        {console.log("options", options)}
+                        <Elements stripe={stripePromise} options={options}>
+                          <ModalAddCardStripeUnique />
+                        </Elements>
+                      </>
+                    )}
                   </>
+
                 )}
+
               </>
             )}
-            {userData.body.meeting === null &&
+          {userData.body.meeting === null &&
             userData.body.discovery === false && userData.body.offre !== null && userData.body.offre.type === "unique" && (
               <>
                 <ModalFormuleEditFlash data={userData} mutate={mutate} />

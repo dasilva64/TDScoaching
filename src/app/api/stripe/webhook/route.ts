@@ -1,20 +1,37 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import prisma from "@/app/lib/prisma";
 
 export async function GET() {
   console.log("Stripe webhook endpoint. Use POST.")
-  return new Response('Stripe webhook endpoint. Use POST.', {
-    status: 200,
-    headers: {
-      'Content-Type': 'text/plain',
+  return NextResponse.json(
+    {
+      status: 200,
+      message:
+        "Stripe webhook endpoint. Use POST.",
     },
-  });
+    {
+      status: 200,
+    }
+  );
 }
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get('stripe-signature');
+  if (!sig) {
+
+    return NextResponse.json(
+      {
+        status: 404,
+        message:
+          "Error no stripe signature",
+      },
+      {
+        status: 404,
+      }
+    );
+  }
   const stripe = new Stripe(process.env.STRIPE_SECRET!, {
     apiVersion: '2022-11-15',
   });
@@ -40,6 +57,14 @@ export async function POST(req: NextRequest) {
       });
     }
   }
-
-  return new Response('OK', { status: 200 });
+  return NextResponse.json(
+    {
+      status: 200,
+      message:
+        "OK",
+    },
+    {
+      status: 200,
+    }
+  );
 }

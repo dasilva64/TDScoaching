@@ -15,7 +15,8 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     return new Response('Webhook signature verification failed', { status: 400 });
   }
-
+  console.log(event)
+  console.log(event.type)
   if (event.type === 'setup_intent.succeeded') {
     const setupIntent: any = event.data.object;
     const offreId = setupIntent.metadata?.offreId; // à ajouter lors de la création du setupIntent

@@ -52,7 +52,7 @@ const AllMeeting = () => {
               backgroundColor: "green",
               textColor: "white",
               url:
-                "http://localhost:3000/utilisateur/" +
+                "https://tdscoaching.fr/utilisateur/" +
                 userData.body.meetings[i].User_meeting_test_userMailToUser.id,
             });
           }

@@ -275,7 +275,8 @@ export async function POST(request: NextRequest) {
               firstname: firstname,
               lastname: lastname,
               mail: email,
-              isMajor: true
+              isMajor: true,
+              role: "ROLE_USER"
             },
           });
           let currentDate = new Date();

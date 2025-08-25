@@ -26,7 +26,7 @@ const ModalAddCardStripeFlash = () => {
         const result = await stripe.confirmSetup({
             elements, // 👈 PaymentElement est géré automatiquement ici
             confirmParams: {
-                return_url: 'http://localhost:3000/redirection-vers-rendez-vous',
+                return_url: 'https://tdscoaching.fr/redirection-vers-rendez-vous',
             },
         });
 

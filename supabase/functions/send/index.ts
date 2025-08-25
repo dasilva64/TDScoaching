@@ -41,7 +41,53 @@ serve(async (req) => {
   for (let i = 0; i < user.length; i++) {
     if (user[i].registertoken !== null) {
       if (new Date().getTime() > new Date(user[i].registerlimite).getTime()) {
-        await supabase.from("User").delete().eq("id", user[i].id);
+        const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fr">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>tds coaching</title>
+      </head>
+      <body>
+        <div style="width: 100%">
+          <div style="text-align: center">
+            <img src="https://tdscoaching.fr/_next/image?url=%2Fassets%2Flogo%2Flogo3.webp&w=750&q=75" width="80px" height="80px" />
+          </div>
+          <div style="background: aqua; padding: 50px 20px; border-radius: 20px">
+            <h1 style="text-align: center">tds coaching</h1>
+            <h2 style="text-align: center">Votre compte a été supprimé</h2>
+            <p>Bonjour ${user[i].firstname},</p>
+            <p>Votre compte a été supprimé car vous ne l'avez pas activé a temps.</p>
+            <p style="margin-bottom: 20px;">Vous pouvez recréer un compte en cliquant sur le bouton ci-dessous</p>
+            <a href="https://tdscoaching.fr/" style="text-decoration: none; padding: 10px; border-radius: 10px; background: orange; color: white;">Créer un compte</a>
+            <p style="margin-top: 20px;">Ce message est personnel. Ne le transférez pas sans votre accord.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+          const response = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${Deno.env.get("_RESEND_API_KEY")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              from: "contact@tdscoaching.fr",
+              to: user[i].mail,
+              subject: "[Suppression] Votre compte a été supprimé",
+              html: htmlContent,
+            }),
+          });
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Erreur lors de l'envoi du mail avec Resend :", errorText);
+          } else {
+            await supabase.from("User").delete().eq("id", user[i].id);
+          }
+        
       }
     }
     if (user[i].twoFAToken !== null) {

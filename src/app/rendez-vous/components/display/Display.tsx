@@ -53,6 +53,7 @@ const Display = () => {
   const [options, setOptions] = useState<any>(null)
   useEffect(() => {
     if (secretModalAddCardStripe !== "") {
+      console.log(secretModalAddCardStripe)
       setOptions({
         clientSecret: secretModalAddCardStripe, // 👈 obligatoire pour PaymentElement
         appearance: {

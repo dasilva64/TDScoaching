@@ -13,7 +13,6 @@ const ModalHelpMeeting = () => {
       type: "ModalHelpRendezVous/close"
     })
   }
-  console.log("displayModalHelpRendezVous")
   return (
     <>
       <TabIndex displayModal={displayModalHelpRendezVous} />

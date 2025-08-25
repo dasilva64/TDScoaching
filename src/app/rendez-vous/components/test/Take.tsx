@@ -214,7 +214,6 @@ const Take = ({ offre, mutate, meetingsByUser }: { offre: any, mutate: any, meet
           </button>
         </div>
         <p onClick={() => {
-          console.log('test')
           dispatch({
             type: "ModalHelpRendezVous/open"
           })

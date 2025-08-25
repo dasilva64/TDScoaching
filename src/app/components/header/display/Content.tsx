@@ -82,7 +82,6 @@ const Content = () => {
   const router = useRouter();
   const pathname = usePathname();
   useEffect(() => {
-    console.log(data)
     if (data) {
       if (data.status === 429 || data.status === 500) {
         dispatch({

@@ -36,7 +36,6 @@ const Content = () => {
   let id = queryParam.toString().split("/");
   const { data, isLoading, isError, mutate } = useGetById(id[2]);
   useEffect(() => {
-    console.log(data)
     if (data) {
       if (data.status === 401 || data.status === 403) {
         dispatch({

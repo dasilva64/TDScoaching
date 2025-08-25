@@ -17,8 +17,10 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  console.log("call webhook")
   const body = await req.text();
   const sig = req.headers.get('stripe-signature');
+  console.log("sig", sig)
   if (!sig) {
 
     return NextResponse.json(

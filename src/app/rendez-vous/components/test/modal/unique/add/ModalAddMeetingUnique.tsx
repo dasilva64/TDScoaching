@@ -87,7 +87,7 @@ const ModalAddMeetingUnique = ({ mutate, userData }: any) => {
         globalMutate("/components/header/api");
         reset()
         closeModal()
-
+        console.log("data.body.client_secret", data.body.client_secret)
         dispatch({
           type: "ModalAddCardStripe/open",
           payload: {

@@ -150,7 +150,6 @@ export async function POST(request: NextRequest) {
                 payment_method_types: ['card'],
                 metadata: {
                   userId: user.id,
-                  offreId: user.offreId,
                 },
               });
             } catch {

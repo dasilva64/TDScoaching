@@ -50,15 +50,26 @@ export async function POST(req: NextRequest) {
   console.log(event.type)
   if (event.type === 'setup_intent.succeeded') {
     const setupIntent: any = event.data.object;
-    const offreId = setupIntent.metadata?.offreId; // à ajouter lors de la création du setupIntent
-    if (offreId) {
-      await prisma.offre_test.update({
-        where: { id: offreId },
-        data: {
-          hasCard: true,
-          stripeIntentId: setupIntent.id,
+    const userId = setupIntent.metadata?.userId; // à ajouter lors de la création du setupIntent
+    if (userId) {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId
         },
-      });
+        select: {
+          offreId: true
+        }
+      })
+      if (user) {
+        await prisma.offre_test.update({
+          where: { id: user.offreId! },
+          data: {
+            hasCard: true,
+            stripeIntentId: setupIntent.id,
+          },
+        });
+      }
+
     }
   }
   return NextResponse.json(

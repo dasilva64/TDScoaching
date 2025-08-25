@@ -5,7 +5,9 @@ import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
   //const res = NextResponse.next();
-
+  if (request.nextUrl.pathname.startsWith('/api/stripe/webhook')) {
+    return NextResponse.next(); // ne pas bloquer Stripe
+  }
    const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
     default-src 'self';

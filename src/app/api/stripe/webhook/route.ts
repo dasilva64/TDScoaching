@@ -2,6 +2,16 @@ import { NextRequest } from "next/server";
 import Stripe from "stripe";
 import prisma from "@/app/lib/prisma";
 
+export async function GET() {
+  console.log("Stripe webhook endpoint. Use POST.")
+  return new Response('Stripe webhook endpoint. Use POST.', {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  });
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get('stripe-signature');

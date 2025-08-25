@@ -89,7 +89,7 @@ const ModalAddCardStripeFlash = () => {
                             </h2>
                             {!isStripeReady && (
                                 <>
-                                    <p>Chargement de Stripe...</p>
+                                    <p className={styles.modalAddCardStripe__load}>Chargement de Stripe...</p>
                                 </>
                             )}
                             {isStripeReady && (

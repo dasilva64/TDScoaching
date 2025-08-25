@@ -19,7 +19,9 @@
     max-height: 90%;
     overflow: scroll;
     z-index: 995;
-
+    &__load {
+        margin-bottom: 20px;
+    }
     &__form {
         &__label {
             margin-bottom: 20px;

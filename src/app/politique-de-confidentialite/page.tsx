@@ -49,7 +49,7 @@ const page = () => {
 
         <h2 className={styles.pdc__h2}>Cookies</h2>
         <p className={styles.pdc__p}>
-          Le site n'utilise pas de cookie
+          Le site n&apos;utilise pas de cookie
         </p>
 
         <h2 className={styles.pdc__h2}>Durées de stockage de vos données</h2>

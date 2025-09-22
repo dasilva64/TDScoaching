@@ -1,4 +1,19 @@
 /** @type {import('next').NextConfig} */
+
+const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' blob: data:;
+    font-src 'self' data:;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    connect-src 'self';
+    upgrade-insecure-requests;
+`
+
 const nextConfig = {
   /* webpack: (config) => {
     config.resolve.alias.canvas = false;
@@ -11,15 +26,6 @@ const nextConfig = {
      return [
       {
       source: "/api/(.*)",
-      headers: [
-        {
-          key: "Cache-Control",
-          value: "private, no-store, no-cache, must-revalidate",
-        },
-      ],
-    },
-    {
-      source: "/(profile|rendez-vous|meetings|suppression-compte|utilisateur|utilisateurs|historique-rendez-vous|email-validation|reinitialisation-mot-de-passe)",
       headers: [
         {
           key: "Cache-Control",
@@ -48,6 +54,10 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [ 
+          {
+            key: 'Content-Security-Policy',
+            value: cspHeader.replace(/\n/g, ''),
+          },
            {
             key: "X-Content-Type-Options",
             value: "nosniff",

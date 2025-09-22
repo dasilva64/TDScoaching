@@ -49,19 +49,8 @@ const page = () => {
 
         <h2 className={styles.pdc__h2}>Cookies</h2>
         <p className={styles.pdc__p}>
-          Le site utilise plusieurs types de cookies :
+          Le site n'utilise pas de cookie
         </p>
-        <ul className={styles.pdc__p}>
-          <li>
-            <strong>Cookie de session (Iron Session)</strong> : Ce cookie est permanent pendant la durée de la session. Il permet de maintenir l’état de connexion de l’utilisateur, même s’il n’est pas connecté, et est également utilisé pour la protection CSRF.
-          </li>
-          <li>
-            <strong>Cookies Stripe</strong> : Lors de l’enregistrement d’une carte bancaire ou du paiement via Stripe, des cookies techniques peuvent être déposés par Stripe pour assurer la sécurité et le bon fonctionnement du paiement. Pour plus d’informations, consulter la politique de confidentialité de Stripe :{" "}
-            <Link className={styles.pdc__link} href="https://stripe.com/fr/privacy">
-              https://stripe.com/fr/privacy
-            </Link>
-          </li>
-        </ul>
 
         <h2 className={styles.pdc__h2}>Durées de stockage de vos données</h2>
         <p className={styles.pdc__p}>

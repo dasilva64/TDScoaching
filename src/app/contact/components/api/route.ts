@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validationBody } from "../../../lib/validation";
 import { checkRateLimitShort } from "@/app/lib/rateLimiter";
-import { Resend } from "resend";
+import { resend } from "@/app/lib/resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {

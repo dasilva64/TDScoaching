@@ -13,7 +13,7 @@ const Parisienne = localFont({
 export const metadata = {
   title: "Contactez votre coach de vie - tdscoaching",
   description:
-    "Vous pouvez me contacter par mail : contact@tds-coachingdevie.fr ou par téléphone : 0781673125",
+    "Vous pouvez me contacter par mail : contact@tdscoaching.fr ou par téléphone : 0781673125",
   icons: {
     icon: "https://www.tdscoaching.fr/assets/logo/logo3.webp",
   },
@@ -26,7 +26,7 @@ export const metadata = {
   },
 };
 
-const Contact = () => {
+export default async function Contact () {
   return (
     <>
       <NoScript />
@@ -53,10 +53,10 @@ const Contact = () => {
                 <strong>Adresse email :</strong>
                 <a
                   className={`${styles.contact__main__container__content__card__link} modalOpen`}
-                  href="mailto:contact@tds-coachingdevie.fr"
+                  href="mailto:contact@tdscoaching.fr"
                 >
                   {" "}
-                  contact@tds-coachingdevie.fr
+                  contact@tdscoaching.fr
                 </a>
               </p>
             </div>
@@ -88,4 +88,3 @@ const Contact = () => {
   );
 };
 
-export default Contact;

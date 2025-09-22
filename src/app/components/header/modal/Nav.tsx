@@ -8,7 +8,7 @@ import Image from "../../image/Image";
 import { useDispatch, useSelector } from "react-redux";
 import TabIndex from "../../tabIndex/TabIndex";
 
-const Nav = ({ discovery, role, meeting, isLoggedIn }: any) => {
+const Nav = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { displayModalNav } = useSelector((state: RootState) => state.ModalNav);
   const closeForm = () => {
@@ -17,7 +17,6 @@ const Nav = ({ discovery, role, meeting, isLoggedIn }: any) => {
     });
   };
   const pathname = usePathname();
- const regex = /^\/rendez-vous\/[a-zA-Z0-9._\-+=]+$/;
   return (
     <>
       <TabIndex displayModal={displayModalNav} />
@@ -149,46 +148,7 @@ const Nav = ({ discovery, role, meeting, isLoggedIn }: any) => {
                       Blog
                     </Link>
                   </li>
-                  {isLoggedIn === false || isLoggedIn === undefined && (
-                    <>
-                    
-                      {!regex.test(pathname) && (
-                        <li
-                          className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
-                        >
-                          <button
-                            className={`${styles.nav__nav__ul__li__btn}`}
-                            onClick={() => {
-                              closeForm()
-                              dispatch({ type: "ModalCalendarDiscoveryMeetingHeader/open" });
-                            }}
-                          >
-                            RDV gratuit
-                          </button>
-                        </li>
-                      )}
-                    </>
-                    
-                  )}
-                  {role === "ROLE_USER" && (
-                    <>
-                      {discovery === true && meeting === null && (
-                        <li
-                          className={`${styles.nav__nav__ul__li} ${styles.nav__nav__ul__li__border}`}
-                        >
-                          <button
-                            className={`${styles.nav__nav__ul__li__btn}`}
-                            onClick={() => {
-                              closeForm()
-                              dispatch({ type: "ModalCalendarDiscoveryMeetingHeader/open" });
-                            }}
-                          >
-                            RDV gratuit
-                          </button>
-                        </li>
-                      )}
-                    </>
-                  )}
+                  
 
                 </ul>
               </nav>

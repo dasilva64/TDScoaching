@@ -92,10 +92,10 @@ const Footer = () => {
             Mail :&nbsp;
             <Link
               className={`${styles.footer__a} modalOpen`}
-              href="mailto:contact@tds-coachingdevie.fr"
+              href="mailto:contact@tdscoaching.fr"
             >
               {" "}
-              contact@tds-coachingdevie.fr
+              contact@tdscoaching.fr
             </Link>
           </li>
           <li className={`${styles.footer__li} ${styles.footer__li__contact}`}>

@@ -82,7 +82,7 @@ export default function CGU() {
         </p>
         <p className={styles.cgu__p}>
           <strong>Propriétaire</strong> : Thierry DA SILVA SEABRA –
-          contact@tds-coachingdevie.fr
+          contact@tdscoaching.fr
           <br />
           micro entreprise tds direct services – 5 rue jean zubietta 33400
           Talence - siret 843931304

@@ -22,7 +22,8 @@ const allowedFields = [
   "majorInput",
   "cguInput",
   "cgvInput",
-  "contratInput"
+  "contratInput",
+  "recoveryCode"
 ];
 
 const dangerousPattern = /(script|onload|onerror|onclick|onmouseover|onmouseenter|javascript)/i;
@@ -128,6 +129,26 @@ export const validationBody = (body: any) => {
             arrayMessageError.push([
               "email",
               "Email : contient un ou plusieurs mots interdits pour des raisons de sécurité (script, onload, onerror, onclick, onmouseover, onmouseenter, javascript)",
+            ]);
+          }
+        }
+      }
+    }
+    if (key === "recoveryCode") {
+      let regex = /^[A-Za-z0-9?!@#&$]{32}$/;
+      if (validator.isEmpty(value.trim())) {
+        arrayMessageError.push(["recoveryCode", "Code : ne peut pas être vide"]);
+      } else {
+        if (!validator.matches(value.trim(), regex)) {
+          arrayMessageError.push([
+            "recoveryCode",
+            "Code : ne peut contenir que des lettres, chiffres et symboles (?, !, @, #, &, $) et doit contenir 32 caractères",
+          ]);
+        } else {
+          if (dangerousPattern.test(value.trim())) {
+            arrayMessageError.push([
+              "recoveryCode",
+              "Code : contient un ou plusieurs mots interdits pour des raisons de sécurité (script, onload, onerror, onclick, onmouseover, onmouseenter, javascript)",
             ]);
           }
         }

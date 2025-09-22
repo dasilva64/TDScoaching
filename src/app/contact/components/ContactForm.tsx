@@ -31,7 +31,6 @@ const ContactForm = () => {
   const [emailInputError, setEmailInputError] = useState<string>("");
   const [objectInputError, setObjectInputError] = useState<string>("");
   const [messageInputError, setMessageInputError] = useState<string>("");
-   const {csrfToken} = useSelector((state: RootState) => state.csrfToken)
   const { trigger, data, reset, isMutating } = useSWRMutation(
     "/contact/components/api",
     fetchPost
@@ -120,7 +119,6 @@ const ContactForm = () => {
     ) {
       if (inputPseudo.length === 0) {
         const fetchContact = async () => {
-          if (csrfToken) {
             trigger({
             email: inputEmail.trim(),
             firstname: inputFirstname.trim(),
@@ -128,17 +126,8 @@ const ContactForm = () => {
             object: inputObject.trim(),
             message: inputMessage.trim(),
             pseudo: inputPseudo.trim(),
-            csrfToken: csrfToken
           });
-          } else {
-            dispatch({
-              type: "flash/storeFlashMessage",
-              payload: {
-                type: "error",
-                flashMessage: "Une erreur technique est survenue. Merci de recharger la page.",
-              },
-            });
-          }
+          
         };
         if (inputPseudo.length === 0) {
           fetchContact();

@@ -12,6 +12,9 @@
     "start": "NEXT_SHARP_PATH: '/tmp/node_modules/sharp' next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@prisma/client": "5.17.0",
     "@reduxjs/toolkit": "1.9.7",

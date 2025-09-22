@@ -8,6 +8,7 @@ export async function POST(request: NextRequest) {
   try {
     const rateLimitResponse = await checkRateLimitShort(request, 'rlflx-contact');
     if (rateLimitResponse) return rateLimitResponse;
+    
     try {
       const { email, firstname, lastname, object, message, pseudo } =
         await request.json();

@@ -4,12 +4,10 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import flash from "../feature/header/flash";
 import ModalNav from "../feature/header/ModalNav";
 import menu from "../feature/header/menu";
-import csrfToken from "../feature/csrfToken";
 import ModalDiscovery from "../feature/tarif/ModalDiscovery";
 import ModalNormal from "../feature/tarif/ModalNormal";
 
 const rootReducer = combineReducers({
-  csrfToken: csrfToken.reducer,
 
   //header
   flash: flash.reducer,

@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
           }
         try {
           await resend.emails.send({
-            from: 'contact@tdscoaching.fr',
+            from: 'TDS Coaching <contact@tdscoaching.fr>',
             to: email.trim(),
             subject: object.trim(),
             html: `<!DOCTYPE html>

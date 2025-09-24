@@ -44,9 +44,9 @@ const Header = async () => {
             <li className={styles.header__li}>
               <LinkNav name="Contact" path="/contact" />
             </li>
-            <li className={styles.header__li}>
+            {/* <li className={styles.header__li}>
               <LinkNav name="Blog" path="/blog" />
-            </li>
+            </li> */}
           </ul>
         </nav>
         <Content />

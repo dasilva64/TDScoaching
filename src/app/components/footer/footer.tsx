@@ -67,14 +67,14 @@ const Footer = () => {
               Conditions générales d&apos;utilisations
             </Link>
           </li>
-           <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
+          {/*  <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link
               className={`${styles.footer__a} modalOpen`}
               href="/conditions-generales-de-vente"
             >
               Conditions générales de vente
             </Link>
-          </li>
+          </li> */}
           <li className={`${styles.footer__li} ${styles.footer__li__plan}`}>
             <Link
               className={`${styles.footer__a} modalOpen`}

@@ -52,11 +52,6 @@ const page = () => {
           Le site n&apos;utilise pas de cookie
         </p>
 
-        <h2 className={styles.pdc__h2}>Durées de stockage de vos données</h2>
-        <p className={styles.pdc__p}>
-          Pour les utilisateurs et utilisatrices qui s’enregistrent sur le site, nous stockons également les données personnelles indiquées dans leur profil. Tous les utilisateurs et utilisatrices peuvent voir, modifier ou supprimer leurs informations personnelles à tout moment. Seul le gestionnaire du site peut aussi voir et modifier ces informations.
-        </p>
-
         <h2 className={styles.pdc__h2}>Les droits que vous avez sur vos données</h2>
         <p className={styles.pdc__p}>
           Conformément au RGPD, vous disposez des droits suivants : accès, rectification, suppression, limitation, opposition et portabilité.

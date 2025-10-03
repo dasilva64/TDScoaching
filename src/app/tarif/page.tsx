@@ -191,7 +191,7 @@ const Tarif = () => {
               <h2
                 className={`${styles.tarif__packs__container__card__h3} ${Parisienne.className}`}
               >
-                Pack sur mesure
+                Pack long
               </h2>
               <ul className={styles.tarif__packs__container__card__ul}>
                 <li className={styles.tarif__packs__container__card__ul__li}>
@@ -205,22 +205,7 @@ const Tarif = () => {
                     src={"/assets/icone/check-solid.svg"}
                     alt="bousole"
                   />
-                  Nombre de séances de coaching à définir (selon choix du client
-                  et problématique abordée) <br />(<ButtonOpenNormal />)
-                </li>
-                <li className={styles.tarif__packs__container__card__ul__li}>
-                  <Image
-                    className={
-                      styles.tarif__packs__container__card__ul__li__icone
-                    }
-                    width="30"
-                    height="30"
-                    priority={true}
-                    src={"/assets/icone/check-solid.svg"}
-                    alt="bousole"
-                  />
-                  Points d’étape offerts (en fonction de la durée totale du
-                  coaching)
+                  6 séances de coaching <br />(<ButtonOpenNormal />)
                 </li>
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image
@@ -235,6 +220,30 @@ const Tarif = () => {
                   />
                   1 bilan final offert
                 </li>
+              </ul>
+              <p className={styles.tarif__packs__container__card__price}>
+                600
+                <span
+                  className={styles.tarif__packs__container__card__price__sign}
+                >
+                  €
+                </span>
+              </p>
+              <div className={styles.tarif__packs__container__card__div}>
+                <Button />
+              </div>
+            </WhileInView>
+            <WhileInView
+              type="y"
+              className={`${styles.tarif__packs__container__card} ${styles.tarif__packs__container__card__entrepise}`}
+            >
+              <h2
+                className={`${styles.tarif__packs__container__card__h3} ${Parisienne.className}`}
+              >
+                Pack entreprise
+              </h2>
+              <ul className={styles.tarif__packs__container__card__ul}>
+                
                 <li className={styles.tarif__packs__container__card__ul__li}>
                   <Image
                     className={
@@ -249,9 +258,6 @@ const Tarif = () => {
                   Prix sur demande
                 </li>
               </ul>
-              <div className={styles.tarif__packs__container__card__div}>
-                <Button />
-              </div>
             </WhileInView>
           </div>
         </div>

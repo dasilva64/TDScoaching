@@ -64,11 +64,7 @@ const page = () => {
           <Link className={styles.ml__link} href="https://tdscoaching.fr">
             tdscoaching.fr
           </Link>{" "}
-          implique l’acceptation pleine et entière des{" "}
-          <Link className={styles.ml__link} href="/conditions-generales-de-vente">
-            Conditions Générales de Vente
-          </Link>{" "}
-          et de la{" "}
+          implique l’acceptation pleine et entière de la{" "}
           <Link className={styles.ml__link} href="/politique-de-confidentialite">
             Politique de confidentialité
           </Link>{" "}

@@ -20,11 +20,11 @@ const Button = () => {
   return (
     <>
       <Link
-        href="/contact"
+        href="https://www.resalib.fr/praticien/116664-thierry-da-silva-seabra-coach-de-vie-chambery"
         className={`${styles.button} modalOpen`}
-        onClick={() => {
+        /* onClick={() => {
           handleClick();
-        }}
+        }} */
       >
         Réserver une séance
       </Link>

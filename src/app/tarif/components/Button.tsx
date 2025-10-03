@@ -20,6 +20,7 @@ const Button = () => {
   return (
     <>
       <Link
+      target="_blank"
         href="https://www.resalib.fr/praticien/116664-thierry-da-silva-seabra-coach-de-vie-chambery"
         className={`${styles.button} modalOpen`}
         /* onClick={() => {
